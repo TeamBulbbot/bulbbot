@@ -1,0 +1,26 @@
+{
+  "name": "bulbbot",
+  "version": "1.0.0",
+  "description": "A discord moderation bot written in Discord.JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TestersQTs/Bulbbot.git"
+  },
+  "author": "TesterQTs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TestersQTs/Bulbbot/issues"
+  },
+  "homepage": "https://github.com/TestersQTs/Bulbbot#readme",
+  "dependencies": {
+    "ascii-table": "0.0.9",
+    "cli-color": "^2.0.0",
+    "discord.js": "^12.3.1",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.10.5"
+  }
+}
