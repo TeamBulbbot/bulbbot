@@ -20,6 +20,8 @@ module.exports = {
 		const end = moment.utc().format("YYYY-MM-DD");
 		let start = "";
 
+		//console.log(user.guild.presences);
+
 		if (user === null) {
 			// If user is not from guild
 			try {
@@ -32,9 +34,9 @@ module.exports = {
 			user.nickname !== null ? (descriptionBottom += `**Nickname: ** ${user.nickname}\n`) : "";
 
 			start = moment(moment.utc(user.joinedTimestamp).format("YYYY-MM-DD"));
-			const daysInServer = moment.duration(start.diff(end)).asDays().toString();
+			const daysInServer = moment.duration(start.diff(end)).asDays();
 
-			descriptionBottom += `**Joined server:** ${moment.utc(user.joinedTimestamp).format("dddd, MMMM, Do YYYY")} \`\`(${daysInServer.replace("-", "")} days ago)\`\`\n`;
+			descriptionBottom += `**Joined server:** ${moment.utc(user.joinedTimestamp).format("dddd, MMMM, Do YYYY")} \`\`(${daysInServer.toString().replace("-", "")} days ago)\`\`\n`;
 			descriptionBottom += `**Roles: ** ${user._roles.map((i) => `<@&${i}>`).join(" ")}\n`;
 
 			user = user.user;
@@ -48,10 +50,10 @@ module.exports = {
 		description += `**Bot: ** ${user.bot}\n`;
 
 		start = moment(moment(user.createdAt).format("YYYY-MM-DD"));
-		const daysOnDiscord = moment.duration(start.diff(end)).asDays().toString();
-		description += `**Account creation:** ${moment(user.createdAt).format("dddd, MMMM, Do YYYY")} \`\`(${daysOnDiscord.replace("-", "")} days ago)\`\``;
+		const daysOnDiscord = moment.duration(start.diff(end)).asDays();
+		description += `**Account creation:** ${moment(user.createdAt).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysOnDiscord).toString().replace("-", "")} days ago)\`\``;
 
-		descriptionBottom += `**Infractions: ** ${Math.floor(Math.random() * 11)}`; // Please someone add a way to track infractions
+		descriptionBottom += `**Infractions: ** ${Math.floor(Math.random() * 100001)}`; // Please someone add a way to track infractions
 
 		let embed = new Discord.MessageEmbed().setColor(process.env.COLOR).setTimestamp().setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.avatarURL()).setThumbnail(user.avatarURL()).setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL())
 			.setDescription(`
