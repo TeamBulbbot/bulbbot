@@ -28,4 +28,72 @@ module.exports = {
 
 		return badges.map((i) => `${i}`).join(" ");
 	},
+
+	Features: async (guildFeatures) => {
+		let features = [];
+
+		guildFeatures.forEach((feature) => {
+			if (feature === "INVITE_SPLASH") feature = emotes.features.invite_splash;
+			else if (feature === "VIP_REGIONS") feature = emotes.features.vip_regions;
+			else if (feature === "VANITY_URL") feature = emotes.features.vanity_url;
+			else if (feature === "VERIFIED") feature = emotes.features.verified;
+			else if (feature === "PARTNERED") feature = emotes.features.partnered;
+			else if (feature === "PUBLIC") feature = emotes.features.public;
+			else if (feature === "COMMERCE") feature = emotes.features.commerce;
+			else if (feature === "DISCOVERABLE") feature = emotes.features.discoverable;
+			else if (feature === "FEATURABLE") feature = emotes.features.featurable;
+			else if (feature === "ANIMATED_ICON") feature = emotes.features.animated_icon;
+			else if (feature === "BANNER") feature = emotes.features.banner;
+			else if (feature === "PUBLIC_DISABLED") feature = emotes.features.public_disabled;
+			else if (feature === "WELCOME_SCREEN_ENABLED") feature = emotes.features.welcome_screen_enabled;
+			else if (feature === "NEWS") feature = emotes.features.news;
+			else if (feature === "COMMUNITY") feature = emotes.features.community;
+
+			features.push(feature);
+		});
+
+		return features.map((i) => `${i}`).join(" ");
+	},
+
+	Regions: async (region) => {
+		switch (region) {
+			case "brazil":
+				region = `:flag_br: ${region}`;
+				break;
+			case "europe":
+				region = `:flag_eu: ${region}`;
+				break;
+			case "hongkong":
+				region = `:flag_hk: ${region}`;
+				break;
+			case "india":
+				region = `:flag_in: ${region}`;
+				break;
+			case "japan":
+				region = `:flag_jp: ${region}`;
+				break;
+			case "russia":
+				region = `:flag_ru: ${region}`;
+				break;
+			case "singapore":
+				region = `:flag_sg: ${region}`;
+				break;
+			case "southafrica":
+				region = `:flag_za: ${region}`;
+				break;
+			case "sydney":
+				region = `:flag_au: ${region}`;
+				break;
+			case "us-central":
+			case "us-east":
+			case "us-south":
+			case "us-west":
+				region = `:flag_us: ${region}`;
+				break;
+			default:
+				break;
+		}
+
+		return region;
+	},
 };
