@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const moment = require("moment");
 const Emotes = require("../../emotes.json");
 const Helper = require("../../handlers/Helper");
 
@@ -18,18 +19,22 @@ module.exports = {
 		const countCategory = guild.channels.cache.filter((m) => m.type === "category").size;
 		const countText = guild.channels.cache.filter((m) => m.type === "text").size;
 
+		const end = moment.utc().format("YYYY-MM-DD");
+		const start = moment(moment(guild.createdAt).format("YYYY-MM-DD"));
+		const daysSinceCreation = moment.duration(start.diff(end)).asDays().toString();
+
 		let embed = new Discord.MessageEmbed();
 		embed.addField(
 			"Sever stats",
 			`Total: **${guild.memberCount}**/${guild.maximumMembers}\n${Emotes.status.online}: **${countOnline}** \n${Emotes.status.idle}: **${countIdle}** \n${Emotes.status.dnd}: **${countDnd}** \n${Emotes.status.offline}: **${guild.memberCount - countOnline - countIdle - countDnd}**`,
 			true
 		);
-		embed.addField("Channel stats", `Total ${countVC + countText + countCategory}\nCategory: ${countCategory}\nText channels: ${countText}\nVoice Channels: ${countVC}`, true);
+		embed.addField("Channel stats", `Total **${countVC + countText + countCategory}**\nCategory: **${countCategory}**\nText channels: **${countText}**\nVoice Channels: **${countVC}**`, true);
 
-		let boosting = `Booster Tier: ${guild.premiumTier}\nAmount of boosters: ${guild.premiumSubscriptionCount}`;
-		if (guild.premiumTier === 1) boosting += `\nEmote slots: 100\nAudio quality: 128 kbps`;
-		else if (guild.premiumTier === 2) boosting += `\nEmote slots: 150\nAudio quality: 256 kbps\nUpload limit: 50 MB`;
-		else if (guild.premiumTier === 3) boosting += `\nEmote slots: 250\nAudio quality: 384 kbps\nUpload limit: 100 MB`;
+		let boosting = `Booster Tier: **${guild.premiumTier}**\nAmount of boosters: **${guild.premiumSubscriptionCount}**`;
+		if (guild.premiumTier === 1) boosting += `\nEmote slots: **100**\nAudio quality: **128** kbps`;
+		else if (guild.premiumTier === 2) boosting += `\nEmote slots: **150**\nAudio quality: **256** kbps\nUpload limit: **50 MB**`;
+		else if (guild.premiumTier === 3) boosting += `\nEmote slots: **250**\nAudio quality: **384** kbps\nUpload limit: **100 MB**`;
 
 		embed.addField("Booster", boosting, true);
 
@@ -42,7 +47,7 @@ module.exports = {
                 **Features:** ${await Helper.Features(guild.features)}
                 **Server region:** ${await Helper.Regions(guild.region)}
                 **Verfication level:** ${guild.verificationLevel}
-				
+				**Server creation:** ${moment.utc(guild.joinedTimestamp).format("dddd, MMMM, Do YYYY")} \`\`(${daysSinceCreation.replace("-", "")} days ago)\`\`
                 `
 		);
 
