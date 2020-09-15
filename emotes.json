@@ -11,10 +11,11 @@
 		"bug_hunter_gold": "<:BugHunterGolden:742096217135120434>",
 		"verfied_bot_developer": "<:VerfiedBotDeveloper:742096217185583184>",
 		"nitro": "<:Nitro:742096216761827409>",
-		"booster": "<:NitroBooster:743837944330059877>"
+		"booster": "<:NitroBooster:743837944330059877>",
+		"guildOwner": "<:ServerOwner:755484711589117994>"
 	},
 	"features": {
-		"invite_splash": "",
+		"invite_splash": "<:INVITE_SPLASH:743853144534155415>",
 		"vip_regions": "<:VIP_REGIONS:743822241728299141>",
 		"vanity_url": "<:VANITY_URL:743822241632092320>",
 		"verified": "<:VERIFIED:743822241766178966>",
@@ -25,9 +26,10 @@
 		"discoverable": "<:DISCOVERABLE:743823681490255902>",
 		"featurable": "<:FEATURABLE:743823664679747584>",
 		"animated_icon": "<:ANIMATED_ICON:743822241342554115>",
-		"banner": "<:INVITE_SPLASH:743853144534155415>",
+		"banner": "<:BANNER:743822241288028242>",
 		"public_disabled": "<:PUBLIC_DISABLED:743822241405468812>",
-		"welcome_screen_enabled": "<:WELCOME_SCREEN_ENABLED:743822241598406686>"
+		"welcome_screen_enabled": "<:WELCOME_SCREEN_ENABLED:743822241598406686>",
+		"community": "<:COMMUNITY:755490050904424638>"
 	},
 	"actions": {
 		"warn": "<:bulbWARN:742096152920588289>",
