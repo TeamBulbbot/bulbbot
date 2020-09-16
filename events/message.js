@@ -1,4 +1,5 @@
 const Guild = require("../models/guild");
+const Database = require("../handlers/Database");
 const mongoose = require("mongoose");
 
 module.exports = async (client, message) => {
@@ -8,15 +9,7 @@ module.exports = async (client, message) => {
 		},
 		async (err, guild) => {
 			if (guild == null) {
-				guildError = new Guild({
-					_id: mongoose.Types.ObjectId(),
-					guildID: message.guild.id,
-					guildName: message.guild.name,
-					guildPrefix: process.env.PREFIX,
-					joinDate: new Date(),
-				});
-
-				guildError.save().catch((err) => console.error(clc.red(err)));
+				Database.AddGuild(message.guild);
 			}
 			let prefix;
 			try {
