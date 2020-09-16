@@ -20,8 +20,6 @@ module.exports = {
 		const end = moment.utc().format("YYYY-MM-DD");
 		let start = "";
 
-		//console.log(user.guild.presences);
-
 		if (user === null) {
 			// If user is not from guild
 			try {
