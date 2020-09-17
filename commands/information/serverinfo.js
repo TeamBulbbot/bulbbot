@@ -23,13 +23,15 @@ module.exports = {
 		const start = moment(moment(guild.createdAt).format("YYYY-MM-DD"));
 		const daysSinceCreation = moment.duration(start.diff(end)).asDays().toString();
 
-		let embed = new Discord.MessageEmbed();
-		embed.addField(
-			"Sever stats",
-			`Total: **${guild.memberCount}**/${guild.maximumMembers}\n${Emotes.status.online}: **${countOnline}** \n${Emotes.status.idle}: **${countIdle}** \n${Emotes.status.dnd}: **${countDnd}** \n${Emotes.status.offline}: **${guild.memberCount - countOnline - countIdle - countDnd}**`,
-			true
-		);
-		embed.addField("Channel stats", `Total **${countVC + countText + countCategory}**\nCategory: **${countCategory}**\nText channels: **${countText}**\nVoice Channels: **${countVC}**`, true);
+		let embed = new Discord.MessageEmbed()
+			.addField(
+				"Sever stats",
+				`Total: **${guild.memberCount}**/${guild.maximumMembers}\n${Emotes.status.online}: **${countOnline}** \n${Emotes.status.idle}: **${countIdle}** \n${Emotes.status.dnd}: **${countDnd}** \n${Emotes.status.offline}: **${guild.memberCount - countOnline - countIdle - countDnd}**`,
+				true
+			)
+			.addField("Channel stats", `Total **${countVC + countText}**\nCategory: **${countCategory}**\nText channels: **${countText}**\nVoice Channels: **${countVC}**`, true)
+			.setTimestamp()
+			.setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.avatarURL());
 
 		let boosting = `Booster Tier: **${guild.premiumTier}**\nAmount of boosters: **${guild.premiumSubscriptionCount}**`;
 		if (guild.premiumTier === 1) boosting += `\nEmote slots: **100**\nAudio quality: **128** kbps`;
@@ -51,8 +53,27 @@ module.exports = {
                 `
 		);
 
-		embed.setTimestamp();
-		embed.setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.avatarURL());
+		let guildRoles = [];
+		let rolesLeft = 0;
+		let amountOfRoles = 0;
+
+		guild.roles.cache.forEach((role) => {
+			amountOfRoles++;
+			if (guildRoles.join(" ").length <= 400) guildRoles.push(role);
+			else rolesLeft++;
+		});
+		embed.addField(`Roles (${amountOfRoles})`, `${guildRoles.join(" ")} ${rolesLeft !== 0 ? `and ${rolesLeft} more` : ""}`, true);
+
+		let guildEmotes = [];
+		let emotesLeft = 0;
+		let amountOfEmotes = 0;
+
+		guild.emojis.cache.forEach((emote) => {
+			amountOfEmotes++;
+			if (guildEmotes.join(" ").length <= 800) guildEmotes.push(emote);
+			else emotesLeft++;
+		});
+		amountOfEmotes !== 0 ? embed.addField(`Emotes (${amountOfEmotes})`, `${guildEmotes.join(" ")} ${emotesLeft !== 0 ? `and ${emotesLeft} more` : ""}`, true) : "";
 
 		return message.channel.send(embed);
 	},
