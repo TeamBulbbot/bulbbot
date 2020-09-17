@@ -51,8 +51,6 @@ module.exports = {
 		const daysOnDiscord = moment.duration(start.diff(end)).asDays();
 		description += `**Account creation:** ${moment(user.createdAt).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysOnDiscord).toString().replace("-", "")} days ago)\`\``;
 
-		descriptionBottom += `**Infractions: ** ${Math.floor(Math.random() * 100001)}`; // Please someone add a way to track infractions
-
 		let embed = new Discord.MessageEmbed().setColor(process.env.COLOR).setTimestamp().setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.avatarURL()).setThumbnail(user.avatarURL()).setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL())
 			.setDescription(`
 ${description}
