@@ -25,30 +25,30 @@ module.exports = {
 
 			// Log configuration
 			case "mod_action":
-				Log.Change_Mod_Action(message.guild.id, newValue.replace(/\D/g, ""));
+				Log.Change_Mod_Action(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(`Now logging \`\`mod actions\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "message":
-				Log.Change_Message(message.guild.id, newValue.replace(/\D/g, ""));
+				Log.Change_Message(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(`Now logging \`\`message logs\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "role":
 			case "role_update":
-				Log.Change_Role(message.guild.id, newValue.replace(/\D/g, ""));
+				Log.Change_Role(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(`Now logging \`\`role updates\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "member_update":
 			case "member":
-				Log.Change_Member(message.guild.id, newValue.replace(/\D/g, ""));
+				Log.Change_Member(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(`Now logging \`\`member updates\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "channel_update":
 			case "channel":
-				Log.Change_Channel(message.guild.id, newValue.replace(/\D/g, ""));
+				Log.Change_Channel(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(`Now logging \`\`channel updates\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "join_leave":
-				Log.Change_Join_Leave(message.guild.id, newValue.replace(/\D/g, ""));
+				Log.Change_Join_Leave(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(`Now logging \`\`join leave logs\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 
