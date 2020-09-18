@@ -25,25 +25,31 @@ module.exports = {
 
 			// Log configuration
 			case "mod_action":
-				message.channel.send(`\`\`${newValue}\`\` in **${message.guild.name}**`);
+				Log.Change_Mod_Action(message.guild.id, newValue.replace(/\D/g, ""));
+				message.channel.send(`Now logging \`\`mod actions\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "message":
-				message.channel.send(`\`\`${newValue}\`\` in **${message.guild.name}**`);
+				Log.Change_Message(message.guild.id, newValue.replace(/\D/g, ""));
+				message.channel.send(`Now logging \`\`message logs\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "role":
 			case "role_update":
-				message.channel.send(`\`\`${newValue}\`\` in **${message.guild.name}**`);
+				Log.Change_Role(message.guild.id, newValue.replace(/\D/g, ""));
+				message.channel.send(`Now logging \`\`role updates\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "member_update":
 			case "member":
-				message.channel.send(`\`\`${newValue}\`\` in **${message.guild.name}**`);
+				Log.Change_Member(message.guild.id, newValue.replace(/\D/g, ""));
+				message.channel.send(`Now logging \`\`member updates\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "channel_update":
 			case "channel":
-				message.channel.send(`\`\`${newValue}\`\` in **${message.guild.name}**`);
+				Log.Change_Channel(message.guild.id, newValue.replace(/\D/g, ""));
+				message.channel.send(`Now logging \`\`channel updates\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 			case "join_leave":
-				message.channel.send(`\`\`${newValue}\`\` in **${message.guild.name}**`);
+				Log.Change_Join_Leave(message.guild.id, newValue.replace(/\D/g, ""));
+				message.channel.send(`Now logging \`\`join leave logs\`\` in ${newValue} in **${message.guild.name}**`);
 				break;
 
 			// Role configuration
