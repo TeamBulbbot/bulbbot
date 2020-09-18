@@ -77,11 +77,11 @@ ${descriptionBottom}
 						Perfom_Action(client, message, Emotes.actions.kick, "Kick", "Kicking", target);
 					} else if (reaction.emoji.id === Emotes.actions.ban.replace(/\D/g, "")) {
 						Perfom_Action(client, message, Emotes.actions.ban, "Ban", "Banning", target);
-					} else if (reaction.emoji.id === Emotes.actions.cancel.replace(/\D/g, "")) return message.channel.send("Canceling the operation.");
-					else return message.channel.send("Canceling the operation.");
+					} else if (reaction.emoji.id === Emotes.actions.cancel.replace(/\D/g, "")) return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
+					else return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 				})
 				.catch((collected) => {
-					message.reply("Canceling the operation.");
+					message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 				});
 		});
 	},
@@ -94,12 +94,11 @@ async function Perfom_Action(client, message, emote, action, actionText, target)
 	await message.channel
 		.awaitMessages((m) => m.author.id == message.author.id, { max: 1, time: 30000 })
 		.then(async (collected) => {
-			message.channel.send(`${actionText} <@${target}> \`\`(${target})\`\` for \`\`${collected.first().content}\`\``);
 			reason = await collected.first().content;
 		})
 		.catch(() => {
 			message.reply("No reason given.");
-			reason = "None";
+			reason = "No reason given.";
 		});
 
 	switch (action) {
@@ -110,13 +109,15 @@ async function Perfom_Action(client, message, emote, action, actionText, target)
 			message.channel.send("To be added 🛠️");
 			break;
 		case "Kick":
-			Moderation.Kick(client, message.guild.id, target, message.author, reason);
+			if (!(await Moderation.Kick(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to kick <@${target}> \`\`(${target})\`\`.`);
 			break;
 		case "Ban":
-			Moderation.Ban(client, message.guild.id, target, message.author, reason);
+			if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
 			break;
 		default:
 			message.channel.send("Something went wrong");
 			break;
 	}
+
+	message.channel.send(`${actionText} <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``);
 }
