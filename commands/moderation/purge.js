@@ -1,12 +1,14 @@
 const fs = require("fs");
 const moment = require("moment");
+const SendLog = require("../../handlers/SendLog");
 
 module.exports = {
 	name: "purge",
 	aliases: ["clear"],
-	category: "mod",
+	category: "moderation",
 	description: "Purge X amount of message in channel",
 	run: async (client, message, args) => {
+		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
 		let amount = 0;
 
 		if (!args[0]) return message.channel.send("🤣  lmao mate you forgot something");
@@ -27,15 +29,16 @@ module.exports = {
 					if (err) return console.error(`[Purge] ${err}`);
 				});
 
-				await client.channels.cache
-					.get(message.channel.id)
-					.send(`Purged \`\`${amount}\`\` messages in ${message.channel} \`\`(${message.channel.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` at \`\`${moment().format("MMMM Do YYYY, h:mm:ss a")}\`\``, {
-						files: [`./files/purge/${message.guild.id}.txt`],
-					});
+				await SendLog.Mod_action(
+					client,
+					message.guild.id,
+					`Purged \`\`${amount}\`\` messages in ${message.channel} \`\`(${message.channel.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` at \`\`${moment().format("MMMM Do YYYY, h:mm:ss a")}\`\``,
+					`./files/purge/${message.guild.id}.txt`
+				);
 			});
 
 		await message.channel
-			.send(`Successfully purged \`\`${amount}\`\` messages in **${message.channel.name}`)
+			.send(`Successfully purged \`\`${amount}\`\` messages in **${message.channel.name}**`)
 			.then((msg) => {
 				msg.delete({ timeout: 1500 });
 			})

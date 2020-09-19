@@ -10,7 +10,7 @@ module.exports = {
 	category: "moderation",
 	description: "Moderation command on user",
 	run: async (client, message, args) => {
-		if (!message.member.hasPermission("MANAGE_SERVER")) return message.channel.send(":lock: Missing permission ``MANAGE_SERVER``"); // I know best has permssion lol
+		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
 		if (args[0] === undefined || args[0] === null) return message.channel.send("🤣  lmao mate you forgot something");
 		let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 		let user = message.guild.member(target);

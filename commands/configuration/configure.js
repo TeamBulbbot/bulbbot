@@ -10,7 +10,7 @@ module.exports = {
 	category: "configuration",
 	description: "Modify settings on the bot in your guild",
 	run: async (client, message, args) => {
-		if (!message.member.hasPermission("MANAGE_SERVER")) return message.channel.send(":lock: Missing permission ``MANAGE_SERVER``");
+		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
 		if (args[0] === undefined || args[0] === null || args[1] === null || args[1] === null) return message.channel.send("🤣  lmao mate you forgot something");
 
 		const setting = args[0].toLowerCase();
