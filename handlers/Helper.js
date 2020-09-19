@@ -60,6 +60,7 @@ module.exports = {
 			case "brazil":
 				region = `:flag_br: ${region}`;
 				break;
+			case "eu-central":
 			case "europe":
 				region = `:flag_eu: ${region}`;
 				break;
