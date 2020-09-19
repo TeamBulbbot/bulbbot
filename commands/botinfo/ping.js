@@ -9,11 +9,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTitle("🏓 Pong!")
-			.setDescription(
-				`Bot Latency is **${Math.floor(new Date().getTime() - message.createdTimestamp)} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**\nWebsocket Latency is **${Math.round(
-					message.guild.shard.ping
-				)} ms**`
-			)
+			.setDescription(`Bot Latency is **${Math.floor(message.createdTimestamp - new Date().getTime())} ms** \nAPI Latency is **${Math.round(client.ws.ping)} ms**\nWebsocket Latency is **${Math.round(message.guild.shard.ping)} ms**`)
 			.setTimestamp();
 		message.channel.send(embed);
 	},
