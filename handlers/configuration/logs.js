@@ -1,5 +1,6 @@
 const Log = require("../../models/log");
 const Discord = require("discord.js");
+var clc = require("cli-color");
 
 function sendEmbed(client, channelId, text) {
 	let embed = new Discord.MessageEmbed().setColor(process.env.COLOR).setTimestamp().setTitle(text);
