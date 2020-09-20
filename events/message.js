@@ -1,6 +1,5 @@
 const Guild = require("../models/guild");
 const Database = require("../handlers/Database");
-const mongoose = require("mongoose");
 
 module.exports = async (client, message) => {
 	Guild.findOne(
@@ -8,9 +7,8 @@ module.exports = async (client, message) => {
 			guildID: message.guild.id,
 		},
 		async (err, guild) => {
-			if (guild == null) {
-				Database.AddGuild(message.guild);
-			}
+			if (guild == null) Database.AddGuild(message.guild);
+
 			let prefix;
 			try {
 				prefix = guild.guildPrefix;
