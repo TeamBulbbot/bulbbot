@@ -14,11 +14,16 @@ module.exports = {
 		let user = message.guild.member(target);
 		let reason = args.slice(1).join(" ");
 		if (reason === "") reason = "No reason given";
-		if (user === null) return message.channel.send("User is not in server");
+		if (user === null) {
+			user = await client.users.fetch(target);
+			if (!user) return await message.channel.send("Unable to find user.");
+			if (!(await Moderation.ForceBan(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
+		} else {
+			if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
+			user = user.user;
+		}
 
-		if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
-
-		await SendLog.Mod_action(client, message.guild.id, `${Emotes.actions.ban} Banned **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
+		await SendLog.Mod_action(client, message.guild.id, `${Emotes.actions.ban} Banned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
 
 		message.channel.send(`${Emotes.actions.ban} Banning <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``);
 	},

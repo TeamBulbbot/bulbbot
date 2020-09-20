@@ -20,4 +20,16 @@ module.exports = {
 			return true;
 		} else return false;
 	},
+	ForceBan: async (client, guildId, target, moderator, reason) => {
+		let guild = client.guilds.cache.get(guildId);
+
+		try {
+			await guild.members.ban(target, {
+				reason: `Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`,
+			});
+			return true;
+		} catch (error) {
+			return false;
+		}
+	},
 };
