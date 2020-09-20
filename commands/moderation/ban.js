@@ -1,5 +1,6 @@
 const Moderation = require("../../handlers/Moderation");
 const Emotes = require("../../emotes.json");
+const SendLog = require("../../handlers/SendLog");
 
 module.exports = {
 	name: "ban",
@@ -16,6 +17,8 @@ module.exports = {
 		if (user === null) return message.channel.send("User is not in server");
 
 		if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
+
+		await SendLog.Mod_action(client, message.guild.id, `${Emotes.actions.ban} Banned **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
 
 		message.channel.send(`${Emotes.actions.ban} Banning <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``);
 	},

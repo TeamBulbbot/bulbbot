@@ -29,12 +29,7 @@ module.exports = {
 					if (err) return console.error(`[Purge] ${err}`);
 				});
 
-				await SendLog.Mod_action(
-					client,
-					message.guild.id,
-					`Purged \`\`${amount}\`\` messages in ${message.channel} \`\`(${message.channel.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` at \`\`${moment().format("MMMM Do YYYY, h:mm:ss a")}\`\``,
-					`./files/purge/${message.guild.id}.txt`
-				);
+				await SendLog.Mod_action(client, message.guild.id, `Purged \`\`${amount}\`\` messages in ${message.channel} \`\`(${message.channel.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\``, `./files/purge/${message.guild.id}.txt`);
 			});
 
 		await message.channel

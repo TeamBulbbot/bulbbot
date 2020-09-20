@@ -1,5 +1,6 @@
 const Moderation = require("../../handlers/Moderation");
 const Emotes = require("../../emotes.json");
+const SendLog = require("../../handlers/SendLog");
 
 module.exports = {
 	name: "kick",
@@ -15,6 +16,7 @@ module.exports = {
 		if (user === null) return message.channel.send("User is not in server");
 
 		if (!(await Moderation.Kick(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to kick <@${target}> \`\`(${target})\`\`.`);
+		await SendLog.Mod_action(client, message.guild.id, `${Emotes.actions.kick} Kicked **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
 
 		message.channel.send(`${Emotes.actions.kick} Kicking <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``);
 	},

@@ -3,6 +3,7 @@ const Helper = require("../../handlers/Helper");
 const moment = require("moment");
 const Emotes = require("../../emotes.json");
 const Moderation = require("../../handlers/Moderation");
+const SendLog = require("../../handlers/SendLog");
 
 module.exports = {
 	name: "usermanagement",
@@ -70,13 +71,13 @@ ${descriptionBottom}
 					const reaction = collected.first();
 
 					if (reaction.emoji.id === Emotes.actions.warn.replace(/\D/g, "")) {
-						Perfom_Action(client, message, Emotes.actions.warn, "Warn", "Warning", target);
+						Perfom_Action(client, message, Emotes.actions.warn, "Warn", "Warning", user);
 					} else if (reaction.emoji.id === Emotes.actions.mute.replace(/\D/g, "")) {
-						Perfom_Action(client, message, Emotes.actions.mute, "Mute", "Muting", target);
+						Perfom_Action(client, message, Emotes.actions.mute, "Mute", "Muting", user);
 					} else if (reaction.emoji.id === Emotes.actions.kick.replace(/\D/g, "")) {
-						Perfom_Action(client, message, Emotes.actions.kick, "Kick", "Kicking", target);
+						Perfom_Action(client, message, Emotes.actions.kick, "Kick", "Kicking", user);
 					} else if (reaction.emoji.id === Emotes.actions.ban.replace(/\D/g, "")) {
-						Perfom_Action(client, message, Emotes.actions.ban, "Ban", "Banning", target);
+						Perfom_Action(client, message, Emotes.actions.ban, "Ban", "Banning", user);
 					} else if (reaction.emoji.id === Emotes.actions.cancel.replace(/\D/g, "")) return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 					else return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 				})
@@ -109,15 +110,17 @@ async function Perfom_Action(client, message, emote, action, actionText, target)
 			message.channel.send("To be added 🛠️");
 			break;
 		case "Kick":
-			if (!(await Moderation.Kick(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to kick <@${target}> \`\`(${target})\`\`.`);
+			if (!(await Moderation.Kick(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to kick <@${target.id}> \`\`(${target.id})\`\`.`);
 			break;
 		case "Ban":
-			if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
+			if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target.id}> \`\`(${target.id})\`\`.`);
 			break;
 		default:
 			message.channel.send("Something went wrong");
 			break;
 	}
 
-	message.channel.send(`${actionText} <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``);
+	await SendLog.Mod_action(client, message.guild.id, `${emote} ${action} **${target.username}**#${target.discriminator} \`\`(${target.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
+
+	message.channel.send(`${actionText} <@${target.id}> \`\`(${target.id})\`\` for \`\`${reason}\`\``);
 }
