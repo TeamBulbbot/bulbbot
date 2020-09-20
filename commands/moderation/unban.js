@@ -8,7 +8,7 @@ module.exports = {
 	description: "Unban a user from the server",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
-		if (args[0] === undefined || args[0] === null) return message.channel.send("🤣  lmao mate you forgot something");
+		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`unban|pardon <user> [reason]\`\``);
 		let target = args[0];
 		let reason = args.slice(1).join(" ");
 		if (reason === "") reason = "No reason given";

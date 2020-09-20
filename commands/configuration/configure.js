@@ -3,6 +3,7 @@ const Guild = require("../../handlers/configuration/guild");
 const Log = require("../../handlers/configuration/logs");
 const Role = require("../../handlers/configuration/roles");
 const Setting = require("../../handlers/configuration/settings");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "configure",
@@ -11,8 +12,8 @@ module.exports = {
 	description: "Modify settings on the bot in your guild",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
-		if (args[0] === undefined || args[0] === null || args[1] === null || args[1] === null) return message.channel.send("🤣  lmao mate you forgot something");
-
+		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value>\`\``);
+		if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`new value\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value>\`\``);
 		const setting = args[0].toLowerCase();
 		const newValue = args[1];
 

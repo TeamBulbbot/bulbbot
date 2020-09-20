@@ -4,12 +4,12 @@ const SendLog = require("../../handlers/SendLog");
 
 module.exports = {
 	name: "ban",
-	aliases: ["terminate", "🍰"],
+	aliases: ["terminate"],
 	category: "moderation",
 	description: "Bans a user from the guild",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
-		if (args[0] === undefined || args[0] === null) return message.channel.send("🤣  lmao mate you forgot something");
+		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`ban|terminate <user> [reason]\`\``);
 		let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 		let user = message.guild.member(target);
 		let reason = args.slice(1).join(" ");
