@@ -48,8 +48,6 @@
 		"offline": "<:Offline:742116937995124776>"
 	},
 	"other": {
-		"tools": "<:bulbTools:757323802274300056>",
-		"wrench": "<:bulbWrench:757336365443842119>",
-		"trash": "<:bulbTrash:757336365032538144>"
+		"tools": "<:bulbTools:757323802274300056>"
 	}
 }
