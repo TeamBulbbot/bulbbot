@@ -24,6 +24,11 @@ module.exports = {
 				message.channel.send(`Successfully updated the prefix to \`\`${newValue}\`\` in **${message.guild.name}**`);
 				break;
 
+			case "track_analytics":
+				Guild.Track_Analytics(message.guild.id, newValue);
+				message.channel.send(`Successfully update the state of tracking analytics to  \`\`${newValue}\`\` in **${message.guild.name}**`);
+				break;
+
 			// Log configuration
 			case "mod_action":
 				Log.Change_Mod_Action(client, message.guild.id, newValue.replace(/\D/g, ""));

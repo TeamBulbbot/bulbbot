@@ -1,3 +1,5 @@
+var clc = require("cli-color");
+
 const Guild = require("../models/guild");
 const Database = require("../handlers/Database");
 
@@ -7,6 +9,7 @@ module.exports = async (client, message) => {
 			guildID: message.guild.id,
 		},
 		async (err, guild) => {
+			if (err) console.error(clc.red(err));
 			if (guild == null) Database.AddGuild(message.guild);
 
 			let prefix;
@@ -29,7 +32,11 @@ module.exports = async (client, message) => {
 			let command = client.commands.get(cmd);
 			if (!command) command = client.commands.get(client.aliases.get(cmd));
 
-			if (command) command.run(client, message, args);
+			if (command) {
+				command.run(client, message, args);
+
+				if (guild.trackAnalytics) await Database.CommandAnalyticsHandler(cmd);
+			}
 		}
 	);
 };

@@ -9,4 +9,12 @@ module.exports = {
 			}
 		});
 	},
+
+	Track_Analytics: async (guildId, state) => {
+		Guild.findOneAndUpdate({ guildID: guildId }, { trackAnalytics: state }, function (error) {
+			if (error) {
+				console.error(clc.red(error));
+			}
+		});
+	},
 };
