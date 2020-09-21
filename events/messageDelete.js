@@ -9,6 +9,7 @@ module.exports = async (client, message) => {
 			guildID: message.guild.id,
 		},
 		async (err, res) => {
+			if (err) console.error(`[Message Delete] ${clc.red(err)}`);
 			if (res.message === "") return;
 			client.channels.cache
 				.get(res.message)

@@ -1,6 +1,7 @@
 const Log = require("../models/log");
 const moment = require("moment");
 const Emotes = require("../emotes.json");
+var clc = require("cli-color");
 
 module.exports = async (client, oldMessage, newMessage) => {
 	if (oldMessage.author.bot) return;
@@ -10,6 +11,7 @@ module.exports = async (client, oldMessage, newMessage) => {
 			guildID: newMessage.guild.id,
 		},
 		async (err, res) => {
+			if (err) console.error(`[Message Update] ${clc.red(err)}`);
 			if (res.message === "") return;
 			client.channels.cache
 				.get(res.message)
