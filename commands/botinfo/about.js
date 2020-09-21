@@ -9,6 +9,7 @@ module.exports = {
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()
+			.setThumbnail(client.user.avatarURL())
 			.setFooter(`Executed by ${message.author.username}#${message.author.discriminator}`, message.author.avatarURL())
 			.setAuthor(`About ${client.user.username}#${client.user.discriminator}`, client.user.avatarURL())
 			.setDescription(
