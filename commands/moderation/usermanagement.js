@@ -104,16 +104,16 @@ async function Perfom_Action(client, message, emote, action, actionText, target)
 
 	switch (action) {
 		case "Warn":
-			message.channel.send("To be added 🛠️");
+			if (!(await Moderation.Warn(client, message.guild.id, target.id, message.author, reason))) return message.channel.send(`Unable to warn <@${target.id}> \`\`(${target.id})\`\`.`);
 			break;
 		case "Mute":
 			message.channel.send("To be added 🛠️");
 			break;
 		case "Kick":
-			if (!(await Moderation.Kick(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to kick <@${target.id}> \`\`(${target.id})\`\`.`);
+			if (!(await Moderation.Kick(client, message.guild.id, target.id, message.author, reason))) return message.channel.send(`Unable to kick <@${target.id}> \`\`(${target.id})\`\`.`);
 			break;
 		case "Ban":
-			if (!(await Moderation.Ban(client, message.guild.id, target, message.author, reason))) return message.channel.send(`Unable to ban <@${target.id}> \`\`(${target.id})\`\`.`);
+			if (!(await Moderation.Ban(client, message.guild.id, target.id, message.author, reason))) return message.channel.send(`Unable to ban <@${target.id}> \`\`(${target.id})\`\`.`);
 			break;
 		default:
 			message.channel.send("Something went wrong");
