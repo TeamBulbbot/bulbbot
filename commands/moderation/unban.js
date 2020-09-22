@@ -1,5 +1,6 @@
 const Emotes = require("../../emotes.json");
 const SendLog = require("../../handlers/SendLog");
+const Moderation = require("../../handlers/Moderation");
 
 module.exports = {
 	name: "unban",
@@ -24,7 +25,7 @@ module.exports = {
 				if (ban.user.username.toLowerCase().includes(target.toLowerCase())) whoToUnban = ban.user.id;
 			});
 
-			if (whoToUnban === "") return message.channel.send(`\`\`${target}\`\` is not banned in ${message.guild.name}`);
+			if (whoToUnban === "") return message.channel.send(`Was unable to find user \`\`${target}\`\` in **${message.guild.name}**, try to be a bit more specific or check if they are banned.`);
 
 			const user = await client.users.fetch(whoToUnban);
 
@@ -41,8 +42,7 @@ module.exports = {
 					const reaction = collected.first();
 
 					if (reaction.emoji.id === Emotes.actions.confirm.replace(/\D/g, "")) {
-						message.guild.members.unban(whoToUnban, `Moderator: ${message.author.username}#${message.author.discriminator} (${message.author.id}) | Target: ${whoToUnban} | Reason: ${reason}`);
-
+						if (!(await Moderation.Unban(client, message.guild.id, user, message.author, reason))) return message.channel.send(`Unable to unban <@${user.id}> \`\`(${user.id})\`\`.`);
 						await SendLog.Mod_action(client, message.guild.id, `Unbanned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
 
 						return message.channel.send(`Unbanning <@${whoToUnban}> \`\`(${whoToUnban})\`\` for \`\`${reason}\`\``);
