@@ -20,6 +20,7 @@
     "ascii-table": "0.0.9",
     "cli-color": "^2.0.0",
     "discord.js": "^12.3.1",
+    "discord.js-pagination": "^1.0.2",
     "dotenv": "^8.2.0",
     "moment": "^2.28.0",
     "moment-duration-format": "^2.3.2",
