@@ -9,6 +9,7 @@ const Log = require("../models/log");
 const CommandAnalytics = require("../models/commandAnalytics");
 
 module.exports = {
+	// Add the guild to the database
 	AddGuild: async (guildObject) => {
 		try {
 			guild = new Guild({
@@ -64,6 +65,7 @@ module.exports = {
 		}
 	},
 
+	// Remove the entire guild from the database
 	RemoveGuild: async (guildObject) => {
 		try {
 			Guild.findOneAndDelete(
@@ -104,6 +106,7 @@ module.exports = {
 		}
 	},
 
+	// Handler to know which commands are commonly used or not
 	CommandAnalyticsHandler: async (commandName) => {
 		CommandAnalytics.findOne({ commandName: commandName }, async (err, res) => {
 			if (res === null) AddCommand(commandName);
