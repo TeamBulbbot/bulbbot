@@ -42,7 +42,7 @@ module.exports = {
 
 		description += `${await Helper.Badges(user.flags.bitfield)}\n`;
 		description += `**ID: ** ${user.id}\n`;
-		description += `**Username: **${user.username}#${user.discriminator}\n`;
+		description += `**Username: **${user.username}**#${user.discriminator}\n`;
 		description += `**Profile: ** <@${user.id}>\n`;
 		description += `**Avatar URL:** [Link](${user.avatarURL()})\n`;
 		description += `**Bot: ** ${user.bot}\n`;
