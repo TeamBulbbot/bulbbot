@@ -17,4 +17,16 @@ module.exports = {
 		});
 		inf.save().catch((err) => console.error(clc.red(err)));
 	},
+
+	Remove: async (id, guildId) => {
+		Infraction.findOneAndDelete(
+			{
+				_id: id,
+				guildID: guildId,
+			},
+			(err, res) => {
+				if (err) console.error(clc.red(err));
+			}
+		);
+	},
 };

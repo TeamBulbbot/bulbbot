@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 const Infraction = require("../../models/infraction");
+const InfractionHandler = require("../../handlers/Infraction");
 const paginationEmbed = require("discord.js-pagination");
 const Emotes = require("../../emotes.json");
+const SendLog = require("../../handlers/SendLog");
 
 module.exports = {
 	name: "infraction",
@@ -83,6 +85,23 @@ module.exports = {
 				);
 				break;
 
+			case "remove":
+				Infraction.find(
+					{
+						_id: args[1],
+						guildID: message.guild.id,
+					},
+					async (err, infs) => {
+						if (infs.length === 0) return message.channel.send(`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`);
+						await InfractionHandler.Remove(args[1], message.guild.id);
+						message.channel.send(`Removed infraction \`\`${args[1]}\`\` in **${message.guild.name}**`);
+						let reason = args[2] || "No reason given";
+						await SendLog.Mod_action(client, message.guild.id, `${Emotes.actions.unban} Infraction \`\`${args[1]}\`\` was removed by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
+					}
+				);
+
+				break;
+
 			case "list":
 				Infraction.find(
 					{
@@ -95,6 +114,9 @@ module.exports = {
 							let action;
 
 							switch (infs[i].action) {
+								case "Warn":
+									action = `${Emotes.actions.warn} Warn`;
+									break;
 								case "Kick":
 									action = `${Emotes.actions.kick} Kick`;
 									break;
