@@ -43,9 +43,9 @@ module.exports = {
 
 					if (reaction.emoji.id === Emotes.actions.confirm.replace(/\D/g, "")) {
 						if (!(await Moderation.Unban(client, message.guild.id, user, message.author, reason))) return message.channel.send(`Unable to unban <@${user.id}> \`\`(${user.id})\`\`.`);
-						await SendLog.Mod_action(client, message.guild.id, `Unbanned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
+						await SendLog.Mod_action(client, message.guild.id, `${Emotes.actions.unban} Unbanned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `, "");
 
-						return message.channel.send(`Unbanning <@${whoToUnban}> \`\`(${whoToUnban})\`\` for \`\`${reason}\`\``);
+						return message.channel.send(`${Emotes.actions.unban} Unbanning <@${whoToUnban}> \`\`(${whoToUnban})\`\` for \`\`${reason}\`\``);
 					} else {
 						return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 					}

@@ -36,6 +36,7 @@
 		"mute": "<:bulbMUTE:742096152937234485>",
 		"kick": "<:bulbKICK:742096152479924335>",
 		"ban": "<:bulbBAN:742096152991760565>",
+		"unban": "<:bulbUnban:758063193250856982>",
 		"confirm": "<:bulbCONFIRM:742096152861868104>",
 		"cancel": "<:bulbCANCEL:742096153172115507>",
 		"right": "<:bulbRIGHT:743166345964683347>",
@@ -50,6 +51,8 @@
 	"other": {
 		"tools": "<:bulbTools:757323802274300056>",
 		"wrench": "<:bulbWrench:757336365443842119>",
-		"trash": "<:bulbTrash:757336365032538144>"
+		"trash": "<:bulbTrash:757336365032538144>",
+		"plus": "<:plus:758063193506709614>",
+		"minus": "<:minus:758063193502384231>"
 	}
 }

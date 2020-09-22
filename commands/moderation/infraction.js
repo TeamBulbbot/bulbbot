@@ -105,7 +105,7 @@ module.exports = {
 									action = `${Emotes.actions.ban} Force Ban`;
 									break;
 								case "Unban":
-									action = `Unban`;
+									action = `${Emotes.actions.unban} Unban`;
 									break;
 
 								default:
@@ -113,8 +113,10 @@ module.exports = {
 									break;
 							}
 
-							let embed = new Discord.MessageEmbed().setColor(process.env.COLOR).setTimestamp().setAuthor(infs[i]._id).setTitle(action).setDescription(
+							let embed = new Discord.MessageEmbed().setColor(process.env.COLOR).setTimestamp().setDescription(
 								`
+								**${action}**
+								**Infraction id:** ${infs[i]._id}
                                 **Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
                                 **Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
                                 **Reason:**  ${infs[i].reportReason}

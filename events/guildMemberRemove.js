@@ -12,7 +12,7 @@ module.exports = async (client, user) => {
 	SendLog.Join_leave_log(
 		client,
 		user.guild.id,
-		`User left guild **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` - **Account Age:** ${Math.floor(accountAgeInDays).toString().replace("-", "")} days - **Days in guild:** ${Math.floor(daysInServer).toString().replace("-", "")} days`,
+		`${Emotes.other.minus} User left guild **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` - **Account Age:** ${Math.floor(accountAgeInDays).toString().replace("-", "")} days - **Days in guild:** ${Math.floor(daysInServer).toString().replace("-", "")} days`,
 		""
 	);
 };
