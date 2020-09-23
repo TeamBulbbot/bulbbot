@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
 	name: "help",
 	category: "botinfo",
-	description: "Helper",
+	description: "Super basic helper command so people know which commands exists",
 	run: async (client, message, args) => {
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
@@ -12,7 +12,7 @@ module.exports = {
 			.setAuthor(`Help ${client.user.username}#${client.user.discriminator}`, client.user.avatarURL());
 		client.commands.forEach((c) => {
 			if (c.category !== "developer") {
-				embed.addField(`${c.name} \`\`(${c.category})\`\``, `> **Aliases:** ${c.aliases > 0 ? c.aliases.join("|") : c.aliases}\n> **Description**: ${c.description}`);
+				embed.addField(`${c.name} \`\`(${c.category})\`\``, ` ${c.aliases > 0 ? `> **Aliases:** ${c.aliases.join("**|**")}` : c.aliases === undefined ? "" : `> **Aliases:** ${c.aliases.join("**|**")}`}\n> **Description**: ${c.description}`);
 			}
 		});
 
