@@ -12,7 +12,7 @@ module.exports = {
 	description: "Infraction logs",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
-		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| <option>\`\``);
+		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf <option>\`\``);
 
 		const option = args[0];
 
@@ -24,7 +24,7 @@ module.exports = {
 			case "search":
 			case "msearch":
 			case "modsearch":
-				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| search|msearch|modsearch <user>\`\``);
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf search|msearch|modsearch <user>\`\``);
 
 				Infraction.find(
 					{
@@ -88,7 +88,7 @@ module.exports = {
 			// infraction|inf osearch|offedersearch <Target ID>
 			case "osearch":
 			case "offedersearch":
-				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| osearch|offedersearch <user>\`\``);
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf osearch|offedersearch <user>\`\``);
 
 				Infraction.find(
 					{
@@ -121,7 +121,7 @@ module.exports = {
 			// infraction|inf edit|update <Infraction Id> [New reason]
 			case "edit":
 			case "update":
-				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| edit|update <id> [reason]\`\``);
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf edit|update <id> [reason]\`\``);
 
 				Infraction.findOne(
 					{
@@ -142,7 +142,7 @@ module.exports = {
 			// Claim responsibilty another infraction
 			// infraction|inf claim <Infraction Id>
 			case "claim":
-				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| claim <id>\`\``);
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf claim <id>\`\``);
 
 				Infraction.findOne(
 					{
@@ -166,7 +166,7 @@ module.exports = {
 			case "delete":
 			case "del":
 			case "remove":
-				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| delete|del|remove <id> [reason]\`\``);
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf delete|del|remove <id> [reason]\`\``);
 
 				Infraction.findOne(
 					{

@@ -5,7 +5,7 @@ require("moment-duration-format");
 module.exports = {
 	name: "uptime",
 	aliases: ["status"],
-	category: "Info",
+	category: "info",
 	description: "Get the current uptime of the bot",
 	run: async (client, message, args) => {
 		let duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
