@@ -16,7 +16,7 @@
 Bulbbot is a powerful discord moderation bot written in Javascript using the discord.js libary.
 
 ## Add the bot to your Discord server
-Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to invite the bot to your server.
+Click [here](https://discord.com/oauth2/authorize?client_id=755149065137815623&scope=bot&permissions=1544940655) to invite the bot to your server.
 
 The defualt prefix of the bot is `!`, but it can easily be changed with the `configure` command. To change the prefix just type `!configure prefix <prefix>`
 
