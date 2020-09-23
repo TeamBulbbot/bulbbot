@@ -12,6 +12,7 @@ module.exports = {
 	description: "Infraction logs",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
+		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| <option>\`\``);
 
 		const option = args[0];
 
@@ -23,10 +24,12 @@ module.exports = {
 			case "search":
 			case "msearch":
 			case "modsearch":
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| search|msearch|modsearch <user>\`\``);
+
 				Infraction.find(
 					{
 						guildID: message.guild.id,
-						moderatorID: args[1],
+						moderatorID: args[1].replace(/\D/g, ""),
 					},
 					async (err, infs) => {
 						let moderator;
@@ -85,10 +88,12 @@ module.exports = {
 			// infraction|inf osearch|offedersearch <Target ID>
 			case "osearch":
 			case "offedersearch":
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| osearch|offedersearch <user>\`\``);
+
 				Infraction.find(
 					{
 						guildID: message.guild.id,
-						targetID: args[1],
+						targetID: args[1].replace(/\D/g, ""),
 					},
 					async (err, infs) => {
 						for (let i = 0; i < infs.length; i++) {
@@ -116,6 +121,8 @@ module.exports = {
 			// infraction|inf edit|update <Infraction Id> [New reason]
 			case "edit":
 			case "update":
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| edit|update <id> [reason]\`\``);
+
 				Infraction.findOne(
 					{
 						_id: args[1],
@@ -135,6 +142,8 @@ module.exports = {
 			// Claim responsibilty another infraction
 			// infraction|inf claim <Infraction Id>
 			case "claim":
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| claim <id>\`\``);
+
 				Infraction.findOne(
 					{
 						_id: args[1],
@@ -157,13 +166,15 @@ module.exports = {
 			case "delete":
 			case "del":
 			case "remove":
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| delete|del|remove <id> [reason]\`\``);
+
 				Infraction.findOne(
 					{
 						_id: args[1],
 						guildID: message.guild.id,
 					},
 					async (err, infs) => {
-						if (infs.length === 0) return message.channel.send(`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`);
+						if (infs === null || infs === undefined) return message.channel.send(`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`);
 						await InfractionHandler.Remove(args[1], message.guild.id);
 						message.channel.send(`Removed infraction \`\`${args[1]}\`\` in **${message.guild.name}**`);
 						let reason = args.slice(2).join(" ") || "No reason given";
@@ -176,6 +187,8 @@ module.exports = {
 			// Get info about a infracton
 			// infraction|inf info <Infraction Id>
 			case "info":
+				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| info <id> \`\``);
+
 				Infraction.findOne(
 					{
 						_id: args[1],
@@ -280,6 +293,9 @@ module.exports = {
 				);
 				break;
 			default:
+				message.channel.send(
+					`${Emotes.actions.warn} Invalid \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf| <option>\`\`\n**Options:** \`\`search|msearch|modsearch\`\`, \`\`osearch|offedersearch\`\`, \`\`edit|update\`\`, \`\`claim\`\`, \`\`delete|del|remove\`\`, \`\`info\`\`, \`\`all|list\`\``
+				);
 				break;
 		}
 	},
