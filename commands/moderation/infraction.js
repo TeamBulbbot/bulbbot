@@ -11,7 +11,7 @@ module.exports = {
 	category: "moderation",
 	description: "Infraction logs",
 	run: async (client, message, args) => {
-		if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission ``ADMINISTRATOR``"); // I know best has permssion lol
+		if (!message.member.hasPermission("KICK_MEMBERS")) return message.channel.send(":lock: Missing permission"); // I know best has permssion lol
 		if (args[0] === undefined || args[0] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf <option>\`\``);
 
 		const option = args[0];
@@ -166,6 +166,7 @@ module.exports = {
 			case "delete":
 			case "del":
 			case "remove":
+				if (!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(":lock: Missing permission "); // I know best has permssion lol
 				if (args[1] === undefined || args[1] === null) return message.channel.send(`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf delete|del|remove <id> [reason]\`\``);
 
 				Infraction.findOne(
