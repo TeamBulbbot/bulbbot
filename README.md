@@ -11,7 +11,7 @@
 </div>
 
 
-<h1>Bulbbot - currently under development</h1>
+<h1>Bulbbot</h1>
 
 Bulbbot is a powerful discord moderation bot written in Javascript using the discord.js libary.
 
