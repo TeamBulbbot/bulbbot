@@ -29,4 +29,20 @@ module.exports = {
 			}
 		);
 	},
+
+	Claim: async (id, guildId, moderatorId) => {
+		Infraction.findOneAndUpdate({ _id: id, guildID: guildId }, { moderatorID: moderatorId }, function (err) {
+			if (err) {
+				console.error(clc.red(error));
+			}
+		});
+	},
+
+	Update: async (id, guildId, reason) => {
+		Infraction.findOneAndUpdate({ _id: id, guildID: guildId }, { reportReason: reason }, function (err) {
+			if (err) {
+				console.error(clc.red(err));
+			}
+		});
+	},
 };
