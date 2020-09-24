@@ -1,8 +1,6 @@
-const Discord = require("discord.js");
 const Guild = require("../../handlers/configuration/guild");
 const Log = require("../../handlers/configuration/logs");
 const Role = require("../../handlers/configuration/roles");
-const Setting = require("../../handlers/configuration/settings");
 const Emotes = require("../../emotes.json");
 
 module.exports = {

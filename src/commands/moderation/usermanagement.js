@@ -104,7 +104,7 @@ ${descriptionBottom}
 										} else if (reaction.emoji.id === Emotes.actions.cancel.replace(/\D/g, "")) return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 										else return message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 									})
-									.catch((collected) => {
+									.catch((_) => {
 										message.channel.send(`${Emotes.actions.cancel} Canceling the operation.`);
 									});
 							});

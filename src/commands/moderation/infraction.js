@@ -16,7 +16,7 @@ module.exports = {
 
 		const option = args[0];
 
-		pages = [];
+		const pages = [];
 
 		switch (option) {
 			// Search and find the infractions made by the mod id
@@ -217,7 +217,7 @@ module.exports = {
 								break;
 
 							default:
-								action = infs[i].action;
+								action = inf.action;
 								break;
 						}
 

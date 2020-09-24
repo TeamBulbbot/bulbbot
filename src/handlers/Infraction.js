@@ -6,7 +6,7 @@ const Infraction = require("../models/infraction");
 module.exports = {
 	// Add a new infraction to the database
 	Add: async (guildId, action, targetId, moderatorId, reason) => {
-		inf = new Infraction({
+		const inf = new Infraction({
 			_id: mongoose.Types.ObjectId(),
 			guildID: guildId,
 			action: action,
@@ -24,7 +24,7 @@ module.exports = {
 				_id: id,
 				guildID: guildId,
 			},
-			(err, res) => {
+			(err, _res) => {
 				if (err) console.error(clc.red(err));
 			}
 		);
@@ -33,7 +33,7 @@ module.exports = {
 	Claim: async (id, guildId, moderatorId) => {
 		Infraction.findOneAndUpdate({ _id: id, guildID: guildId }, { moderatorID: moderatorId }, function (err) {
 			if (err) {
-				console.error(clc.red(error));
+				console.error(clc.red(err));
 			}
 		});
 	},

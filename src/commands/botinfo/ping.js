@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ["🏓"],
 	category: "info",
 	description: "Returns bot and API latency in milliseconds.",
-	run: async (client, message, args) => {
+	run: async (client, message, _args) => {
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTitle("🏓 Pong!")

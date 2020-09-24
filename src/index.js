@@ -1,7 +1,6 @@
 const { Client, Collection } = require("discord.js");
 const { config } = require("dotenv");
 const fs = require("fs");
-const mongoose = require("mongoose");
 const ascii = require("ascii-table");
 const { resolve } = require("path");
 const table = new ascii().setHeading("Event", "Status");

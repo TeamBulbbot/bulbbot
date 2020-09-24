@@ -7,7 +7,7 @@ module.exports = {
 	aliases: ["status"],
 	category: "info",
 	description: "Get the current uptime of the bot",
-	run: async (client, message, args) => {
+	run: async (client, message, _args) => {
 		let duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
 
 		let embed = new Discord.MessageEmbed()

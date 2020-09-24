@@ -8,7 +8,7 @@ module.exports = {
 	aliases: ["server"],
 	category: "information",
 	description: "Gets some useful information about the server",
-	run: async (client, message, args) => {
+	run: async (client, message, _args) => {
 		let guild = message.guild;
 
 		const countOnline = guild.members.cache.filter((m) => m.presence.status === "online").size;

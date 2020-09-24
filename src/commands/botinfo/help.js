@@ -4,7 +4,7 @@ module.exports = {
 	name: "help",
 	category: "botinfo",
 	description: "Super basic helper command so people know which commands exists",
-	run: async (client, message, args) => {
+	run: async (client, message, _args) => {
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setThumbnail(client.user.avatarURL())

@@ -1,5 +1,6 @@
 const Log = require("../models/log");
 const moment = require("moment");
+const clc = require("cli-color")
 
 module.exports = {
 	Mod_action: async (client, guildId, log, file) => {

@@ -4,7 +4,7 @@ module.exports = {
 	name: "analytics",
 	category: "developer",
 	description: "Analytics about the bot",
-	run: async (client, message, args) => {
+	run: async (client, message, _args) => {
 		let developers = process.env.DEVELOPERS.split(",");
 
 		if (developers.includes(message.author.id)) {

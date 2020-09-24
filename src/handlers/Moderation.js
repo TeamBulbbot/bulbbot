@@ -1,11 +1,11 @@
 const Infraction = require("../handlers/Infraction");
 
 module.exports = {
-	Warn: async (client, guildId, target, moderator, reason) => {
+	Warn: async (_client, guildId, target, moderator, reason) => {
 		Infraction.Add(guildId, "Warn", target, moderator.id, reason);
 		return true;
 	},
-	Mute: async (client, guildId, target, moderator, reason) => {},
+	Mute: async (_client, _guildId, _target, _moderator, _reason) => {},
 	// Kick user from guild
 	Kick: async (client, guildId, target, moderator, reason) => {
 		let guild = client.guilds.cache.get(guildId);

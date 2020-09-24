@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ["bot", "license", "privacypolicy", "support", "invite", "github"],
 	category: "botinfo",
 	description: "Get some basic information about the bot",
-	run: async (client, message, args) => {
+	run: async (client, message, _args) => {
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()

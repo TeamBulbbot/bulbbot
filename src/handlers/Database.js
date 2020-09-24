@@ -12,7 +12,7 @@ module.exports = {
 	// Add the guild to the database
 	AddGuild: async (guildObject) => {
 		try {
-			guild = new Guild({
+			const guild = new Guild({
 				_id: mongoose.Types.ObjectId(),
 				guildID: guildObject.id,
 				guildName: guildObject.name,
@@ -22,7 +22,7 @@ module.exports = {
 			});
 			guild.save().catch((err) => console.error(clc.red(err)));
 
-			setting = new Setting({
+			const setting = new Setting({
 				_id: mongoose.Types.ObjectId(),
 				guildID: guildObject.id,
 				language: "en-us",
@@ -36,7 +36,7 @@ module.exports = {
 			});
 			setting.save().catch((err) => console.error(clc.red(err)));
 
-			role = new Role({
+			const role = new Role({
 				_id: mongoose.Types.ObjectId(),
 				guildID: guildObject.id,
 				admin: "",
@@ -46,7 +46,7 @@ module.exports = {
 			});
 			role.save().catch((err) => console.error(clc.red(err)));
 
-			log = new Log({
+			const log = new Log({
 				_id: mongoose.Types.ObjectId(),
 				guildID: guildObject.id,
 				modAction: "",
@@ -72,7 +72,7 @@ module.exports = {
 				{
 					guildID: guildObject.id,
 				},
-				(err, res) => {
+				(err, _res) => {
 					if (err) console.error(clc.red(err));
 				}
 			);
@@ -80,7 +80,7 @@ module.exports = {
 				{
 					guildID: guildObject.id,
 				},
-				(err, res) => {
+				(err, _res) => {
 					if (err) console.error(clc.red(err));
 				}
 			);
@@ -88,7 +88,7 @@ module.exports = {
 				{
 					guildID: guildObject.id,
 				},
-				(err, res) => {
+				(err, _res) => {
 					if (err) console.error(clc.red(err));
 				}
 			);
@@ -96,7 +96,7 @@ module.exports = {
 				{
 					guildID: guildObject.id,
 				},
-				(err, res) => {
+				(err, _res) => {
 					if (err) console.error(clc.red(err));
 				}
 			);
@@ -115,7 +115,7 @@ module.exports = {
 	},
 };
 function AddCommand(commandName) {
-	commandAnalytics = new CommandAnalytics({
+	const commandAnalytics = new CommandAnalytics({
 		_id: mongoose.Types.ObjectId(),
 		commandName: commandName,
 		uses: 1,
@@ -124,7 +124,7 @@ function AddCommand(commandName) {
 }
 
 function IncrementCommand(commandName) {
-	CommandAnalytics.findOneAndUpdate({ commandName: commandName }, { $inc: { uses: 1 } }, { new: true }, function (err, response) {
+	CommandAnalytics.findOneAndUpdate({ commandName: commandName }, { $inc: { uses: 1 } }, { new: true }, function (err, _res) {
 		if (err) console.error(clc.red(err));
 	});
 }
