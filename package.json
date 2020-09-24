@@ -26,5 +26,11 @@
     "moment-duration-format": "^2.3.2",
     "mongoose": "^5.10.5"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/cli-color": "^2.0.0",
+    "@types/eslint": "^7.2.3",
+    "@types/moment-duration-format": "^2.2.2",
+    "@types/mongoose": "^5.7.36",
+    "eslint": "^7.9.0"
+  }
 }
