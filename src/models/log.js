@@ -10,4 +10,4 @@ const logsSchema = mongoose.Schema({
   join_leave: String,
 });
 
-module.exports = mongoose.model("Log", logsSchema, "logs");
+module.exports = mongoose.model("Log", logsSchema);

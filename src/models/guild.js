@@ -8,4 +8,4 @@ const guildSchema = mongoose.Schema({
   joinDate: Date,
 });
 
-module.exports = mongoose.model("Guild", guildSchema, "guilds");
+module.exports = mongoose.model("Guild", guildSchema);

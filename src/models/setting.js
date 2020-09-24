@@ -12,4 +12,4 @@ const settingsSchema = mongoose.Schema({
   trusted_links: Array,
 });
 
-module.exports = mongoose.model("Setting", settingsSchema, "settings");
+module.exports = mongoose.model("Setting", settingsSchema);

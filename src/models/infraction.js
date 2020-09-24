@@ -9,4 +9,4 @@ const infractionSchema = mongoose.Schema({
   date: Date,
 });
 
-module.exports = mongoose.model("Infraction", infractionSchema, "infractions");
+module.exports = mongoose.model("Infraction", infractionSchema);
