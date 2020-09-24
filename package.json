@@ -2,8 +2,10 @@
   "name": "bulbbot",
   "version": "1.0.0",
   "description": "A discord moderation bot written in Discord.JS",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,5 +28,12 @@
     "moment-duration-format": "^2.3.2",
     "mongoose": "^5.10.5"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/cli-color": "^2.0.0",
+    "@types/eslint": "^7.2.3",
+    "@types/moment-duration-format": "^2.2.2",
+    "@types/mongoose": "^5.7.36",
+    "eslint": "^7.9.0",
+    "nodemon": "^2.0.4"
+  }
 }

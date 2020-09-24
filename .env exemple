@@ -1,9 +1,0 @@
-TOKEN=<DISCORD_BOT_TOKEN> 
-
-MONGODB_URI=<MONGODB_URI>
-
-PREFIX=!
-
-COLOR=#7289DA
-
-DEVELOPERS=Developer_user_id_1,Developer_user_id_2
