@@ -28,10 +28,10 @@ module.exports = {
           `${c.name} \`\`(${c.category})\`\``,
           ` ${
             c.aliases > 0
-              ? `> **Aliases:** ${c.aliases.join("**|**")}`
+              ? `> **Aliases:** ${c.aliases.join(" **|** ")}`
               : c.aliases === undefined
               ? ""
-              : `> **Aliases:** ${c.aliases.join("**|**")}`
+              : `> **Aliases:** ${c.aliases.join(" **|** ")}`
           }\n> **Description**: ${c.description}`
         );
       }
