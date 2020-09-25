@@ -1,32 +1,39 @@
 const Discord = require("discord.js");
 
 module.exports = {
-  name: "analytics",
-  category: "developer",
-  description: "Analytics about the bot",
-  run: async (client, message, _args) => {
-    let developers = process.env.DEVELOPERS.split(",");
+	name: "analytics",
+	category: "developer",
+	description: "Analytics about the bot",
+	run: async (client, message, _args) => {
+		let developers = process.env.DEVELOPERS.split(",");
 
-    if (developers.includes(message.author.id)) {
-      let totalGuildSize = client.guilds.cache.size;
+		if (developers.includes(message.author.id)) {
+			let totalGuildSize = client.guilds.cache.size;
 
-      const list = client.guilds.cache;
-      let totalMemberCount = 0;
-      list.forEach((guild) => {
-        totalMemberCount += guild.memberCount;
-      });
+			const list = client.guilds.cache;
+			let totalMemberCount = 0;
+			list.forEach((guild) => {
+				totalMemberCount += guild.memberCount;
+			});
 
-      let embed = new Discord.MessageEmbed()
-        .setTimestamp()
-        .setFooter(
-          `Executed by ${message.author.username}#${message.author.discriminator}`,
-          message.author.avatarURL()
-        )
-        .setColor(process.env.COLOR)
-        .addField("Total Guild count", totalGuildSize, true)
-        .addField("Total member count", totalMemberCount, true);
+			let embed = new Discord.MessageEmbed()
+				.setTimestamp()
+				.setFooter(
+					`Executed by ${message.author.username}#${message.author.discriminator}`,
+					message.author.avatarURL()
+				)
+				.setColor(process.env.COLOR)
 
-      return message.channel.send(embed);
-    }
-  },
+				.addField(
+					"Guild & Users",
+					`
+        **Guild count:** ${totalGuildSize}
+        **Member Count:** ${totalMemberCount}
+        `,
+					true
+				);
+
+			return message.channel.send(embed);
+		}
+	},
 };
