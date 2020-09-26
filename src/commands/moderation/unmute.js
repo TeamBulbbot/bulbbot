@@ -1,8 +1,6 @@
-const Moderation = require("../../handlers/Moderation");
 const Emotes = require("../../emotes.json");
 const SendLog = require("../../handlers/SendLog");
 const Role = require("../../models/role");
-const moment = require("moment");
 
 module.exports = {
 	name: "unmute",
