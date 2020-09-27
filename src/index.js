@@ -39,6 +39,7 @@ fs.readdir(resolve(__dirname, "./events/"), (err, files) => {
 // Run this every 30 seconds
 cron.schedule("*/30 * * * * *", () => {
 	CronJobs.Mute(client);
+	CronJobs.Remind(client);
 });
 
 client.mongoose.init();

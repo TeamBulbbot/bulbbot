@@ -50,22 +50,42 @@ module.exports = {
 					switch (duration.substr(duration.length - 1)) {
 						case "w":
 							unixDuration = unixDuration.substring(0, unixDuration.length - 1);
+							if (unixDuration > 52)
+								return message.channel.send(
+									`${Emotes.actions.warn} You cannot mute a user for more than a year`
+								);
 							unixDuration = moment().add(unixDuration, "weeks").unix();
 							break;
 						case "d":
 							unixDuration = unixDuration.substring(0, unixDuration.length - 1);
+							if (unixDuration > 365)
+								return message.channel.send(
+									`${Emotes.actions.warn} You cannot mute a user for more than a year`
+								);
 							unixDuration = moment().add(unixDuration, "days").unix();
 							break;
 						case "h":
 							unixDuration = unixDuration.substring(0, unixDuration.length - 1);
+							if (unixDuration > 8765)
+								return message.channel.send(
+									`${Emotes.actions.warn} You cannot mute a user for more than a year`
+								);
 							unixDuration = moment().add(unixDuration, "hours").unix();
 							break;
 						case "m":
 							unixDuration = unixDuration.substring(0, unixDuration.length - 1);
+							if (unixDuration > 525948)
+								return message.channel.send(
+									`${Emotes.actions.warn} You cannot mute a user for more than a year`
+								);
 							unixDuration = moment().add(unixDuration, "minutes").unix();
 							break;
 						case "s":
 							unixDuration = unixDuration.substring(0, unixDuration.length - 1);
+							if (unixDuration > 31556926)
+								return message.channel.send(
+									`${Emotes.actions.warn} You cannot mute a user for more than a year`
+								);
 							unixDuration = moment().add(unixDuration, "seconds").unix();
 							break;
 
