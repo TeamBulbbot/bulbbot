@@ -34,7 +34,7 @@
     "@types/eslint": "^7.2.3",
     "@types/moment-duration-format": "^2.2.2",
     "@types/mongoose": "^5.7.36",
-    "eslint": "^7.9.0",
+    "eslint": "^7.10.0",
     "nodemon": "^2.0.4"
   }
 }
