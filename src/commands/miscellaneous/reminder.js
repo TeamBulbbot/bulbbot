@@ -10,6 +10,7 @@ module.exports = {
 	aliases: ["reminder", "r", "🕰️"],
 	category: "miscellaneous",
 	description: "Reminds you something",
+	usage: "remind <duration> <reminder>",
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(

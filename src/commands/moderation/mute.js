@@ -8,6 +8,7 @@ module.exports = {
 	name: "mute",
 	category: "moderation",
 	description: "Mutes a user from the guild",
+	usage: "mute <user> [reason]",
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

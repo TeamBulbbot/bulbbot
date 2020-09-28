@@ -12,6 +12,7 @@ module.exports = {
 	aliases: ["usermgmt", "um"],
 	category: "moderation",
 	description: "Moderation command on user",
+	usage: "usermanagement <user>",
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

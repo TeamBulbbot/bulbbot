@@ -10,6 +10,7 @@ module.exports = {
 	aliases: ["inf"],
 	category: "moderation",
 	description: "Infraction logs",
+	usage: "infraction <option>",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("KICK_MEMBERS"))
 			return message.channel.send(":lock: Missing permission"); // I know best has permssion lol

@@ -8,6 +8,7 @@ module.exports = {
 	aliases: ["cfg", "setting", "config"],
 	category: "configuration",
 	description: "Modify settings on the bot in your guild",
+	usage: "configure <setting> <new value>",
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("MANAGE_GUILD"))
 			return message.channel.send(":lock: Missing permission ``MANAGE_GUILD``"); // I know best has permssion lol

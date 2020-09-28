@@ -6,6 +6,7 @@ module.exports = {
 	name: "unmute",
 	category: "moderation",
 	description: "Unmutes a user from the guild",
+	usage: "unmute <user> [reason]",
 	run: async (client, message, args) => {
 		Role.findOne(
 			{
