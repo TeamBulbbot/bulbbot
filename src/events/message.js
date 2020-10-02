@@ -38,6 +38,15 @@ module.exports = async (client, message) => {
 
 			if (message.author.bot) return;
 			if (!message.guild) return;
+
+			if (
+				message.content === `<@${client.user.id}>` ||
+				message.content === `<@!${client.user.id}>`
+			)
+				return message.channel.send(
+					`Hi, the current prefix of **${message.guild.name}** is \`\`${prefix}\`\``
+				);
+
 			if (!message.content.startsWith(prefix)) return;
 			if (!message.member)
 				message.member = await message.guild.fetchMember(message);
