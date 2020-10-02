@@ -1,10 +1,26 @@
-var clc = require("cli-color");
+const clc = require("cli-color");
+const Discord = require("discord.js");
 
 const Guild = require("../models/guild");
 const Database = require("../handlers/Database");
 
 module.exports = async (client, message) => {
-	if (message.channel.type === "dm") return;
+	if (message.channel.type === "dm") {
+		const webhookClient = new Discord.WebhookClient(
+			process.env.WEBHOOK_ID,
+			process.env.WEBHOOK_TOKEN
+		);
+
+		webhookClient.send(
+			`**User ID:** ${message.author.id}\n**Content:** ${message.content}`,
+			{
+				username: `${message.author.username}#${message.author.discriminator}`,
+				avatarURL: message.author.avatarURL(),
+			}
+		);
+
+		return;
+	}
 	Guild.findOne(
 		{
 			guildID: message.guild.id,
