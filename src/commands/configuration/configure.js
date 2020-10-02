@@ -33,10 +33,15 @@ module.exports = {
 				break;
 
 			case "track_analytics":
-				Guild.Track_Analytics(message.guild.id, newValue);
-				message.channel.send(
-					`Successfully update the state of tracking analytics to  \`\`${newValue}\`\` in **${message.guild.name}**`
-				);
+				if (newValue === "true" || newValue === "false") {
+					Guild.Track_Analytics(message.guild.id, newValue);
+					message.channel.send(
+						`Successfully update the state of tracking analytics to  \`\`${newValue}\`\` in **${message.guild.name}**`
+					);
+				} else
+					message.channel.send(
+						"Invalid value, allowed values ``true`` or ``false``"
+					);
 				break;
 
 			// Log configuration
@@ -177,6 +182,7 @@ module.exports = {
 					`\`\`${newValue}\`\` in **${message.guild.name}**`
 				);
 				break;
+
 			default:
 				message.channel.send(
 					`${Emotes.actions.warn} Invalid \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value>\`\`\n**Guild settings:** \`\`prefix\`\`, \`\`track_analytics\`\`\n**Logging settings:** \`\`mod_action\`\`, \`\`message\`\`, \`\`role|role_update\`\`, \`\`member|member_update\`\`, \`\`channel|channel_update\`\`, \`\`join_leave\`\`\n**Role settings:** \`\`admin\`\`, \`\`mod|moderator\`\`, \`\`mute\`\`, \`\`trusted\`\`\n**Settings:** \`\`lang|language\`\`, \`\`delete_server_invites\`\`, \`\`trusted_server_invites\`\`, \`\`allow_non_latin_usernames\`\`, \`\`dm_on_action\`\`, \`\`censored_words\`\`, \`\`delete_links\`\`, \`\`trusted_links\`\``
