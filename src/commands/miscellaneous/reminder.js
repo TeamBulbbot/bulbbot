@@ -4,6 +4,7 @@ const moment = require("moment");
 const Discord = require("discord.js");
 const clc = require("cli-color");
 const mongoose = require("mongoose");
+const Validate = require("../../handlers/validate");
 
 module.exports = {
 	name: "remind",
@@ -118,13 +119,14 @@ ${Emotes.actions.cancel} **Cancel**
 							`${Emotes.actions.cancel} Canceling the operation.`
 						);
 					else if (reaction.emoji.id === Emotes.other.plus.replace(/\D/g, "")) {
+						let msg = await Validate.Master(client, args.slice(1).join(" "));
 						// in that channel
 						const remind = new Remind({
 							_id: mongoose.Types.ObjectId(),
 							userID: message.author.id,
 							dmRemind: false,
 							channelID: message.channel.id,
-							reminder: args.slice(1).join(" "),
+							reminder: msg,
 							expireTime: unixDuration,
 						});
 						remind.save().catch((err) => console.error(clc.red(err)));
