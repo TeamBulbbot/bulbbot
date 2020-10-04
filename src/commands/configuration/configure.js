@@ -47,6 +47,13 @@ module.exports = {
 
 			// Log configuration
 			case "mod_action":
+				if (
+					message.guild.channels.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`channel\`\``
+					);
 				Log.Change_Mod_Action(
 					client,
 					message.guild.id,
@@ -57,6 +64,13 @@ module.exports = {
 				);
 				break;
 			case "message":
+				if (
+					message.guild.channels.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`channel\`\``
+					);
 				Log.Change_Message(
 					client,
 					message.guild.id,
@@ -68,6 +82,13 @@ module.exports = {
 				break;
 			case "role":
 			case "role_update":
+				if (
+					message.guild.channels.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`channel\`\``
+					);
 				Log.Change_Role(client, message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(
 					`Now logging \`\`role updates\`\` in ${newValue} in **${message.guild.name}**`
@@ -75,6 +96,13 @@ module.exports = {
 				break;
 			case "member":
 			case "member_update":
+				if (
+					message.guild.channels.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`channel\`\``
+					);
 				Log.Change_Member(
 					client,
 					message.guild.id,
@@ -86,6 +114,13 @@ module.exports = {
 				break;
 			case "channel":
 			case "channel_update":
+				if (
+					message.guild.channels.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`channel\`\``
+					);
 				Log.Change_Channel(
 					client,
 					message.guild.id,
@@ -96,6 +131,13 @@ module.exports = {
 				);
 				break;
 			case "join_leave":
+				if (
+					message.guild.channels.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`channel\`\``
+					);
 				Log.Change_Join_Leave(
 					client,
 					message.guild.id,
@@ -108,6 +150,13 @@ module.exports = {
 
 			// Role configuration
 			case "admin":
+				if (
+					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`role\`\``
+					);
 				Role.Change_Admin_role(message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(
 					`Changed the admin role to \`\`${newValue.replace(
@@ -118,6 +167,13 @@ module.exports = {
 				break;
 			case "mod":
 			case "moderator":
+				if (
+					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`role\`\``
+					);
 				Role.Change_Mod_role(message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(
 					`Changed the moderator role to \`\`${newValue.replace(
@@ -127,6 +183,14 @@ module.exports = {
 				);
 				break;
 			case "mute":
+				if (
+					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`role\`\``
+					);
+
 				Role.Change_Mute_role(message.guild.id, newValue.replace(/\D/g, ""));
 				message.channel.send(
 					`Changed the muted role to \`\`${newValue.replace(
