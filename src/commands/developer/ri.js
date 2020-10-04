@@ -7,7 +7,7 @@ module.exports = {
 	description: "Test",
 	run: async (_client, message, _args) => {
 		let developers = process.env.DEVELOPERS.split(",");
-		let url = "http://bit.do/d83VX";
+		let url = "";
 		// ((?:https?:)?\/\/)?((?:www|m)\.)?((?:discord\.gg|discordapp\.gg))+
 
 		let r = [];
