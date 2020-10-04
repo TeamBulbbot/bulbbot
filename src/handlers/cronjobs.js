@@ -24,7 +24,7 @@ module.exports = {
 							let guild = client.guilds.cache.get(mute.guildID);
 							let user = guild.member(mute.targetID);
 
-							if (user.roles.cache.has(roles.mute)) {
+							if (user.roles.cache.has(roles.mute) && user !== undefined) {
 								user.roles.remove(roles.mute).catch(console.error);
 
 								await SendLog.Mod_action(
