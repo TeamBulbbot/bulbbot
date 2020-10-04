@@ -9,6 +9,12 @@ module.exports = {
 	category: "information",
 	description: "Gets some useful information about the server",
 	usage: "serverinfo",
+	clientPermissions: [
+		"EMBED_LINKS",
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"USE_EXTERNAL_EMOJIS",
+	],
 	run: async (client, message, _args) => {
 		let guild = message.guild;
 

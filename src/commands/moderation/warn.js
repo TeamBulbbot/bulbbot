@@ -8,6 +8,7 @@ module.exports = {
 	category: "moderation",
 	description: "Warns a user inside of guild",
 	usage: "warn <user> [reason]",
+	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

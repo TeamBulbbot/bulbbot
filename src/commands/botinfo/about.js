@@ -6,6 +6,7 @@ module.exports = {
 	category: "botinfo",
 	description: "Get some basic information about the bot",
 	usage: "about",
+	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	run: async (client, message, _args) => {
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)

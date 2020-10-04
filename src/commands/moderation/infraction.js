@@ -11,6 +11,7 @@ module.exports = {
 	category: "moderation",
 	description: "Infraction logs",
 	usage: "infraction <option>",
+	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("KICK_MEMBERS"))
 			return message.channel.send(":lock: Missing permission"); // I know best has permssion lol

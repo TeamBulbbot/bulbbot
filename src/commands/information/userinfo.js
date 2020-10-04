@@ -8,6 +8,12 @@ module.exports = {
 	category: "information",
 	description: "Gets some useful information about a user/bot",
 	usage: "userinfo <user>",
+	clientPermissions: [
+		"EMBED_LINKS",
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"USE_EXTERNAL_EMOJIS",
+	],
 	run: async (client, message, args) => {
 		let target;
 		if (args[0] == undefined || args[0] == null) target = message.author.id;

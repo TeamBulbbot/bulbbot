@@ -11,6 +11,7 @@ module.exports = {
 	category: "configuration",
 	description: "Get the configuration list of the guild",
 	usage: "guild",
+	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
 	run: async (client, message, args) => {
 		if (!message.member.hasPermission("MANAGE_GUILD"))
 			return message.channel.send(":lock: Missing permission ``MANAGE_GUILD``"); // I know best has permssion lol

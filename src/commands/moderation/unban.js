@@ -9,6 +9,13 @@ module.exports = {
 	category: "moderation",
 	description: "Unban a user from the server",
 	usage: "unban <user> [reason]",
+	clientPermissions: [
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"MANAGE_MESSAGES",
+		"USE_EXTERNAL_EMOJIS",
+		"BAN_MEMBERS",
+	],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

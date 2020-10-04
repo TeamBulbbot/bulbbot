@@ -9,6 +9,12 @@ module.exports = {
 	category: "moderation",
 	description: "Bans a user from the guild",
 	usage: "ban <user> [reason]",
+	clientPermissions: [
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"BAN_MEMBERS",
+		"USE_EXTERNAL_EMOJIS",
+	],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

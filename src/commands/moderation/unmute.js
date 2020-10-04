@@ -7,6 +7,12 @@ module.exports = {
 	category: "moderation",
 	description: "Unmutes a user from the guild",
 	usage: "unmute <user> [reason]",
+	clientPermissions: [
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"MANAGE_ROLES",
+		"USE_EXTERNAL_EMOJIS",
+	],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

@@ -6,6 +6,7 @@ module.exports = {
 	category: "botinfo",
 	description: "Returns bot and API latency in milliseconds.",
 	usage: "ping",
+	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	run: async (client, message, _args) => {
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)

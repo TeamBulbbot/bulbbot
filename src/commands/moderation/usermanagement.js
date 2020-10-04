@@ -13,6 +13,14 @@ module.exports = {
 	category: "moderation",
 	description: "Moderation command on user",
 	usage: "usermanagement <user>",
+	clientPermissions: [
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"MANAGE_ROLES",
+		"USE_EXTERNAL_EMOJIS",
+		"KICK_MEMBERS",
+		"BAN_MEMBERS",
+	],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

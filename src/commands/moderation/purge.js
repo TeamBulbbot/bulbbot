@@ -10,6 +10,13 @@ module.exports = {
 	category: "moderation",
 	description: "Purge X amount of message in channel",
 	usage: "purge <amount>",
+	clientPermissions: [
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"MANAGE_MESSAGES",
+		"USE_EXTERNAL_EMOJIS",
+		"ATTACH_FILES",
+	],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{
@@ -50,7 +57,7 @@ module.exports = {
 							);
 							message.channel.bulkDelete(messages);
 							fs.writeFile(
-								`./files/purge/${message.guild.id}.txt`,
+								`./src/files/purge/${message.guild.id}.txt`,
 								deletedMSG,
 								function (err) {
 									if (err) return console.error(`[Purge] ${err}`);
@@ -61,7 +68,7 @@ module.exports = {
 								client,
 								message.guild.id,
 								`Purged \`\`${amount}\`\` messages in ${message.channel} \`\`(${message.channel.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\``,
-								`./files/purge/${message.guild.id}.txt`
+								`./src/files/purge/${message.guild.id}.txt`
 							);
 						});
 
@@ -75,7 +82,7 @@ module.exports = {
 						.catch((err) => {
 							console.error(`[Purge] ${err}`);
 						});
-					fs.unlinkSync(`./files/purge/${message.guild.id}.txt`); // Removes the file from the system
+					fs.unlinkSync(`./src/files/purge/${message.guild.id}.txt`); // Removes the file from the system
 				} else return message.channel.send(":lock: Missing permission");
 			}
 		);

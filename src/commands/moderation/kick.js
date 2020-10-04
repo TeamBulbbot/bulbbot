@@ -8,6 +8,12 @@ module.exports = {
 	category: "moderation",
 	description: "Kicks a user from the guild",
 	usage: "kick <user> [reason]",
+	clientPermissions: [
+		"SEND_MESSAGES",
+		"VIEW_CHANNEL",
+		"KICK_MEMBERS",
+		"USE_EXTERNAL_EMOJIS",
+	],
 	run: async (client, message, args) => {
 		Role.findOne(
 			{

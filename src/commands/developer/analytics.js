@@ -4,6 +4,8 @@ module.exports = {
 	name: "analytics",
 	category: "developer",
 	description: "Analytics about the bot",
+	usage: "analytics",
+	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	run: async (client, message, _args) => {
 		let developers = process.env.DEVELOPERS.split(",");
 
