@@ -45,7 +45,3 @@ This project is licensed under the MIT License, see the [LICENSE](https://github
 - Twitter: [@y3ll0wLife](https://twitter.com/y3ll0wLife)
 - Github: [@y3ll0wlife](https://github.com/y3ll0wlife)
 - Discord: mrphilip#0001 (190160914765316096)
-
-## Code  
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FTestersQTs%2FBulbbot.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FTestersQTs%2FBulbbot?ref=badge_large)  
