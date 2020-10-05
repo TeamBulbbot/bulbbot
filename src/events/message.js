@@ -6,15 +6,6 @@ const { Permissions } = require("discord.js");
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
-	if (!message.guild) return;
-
-	if (
-		message.content === `<@${client.user.id}>` ||
-		message.content === `<@!${client.user.id}>`
-	)
-		return message.channel.send(
-			`Hi, the current prefix in **${message.guild.name}** is \`\`${prefix}\`\``
-		);
 
 	if (message.channel.type === "dm") {
 		const webhookClient = new Discord.WebhookClient(
@@ -47,6 +38,15 @@ module.exports = async (client, message) => {
 				prefix = process.env.PREFIX;
 			}
 
+			if (
+				message.content === `<@${client.user.id}>` ||
+				message.content === `<@!${client.user.id}>`
+			)
+				return message.channel.send(
+					`Hi, the current prefix in **${message.guild.name}** is \`\`${prefix}\`\``
+				);
+
+			if (!message.guild) return;
 			if (!message.content.startsWith(prefix)) return;
 			if (!message.member)
 				message.member = await message.guild.fetchMember(message);
