@@ -7,7 +7,6 @@
 ![GitHub](https://img.shields.io/discord/742094927403679816?label=Discord&logo=Discord&logoColor=white)
 ![Github](https://img.shields.io/github/issues/TestersQTs/Bulbbot?color=red&label=Active%20issues&logo=github)
 ![Github](https://img.shields.io/github/stars/TestersQTs/Bulbbot?color=yellow&label=Stars&logo=github)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FTestersQTs%2FBulbbot.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FTestersQTs%2FBulbbot?ref=badge_shield)
 
 </div>
 
