@@ -128,15 +128,14 @@ ${descriptionBottom}
 								await msg
 									.react(Emotes.actions.cancel.replace(/\D/g, "")) // Cancel
 									.then(() => msg.react(Emotes.actions.warn.replace(/\D/g, ""))) // Warn
-									.then(() =>
-										msg.react(Emotes.actions.kick.replace(/\D/g, ""))
-									); // Kick
+									.then(() =>msg.react(Emotes.actions.kick.replace(/\D/g, ""))) // Kick
+									.then(() =>msg.react(Emotes.actions.ban.replace(/\D/g, ""))) // Ban
 
 								if (
 									message.member.roles.cache.has(roles.admin) ||
 									message.member.hasPermission("BAN_MEMBERS")
 								)
-									msg.react(Emotes.actions.ban.replace(/\D/g, "")); // Ban
+									msg
 
 								const filter = (reaction, user) => {
 									return (
