@@ -24,7 +24,6 @@ module.exports = {
 			},
 			async (err, roles) => {
 				if (
-					message.member.roles.cache.has(roles.admin) ||
 					message.member.roles.cache.has(roles.moderator) ||
 					message.member.hasPermission("MANAGE_MESSAGES")
 				) {

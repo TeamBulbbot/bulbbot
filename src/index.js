@@ -7,9 +7,6 @@ const table = new ascii().setHeading("Event", "Status");
 const cron = require("node-cron");
 const CronJobs = require("./handlers/cronjobs");
 
-const AntiSpam = require("discord-anti-spam");
-const Automod = require("../src/models/automod")
-
 const client = new Client();
 
 client.commands = new Collection();
@@ -44,10 +41,6 @@ cron.schedule("*/30 * * * * *", () => {
 	CronJobs.Mute(client);
 	CronJobs.Remind(client);
 });
-
-const antiSpam = new AntiSpam({
-	warnThreshold: Automod.findOne({})
-})
 
 client.mongoose.init();
 client.login(process.env.TOKEN);
