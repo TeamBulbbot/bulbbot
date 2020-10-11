@@ -5,6 +5,7 @@ const Guild = require("../models/guild");
 const Setting = require("../models/setting");
 const Role = require("../models/role");
 const Log = require("../models/log");
+const Automod = require("../models/automod")
 
 const CommandAnalytics = require("../models/commandAnalytics");
 
@@ -57,6 +58,20 @@ module.exports = {
         join_leave: "",
       });
       log.save().catch((err) => console.error(clc.red(err)));
+
+      const automod = new Automod({
+        _id: mongoose.Types.ObjectId(),
+        enabled: false,
+        guildId: guildObject.id,
+        warnThreshold: 5,
+        kickThreshold: 10,
+        banThreshold: 20,
+        maxInterval: 2000,
+        maxDuplicatesWarning: 5,
+        maxDuplicatesKick: 8,
+        maxDuplicatesBan: 15
+      });
+      automod.save().catch((err) => console.error(clc.red(err)));
 
       return true;
     } catch (error) {
