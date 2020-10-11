@@ -13,7 +13,7 @@ module.exports = {
 	usage: "infraction <option>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
 	run: async (client, message, args) => {
-		if (!message.member.hasPermission("KICK_MEMBERS"))
+		if (!message.member.hasPermission("KICK_MEMBERS") || !message.member.roles.cache.has(roles.admin) || !message.member.roles.cache.has(roles.moderator))
 			return message.channel.send(":lock: Missing permission"); // I know best has permssion lol
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
