@@ -22,7 +22,7 @@ module.exports = {
 			async (err, roles) => {
 				if (
 					message.member.roles.cache.has(roles.admin) ||
-					message.member.roles.cache.has(roles.moderator) || 
+					message.member.roles.cache.has(roles.moderator) ||
 					message.member.hasPermission("KICK_MEMBERS")
 				) {
 					if (args[0] === undefined || args[0] === null)
@@ -34,7 +34,9 @@ module.exports = {
 					let reason = args.slice(1).join(" ");
 					if (reason === "") reason = "No reason given";
 					if (user === null)
-						return message.channel.send("User is not in server");
+						return message.channel.send(
+							"Unable to find the user, please try again with the correct **user id**"
+						);
 
 					if (
 						!(await Moderation.Kick(

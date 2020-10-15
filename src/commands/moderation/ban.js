@@ -35,9 +35,17 @@ module.exports = {
 					let reason = args.slice(1).join(" ");
 					if (reason === "") reason = "No reason given";
 					if (user === null) {
-						user = await client.users.fetch(target);
-						if (!user)
-							return await message.channel.send("Unable to find user.");
+						try {
+							user = await client.users.fetch(target);
+						} catch (error) {
+							user = null;
+						}
+						console.log(user);
+
+						if (user === null)
+							return await message.channel.send(
+								"Unable to find the user, please try again with the correct **user id**"
+							);
 						if (
 							!(await Moderation.ForceBan(
 								client,
