@@ -5,6 +5,7 @@ const Discord = require("discord.js");
 const clc = require("cli-color");
 const mongoose = require("mongoose");
 const Validate = require("../../handlers/validate");
+const parse = require("parse-duration");
 
 module.exports = {
 	name: "remind",
@@ -20,66 +21,19 @@ module.exports = {
 		"USE_EXTERNAL_EMOJIS",
 	],
 	run: async (client, message, args) => {
-		if (args[0] === undefined || args[0] === null)
+		if (!args[0])
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`duration\`\`\n${Emotes.other.tools} Correct usage of command: \`\`remind|reminder|r|🕰️ <duration> <reminder> \`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
 			);
-		if (args[1] === undefined || args[1] === null)
+		if (!args[1])
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`reminder\`\`\n${Emotes.other.tools} Correct usage of command: \`\`remind|reminder|r|🕰️ <duration> <reminder> \`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
 			);
 
 		const duration = args[0];
-		let unixDuration = duration;
-
-		switch (duration.substr(duration.length - 1)) {
-			case "w":
-				unixDuration = unixDuration.substring(0, unixDuration.length - 1);
-				if (unixDuration > 52)
-					return message.channel.send(
-						`${Emotes.actions.warn} You cannot have a reminder for more than year`
-					);
-				unixDuration = moment().add(unixDuration, "weeks").unix();
-				break;
-			case "d":
-				unixDuration = unixDuration.substring(0, unixDuration.length - 1);
-				if (unixDuration > 365)
-					return message.channel.send(
-						`${Emotes.actions.warn} You cannot have a reminder for more than year`
-					);
-				unixDuration = moment().add(unixDuration, "days").unix();
-				break;
-			case "h":
-				unixDuration = unixDuration.substring(0, unixDuration.length - 1);
-				if (unixDuration > 8765)
-					return message.channel.send(
-						`${Emotes.actions.warn} You cannot have a reminder for more than year`
-					);
-				unixDuration = moment().add(unixDuration, "hours").unix();
-				break;
-			case "m":
-				unixDuration = unixDuration.substring(0, unixDuration.length - 1);
-				if (unixDuration > 525948)
-					return message.channel.send(
-						`${Emotes.actions.warn} You cannot have a reminder for more than year`
-					);
-				unixDuration = moment().add(unixDuration, "minutes").unix();
-				break;
-			case "s":
-				unixDuration = unixDuration.substring(0, unixDuration.length - 1);
-				if (unixDuration > 31556926)
-					return message.channel.send(
-						`${Emotes.actions.warn} You cannot have a reminder for more than year`
-					);
-				unixDuration = moment().add(unixDuration, "seconds").unix();
-				break;
-
-			default:
-				return message.channel.send(
-					`${Emotes.actions.warn} Invalid \`\`duration\`\`\n${Emotes.other.tools} Correct usage of command: \`\`remind|reminder|r|🕰️ <duration> <reminder> \`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
-				);
-		}
-
+		let unixDuration = parse(duration)
+		if unixDuration > parse("1y") return message.channel.send(`${Emotes.actions.warn} You cannot have a reminder for more than year`)
+		
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()
