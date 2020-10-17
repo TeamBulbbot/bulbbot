@@ -5,7 +5,10 @@ function field(embed, name, category, aliases, description, usage) {
 
   \`\`|\`\` **=** Aliases
   \`\`<>\`\` **=** Arugment is required
-  \`\`[]\`\` **=** Argument is optional`);
+  \`\`[]\`\` **=** Argument is optional
+  \`\`<user>\`\` **=** The user id or a mention
+
+  `);
 	return embed.addField(
 		`${name} `, // \`\`(${category})\`\`
 		` \n> **Usage:** ${usage}${
