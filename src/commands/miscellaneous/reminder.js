@@ -30,10 +30,16 @@ module.exports = {
 			);
 
 		const duration = args[0];
-		let unixDuration = parse(duration)
-		if (unixDuration < parse("1s")) return message.channel.send(`${Emotes.actions.warn} You cannot have a reminder for less than one second`)
-		if (unixDuration > parse("1y")) return message.channel.send(`${Emotes.actions.warn} You cannot have a reminder for more than one year`)
-		
+		let unixDuration = parse(duration);
+		if (unixDuration < parse("1s"))
+			return message.channel.send(
+				`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be shorter than 1 second \n${Emotes.other.tools} Correct usage of command: \`\`remind|reminder|r|🕰️ <duration> <reminder>\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+			);
+		if (unixDuration > parse("1y"))
+			return message.channel.send(
+				`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be longer than 1 year \n${Emotes.other.tools} Correct usage of command: \`\`remind|reminder|r|🕰️ <duration> <reminder>\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+			);
+
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()
