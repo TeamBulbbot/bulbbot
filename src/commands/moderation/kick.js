@@ -34,9 +34,7 @@ module.exports = {
 					let reason = args.slice(1).join(" ");
 					if (reason === "") reason = "No reason given";
 					if (user === null)
-						return message.channel.send(
-							"Unable to find the user, please try again with the correct **user id**"
-						);
+						return message.channel.send("User is not in guild.");
 
 					if (
 						!(await Moderation.Kick(
