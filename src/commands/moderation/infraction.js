@@ -49,30 +49,7 @@ module.exports = {
 						}
 						for (let i = 0; i < infs.length; i++) {
 							let user = await client.users.fetch(infs[i].targetID);
-
-							let action;
-
-							switch (infs[i].action) {
-								case "Warn":
-									action = `${Emotes.actions.warn} Warn`;
-									break;
-								case "Kick":
-									action = `${Emotes.actions.kick} Kick`;
-									break;
-								case "Ban":
-									action = `${Emotes.actions.ban} Ban`;
-									break;
-								case "Force Ban":
-									action = `${Emotes.actions.ban} Force Ban`;
-									break;
-								case "Unban":
-									action = `${Emotes.actions.unban} Unban`;
-									break;
-
-								default:
-									action = infs[i].action;
-									break;
-							}
+							const action = addEmotes(infs[i].action);
 
 							let embed = new Discord.MessageEmbed()
 								.setColor(process.env.COLOR)
@@ -269,29 +246,7 @@ module.exports = {
 							return message.channel.send(
 								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
 							);
-						let action;
-
-						switch (inf.action) {
-							case "Warn":
-								action = `${Emotes.actions.warn} Warn`;
-								break;
-							case "Kick":
-								action = `${Emotes.actions.kick} Kick`;
-								break;
-							case "Ban":
-								action = `${Emotes.actions.ban} Ban`;
-								break;
-							case "Force Ban":
-								action = `${Emotes.actions.ban} Force Ban`;
-								break;
-							case "Unban":
-								action = `${Emotes.actions.unban} Unban`;
-								break;
-
-							default:
-								action = inf.action;
-								break;
-						}
+						const action = addEmotes(inf.action);
 
 						let user = await client.users.fetch(inf.targetID);
 						let moderator = await client.users.fetch(inf.moderatorID);
@@ -325,47 +280,24 @@ module.exports = {
 					},
 					async (err, infs) => {
 						for (let i = 0; i < infs.length; i++) {
+							if (infs[i].targetID === "") continue;
 							let user = await client.users.fetch(infs[i].targetID);
+
 							let moderator = await client.users.fetch(infs[i].moderatorID);
-							let action;
-
-							switch (infs[i].action) {
-								case "Warn":
-									action = `${Emotes.actions.warn} Warn`;
-									break;
-								case "Mute":
-									action = `${Emotes.actions.mute} Mute`;
-									break;
-								case "Kick":
-									action = `${Emotes.actions.kick} Kick`;
-									break;
-								case "Ban":
-									action = `${Emotes.actions.ban} Ban`;
-									break;
-								case "Force Ban":
-									action = `${Emotes.actions.ban} Force Ban`;
-									break;
-								case "Unban":
-									action = `${Emotes.actions.unban} Unban`;
-									break;
-
-								default:
-									action = infs[i].action;
-									break;
-							}
+							const action = addEmotes(infs[i].action);
 
 							let embed = new Discord.MessageEmbed()
 								.setColor(process.env.COLOR)
 								.setTimestamp()
 								.setDescription(
 									`
-								**${action}**
-								**Infraction id:** ${infs[i]._id}
-                                **Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
-                                **Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
-                                **Reason:**  ${infs[i].reportReason}
-                                **Date:** ${infs[i].date}
-                                `
+									**${action}**
+									**Infraction id:** ${infs[i]._id}
+									**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
+									**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
+									**Reason:**  ${infs[i].reportReason}
+									**Date:** ${infs[i].date}
+									`
 								);
 							pages.push(embed);
 						}
@@ -386,3 +318,34 @@ module.exports = {
 		}
 	},
 };
+
+function addEmotes(a) {
+	let action;
+	switch (a) {
+		case "Warn":
+			action = `${Emotes.actions.warn} Warn`;
+			break;
+		case "Mute":
+			action = `${Emotes.actions.mute} Mute`;
+			break;
+		case "Kick":
+			action = `${Emotes.actions.kick} Kick`;
+			break;
+		case "Ban":
+			action = `${Emotes.actions.ban} Ban`;
+			break;
+		case "Force Ban":
+			action = `${Emotes.actions.ban} Force Ban`;
+			break;
+		case "Softban":
+			action = `${Emotes.actions.ban} Soft Ban`;
+			break;
+		case "Unban":
+			action = `${Emotes.actions.unban} Unban`;
+			break;
+		default:
+			action = a;
+			break;
+	}
+	return action;
+}
