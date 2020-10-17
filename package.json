@@ -28,7 +28,8 @@
     "moment-duration-format": "^2.3.2",
     "mongoose": "^5.10.9",
     "node-cron": "^2.0.3",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "parse-duration": "^0.4.4"
   },
   "devDependencies": {
     "@types/cli-color": "^2.0.0",
