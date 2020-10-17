@@ -32,7 +32,8 @@ module.exports = {
 
 		const duration = args[0];
 		let unixDuration = parse(duration)
-		if unixDuration > parse("1y") return message.channel.send(`${Emotes.actions.warn} You cannot have a reminder for more than year`)
+		if unixDuration < parse("1s") return message.channel.send(`${Emotes.actions.warn} You cannot have a reminder for less than one second`)
+		if unixDuration > parse("1y") return message.channel.send(`${Emotes.actions.warn} You cannot have a reminder for more than one year`)
 		
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
