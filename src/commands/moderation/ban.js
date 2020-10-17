@@ -40,7 +40,6 @@ module.exports = {
 						} catch (error) {
 							user = null;
 						}
-						console.log(user);
 
 						if (user === null)
 							return await message.channel.send(
