@@ -1,6 +1,5 @@
 const Emotes = require("../../emotes.json");
 const Remind = require("../../models/remind");
-const moment = require("moment");
 const Discord = require("discord.js");
 const clc = require("cli-color");
 const mongoose = require("mongoose");
