@@ -13,7 +13,7 @@ module.exports = {
 			.setTitle("🏓 Pong!")
 			.setDescription(
 				`Bot Latency is **${Math.floor(
-					message.createdTimestamp - new Date().getTime()
+					new Date().getTime() - message.createdTimestamp
 				)} ms** \nAPI Latency is **${Math.round(
 					client.ws.ping
 				)} ms**\nWebsocket Latency is **${Math.round(
