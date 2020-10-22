@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const Helper = require("../../handlers/Helper");
+const Beautify = require("../../utils/helper/beautify");
 const moment = require("moment");
 
 module.exports = {
@@ -55,7 +55,7 @@ module.exports = {
 			user = user.user;
 		}
 
-		description += `${await Helper.Badges(user.flags.bitfield)}\n`;
+		description += `${Beautify.Badges(user.flags.bitfield)}\n`;
 		description += `**ID: ** ${user.id}\n`;
 		description += `**Username:** **${user.username}**#${user.discriminator}\n`;
 		description += `**Profile: ** <@${user.id}>\n`;

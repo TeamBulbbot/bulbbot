@@ -1,6 +1,6 @@
+const Moderation = require("../../utils/moderation/moderation");
 const Emotes = require("../../emotes.json");
-const SendLog = require("../../handlers/SendLog");
-const Moderation = require("../../handlers/Moderation");
+const Log = require("../../utils/moderation/log");
 const Role = require("../../models/role");
 
 module.exports = {
@@ -102,7 +102,7 @@ module.exports = {
 												return message.channel.send(
 													`Unable to unban <@${user.id}> \`\`(${user.id})\`\`.`
 												);
-											await SendLog.Mod_action(
+											await Log.Mod_action(
 												client,
 												message.guild.id,
 												`${Emotes.actions.unban} Unbanned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,

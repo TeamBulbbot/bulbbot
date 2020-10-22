@@ -1,6 +1,6 @@
-const Guild = require("../../handlers/configuration/guild");
-const Log = require("../../handlers/configuration/logs");
-const Role = require("../../handlers/configuration/roles");
+const Guild = require("../../utils/configuration/guild");
+const Log = require("../../utils/configuration/logs");
+const Role = require("../../utils/configuration/roles");
 const Emotes = require("../../emotes.json");
 
 module.exports = {

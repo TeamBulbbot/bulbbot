@@ -1,15 +1,15 @@
-const SendLog = require("../handlers/SendLog");
+const Log = require("../utils/moderation/log");
 const Emotes = require("../emotes.json");
-const Validate = require("../handlers/validate");
+const Validate = require("../utils/helper/validate");
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
 
 	message.content = await Validate.Master(client, message.content);
 
-	SendLog.Message_Log(
+	Log.Message_Log(
 		client,
 		message.guild.id,
-		`${Emotes.other.trash} Message from **${message.author.username}**#${message.author.discriminator} was deleted in **${message.channel.name}** \`\`(${message.channel.id})\`\`\n**Content:** ${message.content}`
+		`${Emotes.other.trash} Message from **${message.author.username}**#${message.author.discriminator} was deleted in <#${message.channel.id}> \`\`(${message.channel.id})\`\`\n**Content:** ${message.content}`
 	);
 };

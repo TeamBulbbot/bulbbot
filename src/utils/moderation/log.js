@@ -1,4 +1,4 @@
-const Log = require("../models/log");
+const Log = require("../../models/log");
 const moment = require("moment");
 const clc = require("cli-color");
 

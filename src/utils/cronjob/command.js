@@ -1,8 +1,8 @@
-const Mute = require("../models/mute");
-const Remind = require("../models/remind");
-const Roles = require("../models/role");
-const SendLog = require("./SendLog");
-const Emotes = require("../emotes.json");
+const Mute = require("../../models/mute");
+const Remind = require("../../models/remind");
+const Roles = require("../../models/role");
+const SendLog = require("../moderation/log");
+const Emotes = require("../../emotes.json");
 
 const moment = require("moment");
 const clc = require("cli-color");

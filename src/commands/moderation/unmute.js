@@ -1,5 +1,5 @@
 const Emotes = require("../../emotes.json");
-const SendLog = require("../../handlers/SendLog");
+const Log = require("../../utils/moderation/log");
 const Role = require("../../models/role");
 
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
 					if (user.roles.cache.has(roles.mute)) {
 						user.roles.remove(roles.mute).catch(console.error);
 
-						await SendLog.Mod_action(
+						await Log.Mod_action(
 							client,
 							message.guild.id,
 							`${Emotes.actions.unban} Unmuting **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,

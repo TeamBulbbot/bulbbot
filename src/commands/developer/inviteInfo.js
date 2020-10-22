@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const fetch = require("node-fetch");
-const Helper = require("../../handlers/Helper");
+const Beautify = require("../../utils/helper/beautify");
 
 module.exports = {
 	name: "inviteinfo",
@@ -29,7 +29,7 @@ module.exports = {
 					if (res.inviter !== undefined) {
 						desc += `
 \n**Inviter Info**
-${await Helper.Badges(res.inviter.public_flags)}
+${Beautify.Badges(res.inviter.public_flags)}
 **Inviter ID:** ${res.inviter.id}
 **Inviter Username:** ${res.inviter.username}
 **Inviter Discriminator:** ${res.inviter.discriminator}
@@ -54,7 +54,7 @@ ${await Helper.Badges(res.inviter.public_flags)}
 **Guild ID: ** ${res.guild.id}
 **Guild Name: ** ${res.guild.name}
 **Guild Description:** ${res.guild.description}
-**Features:** ${await Helper.Features(res.guild.features)}
+**Features:** ${Beautify.Features(res.guild.features)}
 **Verification Level:** ${res.guild.verification_level}
 **Vanity URL Code:** ${res.guild.vanity_url_code}
 **Member Count:** ${res.approximate_member_count}

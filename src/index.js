@@ -5,13 +5,13 @@ const ascii = require("ascii-table");
 const { resolve } = require("path");
 const table = new ascii().setHeading("Event", "Status");
 const cron = require("node-cron");
-const CronJobs = require("./handlers/cronjobs");
+const CommandJobs = require("./utils/cronjob/command");
 
 const client = new Client();
 
 client.commands = new Collection();
 client.aliases = new Collection();
-client.mongoose = require("./utils/mongoose");
+client.mongoose = require("./utils/database/mongoose");
 
 client.categories = fs.readdirSync(resolve(__dirname, "./commands/"));
 
@@ -38,8 +38,8 @@ fs.readdir(resolve(__dirname, "./events/"), (err, files) => {
 
 // Run this every 30 seconds
 cron.schedule("*/30 * * * * *", () => {
-	CronJobs.Mute(client);
-	CronJobs.Remind(client);
+	CommandJobs.Mute(client);
+	CommandJobs.Remind(client);
 });
 
 client.mongoose.init();

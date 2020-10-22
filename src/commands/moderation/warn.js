@@ -1,6 +1,6 @@
-const Moderation = require("../../handlers/Moderation");
+const Moderation = require("../../utils/moderation/moderation");
 const Emotes = require("../../emotes.json");
-const SendLog = require("../../handlers/SendLog");
+const Log = require("../../utils/moderation/log");
 const Role = require("../../models/role");
 
 module.exports = {
@@ -43,7 +43,7 @@ module.exports = {
 						return message.channel.send(
 							`Unable to warn <@${target}> \`\`(${target})\`\`.`
 						);
-					await SendLog.Mod_action(
+					await Log.Mod_action(
 						client,
 						message.guild.id,
 						`${Emotes.actions.warn} Warning given to **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,

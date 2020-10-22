@@ -1,6 +1,6 @@
-const Infraction = require("../handlers/Infraction");
+const Infraction = require("./infraction");
 const mongoose = require("mongoose");
-const Mute = require("../models/mute");
+const Mute = require("../../models/mute");
 const clc = require("cli-color");
 module.exports = {
 	Warn: async (_client, guildId, target, moderator, reason) => {

@@ -3,7 +3,7 @@ const Remind = require("../../models/remind");
 const Discord = require("discord.js");
 const clc = require("cli-color");
 const mongoose = require("mongoose");
-const Validate = require("../../handlers/validate");
+const Validate = require("../../utils/helper/validate");
 const parse = require("parse-duration");
 
 module.exports = {

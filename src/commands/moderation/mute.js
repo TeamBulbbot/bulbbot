@@ -1,6 +1,6 @@
-const Moderation = require("../../handlers/Moderation");
+const Moderation = require("../../utils/moderation/moderation");
 const Emotes = require("../../emotes.json");
-const SendLog = require("../../handlers/SendLog");
+const Log = require("../../utils/moderation/log");
 const Role = require("../../models/role");
 const parse = require("parse-duration");
 
@@ -80,7 +80,7 @@ module.exports = {
 
 					user.roles.add(roles.mute).catch(console.error);
 
-					await SendLog.Mod_action(
+					await Log.Mod_action(
 						client,
 						message.guild.id,
 						`${Emotes.actions.mute} Muting **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason}\n**Duration:** ${duration} `,

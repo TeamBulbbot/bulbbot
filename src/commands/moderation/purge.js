@@ -1,6 +1,6 @@
 const fs = require("fs");
 const moment = require("moment");
-const SendLog = require("../../handlers/SendLog");
+const Log = require("../../utils/moderation/log");
 const Emotes = require("../../emotes.json");
 const Role = require("../../models/role");
 
@@ -65,7 +65,7 @@ module.exports = {
 								}
 							);
 
-							await SendLog.Mod_action(
+							await Log.Mod_action(
 								client,
 								message.guild.id,
 								`Purged \`\`${amount}\`\` messages in ${message.channel} \`\`(${message.channel.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\``,

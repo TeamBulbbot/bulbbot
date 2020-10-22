@@ -1,7 +1,7 @@
-const Database = require("../handlers/Database");
+const Guild = require("../utils/database/guild");
 const clc = require("cli-color");
 
 module.exports = async (_client, guild) => {
-	Database.AddGuild(guild);
+	Guild.Add(guild);
 	console.log(clc.green("[+] Joined new server"));
 };

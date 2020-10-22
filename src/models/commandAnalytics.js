@@ -1,12 +1,8 @@
 const mongoose = require("mongoose");
 
 const commandAnalyticsSchema = mongoose.Schema({
-  commandName: String,
-  uses: Number,
+	commandName: String,
+	uses: Number,
 });
 
-module.exports = mongoose.model(
-  "CommandAnalytics",
-  commandAnalyticsSchema,
-  "commandAnalytics"
-);
+module.exports = mongoose.model("CommandAnalytics", commandAnalyticsSchema);

@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
-const Helper = require("../../handlers/Helper");
+const Beautify = require("../../utils/helper/beautify");
 const moment = require("moment");
 const Emotes = require("../../emotes.json");
-const Moderation = require("../../handlers/Moderation");
-const SendLog = require("../../handlers/SendLog");
+const Moderation = require("../../utils/moderation/moderation");
+const Log = require("../../utils/moderation/log");
 const Infraction = require("../../models/infraction");
 const Role = require("../../models/role");
 
@@ -77,7 +77,7 @@ module.exports = {
 								user = user.user;
 							} else return message.channel.send("User is not in server");
 
-							description += `${await Helper.Badges(user.flags.bitfield)}\n`;
+							description += `${Beautify.Badges(user.flags.bitfield)}\n`;
 							description += `**ID: ** ${user.id}\n`;
 							description += `**Username: **${user.username}#${user.discriminator}\n`;
 							description += `**Profile: ** <@${user.id}>\n`;
@@ -128,14 +128,14 @@ ${descriptionBottom}
 								await msg
 									.react(Emotes.actions.cancel.replace(/\D/g, "")) // Cancel
 									.then(() => msg.react(Emotes.actions.warn.replace(/\D/g, ""))) // Warn
-									.then(() =>msg.react(Emotes.actions.kick.replace(/\D/g, ""))) // Kick
-									.then(() =>msg.react(Emotes.actions.ban.replace(/\D/g, ""))) // Ban
+									.then(() => msg.react(Emotes.actions.kick.replace(/\D/g, ""))) // Kick
+									.then(() => msg.react(Emotes.actions.ban.replace(/\D/g, ""))); // Ban
 
 								if (
 									message.member.roles.cache.has(roles.admin) ||
 									message.member.hasPermission("BAN_MEMBERS")
 								)
-									msg
+									msg;
 
 								const filter = (reaction, user) => {
 									return (
@@ -293,7 +293,7 @@ async function Perfom_Action(
 			break;
 	}
 
-	await SendLog.Mod_action(
+	await Log.Mod_action(
 		client,
 		message.guild.id,
 		`${emote} ${action} **${target.username}**#${target.discriminator} \`\`(${target.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,

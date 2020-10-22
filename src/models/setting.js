@@ -1,15 +1,10 @@
 const mongoose = require("mongoose");
 
 const settingsSchema = mongoose.Schema({
-  guildID: String,
-  language: String,
-  delete_server_invites: Boolean,
-  trusted_server_invites: Array,
-  allow_non_latin_usernames: Boolean,
-  dm_on_action: Boolean,
-  censored_words: Array,
-  delete_links: Boolean,
-  trusted_links: Array,
+	guildID: String,
+	language: String,
+	dm_on_action: Boolean,
+	allow_non_latin_usernames: Boolean,
 });
 
 module.exports = mongoose.model("Setting", settingsSchema);

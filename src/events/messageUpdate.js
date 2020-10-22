@@ -1,6 +1,6 @@
-const SendLog = require("../handlers/SendLog");
+const Log = require("../utils/moderation/log");
 const Emotes = require("../emotes.json");
-const Validate = require("../handlers/validate");
+const Validate = require("../utils/helper/validate");
 
 module.exports = async (client, oldMessage, newMessage) => {
 	if (oldMessage.author.bot) return;
@@ -9,7 +9,7 @@ module.exports = async (client, oldMessage, newMessage) => {
 	oldMessage.content = await Validate.Master(client, oldMessage.content);
 	newMessage.content = await Validate.Master(client, newMessage.content);
 
-	SendLog.Message_Log(
+	Log.Message_Log(
 		client,
 		newMessage.guild.id,
 		`${Emotes.other.wrench} Message from **${newMessage.author.username}**#${newMessage.author.discriminator} was edited in <#${newMessage.channel.id}> \`\`(${newMessage.channel.id})\`\`\n**Old Message:** ${oldMessage.content}\n**New Message:** ${newMessage.content}`

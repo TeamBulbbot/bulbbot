@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const Infraction = require("../../models/infraction");
-const InfractionHandler = require("../../handlers/Infraction");
+const InfractionUtils = require("../../utils/moderation/infraction");
 const paginationEmbed = require("discord.js-pagination");
 const Emotes = require("../../emotes.json");
-const SendLog = require("../../handlers/SendLog");
+const Log = require("../../utils/moderation/log");
 
 module.exports = {
 	name: "infraction",
@@ -140,11 +140,11 @@ module.exports = {
 								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
 							);
 						let reason = args.slice(2).join(" ") || "No reason given";
-						InfractionHandler.Update(args[1], message.guild.id, reason);
+						InfractionUtils.Update(args[1], message.guild.id, reason);
 						message.channel.send(
 							`${Emotes.other.wrench} Updated infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
 						);
-						await SendLog.Mod_action(
+						await Log.Mod_action(
 							client,
 							message.guild.id,
 							`${Emotes.other.wrench} Infraction \`\`${args[1]}\`\` was edited by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\`\n**Reason:** ${reason}`,
@@ -174,12 +174,12 @@ module.exports = {
 								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
 							);
 						let user = await client.users.fetch(args[2] || message.author.id);
-						InfractionHandler.Claim(args[1], message.guild.id, user);
+						InfractionUtils.Claim(args[1], message.guild.id, user);
 
 						message.channel.send(
 							`${Emotes.other.wrench} Updated infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
 						);
-						SendLog.Mod_action(
+						Log.Mod_action(
 							client,
 							message.guild.id,
 							`${Emotes.other.wrench} Infraction \`\`${args[1]}\`\` was claimed by **${user.username}**#${user.discriminator} \`\`(${user.id})\`\``,
@@ -212,12 +212,12 @@ module.exports = {
 							return message.channel.send(
 								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
 							);
-						await InfractionHandler.Remove(args[1], message.guild.id);
+						await InfractionUtils.Remove(args[1], message.guild.id);
 						message.channel.send(
 							`Removed infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
 						);
 						let reason = args.slice(2).join(" ") || "No reason given";
-						SendLog.Mod_action(
+						Log.Mod_action(
 							client,
 							message.guild.id,
 							`${Emotes.actions.unban} Infraction \`\`${args[1]}\`\` was removed by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,

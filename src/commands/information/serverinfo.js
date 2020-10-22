@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const moment = require("moment");
 const Emotes = require("../../emotes.json");
-const Helper = require("../../handlers/Helper");
+const Beautify = require("../../utils/helper/beautify");
 
 module.exports = {
 	name: "serverinfo",
@@ -88,8 +88,8 @@ module.exports = {
 			`${Emotes.badges.guildOwner} **Owner:** <@${guild.ownerID}> \`\`(${
 				guild.ownerID
 			})\`\`
-                **Features:** ${await Helper.Features(guild.features)}
-                **Server region:** ${await Helper.Regions(guild.region)}
+                **Features:** ${Beautify.Features(guild.features)}
+                **Server region:** ${Beautify.Regions(guild.region)}
                 **Verfication level:** ${guild.verificationLevel}
 				**Server creation:** ${moment
 					.utc(guild.joinedTimestamp)

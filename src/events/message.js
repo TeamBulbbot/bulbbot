@@ -1,8 +1,10 @@
 const clc = require("cli-color");
 const Discord = require("discord.js");
-const Guild = require("../models/guild");
-const Database = require("../handlers/Database");
 const { Permissions } = require("discord.js");
+
+const Guild = require("../models/guild");
+const GuildUtils = require("../utils/database/guild");
+const Commandtils = require("../utils/database/command");
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
@@ -23,13 +25,14 @@ module.exports = async (client, message) => {
 
 		return;
 	}
+
 	Guild.findOne(
 		{
 			guildID: message.guild.id,
 		},
 		async (err, guild) => {
 			if (err) console.error(clc.red(err));
-			if (guild == null) Database.AddGuild(message.guild);
+			if (guild == null) GuildUtils.Add(message.guild);
 
 			let prefix;
 			try {
@@ -70,7 +73,7 @@ module.exports = async (client, message) => {
 						);
 					});
 
-					if (guild.trackAnalytics) await Database.CommandAnalyticsHandler(cmd);
+					if (guild.trackAnalytics) Commandtils.CommandAnalyticsHandler(cmd);
 				} else {
 					return message.channel.send(
 						"**Missing required permissions** to run this command. I need the following permssions\n```" +
