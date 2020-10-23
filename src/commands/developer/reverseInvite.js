@@ -5,6 +5,8 @@ module.exports = {
 	name: "reverseinvite",
 	category: "developer",
 	description: "Currently in development",
+	usage: "reverseinvite <url>",
+	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	run: async (_client, message, args) => {
 		let developers = process.env.DEVELOPERS.split(",");
 		if (args[0] === undefined)

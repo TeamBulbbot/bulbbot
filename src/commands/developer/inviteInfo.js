@@ -6,6 +6,8 @@ module.exports = {
 	name: "inviteinfo",
 	category: "developer",
 	description: "Currently in development",
+	usage: "inviteinfo <invite code>",
+	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	run: async (_client, message, args) => {
 		let developers = process.env.DEVELOPERS.split(",");
 		if (args[0] === undefined)
