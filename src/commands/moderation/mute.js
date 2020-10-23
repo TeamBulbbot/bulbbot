@@ -70,7 +70,7 @@ module.exports = {
 							target,
 							message.author,
 							reason,
-							Math.floor(new Date().getTime() / 1000) + unixDuration,
+							Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
 							duration
 						))
 					)

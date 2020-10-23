@@ -56,7 +56,6 @@ ${Emotes.actions.cancel} **Cancel**
 
                 `
 			);
-
 		message.channel.send(embed).then(async (msg) => {
 			await msg
 				.react(Emotes.other.plus.replace(/\D/g, ""))
@@ -95,7 +94,7 @@ ${Emotes.actions.cancel} **Cancel**
 							channelID: message.channel.id,
 							reminder: msg,
 							expireTime:
-								Math.floor(new Date().getTime() / 1000) + unixDuration,
+								Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
 						});
 						remind.save().catch((err) => console.error(clc.red(err)));
 
@@ -114,7 +113,7 @@ ${Emotes.actions.cancel} **Cancel**
 							guildID: "",
 							reminder: args.slice(1).join(" "),
 							expireTime:
-								Math.floor(new Date().getTime() / 1000) + unixDuration,
+								Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
 						});
 						remind.save().catch((err) => console.error(clc.red(err)));
 
