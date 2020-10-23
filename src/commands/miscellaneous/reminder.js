@@ -94,7 +94,8 @@ ${Emotes.actions.cancel} **Cancel**
 							dmRemind: false,
 							channelID: message.channel.id,
 							reminder: msg,
-							expireTime: unixDuration,
+							expireTime:
+								Math.floor(new Date().getTime() / 1000) + unixDuration,
 						});
 						remind.save().catch((err) => console.error(clc.red(err)));
 
@@ -112,7 +113,8 @@ ${Emotes.actions.cancel} **Cancel**
 							channelID: "",
 							guildID: "",
 							reminder: args.slice(1).join(" "),
-							expireTime: unixDuration,
+							expireTime:
+								Math.floor(new Date().getTime() / 1000) + unixDuration,
 						});
 						remind.save().catch((err) => console.error(clc.red(err)));
 
