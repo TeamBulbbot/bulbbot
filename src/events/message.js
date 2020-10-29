@@ -63,8 +63,36 @@ module.exports = async (client, message) => {
 			if (!command) command = client.commands.get(client.aliases.get(cmd));
 
 			if (command) {
-				const permissions = new Permissions(message.guild.me.permissions);
+				// Handle override commands
+				let clearanceLevel = command.clearanceLevel;
+				let cOverride = guild.overrideCommands.filter(function (c) {
+					return c.commandName == command.name;
+				});
 
+				if (cOverride.length !== 0) {
+					if (!cOverride[0].enabled) return;
+					clearanceLevel = cOverride[0].clearanceLevel;
+				}
+
+				// Handle users
+				let authorClearance = 0;
+				if (message.author.id === message.guild.ownerID) authorClearance = 100;
+
+				guild.moderationRoles.forEach((o) => {
+					if (
+						message.member.roles.cache.has(o.roleId) &&
+						authorClearance < o.clearanceLevel
+					)
+						authorClearance = o.clearanceLevel;
+				});
+
+				console.log("Need clearance level: " + clearanceLevel);
+				console.log("Author clearance level: " + authorClearance);
+
+				if (clearanceLevel > authorClearance)
+					return message.channel.send(":lock: Missing permission");
+
+				const permissions = new Permissions(message.guild.me.permissions);
 				if (permissions.has(command.clientPermissions)) {
 					command.run(client, message, args).catch((err) => {
 						console.error(err);

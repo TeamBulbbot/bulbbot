@@ -1,6 +1,6 @@
 const Emotes = require("../../emotes.json");
 const Log = require("../../utils/moderation/log");
-const Role = require("../../models/role");
+const Guild = require("../../models/guild");
 
 module.exports = {
 	name: "unmute",
@@ -13,52 +13,46 @@ module.exports = {
 		"MANAGE_ROLES",
 		"USE_EXTERNAL_EMOJIS",
 	],
+	clearanceLevel: 50,
 	run: async (client, message, args) => {
-		Role.findOne(
+		Guild.findOne(
 			{
 				guildID: message.guild.id,
 			},
-			async (err, roles) => {
-				if (
-					message.member.roles.cache.has(roles.admin) ||
-					message.member.roles.cache.has(roles.moderator) ||
-					message.member.hasPermission("KICK_MEMBERS")
-				) {
-					if (roles.mute === "")
-						return message.channel.send(
-							"Unable to find a muted role in this server, please add one by doing ``configure|cfg|setting|config mute <mutedRole>``"
-						);
+			async (err, fGuild) => {
+				if (fGuild.roles.mute === "")
+					return message.channel.send(
+						"Unable to find a muted role in this server, please add one by doing ``configure|cfg|setting|config mute <mutedRole>``"
+					);
 
-					if (args[0] === undefined || args[0] === null)
-						return message.channel.send(
-							`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`unmute <user> [reason]\`\``
-						);
+				if (args[0] === undefined || args[0] === null)
+					return message.channel.send(
+						`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`unmute <user> [reason]\`\``
+					);
 
-					let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
-					let user = message.guild.member(target);
-					let reason = args.slice(2).join(" ");
-					if (reason === "") reason = "No reason given";
-					if (user === null)
-						return message.channel.send("User is not in server");
+				let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
+				let user = message.guild.member(target);
+				let reason = args.slice(2).join(" ");
+				if (reason === "") reason = "No reason given";
+				if (user === null) return message.channel.send("User is not in server");
 
-					if (user.roles.cache.has(roles.mute)) {
-						user.roles.remove(roles.mute).catch(console.error);
+				if (user.roles.cache.has(fGuild.roles.mute)) {
+					user.roles.remove(fGuild.roles.mute).catch(console.error);
 
-						await Log.Mod_action(
-							client,
-							message.guild.id,
-							`${Emotes.actions.unban} Unmuting **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
-							""
-						);
+					await Log.Mod_action(
+						client,
+						message.guild.id,
+						`${Emotes.actions.unban} Unmuting **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
+						""
+					);
 
-						message.channel.send(
-							`${Emotes.actions.unban} Unmuting <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``
-						);
-					} else
-						return message.channel.send(
-							`**${user.user.username}** is currently not muted.`
-						);
-				} else return message.channel.send(":lock: Missing permission");
+					message.channel.send(
+						`${Emotes.actions.unban} Unmuting <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``
+					);
+				} else
+					return message.channel.send(
+						`**${user.user.username}** is currently not muted.`
+					);
 			}
 		);
 	},

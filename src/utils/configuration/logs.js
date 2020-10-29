@@ -1,6 +1,6 @@
-const Log = require("../../models/log");
+const Guild = require("../../models/guild");
 const Discord = require("discord.js");
-var clc = require("cli-color");
+const clc = require("cli-color");
 
 function sendEmbed(client, channelId, text) {
 	if (channelId === "") return;
@@ -13,9 +13,11 @@ function sendEmbed(client, channelId, text) {
 
 module.exports = {
 	Change_Mod_Action: async (client, guildId, channelId) => {
-		Log.findOneAndUpdate(
+		Guild.findOneAndUpdate(
 			{ guildID: guildId },
-			{ modAction: channelId },
+			{
+				$set: { "logChannels.modAction": channelId },
+			},
 			function (error) {
 				if (error) {
 					console.error(clc.red(error));
@@ -25,9 +27,11 @@ module.exports = {
 		sendEmbed(client, channelId, "This channel is setup to log mod actions");
 	},
 	Change_Message: async (client, guildId, channelId) => {
-		Log.findOneAndUpdate(
+		Guild.findOneAndUpdate(
 			{ guildID: guildId },
-			{ message: channelId },
+			{
+				$set: { "logChannels.message": channelId },
+			},
 			function (error) {
 				if (error) {
 					console.error(clc.red(error));
@@ -41,29 +45,39 @@ module.exports = {
 		);
 	},
 	Change_Role: async (client, guildId, channelId) => {
-		Log.findOneAndUpdate({ guildID: guildId }, { role: channelId }, function (
-			error
-		) {
-			if (error) {
-				console.error(clc.red(error));
+		Guild.findOneAndUpdate(
+			{ guildID: guildId },
+			{
+				$set: { "logChannels.role": channelId },
+			},
+			function (error) {
+				if (error) {
+					console.error(clc.red(error));
+				}
 			}
-		});
+		);
 		sendEmbed(client, channelId, "This channel is setup to log role updates");
 	},
 	Change_Member: async (client, guildId, channelId) => {
-		Log.findOneAndUpdate({ guildID: guildId }, { member: channelId }, function (
-			error
-		) {
-			if (error) {
-				console.error(clc.red(error));
+		Guild.findOneAndUpdate(
+			{ guildID: guildId },
+			{
+				$set: { "logChannels.member": channelId },
+			},
+			function (error) {
+				if (error) {
+					console.error(clc.red(error));
+				}
 			}
-		});
+		);
 		sendEmbed(client, channelId, "This channel is setup to log member updates");
 	},
 	Change_Channel: async (client, guildId, channelId) => {
-		Log.findOneAndUpdate(
+		Guild.findOneAndUpdate(
 			{ guildID: guildId },
-			{ channel: channelId },
+			{
+				$set: { "logChannels.channel": channelId },
+			},
 			function (error) {
 				if (error) {
 					console.error(clc.red(error));
@@ -77,9 +91,11 @@ module.exports = {
 		);
 	},
 	Change_Join_Leave: async (client, guildId, channelId) => {
-		Log.findOneAndUpdate(
+		Guild.findOneAndUpdate(
 			{ guildID: guildId },
-			{ join_leave: channelId },
+			{
+				$set: { "logChannels.join_leave": channelId },
+			},
 			function (error) {
 				if (error) {
 					console.error(clc.red(error));

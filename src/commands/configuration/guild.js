@@ -1,8 +1,7 @@
+const Discord = require("discord.js");
 const clc = require("cli-color");
 
 const Guild = require("../../models/guild");
-const Log = require("../../models/log");
-const Role = require("../../models/role");
 const Emotes = require("../../emotes.json");
 
 module.exports = {
@@ -12,84 +11,81 @@ module.exports = {
 	description: "Get the configuration list of the guild",
 	usage: "guild",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
-	run: async (client, message, args) => {
-		if (!message.member.hasPermission("MANAGE_GUILD"))
-			return message.channel.send(":lock: Missing permission ``MANAGE_GUILD``"); // I know best has permssion lol
+	clearanceLevel: 50,
+	run: async (client, message, _args) => {
+		Guild.findOne(
+			{
+				guildID: message.guild.id,
+			},
+			async (err, guild) => {
+				if (err) console.error(clc.red(err));
 
-		if (args[0] === undefined || args[0] === null)
-			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`part\`\`\n${Emotes.other.tools} Correct usage of command: \`\`guild|guildconfig|guilddata <part>\`\``
-			);
-		const part = args[0].toLowerCase();
+				let embed = new Discord.MessageEmbed()
+					.setColor(process.env.COLOR)
+					.setTimestamp()
+					.setFooter(
+						`Executed by ${message.author.username}#${message.author.discriminator}`,
+						message.author.avatarURL()
+					)
+					.setTitle(`Configuration on ${message.guild.name}`)
+					.setDescription(
+						`
+**Guild Prefix:** \`\`${guild.guildPrefix}\`\`
+**Track Analytics:** ${emotify(guild.trackAnalytics)}
+					`
+					)
+					.addField(
+						`Settings`,
+						`**Bot language:** ${
+							guild.settings.language
+						}\n**Dm on action:** ${emotify(
+							guild.settings.dm_on_action
+						)}\n**Allow non latin usernames:** ${emotify(
+							guild.settings.allow_non_latin_usernames
+						)}`
+					)
+					.addField(
+						`Logging Channels`,
+						`**Mod Actions:** ${handleChannels(
+							guild.logChannels.modAction
+						)}\n**Message Logs:** ${handleChannels(
+							guild.logChannels.message
+						)}\n**Role Logs:** ${handleChannels(
+							guild.logChannels.role
+						)}\n**Member Logs:** ${handleChannels(
+							guild.roles.member
+						)}\n**Channel Logs:** ${handleChannels(
+							guild.roles.channel
+						)}\n**Join Leave Logs:** ${handleChannels(guild.roles.join_leave)}`
+					)
+					.addField(
+						`Roles`,
+						`**Admin:** ${handleRoles(
+							guild.roles.admin
+						)}\n**Moderator:** ${handleRoles(
+							guild.roles.moderator
+						)}\n**Mute:** ${handleRoles(
+							guild.roles.mute
+						)}\n**Trusted:** ${handleRoles(guild.roles.trusted)}`
+					);
 
-		switch (part) {
-			case "guild":
-				Guild.findOne(
-					{
-						guildID: message.guild.id,
-					},
-					(err, guild) => {
-						if (err) console.error(clc.red(err));
-						let msg = `${Emotes.other.tools} All guild data we store on **${message.guild.name}**\n`;
-
-						msg += `**Guild ID:** ${guild.guildID}\n`;
-						msg += `**Guild Name:** ${guild.guildName}\n`;
-						msg += `**Guild Prefix:** ${guild.guildPrefix}\n`;
-						msg += `**Track Analytics:** ${guild.trackAnalytics}\n`;
-						msg += `**Join Date:** ${guild.joinDate}\n`;
-
-						message.channel.send(msg);
-					}
-				);
-
-				break;
-			case "log":
-				Log.findOne(
-					{
-						guildID: message.guild.id,
-					},
-					(err, guild) => {
-						if (err) console.error(clc.red(err));
-						let msg = `${Emotes.other.tools} All logging data we store on **${message.guild.name}**\n`;
-
-						msg += `**Guild ID:** ${guild.guildID} \n`;
-						msg += `**Mod Actions:** ${guild.modAction} <#${guild.modAction}>\n`;
-						msg += `**Message logs:** ${guild.message} <#${guild.message}>\n`;
-						msg += `**Role logs:** ${guild.role} <#${guild.role}>\n`;
-						msg += `**Member logs:** ${guild.member} <#${guild.member}>\n`;
-						msg += `**Channel logs:** ${guild.channel} <#${guild.channel}>\n`;
-						msg += `**Join leave log:** ${guild.join_leave} <#${guild.join_leave}>\n`;
-
-						message.channel.send(msg);
-					}
-				);
-
-				break;
-			case "role":
-				Role.findOne(
-					{
-						guildID: message.guild.id,
-					},
-					(err, guild) => {
-						if (err) console.error(clc.red(err));
-						let msg = `${Emotes.other.tools} All role data we store on **${message.guild.name}**\n`;
-
-						msg += `**Guild ID:** ${guild.guildID}\n`;
-						msg += `**Admin:** ${guild.admin}\n`;
-						msg += `**Moderator:** ${guild.moderator}\n`;
-						msg += `**Muted:** ${guild.mute}\n`;
-
-						message.channel.send(msg);
-					}
-				);
-
-				break;
-
-			default:
-				message.channel.send(
-					`${Emotes.actions.warn} Invalid \`\`part\`\`\n${Emotes.other.tools} Correct usage of command: \`\`guild|guildconfig|guilddata <part>\`\`\n**Parts:** \`\`guild\`\`, \`\`log\`\`, \`\`role\`\``
-				);
-				break;
-		}
+				return message.channel.send(embed);
+			}
+		);
 	},
 };
+
+function emotify(text) {
+	if (text) return `${Emotes.other.switchOn} Enabled`;
+	else return `${Emotes.other.switchOff} Disabled`;
+}
+function handleChannels(text) {
+	if (text === "" || text === undefined)
+		return `${Emotes.other.switchOff} Disabled`;
+	else return `${Emotes.other.switchOn} <#${text}>`;
+}
+function handleRoles(text) {
+	if (text === "" || text === undefined)
+		return `${Emotes.other.switchOff} None`;
+	else return `${Emotes.other.switchOn} <@&${text}>`;
+}

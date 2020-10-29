@@ -14,6 +14,7 @@ module.exports = {
 		"VIEW_CHANNEL",
 		"USE_EXTERNAL_EMOJIS",
 	],
+	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		let target;
 		if (args[0] == undefined || args[0] == null) target = message.author.id;

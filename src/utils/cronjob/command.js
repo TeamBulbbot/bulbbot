@@ -1,6 +1,6 @@
 const Mute = require("../../models/mute");
 const Remind = require("../../models/remind");
-const Roles = require("../../models/role");
+const Guild = require("../../models/guild");
 const SendLog = require("../moderation/log");
 const Emotes = require("../../emotes.json");
 
@@ -12,20 +12,24 @@ module.exports = {
 		const unix = moment().unix();
 
 		Mute.find({}, async (err, mutes) => {
+			if (err) console.error(clc.red(err));
 			mutes.forEach((mute) => {
 				if (unix >= mute.expireTime) {
-					Roles.findOne(
+					Guild.findOne(
 						{
 							guildID: mute.guildID,
 						},
-						async (err, roles) => {
+						async (err, fGuild) => {
 							if (err) console.error(clc.red(err));
 
 							let guild = client.guilds.cache.get(mute.guildID);
 							let user = guild.member(mute.targetID);
 
-							if (user.roles.cache.has(roles.mute) && user !== undefined) {
-								user.roles.remove(roles.mute).catch(console.error);
+							if (
+								user.roles.cache.has(fGuild.roles.mute) &&
+								user !== undefined
+							) {
+								user.roles.remove(fGuild.roles.mute).catch(console.error);
 
 								await SendLog.Mod_action(
 									client,

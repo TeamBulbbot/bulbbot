@@ -1,6 +1,5 @@
 const Guild = require("../../utils/configuration/guild");
 const Log = require("../../utils/configuration/logs");
-const Role = require("../../utils/configuration/roles");
 const Emotes = require("../../emotes.json");
 
 module.exports = {
@@ -10,9 +9,8 @@ module.exports = {
 	description: "Modify settings on the bot in your guild",
 	usage: "configure <setting> <new value>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
+	clearanceLevel: 75,
 	run: async (client, message, args) => {
-		if (!message.member.hasPermission("MANAGE_GUILD"))
-			return message.channel.send(":lock: Missing permission ``MANAGE_GUILD``"); // I know best has permssion lol
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable a command put disable inside of the <new value>\`\``
@@ -55,63 +53,6 @@ module.exports = {
 				break;
 			case "join_leave":
 				Join_leave(client, message, newValue);
-				break;
-
-			// Role configuration
-			case "admin":
-				if (
-					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
-					undefined
-				)
-					return message.channel.send(
-						`${Emotes.actions.warn} Invalid \`\`role\`\``
-					);
-				Role.Change_Admin_role(message.guild.id, newValue.replace(/\D/g, ""));
-				message.channel.send(
-					`Changed the admin role to \`\`${newValue.replace(
-						/\D/g,
-						""
-					)}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "mod":
-			case "moderator":
-				if (
-					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
-					undefined
-				)
-					return message.channel.send(
-						`${Emotes.actions.warn} Invalid \`\`role\`\``
-					);
-				Role.Change_Mod_role(message.guild.id, newValue.replace(/\D/g, ""));
-				message.channel.send(
-					`Changed the moderator role to \`\`${newValue.replace(
-						/\D/g,
-						""
-					)}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "mute":
-				if (
-					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
-					undefined
-				)
-					return message.channel.send(
-						`${Emotes.actions.warn} Invalid \`\`role\`\``
-					);
-
-				Role.Change_Mute_role(message.guild.id, newValue.replace(/\D/g, ""));
-				message.channel.send(
-					`Changed the muted role to \`\`${newValue.replace(
-						/\D/g,
-						""
-					)}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "trusted":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
 				break;
 
 			// Setting configuration

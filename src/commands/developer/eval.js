@@ -4,6 +4,7 @@ module.exports = {
 	description: "Eval some javascript code",
 	usage: "eval <code>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		let developers = process.env.DEVELOPERS.split(",");
 

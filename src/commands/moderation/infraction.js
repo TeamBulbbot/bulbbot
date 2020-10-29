@@ -12,9 +12,8 @@ module.exports = {
 	description: "Infraction logs",
 	usage: "infraction <option>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
+	clearanceLevel: 50,
 	run: async (client, message, args) => {
-		if (!message.member.hasPermission("KICK_MEMBERS"))
-			return message.channel.send(":lock: Missing permission"); // I know best has permssion lol
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf <option>\`\``

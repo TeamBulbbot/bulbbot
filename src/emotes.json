@@ -54,6 +54,8 @@
 		"trash": "<:bulbTrash:757336365032538144>",
 		"plus": "<:plus:758063193506709614>",
 		"minus": "<:minus:758063193502384231>",
-		"loading": "<a:loading:768917115503378432>"
+		"loading": "<a:loading:768917115503378432>",
+		"switchOff": "<:switchOff:771369901167738900>",
+		"switchOn": "<:switchOn:771369901142179900>"
 	}
 }

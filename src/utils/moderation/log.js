@@ -1,23 +1,23 @@
-const Log = require("../../models/log");
+const Guild = require("../../models/guild");
 const moment = require("moment");
 const clc = require("cli-color");
 
 module.exports = {
 	Mod_action: async (client, guildId, log, file) => {
-		Log.findOne(
+		Guild.findOne(
 			{
 				guildID: guildId,
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Mod Action] ${clc.red(err)}`);
-				if (res.modAction === "") return;
+				if (res.logChannels.modAction === "") return;
 				if (file === "")
 					client.channels.cache
-						.get(res.modAction)
+						.get(res.logChannels.modAction)
 						.send(`\`\`[${moment().format("hh:mm:ss a")}]\`\` ${log}`);
 				else
 					client.channels.cache
-						.get(res.modAction)
+						.get(res.logChannels.modAction)
 						.send(`\`\`[${moment().format("hh:mm:ss a")}]\`\` ${log}`, {
 							files: [file],
 						});
@@ -26,45 +26,45 @@ module.exports = {
 	},
 
 	Message_Log: async (client, guildId, log) => {
-		Log.findOne(
+		Guild.findOne(
 			{
 				guildID: guildId,
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Message Log] ${clc.red(err)}`);
-				if (res.message === "") return;
+				if (res.logChannels.message === "") return;
 				client.channels.cache
-					.get(res.message)
+					.get(res.logChannels.message)
 					.send(`\`\`[${moment().format("hh:mm:ss a")}]\`\` ${log}`);
 			}
 		);
 	},
 
 	Member_Updates: async (client, guildId, log) => {
-		Log.findOne(
+		Guild.findOne(
 			{
 				guildID: guildId,
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Member Update] ${clc.red(err)}`);
-				if (res.member === "") return;
+				if (res.logChannels.member === "") return;
 				client.channels.cache
-					.get(res.member)
+					.get(res.logChannels.member)
 					.send(`\`\`[${moment().format("hh:mm:ss a")}]\`\` ${log}`);
 			}
 		);
 	},
 
 	Join_leave_log: async (client, guildId, log) => {
-		Log.findOne(
+		Guild.findOne(
 			{
 				guildID: guildId,
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Join Leave] ${clc.red(err)}`);
-				if (res.join_leave === "") return;
+				if (res.logChannels.join_leave === "") return;
 				client.channels.cache
-					.get(res.join_leave)
+					.get(res.logChannels.join_leave)
 					.send(`\`\`[${moment().format("hh:mm:ss a")}]\`\` ${log}`);
 			}
 		);

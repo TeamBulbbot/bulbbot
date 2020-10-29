@@ -9,6 +9,7 @@ module.exports = {
 	description: "Get the current uptime of the bot",
 	usage: "uptime",
 	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
+	clearanceLevel: 0,
 	run: async (client, message, _args) => {
 		let duration = moment
 			.duration(client.uptime)

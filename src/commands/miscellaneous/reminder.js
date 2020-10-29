@@ -19,6 +19,7 @@ module.exports = {
 		"ADD_REACTIONS",
 		"USE_EXTERNAL_EMOJIS",
 	],
+	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		if (!args[0])
 			return message.channel.send(
