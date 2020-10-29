@@ -27,7 +27,7 @@
     "jimp": "^0.16.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "mongoose": "^5.10.9",
+    "mongoose": "^5.10.10",
     "node-cron": "^2.0.3",
     "parse-duration": "^0.4.4",
     "request": "^2.88.2",
