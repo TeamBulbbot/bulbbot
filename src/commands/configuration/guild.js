@@ -19,7 +19,6 @@ module.exports = {
 			},
 			async (err, guild) => {
 				if (err) console.error(clc.red(err));
-
 				let embed = new Discord.MessageEmbed()
 					.setColor(process.env.COLOR)
 					.setTimestamp()
@@ -53,10 +52,12 @@ module.exports = {
 						)}\n**Role Logs:** ${handleChannels(
 							guild.logChannels.role
 						)}\n**Member Logs:** ${handleChannels(
-							guild.roles.member
+							guild.logChannels.member
 						)}\n**Channel Logs:** ${handleChannels(
-							guild.roles.channel
-						)}\n**Join Leave Logs:** ${handleChannels(guild.roles.join_leave)}`
+							guild.logChannels.channel
+						)}\n**Join Leave Logs:** ${handleChannels(
+							guild.logChannels.join_leave
+						)}`
 					)
 					.addField(`Roles`, `**Mute:** ${handleRoles(guild.roles.mute)}`);
 
