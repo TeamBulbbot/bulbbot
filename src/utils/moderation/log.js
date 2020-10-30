@@ -10,7 +10,7 @@ module.exports = {
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Mod Action] ${clc.red(err)}`);
-				if (res === null) return;
+				if (res === null || res.logChannels.modAction === "") return;
 
 				if (file === "")
 					client.channels.cache
@@ -33,7 +33,7 @@ module.exports = {
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Message Log] ${clc.red(err)}`);
-				if (res === null) return;
+				if (res === null || res.logChannels.message === "") return;
 
 				client.channels.cache
 					.get(res.logChannels.message)
@@ -49,7 +49,7 @@ module.exports = {
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Member Update] ${clc.red(err)}`);
-				if (res === null) return;
+				if (res === null || res.logChannels.member === "") return;
 
 				client.channels.cache
 					.get(res.logChannels.member)
@@ -65,7 +65,7 @@ module.exports = {
 			},
 			async (err, res) => {
 				if (err) console.error(`[Send Log - Join Leave] ${clc.red(err)}`);
-				if (res === null) return;
+				if (res === null || res.logChannels.join_leave === "") return;
 
 				client.channels.cache
 					.get(res.logChannels.join_leave)
