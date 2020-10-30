@@ -1,7 +1,8 @@
 const Guild = require("../../utils/configuration/guild");
+const GuildModel = require("../../models/guild");
 const Log = require("../../utils/configuration/logs");
 const Emotes = require("../../emotes.json");
-
+const clc = require("cli-color");
 module.exports = {
 	name: "configure",
 	aliases: ["cfg", "setting", "config"],
@@ -55,9 +56,36 @@ module.exports = {
 				Join_leave(client, message, newValue);
 				break;
 
+			// Roles
+			case "mute":
+				if (
+					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
+					undefined
+				)
+					return message.channel.send(
+						`${Emotes.actions.warn} Invalid \`\`role\`\``
+					);
+
+				GuildModel.findOneAndUpdate(
+					{ guildID: message.guild.id },
+					{
+						$set: { "roles.mute": newValue.replace(/\D/g, "") },
+					},
+					function (err) {
+						if (err) console.error(clc.red(err));
+					}
+				);
+				message.channel.send(
+					`Changed the muted role to \`\`${newValue.replace(
+						/\D/g,
+						""
+					)}\`\` in **${message.guild.name}**`
+				);
+				break;
+
 			default:
 				message.channel.send(
-					`${Emotes.actions.warn} Invalid \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable command put disable inside of the <new value>\`\`\n**Guild settings:** \`\`prefix\`\`, \`\`track_analytics\`\`\n**Logging settings:** \`\`mod_action\`\`, \`\`message\`\`, \`\`role|role_update\`\`, \`\`member|member_update\`\`, \`\`channel|channel_update\`\`, \`\`join_leave\`\`\n**Role settings:** \`\`admin\`\`, \`\`mod|moderator\`\`, \`\`mute\`\`, \`\`trusted\`\`\n**Settings:** \`\`lang|language\`\`, \`\`delete_server_invites\`\`, \`\`trusted_server_invites\`\`, \`\`allow_non_latin_usernames\`\`, \`\`dm_on_action\`\`, \`\`censored_words\`\`, \`\`delete_links\`\`, \`\`trusted_links\`\``
+					`${Emotes.actions.warn} Invalid \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable command put disable inside of the <new value>\`\`\n**Guild settings:** \`\`prefix\`\`, \`\`track_analytics\`\`\n**Logging settings:** \`\`mod_action\`\`, \`\`message\`\`, \`\`role|role_update\`\`, \`\`member|member_update\`\`, \`\`channel|channel_update\`\`, \`\`join_leave\`\`\n**Role settings:** \`\`mute\`\``
 				);
 				break;
 		}
