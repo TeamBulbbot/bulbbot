@@ -86,9 +86,6 @@ module.exports = async (client, message) => {
 						authorClearance = o.clearanceLevel;
 				});
 
-				console.log("Need clearance level: " + clearanceLevel);
-				console.log("Author clearance level: " + authorClearance);
-
 				if (clearanceLevel > authorClearance)
 					return message.channel.send(":lock: Missing permission");
 

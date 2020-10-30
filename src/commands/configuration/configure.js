@@ -55,49 +55,6 @@ module.exports = {
 				Join_leave(client, message, newValue);
 				break;
 
-			// Setting configuration
-			case "lang":
-			case "language":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "delete_server_invites":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "trusted_server_invites":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "allow_non_latin_usernames":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "dm_on_action":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "censored_words":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "delete_links":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-			case "trusted_links":
-				message.channel.send(
-					`\`\`${newValue}\`\` in **${message.guild.name}**`
-				);
-				break;
-
 			default:
 				message.channel.send(
 					`${Emotes.actions.warn} Invalid \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable command put disable inside of the <new value>\`\`\n**Guild settings:** \`\`prefix\`\`, \`\`track_analytics\`\`\n**Logging settings:** \`\`mod_action\`\`, \`\`message\`\`, \`\`role|role_update\`\`, \`\`member|member_update\`\`, \`\`channel|channel_update\`\`, \`\`join_leave\`\`\n**Role settings:** \`\`admin\`\`, \`\`mod|moderator\`\`, \`\`mute\`\`, \`\`trusted\`\`\n**Settings:** \`\`lang|language\`\`, \`\`delete_server_invites\`\`, \`\`trusted_server_invites\`\`, \`\`allow_non_latin_usernames\`\`, \`\`dm_on_action\`\`, \`\`censored_words\`\`, \`\`delete_links\`\`, \`\`trusted_links\`\``

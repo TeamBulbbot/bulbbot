@@ -58,16 +58,7 @@ module.exports = {
 							guild.roles.channel
 						)}\n**Join Leave Logs:** ${handleChannels(guild.roles.join_leave)}`
 					)
-					.addField(
-						`Roles`,
-						`**Admin:** ${handleRoles(
-							guild.roles.admin
-						)}\n**Moderator:** ${handleRoles(
-							guild.roles.moderator
-						)}\n**Mute:** ${handleRoles(
-							guild.roles.mute
-						)}\n**Trusted:** ${handleRoles(guild.roles.trusted)}`
-					);
+					.addField(`Roles`, `**Mute:** ${handleRoles(guild.roles.mute)}`);
 
 				return message.channel.send(embed);
 			}
