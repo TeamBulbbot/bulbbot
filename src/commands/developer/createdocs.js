@@ -17,7 +17,6 @@ module.exports = {
 				"configuration",
 				"information",
 				"miscellaneous",
-				"developer",
 				"moderation",
 			];
 			let msg = "# Command list\n";
@@ -25,9 +24,8 @@ module.exports = {
 			categorys.forEach((cat) => {
 				msg += `
 ## ${cat.charAt(0).toUpperCase() + cat.slice(1)}
-
-| Command 	| Aliases                                             	| Description                                                     	| Usage              	| Bot Permssion                             |
-|---------	|-----------------------------------------------------	|-----------------------------------------------------------------	|--------------------	|------------------------------------------	|
+| Command 	| Aliases 	| Default Clearance Level                             	| Description                                                     	| Usage              	| Bot Permssion                            	|
+|---------	|---------	|-----------------------------------------------------	|-----------------------------------------------------------------	|--------------------	|------------------------------------------	|
 `;
 
 				client.commands.forEach((c) => {
@@ -38,7 +36,7 @@ module.exports = {
 								: c.aliases === undefined
 								? "N/A"
 								: `${c.aliases.join(", ")}`
-						} | ${c.description} | \`\`${
+						}| ${c.clearanceLevel} | ${c.description} | \`\`${
 							c.usage
 						}\`\` | ${c.clientPermissions.join(", ")} | \n`;
 					}
