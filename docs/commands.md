@@ -14,7 +14,7 @@
 | configure | cfg, setting, config| 75 | Modify settings on the bot in your guild | ``configure <setting> <new value>`` | SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
 | guild | guildconfig, guilddata| 50 | Get the configuration list of the guild | ``guild`` | SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
 | override | N/A| 75 | Configure the overrides. | ``override <category> <sub category>`` | SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
-| overrides | N/A| 50 | Returns bot and API latency in milliseconds. | ``overrides <category>`` | EMBED_LINKS, SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
+| overrides | N/A| 50 | Get the overrides for the giving category | ``overrides <category>`` | EMBED_LINKS, SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
 
 ## Information
 | Command 	| Aliases 	| Default Clearance Level                             	| Description                                                     	| Usage              	| Bot Permssion                            	|
@@ -26,16 +26,16 @@
 ## Miscellaneous
 | Command 	| Aliases 	| Default Clearance Level                             	| Description                                                     	| Usage              	| Bot Permssion                            	|
 |---------	|---------	|-----------------------------------------------------	|-----------------------------------------------------------------	|--------------------	|------------------------------------------	|
-| jumbo | N/A| 0 | Sends a bigger version of the given emotes  | ``jumbo <emotes>`` | ATTACH_FILES, SEND_MESSAGES, VIEW_CHANNEL | 
-| remind | reminder, r, 🕰️| 0 | Reminds you something | ``remind <duration> <reminder>`` | EMBED_LINKS, SEND_MESSAGES, VIEW_CHANNEL, ADD_REACTIONS, USE_EXTERNAL_EMOJIS | 
+| jumbo | N/A| 0 | Sends a bigger version of the given emote(s) | ``jumbo <emotes>`` | ATTACH_FILES, SEND_MESSAGES, VIEW_CHANNEL | 
+| remind | reminder, r, 🕰️| 0 | Reminds you of something | ``remind <duration> <reminder>`` | EMBED_LINKS, SEND_MESSAGES, VIEW_CHANNEL, ADD_REACTIONS, USE_EXTERNAL_EMOJIS | 
 
 ## Moderation
 | Command 	| Aliases 	| Default Clearance Level                             	| Description                                                     	| Usage              	| Bot Permssion                            	|
 |---------	|---------	|-----------------------------------------------------	|-----------------------------------------------------------------	|--------------------	|------------------------------------------	|
 | ban | terminate| 50 | Bans a user from the guild | ``ban <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, BAN_MEMBERS, USE_EXTERNAL_EMOJIS | 
-| infraction | inf| 50 | Infraction logs | ``infraction <option>`` | SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
+| infraction | inf| 50 | Infraction related commands | ``infraction <option>`` | SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 
 | kick | N/A| 50 | Kicks a user from the guild | ``kick <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, KICK_MEMBERS, USE_EXTERNAL_EMOJIS | 
-| mute | N/A| 50 | Mutes a user from the guild | ``mute <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_ROLES, USE_EXTERNAL_EMOJIS | 
+| mute | N/A| 50 | Mutes a user from the guild | ``mute <user> <duration> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_ROLES, USE_EXTERNAL_EMOJIS | 
 | purge | clear| 50 | Purge X amount of message in channel | ``purge <amount>`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_MESSAGES, USE_EXTERNAL_EMOJIS, ATTACH_FILES | 
 | softban | cleanban| 50 | Bans and unbans a user from a guild clearing their messages | ``softban <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, BAN_MEMBERS, USE_EXTERNAL_EMOJIS | 
 | unban | pardon| 50 | Unban a user from the server | ``unban <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_MESSAGES, USE_EXTERNAL_EMOJIS, BAN_MEMBERS | 
