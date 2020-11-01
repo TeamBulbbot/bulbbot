@@ -9,7 +9,7 @@ module.exports = {
 	name: "infraction",
 	aliases: ["inf"],
 	category: "moderation",
-	description: "Infraction logs",
+	description: "Infraction related commands",
 	usage: "infraction <option>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
 	clearanceLevel: 50,

@@ -6,7 +6,7 @@ const Emotes = require("../../emotes.json");
 module.exports = {
 	name: "jumbo",
 	category: "miscellaneous",
-	description: "Sends a bigger version of the given emotes ",
+	description: "Sends a bigger version of the given emote(s)",
 	usage: "jumbo <emotes>",
 	clientPermissions: ["ATTACH_FILES", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	clearanceLevel: 0,

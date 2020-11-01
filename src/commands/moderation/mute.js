@@ -9,7 +9,7 @@ module.exports = {
 	name: "mute",
 	category: "moderation",
 	description: "Mutes a user from the guild",
-	usage: "mute <user> [reason]",
+	usage: "mute <user> <duration> [reason]",
 	clientPermissions: [
 		"SEND_MESSAGES",
 		"VIEW_CHANNEL",

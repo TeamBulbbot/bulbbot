@@ -10,7 +10,7 @@ module.exports = {
 	name: "remind",
 	aliases: ["reminder", "r", "🕰️"],
 	category: "miscellaneous",
-	description: "Reminds you something",
+	description: "Reminds you of something",
 	usage: "remind <duration> <reminder>",
 	clientPermissions: [
 		"EMBED_LINKS",

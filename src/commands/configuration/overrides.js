@@ -6,7 +6,7 @@ const Logger = require("../../utils/other/winston");
 module.exports = {
 	name: "overrides",
 	category: "configuration",
-	description: "Returns bot and API latency in milliseconds.",
+	description: "Get the overrides for the giving category",
 	usage: "overrides <category>",
 	clientPermissions: [
 		"EMBED_LINKS",
