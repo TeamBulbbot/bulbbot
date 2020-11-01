@@ -1,7 +1,8 @@
 const Infraction = require("./infraction");
 const mongoose = require("mongoose");
 const Mute = require("../../models/mute");
-const clc = require("cli-color");
+const Logger = require("../../utils/other/winston");
+
 module.exports = {
 	Warn: async (_client, guildId, target, moderator, reason) => {
 		Infraction.Add(guildId, "Warn", target, moderator.id, reason);
@@ -23,7 +24,7 @@ module.exports = {
 			targetID: target,
 			expireTime: unixDuration,
 		});
-		mute.save().catch((err) => console.error(clc.red(err)));
+		mute.save().catch((err) => Logger.error(err));
 
 		Infraction.Add(
 			guildId,

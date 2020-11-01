@@ -6,7 +6,7 @@ const { resolve } = require("path");
 const table = new ascii().setHeading("Event", "Status");
 const cron = require("node-cron");
 const CommandJobs = require("./utils/cronjob/command");
-
+const Logger = require("./utils/other/winston");
 const client = new Client();
 
 client.commands = new Collection();
@@ -24,7 +24,7 @@ config({
 });
 
 fs.readdir(resolve(__dirname, "./events/"), (err, files) => {
-	if (err) return console.error;
+	if (err) Logger.error(err);
 	files.forEach((file) => {
 		if (!file.endsWith(".js")) return;
 		const evt = require(`./events/${file}`);

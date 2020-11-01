@@ -2,6 +2,7 @@ const fs = require("fs");
 const moment = require("moment");
 const Log = require("../../utils/moderation/log");
 const Emotes = require("../../emotes.json");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	name: "purge",
@@ -51,7 +52,7 @@ module.exports = {
 					`./src/files/purge/${message.guild.id}.txt`,
 					deletedMSG,
 					function (err) {
-						if (err) return console.error(`[Purge] ${err}`);
+						if (err) Logger.error(err);
 					}
 				);
 
@@ -71,7 +72,7 @@ module.exports = {
 				msg.delete({ timeout: 1500 });
 			})
 			.catch((err) => {
-				console.error(`[Purge] ${err}`);
+				Logger.error(err);
 			});
 		fs.unlinkSync(`./src/files/purge/${message.guild.id}.txt`); // Removes the file from the system
 	},

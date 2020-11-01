@@ -1,5 +1,6 @@
 const Emotes = require("../../emotes.json");
 const fs = require("fs");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	name: "createdocs",
@@ -44,7 +45,7 @@ module.exports = {
 			});
 
 			fs.writeFile(`./docs/commands.md`, msg, function (err) {
-				if (err) return console.error(`[Create Docs] ${err}`);
+				if (err) Logger.error(err);
 			});
 			return message.channel.send(
 				`${Emotes.actions.confirm} Updated all the docs`

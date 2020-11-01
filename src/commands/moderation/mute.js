@@ -3,6 +3,7 @@ const Emotes = require("../../emotes.json");
 const Log = require("../../utils/moderation/log");
 const Guild = require("../../models/guild");
 const parse = require("parse-duration");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	name: "mute",
@@ -77,7 +78,7 @@ module.exports = {
 						`Unable to mute <@${target}> \`\`(${target})\`\`.`
 					);
 
-				user.roles.add(guild.roles.mute).catch(console.error);
+				user.roles.add(guild.roles.mute).catch((err) => Logger.error(err));
 
 				await Log.Mod_action(
 					client,

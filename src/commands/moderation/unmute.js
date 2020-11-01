@@ -1,6 +1,7 @@
 const Emotes = require("../../emotes.json");
 const Log = require("../../utils/moderation/log");
 const Guild = require("../../models/guild");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	name: "unmute",
@@ -37,7 +38,9 @@ module.exports = {
 				if (user === null) return message.channel.send("User is not in server");
 
 				if (user.roles.cache.has(fGuild.roles.mute)) {
-					user.roles.remove(fGuild.roles.mute).catch(console.error);
+					user.roles
+						.remove(fGuild.roles.mute)
+						.catch((err) => Logger.error(err));
 
 					await Log.Mod_action(
 						client,

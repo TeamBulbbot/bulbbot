@@ -1,4 +1,5 @@
-var clc = require("cli-color");
+const clc = require("cli-color");
+const Logger = require("../utils/other/winston");
 
 module.exports = (client) => {
 	console.log(
@@ -10,6 +11,8 @@ module.exports = (client) => {
 [!] Bot is online
   `)
 	);
+
+	Logger.info("Bot is up and running");
 
 	client.user.setPresence({
 		status: "online",

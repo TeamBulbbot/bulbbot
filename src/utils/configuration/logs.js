@@ -1,6 +1,7 @@
 const Guild = require("../../models/guild");
 const Discord = require("discord.js");
 const clc = require("cli-color");
+const Logger = require("../../utils/other/winston");
 
 function sendEmbed(client, channelId, text) {
 	if (channelId === "") return;
@@ -18,10 +19,8 @@ module.exports = {
 			{
 				$set: { "logChannels.modAction": channelId },
 			},
-			function (error) {
-				if (error) {
-					console.error(clc.red(error));
-				}
+			function (err) {
+				if (err) Logger.error(err);
 			}
 		);
 		sendEmbed(client, channelId, "This channel is setup to log mod actions");
@@ -32,10 +31,8 @@ module.exports = {
 			{
 				$set: { "logChannels.message": channelId },
 			},
-			function (error) {
-				if (error) {
-					console.error(clc.red(error));
-				}
+			function (err) {
+				if (err) Logger.error(err);
 			}
 		);
 		sendEmbed(
@@ -50,10 +47,8 @@ module.exports = {
 			{
 				$set: { "logChannels.role": channelId },
 			},
-			function (error) {
-				if (error) {
-					console.error(clc.red(error));
-				}
+			function (err) {
+				if (err) Logger.error(err);
 			}
 		);
 		sendEmbed(client, channelId, "This channel is setup to log role updates");
@@ -64,10 +59,8 @@ module.exports = {
 			{
 				$set: { "logChannels.member": channelId },
 			},
-			function (error) {
-				if (error) {
-					console.error(clc.red(error));
-				}
+			function (err) {
+				if (err) Logger.error(err);
 			}
 		);
 		sendEmbed(client, channelId, "This channel is setup to log member updates");
@@ -78,10 +71,8 @@ module.exports = {
 			{
 				$set: { "logChannels.channel": channelId },
 			},
-			function (error) {
-				if (error) {
-					console.error(clc.red(error));
-				}
+			function (err) {
+				if (err) Logger.error(err);
 			}
 		);
 		sendEmbed(
@@ -96,10 +87,8 @@ module.exports = {
 			{
 				$set: { "logChannels.join_leave": channelId },
 			},
-			function (error) {
-				if (error) {
-					console.error(clc.red(error));
-				}
+			function (err) {
+				if (err) Logger.error(err);
 			}
 		);
 		sendEmbed(

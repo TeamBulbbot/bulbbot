@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-var clc = require("cli-color");
 
 const Infraction = require("../../models/infraction");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	// Add a new infraction to the database
@@ -15,7 +15,7 @@ module.exports = {
 			reportReason: reason,
 			date: new Date(),
 		});
-		inf.save().catch((err) => console.error(clc.red(err)));
+		inf.save().catch((err) => Logger.error(err));
 	},
 
 	Remove: async (id, guildId) => {
@@ -25,7 +25,7 @@ module.exports = {
 				guildID: guildId,
 			},
 			(err, _res) => {
-				if (err) console.error(clc.red(err));
+				if (err) Logger.error(err);
 			}
 		);
 	},
@@ -35,9 +35,7 @@ module.exports = {
 			{ _id: id, guildID: guildId },
 			{ moderatorID: moderatorId },
 			function (err) {
-				if (err) {
-					console.error(clc.red(err));
-				}
+				if (err) Logger.error(err);
 			}
 		);
 	},
@@ -47,9 +45,7 @@ module.exports = {
 			{ _id: id, guildID: guildId },
 			{ reportReason: reason },
 			function (err) {
-				if (err) {
-					console.error(clc.red(err));
-				}
+				if (err) Logger.error(err);
 			}
 		);
 	},

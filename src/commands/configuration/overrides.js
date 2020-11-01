@@ -1,7 +1,7 @@
-const clc = require("cli-color");
 const Discord = require("discord.js");
 const Guild = require("../../models/guild");
 const Emotes = require("../../emotes.json");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	name: "overrides",
@@ -28,7 +28,7 @@ module.exports = {
 						guildID: message.guild.id,
 					},
 					async (err, guild) => {
-						if (err) console.error(clc.red(err));
+						if (err) Logger.error(err);
 
 						let desc = ``;
 
@@ -58,7 +58,7 @@ module.exports = {
 						guildID: message.guild.id,
 					},
 					async (err, guild) => {
-						if (err) console.error(clc.red(err));
+						if (err) Logger.error(err);
 
 						let desc = ``;
 

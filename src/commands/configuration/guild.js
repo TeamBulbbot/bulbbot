@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
-const clc = require("cli-color");
 
 const Guild = require("../../models/guild");
 const Emotes = require("../../emotes.json");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	name: "guild",
@@ -18,7 +18,7 @@ module.exports = {
 				guildID: message.guild.id,
 			},
 			async (err, guild) => {
-				if (err) console.error(clc.red(err));
+				if (err) Logger.error(err);
 				let embed = new Discord.MessageEmbed()
 					.setColor(process.env.COLOR)
 					.setTimestamp()

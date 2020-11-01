@@ -1,7 +1,6 @@
-const clc = require("cli-color");
-
 const Guild = require("../../../models/guild");
 const Emotes = require("../../../emotes.json");
+const Logger = require("../../../utils/other/winston");
 
 module.exports = {
 	Edit: (message, args) => {
@@ -27,7 +26,7 @@ module.exports = {
 				guildID: message.guild.id,
 			},
 			async (err, guild) => {
-				if (err) console.error(clc.red(err));
+				if (err) Logger.error(err);
 				const override = guild.moderationRoles.filter(function (c) {
 					return c.roleId == roleId;
 				});
@@ -42,7 +41,7 @@ module.exports = {
 						},
 						{ upsert: true },
 						function (err, _res) {
-							if (err) console.error(clc.red(err));
+							if (err) Logger.error(err);
 						}
 					);
 					return message.channel.send(
@@ -85,7 +84,7 @@ module.exports = {
 				guildID: message.guild.id,
 			},
 			async (err, guild) => {
-				if (err) console.error(clc.red(err));
+				if (err) Logger.error(err);
 				const override = guild.moderationRoles.filter(function (c) {
 					return c.roleId == roleId;
 				});
@@ -102,7 +101,7 @@ module.exports = {
 						},
 						{ upsert: true },
 						function (err, _res) {
-							if (err) console.error(clc.red(err));
+							if (err) cLogger.error(err);
 						}
 					);
 					return message.channel.send(

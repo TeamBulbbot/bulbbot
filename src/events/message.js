@@ -1,10 +1,10 @@
-const clc = require("cli-color");
 const Discord = require("discord.js");
 const { Permissions } = require("discord.js");
 
 const Guild = require("../models/guild");
 const GuildUtils = require("../utils/database/guild");
 const Commandtils = require("../utils/database/command");
+const Logger = require("../utils/other/winston");
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
@@ -31,7 +31,7 @@ module.exports = async (client, message) => {
 			guildID: message.guild.id,
 		},
 		async (err, guild) => {
-			if (err) console.error(clc.red(err));
+			if (err) Logger.error(err);
 			if (guild == null) GuildUtils.Add(message.guild);
 
 			let prefix;
@@ -92,7 +92,7 @@ module.exports = async (client, message) => {
 				const permissions = new Permissions(message.guild.me.permissions);
 				if (permissions.has(command.clientPermissions)) {
 					command.run(client, message, args).catch((err) => {
-						console.error(err);
+						Logger.error(err);
 						message.channel.send(
 							"**An error has occurred**, please check the the permssion level of the bot or try again later. If the issue persists contact the bot developers."
 						);

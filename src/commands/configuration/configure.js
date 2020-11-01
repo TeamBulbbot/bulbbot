@@ -2,7 +2,8 @@ const Guild = require("../../utils/configuration/guild");
 const GuildModel = require("../../models/guild");
 const Log = require("../../utils/configuration/logs");
 const Emotes = require("../../emotes.json");
-const clc = require("cli-color");
+const Logger = require("../../utils/other/winston");
+
 module.exports = {
 	name: "configure",
 	aliases: ["cfg", "setting", "config"],
@@ -72,7 +73,7 @@ module.exports = {
 						$set: { "roles.mute": newValue.replace(/\D/g, "") },
 					},
 					function (err) {
-						if (err) console.error(clc.red(err));
+						if (err) Logger.error(err);
 					}
 				);
 				message.channel.send(

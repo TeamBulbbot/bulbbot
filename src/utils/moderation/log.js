@@ -1,7 +1,6 @@
 const Guild = require("../../models/guild");
+const Logger = require("../../utils/other/winston");
 const moment = require("moment");
-const clc = require("cli-color");
-
 module.exports = {
 	Mod_action: async (client, guildId, log, file) => {
 		Guild.findOne(
@@ -9,7 +8,7 @@ module.exports = {
 				guildID: guildId,
 			},
 			async (err, res) => {
-				if (err) console.error(`[Send Log - Mod Action] ${clc.red(err)}`);
+				if (err) Logger.error(err);
 				if (res === null || res.logChannels.modAction === "") return;
 
 				if (file === "")
@@ -32,7 +31,7 @@ module.exports = {
 				guildID: guildId,
 			},
 			async (err, res) => {
-				if (err) console.error(`[Send Log - Message Log] ${clc.red(err)}`);
+				if (err) Logger.error(err);
 				if (res === null || res.logChannels.message === "") return;
 
 				client.channels.cache
@@ -48,7 +47,7 @@ module.exports = {
 				guildID: guildId,
 			},
 			async (err, res) => {
-				if (err) console.error(`[Send Log - Member Update] ${clc.red(err)}`);
+				if (err) Logger.error(err);
 				if (res === null || res.logChannels.member === "") return;
 
 				client.channels.cache
@@ -64,7 +63,7 @@ module.exports = {
 				guildID: guildId,
 			},
 			async (err, res) => {
-				if (err) console.error(`[Send Log - Join Leave] ${clc.red(err)}`);
+				if (err) Logger.error(err);
 				if (res === null || res.logChannels.join_leave === "") return;
 
 				client.channels.cache

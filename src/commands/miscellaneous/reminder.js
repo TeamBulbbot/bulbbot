@@ -1,7 +1,7 @@
 const Emotes = require("../../emotes.json");
 const Remind = require("../../models/remind");
 const Discord = require("discord.js");
-const clc = require("cli-color");
+const Logger = require("../../utils/other/winston");
 const mongoose = require("mongoose");
 const Validate = require("../../utils/helper/validate");
 const parse = require("parse-duration");
@@ -97,7 +97,7 @@ ${Emotes.actions.cancel} **Cancel**
 							expireTime:
 								Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
 						});
-						remind.save().catch((err) => console.error(clc.red(err)));
+						remind.save().catch((err) => Logger.error(err));
 
 						return message.channel.send(
 							`${Emotes.actions.confirm} Reminding you in **${duration}** here.`
@@ -116,7 +116,7 @@ ${Emotes.actions.cancel} **Cancel**
 							expireTime:
 								Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
 						});
-						remind.save().catch((err) => console.error(clc.red(err)));
+						remind.save().catch((err) => cLogger.error(err));
 
 						return message.channel.send(
 							`${Emotes.actions.confirm} Reminding you in **${duration}** in dms.`

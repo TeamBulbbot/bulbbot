@@ -1,5 +1,6 @@
 const Guild = require("../../models/guild");
 const clc = require("cli-color");
+const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	Change_Prefix: async (guildId, prefix) => {
@@ -7,9 +8,7 @@ module.exports = {
 			{ guildID: guildId },
 			{ guildPrefix: prefix },
 			function (err) {
-				if (err) {
-					console.error(clc.red(err));
-				}
+				if (err) Logger.error(err);
 			}
 		);
 	},
@@ -19,9 +18,7 @@ module.exports = {
 			{ guildID: guildId },
 			{ trackAnalytics: state },
 			function (err) {
-				if (err) {
-					console.error(clc.red(err));
-				}
+				if (err) Logger.error(err);
 			}
 		);
 	},

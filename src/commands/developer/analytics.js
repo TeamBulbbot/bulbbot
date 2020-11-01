@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-var os = require("os");
+const os = require("os");
 
 module.exports = {
 	name: "analytics",

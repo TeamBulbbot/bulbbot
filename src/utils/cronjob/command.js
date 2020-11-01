@@ -3,16 +3,16 @@ const Remind = require("../../models/remind");
 const Guild = require("../../models/guild");
 const SendLog = require("../moderation/log");
 const Emotes = require("../../emotes.json");
+const Logger = require("../../utils/other/winston");
 
 const moment = require("moment");
-const clc = require("cli-color");
 
 module.exports = {
 	Mute: (client) => {
 		const unix = moment().unix();
 
 		Mute.find({}, async (err, mutes) => {
-			if (err) console.error(clc.red(err));
+			if (err) Logger.error(err);
 			mutes.forEach((mute) => {
 				if (unix >= mute.expireTime) {
 					Guild.findOne(
@@ -20,7 +20,7 @@ module.exports = {
 							guildID: mute.guildID,
 						},
 						async (err, fGuild) => {
-							if (err) console.error(clc.red(err));
+							if (err) Logger.error(err);
 
 							let guild = client.guilds.cache.get(mute.guildID);
 							let user = guild.member(mute.targetID);
@@ -29,7 +29,9 @@ module.exports = {
 								user.roles.cache.has(fGuild.roles.mute) &&
 								user !== undefined
 							) {
-								user.roles.remove(fGuild.roles.mute).catch(console.error);
+								user.roles
+									.remove(fGuild.roles.mute)
+									.catch((err) => Logger.error(err));
 
 								await SendLog.Mod_action(
 									client,
@@ -40,7 +42,7 @@ module.exports = {
 							}
 
 							Mute.findOneAndDelete({ _id: mute._id }, (err, _res) => {
-								if (err) console.error(clc.red(err));
+								if (err) Logger.error(err);
 							});
 						}
 					);
@@ -76,7 +78,7 @@ module.exports = {
 					}
 
 					Remind.findOneAndDelete({ _id: remind._id }, (err, _res) => {
-						if (err) console.error(clc.red(err));
+						if (err) Logger.error(err);
 					});
 				}
 			});
