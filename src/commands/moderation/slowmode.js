@@ -8,9 +8,15 @@ module.exports = {
     category: "moderation",
     description: "Sets a slowmode to a chosen channel",
     usage: "slowmode <channel> <seconds>",
-    clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL", "MANAGE_CHANNELS"],
+    clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "MANAGE_CHANNELS"],
     clearanceLevel: 50,
     run: async (client, message, args) => {
+
+        if (!args[0])
+            return message.channel.send(
+                `${Emotes.actions.warn} Missing required argument \`\`channel\`\`, \`\`duration\`\`\n${Emotes.other.tools} Correct usage of command: \`\`slowmode <channel> <duration>\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+            );
+        
         let channel = message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.get(args[0].replace('<#','').replace('>',''))
         let seconds = parse(args[1]);
 
