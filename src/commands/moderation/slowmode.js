@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Emotes = require("../../emotes.json");
 const parse = require("parse-duration");
+const Log = require("../../utils/moderation/log");
 
 module.exports = {
     name: "slowmode",
@@ -35,7 +36,13 @@ module.exports = {
 
         if (seconds == parse("0s")) {
             await channel.setRateLimitPerUser(seconds / 1000);
-            return message.channel.send(`${Emotes.actions.confirm} Removed slowmode from channel ${channel}`);
+            message.channel.send(`${Emotes.actions.confirm} Removed slowmode from channel ${channel}`);
+             return await Log.Mod_action(
+                client,
+                message.guild.id,
+                `${Emotes.other.wrench} **${message.author.username}**#${message.author.discriminator} (\`\`${message.author.id}\`\`) has removed the slowmode from channel ${channel} (\`\`${channel.id}\`\`)`,
+                ""
+            )
         }else if (seconds < parse("1s")) {
             return message.channel.send(`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be shorter than 1 second \n${Emotes.other.tools} Correct usage of command: \`\`slowmode <channel> <duration>\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``)
         }else if (seconds > parse("21600s")) {
@@ -44,5 +51,12 @@ module.exports = {
 
         await channel.setRateLimitPerUser(seconds / 1000);
         message.channel.send(`${Emotes.actions.confirm} Channel ${channel} slowmode has been set to \`${args[1]}\``);
+
+        await Log.Mod_action(
+            client,
+            message.guild.id,
+            `${Emotes.other.wrench} **${message.author.username}**#${message.author.discriminator} (\`\`${message.author.id}\`\`) has set the slowmode for channel ${channel} (\`\`${channel.id}\`\`) to \`\`${args[1]}\`\``,
+            ""
+        )
     },
 }
