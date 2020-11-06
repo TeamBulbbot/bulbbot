@@ -12,6 +12,6 @@ module.exports = async (client, oldMessage, newMessage) => {
 	Log.Message_Log(
 		client,
 		newMessage.guild.id,
-		`${Emotes.other.wrench} Message from **${newMessage.author.username}**#${newMessage.author.discriminator} was edited in <#${newMessage.channel.id}> \`\`(${newMessage.channel.id})\`\`\n**Old Message:** ${oldMessage.content}\n**New Message:** ${newMessage.content}`
+		`${Emotes.other.wrench} Message from **${newMessage.author.username}**#${newMessage.author.discriminator} \`\`(${message.author.id})\`\` was edited in <#${newMessage.channel.id}> \`\`(${newMessage.channel.id})\`\`\n**Old Message:** ${oldMessage.content}\n**New Message:** ${newMessage.content}`
 	);
 };

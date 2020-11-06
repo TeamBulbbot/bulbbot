@@ -10,6 +10,6 @@ module.exports = async (client, message) => {
 	Log.Message_Log(
 		client,
 		message.guild.id,
-		`${Emotes.other.trash} Message from **${message.author.username}**#${message.author.discriminator} was deleted in <#${message.channel.id}> \`\`(${message.channel.id})\`\`\n**Content:** ${message.content}`
+		`${Emotes.other.trash} Message from **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` was deleted in <#${message.channel.id}> \`\`(${message.channel.id})\`\`\n**Content:** ${message.content}`
 	);
 };
