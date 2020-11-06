@@ -20,6 +20,7 @@ module.exports = {
 		"KICK_MEMBERS",
 		"BAN_MEMBERS",
 	],
+	userPermissions: ["MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)

@@ -77,6 +77,13 @@ module.exports = async (client, message) => {
 				// Handle users
 				let authorClearance = 0;
 				if (message.author.id === message.guild.ownerID) authorClearance = 100;
+				if (message.member.hasPermission("ADMINISTRATOR")) authorClearance = 75;
+
+				if (command.userPermissions.length !== 0) {
+					for (let i = 0; i < command.userPermissions.length; i++) {
+						if (message.member.hasPermission(command.userPermissions[i].toString())) authorClearance = 100;
+					}
+				}
 
 				guild.moderationRoles.forEach((o) => {
 					if (

@@ -14,6 +14,7 @@ module.exports = {
 		"BAN_MEMBERS",
 		"USE_EXTERNAL_EMOJIS",
 	],
+	userPermissions: ["BAN_MEMBERS", "MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)

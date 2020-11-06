@@ -6,6 +6,7 @@ module.exports = {
 	description: "Upload the logs to the current discord channel",
 	usage: "uploadlogs",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "ATTACH_FILES"],
+	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		let developers = process.env.DEVELOPERS.split(",");

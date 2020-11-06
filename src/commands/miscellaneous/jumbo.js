@@ -9,6 +9,7 @@ module.exports = {
 	description: "Sends a bigger version of the given emote(s)",
 	usage: "jumbo <emotes>",
 	clientPermissions: ["ATTACH_FILES", "SEND_MESSAGES", "VIEW_CHANNEL"],
+	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		const size = 150;

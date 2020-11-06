@@ -8,6 +8,7 @@ module.exports = {
 	description: "Create the new docs for the bot",
 	usage: "createdocs",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, _args) => {
 		const developers = process.env.DEVELOPERS.split(",");

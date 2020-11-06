@@ -12,6 +12,7 @@ module.exports = {
 	description: "Infraction related commands",
 	usage: "infraction <option>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
+	userPermissions: ["BAN_MEMBERS", "KICK_MEMBERS", "MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)

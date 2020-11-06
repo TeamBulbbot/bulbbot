@@ -11,6 +11,7 @@ module.exports = {
     usage: "slowmode <channel> <seconds>",
     clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "MANAGE_CHANNELS"],
     clearanceLevel: 50,
+    userPermissions: ["MANAGE_CHANNELS", "MANAGE_GUILD"],
     run: async (client, message, args) => {
 
         if (!args[0])

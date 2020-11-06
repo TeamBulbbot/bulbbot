@@ -9,6 +9,7 @@ module.exports = {
     description: "Changes the server verification level",
     usage: "verification <verificationLevel>",
     clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "MANAGE_GUILD"],
+    userPermissions: ["MANAGE_GUILD"],
     clearanceLevel: 50,
     run: async (client, message, args) => {
         var level = parseInt(args[0], 10)

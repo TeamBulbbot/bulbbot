@@ -28,6 +28,7 @@ module.exports = {
 		"Super basic helper command so people know which commands exists",
 	usage: "help <section>",
 	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
+	userPermissions: [""],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		let embed = new Discord.MessageEmbed()
