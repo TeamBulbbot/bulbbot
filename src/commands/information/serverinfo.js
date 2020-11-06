@@ -15,7 +15,7 @@ module.exports = {
 		"VIEW_CHANNEL",
 		"USE_EXTERNAL_EMOJIS",
 	],
-	userPermissions: [],
+	userPermissions: ["MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, _args) => {
 		let guild = message.guild;

@@ -37,8 +37,10 @@
 | kick | N/A| 50 | Kicks a user from the guild | ``kick <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, KICK_MEMBERS, USE_EXTERNAL_EMOJIS | 
 | mute | N/A| 50 | Mutes a user from the guild | ``mute <user> <duration> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_ROLES, USE_EXTERNAL_EMOJIS | 
 | purge | clear| 50 | Purge X amount of message in channel | ``purge <amount>`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_MESSAGES, USE_EXTERNAL_EMOJIS, ATTACH_FILES | 
+| slowmode | | 50 | Sets a slowmode to a chosen channel | ``slowmode <channel> <seconds>`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_CHANNELS | 
 | softban | cleanban| 50 | Bans and unbans a user from a guild clearing their messages | ``softban <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, BAN_MEMBERS, USE_EXTERNAL_EMOJIS | 
 | unban | pardon| 50 | Unban a user from the server | ``unban <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_MESSAGES, USE_EXTERNAL_EMOJIS, BAN_MEMBERS | 
 | unmute | N/A| 50 | Unmutes a user from the guild | ``unmute <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_ROLES, USE_EXTERNAL_EMOJIS | 
 | usermanagement | usermgmt, um| 50 | Moderation command on user | ``usermanagement <user>`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_ROLES, USE_EXTERNAL_EMOJIS, KICK_MEMBERS, BAN_MEMBERS | 
+| verification | | 50 | Changes the server verification level | ``verification <verificationLevel>`` | SEND_MESSAGES, VIEW_CHANNEL, MANAGE_GUILD | 
 | warn | N/A| 50 | Warns a user inside of guild | ``warn <user> [reason]`` | SEND_MESSAGES, VIEW_CHANNEL, USE_EXTERNAL_EMOJIS | 

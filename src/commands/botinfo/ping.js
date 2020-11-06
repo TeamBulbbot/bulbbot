@@ -7,7 +7,7 @@ module.exports = {
 	description: "Returns bot and API latency in milliseconds.",
 	usage: "ping",
 	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
-	userPermissions: [""],
+	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, _args) => {
 		const embed = new Discord.MessageEmbed()
