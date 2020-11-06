@@ -8,7 +8,7 @@ module.exports = {
 };
 
 async function Remove_Mentions(client, string) {
-	let mentions = string.match(/<@![0-9>]+/g);
+	let mentions = string.match(/(<@|!|[0-9>])+/g);
 
 	if (mentions === null) return string;
 
