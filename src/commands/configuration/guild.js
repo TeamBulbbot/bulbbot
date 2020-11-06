@@ -11,6 +11,7 @@ module.exports = {
 	description: "Get the configuration list of the guild",
 	usage: "guild",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
+	userPermissions: ["MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, _args) => {
 		Guild.findOne(

@@ -6,6 +6,7 @@ module.exports = {
 	description: "Get information about given unicode characters.",
 	usage: "charinfo <characters>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
+	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)

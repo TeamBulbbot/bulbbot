@@ -11,6 +11,7 @@ module.exports = {
 	description: "Modify settings on the bot in your guild",
 	usage: "configure <setting> <new value>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
+	userPermissions: [],
 	clearanceLevel: 75,
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)

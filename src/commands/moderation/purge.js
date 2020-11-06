@@ -17,6 +17,7 @@ module.exports = {
 		"USE_EXTERNAL_EMOJIS",
 		"ATTACH_FILES",
 	],
+	userPermissions: ["MANAGE_MESSAGES", "MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
 		let amount = 0;

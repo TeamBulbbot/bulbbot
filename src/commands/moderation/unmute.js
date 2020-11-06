@@ -14,6 +14,7 @@ module.exports = {
 		"MANAGE_ROLES",
 		"USE_EXTERNAL_EMOJIS",
 	],
+	userPermissions: ["BAN_MEMBERS", "MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
 		Guild.findOne(
