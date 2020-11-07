@@ -84,7 +84,6 @@ module.exports = {
 
 			addedCreation = true;
 
-			console.log(user);
 			user = user.user;
 		}
 
