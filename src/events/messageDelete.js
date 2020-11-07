@@ -5,7 +5,7 @@ const Validate = require("../utils/helper/validate");
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
 
-	message.content = await Validate.Master(client, message.content);
+	message.content = await Validate.Master(client, message.content, message);
 
 	Log.Message_Log(
 		client,

@@ -87,7 +87,11 @@ ${Emotes.actions.cancel} **Cancel**
 							`${Emotes.actions.cancel} Canceling the operation.`
 						);
 					else if (reaction.emoji.id === Emotes.other.plus.replace(/\D/g, "")) {
-						let msg = await Validate.Master(client, args.slice(1).join(" "));
+						let msg = await Validate.Master(
+							client,
+							args.slice(1).join(" "),
+							message.guild
+						);
 						// in that channel
 						const remind = new Remind({
 							_id: mongoose.Types.ObjectId(),

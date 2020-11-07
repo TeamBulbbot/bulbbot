@@ -1,6 +1,7 @@
 module.exports = {
-	Master: async (client, string) => {
+	Master: async (client, string, guild) => {
 		string = await Remove_Mentions(client, string);
+		string = await Remove_Role_Mentions(guild, string);
 		string = await Remove_AtEveryone(string);
 
 		return string;
@@ -8,7 +9,7 @@ module.exports = {
 };
 
 async function Remove_Mentions(client, string) {
-	let mentions = string.match(/(<@|!|[0-9>])+/g);
+	let mentions = string.match(/<@?!?[0-9>]+/g);
 
 	if (mentions === null) return string;
 
@@ -19,6 +20,19 @@ async function Remove_Mentions(client, string) {
 			mentions[i],
 			`@${user.username}#${user.discriminator}`
 		);
+	}
+	return string;
+}
+
+async function Remove_Role_Mentions(guild, string) {
+	let mentions = string.match(/<@&[0-9>]+/g);
+
+	if (mentions === null) return string;
+
+	for (var i = 0; i < mentions.length; i++) {
+		let role = guild.roles.cache.get(mentions[i].replace(/\D/g, ``));
+
+		string = string.replace(mentions[i], `@${role.name}`);
 	}
 	return string;
 }
