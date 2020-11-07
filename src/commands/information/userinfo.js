@@ -25,6 +25,7 @@ module.exports = {
 
 		let descriptionBottom = "";
 		let description = "";
+		let addedCreation = false;
 
 		const end = moment.utc().format("YYYY-MM-DD");
 		let start = "";
@@ -42,16 +43,38 @@ module.exports = {
 				? (descriptionBottom += `**Nickname: ** ${user.nickname}\n`)
 				: "";
 
+			if (user.premiumSinceTimestamp !== 0) {
+				start = moment(
+					moment.utc(user.premiumSinceTimestamp).format("YYYY-MM-DD")
+				);
+				const boosterSince = moment.duration(start.diff(end)).asDays();
+
+				descriptionBottom += `**Boosting since:** ${moment
+					.utc(user.premiumSinceTimestamp)
+					.format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(boosterSince)
+					.toString()
+					.replace("-", "")} days ago)\`\`\n`;
+
+				start = moment(moment(user.user.createdAt).format("YYYY-MM-DD"));
+			}
+
 			start = moment(moment.utc(user.joinedTimestamp).format("YYYY-MM-DD"));
 			const daysInServer = moment.duration(start.diff(end)).asDays();
 
 			descriptionBottom += `**Joined server:** ${moment
 				.utc(user.joinedTimestamp)
-				.format("dddd, MMMM, Do YYYY")} \`\`(${daysInServer
+				.format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysInServer)
 				.toString()
 				.replace("-", "")} days ago)\`\`\n`;
 
-			console.log(user._roles);
+			start = moment(moment(user.user.createdAt).format("YYYY-MM-DD"));
+
+			const daysOnDiscord = moment.duration(start.diff(end)).asDays();
+			descriptionBottom += `**Account creation:** ${moment(
+				user.user.createdAt
+			).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysOnDiscord)
+				.toString()
+				.replace("-", "")} days ago)\`\`\n`;
 
 			user._roles.length !== 0
 				? (descriptionBottom += `**Roles: ** ${user._roles
@@ -59,8 +82,22 @@ module.exports = {
 						.join(" ")}\n`)
 				: "";
 
+			addedCreation = true;
+
+			console.log(user);
 			user = user.user;
 		}
+
+		if (!addedCreation) {
+			start = moment(moment(user.createdAt).format("YYYY-MM-DD"));
+			const daysOnDiscord = moment.duration(start.diff(end)).asDays();
+			descriptionBottom += `**Account creation:** ${moment(
+				user.createdAt
+			).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysOnDiscord)
+				.toString()
+				.replace("-", "")} days ago)\`\`\n`;
+		}
+
 		user.nickname !== null
 			? (description += `${Beautify.Badges(user.flags.bitfield)}\n`)
 			: "";
@@ -68,15 +105,7 @@ module.exports = {
 		description += `**Username:** **${user.username}**#${user.discriminator}\n`;
 		description += `**Profile: ** <@${user.id}>\n`;
 		description += `**Avatar URL:** [Link](${user.avatarURL()})\n`;
-		description += `**Bot: ** ${user.bot}\n`;
-
-		start = moment(moment(user.createdAt).format("YYYY-MM-DD"));
-		const daysOnDiscord = moment.duration(start.diff(end)).asDays();
-		description += `**Account creation:** ${moment(user.createdAt).format(
-			"dddd, MMMM, Do YYYY"
-		)} \`\`(${Math.floor(daysOnDiscord)
-			.toString()
-			.replace("-", "")} days ago)\`\``;
+		description += `**Bot: ** ${user.bot}`;
 
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
