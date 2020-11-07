@@ -14,6 +14,7 @@ module.exports = {
 		"VIEW_CHANNEL",
 		"USE_EXTERNAL_EMOJIS",
 	],
+	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		let target;
