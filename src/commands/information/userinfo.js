@@ -50,14 +50,20 @@ module.exports = {
 				.format("dddd, MMMM, Do YYYY")} \`\`(${daysInServer
 				.toString()
 				.replace("-", "")} days ago)\`\`\n`;
-			descriptionBottom += `**Roles: ** ${user._roles
-				.map((i) => `<@&${i}>`)
-				.join(" ")}\n`;
+
+			console.log(user._roles);
+
+			user._roles.length !== 0
+				? (descriptionBottom += `**Roles: ** ${user._roles
+						.map((i) => `<@&${i}>`)
+						.join(" ")}\n`)
+				: "";
 
 			user = user.user;
 		}
-
-		description += `${Beautify.Badges(user.flags.bitfield)}\n`;
+		user.nickname !== null
+			? (description += `${Beautify.Badges(user.flags.bitfield)}\n`)
+			: "";
 		description += `**ID: ** ${user.id}\n`;
 		description += `**Username:** **${user.username}**#${user.discriminator}\n`;
 		description += `**Profile: ** <@${user.id}>\n`;
