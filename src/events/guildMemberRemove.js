@@ -6,8 +6,6 @@ module.exports = async (client, user) => {
 	const end = moment.utc().format("YYYY-MM-DD");
 	let start = moment(moment.utc(user.user.createdAt).format("YYYY-MM-DD"));
 	const accountAgeInDays = moment.duration(start.diff(end)).asDays();
-	start = moment(moment.utc(user.user.joinedTimestamp).format("YYYY-MM-DD"));
-	const daysInServer = moment.duration(start.diff(end)).asDays();
 
 	Log.Join_leave_log(
 		client,
@@ -17,8 +15,6 @@ module.exports = async (client, user) => {
 		} \`\`(${user.user.id})\`\` - **Account Age:** ${Math.floor(
 			accountAgeInDays
 		)
-			.toString()
-			.replace("-", "")} days - **Days in guild:** ${Math.floor(daysInServer)
 			.toString()
 			.replace("-", "")} days`,
 		""

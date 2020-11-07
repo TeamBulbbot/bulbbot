@@ -81,7 +81,12 @@ module.exports = async (client, message) => {
 
 				if (command.userPermissions.length !== 0) {
 					for (let i = 0; i < command.userPermissions.length; i++) {
-						if (message.member.hasPermission(command.userPermissions[i].toString())) authorClearance = 100;
+						if (
+							message.member.hasPermission(
+								command.userPermissions[i].toString()
+							)
+						)
+							authorClearance = 100;
 					}
 				}
 
