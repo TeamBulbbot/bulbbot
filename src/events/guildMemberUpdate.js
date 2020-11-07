@@ -21,8 +21,6 @@ module.exports = async (client, oldUser, newUser) => {
 	let message = "";
 	let role = "";
 
-	console.log(change);
-
 	switch (change) {
 		case "nickname":
 			if (oldUser.nickname === null) oldUser.nickname = oldUser.user.username;
