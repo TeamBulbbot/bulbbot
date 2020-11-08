@@ -29,10 +29,10 @@ module.exports = {
 			badges.push(emotes.badges.bug_hunter_green);
 		if ((bitfield & bughunter_gold) === bughunter_gold)
 			badges.push(emotes.badges.bug_hunter_gold);
-		if ((bitfield & earlysupport) === earlysupport)
-			badges.push(emotes.badges.eary_supporter);
 		if ((bitfield & botdeveloper) === botdeveloper)
 			badges.push(emotes.badges.verfied_bot_developer);
+		if ((bitfield & earlysupport) === earlysupport)
+			badges.push(emotes.badges.eary_supporter);
 
 		return badges.map((i) => `${i}`).join(" ");
 	},
