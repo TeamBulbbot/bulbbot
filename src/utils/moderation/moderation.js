@@ -108,4 +108,8 @@ module.exports = {
 			return false;
 		}
 	},
+
+	Tempban: async (client, guildId, target, moderator, reason, duration, unixDuration) => {
+		
+	},
 };

@@ -4,7 +4,7 @@ const Log = require("../../utils/moderation/log");
 
 module.exports = {
 	name: "ban",
-	aliases: ["terminate"],
+	aliases: ["terminate", "yeet"],
 	category: "moderation",
 	description: "Bans a user from the guild",
 	usage: "ban <user> [reason]",
@@ -19,7 +19,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`ban|terminate <user> [reason]\`\``
+				`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`ban|terminate|yeet <user> [reason]\`\``
 			);
 		let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 		let user = message.guild.member(target);
