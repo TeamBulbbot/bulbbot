@@ -3,6 +3,7 @@ const GuildModel = require("../../models/guild");
 const Log = require("../../utils/configuration/logs");
 const Emotes = require("../../emotes.json");
 const Logger = require("../../utils/other/winston");
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "configure",
@@ -15,13 +16,17 @@ module.exports = {
 	clearanceLevel: 75,
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
-			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable a command put disable inside of the <new value>\`\``
-			);
+			return message.channel.send(Translator.Translate("configure_missing_arg_setting",
+				{
+					emote_warn: Emotes.actions.warn,
+					emote_tools: Emotes.other.tools
+				}));
 		if (args[1] === undefined || args[1] === null)
-			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`new value\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable a command put disable inside of the <new value>\`\``
-			);
+			return message.channel.send(Translator.Translate("configure_missing_arg_new_value",
+				{
+					emote_warn: Emotes.actions.warn,
+					emote_tools: Emotes.other.tools
+				}));
 		const setting = args[0].toLowerCase();
 		const newValue = args[1];
 
@@ -64,9 +69,10 @@ module.exports = {
 					message.guild.roles.cache.get(newValue.replace(/\D/g, "")) ===
 					undefined
 				)
-					return message.channel.send(
-						`${Emotes.actions.warn} Invalid \`\`role\`\``
-					);
+					return message.channel.send(Translator.Translate("configure_invalid_muterole",
+						{
+							emote_warn: Emotes.actions.warn
+						}));
 
 				GuildModel.findOneAndUpdate(
 					{ guildID: message.guild.id },
@@ -77,18 +83,20 @@ module.exports = {
 						if (err) Logger.error(err);
 					}
 				);
-				message.channel.send(
-					`Changed the muted role to \`\`${newValue.replace(
-						/\D/g,
-						""
-					)}\`\` in **${message.guild.name}**`
-				);
+				message.channel.send(Translator.Translate("configure_muterole_changed",
+					{
+						emote_success: Emotes.actions.confirm,
+						role: newValue.replace(/\D/g, ""),
+						guild: message.guild.name
+					}));
 				break;
 
 			default:
-				message.channel.send(
-					`${Emotes.actions.warn} Invalid \`\`setting\`\`\n${Emotes.other.tools} Correct usage of command: \`\`configure|cfg|setting|config <setting> <new value> | If you want to disable command put disable inside of the <new value>\`\`\n**Guild settings:** \`\`prefix\`\`, \`\`track_analytics\`\`\n**Logging settings:** \`\`mod_action\`\`, \`\`message\`\`, \`\`role|role_update\`\`, \`\`member|member_update\`\`, \`\`channel|channel_update\`\`, \`\`join_leave\`\`\n**Role settings:** \`\`mute\`\``
-				);
+				message.channel.send(Translator.Translate("configure_default_help",
+					{
+						emote_warn: Emotes.actions.warn,
+						emote_tools: Emotes.actions.confirm
+					}));
 				break;
 		}
 	},
