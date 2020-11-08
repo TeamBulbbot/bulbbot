@@ -19,14 +19,14 @@ module.exports = {
 		if ((bitfield & partner) === partner) badges.push(emotes.badges.partner);
 		if ((bitfield & hypesquad_events) === hypesquad_events)
 			badges.push(emotes.badges.hypesquad_events);
-		if ((bitfield & bughunter_green) === bughunter_green)
-			badges.push(emotes.badges.bug_hunter_green);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery)
 			badges.push(emotes.badges.hypesquad_bravery);
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance)
 			badges.push(emotes.badges.hypesquad_brilliance);
 		if ((bitfield & hypesquad_balance) === hypesquad_balance)
 			badges.push(emotes.badges.hypesquad_balance);
+		if ((bitfield & bughunter_green) === bughunter_green)
+			badges.push(emotes.badges.bug_hunter_green);
 		if ((bitfield & bughunter_gold) === bughunter_gold)
 			badges.push(emotes.badges.bug_hunter_gold);
 		if ((bitfield & earlysupport) === earlysupport)
