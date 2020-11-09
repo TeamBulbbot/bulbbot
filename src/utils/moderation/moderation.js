@@ -1,6 +1,7 @@
 const Infraction = require("./infraction");
 const mongoose = require("mongoose");
 const Mute = require("../../models/mute");
+const Tempban = require("../../models/tempban");
 const Logger = require("../../utils/other/winston");
 
 module.exports = {
@@ -107,5 +108,41 @@ module.exports = {
 		} catch (error) {
 			return false;
 		}
+	},
+
+	Tempban: async (
+		client,
+		guildId,
+		target,
+		moderator,
+		reason,
+		duration,
+		unixDuration
+	) => {
+		const guild = client.guilds.cache.get(guildId);
+		const user = guild.member(target);
+
+		if (user.bannable) {
+			Infraction.Add(
+				guildId,
+				"Tempban",
+				target,
+				moderator.id,
+				`${reason}\n**Duration:** ${duration}`
+			);
+			await user.ban({
+				reason: `Tempbanned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Duration: ${duration} | Reason: ${reason}`,
+			});
+
+			const tempban = new Tempban({
+				_id: mongoose.Types.ObjectId(),
+				guildID: guildId,
+				targetID: target,
+				expireTime: unixDuration,
+			});
+			tempban.save().catch((err) => Logger.error(err));
+
+			return true;
+		} else return false;
 	},
 };
