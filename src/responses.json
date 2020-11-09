@@ -21,5 +21,10 @@
   "configure_channels_stop": "{emote_success} Stopped logging `channel updates` in **{guild}**",
   "configure_channels_successful": "{emote_success} Now logging `channel updates` in {new_value} in **{guild}**",
   "configure_join_leave_stop": "{emote_success} Stopped logging `join/leave` in **{guild}**",
-  "configure_join_leave_successful": "{emote_success} Now logging `join/leave` in {new_value} in **{guild}**"
+  "configure_join_leave_successful": "{emote_success} Now logging `join/leave` in {new_value} in **{guild}**",
+
+  "override_missing_arg_category": "{emote_warn} Missing required argument `category`\n{emote_tools} Correct usage of command: `override <category> <sub category>`\n**List of categories:** `command`, `role`",
+  "override_invalid_subcategory": "{emote_warn} Invalid `sub category`\n{emote_tools} Correct usage of command: `override command <sub category>`\n**List of sub categories:** `edit`, `add`, `disable`, `enable`",
+  "override_invalid_subcategory_edit_add": "{emote_warn} Invalid `sub category`\n{emote_tools} Correct usage of command: `override role <sub category>`\n**List of sub categories:** `edit`, `add`",
+  "override_invalid_category_subcategory": "{emote_warn} Invalid `category`\n{emote_tools} Correct usage of command: `override <category> <sub category>`\n**List of categories:** `command`, `role`\n**List of sub categories:** `edit`, `add`"
 }
