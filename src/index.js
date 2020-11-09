@@ -40,6 +40,7 @@ fs.readdir(resolve(__dirname, "./events/"), (err, files) => {
 cron.schedule("*/30 * * * * *", () => {
 	CommandJobs.Mute(client);
 	CommandJobs.Remind(client);
+	CommandJobs.Tempban(client);
 });
 
 client.mongoose.init();
