@@ -1,4 +1,4 @@
-const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator");
 
 module.exports = {
 	name: "charinfo",
@@ -11,7 +11,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`characters\`\`\n${Emotes.other.tools} Correct usage of command: \`\`charinfo <characters>\`\``
+				Translator.Translate("charinfo_missing_arg_charcters")
 			);
 
 		const categories = [
@@ -49,7 +49,7 @@ module.exports = {
 		let chars = args.slice(0).join(" ");
 
 		message.channel
-			.send(`${Emotes.other.loading} Please wait`)
+			.send(Translator.Translate("global_loading"))
 			.then(async (msg) => {
 				let text = "";
 				for (var i = 0; i < chars.length; i++) {

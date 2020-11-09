@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const Guild = require("../../models/guild");
 const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator");
+
 const Logger = require("../../utils/other/winston");
 
 module.exports = {
@@ -19,7 +21,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`category\`\`\n${Emotes.other.tools} Correct usage of command: \`\`override <category>\`\`\n**List of categorys:** \`\`command\`\`, \`\`role\`\``
+				Translator.Translate("overrides_missing_arg_category")
 			);
 		switch (args[0].toLowerCase()) {
 			case "command":
@@ -36,6 +38,10 @@ module.exports = {
 						guild.overrideCommands.forEach((c) => {
 							desc += emotify(c.enabled);
 							desc += ` - \`\`${c.commandName}\`\` with a clearance level of \`\`${c.clearanceLevel}\`\`\n`;
+							desc += Translator.Translate("overrides_with_clearance_level", {
+								cl_commandName: c.commandName,
+								cL_CL: c.clearanceLevel,
+							});
 						});
 
 						const embed = new Discord.MessageEmbed()

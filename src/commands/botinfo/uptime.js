@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const moment = require("moment");
-const Translator = require("../../utils/lang/translator")
+const Translator = require("../../utils/lang/translator");
 require("moment-duration-format");
 
 module.exports = {
@@ -28,7 +28,9 @@ module.exports = {
 				`${client.user.username}#${client.user.discriminator}`,
 				client.user.avatarURL()
 			)
-			.setTitle(Translator.Translate("uptime_current_uptime", {uptime: duration}));
+			.setTitle(
+				Translator.Translate("uptime_current_uptime", { uptime: duration })
+			);
 
 		return message.channel.send(embed);
 	},
