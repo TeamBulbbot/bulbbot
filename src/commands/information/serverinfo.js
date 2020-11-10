@@ -85,7 +85,7 @@ module.exports = {
 				`https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096`
 			);
 		embed.setAuthor(`${guild.name} (${guild.id})`, guild.iconURL());
-		embed.setThumbnail(guild.iconURL());
+		embed.setThumbnail(guild.iconURL({ dynamic: true }));
 		embed.setDescription(
 			`${Emotes.badges.guildOwner} **Owner:** <@${guild.ownerID}> \`\`(${
 				guild.ownerID

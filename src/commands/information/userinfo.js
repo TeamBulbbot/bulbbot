@@ -113,7 +113,7 @@ module.exports = {
 				`Executed by ${message.author.username}#${message.author.discriminator}`,
 				message.author.avatarURL()
 			)
-			.setThumbnail(user.avatarURL())
+			.setThumbnail(user.avatarURL({ dynamic: true }))
 			.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL())
 			.setDescription(`
 ${description}
