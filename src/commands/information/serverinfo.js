@@ -80,7 +80,7 @@ module.exports = {
 		embed.addField("Booster", boosting, true);
 
 		embed.setColor(process.env.COLOR);
-		if (guild.splash !== null || guild.splash !== undefined)
+		if (guild.splash !== null)
 			embed.setImage(
 				`https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096`
 			);

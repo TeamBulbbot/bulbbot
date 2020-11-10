@@ -64,20 +64,15 @@ module.exports = {
 						`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be longer than 1 year \n${Emotes.other.tools} Correct usage of command: \`\`mute <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
 					);
 
-				if (
-					!(await Moderation.Mute(
-						client,
-						message.guild.id,
-						target,
-						message.author,
-						reason,
-						Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
-						duration
-					))
-				)
-					return message.channel.send(
-						`Unable to mute <@${target}> \`\`(${target})\`\`.`
-					);
+				await Moderation.Mute(
+					client,
+					message.guild.id,
+					target,
+					message.author,
+					reason,
+					Math.floor(new Date().getTime() / 1000) + unixDuration / 1000,
+					duration
+				);
 
 				user.roles.add(guild.roles.mute).catch((err) => Logger.error(err));
 

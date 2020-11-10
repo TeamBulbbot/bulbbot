@@ -1,6 +1,5 @@
 const Guild = require("../../models/guild");
 const Discord = require("discord.js");
-const clc = require("cli-color");
 const Logger = require("../../utils/other/winston");
 
 function sendEmbed(client, channelId, text) {

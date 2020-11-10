@@ -170,13 +170,7 @@ ${descriptionBottom}
 									"Banning",
 									user
 								);
-							} else if (
-								reaction.emoji.id === Emotes.actions.cancel.replace(/\D/g, "")
-							)
-								return message.channel.send(
-									`${Emotes.actions.cancel} Canceling the operation.`
-								);
-							else
+							} else
 								return message.channel.send(
 									`${Emotes.actions.cancel} Canceling the operation.`
 								);
@@ -218,18 +212,14 @@ async function Perfom_Action(
 
 	switch (action) {
 		case "Warn":
-			if (
-				!(await Moderation.Warn(
-					client,
-					message.guild.id,
-					target.id,
-					message.author,
-					reason
-				))
-			)
-				return message.channel.send(
-					`Unable to warn <@${target.id}> \`\`(${target.id})\`\`.`
-				);
+			await Moderation.Warn(
+				client,
+				message.guild.id,
+				target.id,
+				message.author,
+				reason
+			);
+
 			break;
 
 		case "Kick":
