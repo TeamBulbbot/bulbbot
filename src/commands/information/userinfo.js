@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Beautify = require("../../utils/helper/beautify");
 const moment = require("moment");
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "userinfo",
@@ -35,7 +36,7 @@ module.exports = {
 			try {
 				user = await client.users.fetch(target);
 			} catch (error) {
-				return message.channel.send("User was not found");
+				return message.channel.send(Translator.Translate("global_user_not_found", {user: args[0]}));
 			}
 		} else {
 			// User is from guild
@@ -115,11 +116,7 @@ module.exports = {
 			)
 			.setThumbnail(user.avatarURL({ dynamic: true }))
 			.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL())
-			.setDescription(`
-${description}
-${descriptionBottom}
-
-		`);
+			.setDescription(`${description}${descriptionBottom}`);
 		return message.channel.send(embed);
 	},
 };

@@ -5,6 +5,7 @@ const Guild = require("../models/guild");
 const GuildUtils = require("../utils/database/guild");
 const Commandtils = require("../utils/database/command");
 const Logger = require("../utils/other/winston");
+const Translator = require("../utils/lang/translator")
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
@@ -105,9 +106,7 @@ module.exports = async (client, message) => {
 				if (permissions.has(command.clientPermissions)) {
 					command.run(client, message, args).catch((err) => {
 						Logger.error(err);
-						message.channel.send(
-							"**An error has occurred**, please check the the permssion level of the bot or try again later. If the issue persists contact the bot developers."
-						);
+						message.channel.send(Translator.Translate("global_error"));
 					});
 
 					if (guild.trackAnalytics) Commandtils.CommandAnalyticsHandler(cmd);
