@@ -1,4 +1,3 @@
-const Emotes = require("../../emotes.json");
 const Commands = require("./overrides/commands");
 const Roles = require("./overrides/roles");
 const Translator = require("../../utils/lang/translator")

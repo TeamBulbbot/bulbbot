@@ -1,5 +1,4 @@
 const Log = require("../utils/moderation/log");
-const Emotes = require("../emotes.json");
 const moment = require("moment");
 const Translator = require("../utils/lang/translator")
 

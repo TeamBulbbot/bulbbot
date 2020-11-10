@@ -1,7 +1,6 @@
 const Guild = require("../../utils/configuration/guild");
 const GuildModel = require("../../models/guild");
 const Log = require("../../utils/configuration/logs");
-const Emotes = require("../../emotes.json");
 const Logger = require("../../utils/other/winston");
 const Translator = require("../../utils/lang/translator")
 
