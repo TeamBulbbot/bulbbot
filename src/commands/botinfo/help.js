@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-function field(embed, name, category, aliases, description, usage) {
+function field(embed, name, aliases, description, usage) {
 	embed.setDescription(`
 
   \`\`|\`\` **=** Aliases
@@ -10,7 +10,7 @@ function field(embed, name, category, aliases, description, usage) {
 
   `);
 	return embed.addField(
-		`${name} `, // \`\`(${category})\`\`
+		`${name} `,
 		` \n> **Usage:** ${usage}${
 			aliases > 0
 				? `\n> **Aliases:** ${aliases.join(" **|** ")}`
@@ -49,7 +49,7 @@ module.exports = {
 			case "botinfo":
 				client.commands.forEach((c) => {
 					if (c.category === "botinfo")
-						field(embed, c.name, c.category, c.aliases, c.description, c.usage);
+						field(embed, c.name, c.aliases, c.description, c.usage);
 				});
 
 				break;
@@ -58,7 +58,7 @@ module.exports = {
 			case "configuration":
 				client.commands.forEach((c) => {
 					if (c.category === "configuration")
-						field(embed, c.name, c.category, c.aliases, c.description, c.usage);
+						field(embed, c.name, c.aliases, c.description, c.usage);
 				});
 				break;
 
@@ -66,7 +66,7 @@ module.exports = {
 			case "information":
 				client.commands.forEach((c) => {
 					if (c.category === "information")
-						field(embed, c.name, c.category, c.aliases, c.description, c.usage);
+						field(embed, c.name, c.aliases, c.description, c.usage);
 				});
 				break;
 
@@ -74,7 +74,7 @@ module.exports = {
 			case "miscellaneous":
 				client.commands.forEach((c) => {
 					if (c.category === "miscellaneous")
-						field(embed, c.name, c.category, c.aliases, c.description, c.usage);
+						field(embed, c.name, c.aliases, c.description, c.usage);
 				});
 				break;
 
@@ -82,7 +82,7 @@ module.exports = {
 			case "moderation":
 				client.commands.forEach((c) => {
 					if (c.category === "moderation")
-						field(embed, c.name, c.category, c.aliases, c.description, c.usage);
+						field(embed, c.name, c.aliases, c.description, c.usage);
 				});
 				break;
 

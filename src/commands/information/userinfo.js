@@ -19,7 +19,7 @@ module.exports = {
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
 		let target;
-		if (args[0] == undefined || args[0] == null) target = message.author.id;
+		if (args[0] == undefined) target = message.author.id;
 		// If args[0] is not selected use the author as target
 		else target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 		let user = message.guild.member(target);
@@ -55,8 +55,6 @@ module.exports = {
 					.format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(boosterSince)
 					.toString()
 					.replace("-", "")} days ago)\`\`\n`;
-
-				start = moment(moment(user.user.createdAt).format("YYYY-MM-DD"));
 			}
 
 			start = moment(moment.utc(user.joinedTimestamp).format("YYYY-MM-DD"));

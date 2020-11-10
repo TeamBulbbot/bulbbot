@@ -12,12 +12,12 @@ module.exports = {
 	userPermissions: ["BAN_MEMBERS", "KICK_MEMBERS", "MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
-		if (args[0] === undefined || args[0] === null)
+		if (args[0] === undefined)
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`users\`\`\n${Emotes.other.tools} Correct usage of command: \`\`multikick <user> [user2]...[reason]\`\``
 			);
 
-		let targets = args
+		const targets = args
 			.slice(0)
 			.join(" ")
 			.match(/<@?!?[0-9>]+|[0-9>]{17,}/g);
@@ -29,8 +29,8 @@ module.exports = {
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
-			target = targets[i].replace(/\D/g, "");
-			let t = await client.users.fetch(target);
+			const target = targets[i].replace(/\D/g, "");
+			const t = await client.users.fetch(target);
 
 			await Moderation.Kick(
 				client,

@@ -3,7 +3,6 @@ const Remind = require("../../models/remind");
 const Guild = require("../../models/guild");
 const Tempban = require("../../models/tempban");
 const SendLog = require("../moderation/log");
-const Moderation = require("../moderation/moderation");
 const Emotes = require("../../emotes.json");
 const Logger = require("../../utils/other/winston");
 const Infraction = require("../moderation/infraction");
@@ -29,8 +28,8 @@ module.exports = {
 							let user = guild.member(mute.targetID);
 
 							if (
-								user.roles.cache.has(fGuild.roles.mute) &&
-								user !== undefined
+								user !== undefined &&
+								user.roles.cache.has(fGuild.roles.mute)
 							) {
 								user.roles
 									.remove(fGuild.roles.mute)

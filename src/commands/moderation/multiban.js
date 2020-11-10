@@ -17,7 +17,7 @@ module.exports = {
 				`${Emotes.actions.warn} Missing required argument \`\`users\`\`\n${Emotes.other.tools} Correct usage of command: \`\`multiban <user> [user2]...[reason]\`\``
 			);
 
-		let targets = args
+		const targets = args
 			.slice(0)
 			.join(" ")
 			.match(/<@?!?[0-9>]+|[0-9>]{17,}/g);
@@ -29,7 +29,7 @@ module.exports = {
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
-			target = targets[i].replace(/\D/g, "");
+			let target = targets[i].replace(/\D/g, "");
 			let t = await client.users.fetch(target);
 
 			if (

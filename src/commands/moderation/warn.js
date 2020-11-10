@@ -21,18 +21,14 @@ module.exports = {
 		if (reason === "") reason = "No reason given";
 		if (user === null) return message.channel.send("User is not in server");
 
-		if (
-			!(await Moderation.Warn(
-				client,
-				message.guild.id,
-				target,
-				message.author,
-				reason
-			))
-		)
-			return message.channel.send(
-				`Unable to warn <@${target}> \`\`(${target})\`\`.`
-			);
+		await Moderation.Warn(
+			client,
+			message.guild.id,
+			target,
+			message.author,
+			reason
+		);
+
 		await Log.Mod_action(
 			client,
 			message.guild.id,
