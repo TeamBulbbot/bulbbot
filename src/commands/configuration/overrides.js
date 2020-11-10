@@ -37,11 +37,7 @@ module.exports = {
 
 						guild.overrideCommands.forEach((c) => {
 							desc += emotify(c.enabled);
-							desc += ` - \`\`${c.commandName}\`\` with a clearance level of \`\`${c.clearanceLevel}\`\`\n`;
-							desc += Translator.Translate("overrides_with_clearance_level", {
-								cl_commandName: c.commandName,
-								cL_CL: c.clearanceLevel,
-							});
+							desc += Translator.Translate("overrides_with_clearance_level_command", {cl_commandName: c.commandName, cL_CL: c.clearanceLevel,});
 						});
 
 						const embed = new Discord.MessageEmbed()
@@ -51,7 +47,7 @@ module.exports = {
 								`Executed by ${message.author.username}#${message.author.discriminator}`,
 								message.author.avatarURL()
 							)
-							.setTitle("List of command overrides")
+							.setTitle(Translator.Translate("overrides_override_list_commands"))
 							.setDescription(desc);
 
 						return message.channel.send(embed);
@@ -70,7 +66,7 @@ module.exports = {
 						let desc = ``;
 
 						guild.moderationRoles.forEach((r) => {
-							desc += `<@&${r.roleId}> \`\`(${r.roleId})\`\` with a clearance level of \`\`${r.clearanceLevel}\`\`\n`;
+							desc += Translator.Translate("overrides_with_clearance_level_role", {role_id: r.roleId, role: r.role, cL_CL: r.clearanceLevel})
 						});
 
 						const embed = new Discord.MessageEmbed()
@@ -80,7 +76,7 @@ module.exports = {
 								`Executed by ${message.author.username}#${message.author.discriminator}`,
 								message.author.avatarURL()
 							)
-							.setTitle("List of role overrides")
+							.setTitle(Translator.Translate("overrides_override_list_roles"))
 							.setDescription(desc);
 
 						return message.channel.send(embed);
@@ -89,7 +85,7 @@ module.exports = {
 				break;
 			default:
 				message.channel.send(
-					`${Emotes.actions.warn} Invalid \`\`category\`\`\n${Emotes.other.tools} Correct usage of command: \`\`override <category>\`\`\n**List of categorys:** \`\`command\`\`, \`\`role\`\``
+					`${Emotes.actions.warn} Invalid \`\`category\`\`\n${Emotes.other.tools} Correct usage of command: \`\`override <category>\`\`\n**List of categories:** \`\`command\`\`, \`\`role\`\``
 				);
 				break;
 		}
@@ -97,6 +93,6 @@ module.exports = {
 };
 
 function emotify(text) {
-	if (text) return `${Emotes.other.switchOn} Enabled`;
-	else return `${Emotes.other.switchOff} Disabled`;
+	if (text) return Translator.Translate("overrides_enabled");
+	else return Translator.Translate("overrides_disabled");
 }

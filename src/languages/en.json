@@ -1,5 +1,10 @@
 {
 	"global_loading": "{emote_loading} Please wait",
+	"global_user_not_found": "{emote_warn} Could not find the specified user `{user}`",
+	"global_error": "**An error has occurred**, please check the the permission level of the bot or try again later. If the issue persists contact the bot developers.",
+
+	"event_guild_member_add": "{emote_plus} New user joined the guild **{user}**#{user_discriminator} `({user_id})` - **Account age:** {age} days",
+	"event_guild_member_remove": "{emote_minus} User has left **{user}**#{user_discriminator} `({user_id})` - **Account age:** {age} days",
 
 	"uptime_current_uptime": "Current uptime: {uptime}",
 
@@ -30,9 +35,13 @@
 	"override_invalid_subcategory_edit_add": "{emote_warn} Invalid `sub category`\n{emote_tools} Correct usage of command: `override role <sub category>`\n**List of sub categories:** `edit`, `add`",
 	"override_invalid_category_subcategory": "{emote_warn} Invalid `category`\n{emote_tools} Correct usage of command: `override <category> <sub category>`\n**List of categories:** `command`, `role`\n**List of sub categories:** `edit`, `add`",
 
-	"overrides_missing_arg_category": "{emote_warn} Missing required argument `category`\n{emote_tools} Correct usage of command: `override <category>`\n**List of categorys:** `command`, `role`",
-	"overrides_with_clearance_level": "- `{cl_commandName}` with a clearance level of `{cL_CL}`",
+	"overrides_missing_arg_category": "{emote_warn} Missing required argument `category`\n{emote_tools} Correct usage of command: `override <category>`\n**List of categories:** `command`, `role`",
+	"overrides_with_clearance_level_command": " - `{cl_commandName}` with a clearance level of `{cL_CL}`",
+	"overrides_with_clearance_level_role": "{role} `({role_id}})` with a clearance level of `{cL_CL}`\n",
+	"overrides_override_list_commands": "List of command overrides",
+	"overrides_override_list_roles": "List of role overrides",
+	"overrides_enabled": "{emote_switchOn} Enabled",
+	"overrides_disabled": "{emote_switchOff} Disabled",
 
-	
-	"charinfo_missing_arg_charcters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
+	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
 }
