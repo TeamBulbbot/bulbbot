@@ -21,7 +21,7 @@ module.exports = {
 			.slice(0)
 			.join(" ")
 			.match(/<@?!?[0-9>]+|[0-9>]{17,}/g);
-		const reason = args
+		let reason = args
 			.slice(0)
 			.join("")
 			.replace(/<@?!?[0-9>]+|[0-9>]{17,}/g, "");
