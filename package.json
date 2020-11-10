@@ -27,7 +27,7 @@
     "jimp": "^0.16.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "mongoose": "^5.10.11",
+    "mongoose": "^5.10.13",
     "node-cron": "^2.0.3",
     "parse-duration": "^0.4.4",
     "request": "^2.88.2",
@@ -40,7 +40,7 @@
     "@types/eslint": "^7.2.4",
     "@types/moment-duration-format": "^2.2.2",
     "@types/mongoose": "^5.7.37",
-    "eslint": "^7.12.1",
+    "eslint": "^7.13.0",
     "nodemon": "^2.0.6"
   }
 }
