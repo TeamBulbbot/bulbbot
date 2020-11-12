@@ -10,12 +10,7 @@ module.exports = {
 	category: "information",
 	description: "Gets some useful information about a user/bot",
 	usage: "userinfo <user>",
-	clientPermissions: [
-		"EMBED_LINKS",
-		"SEND_MESSAGES",
-		"VIEW_CHANNEL",
-		"USE_EXTERNAL_EMOJIS",
-	],
+	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
