@@ -1,10 +1,11 @@
-const Emotes = require("../../emotes.json");
-const Remind = require("../../models/remind");
 const Discord = require("discord.js");
-const Logger = require("../../utils/other/winston");
 const mongoose = require("mongoose");
-const Validate = require("../../utils/helper/validate");
 const parse = require("parse-duration");
+
+const Remind = require("../../models/remind");
+const Logger = require("../../utils/other/winston");
+const Validate = require("../../utils/helper/validate");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "remind",

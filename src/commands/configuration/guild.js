@@ -18,7 +18,7 @@ module.exports = {
 			{
 				guildID: message.guild.id,
 			},
-			async (err, guild) => {
+			(err, guild) => {
 				if (err) Logger.error(err);
 				let embed = new Discord.MessageEmbed()
 					.setColor(process.env.COLOR)

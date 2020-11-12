@@ -1,6 +1,7 @@
 const fs = require("fs");
 const Jimp = require("jimp");
 const Twemoji = require("twemoji");
+
 const Emotes = require("../../emotes.json");
 
 module.exports = {
@@ -25,8 +26,8 @@ module.exports = {
 		await message.channel
 			.send(`${Emotes.other.loading} Gathering the emotes`)
 			.then(async (msg) => {
-				new Jimp(args.length * size, 150, 0x0, function (err, image) {
-					image.write(
+				new Jimp(args.length * size, 150, 0x0, async function (err, image) {
+					await image.writeAsync(
 						`src/files/jumbo/${message.author.id}-${message.guild.id}.png`
 					);
 				});
@@ -34,33 +35,28 @@ module.exports = {
 				for (let i = 0; i < args.length; i++) {
 					let emote = args[i];
 
-					try {
-						if (Twemoji.convert.toCodePoint(emote).length > 10) {
-							let image = await Jimp.read(
-								"https://cdn.discordapp.com/emojis/" +
-									emote.replace(/\D/g, "") +
-									".png?v=1"
-							);
-							image.resize(size, Jimp.AUTO);
-							image.write(
-								`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`
-							);
-						} else {
-							if (Twemoji.convert.toCodePoint(emote).length >= 6)
-								emote = Twemoji.convert.toCodePoint(emote).slice(0, -5);
-							else emote = Twemoji.convert.toCodePoint(emote);
+					if (Twemoji.convert.toCodePoint(emote).length > 10) {
+						emote = emote.match(/:[0-9>]{17,}>+/g);
+						emote = emote[0].substring(1).slice(0, -1);
 
-							let image = await Jimp.read(
-								"https://twemoji.maxcdn.com/v/latest/72x72/" + emote + ".png"
-							);
-							image.resize(size, Jimp.AUTO);
-							image.write(
-								`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`
-							);
-						}
-					} catch (error) {
-						return msg.edit(
-							"**An error has occurred**, please include spaces between each emote as this is known to cause issues with the bot."
+						let image = await Jimp.read(
+							`https://cdn.discordapp.com/emojis/${emote}.png?v=1`
+						);
+						image.resize(size, Jimp.AUTO);
+						await image.writeAsync(
+							`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`
+						);
+					} else {
+						if (Twemoji.convert.toCodePoint(emote).length >= 6)
+							emote = Twemoji.convert.toCodePoint(emote).slice(0, -5);
+						else emote = Twemoji.convert.toCodePoint(emote);
+
+						let image = await Jimp.read(
+							"https://twemoji.maxcdn.com/v/latest/72x72/" + emote + ".png"
+						);
+						image.resize(size, Jimp.AUTO);
+						await image.writeAsync(
+							`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`
 						);
 					}
 				}

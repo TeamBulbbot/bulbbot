@@ -9,9 +9,9 @@ module.exports = {
 	userPermissions: [],
 	clearanceLevel: 0,
 	run: async (client, message, args) => {
-		if (args[0] === undefined || args[0] === null)
+		if (args[0] === undefined)
 			return message.channel.send(
-				Translator.Translate("charinfo_missing_arg_charcters")
+				Translator.Translate("charinfo_missing_arg_characters")
 			);
 
 		const categories = [
@@ -52,7 +52,7 @@ module.exports = {
 			.send(Translator.Translate("global_loading"))
 			.then(async (msg) => {
 				let text = "";
-				for (var i = 0; i < chars.length; i++) {
+				for (let i = 0; i < chars.length; i++) {
 					categories.forEach((cat) => {
 						let Unicode = require(`unicode/category/${cat}`);
 						if (Unicode[chars[i].charCodeAt(0)] !== undefined)
@@ -61,7 +61,7 @@ module.exports = {
 				}
 				if (text.length >= 1000) text = text.substring(0, 1000) + "...";
 
-				msg.edit(`\`\`\`${text}\`\`\``);
+				return msg.edit(`\`\`\`${text}\`\`\``);
 			});
 	},
 };

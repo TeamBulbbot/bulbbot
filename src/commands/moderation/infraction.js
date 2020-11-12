@@ -1,9 +1,10 @@
 const Discord = require("discord.js");
+const paginationEmbed = require("discord.js-pagination");
+
 const Infraction = require("../../models/infraction");
 const InfractionUtils = require("../../utils/moderation/infraction");
-const paginationEmbed = require("discord.js-pagination");
-const Emotes = require("../../emotes.json");
 const Log = require("../../utils/moderation/log");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "infraction",

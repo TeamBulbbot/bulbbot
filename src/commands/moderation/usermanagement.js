@@ -1,10 +1,11 @@
 const Discord = require("discord.js");
-const Beautify = require("../../utils/helper/beautify");
 const moment = require("moment");
-const Emotes = require("../../emotes.json");
+
+const Infraction = require("../../models/infraction");
+const Beautify = require("../../utils/helper/beautify");
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
-const Infraction = require("../../models/infraction");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "usermanagement",

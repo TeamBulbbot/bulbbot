@@ -1,6 +1,7 @@
-const Emotes = require("../../emotes.json");
 const parse = require("parse-duration");
+
 const Log = require("../../utils/moderation/log");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "slowmode",

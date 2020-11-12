@@ -9,8 +9,8 @@ module.exports = {
 	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	userPermissions: [],
 	clearanceLevel: 0,
-	run: async (client, message, _args) => {
-		let embed = new Discord.MessageEmbed()
+	run: (client, message, _args) => {
+		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()
 			.setThumbnail(client.user.avatarURL())

@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const moment = require("moment");
-const Translator = require("../../utils/lang/translator");
 require("moment-duration-format");
+
+const Translator = require("../../utils/lang/translator");
 
 module.exports = {
 	name: "uptime",
@@ -12,12 +13,12 @@ module.exports = {
 	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	userPermissions: [],
 	clearanceLevel: 0,
-	run: async (client, message, _args) => {
-		let duration = moment
+	run: (client, message, _args) => {
+		const duration = moment
 			.duration(client.uptime)
 			.format(" D [days], H [hrs], m [mins], s [secs]");
 
-		let embed = new Discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()
 			.setFooter(

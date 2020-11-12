@@ -1,6 +1,7 @@
-const Emotes = require("../../emotes.json");
 const fs = require("fs");
+
 const Logger = require("../../utils/other/winston");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "createdocs",

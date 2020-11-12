@@ -1,8 +1,9 @@
 const fs = require("fs");
 const moment = require("moment");
+
 const Log = require("../../utils/moderation/log");
-const Emotes = require("../../emotes.json");
 const Logger = require("../../utils/other/winston");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "purge",

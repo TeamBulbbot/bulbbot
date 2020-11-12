@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
-const Beautify = require("../../utils/helper/beautify");
 const moment = require("moment");
-const Translator = require("../../utils/lang/translator")
+
+const Beautify = require("../../utils/helper/beautify");
+const Translator = require("../../utils/lang/translator");
 
 module.exports = {
 	name: "userinfo",
@@ -28,73 +29,39 @@ module.exports = {
 		let description = "";
 		let addedCreation = false;
 
-		const end = moment.utc().format("YYYY-MM-DD");
-		let start = "";
-
 		if (user === null) {
 			// If user is not from guild
 			try {
 				user = await client.users.fetch(target);
 			} catch (error) {
-				return message.channel.send(Translator.Translate("global_user_not_found", {user: args[0]}));
+				return message.channel.send(
+					Translator.Translate("global_user_not_found", { user: args[0] })
+				);
 			}
 		} else {
-			// User is from guild
 			user.nickname !== null
 				? (descriptionBottom += `**Nickname: ** ${user.nickname}\n`)
 				: "";
 
 			if (user.premiumSinceTimestamp !== 0) {
-				start = moment(
-					moment.utc(user.premiumSinceTimestamp).format("YYYY-MM-DD")
+				descriptionBottom += GetDays(
+					"**Boosting since:**",
+					user.premiumSinceTimestamp
 				);
-				const boosterSince = moment.duration(start.diff(end)).asDays();
-
-				descriptionBottom += `**Boosting since:** ${moment
-					.utc(user.premiumSinceTimestamp)
-					.format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(boosterSince)
-					.toString()
-					.replace("-", "")} days ago)\`\`\n`;
 			}
 
-			start = moment(moment.utc(user.joinedTimestamp).format("YYYY-MM-DD"));
-			const daysInServer = moment.duration(start.diff(end)).asDays();
-
-			descriptionBottom += `**Joined server:** ${moment
-				.utc(user.joinedTimestamp)
-				.format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysInServer)
-				.toString()
-				.replace("-", "")} days ago)\`\`\n`;
-
-			start = moment(moment(user.user.createdAt).format("YYYY-MM-DD"));
-
-			const daysOnDiscord = moment.duration(start.diff(end)).asDays();
-			descriptionBottom += `**Account creation:** ${moment(
+			descriptionBottom += GetDays("**Joined Guild:**", user.joinedTimestamp);
+			descriptionBottom += GetDays(
+				"**Account Creation:**",
 				user.user.createdAt
-			).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysOnDiscord)
-				.toString()
-				.replace("-", "")} days ago)\`\`\n`;
-
-			user._roles.length !== 0
-				? (descriptionBottom += `**Roles: ** ${user._roles
-						.map((i) => `<@&${i}>`)
-						.join(" ")}\n`)
-				: "";
+			);
 
 			addedCreation = true;
-
 			user = user.user;
 		}
 
-		if (!addedCreation) {
-			start = moment(moment(user.createdAt).format("YYYY-MM-DD"));
-			const daysOnDiscord = moment.duration(start.diff(end)).asDays();
-			descriptionBottom += `**Account creation:** ${moment(
-				user.createdAt
-			).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(daysOnDiscord)
-				.toString()
-				.replace("-", "")} days ago)\`\`\n`;
-		}
+		if (!addedCreation)
+			descriptionBottom += GetDays("**Account Creation:**", user.createdAt);
 
 		user.nickname !== null
 			? (description += `${Beautify.Badges(user.flags.bitfield)}\n`)
@@ -102,8 +69,10 @@ module.exports = {
 		description += `**ID: ** ${user.id}\n`;
 		description += `**Username:** **${user.username}**#${user.discriminator}\n`;
 		description += `**Profile: ** <@${user.id}>\n`;
-		description += `**Avatar URL:** [Link](${user.avatarURL()})\n`;
-		description += `**Bot: ** ${user.bot}`;
+		description += `**Avatar URL:** [Link](${user.avatarURL({
+			dynamic: true,
+		})})\n`;
+		description += `**Bot: ** ${user.bot}\n`;
 
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
@@ -118,3 +87,15 @@ module.exports = {
 		return message.channel.send(embed);
 	},
 };
+
+function GetDays(text, start) {
+	const end = moment.utc().format("YYYY-MM-DD");
+	const date = moment(moment.utc(start).format("YYYY-MM-DD"));
+	const days = moment.duration(date.diff(end)).asDays();
+
+	return `${text} ${moment
+		.utc(start)
+		.format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(days)
+		.toString()
+		.replace("-", "")} days ago)\`\`\n`;
+}

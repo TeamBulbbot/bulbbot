@@ -1,7 +1,7 @@
-const Emotes = require("../../emotes.json");
-const Log = require("../../utils/moderation/log");
 const Guild = require("../../models/guild");
+const Log = require("../../utils/moderation/log");
 const Logger = require("../../utils/other/winston");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "unmute",

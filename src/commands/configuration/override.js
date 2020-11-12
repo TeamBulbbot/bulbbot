@@ -1,6 +1,6 @@
 const Commands = require("./overrides/commands");
 const Roles = require("./overrides/roles");
-const Translator = require("../../utils/lang/translator")
+const Translator = require("../../utils/lang/translator");
 
 module.exports = {
 	name: "override",
@@ -11,9 +11,11 @@ module.exports = {
 	userPermissions: [],
 	clearanceLevel: 75,
 	run: async (client, message, args) => {
-		if (args[0] === undefined || args[0] === null)
-			return message.channel.send(Translator.Translate("override_missing_arg_category"));
-		if (args[1] === undefined || args[1] === null) args[1] = "null";
+		if (args[0] === undefined)
+			return message.channel.send(
+				Translator.Translate("override_missing_arg_category")
+			);
+		if (args[1] === undefined) args[1] = "null";
 
 		switch (args[0].toLowerCase()) {
 			case "command":
@@ -34,7 +36,9 @@ module.exports = {
 						Commands.Enable(message, args);
 						break;
 					default:
-						message.channel.send(Translator.Translate("override_invalid_subcategory"));
+						message.channel.send(
+							Translator.Translate("override_invalid_subcategory")
+						);
 						break;
 				}
 
@@ -51,7 +55,9 @@ module.exports = {
 						Roles.Add(message, args);
 						break;
 					default:
-						message.channel.send(Translator.Translate("override_invalid_subcategory_edit_add"));
+						message.channel.send(
+							Translator.Translate("override_invalid_subcategory_edit_add")
+						);
 						break;
 				}
 

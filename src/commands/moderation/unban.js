@@ -1,6 +1,6 @@
 const Moderation = require("../../utils/moderation/moderation");
-const Emotes = require("../../emotes.json");
 const Log = require("../../utils/moderation/log");
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "unban",

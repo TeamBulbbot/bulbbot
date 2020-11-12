@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
+
 const Guild = require("../../models/guild");
 const Emotes = require("../../emotes.json");
 const Translator = require("../../utils/lang/translator");
-
 const Logger = require("../../utils/other/winston");
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
 	userPermissions: ["MANAGE_GUILD"],
 	clearanceLevel: 50,
 	run: async (client, message, args) => {
-		if (args[0] === undefined || args[0] === null)
+		if (args[0] === undefined)
 			return message.channel.send(
 				Translator.Translate("overrides_missing_arg_category")
 			);
@@ -37,7 +37,10 @@ module.exports = {
 
 						guild.overrideCommands.forEach((c) => {
 							desc += emotify(c.enabled);
-							desc += Translator.Translate("overrides_with_clearance_level_command", {cl_commandName: c.commandName, cL_CL: c.clearanceLevel,});
+							desc += Translator.Translate(
+								"overrides_with_clearance_level_command",
+								{ cl_commandName: c.commandName, cL_CL: c.clearanceLevel }
+							);
 						});
 
 						const embed = new Discord.MessageEmbed()
@@ -47,7 +50,9 @@ module.exports = {
 								`Executed by ${message.author.username}#${message.author.discriminator}`,
 								message.author.avatarURL()
 							)
-							.setTitle(Translator.Translate("overrides_override_list_commands"))
+							.setTitle(
+								Translator.Translate("overrides_override_list_commands")
+							)
 							.setDescription(desc);
 
 						return message.channel.send(embed);
@@ -66,7 +71,10 @@ module.exports = {
 						let desc = ``;
 
 						guild.moderationRoles.forEach((r) => {
-							desc += Translator.Translate("overrides_with_clearance_level_role", {role_id: r.roleId, role: r.role, cL_CL: r.clearanceLevel})
+							desc += Translator.Translate(
+								"overrides_with_clearance_level_role",
+								{ role_id: r.roleId, cL_CL: r.clearanceLevel }
+							);
 						});
 
 						const embed = new Discord.MessageEmbed()

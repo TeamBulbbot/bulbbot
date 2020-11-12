@@ -4,11 +4,11 @@ const Logger = require("../../../utils/other/winston");
 
 module.exports = {
 	Edit: (message, args) => {
-		if (args[2] === undefined || args[2] === null)
+		if (args[2] === undefined)
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`role\`\`\n${Emotes.other.tools} Correct usage of command: \`\`override role edit <role> <clearance level>\`\``
 			);
-		if (args[3] === undefined || args[3] === null)
+		if (args[3] === undefined)
 			return message.channel.send(
 				`${Emotes.actions.warn} Missing required argument \`\`clearance level\`\`\n${Emotes.other.tools} Correct usage of command: \`\`override role edit <role> <clearance level>\`\``
 			);
