@@ -4,7 +4,19 @@ const Emotes = require("../../emotes.json");
 module.exports = {
 	Translate: (
 		key,
-		{ uptime, role, role_id, guild, user, user_discriminator, user_id, new_value, cl_commandName, cL_CL, age } = {}
+		{
+			uptime,
+			role,
+			role_id,
+			guild,
+			user,
+			user_discriminator,
+			user_id,
+			new_value,
+			cl_commandName,
+			cL_CL,
+			age,
+		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
 		//Uptime
@@ -30,8 +42,8 @@ module.exports = {
 		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_success})/g, Emotes.actions.confirm);
-		response = response.replace(/({emote_swichOn})/g, Emotes.other.switchOn);
-		response = response.replace(/({emote_swichOff})/g, Emotes.other.switchOff);
+		response = response.replace(/({emote_switchOn})/g, Emotes.other.switchOn);
+		response = response.replace(/({emote_switchOff})/g, Emotes.other.switchOff);
 		response = response.replace(/({emote_plus})/g, Emotes.other.plus);
 		response = response.replace(/({emote_minus})/g, Emotes.other.minus);
 
