@@ -15,8 +15,8 @@ module.exports = {
 		"VIEW_CHANNEL",
 		"USE_EXTERNAL_EMOJIS",
 	],
-	userPermissions: ["MANAGE_GUILD"],
-	clearanceLevel: 50,
+	userPermissions: [],
+	clearanceLevel: 0,
 	run: async (client, message, _args) => {
 		const url = "https://discordstatus.com/api/v2/incidents.json";
 		const latency = Math.floor(new Date().getTime() - message.createdTimestamp);
