@@ -9,7 +9,7 @@ module.exports = {
 	usage: "override <category> <sub category>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
 	userPermissions: [],
-	clearanceLevel: 75,
+	clearanceLevel: 100,
 	run: async (client, message, args) => {
 		if (args[0] === undefined)
 			return message.channel.send(
@@ -63,7 +63,7 @@ module.exports = {
 
 				break;
 			default:
-				message.channel.send(Translator.Translate());
+				message.channel.send(Translator.Translate("override_invalid_category_subcategory"));
 				break;
 		}
 	},
