@@ -52,19 +52,18 @@ module.exports = {
 							let user = await client.users.fetch(infs[i].targetID);
 							const action = addEmotes(infs[i].action);
 
+							let content = "";
+							content += `**${action}**\n`
+							content += `**Infraction id:** ${infs[i]._id}\n`
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
+							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**Date:** ${infs[i].date}\n`;
+
 							let embed = new Discord.MessageEmbed()
 								.setColor(process.env.COLOR)
 								.setTimestamp()
-								.setDescription(
-									`
-							**${action}**
-							**Infraction id:** ${infs[i]._id}
-                            **Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
-                            **Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
-                            **Reason:**  ${infs[i].reportReason}
-                            **Date:** ${infs[i].date}
-                            `
-								);
+								.setDescription(content);
 							pages.push(embed);
 						}
 
@@ -96,19 +95,18 @@ module.exports = {
 							let user = await client.users.fetch(infs[i].targetID);
 							let moderator = await client.users.fetch(infs[i].moderatorID);
 
+							let content = "";
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
+							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**Date:** ${infs[i].date}\n`;
+
 							let embed = new Discord.MessageEmbed()
 								.setColor(process.env.COLOR)
 								.setTimestamp()
 								.setAuthor(infs[i]._id)
 								.setTitle(infs[i].action)
-								.setDescription(
-									`
-                                **Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
-                                **Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
-                                **Reason:**  ${infs[i].reportReason}
-                                **Date:** ${infs[i].date}
-                                `
-								);
+								.setDescription(content);
 							pages.push(embed);
 						}
 
@@ -116,7 +114,7 @@ module.exports = {
 							return message.channel.send(
 								"Was unable to find any infractions."
 							);
-						paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
+						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
 				);
 				break;
@@ -141,7 +139,7 @@ module.exports = {
 								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
 							);
 						let reason = args.slice(2).join(" ") || "No reason given";
-						InfractionUtils.Update(args[1], message.guild.id, reason);
+						await InfractionUtils.Update(args[1], message.guild.id, reason);
 						message.channel.send(
 							`${Emotes.other.wrench} Updated infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
 						);
@@ -175,12 +173,12 @@ module.exports = {
 								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
 							);
 						let user = await client.users.fetch(args[2] || message.author.id);
-						InfractionUtils.Claim(args[1], message.guild.id, user);
+						await InfractionUtils.Claim(args[1], message.guild.id, user);
 
 						message.channel.send(
 							`${Emotes.other.wrench} Updated infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
 						);
-						Log.Mod_action(
+						await Log.Mod_action(
 							client,
 							message.guild.id,
 							`${Emotes.other.wrench} Infraction \`\`${args[1]}\`\` was claimed by **${user.username}**#${user.discriminator} \`\`(${user.id})\`\``,
@@ -218,7 +216,7 @@ module.exports = {
 							`Removed infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
 						);
 						let reason = args.slice(2).join(" ") || "No reason given";
-						Log.Mod_action(
+						await Log.Mod_action(
 							client,
 							message.guild.id,
 							`${Emotes.actions.unban} Infraction \`\`${args[1]}\`\` was removed by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
@@ -252,21 +250,20 @@ module.exports = {
 						let user = await client.users.fetch(inf.targetID);
 						let moderator = await client.users.fetch(inf.moderatorID);
 
+						let content = "";
+						content += `**${action}**\n`
+						content += `**Infraction id:** ${inf._id}\n`
+						content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
+						content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
+						content += `**Reason:**  ${inf.reportReason}\n`
+						content += `**Date:** ${inf.date}\n`
+
 						let embed = new Discord.MessageEmbed()
 							.setColor(process.env.COLOR)
 							.setTimestamp()
 							.setThumbnail(user.avatarURL())
-							.setDescription(
-								`
-								**${action}**
-								**Infraction id:** ${inf._id}
-                                **Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
-                                **Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
-                                **Reason:**  ${inf.reportReason}
-                                **Date:** ${inf.date}
-                                `
-							);
-						message.channel.send(embed);
+							.setDescription(content);
+						await message.channel.send(embed);
 					}
 				);
 				break;
@@ -307,7 +304,7 @@ module.exports = {
 							return message.channel.send(
 								"Was unable to find any infractions."
 							);
-						paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
+						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
 				);
 				break;
