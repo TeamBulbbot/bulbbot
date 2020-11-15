@@ -284,19 +284,18 @@ module.exports = {
 							let moderator = await client.users.fetch(infs[i].moderatorID);
 							const action = addEmotes(infs[i].action);
 
+							let content = "";
+							content += `**${action}**\n`
+							content += `**Infraction id:** ${infs[i]._id}\n`
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
+							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**Date:** ${infs[i].date}\n`;
+
 							let embed = new Discord.MessageEmbed()
 								.setColor(process.env.COLOR)
 								.setTimestamp()
-								.setDescription(
-									`
-									**${action}**
-									**Infraction id:** ${infs[i]._id}
-									**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`
-									**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`
-									**Reason:**  ${infs[i].reportReason}
-									**Date:** ${infs[i].date}
-									`
-								);
+								.setDescription(content);
 							pages.push(embed);
 						}
 
