@@ -7,7 +7,7 @@ module.exports = async (client, user) => {
 	let start = moment(moment.utc(user.user.createdAt).format("YYYY-MM-DD"));
 	const accountAgeInDays = moment.duration(start.diff(end)).asDays();
 
-	Log.Join_leave_log(
+	await Log.Join_leave_log(
 		client,
 		user.guild.id,
 		Translator.Translate("event_guild_member_remove",
@@ -17,5 +17,28 @@ module.exports = async (client, user) => {
 				user_id: user.user.id,
 				age: Math.floor(accountAgeInDays).toString().replace("-", "")
 			})
+	)
+
+	const log = await user.guild.fetchAuditLogs({limit: 1, type: 'MEMBER_KICK'});
+	const kickLog = log.entries.first();
+	if (!kickLog) return;
+
+	const { executor, reason } = kickLog;
+	if (executor.id === client.user.id) return;
+
+	await Log.Mod_action(
+		client,
+		user.guild.id,
+		Translator.Translate("event_guild_member_kick",
+			{
+				user: user.user.username,
+				user_discriminator: user.user.discriminator,
+				user_id: user.user.id,
+				moderator: executor.username,
+				moderator_discriminator: executor.discriminator,
+				moderator_id: executor.id,
+				reason: reason
+			}),
+		""
 	)
 };
