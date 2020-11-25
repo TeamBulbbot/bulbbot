@@ -5,6 +5,9 @@
 
 	"event_guild_member_add": "{emote_plus} New user joined the guild **{user}**#{user_discriminator} `({user_id})` - **Account age:** {age} days",
 	"event_guild_member_remove": "{emote_minus} User has left **{user}**#{user_discriminator} `({user_id})` - **Account age:** {age} days",
+	"event_guild_ban_add": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been manually banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"event_guild_ban_remove": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been manually unbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})",
+	"event_guild_member_kick": "{emote_kick} **{user}**#{user_discriminator} `({user_id})` has been manually kicked by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
 
 	"uptime_current_uptime": "Current uptime: {uptime}",
 

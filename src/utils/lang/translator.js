@@ -12,10 +12,14 @@ module.exports = {
 			user,
 			user_discriminator,
 			user_id,
+			moderator,
+			moderator_discriminator,
+			moderator_id,
 			new_value,
 			cl_commandName,
 			cL_CL,
 			age,
+			reason,
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
@@ -29,6 +33,10 @@ module.exports = {
 		response = response.replace(/({user})/, user);
 		response = response.replace(/({user_discriminator})/, user_discriminator);
 		response = response.replace(/({user_id})/, user_id);
+		response = response.replace(/({moderator})/, moderator);
+		response = response.replace(/({moderator_discriminator})/, moderator_discriminator);
+		response = response.replace(/({moderator_id})/, moderator_id);
+		response = response.replace(/({reason})/, reason);
 
 		// Clearance
 		response = response.replace(/({cl_commandName})/g, cl_commandName);
@@ -46,6 +54,9 @@ module.exports = {
 		response = response.replace(/({emote_switchOff})/g, Emotes.other.switchOff);
 		response = response.replace(/({emote_plus})/g, Emotes.other.plus);
 		response = response.replace(/({emote_minus})/g, Emotes.other.minus);
+		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
+		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
+		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
 
 		//Configure
 		response = response.replace(/({new_value})/g, new_value);
