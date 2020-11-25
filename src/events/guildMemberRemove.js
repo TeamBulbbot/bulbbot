@@ -25,6 +25,8 @@ module.exports = async (client, user) => {
 
 	const { executor, reason } = kickLog;
 	if (executor.id === client.user.id) return;
+        if (kickLog.target.id !== user.id) return;
+
 
 	await Log.Mod_action(
 		client,
