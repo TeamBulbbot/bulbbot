@@ -19,7 +19,7 @@ module.exports = async (client, user) => {
 			})
 	)
 
-	const log = await user.guild.fetchAuditLogs({limit: 1, type: 'MEMBER_KICK'});
+	/*const log = await user.guild.fetchAuditLogs({limit: 1, type: 'MEMBER_KICK'});
 	const kickLog = log.entries.first();
 	if (!kickLog) return;
 
@@ -40,5 +40,5 @@ module.exports = async (client, user) => {
 				reason: reason
 			}),
 		""
-	)
+	)*/
 };
