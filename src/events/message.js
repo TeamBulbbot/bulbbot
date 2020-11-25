@@ -5,7 +5,7 @@ const Guild = require("../models/guild");
 const GuildUtils = require("../utils/database/guild");
 const Commandtils = require("../utils/database/command");
 const Logger = require("../utils/other/winston");
-const Translator = require("../utils/lang/translator")
+const Translator = require("../utils/lang/translator");
 
 module.exports = async (client, message) => {
 	if (message.author.bot) return;
@@ -78,9 +78,9 @@ module.exports = async (client, message) => {
 				// Handle users
 				let authorClearance = 0;
 				if (message.author.id === message.guild.ownerID) authorClearance = 100;
-				if (message.member.hasPermission("ADMINISTRATOR")) authorClearance = 75;
-
-				if (command.userPermissions.length !== 0) {
+				else if (message.member.hasPermission("ADMINISTRATOR"))
+					authorClearance = 75;
+				else if (command.userPermissions.length !== 0) {
 					for (let i = 0; i < command.userPermissions.length; i++) {
 						if (
 							message.member.hasPermission(
@@ -89,15 +89,17 @@ module.exports = async (client, message) => {
 						)
 							authorClearance = 100;
 					}
+				} else {
+					guild.moderationRoles.forEach((o) => {
+						if (
+							message.member.roles.cache.has(o.roleId) &&
+							authorClearance < o.clearanceLevel
+						)
+							authorClearance = o.clearanceLevel;
+					});
 				}
 
-				guild.moderationRoles.forEach((o) => {
-					if (
-						message.member.roles.cache.has(o.roleId) &&
-						authorClearance < o.clearanceLevel
-					)
-						authorClearance = o.clearanceLevel;
-				});
+				console.log(authorClearance);
 
 				if (clearanceLevel > authorClearance)
 					return message.channel.send(":lock: Missing permission");
