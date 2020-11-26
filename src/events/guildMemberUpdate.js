@@ -45,14 +45,14 @@ module.exports = async (client, oldUser, newUser) => {
 			);
 
 			role.name = await Validate.Master(client, role.name, oldUser.guild);
-			message = `Role was removed from **${oldUser.user.username}**#${oldUser.user.discriminator} \`\`(${oldUser.user.id})\`\`, ${role.name} \`\`(${role.id})\`\``;
+			message = `Role was removed from **${oldUser.user.username}**#${oldUser.user.discriminator} \`\`(${oldUser.user.id})\`\`, ${role.name}`;
 
 			break;
 		case "newrole":
 			role = newUser.guild.roles.cache.get(
 				newUser._roles.diff(oldUser._roles)[0]
 			);
-			message = `Role was added to **${newUser.user.username}**#${newUser.user.discriminator} \`\`(${newUser.user.id})\`\`, ${role.name} \`\`(${role.id})\`\``;
+			message = `Role was added to **${newUser.user.username}**#${newUser.user.discriminator} \`\`(${newUser.user.id})\`\`, ${role.name} `;
 			break;
 
 		default:
