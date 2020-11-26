@@ -99,8 +99,6 @@ module.exports = async (client, message) => {
 					});
 				}
 
-				console.log(authorClearance);
-
 				if (clearanceLevel > authorClearance)
 					return message.channel.send(":lock: Missing permission");
 
