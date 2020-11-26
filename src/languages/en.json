@@ -46,9 +46,9 @@
 	"overrides_enabled": "{emote_switchOn} Enabled",
 	"overrides_disabled": "{emote_switchOff} Disabled",
 
-	"infractiondm_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infdm <user> <anonymous> <message>`",
-	"infractiondm_missing_arg_anonymous": "{emote_warn} Missing required argument `anonymous`\n{emote_tools} Correct usage of command: `infdm <user> <anonymous> <message>`",
-	"infractiondm_missing_arg_message": "{emote_warn} Missing required argument `message`\n{emote_tools} Correct usage of command: `infdm <user> <anonymous> <message>`",
+	"infractiondm_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
+	"infractiondm_missing_arg_anonymous": "{emote_warn} Missing required argument `anonymous`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
+	"infractiondm_missing_arg_message": "{emote_warn} Missing required argument `message`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
 	"infractiondm_invalid_arg_anonymous": "{emote_warn} Argument `anonymous` cannot be `{new_value}`\n{emote_tools} **Allowed values:** `-a`, `-p`",
 	"infractiondm_failed": "{emote_warn} Could not DM **{user}** `{user_id}`! They very likely have their DMs turned off",
 	"infractiondm_sent": "{emote_success} Successfully sent an infraction DM to **{user}** `({user_id})`",
