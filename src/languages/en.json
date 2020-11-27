@@ -39,7 +39,7 @@
 	"override_invalid_category_subcategory": "{emote_warn} Invalid `category`\n{emote_tools} Correct usage of command: `override <category> <sub category>`\n**List of categories:** `command`, `role`\n**List of sub categories:** `edit`, `add`",
 
 	"overrides_missing_arg_category": "{emote_warn} Missing required argument `category`\n{emote_tools} Correct usage of command: `override <category>`\n**List of categories:** `command`, `role`",
-	"overrides_with_clearance_level_command": " - `{cl_commandName}` with a clearance level of `{cL_CL}`",
+	"overrides_with_clearance_level_command": " - `{cl_commandName}` with a clearance level of `{cL_CL}`\n",
 	"overrides_with_clearance_level_role": "<@&{role_id}> `({role_id})` with a clearance level of `{cL_CL}`\n",
 	"overrides_override_list_commands": "List of command overrides",
 	"overrides_override_list_roles": "List of role overrides",
