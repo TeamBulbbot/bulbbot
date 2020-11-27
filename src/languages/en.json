@@ -8,6 +8,9 @@
 	"event_guild_ban_add": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been manually banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
 	"event_guild_ban_remove": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been manually unbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})",
 	"event_guild_member_kick": "{emote_kick} **{user}**#{user_discriminator} `({user_id})` has been manually kicked by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"event_guild_member_update_role_add": "The **{role}** role has been added to **{user}**#{user_discriminator} `({user_id})`",
+	"event_guild_member_update_role_remove": "The **{role}** role has been removed from **{user}**#{user_discriminator} `({user_id})`",
+	"event_guild_member_update_nickname": "**{user}**#{user_discriminator} has changed their nickname\n**Old nickname:** {nick_old}\n**New nickname:** {nick_new}",
 
 	"uptime_current_uptime": "Current uptime: {uptime}",
 

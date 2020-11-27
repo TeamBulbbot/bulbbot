@@ -1,6 +1,7 @@
 const Log = require("../utils/moderation/log");
 const Emotes = require("../emotes.json");
 const Validate = require("../utils/helper/validate");
+const Translator = require("../utils/lang/translator")
 
 Array.prototype.diff = function (a) {
 	return this.filter(function (i) {
@@ -36,8 +37,14 @@ module.exports = async (client, oldUser, newUser) => {
 				newUser.nickname,
 				newUser.guild
 			);
-
-			message = `Nickname change from **${newUser.user.username}**#${newUser.user.discriminator} \`\`(${newUser.user.id})\`\`\n**Old nickname:** ${oNick}\n**New nickname:** ${nNick}`;
+			
+			message = Translator.Translate("event_guild_member_update_nickname", {
+				user: newUser.user.username,
+				user_discriminator: newUser.user.discriminator,
+				user_id: newUser.user.id,
+				nick_old: oNick,
+				nick_new: nNick
+			})
 			break;
 		case "removedrole":
 			role = newUser.guild.roles.cache.get(
@@ -45,14 +52,24 @@ module.exports = async (client, oldUser, newUser) => {
 			);
 
 			role.name = await Validate.Master(client, role.name, oldUser.guild);
-			message = `Role was removed from **${oldUser.user.username}**#${oldUser.user.discriminator} \`\`(${oldUser.user.id})\`\`, ${role.name}`;
+			message = Translator.Translate("event_guild_member_update_role_remove", {
+				user: oldUser.user.username,
+				user_discriminator: oldUser.user.discriminator,
+				user_id: oldUser.user.id,
+				role: role.name
+			})
 
 			break;
 		case "newrole":
 			role = newUser.guild.roles.cache.get(
 				newUser._roles.diff(oldUser._roles)[0]
 			);
-			message = `Role was added to **${newUser.user.username}**#${newUser.user.discriminator} \`\`(${newUser.user.id})\`\`, ${role.name} `;
+			message = Translator.Translate("event_guild_member_update_role_add", {
+				user: oldUser.user.username,
+				user_discriminator: oldUser.user.discriminator,
+				user_id: oldUser.user.id,
+				role: role.name
+			})
 			break;
 
 		default:
@@ -60,7 +77,7 @@ module.exports = async (client, oldUser, newUser) => {
 			break;
 	}
 
-	Log.Member_Updates(
+	await Log.Member_Updates(
 		client,
 		newUser.guild.id,
 		`${Emotes.other.wrench} ${message}`

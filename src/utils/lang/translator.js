@@ -20,6 +20,8 @@ module.exports = {
 			cL_CL,
 			age,
 			reason,
+			nick_old,
+			nick_new
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
@@ -37,6 +39,10 @@ module.exports = {
 		response = response.replace(/({moderator_discriminator})/, moderator_discriminator);
 		response = response.replace(/({moderator_id})/, moderator_id);
 		response = response.replace(/({reason})/, reason);
+
+		//Events
+		response = response.replace(/({nick_new})/, nick_new);
+		response = response.replace(/({nick_old})/, nick_old);
 
 		// Clearance
 		response = response.replace(/({cl_commandName})/g, cl_commandName);
