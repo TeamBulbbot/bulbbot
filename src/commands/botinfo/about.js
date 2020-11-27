@@ -9,7 +9,15 @@ module.exports = {
 	clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "VIEW_CHANNEL"],
 	userPermissions: [],
 	clearanceLevel: 0,
-	run: (client, message, _args) => {
+	run: async (client, message, _args) => {
+		let desc = "";
+		const developers = process.env.DEVELOPERS.split(",");
+
+		for (let i = 0; i < developers.length; i++) {
+			const dev = await client.users.fetch(developers[i]);
+			desc += `**${dev.username}**#${dev.discriminator} \`\`(${dev.id})\`\`\n`;
+		}
+
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.COLOR)
 			.setTimestamp()
@@ -28,10 +36,7 @@ module.exports = {
 **https://discord.gg/cacUmbQ**
 
 **🛠️ Developers**
-**Ben!**#0002 \`\`(255834596766253057)\`\`
-**KlukCZ**#6589 \`\`(439396770695479297)\`\`
-**mrphilip**#0001 \`\`(190160914765316096)\`\`
-
+${desc}
 **📜 License**
 This bot is licensed under the MIT license, for more info please see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**
         `
