@@ -39,6 +39,9 @@ module.exports = {
 		let user = message.guild.member(target);
 		let messageDM;
 
+		let roleName = user.roles.highest.name;
+		if (roleName === "@everyone") roleName = "Moderator";
+
 		if (user === null) {
 			return message.channel.send(
 				Translator.Translate("global_user_not_found", { user: args[1] })
@@ -46,10 +49,10 @@ module.exports = {
 		}
 
 		if (anonymous) {
-			messageDM = `**Moderator from ${message.guild.name}**:\n`;
+			messageDM = `**${roleName} from ${message.guild.name}**:\n`;
 			messageDM += args.slice(2).join(" ");
 		} else {
-			messageDM = `**(Moderator) ${message.author.username} from ${message.guild.name}:**\n`;
+			messageDM = `**(${roleName}) ${message.author.username} from ${message.guild.name}:**\n`;
 			messageDM += args.slice(2).join(" ");
 		}
 
