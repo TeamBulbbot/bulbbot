@@ -5,7 +5,7 @@ module.exports = {
 	name: "infractiondm",
 	aliases: ["infractionmessage", "infmsg", "infdm"],
 	category: "moderation",
-	description: "Get some basic information about the bot",
+	description: "Send a dm from the bot as a moderator (anonymous or public)",
 	usage: "infractiondm <user> <anonymous> <message>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
 	userPermissions: [],
