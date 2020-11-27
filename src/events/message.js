@@ -77,9 +77,11 @@ module.exports = async (client, message) => {
 
 				// Handle users
 				let authorClearance = 0;
-				if (message.author.id === message.guild.ownerID) authorClearance = 100;
-				else if (message.member.hasPermission("ADMINISTRATOR"))
-					authorClearance = 75;
+				if (
+					message.author.id === message.guild.ownerID ||
+					message.member.hasPermission("ADMINISTRATOR")
+				)
+					authorClearance = 100;
 				else if (command.userPermissions.length !== 0) {
 					for (let i = 0; i < command.userPermissions.length; i++) {
 						if (
