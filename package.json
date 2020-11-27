@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@types/cli-color": "^2.0.0",
-    "@types/eslint": "^7.2.4",
+    "@types/eslint": "^7.2.5",
     "@types/moment-duration-format": "^2.2.2",
     "@types/mongoose": "^5.7.37",
     "eslint": "^7.14.0",
