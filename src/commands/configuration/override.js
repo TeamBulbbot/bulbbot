@@ -8,7 +8,7 @@ module.exports = {
 	description: "Configure the overrides.",
 	usage: "override <category> <sub category>",
 	clientPermissions: ["SEND_MESSAGES", "VIEW_CHANNEL", "USE_EXTERNAL_EMOJIS"],
-	userPermissions: [],
+	userPermissions: ["ADMINISTRATOR"],
 	clearanceLevel: 100,
 	run: async (client, message, args) => {
 		if (args[0] === undefined)
