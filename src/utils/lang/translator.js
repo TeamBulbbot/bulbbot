@@ -21,7 +21,8 @@ module.exports = {
 			age,
 			reason,
 			nick_old,
-			nick_new
+			nick_new,
+			channel_id
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
@@ -43,6 +44,8 @@ module.exports = {
 		//Events
 		response = response.replace(/({nick_new})/, nick_new);
 		response = response.replace(/({nick_old})/, nick_old);
+		response = response.replace(/({channel_id})/, channel_id);
+		response = response.replace(/({channel_id})/, channel_id);
 
 		// Clearance
 		response = response.replace(/({cl_commandName})/g, cl_commandName);
@@ -63,6 +66,7 @@ module.exports = {
 		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
 		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
+		response = response.replace(/({emote_trash})/g, Emotes.other.trash);
 
 		//Configure
 		response = response.replace(/({new_value})/g, new_value);

@@ -23,9 +23,10 @@ module.exports = async (client, user) => {
 	const kickLog = log.entries.first();
 	if (!kickLog) return;
 
-	let { executor, reason } = kickLog;
+	let { executor, reason, target } = kickLog;
 	if (executor.id === client.user.id) return;
 	if (kickLog.createdAt < user.joinedAt) return;
+	if (user.id !== target.id) return;
 
 	if (reason === null) reason = "No reason given"
 

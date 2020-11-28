@@ -11,6 +11,7 @@
 	"event_guild_member_update_role_add": "The **{role}** role has been added to **{user}**#{user_discriminator} `({user_id})`",
 	"event_guild_member_update_role_remove": "The **{role}** role has been removed from **{user}**#{user_discriminator} `({user_id})`",
 	"event_guild_member_update_nickname": "**{user}**#{user_discriminator} has changed their nickname\n**Old nickname:** {nick_old}\n**New nickname:** {nick_new}",
+	"event_message_delete": "{emote_trash} Message from **{user}**#{user_discriminator} `({user_id})` has been removed in <#{channel_id}> `({channel_id})`\n**Content:** {new_value}",
 
 	"uptime_current_uptime": "Current uptime: {uptime}",
 
