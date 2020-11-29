@@ -15,6 +15,7 @@ module.exports = {
 			moderator,
 			moderator_discriminator,
 			moderator_id,
+			old_value,
 			new_value,
 			cl_commandName,
 			cL_CL,
@@ -46,6 +47,7 @@ module.exports = {
 		response = response.replace(/({nick_old})/, nick_old);
 		response = response.replace(/({channel_id})/, channel_id);
 		response = response.replace(/({channel_id})/, channel_id);
+		response = response.replace(/({old_value})/g, old_value);
 
 		// Clearance
 		response = response.replace(/({cl_commandName})/g, cl_commandName);
@@ -67,6 +69,7 @@ module.exports = {
 		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
 		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
 		response = response.replace(/({emote_trash})/g, Emotes.other.trash);
+		response = response.replace(/({emote_wrench})/g, Emotes.other.wrench);
 
 		//Configure
 		response = response.replace(/({new_value})/g, new_value);
