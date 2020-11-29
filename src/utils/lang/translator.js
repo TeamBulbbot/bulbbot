@@ -21,6 +21,7 @@ module.exports = {
 			cL_CL,
 			age,
 			reason,
+			time,
 			nick_old,
 			nick_new,
 			channel_id
@@ -41,6 +42,7 @@ module.exports = {
 		response = response.replace(/({moderator_discriminator})/, moderator_discriminator);
 		response = response.replace(/({moderator_id})/, moderator_id);
 		response = response.replace(/({reason})/, reason);
+		response = response.replace(/({time})/, time);
 
 		//Events
 		response = response.replace(/({nick_new})/, nick_new);
@@ -70,6 +72,8 @@ module.exports = {
 		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
 		response = response.replace(/({emote_trash})/g, Emotes.other.trash);
 		response = response.replace(/({emote_wrench})/g, Emotes.other.wrench);
+		response = response.replace(/({emote_mute})/g, Emotes.actions.mute);
+		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
 
 		//Configure
 		response = response.replace(/({new_value})/g, new_value);

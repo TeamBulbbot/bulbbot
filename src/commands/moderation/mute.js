@@ -5,6 +5,7 @@ const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
 const Logger = require("../../utils/other/winston");
 const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "mute",
@@ -27,16 +28,16 @@ module.exports = {
 			async (err, guild) => {
 				if (guild.roles.mute === "")
 					return message.channel.send(
-						"Unable to find a muted role in this server, please add one by doing ``configure|cfg|setting|config mute <mutedRole>``"
+						Translator.Translate("mute_mute_role_not_found")
 					);
 
 				if (args[0] === undefined || args[0] === null)
 					return message.channel.send(
-						`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`mute <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+						Translator.Translate("mute_missing_arg_user")
 					);
 				if (args[1] === undefined || args[1] === null)
 					return message.channel.send(
-						`${Emotes.actions.warn} Missing required argument \`\`duration\`\`\n${Emotes.other.tools} Correct usage of command: \`\`mute <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+						Translator.Translate("mute_missing_arg_duration")
 					);
 
 				let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
@@ -44,25 +45,30 @@ module.exports = {
 
 				let reason = args.slice(2).join(" ");
 				if (reason === "") reason = "No reason given";
-				if (user === null) return message.channel.send("User is not in server");
+				if (user === null) return message.channel.send(Translator.Translate("global_user_not_found", { user: target}));
+				if (target === message.author.id) return message.channel.send(Translator.Translate("global_cannot_action_self"))
 
 				if (
 					user.roles.cache.has(guild.roles.mute) &&
 					user.roles.cache.has(guild.roles.mute) !== null
 				)
 					return message.channel.send(
-						`**${user.user.username}** is currently muted.`
+						Translator.Translate("mute_already_muted", {
+							user: user.user.username,
+							user_discriminator: user.user.discriminator,
+							user_id: user.user.id
+						})
 					);
 
 				const duration = args[1];
 				let unixDuration = parse(duration);
 				if (unixDuration < parse("1s"))
 					return message.channel.send(
-						`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be shorter than 1 second \n${Emotes.other.tools} Correct usage of command: \`\`mute <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+						Translator.Translate("mute_invalid_duration_second")
 					);
 				if (unixDuration > parse("1y"))
 					return message.channel.send(
-						`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be longer than 1 year \n${Emotes.other.tools} Correct usage of command: \`\`mute <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+						Translator.Translate("mute_invalid_duration_year")
 					);
 
 				await Moderation.Mute(
@@ -80,12 +86,29 @@ module.exports = {
 				await Log.Mod_action(
 					client,
 					message.guild.id,
-					`${Emotes.actions.mute} Muting **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason}\n**Duration:** ${duration} `,
+					Translator.Translate("mute_muted_log", {
+						user: user.user.username,
+						user_discriminator: user.user.discriminator,
+						user_id: user.user.id,
+						moderator: message.author.username,
+						moderator_discriminator: message.author.discriminator,
+						moderator_id: message.author.id,
+						reason: reason,
+						time: duration
+					}),
 					""
 				);
 
 				message.channel.send(
-					`${Emotes.actions.mute} Muting <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\` for **${duration}**`
+					Translator.Translate("mute_muted", {
+						user: user.user.username,
+						user_discriminator: user.user.discriminator,
+						user_id: user.user.id,
+						moderator: message.author.username,
+						moderator_discriminator: message.author.discriminator,
+						moderator_id: message.author.id,
+						time: duration
+					})
 				);
 			}
 		);

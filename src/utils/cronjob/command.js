@@ -6,6 +6,7 @@ const SendLog = require("../moderation/log");
 const Emotes = require("../../emotes.json");
 const Logger = require("../../utils/other/winston");
 const Infraction = require("../moderation/infraction");
+const Translator = require("../../utils/lang/translator")
 
 const moment = require("moment");
 
@@ -32,13 +33,17 @@ module.exports = {
 								user.roles.cache.has(fGuild.roles.mute)
 							) {
 								user.roles
-									.remove(fGuild.roles.mute)
+									.remove(fGuild.roles.mute, Translator.Translate("mute_audit"))
 									.catch((err) => Logger.error(err));
 
 								await SendLog.Mod_action(
 									client,
 									mute.guildID,
-									`${Emotes.actions.unban} Unmuted **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **automatically unmuted**  `,
+									Translator.Translate("mute_unmuted", {
+										user: user.user.username,
+										user_discriminator: user.user.discriminator,
+										user_id: user.user.id
+									}),
 									""
 								);
 							}
@@ -106,13 +111,17 @@ module.exports = {
 					);
 					await guild.members.unban(
 						ban.targetID,
-						`Unbanned ${user.username}#${user.discriminator} (${user.id}) by automatically unbanned`
+						Translator.Translate("tempban_audit")
 					);
 
 					await SendLog.Mod_action(
 						client,
 						ban.guildID,
-						`${Emotes.actions.unban} Unbanned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **automatically unbanned**  `,
+						Translator.Translate("tempban_unban", {
+							user: user.username,
+							user_discriminator: user.discriminator,
+							user_id: user.id
+						}),
 						""
 					);
 
