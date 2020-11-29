@@ -7,7 +7,7 @@ module.exports = async (client, user) => {
 	const start = moment(moment.utc(user.user.createdAt).format("YYYY-MM-DD"));
 	const accountAgeInDays = moment.duration(start.diff(end)).asDays();
 
-	Log.Join_leave_log(
+	await Log.Join_leave_log(
 		client,
 		user.guild.id,
 		Translator.Translate("event_guild_member_add",

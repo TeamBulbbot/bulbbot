@@ -4,8 +4,10 @@ const Translator = require("../utils/lang/translator")
 module.exports = async (client, guild, user) => {
     const log = await guild.fetchAuditLogs({limit: 1, type: 'MEMBER_BAN_ADD'});
     const banLog = log.entries.first();
-    const { executor, reason } = banLog;
+    let { executor, reason } = banLog;
     if (executor.id === client.user.id) return;
+
+    if (reason === null) reason = "No reason given"
 
     await Log.Mod_action(
         client,
