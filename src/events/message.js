@@ -91,7 +91,8 @@ module.exports = async (client, message) => {
 						)
 							authorClearance = 100;
 					}
-				} else {
+				}
+				if (authorClearance !== 100) {
 					guild.moderationRoles.forEach((o) => {
 						if (
 							message.member.roles.cache.has(o.roleId) &&
