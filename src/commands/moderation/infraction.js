@@ -44,7 +44,7 @@ module.exports = {
 					async (err, infs) => {
 						let moderator;
 						try {
-							moderator = await client.users.fetch(args[1]);
+							moderator = await message.guild.members.fetch(args[1].replace(/\D/g, ""));
 						} catch (error) {
 							return message.channel.send("User was not found");
 						}
@@ -92,8 +92,8 @@ module.exports = {
 					},
 					async (err, infs) => {
 						for (let i = 0; i < infs.length; i++) {
-							let user = await client.users.fetch(infs[i].targetID);
-							let moderator = await client.users.fetch(infs[i].moderatorID);
+							let user = await message.guild.members.fetch(infs[i].targetID);
+							let moderator = await message.guild.members.fetch(infs[i].moderatorID);
 
 							let content = "";
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
