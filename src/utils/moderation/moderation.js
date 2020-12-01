@@ -1,18 +1,30 @@
 const Infraction = require("./infraction");
-const InfractionDB = require("../../models/infraction")
 const mongoose = require("mongoose");
 const Mute = require("../../models/mute");
 const Tempban = require("../../models/tempban");
 const Logger = require("../../utils/other/winston");
 
+const Global = require("../../utils/database//global");
+
 module.exports = {
 	Warn: async (_client, guildId, target, moderator, reason) => {
-		InfractionDB.findById("5fc613dc6f2075e023a182ac",
-			async (err, inf) => {
-				if (err) Logger.error(err);
-				await Infraction.Add(guildId, "Warn", inf.toJSON().infCount + 1, target, moderator.id, reason);
-				return true;
-			})
+		console.log(GetCurrentInfNumber());
+		/*
+		
+
+		InfractionDB.findById("5fc613dc6f2075e023a182ac", async (err, inf) => {
+			if (err) Logger.error(err);
+			await Infraction.Add(
+				guildId,
+				"Warn",
+				inf.toJSON().infCount + 1,
+				target,
+				moderator.id,
+				reason
+			);
+			return true;
+		});*/
+		return true;
 	},
 	// Mutes a user from the guild
 	Mute: async (
@@ -48,7 +60,14 @@ module.exports = {
 		let guild = client.guilds.cache.get(guildId);
 		let user = guild.member(target);
 		if (user.kickable) {
-			await Infraction.Add(guildId, "Kick", infId, target, moderator.id, reason);
+			await Infraction.Add(
+				guildId,
+				"Kick",
+				infId,
+				target,
+				moderator.id,
+				reason
+			);
 			await user.kick(
 				`Kicked by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`
 			);
@@ -74,7 +93,14 @@ module.exports = {
 		let user = guild.member(target);
 
 		if (user.bannable) {
-			await Infraction.Add(guildId, "Softban", target, infId, moderator.id, reason);
+			await Infraction.Add(
+				guildId,
+				"Softban",
+				target,
+				infId,
+				moderator.id,
+				reason
+			);
 			await user.ban({
 				days: 7,
 				reason: `Soft banned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`,
@@ -92,7 +118,14 @@ module.exports = {
 		let guild = client.guilds.cache.get(guildId);
 
 		try {
-			await Infraction.Add(guildId, "Force Ban", infId, target, moderator.id, reason);
+			await Infraction.Add(
+				guildId,
+				"Force Ban",
+				infId,
+				target,
+				moderator.id,
+				reason
+			);
 			await guild.members.ban(target, {
 				reason: `Forced banned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`,
 			});
@@ -106,7 +139,14 @@ module.exports = {
 		let guild = client.guilds.cache.get(guildId);
 
 		try {
-			await Infraction.Add(guildId, "Unban", target.id, infId, moderator.id, reason);
+			await Infraction.Add(
+				guildId,
+				"Unban",
+				target.id,
+				infId,
+				moderator.id,
+				reason
+			);
 			await guild.members.unban(
 				target,
 				`Unbanned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target.id} | Reason: ${reason}`
@@ -155,3 +195,7 @@ module.exports = {
 		} else return false;
 	},
 };
+
+function GetCurrentInfNumber() {
+	return Global.Number();
+}
