@@ -74,6 +74,10 @@
 	"tempban_audit": "Automatic unban",
 	"tempban_unban": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unbanned after their ban expired.",
 
+	"munban_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multiunban <user> [user2]...[reason]`",
+	"munban_fail": "{emote_warn} Unable to unban **{user}**#{user_discriminator} `(user_id)`",
+	"munban_success": "{emote_unban} Successfully unbanned {new_value} for {reason}",
+	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`",
 
 	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
 }
