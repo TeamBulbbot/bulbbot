@@ -25,7 +25,13 @@ module.exports = {
 				infraction[i].moderatorID,
 				infraction[i].reportReason
 			);
-			console.log(infraction);
+			sleep(800);
+			console.log(await Global.NumberInfraction());
 		}
 	},
 };
+
+function sleep(delay) {
+	var start = new Date().getTime();
+	while (new Date().getTime() < start + delay);
+}
