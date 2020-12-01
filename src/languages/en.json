@@ -52,6 +52,8 @@
 	"overrides_enabled": "{emote_switchOn} Enabled",
 	"overrides_disabled": "{emote_switchOff} Disabled",
 
+	"infraction_missing_arg_option": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infraction|inf search|msearch|modsearch <user>`",
+
 	"infractiondm_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
 	"infractiondm_missing_arg_anonymous": "{emote_warn} Missing required argument `anonymous`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
 	"infractiondm_missing_arg_message": "{emote_warn} Missing required argument `message`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",

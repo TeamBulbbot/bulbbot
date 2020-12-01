@@ -5,7 +5,9 @@ const Infraction = require("../../models/infraction");
 const InfractionUtils = require("../../utils/moderation/infraction");
 const Log = require("../../utils/moderation/log");
 const Emotes = require("../../emotes.json");
-const Translator = require("../../utils/lang/translator")
+const Translator = require("../../utils/lang/translator");
+
+const Handler = require("./infraction/master");
 
 module.exports = {
 	name: "infraction",
@@ -43,19 +45,20 @@ module.exports = {
 					async (err, infs) => {
 						let moderator;
 						try {
-							moderator = await message.guild.member(args[1].replace(/\D/g, "")).user;
+							moderator = await message.guild.member(args[1].replace(/\D/g, ""))
+								.user;
 						} catch (err) {
-
+							if (err) console.log(err);
 						}
 						for (let i = 0; i < infs.length; i++) {
 							let user = await client.users.fetch(infs[i].targetID);
 
 							let content = "";
-							content += `**${addEmotes(infs[i].action)}**\n`
-							content += `**Infraction id:** ${infs[i].infId}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**${addEmotes(infs[i].action)}**\n`;
+							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
@@ -77,17 +80,22 @@ module.exports = {
 							let { moderator, user } = "";
 							try {
 								user = await message.guild.member(infs[i].targetID).user;
-								moderator = await message.guild.member(infs[i].moderatorID).user;
+								moderator = await message.guild.member(infs[i].moderatorID)
+									.user;
 							} catch (error) {
-								return message.channel.send(Translator.Translate("global_user_not_found", {user: args[1].replace(/\D/g, "")}));
+								return message.channel.send(
+									Translator.Translate("global_user_not_found", {
+										user: args[1].replace(/\D/g, ""),
+									})
+								);
 							}
 
 							let content = "";
-							content += `**${addEmotes(infs[i].action)}**\n`
-							content += `**Infraction id:** ${infs[i].infId}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**${addEmotes(infs[i].action)}**\n`;
+							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
@@ -99,7 +107,9 @@ module.exports = {
 
 						if (pages.length === 0)
 							return message.channel.send(
-								Translator.Translate("infraction_no_infractions", {user: args[1].replace(/\D/g, "")})
+								Translator.Translate("infraction_no_infractions", {
+									user: args[1].replace(/\D/g, ""),
+								})
 							);
 						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
@@ -123,7 +133,8 @@ module.exports = {
 					async (err, infs) => {
 						let moderator;
 						try {
-							moderator = await message.guild.member(args[1].replace(/\D/g, "")).user;
+							moderator = await message.guild.member(args[1].replace(/\D/g, ""))
+								.user;
 						} catch (error) {
 							return message.channel.send("User was not found");
 						}
@@ -132,11 +143,11 @@ module.exports = {
 							const action = addEmotes(infs[i].action);
 
 							let content = "";
-							content += `**${action}**\n`
-							content += `**Infraction id:** ${infs[i].infId}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**${action}**\n`;
+							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
@@ -148,7 +159,9 @@ module.exports = {
 
 						if (pages.length === 0)
 							return message.channel.send(
-								Translator.Translate("infraction_no_infractions", {user: args[1].replace(/\D/g, "")})
+								Translator.Translate("infraction_no_infractions", {
+									user: args[1].replace(/\D/g, ""),
+								})
 							);
 						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
@@ -172,14 +185,15 @@ module.exports = {
 					async (err, infs) => {
 						for (let i = 0; i < infs.length; i++) {
 							let user = await message.guild.member(infs[i].targetID).user;
-							let moderator = await message.guild.member(infs[i].moderatorID).user;
+							let moderator = await message.guild.member(infs[i].moderatorID)
+								.user;
 
 							let content = "";
-							content += `**${addEmotes(infs[i].action)}**\n`
-							content += `**Infraction id:** ${infs[i].infId}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**${addEmotes(infs[i].action)}**\n`;
+							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
@@ -191,7 +205,9 @@ module.exports = {
 
 						if (pages.length === 0)
 							return message.channel.send(
-								Translator.Translate("infraction_no_infractions", {user: args[1].replace(/\D/g, "")})
+								Translator.Translate("infraction_no_infractions", {
+									user: args[1].replace(/\D/g, ""),
+								})
 							);
 						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
@@ -330,12 +346,12 @@ module.exports = {
 						let moderator = await client.users.fetch(inf.moderatorID);
 
 						let content = "";
-						content += `**${action}**\n`
-						content += `**Infraction id:** ${inf._id}\n`
-						content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-						content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-						content += `**Reason:**  ${inf.reportReason}\n`
-						content += `**Date:** ${inf.date}\n`
+						content += `**${action}**\n`;
+						content += `**Infraction id:** ${inf._id}\n`;
+						content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+						content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+						content += `**Reason:**  ${inf.reportReason}\n`;
+						content += `**Date:** ${inf.date}\n`;
 
 						let embed = new Discord.MessageEmbed()
 							.setColor(process.env.COLOR)
@@ -351,40 +367,8 @@ module.exports = {
 			// infraction|inf all|list
 			case "all":
 			case "list":
-				Infraction.find(
-					{
-						guildID: message.guild.id,
-					},
-					async (err, infs) => {
-						for (let i = 0; i < infs.length; i++) {
-							if (infs[i].targetID === "") continue;
-							let user = await client.users.fetch(infs[i].targetID);
+				Handler.Handle("list", client, message);
 
-							let moderator = await client.users.fetch(infs[i].moderatorID);
-							const action = addEmotes(infs[i].action);
-
-							let content = "";
-							content += `**${action}**\n`
-							content += `**Infraction id:** ${infs[i].infID}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
-							content += `**Date:** ${infs[i].date}\n`;
-
-							let embed = new Discord.MessageEmbed()
-								.setColor(process.env.COLOR)
-								.setTimestamp()
-								.setDescription(content);
-							pages.push(embed);
-						}
-
-						if (pages.length === 0)
-							return message.channel.send(
-								"Was unable to find any infractions."
-							);
-						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
-					}
-				);
 				break;
 			default:
 				message.channel.send(
