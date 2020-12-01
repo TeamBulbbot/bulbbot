@@ -5,11 +5,12 @@ const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	// Add a new infraction to the database
-	Add: async (guildId, action, targetId, moderatorId, reason) => {
+	Add: async (guildId, action, infId, targetId, moderatorId, reason) => {
 		const inf = new Infraction({
 			_id: mongoose.Types.ObjectId(),
 			guildID: guildId,
 			action: action,
+			infID: infId,
 			targetID: targetId,
 			moderatorID: moderatorId,
 			reportReason: reason,

@@ -1,6 +1,7 @@
 const Log = require("../utils/moderation/log");
 const moment = require("moment");
 const Translator = require("../utils/lang/translator")
+const Moderation = require("../utils/moderation/moderation")
 
 module.exports = async (client, user) => {
 	const end = moment.utc().format("YYYY-MM-DD");
@@ -45,4 +46,6 @@ module.exports = async (client, user) => {
 			}),
 		""
 	)
+
+	await Moderation.Kick(client, user.guild.id, user.user.id, executor.id, reason)
 };

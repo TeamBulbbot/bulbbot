@@ -74,6 +74,8 @@
 	"tempban_audit": "Automatic unban",
 	"tempban_unban": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unbanned after their ban expired.",
 
+	"infraction_missing_arg_option": "{emote_warn} Missing required argument `option`\n{emote_tools} Correct usage of command: `infraction|inf <option>`",
+	"infraction_no_infractions": "{emote_warn} User `{user}` doesn't seem to have any infractions.",
 
 	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
 }

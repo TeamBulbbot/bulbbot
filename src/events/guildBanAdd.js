@@ -1,5 +1,6 @@
 const Log = require("../utils/moderation/log");
 const Translator = require("../utils/lang/translator")
+const Moderation = require("../utils/moderation/moderation")
 
 module.exports = async (client, guild, user) => {
     const log = await guild.fetchAuditLogs({limit: 1, type: 'MEMBER_BAN_ADD'});
@@ -24,4 +25,6 @@ module.exports = async (client, guild, user) => {
             }),
         ""
     )
+
+    await Moderation.Ban(client, user.guild.id, user.id, executor.id, reason)
 }

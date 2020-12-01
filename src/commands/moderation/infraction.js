@@ -5,6 +5,7 @@ const Infraction = require("../../models/infraction");
 const InfractionUtils = require("../../utils/moderation/infraction");
 const Log = require("../../utils/moderation/log");
 const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "infraction",
@@ -18,7 +19,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`option\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf <option>\`\``
+				Translator.Translate("infraction_missing_arg_option")
 			);
 
 		const option = args[0];
@@ -26,9 +27,87 @@ module.exports = {
 		const pages = [];
 
 		switch (option) {
-			// Search and find the infractions made by the mod id
-			// infraction|inf search|msearch|modsearch <Mod ID>
+			// Search and find all infractions that have the provided ID set on them
+			// infraction|inf search| <ID>
 			case "search":
+				if (args[1] === undefined || args[1] === null)
+					return message.channel.send(
+						`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf search|msearch|modsearch <user>\`\``
+					);
+
+				Infraction.find(
+					{
+						guildID: message.guild.id,
+						moderatorID: args[1].replace(/\D/g, ""),
+					},
+					async (err, infs) => {
+						let moderator;
+						try {
+							moderator = await message.guild.member(args[1].replace(/\D/g, "")).user;
+						} catch (err) {
+
+						}
+						for (let i = 0; i < infs.length; i++) {
+							let user = await client.users.fetch(infs[i].targetID);
+
+							let content = "";
+							content += `**${addEmotes(infs[i].action)}**\n`
+							content += `**Infraction id:** ${infs[i].infId}\n`
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
+							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**Date:** ${infs[i].date}\n`;
+
+							let embed = new Discord.MessageEmbed()
+								.setColor(process.env.COLOR)
+								.setTimestamp()
+								.setDescription(content);
+							pages.push(embed);
+						}
+					}
+				);
+
+				Infraction.find(
+					{
+						guildID: message.guild.id,
+						targetID: args[1].replace(/\D/g, ""),
+					},
+					async (err, infs) => {
+						for (let i = 0; i < infs.length; i++) {
+							let { moderator, user } = "";
+							try {
+								user = await message.guild.member(infs[i].targetID).user;
+								moderator = await message.guild.member(infs[i].moderatorID).user;
+							} catch (error) {
+								return message.channel.send(Translator.Translate("global_user_not_found", {user: args[1].replace(/\D/g, "")}));
+							}
+
+							let content = "";
+							content += `**${addEmotes(infs[i].action)}**\n`
+							content += `**Infraction id:** ${infs[i].infId}\n`
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
+							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**Date:** ${infs[i].date}\n`;
+
+							let embed = new Discord.MessageEmbed()
+								.setColor(process.env.COLOR)
+								.setTimestamp()
+								.setDescription(content);
+							pages.push(embed);
+						}
+
+						if (pages.length === 0)
+							return message.channel.send(
+								Translator.Translate("infraction_no_infractions", {user: args[1].replace(/\D/g, "")})
+							);
+						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
+					}
+				);
+				break;
+
+			// Search and find all the infractions made by the Mod ID
+			// infraction|inf msearch|modsearch <Mod ID>
 			case "msearch":
 			case "modsearch":
 				if (args[1] === undefined || args[1] === null)
@@ -54,7 +133,7 @@ module.exports = {
 
 							let content = "";
 							content += `**${action}**\n`
-							content += `**Infraction id:** ${infs[i]._id}\n`
+							content += `**Infraction id:** ${infs[i].infId}\n`
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
 							content += `**Reason:**  ${infs[i].reportReason}\n`
@@ -69,9 +148,9 @@ module.exports = {
 
 						if (pages.length === 0)
 							return message.channel.send(
-								"Was unable to find any infractions."
+								Translator.Translate("infraction_no_infractions", {user: args[1].replace(/\D/g, "")})
 							);
-						paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
+						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
 				);
 				break;
@@ -96,6 +175,8 @@ module.exports = {
 							let moderator = await message.guild.member(infs[i].moderatorID).user;
 
 							let content = "";
+							content += `**${addEmotes(infs[i].action)}**\n`
+							content += `**Infraction id:** ${infs[i].infId}\n`
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
 							content += `**Reason:**  ${infs[i].reportReason}\n`
@@ -104,15 +185,13 @@ module.exports = {
 							let embed = new Discord.MessageEmbed()
 								.setColor(process.env.COLOR)
 								.setTimestamp()
-								.setAuthor(infs[i]._id)
-								.setTitle(infs[i].action)
 								.setDescription(content);
 							pages.push(embed);
 						}
 
 						if (pages.length === 0)
 							return message.channel.send(
-								"Was unable to find any infractions."
+								Translator.Translate("infraction_no_infractions", {user: args[1].replace(/\D/g, "")})
 							);
 						await paginationEmbed(message, pages, ["⏪", "⏩"], 120000);
 					}
@@ -286,7 +365,7 @@ module.exports = {
 
 							let content = "";
 							content += `**${action}**\n`
-							content += `**Infraction id:** ${infs[i]._id}\n`
+							content += `**Infraction id:** ${infs[i].infID}\n`
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
 							content += `**Reason:**  ${infs[i].reportReason}\n`

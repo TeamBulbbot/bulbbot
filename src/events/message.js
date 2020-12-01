@@ -16,7 +16,7 @@ module.exports = async (client, message) => {
 			process.env.WEBHOOK_TOKEN
 		);
 
-		webhookClient.send(
+		await webhookClient.send(
 			`**User ID:** ${message.author.id}\n**Content:** ${message.content}`,
 			{
 				username: `${message.author.username}#${message.author.discriminator}`,
