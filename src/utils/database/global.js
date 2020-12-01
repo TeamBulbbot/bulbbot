@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-
 const Global = require("../../models/global");
 const Logger = require("../../utils/other/winston");
 
@@ -13,5 +11,23 @@ module.exports = {
 		global.save().catch((err) => Logger.error(err));
 	},
 
-	Number: () => {},
+	NumberInfraction: async () => {
+		const global = await Global.findOne({}, async (err, _g) => {
+			if (err) Logger.error(err);
+		});
+		return await global.infCounter;
+	},
+
+	IncrementInfraction: async () => {
+		Global.findOneAndUpdate(
+			{},
+			{ $inc: { infCounter: 1 } },
+			{ new: true },
+			function (err, _res) {
+				if (err) Logger.error(err);
+			}
+		);
+
+		return true;
+	},
 };

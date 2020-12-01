@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const Infraction = require("../../models/infraction");
+const Global = require("../database/global");
 const Logger = require("../../utils/other/winston");
 
 module.exports = {
@@ -17,6 +18,9 @@ module.exports = {
 			date: new Date(),
 		});
 		inf.save().catch((err) => Logger.error(err));
+
+		if (!Global.IncrementInfraction())
+			Logger.error("Was unable to store the infraction id");
 	},
 
 	Remove: async (id, guildId) => {
