@@ -24,7 +24,17 @@ module.exports = {
 		let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 		let user = message.guild.member(target);
 		let reason = args.slice(1).join(" ");
+
+		const banList = await message.guild.fetchBans();
+		const bannedUser = banList.find((user) => user.user.id === target);
+
+		if (bannedUser)
+			return message.channel.send(
+				`<@${target}> \`\`(${target})\`\` is already banned.`
+			);
+
 		if (reason === "") reason = "No reason given";
+
 		if (user === null) {
 			try {
 				user = await client.users.fetch(target);
