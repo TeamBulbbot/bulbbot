@@ -15,7 +15,7 @@ module.exports = {
 		const global = await Global.findOne({}, async (err, _g) => {
 			if (err) Logger.error(err);
 		});
-		return await global.infCounter;
+		return global.infCounter;
 	},
 
 	IncrementInfraction: async () => {
