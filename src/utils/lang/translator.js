@@ -28,6 +28,9 @@ module.exports = {
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
+		//Infractions
+		response = response.replace(/({inf_number})/g, infID);
+
 		//Uptime
 		response = response.replace(/({uptime})/g, uptime);
 

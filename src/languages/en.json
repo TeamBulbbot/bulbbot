@@ -82,6 +82,8 @@
 	"munban_success": "{emote_unban} Successfully unbanned {new_value} for {reason}",
 	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`",
 
+	"warn_log": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+
 	"infraction_remove_missing_arg_id": "{emote_warn} Missing required argument `id`\n{emote_tools} Correct usage of command: `infraction|inf delete|del|remove <id> [reason]`",
 
 	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
