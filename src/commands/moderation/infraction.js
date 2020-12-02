@@ -55,7 +55,7 @@ module.exports = {
 
 							let content = "";
 							content += `**${addEmotes(infs[i].action)}**\n`;
-							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Infraction id:** ${infs[i].infID}\n`;
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
 							content += `**Reason:**  ${infs[i].reportReason}\n`;
@@ -92,7 +92,7 @@ module.exports = {
 
 							let content = "";
 							content += `**${addEmotes(infs[i].action)}**\n`;
-							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Infraction id:** ${infs[i].infID}\n`;
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
 							content += `**Reason:**  ${infs[i].reportReason}\n`;
@@ -144,7 +144,7 @@ module.exports = {
 
 							let content = "";
 							content += `**${action}**\n`;
-							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Infraction id:** ${infs[i].infID}\n`;
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
 							content += `**Reason:**  ${infs[i].reportReason}\n`;
@@ -190,7 +190,7 @@ module.exports = {
 
 							let content = "";
 							content += `**${addEmotes(infs[i].action)}**\n`;
-							content += `**Infraction id:** ${infs[i].infId}\n`;
+							content += `**Infraction id:** ${infs[i].infID}\n`;
 							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
 							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
 							content += `**Reason:**  ${infs[i].reportReason}\n`;
@@ -249,39 +249,10 @@ module.exports = {
 
 				break;
 
-			// Claim responsibilty another infraction
+			// Claim responsibility for another infraction
 			// infraction|inf claim <Infraction Id>
 			case "claim":
-				if (args[1] === undefined || args[1] === null)
-					return message.channel.send(
-						`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf claim <id>\`\``
-					);
-
-				Infraction.findOne(
-					{
-						_id: args[1],
-						guildID: message.guild.id,
-					},
-					async (err, inf) => {
-						if (inf === null || inf === undefined)
-							return message.channel.send(
-								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
-							);
-						let user = await client.users.fetch(args[2] || message.author.id);
-						await InfractionUtils.Claim(args[1], message.guild.id, user);
-
-						message.channel.send(
-							`${Emotes.other.wrench} Updated infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
-						);
-						await Log.Mod_action(
-							client,
-							message.guild.id,
-							`${Emotes.other.wrench} Infraction \`\`${args[1]}\`\` was claimed by **${user.username}**#${user.discriminator} \`\`(${user.id})\`\``,
-							""
-						);
-					}
-				);
-
+				await Handler.Handle("claim", client, message, args)
 				break;
 
 			// Delete and infraction from the system
@@ -289,37 +260,7 @@ module.exports = {
 			case "delete":
 			case "del":
 			case "remove":
-				if (!message.member.hasPermission("ADMINISTRATOR"))
-					return message.channel.send(":lock: Missing permission "); // I know best has permssion lol
-				if (args[1] === undefined || args[1] === null)
-					return message.channel.send(
-						`${Emotes.actions.warn} Missing required argument \`\`id\`\`\n${Emotes.other.tools} Correct usage of command: \`\`infraction|inf delete|del|remove <id> [reason]\`\``
-					);
-
-				Infraction.findOne(
-					{
-						_id: args[1],
-						guildID: message.guild.id,
-					},
-					async (err, infs) => {
-						if (infs === null || infs === undefined)
-							return message.channel.send(
-								`Unable to find infraction with the id \`\`${args[1]}\`\` in **${message.guild.name}**`
-							);
-						await InfractionUtils.Remove(args[1], message.guild.id);
-						message.channel.send(
-							`Removed infraction \`\`${args[1]}\`\` in **${message.guild.name}**`
-						);
-						let reason = args.slice(2).join(" ") || "No reason given";
-						await Log.Mod_action(
-							client,
-							message.guild.id,
-							`${Emotes.actions.unban} Infraction \`\`${args[1]}\`\` was removed by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
-							""
-						);
-					}
-				);
-
+				await Handler.Handle("remove", client, message, args)
 				break;
 
 			// Get info about a infracton
@@ -367,7 +308,7 @@ module.exports = {
 			// infraction|inf all|list
 			case "all":
 			case "list":
-				Handler.Handle("list", client, message);
+				await Handler.Handle("list", client, message);
 
 				break;
 			default:

@@ -37,7 +37,7 @@ module.exports = {
 
 	Claim: async (id, guildId, moderatorId) => {
 		Infraction.findOneAndUpdate(
-			{ _id: id, guildID: guildId },
+			{ infID: id, guildID: guildId },
 			{ moderatorID: moderatorId },
 			function (err) {
 				if (err) Logger.error(err);

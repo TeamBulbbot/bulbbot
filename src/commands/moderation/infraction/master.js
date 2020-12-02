@@ -11,10 +11,10 @@ const Search = require("./search");
 const Update = require("./update");
 
 module.exports = {
-	Handle: async (option, client, message) => {
+	Handle: async (option, client, message, args) => {
 		switch (option) {
 			case "claim":
-				Claim.Call();
+				Claim.Call(client, message, args);
 				break;
 
 			case "info":
@@ -22,7 +22,7 @@ module.exports = {
 				break;
 
 			case "list":
-				List.Call(client, message, await GetAllInfs(message.guild.id));
+				await List.Call(client, message, await GetAllInfs(message.guild.id));
 				break;
 
 			case "modsearch":
@@ -34,7 +34,7 @@ module.exports = {
 				break;
 
 			case "remove":
-				Remove.Call();
+				Remove.Call(client, message, args);
 				break;
 
 			case "search":
