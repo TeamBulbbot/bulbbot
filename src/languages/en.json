@@ -88,6 +88,7 @@
 
 	"infraction_remove_missing_arg_id": "{emote_warn} Missing required argument `id`\n{emote_tools} Correct usage of command: `infraction|inf delete|del|remove <id> [reason]`",
 	"infraction_invalid_arg_option": "{emote_warn} Invalid `option`\n{emote_tools} Correct usage of command: `infraction|inf| <option>`\n**Options:** `search|msearch|modsearch`, `osearch|offedersearch`, `edit|update`, `claim`, `delete|del|remove`, `info`, `all|list`",
+	"infraction_no_infractions": "{emote_warn} This user doesn't appear to have any infractions!",
 
 	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
 }

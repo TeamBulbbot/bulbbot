@@ -64,7 +64,7 @@ module.exports = {
 			// Get info about a infracton
 			// infraction|inf info <Infraction Id>
 			case "info":
-				Handler.Handle("info", client, message, args)
+				await Handler.Handle("info", client, message, args)
 				break;
 
 			// Return all infractions in guild
