@@ -18,7 +18,7 @@ module.exports = {
 				break;
 
 			case "info":
-				Info.Call();
+				Info.Call(client, message, args);
 				break;
 
 			case "list":
@@ -26,11 +26,11 @@ module.exports = {
 				break;
 
 			case "modsearch":
-				ModSearch.Call();
+				ModSearch.Call(client, message, args);
 				break;
 
 			case "offendersearch":
-				OffenderSearch.Call();
+				OffenderSearch.Call(client, message, args);
 				break;
 
 			case "remove":
@@ -38,11 +38,11 @@ module.exports = {
 				break;
 
 			case "search":
-				Search.Call();
+				Search.Call(client, message, args);
 				break;
 
 			case "update":
-				Update.Call();
+				Update.Call(client, message, args);
 				break;
 
 			default:
