@@ -57,7 +57,7 @@
 	"infraction_invalid_arg_option": "{emote_warn} Invalid `option`\n{emote_tools} Correct usage of command: `infraction|inf <option>`\n**Options:** `search|msearch|modsearch`, `osearch|offedersearch`, `edit|update`, `claim`, `delete|del|remove`, `info`, `all|list`",
 	"infraction_remove_missing_arg_id": "{emote_warn} Missing required argument `id`\n{emote_tools} Correct usage of command: `infraction|inf delete|del|remove <id> [reason]`",
 	"infraction_no_infractions": "{emote_warn} This user doesn't appear to have any infractions!",
-	"infraction_unable_to_find_inf": "{emote_warn} Unable to find infraction with the id `{infraction_id}` in **{guild}",
+	"infraction_unable_to_find_inf": "{emote_warn} Unable to find infraction with the id `{inf_number}` in **{guild}",
 	"infraction_claim_missing_arg_option": "{emote_warn} Missing required argument `option`\n{emote_tools} Correct usage of command: `infraction|inf claim <id>`",
 
 	"infractiondm_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
@@ -100,6 +100,11 @@
 	"warn_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `warn <user> [reason]`",
 	"warn_success": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned for `{reason}`\n**Infraction ID:** {inf_number}",
 	"warn_log": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	
+	"softban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `softban|cleanban <user> [reason]`",
+	"softban_fail": "{emote_warn} Was unable to softban **{user}**#{user_discriminator} `({user_id})`",
+	"softban_success": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been softbanned for `{reason}`\n**Infraction ID:** {inf_number}",
+	"softban_log": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been softbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
 
 	"kick_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `kick <user> [reason]`",
 	"kick_fail": "{emote_warn} Was unable to kick **{user}**#{user_discriminator} `({user_id})`",
