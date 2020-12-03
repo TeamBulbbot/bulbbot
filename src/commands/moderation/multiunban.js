@@ -1,7 +1,6 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
 const Translator = require("../../utils/lang/translator")
-const Global = require("../../utils/database/global")
 
 module.exports = {
 	name: "multiunban",
@@ -17,8 +16,6 @@ module.exports = {
 			return message.channel.send(
 				Translator.Translate("munban_missing_arg_users")
 			);
-
-		const inf_ID = await Global.NumberInfraction();
 
 		const targets = args
 			.slice(0)
@@ -61,7 +58,6 @@ module.exports = {
 				moderator: message.author.username,
 				moderator_discriminator: message.author.discriminator,
 				moderator_id: message.author.id,
-				inf_number: inf_ID
 			}),
 			""
 		);

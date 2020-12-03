@@ -97,7 +97,11 @@
 	"munban_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multiunban <user> [user2]...[reason]`",
 	"munban_fail": "{emote_warn} Unable to unban **{user}**#{user_discriminator} `(user_id)`",
 	"munban_success": "{emote_unban} Successfully unbanned {new_value} for {reason}",
-	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Infraction ID:** {inf_number}",
+	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	
+	"mwarn_missing_arg_users": "{{emote_warn}} Missing required argument `users`\n{{emote_tools}} Correct usage of command: `multiwarn <user> [user2]...[reason]`",
+	"mwarn_log": "{emote_warn} Multiple users were warned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"mwarn_success": "{emote_warn} Successfully warned {new_value} for {reason}",
 	
 	"unban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `unban|pardon <user> [reason]`",
 	"unban_fail": "{emote_warn} User `{user}` is not in the server or has not been banned yet!",
