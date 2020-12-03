@@ -3,6 +3,8 @@ const parse = require("parse-duration");
 const Log = require("../../utils/moderation/log");
 const Moderation = require("../../utils/moderation/moderation");
 const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator")
+const Global = require("../../utils/database/global")
 
 module.exports = {
 	name: "tempban",
@@ -21,31 +23,32 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`tempban <user> <duration> [reason]\`\``
+				Translator.Translate("tempban_missing_arg_user")
 			);
 		if (args[1] === undefined || args[1] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`duration\`\`\n${Emotes.other.tools} Correct usage of command: \`\`tempban <user> <duration> [reason]\`\``
+				Translator.Translate("tempban_missing_arg_duration")
 			);
 
 		let target = args[0].replace(/\D/g, "");
 		let duration = parse(args[1]);
 		let reason = args.slice(2).join(" ");
+		const infID = await Global.NumberInfraction();
 		if (reason === "") reason = "No reason given";
 
 		let user = message.guild.member(target);
 
 		if (user == null) {
-			return message.channel.send("User is not in server");
+			return message.channel.send(Translator.Translate("global_user_not_found"));
 		}
 
 		if (duration < parse("1s")) {
 			return message.channel.send(
-				`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be shorter than 1 second \n${Emotes.other.tools} Correct usage of command: \`\`tempban|tempyeet <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+				Translator.Translate("tempban_invalid_duration_second")
 			);
 		} else if (duration > parse("1y")) {
 			return message.channel.send(
-				`${Emotes.actions.warn} Invalid \`\`duration\`\`, the time can also not be longer than 1 year \n${Emotes.other.tools} Correct usage of command: \`\`tempban|tempyeet <user> <duration> [reason]\`\`\n**Duration:** \`\`w = week\`\`, \`\`d = day\`\`, \`\`h = hour\`\`, \`\`m = minutes\`\`, \`\`s = seconds\`\``
+				Translator.Translate("tempban_invalid_duration_year")
 			);
 		}
 
@@ -61,17 +64,38 @@ module.exports = {
 			))
 		)
 			return message.channel.send(
-				`Unable to ban <@${target}> \`\`(${target})\`\`.`
+				Translator.Translate("ban_fail", {
+					user: user.user.username,
+					user_discriminator: user.user.discriminator,
+					user_id: user.user.id,
+				})
 			);
 
 		await Log.Mod_action(
 			client,
 			message.guild.id,
-			`${Emotes.actions.ban} **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` has been temporarily banned by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\`  \n**Reason:** ${reason} \n**Duration:** ${args[1]}`,
+			Translator.Translate("tempban_log", {
+				user: user.user.username,
+				user_discriminator: user.user.discriminator,
+				user_id: user.user.id,
+				moderator: message.author.username,
+				moderator_discriminator: message.author.discriminator,
+				moderator_id: message.active.id,
+				reason: reason,
+				time: args[1],
+				inf_number: infID
+			}),
 			""
 		);
 		message.channel.send(
-			`${Emotes.actions.ban} **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` has been temporarily banned because \`\`${reason}\`\` and for \`\`${args[1]}\`\``
+			Translator.Translate("tempban_success", {
+				user: user.user.username,
+				user_discriminator: user.user.discriminator,
+				user_id: user.user.id,
+				reason: reason,
+				time: args[1],
+				inf_number: infID
+			})
 		);
 	},
 };

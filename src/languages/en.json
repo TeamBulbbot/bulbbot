@@ -86,6 +86,12 @@
 	"unmute_log": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been unmuted by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
 
 	"tempban_audit": "Automatic unban",
+	"tempban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `tempban <user> <duration> [reason]`",
+	"tempban_missing_arg_duration": "{emote_warn} Missing required argument `duration`\n{emote_tools} Correct usage of command: `tempban <user> <duration> [reason]`",
+	"tempban_invalid_duration_second": "{emote_warn} Invalid `duration`, the time can also not be shorter than 1 second \n{emote_tools} Correct usage of command: `tempban|tempyeet <user> <duration> [reason]`\\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
+	"tempban_invalid_duration_year": "{emote_warn} Invalid `duration`, the time can also not be longer than 1 year \n{emote_tools} Correct usage of command: `tempban|tempyeet <user> <duration> [reason]`\\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
+	"tempban_success": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been temporarily banned for **{reason}**\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	"tempban_log": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been temporarily banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Duration:** {time}\n**Infraction ID:** {inf_number}",
 	"tempban_unban": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unbanned after their ban expired.",
 
 	"munban_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multiunban <user> [user2]...[reason]`",

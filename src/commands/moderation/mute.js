@@ -96,7 +96,7 @@ module.exports = {
 						moderator_discriminator: message.author.discriminator,
 						moderator_id: message.author.id,
 						reason: reason,
-						time: duration,
+						time: args[1],
 						inf_number: inf_ID
 					}),
 					""
@@ -110,7 +110,7 @@ module.exports = {
 						moderator: message.author.username,
 						moderator_discriminator: message.author.discriminator,
 						moderator_id: message.author.id,
-						time: duration,
+						time: args[1],
 						inf_number: inf_ID
 					})
 				);
