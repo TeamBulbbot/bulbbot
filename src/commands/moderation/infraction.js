@@ -44,7 +44,8 @@ module.exports = {
 					async (err, infs) => {
 						let moderator;
 						try {
-							moderator = await message.guild.member(args[1].replace(/\D/g, "")).user;
+							moderator = await message.guild.member(args[1].replace(/\D/g, ""))
+								.user;
 						} catch (error) {
 							return message.channel.send("User was not found");
 						}
@@ -53,11 +54,11 @@ module.exports = {
 							const action = addEmotes(infs[i].action);
 
 							let content = "";
-							content += `**${action}**\n`
-							content += `**Infraction id:** ${infs[i]._id}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**${action}**\n`;
+							content += `**Infraction id:** ${infs[i]._id}\n`;
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
@@ -93,12 +94,13 @@ module.exports = {
 					async (err, infs) => {
 						for (let i = 0; i < infs.length; i++) {
 							let user = await message.guild.member(infs[i].targetID).user;
-							let moderator = await message.guild.member(infs[i].moderatorID).user;
+							let moderator = await message.guild.member(infs[i].moderatorID)
+								.user;
 
 							let content = "";
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
@@ -251,12 +253,12 @@ module.exports = {
 						let moderator = await client.users.fetch(inf.moderatorID);
 
 						let content = "";
-						content += `**${action}**\n`
-						content += `**Infraction id:** ${inf._id}\n`
-						content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-						content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-						content += `**Reason:**  ${inf.reportReason}\n`
-						content += `**Date:** ${inf.date}\n`
+						content += `**${action}**\n`;
+						content += `**Infraction id:** ${inf._id}\n`;
+						content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+						content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+						content += `**Reason:**  ${inf.reportReason}\n`;
+						content += `**Date:** ${inf.date}\n`;
 
 						let embed = new Discord.MessageEmbed()
 							.setColor(process.env.COLOR)
@@ -279,17 +281,23 @@ module.exports = {
 					async (err, infs) => {
 						for (let i = 0; i < infs.length; i++) {
 							if (infs[i].targetID === "") continue;
-							let user = await message.guild.member(infs[i].targetID).user;
+							let user;
+							let moderator;
+							try {
+								user = await client.users.fetch(infs[i].targetID);
+								moderator = await client.users.fetch(infs[i].moderatorID);
+							} catch (error) {
+								continue;
+							}
 
-							let moderator = await message.guild.member(infs[i].moderatorID).user;
 							const action = addEmotes(infs[i].action);
 
 							let content = "";
-							content += `**${action}**\n`
-							content += `**Infraction id:** ${infs[i]._id}\n`
-							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`
-							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`
-							content += `**Reason:**  ${infs[i].reportReason}\n`
+							content += `**${action}**\n`;
+							content += `**Infraction id:** ${infs[i]._id}\n`;
+							content += `**Target:** ${user.username}#${user.discriminator} \`\`(${user.id})\`\`\n`;
+							content += `**Moderator:** ${moderator.username}#${moderator.discriminator} \`\`(${moderator.id})\`\`\n`;
+							content += `**Reason:**  ${infs[i].reportReason}\n`;
 							content += `**Date:** ${infs[i].date}\n`;
 
 							let embed = new Discord.MessageEmbed()
