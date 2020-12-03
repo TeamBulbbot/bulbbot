@@ -1,7 +1,7 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
 const Emotes = require("../../emotes.json");
-const Translator = require("../../utils/lang/translator")
+const Translator = require("../../utils/lang/translator");
 
 module.exports = {
 	name: "multiunban",
@@ -42,11 +42,13 @@ module.exports = {
 					reason
 				))
 			)
-				message.channel.send(Translator.Translate("munban_fail", {
-					user: t.username,
-					user_discriminator: t.discriminator,
-					user_id: t.id
-				}))
+				message.channel.send(
+					Translator.Translate("munban_fail", {
+						user: t.username,
+						user_discriminator: t.discriminator,
+						user_id: t.id,
+					})
+				);
 			fullList += `**${t.username}**#${t.discriminator} \`\`(${t.id})\`\`, `;
 		}
 
@@ -58,14 +60,14 @@ module.exports = {
 				reason: reason,
 				moderator: message.author.username,
 				moderator_discriminator: message.author.discriminator,
-				moderator_id: message.author.id
+				moderator_id: message.author.id,
 			}),
 			""
 		);
 		message.channel.send(
 			Translator.Translate("munban_success", {
 				new_value: fullList,
-				reason: reason
+				reason: reason,
 			})
 		);
 	},
