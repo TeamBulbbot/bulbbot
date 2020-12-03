@@ -1,6 +1,8 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
 const Emotes = require("../../emotes.json");
+const Global = require("../../utils/database/global")
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "unban",
@@ -20,10 +22,11 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`unban|pardon <user> [reason]\`\``
+				Translator.Translate("unban_missing_arg_user")
 			);
 		let target = args[0];
 		let reason = args.slice(1).join(" ");
+		const infID = await Global.NumberInfraction();
 		if (reason === "") reason = "No reason given";
 
 		let whoToUnban = "";
@@ -40,14 +43,20 @@ module.exports = {
 
 			if (whoToUnban === "")
 				return message.channel.send(
-					`Was unable to find user \`\`${target}\`\` in **${message.guild.name}**, try to be a bit more specific or check if they are banned.`
+					Translator.Translate("unban_fail", {
+						user: target
+					})
 				);
 
 			const user = await client.users.fetch(whoToUnban);
 
 			message.channel
 				.send(
-					`Are you sure you want to unban **${user.username}**#${user.discriminator} \`\`(${user.id})\`\`?`
+					Translator.Translate("unban_confirm", {
+						user: user.username,
+						user_discriminator: user.discriminator,
+						user_id: user.id
+					})
 				)
 				.then((msg) => {
 					msg
@@ -85,21 +94,40 @@ module.exports = {
 									))
 								)
 									return message.channel.send(
-										`Unable to unban <@${user.id}> \`\`(${user.id})\`\`.`
+										Translator.Translate("unban_fail_2", {
+											user: user.username,
+											user_discriminator: user.discriminator,
+											user_id: user.id
+										})
 									);
 								await Log.Mod_action(
 									client,
 									message.guild.id,
-									`${Emotes.actions.unban} Unbanned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
+									Translator.Translate("unban_log", {
+										user: user.username,
+										user_discriminator: user.discriminator,
+										user_id: user.id,
+										moderator: message.author.username,
+										moderator_discriminator: message.author.discriminator,
+										moderator_id: message.author.id,
+										reason: reason,
+										inf_number: infID
+									}),
 									""
 								);
 
 								return message.channel.send(
-									`${Emotes.actions.unban} Unbanning <@${whoToUnban}> \`\`(${whoToUnban})\`\` for \`\`${reason}\`\``
+									Translator.Translate("unban_success", {
+										user: user.username,
+										user_discriminator: user.discriminator,
+										user_id: user.id,
+										reason: reason,
+										inf_number: infID
+									})
 								);
 							} else {
 								return message.channel.send(
-									`${Emotes.actions.cancel} Canceling the operation.`
+									Translator.Translate("global_operation_cancel")
 								);
 							}
 						});
