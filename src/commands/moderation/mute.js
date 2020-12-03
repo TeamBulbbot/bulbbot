@@ -110,7 +110,8 @@ module.exports = {
 						moderator: message.author.username,
 						moderator_discriminator: message.author.discriminator,
 						moderator_id: message.author.id,
-						time: duration
+						time: duration,
+						inf_number: inf_ID
 					})
 				);
 			}

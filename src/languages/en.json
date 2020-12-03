@@ -69,7 +69,7 @@
 	"mute_already_muted": "{emote_warn} **{user}**#{user_discriminator} `({user_id}) is already muted!`",
 	"mute_invalid_duration_second": "{emote_warn} Invalid `duration`, the time can also not be shorter than 1 second \n{emote_tools} Correct usage of command: `mute <user> <duration> [reason]`\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
 	"mute_invalid_duration_year": "{emote_warn} Invalid `duration`, the time can also not be longer than 1 year \n{emote_tools} Correct usage of command: `mute <user> <duration> [reason]`\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
-	"mute_muted": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted for **{time}**",
+	"mute_muted": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted for **{time}**\n**Infraction ID:** {inf_number}",
 	"mute_muted_log": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Duration:** {time}\n**Infraction ID:** {inf_number}",
 	"mute_unmuted": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unmuted after their mute expired.",
 	"mute_audit": "Automatic unmute",
