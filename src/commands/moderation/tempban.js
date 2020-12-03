@@ -2,7 +2,6 @@ const parse = require("parse-duration");
 
 const Log = require("../../utils/moderation/log");
 const Moderation = require("../../utils/moderation/moderation");
-const Emotes = require("../../emotes.json");
 const Translator = require("../../utils/lang/translator")
 const Global = require("../../utils/database/global")
 

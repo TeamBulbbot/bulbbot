@@ -2,7 +2,6 @@ const Infraction = require("../../../models/infraction")
 const InfractionUtils = require("../../../utils/moderation/infraction")
 const Emotes = require("../../../emotes.json")
 const Log = require("../../../utils/moderation/log")
-const Translator = require("../../../utils/lang/translator")
 
 module.exports = {
 	Call: (client, message, args) => {

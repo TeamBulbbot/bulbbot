@@ -1,6 +1,5 @@
 const Infraction = require("../../../models/infraction")
 const Emotes = require("../../../emotes.json")
-const Translator = require("../../../utils/lang/translator")
 const Discord = require("discord.js")
 
 module.exports = {
