@@ -55,7 +55,8 @@ module.exports = {
 				user: user.user.username,
 				user_discriminator: user.user.discriminator,
 				user_id: user.user.id,
-				reason: reason
+				reason: reason,
+				inf_number: inf_ID
 			})
 		);
 	},
