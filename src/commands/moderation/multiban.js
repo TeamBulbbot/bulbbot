@@ -1,6 +1,6 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
-const Translator = require("../../utils/lang/translator)
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "multiban",
