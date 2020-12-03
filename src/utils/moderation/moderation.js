@@ -145,9 +145,10 @@ module.exports = {
 				moderator.id,
 				reason
 			);
+
 			await guild.members.unban(
 				target,
-				`Unbanned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target.id} | Reason: ${reason}`
+				`Unbanned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`
 			);
 			return true;
 		} catch (error) {

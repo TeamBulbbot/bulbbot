@@ -41,11 +41,13 @@ module.exports = {
 					reason
 				))
 			)
-				message.channel.send(Translator.Translate("munban_fail", {
-					user: t.username,
-					user_discriminator: t.discriminator,
-					user_id: t.id
-				}))
+				message.channel.send(
+					Translator.Translate("munban_fail", {
+						user: t.username,
+						user_discriminator: t.discriminator,
+						user_id: t.id,
+					})
+				);
 			fullList += `**${t.username}**#${t.discriminator} \`\`(${t.id})\`\`, `;
 		}
 
@@ -64,7 +66,7 @@ module.exports = {
 		message.channel.send(
 			Translator.Translate("munban_success", {
 				new_value: fullList,
-				reason: reason
+				reason: reason,
 			})
 		);
 	},

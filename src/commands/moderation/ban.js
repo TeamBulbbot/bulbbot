@@ -26,7 +26,17 @@ module.exports = {
 		let user = message.guild.member(target);
 		let reason = args.slice(1).join(" ");
 		const infID = await Global.NumberInfraction();
+
+		const banList = await message.guild.fetchBans();
+		const bannedUser = banList.find((user) => user.user.id === target);
+
+		if (bannedUser)
+			return message.channel.send(
+				`<@${target}> \`\`(${target})\`\` is already banned.`
+			);
+    
 		if (reason === "") reason = "No reason given";
+
 		if (user === null) {
 			try {
 				user = await client.users.fetch(target);
