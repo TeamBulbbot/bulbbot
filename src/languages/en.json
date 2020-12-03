@@ -55,8 +55,10 @@
 
 	"infraction_missing_arg_option": "{emote_warn} Missing required argument `option`\n{emote_tools} Correct usage of command: `infraction|inf <option>`\n**Options:** `search|msearch|modsearch`, `osearch|offedersearch`, `edit|update`, `claim`, `delete|del|remove`, `info`, `all|list`",
 	"infraction_invalid_arg_option": "{emote_warn} Invalid `option`\n{emote_tools} Correct usage of command: `infraction|inf <option>`\n**Options:** `search|msearch|modsearch`, `osearch|offedersearch`, `edit|update`, `claim`, `delete|del|remove`, `info`, `all|list`",
-	"infraction_no_infractions": "{emote_warn} This user doesn't appear to have any infractions!",
 	"infraction_remove_missing_arg_id": "{emote_warn} Missing required argument `id`\n{emote_tools} Correct usage of command: `infraction|inf delete|del|remove <id> [reason]`",
+	"infraction_no_infractions": "{emote_warn} This user doesn't appear to have any infractions!",
+	"infraction_unable_to_find_inf": "{emote_warn} Unable to find infraction with the id `{infraction_id}` in **{guild}",
+	"infraction_claim_missing_arg_option": "{emote_warn} Missing required argument `option`\n{emote_tools} Correct usage of command: `infraction|inf claim <id>`",
 
 	"infractiondm_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
 	"infractiondm_missing_arg_anonymous": "{emote_warn} Missing required argument `anonymous`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
