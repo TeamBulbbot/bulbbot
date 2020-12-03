@@ -1,6 +1,6 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
-const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator)
 
 module.exports = {
 	name: "multiban",
@@ -14,7 +14,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`users\`\`\n${Emotes.other.tools} Correct usage of command: \`\`multiban <user> [user2]...[reason]\`\``
+				Translator.Translate("mban_missing_arg_users")
 			);
 
 		const targets = args
@@ -41,18 +41,31 @@ module.exports = {
 					reason
 				))
 			)
-				message.channel.send(`Unable to ban <@${target}> \`\`(${target})\`\`.`);
+				message.channel.send(Translator.Translate("ban_fail", {
+					user: t.user.username,
+					user_discriminator: t.user.discriminator,
+					user_id: t.user.id
+				}));
 			fullList += `**${t.username}**#${t.discriminator} \`\`(${t.id})\`\`, `;
 		}
 
 		await Log.Mod_action(
 			client,
 			message.guild.id,
-			`${Emotes.actions.ban} Multiple targets were banned ${fullList} by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
+			Translator.Translate("mkick_log", {
+				new_value: fullList,
+				reason: reason,
+				moderator: message.author.username,
+				moderator_discriminator: message.author.discriminator,
+				moderator_id: message.author.id,
+			}),
 			""
 		);
 		message.channel.send(
-			`${Emotes.actions.ban} Banned ${fullList} for \`\`${reason}\`\``
+			Translator.Translate("mkick_success", {
+				new_value: fullList,
+				reason: reason
+			})
 		);
 	},
 };

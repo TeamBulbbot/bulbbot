@@ -107,6 +107,10 @@
 	"mkick_log": "{emote_kick} Multiple users were kicked {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
 	"mkick_success": "{emote_kick} Successfully kicked {new_value} for {reason}",
 	
+	"mban_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multiban <user> [user2]...[reason]`",
+	"mban_log": "{emote_ban} Multiple users were banned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"mban_success": "{emote_ban} Successfully banned {new_value} for {reason}",
+	
 	"unban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `unban|pardon <user> [reason]`",
 	"unban_fail": "{emote_warn} User `{user}` is not in the server or has not been banned yet!",
 	"unban_fail_2": "{emote_warn} Unable to unban **{user}**#{user_discriminator} `(user_id)`",
