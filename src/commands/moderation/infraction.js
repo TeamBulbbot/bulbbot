@@ -281,7 +281,7 @@ module.exports = {
 							if (infs[i].targetID === "") continue;
 							let user = await message.guild.member(infs[i].moderatorID).user;
 
-							let moderator = await message.guild.member(infs[i].moderatorID);
+							let moderator = await message.guild.member(infs[i].moderatorID).user;
 							const action = addEmotes(infs[i].action);
 
 							let content = "";
