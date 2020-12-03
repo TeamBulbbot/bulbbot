@@ -1,6 +1,7 @@
-const Emotes = require("../../emotes.json");
 const Log = require("../../utils/moderation/log");
 const Moderation = require("../../utils/moderation/moderation");
+const Translator = require("../../utils/lang/translator")
+const Global = require("../../utils/database/global")
 
 module.exports = {
 	name: "ban",
@@ -19,11 +20,12 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`ban|terminate|yeet <user> [reason]\`\``
+				Translator.Translate("ban_missing_arg_user")
 			);
 		let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 		let user = message.guild.member(target);
 		let reason = args.slice(1).join(" ");
+		const infID = await Global.NumberInfraction();
 		if (reason === "") reason = "No reason given";
 		if (user === null) {
 			try {
@@ -33,8 +35,8 @@ module.exports = {
 			}
 
 			if (user === null)
-				return await message.channel.send(
-					"Unable to find the user, please try again with the correct **user id**"
+				return message.channel.send(
+					Translator.Translate("global_user_not_found", {user: target})
 				);
 			if (
 				!(await Moderation.ForceBan(
@@ -46,7 +48,11 @@ module.exports = {
 				))
 			)
 				return message.channel.send(
-					`Unable to ban <@${target}> \`\`(${target})\`\`.`
+					Translator.Translate("ban_fail", {
+						user: user.user.username,
+						user_discriminator: user.user.discriminator,
+						user_id: user.user.id
+					})
 				);
 		} else {
 			if (
@@ -59,7 +65,12 @@ module.exports = {
 				))
 			)
 				return message.channel.send(
-					`Unable to ban <@${target}> \`\`(${target})\`\`.`
+					Translator.Translate("ban_fail", {
+						user: user.user.username,
+						user_discriminator: user.user.discriminator,
+						user_id: user.user.id,
+						inf_number: infID
+					})
 				);
 			user = user.user;
 		}
@@ -67,12 +78,27 @@ module.exports = {
 		await Log.Mod_action(
 			client,
 			message.guild.id,
-			`${Emotes.actions.ban} Banned **${user.username}**#${user.discriminator} \`\`(${user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
+			Translator.Translate("ban_log", {
+				user: user.username,
+				user_discriminator: user.discriminator,
+				user_id: user.id,
+				moderator: message.author.username,
+				moderator_discriminator: message.author.discriminator,
+				moderator_id: message.author.id,
+				reason: reason,
+				inf_number: infID
+			}),
 			""
 		);
 
 		message.channel.send(
-			`${Emotes.actions.ban} Banning <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``
+			Translator.Translate("ban_success", {
+				user: user.username,
+				user_discriminator: user.discriminator,
+				user_id: user.id,
+				reason: reason,
+				inf_number: infID
+			})
 		);
 	},
 };

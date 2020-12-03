@@ -69,7 +69,7 @@
 	"mute_already_muted": "{emote_warn} **{user}**#{user_discriminator} `({user_id}) is already muted!`",
 	"mute_invalid_duration_second": "{emote_warn} Invalid `duration`, the time can also not be shorter than 1 second \n{emote_tools} Correct usage of command: `mute <user> <duration> [reason]`\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
 	"mute_invalid_duration_year": "{emote_warn} Invalid `duration`, the time can also not be longer than 1 year \n{emote_tools} Correct usage of command: `mute <user> <duration> [reason]`\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
-	"mute_muted": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted by for **{time}**",
+	"mute_muted": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted for **{time}**",
 	"mute_muted_log": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Duration:** {time}\n**Infraction ID:** {inf_number}",
 	"mute_unmuted": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unmuted after their mute expired.",
 	"mute_audit": "Automatic unmute",
@@ -81,9 +81,14 @@
 	"munban_fail": "{emote_warn} Unable to unban **{user}**#{user_discriminator} `(user_id)`",
 	"munban_success": "{emote_unban} Successfully unbanned {new_value} for {reason}",
 	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Infraction ID:** {inf_number}",
+	
+	"ban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `ban|terminate|yeet <user> [reason]`",
+	"ban_fail": "{emote_warn} Was unable to ban **{user}**#{user_discriminator} `({user_id})`",
+	"ban_success": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been banned for **{reason}**\n**Infraction ID:** {inf_number}",
+	"ban_log": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
 
 	"warn_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `warn <user> [reason]`",
-	"warn_success": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned for `{}reason`",
+	"warn_success": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned for `{reason}`",
 	"warn_log": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
 
 	"infraction_remove_missing_arg_id": "{emote_warn} Missing required argument `id`\n{emote_tools} Correct usage of command: `infraction|inf delete|del|remove <id> [reason]`",
