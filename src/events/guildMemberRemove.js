@@ -1,8 +1,6 @@
 const Log = require("../utils/moderation/log");
 const moment = require("moment");
 const Translator = require("../utils/lang/translator")
-const Moderation = require("../utils/moderation/moderation")
-const Global = require("../utils/database/global")
 
 module.exports = async (client, user) => {
 	const end = moment.utc().format("YYYY-MM-DD");
@@ -20,8 +18,6 @@ module.exports = async (client, user) => {
 				age: Math.floor(accountAgeInDays).toString().replace("-", "")
 			})
 	)
-
-	const inf_ID = await Global.NumberInfraction();
 
 	const log = await user.guild.fetchAuditLogs({limit: 1, type: 'MEMBER_KICK'}).catch();
 	const kickLog = log.entries.first();
@@ -45,11 +41,8 @@ module.exports = async (client, user) => {
 				moderator: executor.username,
 				moderator_discriminator: executor.discriminator,
 				moderator_id: executor.id,
-				reason: reason,
-				inf_number: inf_ID
+				reason: reason
 			}),
 		""
 	)
-
-	await Moderation.Kick(client, user.guild.id, user.user.id, executor.id, reason)
 };

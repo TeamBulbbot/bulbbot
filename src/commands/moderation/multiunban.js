@@ -1,6 +1,7 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
-const Translator = require("../../utils/lang/translator")
+const Emotes = require("../../emotes.json");
+const Translator = require("../../utils/lang/translator");
 
 module.exports = {
 	name: "multiunban",

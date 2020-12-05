@@ -4,18 +4,9 @@ const Mute = require("../../models/mute");
 const Tempban = require("../../models/tempban");
 const Logger = require("../../utils/other/winston");
 
-const Global = require("../../utils/database//global");
-
 module.exports = {
 	Warn: async (_client, guildId, target, moderator, reason) => {
-		await Infraction.Add(
-			guildId,
-			"Warn",
-			await GetCurrentInfNumber(),
-			target,
-			moderator.id,
-			reason
-		);
+		Infraction.Add(guildId, "Warn", target, moderator.id, reason);
 		return true;
 	},
 	// Mutes a user from the guild
@@ -36,10 +27,9 @@ module.exports = {
 		});
 		mute.save().catch((err) => Logger.error(err));
 
-		await Infraction.Add(
+		Infraction.Add(
 			guildId,
 			"Mute",
-			await GetCurrentInfNumber(),
 			target,
 			moderator.id,
 			reason + `\n**Duration:** ${duration}`
@@ -51,14 +41,7 @@ module.exports = {
 		let guild = client.guilds.cache.get(guildId);
 		let user = guild.member(target);
 		if (user.kickable) {
-			await Infraction.Add(
-				guildId,
-				"Kick",
-				await GetCurrentInfNumber(),
-				target,
-				moderator.id,
-				reason
-			);
+			Infraction.Add(guildId, "Kick", target, moderator.id, reason);
 			await user.kick(
 				`Kicked by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`
 			);
@@ -71,14 +54,7 @@ module.exports = {
 		let user = guild.member(target);
 
 		if (user.bannable) {
-			await Infraction.Add(
-				guildId,
-				"Ban",
-				await GetCurrentInfNumber(),
-				target,
-				moderator.id,
-				reason
-			);
+			Infraction.Add(guildId, "Ban", target, moderator.id, reason);
 			await user.ban({
 				reason: `Banned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`,
 			});
@@ -91,14 +67,7 @@ module.exports = {
 		let user = guild.member(target);
 
 		if (user.bannable) {
-			await Infraction.Add(
-				guildId,
-				"Softban",
-				target,
-				await GetCurrentInfNumber(),
-				moderator.id,
-				reason
-			);
+			Infraction.Add(guildId, "Softban", target, moderator.id, reason);
 			await user.ban({
 				days: 7,
 				reason: `Soft banned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`,
@@ -116,14 +85,7 @@ module.exports = {
 		let guild = client.guilds.cache.get(guildId);
 
 		try {
-			await Infraction.Add(
-				guildId,
-				"Force Ban",
-				await GetCurrentInfNumber(),
-				target,
-				moderator.id,
-				reason
-			);
+			Infraction.Add(guildId, "Force Ban", target, moderator.id, reason);
 			await guild.members.ban(target, {
 				reason: `Forced banned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`,
 			});
@@ -137,15 +99,7 @@ module.exports = {
 		let guild = client.guilds.cache.get(guildId);
 
 		try {
-			await Infraction.Add(
-				guildId,
-				"Unban",
-				target.id,
-				await GetCurrentInfNumber(),
-				moderator.id,
-				reason
-			);
-
+			Infraction.Add(guildId, "Unban", target, moderator.id, reason);
 			await guild.members.unban(
 				target,
 				`Unbanned by Moderator: ${moderator.username}#${moderator.discriminator} (${moderator.id}) | Target: ${target} | Reason: ${reason}`
@@ -169,10 +123,9 @@ module.exports = {
 		const user = guild.member(target);
 
 		if (user.bannable) {
-			await Infraction.Add(
+			Infraction.Add(
 				guildId,
 				"Tempban",
-				await GetCurrentInfNumber(),
 				target,
 				moderator.id,
 				`${reason}\n**Duration:** ${duration}`
@@ -193,7 +146,3 @@ module.exports = {
 		} else return false;
 	},
 };
-
-function GetCurrentInfNumber() {
-	return Global.NumberInfraction();
-}

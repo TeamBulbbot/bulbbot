@@ -16,7 +16,7 @@ module.exports = async (client, message) => {
 			process.env.WEBHOOK_TOKEN
 		);
 
-		await webhookClient.send(
+		webhookClient.send(
 			`**User ID:** ${message.author.id}\n**Content:** ${message.content}`,
 			{
 				username: `${message.author.username}#${message.author.discriminator}`,
@@ -103,10 +103,7 @@ module.exports = async (client, message) => {
 				}
 
 				if (clearanceLevel > authorClearance)
-					return message.channel.send(Translator.Translate("global_missing_permission")).then(msg => {
-						msg.delete({timeout: 5000});
-						message.delete({timeout: 5000})
-					});
+					return message.channel.send(":lock: Missing permission");
 
 				const permissions = new Permissions(message.guild.me.permissions);
 				if (permissions.has(command.clientPermissions)) {

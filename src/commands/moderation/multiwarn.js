@@ -1,6 +1,6 @@
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
-const Translator = require("../../utils/lang/translator")
+const Emotes = require("../../emotes.json");
 
 module.exports = {
 	name: "multiwarn",
@@ -14,7 +14,7 @@ module.exports = {
 	run: async (client, message, args) => {
 		if (args[0] === undefined || args[0] === null)
 			return message.channel.send(
-				Translator.Translate("mwarn_missing_arg_users")
+				`${Emotes.actions.warn} Missing required argument \`\`users\`\`\n${Emotes.other.tools} Correct usage of command: \`\`multiwarn <user> [user2]...[reason]\`\``
 			);
 
 		const targets = args
@@ -45,20 +45,11 @@ module.exports = {
 		await Log.Mod_action(
 			client,
 			message.guild.id,
-			Translator.Translate("mwarn_log", {
-				new_value: fullList,
-				reason: reason,
-				moderator: message.author.username,
-				moderator_discriminator: message.author.discriminator,
-				moderator_id: message.author.id,
-			}),
+			`${Emotes.actions.warn} Multiple targets were warned ${fullList} by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
 			""
 		);
 		message.channel.send(
-			Translator.Translate("mwarn_log", {
-				new_value: fullList,
-				reason: reason
-			})
+			`${Emotes.actions.warn} Warned ${fullList} for \`\`${reason}\`\``
 		);
 	},
 };

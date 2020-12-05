@@ -4,8 +4,8 @@ const Guild = require("../../models/guild");
 const Moderation = require("../../utils/moderation/moderation");
 const Log = require("../../utils/moderation/log");
 const Logger = require("../../utils/other/winston");
+const Emotes = require("../../emotes.json");
 const Translator = require("../../utils/lang/translator")
-const Global = require("../../utils/database/global")
 
 module.exports = {
 	name: "mute",
@@ -42,8 +42,6 @@ module.exports = {
 
 				let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 				let user = message.guild.member(target);
-
-				const inf_ID = await Global.NumberInfraction();
 
 				let reason = args.slice(2).join(" ");
 				if (reason === "") reason = "No reason given";
@@ -96,8 +94,7 @@ module.exports = {
 						moderator_discriminator: message.author.discriminator,
 						moderator_id: message.author.id,
 						reason: reason,
-						time: args[1],
-						inf_number: inf_ID
+						time: duration
 					}),
 					""
 				);
@@ -110,8 +107,7 @@ module.exports = {
 						moderator: message.author.username,
 						moderator_discriminator: message.author.discriminator,
 						moderator_id: message.author.id,
-						time: args[1],
-						inf_number: inf_ID
+						time: duration
 					})
 				);
 			}

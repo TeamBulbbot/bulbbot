@@ -1,11 +1,7 @@
 const Log = require("../utils/moderation/log");
 const Translator = require("../utils/lang/translator")
-const Moderation = require("../utils/moderation/moderation")
-const Global = require("../utils/database/global")
 
 module.exports = async (client, guild, user) => {
-    const inf_ID = await Global.NumberInfraction();
-
     const log = await guild.fetchAuditLogs({limit: 1, type: 'MEMBER_BAN_ADD'});
     const banLog = log.entries.first();
     let { executor, reason } = banLog;
@@ -24,11 +20,8 @@ module.exports = async (client, guild, user) => {
                 moderator: executor.username,
                 moderator_discriminator: executor.discriminator,
                 moderator_id: executor.id,
-                reason: reason,
-                inf_number: inf_ID
+                reason: reason
             }),
         ""
     )
-
-    await Moderation.Ban(client, user.guild.id, user.id, executor.id, reason)
 }
