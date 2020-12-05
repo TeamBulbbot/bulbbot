@@ -6,7 +6,7 @@ const SendLog = require("../moderation/log");
 const Emotes = require("../../emotes.json");
 const Logger = require("../../utils/other/winston");
 const Infraction = require("../moderation/infraction");
-const Translator = require("../../utils/lang/translator")
+const Translator = require("../../utils/lang/translator");
 
 const moment = require("moment");
 
@@ -27,9 +27,9 @@ module.exports = {
 
 							let guild = client.guilds.cache.get(mute.guildID);
 							let user = guild.member(mute.targetID);
-
 							if (
 								user !== undefined &&
+								user.roles.cache === null &&
 								user.roles.cache.has(fGuild.roles.mute)
 							) {
 								user.roles
@@ -42,7 +42,7 @@ module.exports = {
 									Translator.Translate("mute_unmuted", {
 										user: user.user.username,
 										user_discriminator: user.user.discriminator,
-										user_id: user.user.id
+										user_id: user.user.id,
 									}),
 									""
 								);
@@ -120,7 +120,7 @@ module.exports = {
 						Translator.Translate("tempban_unban", {
 							user: user.username,
 							user_discriminator: user.discriminator,
-							user_id: user.id
+							user_id: user.id,
 						}),
 						""
 					);
