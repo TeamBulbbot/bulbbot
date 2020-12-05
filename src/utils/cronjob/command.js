@@ -29,7 +29,7 @@ module.exports = {
 							let user = guild.member(mute.targetID);
 							if (
 								user !== undefined &&
-								user.roles.cache === null &&
+								user.roles === null &&
 								user.roles.cache.has(fGuild.roles.mute)
 							) {
 								user.roles
