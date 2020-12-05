@@ -24,7 +24,10 @@ module.exports = {
 			{ $inc: { infCounter: 1 } },
 			{ new: true },
 			function (err, _res) {
-				if (err) Logger.error(err);
+				if (err) {
+					Logger.error(err);
+					return false;
+				}
 			}
 		);
 
