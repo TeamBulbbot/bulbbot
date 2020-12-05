@@ -1,5 +1,4 @@
 const Translator = require("../../utils/lang/translator");
-
 const Handler = require("./infraction/master");
 
 module.exports = {
