@@ -3,12 +3,14 @@
 	"global_user_not_found": "{emote_warn} Could not find the specified user `{user}`",
 	"global_error": "**An error has occurred**, please check the the permission level of the bot or try again later. If the issue persists contact the bot developers.",
 	"global_cannot_action_self": "{emote_warn} You cannot perform this action on yourself!",
+	"global_missing_permission": ":lock: You do not have sufficient permission to perform this action!",
+	"global_operation_cancel": "{emote_warn} Cancelling operation",
 
 	"event_guild_member_add": "{emote_plus} New user joined the guild **{user}**#{user_discriminator} `({user_id})` - **Account age:** {age} days",
 	"event_guild_member_remove": "{emote_minus} User has left **{user}**#{user_discriminator} `({user_id})` - **Account age:** {age} days",
-	"event_guild_ban_add": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been manually banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
-	"event_guild_ban_remove": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been manually unbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})",
-	"event_guild_member_kick": "{emote_kick} **{user}**#{user_discriminator} `({user_id})` has been manually kicked by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"event_guild_ban_add": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been manually banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	"event_guild_ban_remove": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been manually unbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})\n**Infraction ID:** {inf_number}",
+	"event_guild_member_kick": "{emote_kick} **{user}**#{user_discriminator} `({user_id})` has been manually kicked by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
 	"event_guild_member_update_role_add": "The **{role}** role has been added to **{user}**#{user_discriminator} `({user_id})`",
 	"event_guild_member_update_role_remove": "The **{role}** role has been removed from **{user}**#{user_discriminator} `({user_id})`",
 	"event_guild_member_update_nickname": "**{user}**#{user_discriminator} has changed their nickname\n**Old nickname:** {nick_old}\n**New nickname:** {nick_new}",
@@ -52,6 +54,13 @@
 	"overrides_enabled": "{emote_switchOn} Enabled",
 	"overrides_disabled": "{emote_switchOff} Disabled",
 
+	"infraction_missing_arg_option": "{emote_warn} Missing required argument `option`\n{emote_tools} Correct usage of command: `infraction|inf <option>`\n**Options:** `search|msearch|modsearch`, `osearch|offedersearch`, `edit|update`, `claim`, `delete|del|remove`, `info`, `all|list`",
+	"infraction_invalid_arg_option": "{emote_warn} Invalid `option`\n{emote_tools} Correct usage of command: `infraction|inf <option>`\n**Options:** `search|msearch|modsearch`, `osearch|offedersearch`, `edit|update`, `claim`, `delete|del|remove`, `info`, `all|list`",
+	"infraction_remove_missing_arg_id": "{emote_warn} Missing required argument `id`\n{emote_tools} Correct usage of command: `infraction|inf delete|del|remove <id> [reason]`",
+	"infraction_no_infractions": "{emote_warn} This user doesn't appear to have any infractions!",
+	"infraction_unable_to_find_inf": "{emote_warn} Unable to find infraction with the id `{inf_number}` in **{guild}",
+	"infraction_claim_missing_arg_option": "{emote_warn} Missing required argument `option`\n{emote_tools} Correct usage of command: `infraction|inf claim <id>`",
+
 	"infractiondm_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
 	"infractiondm_missing_arg_anonymous": "{emote_warn} Missing required argument `anonymous`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
 	"infractiondm_missing_arg_message": "{emote_warn} Missing required argument `message`\n{emote_tools} Correct usage of command: `infractiondm <user> <anonymous> <message>`",
@@ -66,18 +75,67 @@
 	"mute_already_muted": "{emote_warn} **{user}**#{user_discriminator} `({user_id}) is already muted!`",
 	"mute_invalid_duration_second": "{emote_warn} Invalid `duration`, the time can also not be shorter than 1 second \n{emote_tools} Correct usage of command: `mute <user> <duration> [reason]`\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
 	"mute_invalid_duration_year": "{emote_warn} Invalid `duration`, the time can also not be longer than 1 year \n{emote_tools} Correct usage of command: `mute <user> <duration> [reason]`\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
-	"mute_muted": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted by **{moderator}**#{moderator_discriminator} `({moderator_id})` for **{time}**",
-	"mute_muted_log": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Duration:** {time}",
+	"mute_muted": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted for **{time}**\n**Infraction ID:** {inf_number}",
+	"mute_muted_log": "{emote_mute} **{user}**#{user_discriminator} `({user_id})` has been muted by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Duration:** {time}\n**Infraction ID:** {inf_number}",
 	"mute_unmuted": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unmuted after their mute expired.",
 	"mute_audit": "Automatic unmute",
 
+	"unmute_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `unmute <user> [reason]`",
+	"unmute_fail": "{emote_warn} **{user}**{user_discriminator} `{user_id}` is currently not muted",
+	"unmute_success": "{emote_unban} Successfully unmuted **{user}**{user_discriminator} `({user_id})` for {reason}\n**Infraction ID:** {inf_number}",
+	"unmute_log": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been unmuted by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+
 	"tempban_audit": "Automatic unban",
+	"tempban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `tempban <user> <duration> [reason]`",
+	"tempban_missing_arg_duration": "{emote_warn} Missing required argument `duration`\n{emote_tools} Correct usage of command: `tempban <user> <duration> [reason]`",
+	"tempban_invalid_duration_second": "{emote_warn} Invalid `duration`, the time can also not be shorter than 1 second \n{emote_tools} Correct usage of command: `tempban|tempyeet <user> <duration> [reason]`\\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
+	"tempban_invalid_duration_year": "{emote_warn} Invalid `duration`, the time can also not be longer than 1 year \n{emote_tools} Correct usage of command: `tempban|tempyeet <user> <duration> [reason]`\\n**Duration:** `w = week`, `d = day`, `h = hour`, `m = minutes`, `s = seconds`",
+	"tempban_success": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been temporarily banned for **{reason}**\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	"tempban_log": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been temporarily banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Duration:** {time}\n**Infraction ID:** {inf_number}",
 	"tempban_unban": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been automatically unbanned after their ban expired.",
 
 	"munban_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multiunban <user> [user2]...[reason]`",
 	"munban_fail": "{emote_warn} Unable to unban **{user}**#{user_discriminator} `(user_id)`",
 	"munban_success": "{emote_unban} Successfully unbanned {new_value} for {reason}",
-	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`",
+	"munban_log": "{emote_unban} Multiple users were unbanned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	
+	"mwarn_missing_arg_users": "{{emote_warn}} Missing required argument `users`\n{{emote_tools}} Correct usage of command: `multiwarn <user> [user2]...[reason]`",
+	"mwarn_log": "{emote_warn} Multiple users were warned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"mwarn_success": "{emote_warn} Successfully warned {new_value} for {reason}",
+	
+	"mkick_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multikick <user> [user2]...[reason]`",
+	"mkick_log": "{emote_kick} Multiple users were kicked {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"mkick_success": "{emote_kick} Successfully kicked {new_value} for {reason}",
+	
+	"mban_missing_arg_users": "{emote_warn} Missing required argument `users`\n{emote_tools} Correct usage of command: `multiban <user> [user2]...[reason]`",
+	"mban_log": "{emote_ban} Multiple users were banned {new_value} by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}",
+	"mban_success": "{emote_ban} Successfully banned {new_value} for {reason}",
+	
+	"unban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `unban|pardon <user> [reason]`",
+	"unban_fail": "{emote_warn} User `{user}` is not in the server or has not been banned yet!",
+	"unban_fail_2": "{emote_warn} Unable to unban **{user}**#{user_discriminator} `(user_id)`",
+	"unban_confirm": "Are you sure you want to unban **{user}**#{user_discriminator} `({user_id})`?",
+	"unban_success": "{emote_unban} Successfully unbanned **{user}**#{user_discriminator} `({user_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	"unban_log": "{emote_unban} **{user}**#{user_discriminator} `({user_id})` has been unbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+
+	"ban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `ban|terminate|yeet <user> [reason]`",
+	"ban_fail": "{emote_warn} Was unable to ban **{user}**#{user_discriminator} `({user_id})`",
+	"ban_success": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been banned for **{reason}**\n**Infraction ID:** {inf_number}",
+	"ban_log": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been banned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+
+	"warn_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `warn <user> [reason]`",
+	"warn_success": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned for `{reason}`\n**Infraction ID:** {inf_number}",
+	"warn_log": "{emote_warn} **{user}**#{user_discriminator} `({user_id})` has been warned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	
+	"softban_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `softban|cleanban <user> [reason]`",
+	"softban_fail": "{emote_warn} Was unable to softban **{user}**#{user_discriminator} `({user_id})`",
+	"softban_success": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been softbanned for `{reason}`\n**Infraction ID:** {inf_number}",
+	"softban_log": "{emote_ban} **{user}**#{user_discriminator} `({user_id})` has been softbanned by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+
+	"kick_missing_arg_user": "{emote_warn} Missing required argument `user`\n{emote_tools} Correct usage of command: `kick <user> [reason]`",
+	"kick_fail": "{emote_warn} Was unable to kick **{user}**#{user_discriminator} `({user_id})`",
+	"kick_log": "{emote_kick} **{user}**#{user_discriminator} `({user_id})` has been kicked by **{moderator}**#{moderator_discriminator} `({moderator_id})`\n**Reason:** {reason}\n**Infraction ID:** {inf_number}",
+	"kick_success": "{emote_kick} **{user}**#{user_discriminator} `({user_id})` has been banned for **{reason}**\n**Infraction ID:** {inf_number}",
 
 	"charinfo_missing_arg_characters": "{emote_warn} Missing required argument `characters` \n{emote_tools} Correct usage of command: `charinfo <characters>`"
 }

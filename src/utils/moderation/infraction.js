@@ -1,21 +1,25 @@
 const mongoose = require("mongoose");
 
 const Infraction = require("../../models/infraction");
+const Global = require("../database/global");
 const Logger = require("../../utils/other/winston");
 
 module.exports = {
 	// Add a new infraction to the database
-	Add: async (guildId, action, targetId, moderatorId, reason) => {
+	Add: async (guildId, action, infId, targetId, moderatorId, reason) => {
 		const inf = new Infraction({
 			_id: mongoose.Types.ObjectId(),
 			guildID: guildId,
 			action: action,
+			infID: infId,
 			targetID: targetId,
 			moderatorID: moderatorId,
 			reportReason: reason,
 			date: new Date(),
 		});
 		inf.save().catch((err) => Logger.error(err));
+
+		await Global.IncrementInfraction()
 	},
 
 	Remove: async (id, guildId) => {
@@ -32,7 +36,7 @@ module.exports = {
 
 	Claim: async (id, guildId, moderatorId) => {
 		Infraction.findOneAndUpdate(
-			{ _id: id, guildID: guildId },
+			{ infID: id, guildID: guildId },
 			{ moderatorID: moderatorId },
 			function (err) {
 				if (err) Logger.error(err);

@@ -1,7 +1,8 @@
 const Guild = require("../../models/guild");
 const Log = require("../../utils/moderation/log");
 const Logger = require("../../utils/other/winston");
-const Emotes = require("../../emotes.json");
+const Global = require("../../utils/database/global")
+const Translator = require("../../utils/lang/translator")
 
 module.exports = {
 	name: "unmute",
@@ -24,19 +25,20 @@ module.exports = {
 			async (err, fGuild) => {
 				if (fGuild.roles.mute === "")
 					return message.channel.send(
-						"Unable to find a muted role in this server, please add one by doing ``configure|cfg|setting|config mute <mutedRole>``"
+						Translator.Translate("mute_mute_role_not_found")
 					);
 
 				if (args[0] === undefined || args[0] === null)
 					return message.channel.send(
-						`${Emotes.actions.warn} Missing required argument \`\`user\`\`\n${Emotes.other.tools} Correct usage of command: \`\`unmute <user> [reason]\`\``
+						Translator.Translate("unmute_missing_arg_user")
 					);
 
 				let target = args[0].replace(/\D/g, ""); // Remove everything except numbers
 				let user = message.guild.member(target);
 				let reason = args.slice(2).join(" ");
+				const infID = await Global.NumberInfraction();
 				if (reason === "") reason = "No reason given";
-				if (user === null) return message.channel.send("User is not in server");
+				if (user === null) return message.channel.send(Translator.Translate("global_user_not_found", {user: target}));
 
 				if (user.roles.cache.has(fGuild.roles.mute)) {
 					user.roles
@@ -46,16 +48,35 @@ module.exports = {
 					await Log.Mod_action(
 						client,
 						message.guild.id,
-						`${Emotes.actions.unban} Unmuting **${user.user.username}**#${user.user.discriminator} \`\`(${user.user.id})\`\` by **${message.author.username}**#${message.author.discriminator} \`\`(${message.author.id})\`\` \n**Reason:** ${reason} `,
+						Translator.Translate("unmute_log", {
+							user: user.user.username,
+							user_discriminator: user.user.discriminator,
+							user_id: user.user.id,
+							moderator: message.author.username,
+							moderator_discriminator: message.author.discriminator,
+							moderator_id: message.author.id,
+							reason: reason,
+							inf_number: infID
+						}),
 						""
 					);
 
 					message.channel.send(
-						`${Emotes.actions.unban} Unmuting <@${target}> \`\`(${target})\`\` for \`\`${reason}\`\``
+						Translator.Translate("unmute_success", {
+							user: user.user.username,
+							user_discriminator: user.user.discriminator,
+							user_id: user.user.id,
+							reason: reason,
+							inf_number: infID
+						})
 					);
 				} else
 					return message.channel.send(
-						`**${user.user.username}** is currently not muted.`
+						Translator.Translate("unmute_fail", {
+							user: user.user.username,
+							user_discriminator: user.user.discriminator,
+							user_id: user.user.id
+						})
 					);
 			}
 		);

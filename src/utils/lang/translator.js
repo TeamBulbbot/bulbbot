@@ -24,10 +24,14 @@ module.exports = {
 			time,
 			nick_old,
 			nick_new,
-			channel_id
+			channel_id,
+			inf_number
 		} = {}
 	) => {
 		let response = JSON.parse(JSON.stringify(lang))[key].toString();
+		//Infractions
+		response = response.replace(/({inf_number})/g, inf_number);
+
 		//Uptime
 		response = response.replace(/({uptime})/g, uptime);
 
