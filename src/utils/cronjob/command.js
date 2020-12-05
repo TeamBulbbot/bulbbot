@@ -26,12 +26,12 @@ module.exports = {
 							if (err) Logger.error(err);
 
 							let guild = client.guilds.cache.get(mute.guildID);
+							if (!guild) return;
 							let user = guild.member(mute.targetID);
-							if (
-								user !== undefined &&
-								user.roles === null &&
-								user.roles.cache.has(fGuild.roles.mute)
-							) {
+							if (!user) return;
+							if (user.roles === null) return;
+
+							if (user.roles.cache.has(fGuild.roles.mute)) {
 								user.roles
 									.remove(fGuild.roles.mute, Translator.Translate("mute_audit"))
 									.catch((err) => Logger.error(err));
