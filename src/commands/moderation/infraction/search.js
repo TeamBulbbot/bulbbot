@@ -21,7 +21,7 @@ module.exports = {
 			async (err, infs) => {
 				let moderator;
 				try {
-					moderator = await message.guild.member(args[1].replace(/\D/g, ""))
+					moderator = await client.users.fetch(args[1].replace(/\D/g, ""))
 						.user;
 				} catch (err) {
 					if (err) console.log(err);

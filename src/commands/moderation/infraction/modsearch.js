@@ -21,7 +21,7 @@ module.exports = {
 			async (err, infs) => {
 				let moderator;
 				try {
-					moderator = await message.guild.member(args[1].replace(/\D/g, ""))
+					moderator = await client.users.fetch(args[1].replace(/\D/g, ""))
 						.user;
 				} catch (error) {
 					return message.channel.send("User was not found");

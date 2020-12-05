@@ -19,8 +19,7 @@ module.exports = {
 		});
 		inf.save().catch((err) => Logger.error(err));
 
-		if (!(await Global.IncrementInfraction()))
-			Logger.error("Was unable to store the infraction id");
+		await Global.IncrementInfraction()
 	},
 
 	Remove: async (id, guildId) => {

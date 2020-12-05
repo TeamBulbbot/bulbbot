@@ -20,8 +20,8 @@ module.exports = {
 			},
 			async (err, infs) => {
 				for (let i = 0; i < infs.length; i++) {
-					let user = await message.guild.member(infs[i].targetID).user;
-					let moderator = await message.guild.member(infs[i].moderatorID)
+					let user = await client.users.fetch(infs[i].targetID);
+					let moderator = await client.users.fetch(infs[i].moderatorID)
 						.user;
 
 					let content = "";
