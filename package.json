@@ -40,7 +40,7 @@
     "@types/cli-color": "^2.0.0",
     "@types/eslint": "^7.2.5",
     "@types/moment-duration-format": "^2.2.2",
-    "@types/mongoose": "^5.10.1",
+    "@types/mongoose": "^5.10.2",
     "eslint": "^7.14.0",
     "nodemon": "^2.0.6"
   }
