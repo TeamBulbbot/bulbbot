@@ -4,7 +4,7 @@ module.exports = (sequelize) => {
 	sequelize.define("GuildConfiguration", {
 		Prefix: {
 			type: DataTypes.STRING,
-			defaultValue: "!",
+			defaultValue: process.env.PREFIX,
 		},
 		TrackAnalytics: {
 			type: DataTypes.BOOLEAN,
@@ -16,7 +16,6 @@ module.exports = (sequelize) => {
 		},
 		MuteRole: {
 			type: DataTypes.STRING,
-			allowNull: true,
 		},
 	});
 };

@@ -6,6 +6,7 @@ async function sync() {
 
 	//await sequelize.sync();
 	await sequelize.sync({ force: true });
+
 	const end = new Date().getTime();
 
 	console.log(`\nDatabase sync done, it took ${end - start} ms!`);
