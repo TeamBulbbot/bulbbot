@@ -1,0 +1,31 @@
+{
+	"name": "bulbbot",
+	"version": "0.0.1",
+	"description": "A discord moderation bot written in Discord.JS",
+	"main": "src/index.js",
+	"scripts": {
+		"start": "node src/index.js",
+		"dev": "nodemon",
+		"db-sync": "node src/utils/database/sync.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TestersQTs/Bulbbot.git"
+	},
+	"author": "TesterQTs",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/TestersQTs/Bulbbot/issues"
+	},
+	"homepage": "https://github.com/TestersQTs/Bulbbot#readme",
+	"dependencies": {
+		"discord.js": "^12.5.1",
+		"dotenv": "^8.2.0",
+		"pg": "^8.5.1",
+		"pg-hstore": "^2.3.3",
+		"sequelize": "^6.3.5"
+	},
+	"devDependencies": {
+		"sequelize-cli": "^6.2.0"
+	}
+}
