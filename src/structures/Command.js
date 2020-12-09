@@ -1,4 +1,5 @@
 const {CommandException} = require("./exceptions/CommandException");
+const {Permissions} = require("discord.js")
 
 module.exports = class Command {
     constructor(client, name, options = {}) {
@@ -8,6 +9,8 @@ module.exports = class Command {
         this.description = options.description || "No description provided"
         this.category = options.category || "Miscellaneous"
         this.usage = options.usage || "No usage provided"
+        this.userPerms = new Permissions(options.userPerms).freeze()
+        this.clientPerms = new Permissions(options.clientPerms).freeze()
     }
 
     async run(message, args) {

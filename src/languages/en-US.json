@@ -1,5 +1,7 @@
 {
   "global_executed_by": "Executed by {user_name}#{user_discriminator}",
+  "global_missing_permission": ":lock: Missing permission(s)",
+  "global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
 
   "ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**"
 }
