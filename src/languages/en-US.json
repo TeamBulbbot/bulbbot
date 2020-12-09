@@ -1,0 +1,5 @@
+{
+  "global_executed_by": "Executed by {user_name}#{user_discriminator}",
+
+  "ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**"
+}
