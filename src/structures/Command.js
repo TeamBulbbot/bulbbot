@@ -11,6 +11,7 @@ module.exports = class Command {
         this.usage = options.usage || "No usage provided"
         this.userPerms = new Permissions(options.userPerms).freeze()
         this.clientPerms = new Permissions(options.clientPerms).freeze()
+        this.clearance = options.clearance || 0
     }
 
     async run(message, args) {

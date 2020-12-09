@@ -30,6 +30,9 @@ module.exports = class BulbBotClient extends Client {
 
         if (!options.defaultPerms) throw new PermissionException("Default permissions cannot be null!")
         this.defaultPerms = new Permissions(options.defaultPerms).freeze()
+
+        if (!options.clearance) throw new Error("Clearance level cannot be null!")
+        this.clearance = options.clearance
     }
 
     async login(token = this.token) {
