@@ -1,12 +1,17 @@
-module.exports = (client) => {
-	console.log(
-		`------------------\nCurrently logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})\nGuild count: ${client.guilds.cache.size}\nCommand count: ${client.commands.size}\n------------------`
-	);
-	client.user.setPresence({
-		status: "online",
-		activity: {
-			name: "Version 0.0.1",
-			type: "WATCHING",
-		},
-	});
-};
+const Event = require("../structures/Event")
+
+module.exports = class extends Event {
+    constructor(...args) {
+        super(...args, {
+            once: true
+        });
+    }
+
+    run() {
+        console.log([
+            `${this.client.user.username} successfully logged and ready`,
+            `Listening to ${this.client.commands.size} command(s)`,
+            `Listening to ${this.client.events.size} event(s)`
+        ].join("\n"))
+    }
+}

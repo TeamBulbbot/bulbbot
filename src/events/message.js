@@ -1,19 +1,26 @@
-module.exports = async (client, message) => {
-	const prefix = process.env.PREFIX;
+const Event = require("../structures/Event")
 
-	if (message.author.bot) return;
-	if (!message.guild) return;
-	if (!message.content.startsWith(prefix)) return;
-	if (!message.member)
-		message.member = await message.guild.fetchMember(message);
+module.exports = class extends Event {
+    constructor(...args) {
+        super(...args);
+    }
 
-	const args = message.content.slice(prefix.length).trim().split(/ +/g);
-	const cmd = args.shift().toLowerCase();
+    async run(message) {
+        const mentionRegex = RegExp(`^<@!${this.client.user.id}>`)
+        const mentionRegexPrefix = RegExp(`^<@${this.client.user.id}>`)
 
-	if (cmd.length === 0) return;
+        if (!message.guild || message.author.bot) return;
 
-	let command = client.commands.get(cmd);
-	if (!command) command = client.commands.get(client.aliases.get(cmd));
+        if (message.content.match(mentionRegex)) message.channel.send(`My prefix for ${message.guild.name} is ${this.client.prefix}`)
 
-	if (command) command.run(client, message, args);
-};
+        const prefix = message.content.match(mentionRegexPrefix) ?
+            message.content.match(mentionRegexPrefix)[0] : this.client.prefix;
+
+        const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g)
+
+        const command = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()))
+        if (command) {
+            command.run(message, args)
+        }
+    }
+}
