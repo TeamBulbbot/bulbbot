@@ -1,9 +1,16 @@
 - ban
+    - yeet
+    - terminate
 - multiban
+    - mban
 - unban
+    - pardon
 - multiunban
+    - munban
 - softban
+    - cleanban
 - tempban
+    - tempyeet
 
 - warn
 - multiwarn
@@ -15,14 +22,19 @@
 - unmute
 
 - purge
+    - clear
 
 - deafean
 - undeafean
-- vckick
-- multivckick
+- voicekick
+    - vckick
+- multivoicekick
+    - multivckick
+    - mvckick
 
 - slowmode
 - verfication
 
 - infraction
+    - inf
 
