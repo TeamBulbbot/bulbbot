@@ -1,6 +1,6 @@
 const Event = require("../structures/Event")
 const BulbBotUtils = require("./../utils/BulbBotUtils")
-const { getPrefix } = require("../utils/guilds/Handler")
+const { getPrefix } = require("../utils/guilds/Guild")
 
 module.exports = class extends Event {
     constructor(...args) {
@@ -9,7 +9,6 @@ module.exports = class extends Event {
 
     async run(message) {
         this.client.prefix = getPrefix(message.guild)
-
 
         const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`)
         if (!message.guild || message.author.bot) return
