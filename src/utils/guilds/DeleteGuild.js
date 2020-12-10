@@ -14,11 +14,11 @@ module.exports = async (guildId) => {
         return;
     }
 
-    dbGuild.destroy()
+    await dbGuild.destroy()
         .catch((err) => console.log(`Unable to delete the Guild table for: ${guildId}: `, err));
-    dbGuild.GuildConfiguration.destroy()
+    await dbGuild.GuildConfiguration.destroy()
         .catch((err) => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
-    dbGuild.GuildLogging.destroy()
+    await dbGuild.GuildLogging.destroy()
         .catch((err) => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
 
 };
