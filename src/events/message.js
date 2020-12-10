@@ -9,7 +9,7 @@ module.exports = class extends Event {
 
     async run(message) {
         this.client.prefix = getPrefix(message.guild)
-
+     
         const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`)
         if (!message.guild || message.author.bot) return
         if (message.content.match(mentionRegex)) message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``)
