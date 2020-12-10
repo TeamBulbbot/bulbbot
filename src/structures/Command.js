@@ -12,6 +12,10 @@ module.exports = class Command {
         this.userPerms = new Permissions(options.userPerms).freeze()
         this.clientPerms = new Permissions(options.clientPerms).freeze()
         this.clearance = options.clearance || 0
+        this.devOnly = options.devOnly || false
+        this.maxArgs = options.maxArgs || 0
+        this.minArgs = options.minArgs || 0
+        this.argList = options.argList || []
     }
 
     async run(message, args) {

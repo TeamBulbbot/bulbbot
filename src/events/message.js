@@ -8,7 +8,7 @@ module.exports = class extends Event {
     }
 
     async run(message) {
-        this.client.prefix = getPrefix(message.guild)
+        this.client.prefix = await getPrefix(message.guild)
 
         const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`)
         if (!message.guild || message.author.bot) return
@@ -36,6 +36,19 @@ module.exports = class extends Event {
                 if (missing.length) {
                     return message.channel.send(BulbBotUtils.translation.translate("global_missing_permission_bot"))
                 }
+            }
+
+            let developers = process.env.DEVELOPERS.split(",")
+            if (command.devOnly)
+                if (!developers.includes(message.author.id)) return
+
+            if (command.maxArgs < args.length) {
+                return message.channel.send(BulbBotUtils.translation.translate("event_message_args_check_violation", {
+                    arg: args[command.maxArgs],
+                    arg_expected: command.maxArgs,
+                    arg_provided: args.length,
+                    usage: command.usage
+                }))
             }
 
             command.run(message, args)
