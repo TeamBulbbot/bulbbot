@@ -8,11 +8,11 @@ function ApplyExtra(sequelize) {
         Infraction,
     } = sequelize.models;
 
-    GuildConfiguration.belongsTo(Guild);
-    GuildLogging.belongsTo(Guild);
-    Infraction.belongsTo(Guild);
-    Guild.hasMany(GuildModerationRoles);
-    Guild.hasMany(GuildOverrideCommands);
+
+    Guild.belongsTo(GuildConfiguration, {});
+    Guild.belongsTo(GuildLogging, {})
+
+    Guild.hasMany(Infraction, {});
 }
 
 module.exports = { ApplyExtra };
