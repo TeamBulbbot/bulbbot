@@ -18,5 +18,9 @@
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 
-	"uptime_uptime": "The current uptime is **{uptime}**"
+	"uptime_uptime": "The current uptime is **{uptime}**",
+
+	"license_license": "📜 This bot is licensed under the MIT license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**"
 }
