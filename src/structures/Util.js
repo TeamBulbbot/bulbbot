@@ -31,7 +31,7 @@ module.exports = class Util {
 				if (!this.isClass(File)) throw new CommandException(`Command '${name}' doesn't export a class.`);
 
 				const command = new File(this.client, name.toLowerCase());
-				if (!(command instanceof Command)) throw new CommandException(`Command '${name}' doesnt belong in Commands.`);
+				if (!(command instanceof Command)) throw new CommandException(`Command '${name}' doesn't belong in Commands.`);
 
 				this.client.commands.set(command.name, command);
 				if (command.aliases.length) {
@@ -54,7 +54,7 @@ module.exports = class Util {
 				if (!this.isClass(File)) throw new EventException(`Event '${name}' doesn't export a class.`);
 
 				const event = new File(this.client, name.toLowerCase());
-				if (!(event instanceof Event)) throw new EventException(`Event '${name}' doesnt belong in Events.`);
+				if (!(event instanceof Event)) throw new EventException(`Event '${name}' doesn't belong in Events.`);
 
 				this.client.events.set(event.name, event);
 				event.emitter[event.type](name, (...args) => event.run(...args));
