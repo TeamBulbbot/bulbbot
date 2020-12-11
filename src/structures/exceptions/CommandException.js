@@ -1,10 +1,10 @@
 class CommandException extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "CommandException"
-    }
+	constructor(message) {
+		super(message);
+		this.name = "CommandException";
+	}
 }
 
 module.exports = {
-    CommandException
-}
+	CommandException,
+};
