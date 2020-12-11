@@ -2,9 +2,7 @@ const Event = require("../structures/Event");
 const BulbBotUtils = require("./../utils/BulbBotUtils");
 const { getPrefix } = require("../utils/guilds/Guild");
 
-module.exports = class extends (
-	Event
-) {
+module.exports = class extends Event {
 	constructor(...args) {
 		super(...args);
 	}
@@ -43,15 +41,24 @@ module.exports = class extends (
 			let developers = process.env.DEVELOPERS.split(",");
 			if (command.devOnly) if (!developers.includes(message.author.id)) return;
 
-			if (command.maxArgs < args.length) {
+			if (command.maxArgs < args.length && command.maxArgs !== -1) {
 				return message.channel.send(
-					BulbBotUtils.translation.translate("event_message_args_check_violation", {
+					BulbBotUtils.translation.translate("event_message_args_unexpected", {
 						arg: args[command.maxArgs],
 						arg_expected: command.maxArgs,
 						arg_provided: args.length,
 						usage: command.usage,
 					}),
 				);
+			}
+
+			if (command.minArgs > args.length) {
+				return message.channel.send(BulbBotUtils.translation.translate("event_message_args_missing", {
+					arg: command.argList[args.length],
+					arg_expected: command.minArgs,
+					arg_provided: args.length,
+					usage: command.usage
+				}))
 			}
 
 			command.run(message, args);

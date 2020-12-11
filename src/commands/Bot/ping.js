@@ -9,7 +9,7 @@ module.exports = class extends (
 		super(...args, {
 			description: "Return the WebSocked and API latency",
 			category: "Bot",
-			usage: "!ping",
+			usage: "!ping"
 		});
 	}
 

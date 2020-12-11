@@ -3,7 +3,8 @@
 	"global_missing_permission": ":lock: Missing permission(s)",
 	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
 
-	"event_message_args_check_violation": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
+	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
+	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**"
 }
