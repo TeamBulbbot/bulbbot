@@ -2,9 +2,19 @@
 	"global_executed_by": "Executed by {user_name}#{user_discriminator}",
 	"global_missing_permission": ":lock: Missing permission(s)",
 	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
+	"global_user_not_found": "{emote_warn} Could not find user `{user}`",
 
 	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
+
+	"userinfo_embed_id": "**ID:** {user_id}\n",
+	"userinfo_embed_username": "**Username:** {user_name}\n",
+	"userinfo_embed_profile": "**Profile:** <@{user_id}>\n",
+	"userinfo_embed_avatar": "**Avatar URL:** [Link]({user_avatar})\n",
+	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
+	"userinfo_embed_created": "**Account Creation:** {user_age}",
+	"userinfo_embed_joined": "**Joined Guild:** {user_joined}",
+	"userinfo_embed_premium": "**Boosting since:** {user_premium}",
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**"
 }
