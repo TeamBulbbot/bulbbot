@@ -18,8 +18,11 @@ module.exports = class extends (
 		const apiLatency = Math.round(this.client.ws.ping);
 
 		const embed = new Discord.MessageEmbed()
+			.setColor(process.env.EMBED_COLOR)
 			.setDescription(BulbBotUtils.translation.translate("ping_latency", { latency_bot: latency, latency_ws: apiLatency }))
-			.setFooter(BulbBotUtils.translation.translate("global_executed_by", { user: message.author }))
+			.setFooter(BulbBotUtils.translation.translate("global_executed_by", { user: message.author }),
+				message.author.avatarURL({dynamic: true})
+			)
 			.setTimestamp();
 
 		return message.channel.send(embed);
