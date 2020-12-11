@@ -4,7 +4,6 @@ module.exports = sequelize => {
 	sequelize.define("GuildOverrideCommands", {
 		Enabled: {
 			type: DataTypes.BOOLEAN,
-			defaultValue: true,
 			allowNull: false,
 		},
 		CommandName: {
@@ -12,7 +11,7 @@ module.exports = sequelize => {
 			allowNull: false,
 		},
 		ClearanceLevel: {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
 	});
