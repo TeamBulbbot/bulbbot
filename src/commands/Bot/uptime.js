@@ -22,10 +22,10 @@ module.exports = class extends (
 		const secs = Math.floor(time.asSeconds() - days * 24 * 60 * 60 - hours * 60 * 60 - mins * 60);
 
 		let uptime = "";
-		if (days > 0) uptime += `${days} days, `;
-		if (hours > 0) uptime += `${hours} hours, `;
-		if (mins > 0) uptime += `${mins} minutes, `;
-		if (secs > 0) uptime += `${secs} seconds`;
+		if (days > 0) uptime += `${days} day(s), `;
+		if (hours > 0) uptime += `${hours} hour(s), `;
+		if (mins > 0) uptime += `${mins} minute(s), `;
+		if (secs > 0) uptime += `${secs} second(s)`;
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
