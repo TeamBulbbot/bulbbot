@@ -17,7 +17,7 @@ module.exports = {
 	},
 
 	/**
-	 * Returns an array of all Infraction for the searched user ID marked as offender
+	 * Returns an object array of all Infraction for the searched user ID marked as offender
 	 * in the database
 	 *
 	 * @param guildId           Guild ID
@@ -41,7 +41,7 @@ module.exports = {
 	},
 
 	/**
-	 * Returns an array of all Infractions for the specified user ID marked as Moderator
+	 * Returns an object array of all Infractions for the specified user ID marked as Moderator
 	 * in the database
 	 *
 	 * @param guildId           Guild ID

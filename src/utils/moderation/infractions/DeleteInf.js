@@ -1,7 +1,7 @@
 const sequelize = require("../../database/connection");
 
 /**
- * Deleted an Infraction table from the database
+ * Deletes an infraction for the provided guild
  *
  * @param guildId       Guild ID where the infarction is being deleted
  * @param infId         Infraction ID

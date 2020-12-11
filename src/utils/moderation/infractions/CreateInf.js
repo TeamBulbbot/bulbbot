@@ -1,7 +1,7 @@
 const sequelize = require("../../database/connection");
 
 /**
- * Creates the Infraction table in the database.
+ * Creates an infraction for the provided guild
  *
  * @param guildId               Guild ID where the Infraction is being stored from
  * @param action                Mod action type
