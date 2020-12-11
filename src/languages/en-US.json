@@ -16,5 +16,7 @@
 	"userinfo_embed_joined": "**Joined Guild:** {user_joined}",
 	"userinfo_embed_premium": "**Boosting since:** {user_premium}",
 
-	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**"
+	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
+
+	"uptime_uptime": "The current uptime is **{uptime}**"
 }
