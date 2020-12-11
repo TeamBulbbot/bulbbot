@@ -1,5 +1,10 @@
 const sequelize = require("../database/connection");
-
+/**
+ * Removed the specified Guild object from the database
+ *
+ * @param guildId       Guild ID parsed from the onGuildLeave event
+ * @returns {Promise<void>}
+ */
 module.exports = async (guildId) => {
     const dbGuild = await sequelize.models.Guild.findOne({
         where: {GuildId: guildId},

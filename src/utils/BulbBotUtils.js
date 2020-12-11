@@ -4,6 +4,12 @@ const Emotes = require("./../emotes.json")
 
 module.exports = {
     translation: any = {
+        /**
+         *
+         * @param string    Translatable string from the lang file
+         * @param key       Values that should be replaced by the function
+         * @returns {*}     Resolved translated string
+         */
         translate: (string, key = {}) => {
             let response;
             try {

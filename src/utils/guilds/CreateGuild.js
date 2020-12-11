@@ -1,5 +1,11 @@
 const sequelize = require("../database/connection");
 
+/**
+ * Creates a new Guild object in the database
+ *
+ * @param guild     Parsed Guild object from the onGuildCreate event
+ * @returns {Promise<void>}
+ */
 module.exports = async (guild) => {
     const config = await sequelize.models.GuildConfiguration.create({
         Prefix: process.env.PREFIX,
