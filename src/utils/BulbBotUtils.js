@@ -36,6 +36,7 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({user_age})/g, formatDays(key.user_age));
 		response = response.replace(/({user_premium})/g, formatDays(key.user_premium));
 		response = response.replace(/({user_joined})/g, formatDays(key.user_joined));
+		response = response.replace(/({user_roles})/g, key.user_roles);
 
 		response = response.replace(/({arg})/g, key.arg);
 		response = response.replace(/({arg_expected})/g, key.arg_expected);

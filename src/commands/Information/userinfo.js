@@ -10,6 +10,7 @@ module.exports = class extends (
 			category: "Information",
 			aliases: ["whois", "info", "user"],
 			usage: "!userinfo [user]",
+			clearance: 50,
 			maxArgs: 1,
 		});
 	}
@@ -27,7 +28,6 @@ module.exports = class extends (
 		}
 
 		user = await this.client.bulbutils.userObject(isGuildMember, user);
-		console.log(user);
 		let description = "";
 
 		if (user.flags !== null) description += this.client.bulbutils.badges(user.flags.bitfield) + "\n";
@@ -47,6 +47,9 @@ module.exports = class extends (
 
 		description += this.client.bulbutils.translate("userinfo_embed_created", { user_age: user.createdAt });
 
+		if (user.roles !== undefined)
+			description += this.client.bulbutils.translate("userinfo_embed_roles", { user_roles: user.roles._roles.map((r) => `${r}`).join(", ")})
+
 		let color;
 		if (user.roles === undefined || user.roles.highest.name === "@everyone") color = process.env.EMBED_COLOR;
 		else color = user.roles.highest.hexColor;
@@ -65,6 +68,6 @@ module.exports = class extends (
 			)
 			.setTimestamp();
 
-		return await message.channel.send(embed);
+		return message.channel.send(embed);
 	}
 };
