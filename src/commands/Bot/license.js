@@ -1,6 +1,5 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const BulbBotUtils = require("../../utils/BulbBotUtils");
 
 module.exports = class extends (
 	Command
@@ -16,8 +15,8 @@ module.exports = class extends (
 	async run(message, args) {
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
-			.setDescription(BulbBotUtils.translation.translate("license_license"))
-			.setFooter(BulbBotUtils.translation.translate("global_executed_by", { user: message.author }), message.author.avatarURL({ dynamic: true }))
+			.setDescription(this.client.bulbutils.translate("license_license"))
+			.setFooter(this.client.bulbutils.translate("global_executed_by", { user: message.author }), message.author.avatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		return message.channel.send(embed);

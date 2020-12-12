@@ -1,5 +1,6 @@
 const { Client, Collection, Permissions } = require("discord.js");
 const Util = require("./Util");
+const BulbBotUtils = require("./../utils/BulbBotUtils")
 
 const { PermissionException } = require("./exceptions/PermissionException");
 
@@ -18,6 +19,8 @@ module.exports = class BulbBotClient extends (
 		this.events = new Collection();
 
 		this.utils = new Util(this);
+
+		this.bulbutils = new BulbBotUtils(this)
 	}
 
 	validate(options) {

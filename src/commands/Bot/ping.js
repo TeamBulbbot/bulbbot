@@ -1,6 +1,5 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const BulbBotUtils = require("../../utils/BulbBotUtils");
 
 module.exports = class extends (
 	Command
@@ -19,8 +18,8 @@ module.exports = class extends (
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
-			.setDescription(BulbBotUtils.translation.translate("ping_latency", { latency_bot: latency, latency_ws: apiLatency }))
-			.setFooter(BulbBotUtils.translation.translate("global_executed_by", { user: message.author }),
+			.setDescription(this.client.bulbutils.translate("ping_latency", { latency_bot: latency, latency_ws: apiLatency }))
+			.setFooter(this.client.bulbutils.translate("global_executed_by", { user: message.author }),
 				message.author.avatarURL({dynamic: true})
 			)
 			.setTimestamp();

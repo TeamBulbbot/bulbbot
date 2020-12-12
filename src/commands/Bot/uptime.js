@@ -1,6 +1,5 @@
 const Command = require("../../structures/Command");
 const Discord = require("discord.js");
-const BulbBotUtils = require("../../utils/BulbBotUtils");
 const moment = require("moment");
 
 module.exports = class extends (
@@ -29,8 +28,8 @@ module.exports = class extends (
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
-			.setDescription(BulbBotUtils.translation.translate("uptime_uptime", { uptime }))
-			.setFooter(BulbBotUtils.translation.translate("global_executed_by", { user: message.author }), message.author.avatarURL({ dynamic: true }))
+			.setDescription(this.client.bulbutils.translate("uptime_uptime", { uptime }))
+			.setFooter(this.client.bulbutils.translate("global_executed_by", { user: message.author }), message.author.avatarURL({ dynamic: true }))
 			.setTimestamp();
 
 		return message.channel.send(embed);
