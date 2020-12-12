@@ -1,5 +1,4 @@
 const Event = require("../structures/Event");
-const BulbBotUtils = require("./../utils/BulbBotUtils");
 const { getPrefix } = require("../utils/guilds/Guild");
 
 module.exports = class extends (
@@ -25,7 +24,7 @@ module.exports = class extends (
 			if (userPermCheck) {
 				const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
 				if (missing.length) {
-					return message.channel.send(BulbBotUtils.translation.translate("global_missing_permission")).then(msg => {
+					return message.channel.send(this.client.bulbutils.translate("global_missing_permission")).then(msg => {
 						message.delete({ timeout: 5000 });
 						msg.delete({ timeout: 5000 });
 					});
@@ -36,7 +35,7 @@ module.exports = class extends (
 			if (clientPermCheck) {
 				const missing = message.channel.permissionsFor(message.member).missing(clientPermCheck);
 				if (missing.length) {
-					return message.channel.send(BulbBotUtils.translation.translate("global_missing_permission_bot"));
+					return message.channel.send(this.client.bulbutils.translate("global_missing_permission_bot"));
 				}
 			}
 
@@ -45,7 +44,7 @@ module.exports = class extends (
 
 			if (command.maxArgs < args.length && command.maxArgs !== -1) {
 				return message.channel.send(
-					BulbBotUtils.translation.translate("event_message_args_unexpected", {
+					this.client.bulbutils.translate("event_message_args_unexpected", {
 						arg: args[command.maxArgs],
 						arg_expected: command.maxArgs,
 						arg_provided: args.length,
@@ -56,7 +55,7 @@ module.exports = class extends (
 
 			if (command.minArgs > args.length) {
 				return message.channel.send(
-					BulbBotUtils.translation.translate("event_message_args_missing", {
+					this.client.bulbutils.translate("event_message_args_missing", {
 						arg: command.argList[args.length],
 						arg_expected: command.minArgs,
 						arg_provided: args.length,

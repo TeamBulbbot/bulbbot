@@ -38,6 +38,26 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({user_joined})/g, formatDays(key.user_joined));
 		response = response.replace(/({user_roles})/g, key.user_roles);
 
+		if (key.guild) {
+			response = response.replace(/({guild_owner_name})/g, key.guild.ownerID);
+			response = response.replace(/({guild_owner_id})/g, key.guild.owner.id);
+			response = response.replace(/({guild_features})/g, this.guildFeatures(key.guild.features));
+			response = response.replace(/({guild_region})/g, key.guild.region);
+			response = response.replace(/({guild_verification})/g, key.guild.verificationLevel);
+			response = response.replace(/({guild_age})/g, formatDays(key.guild.createdTimestamp));
+			response = response.replace(/({guild_members})/g, key.guild.memberCount);
+			response = response.replace(/({guild_max})/g, key.guild.maximumMembers);
+			response = response.replace(/({guild_online})/g, key.guild.members.cache.filter((m) => m.presence.status === "online").size);
+			response = response.replace(/({guild_idle})/g, key.guild.members.cache.filter((m) => m.presence.status === "idle").size);
+			response = response.replace(/({guild_dnd})/g, key.guild.members.cache.filter((m) => m.presence.status === "dnd").size);
+			response = response.replace(/({guild_offline})/g,
+				key.guild.memberCount -
+				key.guild.members.cache.filter((m) => m.presence.status === "dnd").size -
+				key.guild.members.cache.filter((m) => m.presence.status === "idle").size -
+				key.guild.members.cache.filter((m) => m.presence.status === "online").size
+			);
+		}
+
 		response = response.replace(/({arg})/g, key.arg);
 		response = response.replace(/({arg_expected})/g, key.arg_expected);
 		response = response.replace(/({arg_provided})/g, key.arg_provided);
@@ -46,6 +66,12 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_github})/g, Emotes.other.github);
+		response = response.replace(/({emote_owner})/g, Emotes.badges.guildOwner);
+		response = response.replace(/({emote_online})/g, Emotes.status.online);
+		response = response.replace(/({emote_idle})/g, Emotes.status.idle);
+		response = response.replace(/({emote_dnd})/g, Emotes.status.dnd);
+		response = response.replace(/({emote_offline})/g, Emotes.status.offline);
+
 		return response;
 	}
 
@@ -81,6 +107,36 @@ module.exports = class BulbBotUtils {
 		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.badges.eary_supporter);
 
 		return badges.map(i => `${i}`).join(" ");
+	}
+	
+	guildFeatures(guildFeatures) {
+		let features = [];
+
+		guildFeatures.forEach((feature) => {
+			if (feature === "INVITE_SPLASH") feature = Emotes.features.invite_splash;
+			else if (feature === "VIP_REGIONS") feature = Emotes.features.vip_regions;
+			else if (feature === "VANITY_URL") feature = Emotes.features.vanity_url;
+			else if (feature === "VERIFIED") feature = Emotes.features.verified;
+			else if (feature === "PARTNERED") feature = Emotes.features.partnered;
+			else if (feature === "PUBLIC") feature = Emotes.features.public;
+			else if (feature === "COMMERCE") feature = Emotes.features.commerce;
+			else if (feature === "DISCOVERABLE")
+				feature = Emotes.features.discoverable;
+			else if (feature === "FEATURABLE") feature = Emotes.features.featurable;
+			else if (feature === "ANIMATED_ICON")
+				feature = Emotes.features.animated_icon;
+			else if (feature === "BANNER") feature = Emotes.features.banner;
+			else if (feature === "PUBLIC_DISABLED")
+				feature = Emotes.features.public_disabled;
+			else if (feature === "WELCOME_SCREEN_ENABLED")
+				feature = Emotes.features.welcome_screen_enabled;
+			else if (feature === "NEWS") feature = Emotes.features.news;
+			else if (feature === "COMMUNITY") feature = Emotes.features.community;
+
+			features.push(feature);
+		});
+
+		return features.map((i) => `${i}`).join(" ");
 	}
 
 	/**

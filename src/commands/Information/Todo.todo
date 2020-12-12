@@ -3,13 +3,5 @@
 - discordstatus
     - dstatus
 
-- serverinfo
-    - server
-
-- userinfo
-    - info
-    - user
-    - whois
-
 - inviteinfo
     - inv
