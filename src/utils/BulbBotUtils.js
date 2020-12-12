@@ -104,7 +104,7 @@ module.exports = class BulbBotUtils {
 		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.badges.bug_hunter_green);
 		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.badges.bug_hunter_gold);
 		if ((bitfield & botdeveloper) === botdeveloper) badges.push(Emotes.badges.verfied_bot_developer);
-		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.badges.eary_supporter);
+		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.badges.early_supporter);
 
 		return badges.map(i => `${i}`).join(" ");
 	}
