@@ -8,7 +8,7 @@ module.exports = class extends (
 		super(...args, {
 			description: "Return the WebSocked and API latency",
 			category: "Bot",
-			usage: "!ping"
+			usage: "!ping",
 		});
 	}
 
@@ -19,8 +19,12 @@ module.exports = class extends (
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
 			.setDescription(this.client.bulbutils.translate("ping_latency", { latency_bot: latency, latency_ws: apiLatency }))
-			.setFooter(this.client.bulbutils.translate("global_executed_by", { user: message.author }),
-				message.author.avatarURL({dynamic: true})
+			.setFooter(
+				this.client.bulbutils.translate("global_executed_by", {
+					user_name: await this.client.bulbutils.userObject(true, message.member).username,
+					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
+				}),
+				message.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 

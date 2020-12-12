@@ -5,7 +5,7 @@ const moment = require("moment");
 
 module.exports = class BulbBotUtils {
 	constructor(client) {
-		this.client = client
+		this.client = client;
 	}
 
 	/**
@@ -14,7 +14,7 @@ module.exports = class BulbBotUtils {
 	 * @param key       Values that should be replaced by the function
 	 * @returns {*}     Resolved translated string
 	 */
-	translate (string, key = {}) {
+	translate(string, key = {}) {
 		let response;
 		try {
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
@@ -27,16 +27,15 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({uptime})/g, key.uptime);
 
-		if (key.user) {
-			response = response.replace(/({user_id})/g, key.user.id);
-			response = response.replace(/({user_name})/g, key.user.user.username);
-			response = response.replace(/({user_discriminator})/g, key.user.discriminator);
-			response = response.replace(/({user_avatar})/g, key.user.user.avatarURL({dynamic: true}));
-			response = response.replace(/({user_bot})/g, key.user.user.bot);
-			response = response.replace(/({user_age})/g, formatDays(key.user.user.createdAt));
-			response = response.replace(/({user_joined})/g, formatDays(key.user.joinedTimestamp));
-			response = response.replace(/({user_premium})/g, formatDays(key.user.user.premiumSinceTimestamp));
-		}
+		response = response.replace(/({user_id})/g, key.user_id);
+		response = response.replace(/({user_name})/g, key.user_name);
+		response = response.replace(/({user_nickname})/g, key.user_nickname);
+		response = response.replace(/({user_discriminator})/g, key.user_discriminator);
+		response = response.replace(/({user_avatar})/g, key.user_avatar);
+		response = response.replace(/({user_bot})/g, key.user_bot);
+		response = response.replace(/({user_age})/g, formatDays(key.user_age));
+		response = response.replace(/({user_premium})/g, formatDays(key.user_premium));
+		response = response.replace(/({user_joined})/g, formatDays(key.user_joined));
 
 		response = response.replace(/({arg})/g, key.arg);
 		response = response.replace(/({arg_expected})/g, key.arg_expected);
@@ -55,7 +54,7 @@ module.exports = class BulbBotUtils {
 	 * @param bitfield		Bitfield provided by the {@link User} object
 	 * @returns {string}	Returned array of badges
 	 */
-	badges (bitfield) {
+	badges(bitfield) {
 		let badges = [];
 
 		const staff = 1 << 0;
@@ -82,12 +81,54 @@ module.exports = class BulbBotUtils {
 
 		return badges.map(i => `${i}`).join(" ");
 	}
-}
+
+	/**
+	 * Creates a global user object
+	 *
+	 * @param isGuildMember         Is a guild member object
+	 * @param userObject            The user object
+	 * @returns {UserObject}
+	 */
+	userObject(isGuildMember, userObject) {
+		let user;
+
+		if (isGuildMember) {
+			user = {
+				id: userObject.user.id,
+				flags: userObject.user.flags,
+				username: userObject.user.username,
+				discriminator: userObject.user.discriminator,
+				avatar: userObject.user.avatar,
+				avatarUrl: userObject.user.avatarURL({ dynamic: true }),
+				bot: userObject.user.bot,
+
+				roles: userObject.roles,
+				nickname: userObject.nickname,
+				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
+				joinedTimestamp: userObject.joinedTimestamp,
+				createdAt: userObject.user.createdAt,
+			};
+		} else {
+			user = {
+				id: userObject.id,
+				flags: userObject.flags,
+				username: userObject.username,
+				discriminator: userObject.discriminator,
+				avatar: userObject.avatar,
+				avatarUrl: userObject.avatarURL({ dynamic: true }),
+				bot: userObject.bot,
+				createdAt: userObject.createdAt,
+			};
+		}
+
+		return user;
+	}
+};
 
 function formatDays(start) {
 	const end = moment.utc().format("YYYY-MM-DD");
 	const date = moment(moment.utc(start).format("YYYY-MM-DD"));
 	const days = moment.duration(date.diff(end)).asDays();
 
-	return `${moment.utc(start).format("dddd, MMMM, Do YYYY")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\`\n`;
+	return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\`\n`;
 }

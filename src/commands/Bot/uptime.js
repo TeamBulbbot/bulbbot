@@ -29,7 +29,13 @@ module.exports = class extends (
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
 			.setDescription(this.client.bulbutils.translate("uptime_uptime", { uptime }))
-			.setFooter(this.client.bulbutils.translate("global_executed_by", { user: message.author }), message.author.avatarURL({ dynamic: true }))
+			.setFooter(
+				this.client.bulbutils.translate("global_executed_by", {
+					user_name: await this.client.bulbutils.userObject(true, message.member).username,
+					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
+				}),
+				message.author.avatarURL({ dynamic: true }),
+			)
 			.setTimestamp();
 
 		return message.channel.send(embed);
