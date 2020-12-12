@@ -29,13 +29,13 @@ module.exports = class BulbBotUtils {
 
 		if (key.user) {
 			response = response.replace(/({user_id})/g, key.user.id);
-			response = response.replace(/({user_name})/g, key.user.username);
+			response = response.replace(/({user_name})/g, key.user.user.username);
 			response = response.replace(/({user_discriminator})/g, key.user.discriminator);
-			response = response.replace(/({user_avatar})/g, key.user.avatarURL({dynamic: true}));
-			response = response.replace(/({user_bot})/g, key.user.bot);
-			response = response.replace(/({user_age})/g, formatDays(key.user.createdAt));
+			response = response.replace(/({user_avatar})/g, key.user.user.avatarURL({dynamic: true}));
+			response = response.replace(/({user_bot})/g, key.user.user.bot);
+			response = response.replace(/({user_age})/g, formatDays(key.user.user.createdAt));
 			response = response.replace(/({user_joined})/g, formatDays(key.user.joinedTimestamp));
-			response = response.replace(/({user_premium})/g, formatDays(key.user.premiumSinceTimestamp));
+			response = response.replace(/({user_premium})/g, formatDays(key.user.user.premiumSinceTimestamp));
 		}
 
 		response = response.replace(/({arg})/g, key.arg);
