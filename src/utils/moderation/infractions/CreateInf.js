@@ -10,7 +10,7 @@ const sequelize = require("../../database/connection");
  * @param targetId              ID of the user receiving the infraction
  * @param moderator             Moderator responsible for the infraction
  * @param moderatorId           ID of the responsible moderator
- * @returns {Promise<void>}
+ * @returns infId				The infraction row
  */
 module.exports = async (guildId, action, reason, target, targetId, moderator, moderatorId) => {
 	const dbGuild = await sequelize.models.Guild.findOne({
@@ -18,7 +18,7 @@ module.exports = async (guildId, action, reason, target, targetId, moderator, mo
 	});
 	if (dbGuild === null) return;
 
-	await sequelize.models.Infraction.create({
+	const inf = await sequelize.models.Infraction.create({
 		Action: action,
 		Reason: reason,
 		Target: target,
@@ -27,4 +27,6 @@ module.exports = async (guildId, action, reason, target, targetId, moderator, mo
 		ModeratorId: moderatorId,
 		GuildId: dbGuild.id,
 	});
+
+	return inf.id;
 };
