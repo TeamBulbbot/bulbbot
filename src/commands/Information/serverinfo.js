@@ -77,11 +77,11 @@ module.exports = class extends (
 			)
 			.addField(
 				this.client.bulbutils.translate("serverinfo_emotes", { guild_amount_emotes: amountOfEmotes }),
-				`${guildEmotes.join(" ")} ${
-					emotesLeft !== 0
-						? this.client.bulbutils.translate("serverinfo_emotes_too_many", { guild_emotes_left: emotesLeft })
-						: this.client.bulbutils.translate("serverinfo_emotes_none")
-				}`,
+				amountOfEmotes !== 0
+					? `${guildEmotes.join(" ")} ${
+							emotesLeft !== 0 ? this.client.bulbutils.translate("serverinfo_emotes_too_many", { guild_emotes_left: emotesLeft }) : ""
+					  }`
+					: this.client.bulbutils.translate("serverinfo_emotes_none"),
 				true,
 			)
 			.setDescription(description)
