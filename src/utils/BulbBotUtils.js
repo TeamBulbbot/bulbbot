@@ -38,6 +38,10 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({user_joined})/g, formatDays(key.user_joined));
 		response = response.replace(/({user_roles})/g, key.user_roles);
 
+		response = response.replace(/({moderator_id})/g, key.moderator_id);
+		response = response.replace(/({moderator_name})/g, key.moderator_name);
+		response = response.replace(/({moderator_discriminator})/g, key.moderator_discriminator);
+
 		if (key.guild) {
 			response = response.replace(/({guild_owner_name})/g, key.guild.ownerID);
 			response = response.replace(/({guild_owner_id})/g, key.guild.owner.id);
@@ -77,6 +81,8 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({arg_provided})/g, key.arg_provided);
 		response = response.replace(/({usage})/g, key.usage);
 
+		response = response.replace(/({reason})/g, key.reason);
+
 		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_github})/g, Emotes.other.github);
@@ -85,6 +91,7 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_idle})/g, Emotes.status.idle);
 		response = response.replace(/({emote_dnd})/g, Emotes.status.dnd);
 		response = response.replace(/({emote_offline})/g, Emotes.status.offline);
+		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
 
 		return response;
 	}
