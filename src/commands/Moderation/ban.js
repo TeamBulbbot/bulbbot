@@ -49,6 +49,7 @@ module.exports = class extends (
 
 		if (notInGuild) {
 			infId = await ForceBan(
+				this.client,
 				message.guild,
 				target,
 				message.author,
@@ -87,7 +88,6 @@ module.exports = class extends (
 				reason,
 			);
 		}
-		console.log(infId);
 
 		return message.channel.send(
 			this.client.bulbutils.translate("ban_success", {
@@ -99,6 +99,3 @@ module.exports = class extends (
 		);
 	}
 };
-
-// TODO
-// - translate

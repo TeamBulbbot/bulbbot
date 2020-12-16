@@ -1,4 +1,5 @@
 const { createInfraction } = require("../InfractionUtils");
+const { SendModAction } = require("./log");
 
 module.exports = {
 	Warn: async () => {},
@@ -14,9 +15,10 @@ module.exports = {
 		return infId;
 	},
 
-	ForceBan: async (guild, target, moderator, reason, reasonLog) => {
+	ForceBan: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.members.ban(target.id, { reason });
 		const infId = await createInfraction(guild.id, "Forceban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendModAction(client, guild, "Forceban", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
