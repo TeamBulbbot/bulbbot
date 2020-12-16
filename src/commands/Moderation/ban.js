@@ -74,6 +74,7 @@ module.exports = class extends (
 			}
 			target = target.user;
 			infId = await Ban(
+				this.client,
 				message.guild,
 				target,
 				message.author,
