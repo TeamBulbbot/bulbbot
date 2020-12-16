@@ -2,3 +2,23 @@
 
 - reminder
     - r
+
+- quote
+    - context
+    - provide a channel id + message id and it quotes that message
+
+- starboard :pleading:
+
+- avatar
+
+- snowflake
+    - get info about a snowflake
+    - what it can be etc
+        - user
+        - role
+        - server
+        - channel
+        - nothing
+
+- search
+    - search the guild members
