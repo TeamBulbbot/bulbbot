@@ -2,8 +2,9 @@
 	"global_executed_by": "Executed by {user_name}#{user_discriminator}",
 	"global_missing_permission": ":lock: Missing permission(s)",
 	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
-	"global_user_not_found": "{emote_warn} Could not find user `{user_id}`",
-	"global_mod_action_log": "Moderator: {moderator_id} | Target: {user_id} | Reason: {reason}",
+	"global_user_not_found": "{emote_warn} Could not find user",
+	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
+	"global_no_reason": "No reason given",
 
 	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
@@ -47,7 +48,9 @@
 	"serverinfo_emotes_too_many": " and **{guild_emotes_left}** more",
 	"serverinfo_emotes_none": "No emotes",
 
-	"ban_success": "{emote_ban} Banned **{user_name}**#{user_discriminator} `({user_id})` for **{reason}**",
+	"ban_success": "{emote_ban} Banned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"ban_fail": "{emote_warn} Unable to ban **{target_tag}** `({target_id})`",
+	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` is already banned with the reason `{reason}`",
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 

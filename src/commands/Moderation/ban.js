@@ -1,54 +1,104 @@
-const Command = require("../../structures/Command")
-const InfractionUtils = require("./../../utils/InfractionUtils")
+const Command = require("../../structures/Command");
+const { Ban, ForceBan } = require("../../utils/moderation/actions");
 
-module.exports = class extends Command {
-    constructor(...args) {
-        super(...args, {
-            description: "Bans the selected user from the guild",
-            category: "Moderation",
-            aliases: ["terminate", "yeet"],
-            usage: "!ban <user> [reason]",
-            argList: ["user:User"],
-            minArgs: 1,
-            maxArgs: -1,
-            clearance: 50,
-            userPerms: ["BAN_MEMBERS"],
-            clientPerms: ["BAN_MEMBERS"]
-        });
-    }
+module.exports = class extends (
+	Command
+) {
+	constructor(...args) {
+		super(...args, {
+			description: "Bans the selected user from the guild",
+			category: "Moderation",
+			aliases: ["terminate", "yeet"],
+			usage: "!ban <user> [reason]",
+			argList: ["user:User"],
+			minArgs: 1,
+			maxArgs: -1,
+			clearance: 50,
+			userPerms: ["BAN_MEMBERS"],
+			clientPerms: ["BAN_MEMBERS"],
+		});
+	}
 
-    async run(message, args) {
-        const user = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[0])).user
-        if (!user) return message.channel.send(this.client.bulbutils.translate("global_user_not_found", {user_id: args[0]}))
+	async run(message, args) {
+		const targetId = args[0].replace(/\D/g, "");
+		let target = message.guild.member(targetId);
+		let reason = args.slice(1).join(" ");
+		let notInGuild = !target;
+		let infId = null;
 
-        let reason = "No reason given"
-        if (args[1]) reason = args.slice(1).join(" ");
+		const banList = await message.guild.fetchBans();
+		const bannedUser = banList.find(user => user.user.id === targetId);
 
-        await message.guild.members.ban( user, {reason: this.client.bulbutils.translate("global_mod_action_log", {
-                moderator_id: message.author.id,
-                user_id: user.id,
-                reason: reason
-            })
-        });
+		if (bannedUser) {
+			return message.channel.send(
+				this.client.bulbutils.translate("already_banned", {
+					target_tag: bannedUser.user.tag,
+					target_id: bannedUser.user.id,
+					reason: bannedUser.reason,
+				}),
+			);
+		}
+		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
+		if (!target) {
+			try {
+				target = await this.client.users.fetch(targetId);
+			} catch (error) {
+				return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+			}
+		}
 
-        message.channel.send(this.client.bulbutils.translate("ban_success", {
-            user_name: user.username,
-            user_discriminator: user.discriminator,
-            user_id: user.id,
-            moderator_name: message.author.username,
-            moderator_discriminator: message.author.discriminator,
-            moderator_id: message.author.id,
-            reason: reason
-        }));
+		if (notInGuild) {
+			infId = await ForceBan(
+				message.guild,
+				target,
+				message.author,
+				this.client.bulbutils.translate("global_mod_action_log", {
+					action: "Forcebanned",
+					moderator_tag: message.author.tag,
+					moderator_id: message.author.id,
+					target_tag: target.tag,
+					target_id: target.id,
+					reason,
+				}),
+				reason,
+			);
+		} else {
+			if (!target.bannable) {
+				return message.channel.send(
+					this.client.bulbutils.translate("ban_fail", {
+						target_tag: target.user.tag,
+						target_id: target.user.id,
+					}),
+				);
+			}
+			target = target.user;
+			infId = await Ban(
+				message.guild,
+				target,
+				message.author,
+				this.client.bulbutils.translate("global_mod_action_log", {
+					action: "Banned",
+					moderator_tag: message.author.tag,
+					moderator_id: message.author.id,
+					target_tag: target.tag,
+					target_id: target.id,
+					reason,
+				}),
+				reason,
+			);
+		}
+		console.log(infId);
 
-        await InfractionUtils.createInfraction(
-            message.guild.id,
-            "Ban",
-            reason,
-            user.tag,
-            user.id,
-            message.author.tag,
-            message.author.id
-        );
-    }
-}
+		return message.channel.send(
+			this.client.bulbutils.translate("ban_success", {
+				target_tag: target.tag,
+				target_id: target.id,
+				reason,
+				infractionId: infId,
+			}),
+		);
+	}
+};
+
+// TODO
+// - translate

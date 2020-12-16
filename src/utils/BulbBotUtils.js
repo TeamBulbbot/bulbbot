@@ -39,8 +39,12 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({user_roles})/g, key.user_roles);
 
 		response = response.replace(/({moderator_id})/g, key.moderator_id);
-		response = response.replace(/({moderator_name})/g, key.moderator_name);
-		response = response.replace(/({moderator_discriminator})/g, key.moderator_discriminator);
+		response = response.replace(/({moderator_tag})/g, key.moderator_tag);
+		response = response.replace(/({target_id})/g, key.target_id);
+		response = response.replace(/({target_tag})/g, key.target_tag);
+		response = response.replace(/({action})/g, key.action);
+
+		response = response.replace(/({infractionId})/g, key.infractionId);
 
 		if (key.guild) {
 			response = response.replace(/({guild_owner_name})/g, key.guild.ownerID);
