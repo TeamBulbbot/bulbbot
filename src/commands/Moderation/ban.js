@@ -6,7 +6,7 @@ module.exports = class extends (
 ) {
 	constructor(...args) {
 		super(...args, {
-			description: "Bans the selected user from the guild",
+			description: "Bans or forcebans a user from the guild",
 			category: "Moderation",
 			aliases: ["terminate", "yeet"],
 			usage: "!ban <user> [reason]",
