@@ -52,7 +52,10 @@
 	"ban_fail": "{emote_warn} Unable to ban **{target_tag}** `({target_id})`",
 	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` is already banned with the reason `{reason}`",
 
-	"kick_success": "{emote_ban} Kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"not_banned": "{emote_warn} **{target_tag}** `({target_id})` is not already banned",
+	"unban_success": "{emote_unban} Unbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+
+	"kick_success": "{emote_kick} Kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 	"kick_fail": "{emote_warn} Unable to kick **{target_tag}** `({target_id})`",
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",

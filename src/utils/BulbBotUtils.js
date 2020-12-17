@@ -96,6 +96,8 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_dnd})/g, Emotes.status.dnd);
 		response = response.replace(/({emote_offline})/g, Emotes.status.offline);
 		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
+		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
+		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
 
 		return response;
 	}

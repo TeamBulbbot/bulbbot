@@ -24,6 +24,9 @@ function BetterActions(action) {
 		case "ban":
 			action = `${Emotes.actions.ban} Banned`;
 			break;
+		case "unban":
+			action = `${Emotes.actions.unban} Unbanned`;
+			break;
 		case "forceban":
 			action = `${Emotes.actions.ban} Forcebanned`;
 			break;

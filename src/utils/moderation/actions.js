@@ -34,5 +34,11 @@ module.exports = {
 
 	TempBan: async () => {},
 
-	Unban: async () => {},
+	Unban: async (client, guild, target, moderator, reason, reasonLog) => {
+		await guild.members.unban(target.id, reason);
+		const infId = await createInfraction(guild.id, "Unban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendModAction(client, guild, "Unban", target, moderator, reasonLog, infId);
+
+		return infId;
+	},
 };
