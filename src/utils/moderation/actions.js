@@ -6,7 +6,13 @@ module.exports = {
 
 	Mute: async () => {},
 
-	Kick: async () => {},
+	Kick: async (client, guild, target, moderator, reason, reasonLog) => {
+		await guild.member(target.id).kick(reason);
+		const infId = await createInfraction(guild.id, "Kick", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendModAction(client, guild, "Kick", target, moderator, reasonLog, infId);
+
+		return infId;
+	},
 
 	Ban: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.member(target.id).ban({ reason });
