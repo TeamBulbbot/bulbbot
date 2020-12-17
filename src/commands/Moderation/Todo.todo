@@ -1,7 +1,5 @@
 - multiban
     - mban
-- unban
-    - pardon
 - multiunban
     - munban
 - softban
@@ -16,9 +14,6 @@
 
 - mute
 - unmute
-
-- purge
-    - clear
 
 - deafean
 - undeafean
