@@ -1,4 +1,4 @@
-const Command = require("./../../structures/Command");
+const Command = require("../../structures/Command");
 const { createInfraction } = require("../../utils/InfractionUtils");
 
 module.exports = class extends (
