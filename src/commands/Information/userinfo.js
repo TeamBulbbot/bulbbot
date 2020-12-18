@@ -23,7 +23,11 @@ module.exports = class extends (
 		let isGuildMember = true;
 
 		if (!user) {
-			user = await this.client.users.fetch(target);
+			try {
+				user = await this.client.users.fetch(target);
+			} catch (error) {
+				return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+			}
 			isGuildMember = false;
 		}
 
@@ -48,7 +52,7 @@ module.exports = class extends (
 		description += this.client.bulbutils.translate("userinfo_embed_created", { user_age: user.createdAt });
 
 		if (user.roles !== undefined)
-			description += this.client.bulbutils.translate("userinfo_embed_roles", { user_roles: user.roles._roles.map((r) => `${r}`).join(", ")})
+			description += this.client.bulbutils.translate("userinfo_embed_roles", { user_roles: user.roles._roles.map(r => `${r}`).join(", ") });
 
 		let color;
 		if (user.roles === undefined || user.roles.highest.name === "@everyone") color = process.env.EMBED_COLOR;
