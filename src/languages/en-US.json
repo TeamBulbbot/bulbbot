@@ -66,5 +66,8 @@
 
 	"license_license": "📜 This bot is licensed under the MIT license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
 
-	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**"
+	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**",
+
+	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
+	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }
