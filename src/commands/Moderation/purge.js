@@ -1,4 +1,5 @@
 const Command = require("../../structures/Command");
+const { SendModActionFile } = require("../../utils/moderation/log");
 const fs = require("fs");
 const moment = require("moment");
 
@@ -34,37 +35,36 @@ module.exports = class extends (
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		fs.writeFile(
+		let delMsgs = `Message purge in #${message.channel.name} (${message.channel.id}) by ${message.author.tag} (${
+			message.author.id
+		}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
+
+		for (let i = 0; i < deleteMsg.length; i++) {
+			const msgs = await message.channel.messages.fetch({
+				limit: deleteMsg[i],
+			});
+
+			msgs.map(m => {
+				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content}\n`;
+			});
+
+			await message.channel.bulkDelete(msgs);
+		}
+
+		fs.writeFile(`./src/files/purge/${message.guild.id}.txt`, delMsgs, function (err) {
+			if (err) console.error(err);
+		});
+
+		await SendModActionFile(
+			this.client,
+			message.guild,
+			"Purge",
+			amount,
 			`./src/files/purge/${message.guild.id}.txt`,
-			`Message purge in #${message.channel.name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format(
-				"MMMM Do YYYY, h:mm:ss a",
-			)} \n`,
-			function (err) {
-				if (err) console.error(err);
-			},
+			message.channel,
+			message.author,
 		);
 
-		var delMsgs = "";
-
-		deleteMsg.forEach(async count => {
-			await message.channel.messages
-				.fetch({
-					limit: count,
-				})
-				.then(async msgs => {
-					await msgs.map(
-						m =>
-							(delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${
-								m.content
-							}\n`),
-					);
-
-					fs.appendFile(`./src/files/purge/${message.guild.id}.txt`, delMsgs, function (err) {
-						if (err) console.error(err);
-					});
-
-					await message.channel.bulkDelete(msgs);
-				});
-		});
+		fs.unlinkSync(`./src/files/purge/${message.guild.id}.txt`);
 	}
 };

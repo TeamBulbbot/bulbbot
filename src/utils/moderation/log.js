@@ -17,6 +17,24 @@ module.exports = {
 				})\` because \`${log}\` \`[#${infId}]\``,
 			);
 	},
+
+	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
+		const dbGuild = await GetDBGuild(guild.id);
+		const betterAction = BetterActions(action);
+
+		if (dbGuild.GuildLogging.ModAction === null) return;
+
+		client.channels.cache
+			.get(dbGuild.GuildLogging.ModAction)
+			.send(
+				`\`[${moment().format("hh:mm:ss a")}]\` ${betterAction} **${moderator.tag}** \`(${moderator.id})\` **${amount}** messages was removed in <#${
+					channel.id
+				}>`,
+				{
+					files: [file],
+				},
+			);
+	},
 };
 
 function BetterActions(action) {
@@ -32,6 +50,9 @@ function BetterActions(action) {
 			break;
 		case "kick":
 			action = `${Emotes.actions.kick} Kicked`;
+			break;
+		case "purge":
+			action = `${Emotes.actions.warn} Message purge by`;
 			break;
 		default:
 			break;
