@@ -12,7 +12,7 @@ Any `number`.
 
 ### bool
 
-A value that is either `True` or `False`.
+A value that is either `true` or `false`.
 
 ### User
 
