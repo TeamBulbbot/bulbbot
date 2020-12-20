@@ -41,31 +41,14 @@ module.exports = class extends (
 					? reaction.message.content
 					: "",
 			)
+			.setFooter(`#${reaction.message.channel.name}`)
 			.setTimestamp();
 
 		this.client.channels.cache.get(config.ChannelId).send(embed);
 
 		await sequelize.models.StarboardPost.create({
 			OGMessageId: reaction.message.id,
-			JumpLink: `https://bulbbot.discord.com/channels/${reaction.message.guild.id}/${reaction.message.channel.id}/${reaction.message.id}`,
-			Stars: reaction.count,
 			StarboardId: dbGuild.id,
 		});
 	}
 };
-
-/*
-message.channel.name
-<# message.channel.id >
-message.channel.nsfw (true return)
-
-message.content
-message.author.tag
-message.author.id
-
-._emoji.name
-._emoji.id
-
-message.count
-
-*/
