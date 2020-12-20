@@ -60,6 +60,11 @@
 
 	"purge_too_many": "{emote_warn} Can only purge a max of 200 messages at a time",
 
+	"verification_non_integer": "{emote_warn} Level needs to be an integer",
+	"verification_community_zero": "{emote_warn} Verification level cannot be set to `0` for community servers!",
+	"verification_level_error": "{emote_warn} Verification level cannot be greater than `4` or less than `0`",
+	"verification_level_success": "{emote_warn} Server verification level changed to `{level}`",
+
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 
 	"uptime_uptime": "The current uptime is **{uptime}**",

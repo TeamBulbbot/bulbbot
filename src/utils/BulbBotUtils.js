@@ -89,6 +89,8 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({snowflake})/g, key.snowflake);
 
+		response = response.replace(/({level})/g, key.level);
+
 		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_github})/g, Emotes.other.github);
