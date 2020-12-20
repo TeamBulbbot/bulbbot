@@ -12,10 +12,13 @@ module.exports = async guild => {
 	});
 	const logging = await sequelize.models.GuildLogging.create({});
 
+	const starboard = await sequelize.models.Starboard.create({});
+
 	await sequelize.models.Guild.create({
 		Name: guild.name,
 		GuildId: guild.id,
 		GuildConfigurationId: config.id,
 		GuildLoggingId: logging.id,
+		StarboardId: starboard.id,
 	});
 };

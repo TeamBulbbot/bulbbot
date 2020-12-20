@@ -27,6 +27,7 @@ const models = [
 	require("./models/GuildModerationRoles"),
 	require("./models/GuildOverrideCommands"),
 	require("./models/Infraction"),
+	require("./models/Starboard"),
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);
