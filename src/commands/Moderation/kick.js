@@ -17,7 +17,6 @@ module.exports = class extends (
 			clientPerms: ["KICK_MEMBERS"],
 		});
 	}
-
 	async run(message, args) {
 		const targetId = args[0].replace(/\D/g, "");
 		let target = message.guild.member(targetId);
