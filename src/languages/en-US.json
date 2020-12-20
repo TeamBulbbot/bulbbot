@@ -58,7 +58,7 @@
 	"kick_success": "{emote_kick} Kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 	"kick_fail": "{emote_warn} Unable to kick **{target_tag}** `({target_id})`",
 
-	"purge_too_many": "{emote_warn} Can only purge a max of 500 messages at a time",
+	"purge_too_many": "{emote_warn} Can only purge a max of 200 messages at a time",
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 
