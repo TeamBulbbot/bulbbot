@@ -1,23 +1,17 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("Starboard", {
-		Enabled: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
+	sequelize.define("StarboardPost", {
+		OGMessageId: {
+			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		ChannelId: {
+		JumpLink: {
 			type: DataTypes.STRING,
-		},
-		Emoji: {
-			type: DataTypes.STRING,
-			defaultValue: "2b50", // ⭐
 			allowNull: false,
 		},
-		MinimumCount: {
+		Stars: {
 			type: DataTypes.INTEGER,
-			defaultValue: 3,
 			allowNull: false,
 		},
 	});

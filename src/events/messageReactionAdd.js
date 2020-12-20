@@ -1,4 +1,8 @@
 const Event = require("../structures/Event");
+const { GetGuild, CheckIfMessageAlreadyInDB } = require("../utils/miscellaneous/starboard");
+const sequelize = require("../utils/database/connection");
+const emojiUnicode = require("emoji-unicode");
+const Discord = require("discord.js");
 
 module.exports = class extends (
 	Event
@@ -7,9 +11,46 @@ module.exports = class extends (
 		super(...args);
 	}
 
-	run(reaction, user) {
-		console.log(reaction);
-		console.log(user);
+	async run(reaction, user) {
+		if (reaction.message.channel.nsfw) return;
+
+		const dbGuild = await GetGuild(reaction.message.guild.id);
+		const config = dbGuild.Starboard;
+		const reactionEmote = emojiUnicode(reaction._emoji.name);
+
+		if (!config.Enabled) return;
+		if (config.Emoji !== reactionEmote) return;
+		if (config.ChannelId === null) return;
+		if (config.MiniumCount < reaction.count) return;
+		if (await CheckIfMessageAlreadyInDB(dbGuild.Starboard.id, reaction.message.id)) return;
+
+		const attach = reaction.message.attachments.first();
+
+		const embed = new Discord.MessageEmbed()
+			.setColor(process.env.EMBED_COLOR)
+			.setAuthor(reaction.message.author.tag, reaction.message.author.avatarURL())
+			.setDescription(
+				reaction.message.content +
+					"\n\n" +
+					`[**Jump to message**](https://bulbbot.discord.com/channels/${reaction.message.guild.id}/${reaction.message.channel.id}/${reaction.message.id})`,
+			)
+			.setImage(
+				attach !== undefined
+					? attach.url
+					: reaction.message.content.endsWith(".png") | reaction.message.content.endsWith(".jpg") | reaction.message.content.endsWith(".gif")
+					? reaction.message.content
+					: "",
+			)
+			.setTimestamp();
+
+		this.client.channels.cache.get(config.ChannelId).send(embed);
+
+		await sequelize.models.StarboardPost.create({
+			OGMessageId: reaction.message.id,
+			JumpLink: `https://bulbbot.discord.com/channels/${reaction.message.guild.id}/${reaction.message.channel.id}/${reaction.message.id}`,
+			Stars: reaction.count,
+			StarboardId: dbGuild.id,
+		});
 	}
 };
 
@@ -22,8 +63,8 @@ message.content
 message.author.tag
 message.author.id
 
-message._emoji.name
-message._emoji.id
+._emoji.name
+._emoji.id
 
 message.count
 
