@@ -53,7 +53,7 @@ module.exports = class Util {
 				const File = require(eventFile);
 				if (!this.isClass(File)) throw new EventException(`Event '${name}' doesn't export a class.`);
 
-				const event = new File(this.client, name.toLowerCase());
+				const event = new File(this.client, name);
 				if (!(event instanceof Event)) throw new EventException(`Event '${name}' doesn't belong in Events.`);
 
 				this.client.events.set(event.name, event);
