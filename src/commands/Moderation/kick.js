@@ -8,8 +8,8 @@ module.exports = class extends (
 		super(...args, {
 			description: "Kicks a user from the guild",
 			category: "Moderation",
-			usage: "!kick <user> [reason]",
-			argList: ["user:User"],
+			usage: "!kick <member> [reason]",
+			argList: ["member:Member"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
