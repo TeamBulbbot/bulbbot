@@ -10,6 +10,10 @@ Any `text`.
 
 Any `number`.
 
+### combined
+
+Any `numbers` or `text` combined.
+
 ### bool
 
 A value that is either `true` or `false`.

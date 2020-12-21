@@ -162,6 +162,7 @@ module.exports = class BulbBotUtils {
 			else if (feature === "WELCOME_SCREEN_ENABLED") feature = Emotes.features.welcome_screen_enabled;
 			else if (feature === "NEWS") feature = Emotes.features.news;
 			else if (feature === "COMMUNITY") feature = Emotes.features.community;
+			else feature = `\`${feature}\``;
 
 			features.push(feature);
 		});

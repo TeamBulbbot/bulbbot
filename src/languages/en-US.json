@@ -75,6 +75,8 @@
 
 	"invite_desc": "**Invite the bot to your guild**\n{bot_invite}\n\n**Join the support guild**\n{support_guild}",
 
+	"inviteinfo_error": "{emote_warn} Unable to find a guild with that invite",
+
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }
