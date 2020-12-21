@@ -73,6 +73,8 @@
 
 	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**",
 
+	"invite_desc": "**Invite the bot to your guild**\n{bot_invite}\n\n**Join the support guild**\n{support_guild}",
+
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }

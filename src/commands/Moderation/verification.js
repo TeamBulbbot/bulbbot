@@ -1,5 +1,4 @@
 const Command = require("../../structures/Command");
-const { Ban, ForceBan } = require("../../utils/moderation/actions");
 
 module.exports = class extends (
 	Command

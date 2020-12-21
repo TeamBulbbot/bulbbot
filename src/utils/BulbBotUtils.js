@@ -91,6 +91,9 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({level})/g, key.level);
 
+		response = response.replace(/({bot_invite})/g, key.bot_invite);
+		response = response.replace(/({support_guild})/g, key.support_guild);
+
 		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_github})/g, Emotes.other.github);

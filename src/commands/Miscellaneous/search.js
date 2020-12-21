@@ -17,13 +17,13 @@ module.exports = class extends (
 
 	async run(message, args) {
 		const query = args.join(" ");
-		let desc = "";
+		let desc = [];
 
 		message.guild.members.cache.array().forEach(member => {
-			if (similarity(member.user.username, query) >= 0.5) desc += `${member.user.tag} (${member.user.id})\n`;
+			if (similarity(member.user.username, query) >= 0.6) desc.push(`${member.user.tag} (${member.user.id})`);
 		});
-
-		if (desc === "") desc = this.client.bulbutils.translate("global_user_not_found");
+		desc.sort();
+		if (desc.length === 0) desc = this.client.bulbutils.translate("global_user_not_found");
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
