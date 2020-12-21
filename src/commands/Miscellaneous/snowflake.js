@@ -1,6 +1,7 @@
-const Command = require("../../structures/Command");
 const Discord = require("discord.js");
 const moment = require("moment");
+const Command = require("../../structures/Command");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -17,7 +18,7 @@ module.exports = class extends (
 	}
 
 	async run(message, args) {
-		const snowflake = args[0].replace(/\D/g, "");
+		const snowflake = args[0].replace(NonDigits, "");
 		if (snowflake <= Discord.SnowflakeUtil.EPOCH) return message.channel.send(this.client.bulbutils.translate("invalid_snowflake", { snowflake }));
 		const deconstruct = Discord.SnowflakeUtil.deconstruct(snowflake);
 		let passedAnything = false;

@@ -1,4 +1,5 @@
 const Command = require("../../structures/Command");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -18,7 +19,7 @@ module.exports = class extends (
 	}
 
 	async run(message, args) {
-		const level = parseInt(args[0].replace(/\D/g, ""));
+		const level = parseInt(args[0].replace(NonDigits, ""));
 		if (level === "") return message.channel.send(this.client.bulbutils.translate("verification_non_integer"));
 		if (message.guild.features.includes("COMMUNITY") && level === 0)
 			return message.channel.send(this.client.bulbutils.translate("verification_community_zero"));

@@ -39,7 +39,7 @@ module.exports = class extends (
 				}
 			}
 
-			let developers = process.env.DEVELOPERS.split(",");
+			const developers = process.env.DEVELOPERS.split(",");
 			if (command.devOnly) if (!developers.includes(message.author.id)) return;
 
 			if (command.maxArgs < args.length && command.maxArgs !== -1) {

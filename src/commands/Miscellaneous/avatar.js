@@ -1,5 +1,6 @@
-const Command = require("../../structures/Command");
 const Discord = require("discord.js");
+const Command = require("../../structures/Command");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -17,7 +18,7 @@ module.exports = class extends (
 	async run(message, args) {
 		let id;
 		if (args[0] === undefined) id = message.author.id;
-		else id = args[0].replace(/\D/g, "");
+		else id = args[0].replace(NonDigits, "");
 		let user;
 		try {
 			user = await this.client.users.fetch(id);

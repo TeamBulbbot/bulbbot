@@ -1,5 +1,6 @@
 const Command = require("../../structures/Command");
 const { Ban, ForceBan } = require("../../utils/moderation/actions");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -20,7 +21,7 @@ module.exports = class extends (
 	}
 
 	async run(message, args) {
-		const targetId = args[0].replace(/\D/g, "");
+		const targetId = args[0].replace(NonDigits, "");
 		let target = message.guild.member(targetId);
 		let reason = args.slice(1).join(" ");
 		let notInGuild = !target;

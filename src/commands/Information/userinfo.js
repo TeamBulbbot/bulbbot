@@ -1,5 +1,6 @@
-const Command = require("./../../structures/Command");
 const Discord = require("discord.js");
+const Command = require("./../../structures/Command");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -18,7 +19,7 @@ module.exports = class extends (
 	async run(message, args) {
 		let target;
 		if (args[0] === undefined) target = message.author.id;
-		else target = args[0].replace(/\D/g, "");
+		else target = args[0].replace(NonDigits, "");
 		let user = message.guild.member(target);
 		let isGuildMember = true;
 

@@ -1,5 +1,6 @@
 const Command = require("../../structures/Command");
 const { createInfraction } = require("../../utils/InfractionUtils");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -21,7 +22,7 @@ module.exports = class extends (
 	async run(message, args) {
 		// TESTING FILE STILL VERY MUCH WORK IN PROGRESS
 
-		const target = await this.client.users.fetch(args[1].replace(/\D/g, ""));
+		const target = await this.client.users.fetch(args[1].replace(NonDigits, ""));
 		switch (args[0].toLowerCase()) {
 			case "create":
 			case "add":
