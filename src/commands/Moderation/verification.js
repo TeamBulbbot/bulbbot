@@ -28,5 +28,8 @@ module.exports = class extends (
 
 		await message.guild.setVerificationLevel(level);
 		message.channel.send(this.client.bulbutils.translate("verification_level_success", { level }));
+
+		// TODO
+		// - send this as a mod action log
 	}
 };

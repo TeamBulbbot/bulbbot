@@ -65,6 +65,9 @@ module.exports = class extends (
 			message.author,
 		);
 
+		// TODO
+		// - send message back to user
+
 		fs.unlinkSync(`./src/files/purge/${message.guild.id}.txt`);
 	}
 };
