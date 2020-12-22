@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const { Ban, ForceBan } = require("../../utils/moderation/actions");
-const { UserMentionStrict } = require("../../utils/Regex");
+const { UserMentionStrict, NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends (
 	Command
@@ -24,11 +24,11 @@ module.exports = class extends (
 		const targets = args.slice(0).join(" ").match(UserMentionStrict);
 		let reason = args.slice(0).join("").replace(UserMentionStrict, "");
 
-		if (reason === "") reason = "No reason given";
+		if (reason === "") reason = this.client.bulbutils.translate("global_no_reason");
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
-			const t = targets[i].replace(/\D/g, "");
+			const t = targets[i].replace(NonDigits, "");
 			let infId;
 			let target = await message.guild.member(t);
 			const notInGuild = !target;
