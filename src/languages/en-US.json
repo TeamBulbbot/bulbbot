@@ -21,7 +21,7 @@
 	"userinfo_embed_roles": "**Roles:** {user_roles}",
 
 	"serverinfo_embed_owner": "{emote_owner} **Owner:** <@{guild_owner_name}> `{guild_owner_id}`\n",
-	"serverinfo_embed_features": "**Features:** {guild_features}\n",
+	"serverinfo_embed_features": "**Features:**\n{guild_features}\n",
 	"serverinfo_embed_region": "**Region:** {guild_region}\n",
 	"serverinfo_embed_verification": "**Verification level:** {guild_verification}\n",
 	"serverinfo_embed_created": "**Created at:** {guild_age}",
@@ -73,7 +73,7 @@
 
 	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**",
 
-	"invite_desc": "**Invite the bot to your guild**\n{bot_invite}\n\n**Join the support guild**\n{support_guild}",
+	"invite_desc": "**Invite the bot to your server**\n{bot_invite}\n\n**Join the support server**\n{support_guild}",
 
 	"inviteinfo_error": "{emote_warn} Unable to find a guild with that invite",
 

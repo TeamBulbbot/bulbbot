@@ -17,7 +17,7 @@ module.exports = class extends (
 	}
 
 	async run(message, args) {
-		const clean = text => {
+		const clean = async text => {
 			if (typeof text === "string") return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 			else return text;
 		};

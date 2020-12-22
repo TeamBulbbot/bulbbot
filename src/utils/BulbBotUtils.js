@@ -97,11 +97,12 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_github})/g, Emotes.other.github);
-		response = response.replace(/({emote_owner})/g, Emotes.badges.guildOwner);
-		response = response.replace(/({emote_online})/g, Emotes.status.online);
-		response = response.replace(/({emote_idle})/g, Emotes.status.idle);
-		response = response.replace(/({emote_dnd})/g, Emotes.status.dnd);
-		response = response.replace(/({emote_offline})/g, Emotes.status.offline);
+		response = response.replace(/({emote_owner})/g, Emotes.other.GUILD_OWNER);
+		response = response.replace(/({emote_online})/g, Emotes.status.ONLINE);
+		response = response.replace(/({emote_idle})/g, Emotes.status.IDLE);
+		response = response.replace(/({emote_dnd})/g, Emotes.status.DND);
+		response = response.replace(/({emote_offline})/g, Emotes.status.OFFLINE);
+
 		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
 		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
@@ -131,16 +132,16 @@ module.exports = class BulbBotUtils {
 		const bughunter_gold = 1 << 14;
 		const botdeveloper = 1 << 17;
 
-		if ((bitfield & staff) === staff) badges.push(Emotes.badges.staff);
-		if ((bitfield & partner) === partner) badges.push(Emotes.badges.partner);
-		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.badges.hypesquad_events);
-		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.badges.hypesquad_bravery);
-		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.badges.hypesquad_brilliance);
-		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.badges.hypesquad_balance);
-		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.badges.bug_hunter_green);
-		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.badges.bug_hunter_gold);
-		if ((bitfield & botdeveloper) === botdeveloper) badges.push(Emotes.badges.verfied_bot_developer);
-		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.badges.early_supporter);
+		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
+		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
+		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
+		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
+		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.flags.HOUSE_BRILLIANCE);
+		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.flags.HOUSE_BALANCE);
+		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
+		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
+		if ((bitfield & botdeveloper) === botdeveloper) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
+		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.flags.EARLY_SUPPORTER);
 
 		return badges.map(i => `${i}`).join(" ");
 	}
@@ -149,27 +150,73 @@ module.exports = class BulbBotUtils {
 		let features = [];
 
 		guildFeatures.forEach(feature => {
-			if (feature === "INVITE_SPLASH") feature = Emotes.features.invite_splash;
-			else if (feature === "VIP_REGIONS") feature = Emotes.features.vip_regions;
-			else if (feature === "VANITY_URL") feature = Emotes.features.vanity_url;
-			else if (feature === "VERIFIED") feature = Emotes.features.verified;
-			else if (feature === "PARTNERED") feature = Emotes.features.partnered;
-			else if (feature === "PUBLIC") feature = Emotes.features.public;
-			else if (feature === "COMMERCE") feature = Emotes.features.commerce;
-			else if (feature === "DISCOVERABLE") feature = Emotes.features.discoverable;
-			else if (feature === "FEATURABLE") feature = Emotes.features.featurable;
-			else if (feature === "ANIMATED_ICON") feature = Emotes.features.animated_icon;
-			else if (feature === "BANNER") feature = Emotes.features.banner;
-			else if (feature === "PUBLIC_DISABLED") feature = Emotes.features.public_disabled;
-			else if (feature === "WELCOME_SCREEN_ENABLED") feature = Emotes.features.welcome_screen_enabled;
-			else if (feature === "NEWS") feature = Emotes.features.news;
-			else if (feature === "COMMUNITY") feature = Emotes.features.community;
-			else feature = `\`${feature}\``;
+			let f;
+			let desc;
 
-			features.push(feature);
+			if (feature === "ANIMATED_ICON") {
+				f = Emotes.features.ANIMATED_ICON;
+				desc = "Adds the ability to upload a animated icon to the guild";
+			} else if (feature === "BANNER") {
+				f = Emotes.features.BANNER;
+				desc = "Adds the ability to set a banner image for the guild that will display above the channel list";
+			} else if (feature === "COMMERCE") {
+				f = Emotes.features.COMMERCE;
+				desc = "Adds the ability to create store channels";
+			} else if (feature === "COMMUNITY") {
+				f = Emotes.features.COMMUNITY;
+				desc = "Gives access to the Server Discovery, Insights, Community Server News and Announcement Channels";
+			} else if (feature === "DISCOVERABLE") {
+				f = Emotes.features.DISCOVERABLE;
+				desc = "Makes guild visible in Sever Discovery";
+			} else if (feature === "ENABLED_DISCOVERABLE_BEFORE") {
+				f = Emotes.features.ENABLED_DISCOVERABLE_BEFORE;
+				desc = "Enabled Sever Discovery before the Discovery Checklist was launched";
+			} else if (feature === "FORCE_RELAY") {
+				f = Emotes.features.FORCE_RELAY;
+				desc = "Shard the guild connections to different nodes that relay information between each other.";
+			} else if (feature === "INVITE_SPLASH") {
+				f = Emotes.features.INVITE_SPLASH;
+				desc = "Adds the ability to set a background image that will display on the invite links";
+			} else if (feature === "MEMBER_LIST_DISABLED") {
+				f = Emotes.features.MEMBER_LIST_DISABLED;
+				desc = "Hides the member list";
+			} else if (feature === "MEMBER_VERIFICATION_GATE_ENABLED") {
+				f = Emotes.features.MEMBER_VERIFICATION_GATE_ENABLED;
+				desc = "Has member verification gate enabled, which requirers new users to pass verification gate before accessing the guild";
+			} else if (feature === "MORE_EMOJI") {
+				f = Emotes.features.MORE_EMOJI;
+				desc = "Adds 150 extra emote slots in each category (normal and animated)";
+			} else if (feature === "NEWS") {
+				f = Emotes.features.NEWS;
+				desc = "Adds the ability to create announcement channels";
+			} else if (feature === "PARTNERED") {
+				f = Emotes.features.PARTNERED;
+				desc = "Shows the partner badge next to the server name";
+			} else if (feature === "PREVIEW_ENABLED") {
+				f = Emotes.features.PREVIEW_ENABLED;
+				desc = "Enables lurking in the guild";
+			} else if (feature === "RELAY_ENABLED") {
+				f = Emotes.features.RELAY_ENABLED;
+				desc = "Shard the guild connections to different nodes that relay information between each other.";
+			} else if (feature === "VANITY_URL") {
+				f = Emotes.features.VANITY_URL;
+				desc = "Adds the ability to set a custom invite link (discord.gg/CUSTOM_VANITY)";
+			} else if (feature === "VERIFIED") {
+				f = Emotes.features.VERIFIED;
+				desc = "Shows the verfied checkmark next to the server name";
+			} else if (feature === "WELCOME_SCREEN_ENABLED") {
+				f = Emotes.features.WELCOME_SCREEN_ENABLED;
+				desc = "Has the welcome screen enabled enabled, which will show a model when new users join the guild";
+			}
+
+			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
+
+			features.push(f);
 		});
 
-		return features.map(i => `${i}`).join(" ");
+		features.sort();
+
+		return features.map(i => `${i}`).join("\n");
 	}
 
 	guildRegion(region) {
