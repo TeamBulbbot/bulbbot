@@ -83,6 +83,8 @@
 
 	"multikick_success": "{emote_kick} Kicked {full_list} for {reason}",
 
+	"softban_success": "{emote_ban} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }

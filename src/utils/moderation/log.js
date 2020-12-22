@@ -39,6 +39,9 @@ module.exports = {
 
 function BetterActions(action) {
 	switch (action.toLowerCase()) {
+		case "softban":
+			action = `${Emotes.actions.ban} Softbanned`;
+			break;
 		case "ban":
 			action = `${Emotes.actions.ban} Banned`;
 			break;

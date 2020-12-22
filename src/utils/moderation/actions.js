@@ -30,7 +30,15 @@ module.exports = {
 		return infId;
 	},
 
-	SoftBan: async () => {},
+	SoftBan: async (client, guild, target, moderator, reason, reasonLog, days) => {
+		await guild.member(target.id).ban({ reason, days });
+		await guild.members.unban(target.id, reason);
+
+		const infId = await createInfraction(guild.id, "Softban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendModAction(client, guild, "Softban", target, moderator, reasonLog, infId);
+
+		return infId;
+	},
 
 	TempBan: async () => {},
 
