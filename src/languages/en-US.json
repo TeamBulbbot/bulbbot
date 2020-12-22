@@ -79,6 +79,8 @@
 
 	"multiban_success": "{emote_ban} Banned {full_list} for {reason}",
 
+	"multiunban_success": "{emote_unban} Unbanned {full_list} for {reason}",
+
 	"multikick_success": "{emote_kick} Kicked {full_list} for {reason}",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
