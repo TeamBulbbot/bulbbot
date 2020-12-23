@@ -9,6 +9,7 @@ module.exports = class extends (
 
 	run(invite) {
 		// TODO
-		console.log("invite deleted:", invite);
+		// log somewhere
+		console.log(`Invite deleted: \`${invite.code}\``);
 	}
 };
