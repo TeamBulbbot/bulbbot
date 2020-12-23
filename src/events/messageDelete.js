@@ -9,6 +9,6 @@ module.exports = class extends (
 
 	run(message) {
 		// TODO
-		console.log("message deleted:", message);
+		console.log(`Message deleted: ${message.content}`);
 	}
 };
