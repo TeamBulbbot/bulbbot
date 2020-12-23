@@ -35,7 +35,40 @@ module.exports = {
 				},
 			);
 	},
+
+	SendEventLog: async (client, guild, part, log) => {
+		const dbGuild = await GetDBGuild(guild.id);
+		const logChannel = GetPart(dbGuild, part);
+
+		if (logChannel === null) return;
+		client.channels.cache.get(logChannel).send(`\`[${moment().format("hh:mm:ss a")}]\` ${log}`);
+	},
 };
+
+function GetPart(dbGuild, part) {
+	switch (part.toLowerCase()) {
+		case "message":
+			part = dbGuild.GuildLogging.Message;
+			break;
+		case "role":
+			part = dbGuild.GuildLogging.Role;
+			break;
+		case "member":
+			part = dbGuild.GuildLogging.Member;
+			break;
+		case "channel":
+			part = dbGuild.GuildLogging.Channel;
+			break;
+		case "joinleave":
+			part = dbGuild.GuildLogging.JoinLeave;
+			break;
+		default:
+			part = null;
+			break;
+	}
+
+	return part;
+}
 
 function BetterActions(action) {
 	switch (action.toLowerCase()) {

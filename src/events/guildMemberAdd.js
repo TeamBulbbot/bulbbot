@@ -1,4 +1,5 @@
 const Event = require("../structures/Event");
+const { SendEventLog } = require("../utils/moderation/log");
 
 module.exports = class extends (
 	Event
@@ -9,6 +10,6 @@ module.exports = class extends (
 
 	run(member) {
 		// TODO
-		console.log("new guild member:", member);
+		SendEventLog(this.client, member.guild, "member", `**New member:** **${member.tag}** (${member.id})`);
 	}
 };

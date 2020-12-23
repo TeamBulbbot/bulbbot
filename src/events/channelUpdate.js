@@ -1,4 +1,5 @@
 const Event = require("../structures/Event");
+const { SendEventLog } = require("../utils/moderation/log");
 
 module.exports = class extends (
 	Event
@@ -8,20 +9,19 @@ module.exports = class extends (
 	}
 
 	run(oldChannel, newChannel) {
-		// TODO
-		// If you are bored one day check for perm changes
+		let msg = "**Channel update:** ";
 
 		// name change
-		if (oldChannel.name !== newChannel.name)
-			console.log(`Chanel update in <#${newChannel.id}> name was changed from \`#${oldChannel.name}\` to \`#${newChannel.name}\``);
+		if (oldChannel.name !== newChannel.name) msg += `<#${newChannel.id}> name was changed from \`#${oldChannel.name}\` to \`#${newChannel.name}\`\n`;
 		// type change
-		else if (oldChannel.type !== newChannel.type)
-			console.log(`Chanel update in <#${newChannel.id}> type was changed from \`${oldChannel.type}\` to \`${newChannel.type}\``);
+		if (oldChannel.type !== newChannel.type) msg += `<#${newChannel.id}> type was changed from \`${oldChannel.type}\` to \`${newChannel.type}\`\n`;
 		//  nsw change
-		else if (oldChannel.nsfw !== newChannel.nsfw) {
-			if (newChannel.nsfw) console.log(`Chanel update in <#${newChannel.id}> nsfw was \`enabled\``);
-			else console.log(`Chanel update in <#${newChannel.id}> nsfw was \`disabled\``);
+		if (oldChannel.nsfw !== newChannel.nsfw) {
+			if (newChannel.nsfw) msg += `<#${newChannel.id}> nsfw was \`enabled\`\n`;
+			else msg += `<#${newChannel.id}> nsfw was \`disabled\`\n`;
 		}
+
+		SendEventLog(this.client, newChannel.guild, "channel", msg);
 	}
 };
 

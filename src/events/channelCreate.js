@@ -1,4 +1,5 @@
 const Event = require("../structures/Event");
+const { SendEventLog } = require("../utils/moderation/log");
 
 module.exports = class extends (
 	Event
@@ -8,8 +9,6 @@ module.exports = class extends (
 	}
 
 	run(channel) {
-		// TODO
-		// log somewhere
-		console.log(`Chanel created: <#${channel.id}> (${channel.type})`);
+		SendEventLog(this.client, channel.guild, "channel", `**Channel created:** <#${channel.id}> (${channel.type})`);
 	}
 };
