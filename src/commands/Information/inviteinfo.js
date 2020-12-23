@@ -11,7 +11,7 @@ module.exports = class extends (
 			category: "Information",
 			aliases: ["inv"],
 			usage: "!inviteinfo <invitecode>",
-			argList: ["invitecode:combined"],
+			argList: ["invitecode:string"],
 			minArgs: 1,
 			maxArgs: -1,
 		});
