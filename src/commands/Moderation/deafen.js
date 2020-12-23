@@ -25,12 +25,12 @@ module.exports = class extends Command {
 
         if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
         if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"))
-        if (!target.voice.channel) return message.channel.send(this.client.bulbutils.translate("deafen_not_in_voice"))
+        if (!target.voice.channel) return message.channel.send(this.client.bulbutils.translate("global_not_in_voice"))
         if (target.voice.serverDeaf) return message.channel.send(this.client.bulbutils.translate("deafen_already_deaf"))
 
         infId = await Deafen(this.client,
             message.guild,
-            target.user,
+            target,
             message.author,
             this.client.bulbutils.translate("global_mod_action_log", {
                 action: "Deafened",

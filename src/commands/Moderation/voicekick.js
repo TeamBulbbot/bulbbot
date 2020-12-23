@@ -1,19 +1,20 @@
-const Command = require("./../../structures/Command")
-const { Undeafen } = require("../../utils/moderation/actions");
+const Command = require("../../structures/Command")
+const { Voicekick } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
-            description: "Undeafens a member from a Voice Channel they're connected to",
+            description: "Kicks a member from the Voice Channel they're connected to",
             category: "Moderation",
-            usage: "!undeafen <user> [reason]",
+            usage: "!voicekick <user> [reason]",
+            aliases: ["vckick"],
             argList: ["user:User"],
             minArgs: 1,
             maxArgs: -1,
             clearance: 50,
-            userPerms: ["DEAFEN_MEMBERS"],
-            clientPerms: ["DEAFEN_MEMBERS"],
+            userPerms: ["MOVE_MEMBERS"],
+            clientPerms: ["MOVE_MEMBERS"],
         });
     }
 
@@ -26,14 +27,13 @@ module.exports = class extends Command {
         if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
         if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"))
         if (!target.voice.channel) return message.channel.send(this.client.bulbutils.translate("global_not_in_voice"))
-        if (!target.voice.serverDeaf) return message.channel.send(this.client.bulbutils.translate("undeafen_not_deaf"))
 
-        infId = await Undeafen(this.client,
+        infId = await Voicekick(this.client,
             message.guild,
             target,
             message.author,
             this.client.bulbutils.translate("global_mod_action_log", {
-                action: "Undeafened",
+                action: "Deafened",
                 moderator_tag: message.author.tag,
                 moderator_id: message.author.id,
                 target_tag: target.user.tag,
@@ -44,7 +44,7 @@ module.exports = class extends Command {
         )
 
         return message.channel.send(
-            this.client.bulbutils.translate("undeafen_success", {
+            this.client.bulbutils.translate("voicekick_success", {
                 target_tag: target.user.tag,
                 target_id: target.user.id,
                 reason,

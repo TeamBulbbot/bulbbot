@@ -9,7 +9,7 @@ module.exports = {
 	Kick: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.member(target.id).kick(reason);
 		const infId = await createInfraction(guild.id, "Kick", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Kick", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Kicked", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
@@ -17,7 +17,7 @@ module.exports = {
 	Ban: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.member(target.id).ban({ reason });
 		const infId = await createInfraction(guild.id, "Ban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Ban", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Banned", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
@@ -25,7 +25,7 @@ module.exports = {
 	ForceBan: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.members.ban(target.id, { reason });
 		const infId = await createInfraction(guild.id, "Forceban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Forceban", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Forcebanned", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
@@ -35,7 +35,7 @@ module.exports = {
 		await guild.members.unban(target.id, reason);
 
 		const infId = await createInfraction(guild.id, "Softban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Softban", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Softbanned", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
@@ -45,7 +45,7 @@ module.exports = {
 	Unban: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.members.unban(target.id, reason);
 		const infId = await createInfraction(guild.id, "Unban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Unban", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Unbanned", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
@@ -53,7 +53,7 @@ module.exports = {
 	Deafen: async (client, guild, target, moderator, reason, reasonLog) => {
 		await target.voice.setDeaf(true)
 		const infId = await createInfraction(guild.id, "Deafen", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Deafen", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Deafened", target.user, moderator, reasonLog, infId);
 
 		return infId;
 	},
@@ -61,7 +61,15 @@ module.exports = {
 	Undeafen: async (client, guild, target, moderator, reason, reasonLog) => {
 		await target.voice.setDeaf(false)
 		const infId = await createInfraction(guild.id, "Undeafen", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "Undeafen", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "Undeafened", target.user, moderator, reasonLog, infId);
+
+		return infId;
+	},
+
+	Voicekick: async (client, guild, target, moderator, reason, reasonLog) => {
+		await target.voice.kick()
+		const infId = await createInfraction(guild.id, "Voice kick", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		await SendModAction(client, guild, "Voice kicked", target.user, moderator, reasonLog, infId);
 
 		return infId;
 	},

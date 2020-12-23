@@ -5,6 +5,7 @@
 	"global_user_not_found": "{emote_warn} Could not find the specified user",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
 	"global_no_reason": "No reason given",
+	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 
 	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
@@ -86,13 +87,13 @@
 
 	"softban_success": "{emote_ban} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
-	"deafen_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 	"deafen_already_deaf": "{emote_warn} User is already deafened!",
 	"deafen_success": "{emote_kick} Deafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
-	"undeafen_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 	"undeafen_not_deaf": "{emote_warn} User is not deafened!",
 	"undeafen_success": "{emote_kick} Undeafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+
+	"voicekick_success": "{emote_kick} Voice kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
