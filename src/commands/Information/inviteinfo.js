@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const Command = require("../../structures/Command");
+const Emotes = require("../../emotes.json");
 
 module.exports = class extends (
 	Command
@@ -30,16 +31,16 @@ module.exports = class extends (
 		let inviteInfo = "";
 
 		desc += `${this.client.bulbutils.guildFeatures(guild.features)}\n\n`;
-		guild.description !== null ? (desc += `**${guild.description}**\n\n`) : "";
 		desc += `Verification Level: \`${guild.verificationLevel}\`\n`;
 		desc += `Large: \`${guild.large}\`\n\n`;
 
 		inviteInfo += `Code: \`${invite.code}\`\n`;
-		inviteInfo += `Presence Count: \`${invite.presenceCount}\`\n`;
-		inviteInfo += `Member Count: \`${invite.memberCount}\`\n\n`;
+		inviteInfo += `${Emotes.status.ONLINE}: \`${invite.presenceCount}\`\n`;
+		inviteInfo += `${Emotes.status.OFFLINE}: \`${invite.memberCount}\`\n\n`;
 
 		let embed = new Discord.MessageEmbed()
 			.setColor(process.env.EMBED_COLOR)
+			.setTitle(guild.description !== null ? `${guild.description}` : "")
 			.setAuthor(`${guild.name} (${guild.id})`, guild.iconURL({ dynamic: true }))
 			.setDescription(desc)
 			.addField("**Invite**", inviteInfo, true)
