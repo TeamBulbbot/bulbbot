@@ -9,6 +9,12 @@ module.exports = class extends (
 
 	run(guild) {
 		// TODO
+		/*
+		guild.id
+		guild.name
+		*/
+
+		// add guild to the database
 		console.log("join guild:", guild);
 	}
 };

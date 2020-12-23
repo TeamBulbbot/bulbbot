@@ -9,6 +9,12 @@ module.exports = class extends (
 
 	run(guild) {
 		// TODO
+		/*
+		guild.id
+		*/
+
+		// remove the guild from the database
+
 		console.log("removed from guild:", guild);
 	}
 };

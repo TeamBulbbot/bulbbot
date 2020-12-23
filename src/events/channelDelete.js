@@ -9,6 +9,11 @@ module.exports = class extends (
 
 	run(channel) {
 		// TODO
+		/*
+		channel.type
+		channel.id
+		channel.name
+		*/
 		console.log("channel deleted:", channel);
 	}
 };
