@@ -2,7 +2,7 @@
 	"global_executed_by": "Executed by {user_name}#{user_discriminator}",
 	"global_missing_permission": ":lock: Missing permission(s)",
 	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
-	"global_user_not_found": "{emote_warn} Could not find user",
+	"global_user_not_found": "{emote_warn} Could not find the specified user",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
 	"global_no_reason": "No reason given",
 
@@ -84,6 +84,10 @@
 	"multikick_success": "{emote_kick} Kicked {full_list} for {reason}",
 
 	"softban_success": "{emote_ban} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+
+	"deafen_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
+	"deafen_already_deaf": "{emote_warn} User is already deafened!",
+	"deafen_success": "{emote_kick} Deafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
