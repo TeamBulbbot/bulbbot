@@ -9,11 +9,7 @@ module.exports = class extends (
 
 	run(channel) {
 		// TODO
-		/*
-		channel.type
-		channel.id
-		channel.name
-		*/
-		console.log("channel deleted:", channel);
+		// log somewhere
+		console.log(`Chanel deleted: <#${channel.id}> (${channel.type})`);
 	}
 };

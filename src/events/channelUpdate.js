@@ -9,16 +9,24 @@ module.exports = class extends (
 
 	run(oldChannel, newChannel) {
 		// TODO
-		/*
-		channel.type
-		channel.id
-		channel.name
-		*/
-
-		// Check for name change
 		// If you are bored one day check for perm changes
 
-		console.log("old channel:", oldChannel);
-		console.log("new channel:", newChannel);
+		// name change
+		if (oldChannel.name !== newChannel.name)
+			console.log(`Chanel update in <#${newChannel.id}> name was changed from \`#${oldChannel.name}\` to \`#${newChannel.name}\``);
+		// type change
+		else if (oldChannel.type !== newChannel.type)
+			console.log(`Chanel update in <#${newChannel.id}> type was changed from \`${oldChannel.type}\` to \`${newChannel.type}\``);
+		//  nsw change
+		else if (oldChannel.nsfw !== newChannel.nsfw) {
+			if (newChannel.nsfw) console.log(`Chanel update in <#${newChannel.id}> nsfw was \`enabled\``);
+			else console.log(`Chanel update in <#${newChannel.id}> nsfw was \`disabled\``);
+		}
 	}
 };
+
+/*
+// was moved (a bit spam)
+if (oldChannel.rawPosition !== newChannel.rawPosition)
+	console.log(`Chanel update in <#${newChannel.id}> position was moved from \`${oldChannel.rawPosition}\` to \`${newChannel.rawPosition}\``);
+*/

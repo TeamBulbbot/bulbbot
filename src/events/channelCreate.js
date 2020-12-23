@@ -9,11 +9,7 @@ module.exports = class extends (
 
 	run(channel) {
 		// TODO
-		/*
-		channel.type
-		channel.id
-		channel.name
-		*/
-		console.log("channel created:", channel);
+		// log somewhere
+		console.log(`Chanel created: <#${channel.id}> (${channel.type})`);
 	}
 };
