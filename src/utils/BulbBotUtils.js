@@ -81,6 +81,12 @@ module.exports = class BulbBotUtils {
 			response = response.replace(/({guild_booster_boosters})/g, key.guild.premiumSubscriptionCount);
 		}
 
+		if (key.channel) {
+			response = response.replace(/({channel})/g, key.channel);
+		}
+
+		response = response.replace(/({slowmode})/g, key.slowmode);
+
 		response = response.replace(/({guild_amount_roles})/g, key.guild_amount_roles);
 		response = response.replace(/({guild_amount_emotes})/g, key.guild_amount_emotes);
 		response = response.replace(/({guild_roles_left})/g, key.guild_roles_left);
@@ -100,7 +106,8 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({bot_invite})/g, key.bot_invite);
 		response = response.replace(/({support_guild})/g, key.support_guild);
 
-		response = response.replace(/({emote_warn})/g, Emotes.actions.warn);
+		response = response.replace(/({emote_warn})/g, Emotes.actions.WARN);
+		response = response.replace(/({emote_confirm})/g, Emotes.actions.CONFIRM);
 		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
 		response = response.replace(/({emote_github})/g, Emotes.other.github);
 		response = response.replace(/({emote_owner})/g, Emotes.other.GUILD_OWNER);

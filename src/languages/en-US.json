@@ -3,6 +3,7 @@
 	"global_missing_permission": ":lock: Missing permission(s)",
 	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
 	"global_user_not_found": "{emote_warn} Could not find the specified user",
+	"global_channel_not_found": "{emote_warn} Could not find the specified channel",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
 	"global_no_reason": "No reason given",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
@@ -97,6 +98,9 @@
 
 	"slowmode_invalid_0s": "{emote_warn} Slowmode duration cannot be lower than **0 seconds**!",
 	"slowmode_invalid_6h": "{emote_warn} Slowmode duration cannot be higher than **6 hours**!",
+
+	"slowmode_success_remove": "{emote_confirm} Successfully removed slowmode from {channel}",
+	"slowmode_success": "{emote_confirm} Successfully set slowmode in {channel} to **{slowmode}**",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
