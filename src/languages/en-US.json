@@ -90,6 +90,10 @@
 	"deafen_already_deaf": "{emote_warn} User is already deafened!",
 	"deafen_success": "{emote_kick} Deafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
+	"undeafen_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
+	"undeafen_not_deaf": "{emote_warn} User is not deafened!",
+	"undeafen_success": "{emote_kick} Undeafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }
