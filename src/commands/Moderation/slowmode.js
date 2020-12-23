@@ -30,7 +30,7 @@ module.exports = class extends Command {
         else
             duration = parse(args[1])
 
-        if (duration < parse("0s")) return message.channel.send(this.client.bulbutils.translate("slowmode_invalid_0s"))
+        if (duration < parse("0s") || duration === null) return message.channel.send(this.client.bulbutils.translate("slowmode_invalid_0s"))
         if (duration > parse("6h")) return message.channel.send(this.client.bulbutils.translate("slowmode_invalid_6h"))
 
         await channel.setRateLimitPerUser(duration / 1000)
