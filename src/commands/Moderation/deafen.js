@@ -30,7 +30,7 @@ module.exports = class extends Command {
 
         infId = await Deafen(this.client,
             message.guild,
-            target,
+            target.user,
             message.author,
             this.client.bulbutils.translate("global_mod_action_log", {
                 action: "Deafened",
