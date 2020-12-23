@@ -38,6 +38,11 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({user_joined})/g, formatDays(key.user_joined));
 		response = response.replace(/({user_roles})/g, key.user_roles);
 		response = response.replace(/({user_infractions})/g, key.user_infractions);
+		if (key.user_infractions !== undefined) {
+			if (key.user_infractions <= 1) response = response.replace(/({emote_inf})/g, Emotes.status.ONLINE);
+			if (key.user_infractions === 2) response = response.replace(/({emote_inf})/g, Emotes.other.INF1);
+			if (key.user_infractions > 2) response = response.replace(/({emote_inf})/g, Emotes.other.INF2);
+		}
 
 		response = response.replace(/({moderator_id})/g, key.moderator_id);
 		response = response.replace(/({moderator_tag})/g, key.moderator_tag);
@@ -103,8 +108,6 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_idle})/g, Emotes.status.IDLE);
 		response = response.replace(/({emote_dnd})/g, Emotes.status.DND);
 		response = response.replace(/({emote_offline})/g, Emotes.status.OFFLINE);
-		response = response.replace(/({emote_inf_1})/g, Emotes.other.INF1);
-		response = response.replace(/({emote_inf_2})/g, Emotes.other.INF2);
 
 		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
 		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);

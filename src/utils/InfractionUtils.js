@@ -67,6 +67,8 @@ module.exports = {
 			include: [{ model: sequelize.models.Infraction }],
 		});
 
+		if (dbGuild === null) return [];
+
 		return dbGuild.Infractions;
 	},
 
@@ -91,6 +93,8 @@ module.exports = {
 			],
 		});
 
+		if (dbGuild === null) return [];
+
 		return dbGuild.Infractions;
 	},
 
@@ -114,6 +118,8 @@ module.exports = {
 				},
 			],
 		});
+
+		if (dbGuild === null) return [];
 
 		return dbGuild.Infractions;
 	},

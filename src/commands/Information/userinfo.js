@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const Command = require("./../../structures/Command");
 const { NonDigits } = require("../../utils/Regex");
-const Emotes = require("../../emotes.json")
+const { getOffenderInfractions } = require("../../utils/InfractionUtils");
 
 module.exports = class extends (
 	Command
@@ -56,7 +56,8 @@ module.exports = class extends (
 		if (user.roles !== undefined)
 			description += this.client.bulbutils.translate("userinfo_embed_roles", { user_roles: user.roles._roles.map(r => `${r}`).join(", ") });
 
-		description += this.client.bulbutils.translate("userinfo_embed_infractions", { user_infractions: Date.now() })
+		const infs = await getOffenderInfractions(message.guild.id, user.id);
+		description += this.client.bulbutils.translate("userinfo_embed_infractions", { user_infractions: infs.length });
 
 		let color;
 		if (user.roles === undefined || user.roles.highest.name === "@everyone") color = process.env.EMBED_COLOR;
