@@ -44,14 +44,13 @@ module.exports = class extends (
 		description += this.client.bulbutils.translate("userinfo_embed_profile", { user_id: user.id });
 		description += this.client.bulbutils.translate("userinfo_embed_avatar", { user_avatar: user.avatarUrl });
 		description += this.client.bulbutils.translate("userinfo_embed_bot", { user_bot: user.bot });
+		description += this.client.bulbutils.translate("userinfo_embed_created", { user_age: user.createdAt });
 
 		if (user.premiumSinceTimestamp > 0)
 			description += this.client.bulbutils.translate("userinfo_embed_premium", { user_premium: user.premiumSinceTimestamp });
 
 		if (user.joinedTimestamp !== undefined)
 			description += this.client.bulbutils.translate("userinfo_embed_joined", { user_joined: user.joinedTimestamp });
-
-		description += this.client.bulbutils.translate("userinfo_embed_created", { user_age: user.createdAt });
 
 		if (user.roles !== undefined)
 			description += this.client.bulbutils.translate("userinfo_embed_roles", { user_roles: user.roles._roles.map(r => `${r}`).join(", ") });

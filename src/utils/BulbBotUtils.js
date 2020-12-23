@@ -333,5 +333,5 @@ function formatDays(start) {
 	const date = moment(moment.utc(start).format("YYYY-MM-DD"));
 	const days = moment.duration(date.diff(end)).asDays();
 
-	return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\`\n`;
+	return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\``;
 }
