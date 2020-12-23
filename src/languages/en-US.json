@@ -95,6 +95,9 @@
 
 	"voicekick_success": "{emote_kick} Voice kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
+	"slowmode_invalid_0s": "{emote_warn} Slowmode duration cannot be lower than **0 seconds**!",
+	"slowmode_invalid_6h": "{emote_warn} Slowmode duration cannot be higher than **6 hours**!",
+
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }
