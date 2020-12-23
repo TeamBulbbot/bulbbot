@@ -18,7 +18,8 @@
 	"userinfo_embed_created": "**Account Creation:** {user_age}",
 	"userinfo_embed_joined": "**Joined Guild:** {user_joined}",
 	"userinfo_embed_premium": "**Boosting since:** {user_premium}",
-	"userinfo_embed_roles": "**Roles:** {user_roles}",
+	"userinfo_embed_roles": "**Roles:** {user_roles}\n\n",
+	"userinfo_embed_infractions": "**Infractions:** {emote_inf_2} **{user_infractions}** infraction(s) on this server",
 
 	"serverinfo_embed_owner": "{emote_owner} **Owner:** <@{guild_owner_name}> `{guild_owner_id}`\n",
 	"serverinfo_embed_features": "**Features:**\n{guild_features}\n",
