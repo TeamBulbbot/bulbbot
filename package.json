@@ -19,6 +19,7 @@
 	},
 	"homepage": "https://github.com/TestersQTs/Bulbbot#readme",
 	"dependencies": {
+		"@hapi/hapi": "^20.0.3",
 		"discord.js": "^12.5.1",
 		"dotenv": "^8.2.0",
 		"emoji-unicode": "^2.0.1",
@@ -26,6 +27,7 @@
 		"parse-duration": "^0.4.4",
 		"pg": "^8.5.1",
 		"pg-hstore": "^2.3.3",
+		"prom-client": "^13.0.0",
 		"sequelize": "^6.3.5"
 	},
 	"devDependencies": {

@@ -1,5 +1,6 @@
 const Event = require("../structures/Event");
 const { getPrefix } = require("../utils/guilds/Guild");
+const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
 
 module.exports = class extends (
 	Event
@@ -10,6 +11,7 @@ module.exports = class extends (
 
 	async run(message) {
 		this.client.prefix = await getPrefix(message.guild);
+		activity_guilds(message.guild.id);
 
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 		if (!message.guild || message.author.bot) return;
@@ -65,6 +67,7 @@ module.exports = class extends (
 			}
 
 			command.run(message, args);
+			client_command_usage(command.name);
 		}
 	}
 };

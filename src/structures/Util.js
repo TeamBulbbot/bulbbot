@@ -8,6 +8,8 @@ const Event = require("./Event");
 const { EventException } = require("./exceptions/EventException");
 const { CommandException } = require("./exceptions/CommandException");
 
+const metrics = require("../utils/prometheus/metrics");
+
 module.exports = class Util {
 	constructor(client) {
 		this.client = client;
@@ -57,7 +59,10 @@ module.exports = class Util {
 				if (!(event instanceof Event)) throw new EventException(`Event '${name}' doesn't belong in Events.`);
 
 				this.client.events.set(event.name, event);
-				event.emitter[event.type](name, (...args) => event.run(...args));
+				event.emitter[event.type](name, (...args) => {
+					event.run(...args);
+					metrics.client_event(event.name);
+				});
 				console.log(`Successfully registered event '${event.name}'`);
 			}
 		});

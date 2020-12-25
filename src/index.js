@@ -1,5 +1,6 @@
 const BulbBotClient = require("./structures/BulbBotClient");
 const db = require("./utils/database/connection");
+const server = require("./utils/prometheus/server");
 
 require("dotenv").config();
 const config = {
@@ -10,6 +11,8 @@ const config = {
 };
 
 const client = new BulbBotClient(config);
+
+server.init().catch(err => console.log("Server connection error: ", err));
 
 db.authenticate()
 	.then(() => console.log("Database connected..."))
