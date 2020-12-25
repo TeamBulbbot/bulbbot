@@ -1,21 +1,28 @@
 const sequelize = require("../database/connection");
 const Emotes = require("../../emotes.json");
 const moment = require("moment");
+const BulbBotUtils = require("../BulbBotUtils")
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
 		const betterAction = BetterActions(action);
+		const utils = new BulbBotUtils()
 
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
 		client.channels.cache
 			.get(dbGuild.GuildLogging.ModAction)
-			.send(
-				`\`[${moment().format("hh:mm:ss a")}]\` ${betterAction} **${target.tag}** \`(${target.id})\` by **${moderator.tag}** \`(${
-					moderator.id
-				})\` because \`${log}\` \`[#${infId}]\``,
-			);
+			.send(utils.translate("global_logging_mod", {
+				timestamp: moment().format("hh:mm:ss a"),
+				target_tag: target.tag,
+				user_id: target.id,
+				moderator_tag: moderator.tag,
+				moderator_id: moderator.id,
+				reason: log,
+				infractionId: infId,
+				action: betterAction
+			}))
 	},
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {

@@ -5,6 +5,7 @@
 	"global_user_not_found": "{emote_warn} Could not find the specified user",
 	"global_channel_not_found": "{emote_warn} Could not find the specified channel",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
+	"global_logging_mod": "`[{timestamp}]` **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[{infractionId}]`",
 	"global_no_reason": "No reason given",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 
@@ -105,6 +106,8 @@
 	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
 	"lockdown_locked": "{emote_confirm} Successfully locked down channel {channel}",
 	"lockdown_unlocked": "{emote_confirm} Successfully unlocked channel {channel}",
+
+	"warn_success": "{emote_success} Successfully warned **{user_name}#{user_discriminator}** `({user_id})` for **{reason}**`[{infractionId}]`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
