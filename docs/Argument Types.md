@@ -40,7 +40,7 @@ A valid Member ID. For example
 
 - `190160914765316096`
 
-### channel
+### Channel
 
 Anything that can uniquely identify a channel. For example
 
@@ -53,7 +53,7 @@ A valid channel ID. For example
 
 - `742095521962786858`
 
-### role
+### Role
 
 Anything that can uniquely identify a role. For example
 
