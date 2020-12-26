@@ -14,8 +14,9 @@ module.exports = class extends Command {
     }
 
     async run(message, args) {
+        let guild;
         try {
-            const guild = await this.client.guilds.fetch(args[0])
+            guild = await this.client.guilds.fetch(args[0])
         } catch(err) {
             return message.channel.send("Could not fetch the specified guild!")
         }
