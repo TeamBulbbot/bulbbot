@@ -228,11 +228,9 @@ module.exports = class BulbBotUtils {
 				f = Emotes.features.VIP_REGIONS;
 				desc = "Adds the ability to create voice channels with 384kbps max bitrate";
 			}
-			("FEATURABLE");
 
-			("VIP_REGIONS");
-
-			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
+			if (features.length <= 10) f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
+			else f += `\`${feature}\``;
 
 			features.push(f);
 		});
