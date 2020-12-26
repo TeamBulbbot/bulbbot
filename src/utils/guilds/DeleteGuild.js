@@ -8,7 +8,12 @@ const sequelize = require("../database/connection");
 module.exports = async guildId => {
 	const dbGuild = await sequelize.models.Guild.findOne({
 		where: { GuildId: guildId },
-		include: [{ model: sequelize.models.GuildConfiguration }, { model: sequelize.models.GuildLogging }],
+		include: [
+			{ model: sequelize.models.GuildConfiguration },
+			{ model: sequelize.models.GuildLogging },
+			{ model: sequelize.models.Infraction },
+			{ model: sequelize.models.Starboard },
+		],
 	});
 
 	if (dbGuild === null) {
@@ -19,4 +24,6 @@ module.exports = async guildId => {
 	await dbGuild.destroy().catch(err => console.log(`Unable to delete the Guild table for: ${guildId}: `, err));
 	await dbGuild.GuildConfiguration.destroy().catch(err => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
 	await dbGuild.GuildLogging.destroy().catch(err => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
+	await dbGuild.Infractions.forEach(inf => inf.destroy().catch(err => console.log(`Unable to delete the Infraction table for: ${guildId}: `, err)));
+	await dbGuild.Starboard.destroy().catch(err => console.log(`Unable to delete the Starboard table for: ${guildId}: `, err));
 };
