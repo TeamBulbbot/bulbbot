@@ -1,4 +1,6 @@
 const Event = require("../structures/Event");
+const { SendModAction } = require("../utils/moderation/log");
+const { createInfraction } = require("../utils/InfractionUtils");
 
 module.exports = class extends (
 	Event
@@ -7,22 +9,14 @@ module.exports = class extends (
 		super(...args, {});
 	}
 
-	run(guild, user) {
-		// TODO
-		/*
-		==Guild==
-		guild.id
+	async run(guild, target) {
+		const auditLog = await guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_ADD" });
+		const banLog = auditLog.entries.first();
+		let { executor, reason } = banLog;
+		if (executor.id === this.client.user.id) return;
+		if (reason === null) reason = this.client.bulbutils.translate("global_no_reason");
 
-		==User==
-		user.id
-		user.tag
-		*/
-
-		// check if it was a manual ban (fetch the audit logs)
-		// if manual create an inf
-		// check if it was from bulbbot
-
-		console.log("new ban in:", guild);
-		console.log("user:", user);
+		const infId = await createInfraction(guild.id, "Manual ban", reason, target.tag, target.id, executor.tag, executor.id);
+		await SendModAction(this.client, guild, "manually banned", target, executor, reason, infId);
 	}
 };
