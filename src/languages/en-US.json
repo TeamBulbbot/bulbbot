@@ -5,7 +5,7 @@
 	"global_user_not_found": "{emote_warn} Could not find the specified user",
 	"global_channel_not_found": "{emote_warn} Could not find the specified channel",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
-	"global_logging_mod": "`[{timestamp}]` **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[{infractionId}]`",
+	"global_logging_mod": "`[{timestamp}]` **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
 	"global_no_reason": "No reason given",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 
