@@ -81,13 +81,13 @@
 
 	"inviteinfo_error": "{emote_warn} Unable to find a guild with that invite",
 
-	"multiban_success": "{emote_ban} Banned {full_list} for {reason}",
+	"multiban_success": "{emote_ban} Banned {full_list} for **{reason}**",
 
-	"multiunban_success": "{emote_unban} Unbanned {full_list} for {reason}",
+	"multiunban_success": "{emote_unban} Unbanned {full_list} for **{reason}**",
 
-	"multikick_success": "{emote_kick} Kicked {full_list} for {reason}",
+	"multikick_success": "{emote_kick} Kicked {full_list} for **{reason}**",
 
-	"multiwarn_success": "{emote_kick} Warned {full_list} for {reason}",
+	"multiwarn_success": "{emote_kick} Warned {full_list} for **{reason}**",
 
 	"softban_success": "{emote_ban} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 

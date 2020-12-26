@@ -22,7 +22,7 @@ module.exports = class extends (
 
 	async run(message, args) {
 		const targets = args.slice(0).join(" ").match(UserMentionStrict);
-		let reason = args.slice(0).join("").replace(UserMentionStrict, "");
+		let reason = args.slice(targets.length).join("").replace(UserMentionStrict, "");
 
 		if (reason === "") reason = this.client.bulbutils.translate("global_no_reason");
 		let fullList = "";
