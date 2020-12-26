@@ -28,7 +28,8 @@
 		"pg": "^8.5.1",
 		"pg-hstore": "^2.3.3",
 		"prom-client": "^13.0.0",
-		"sequelize": "^6.3.5"
+		"sequelize": "^6.3.5",
+		"winston": "^3.3.3"
 	},
 	"devDependencies": {
 		"sequelize-cli": "^6.2.0"
