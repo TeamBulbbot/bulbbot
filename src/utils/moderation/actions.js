@@ -30,7 +30,7 @@ module.exports = {
 	ForceBan: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.members.ban(target.id, { reason });
 		const infId = await createInfraction(guild.id, "Forceban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
-		await SendModAction(client, guild, "forcebanned", target, moderator, reasonLog, infId);
+		await SendModAction(client, guild, "force-banned", target, moderator, reasonLog, infId);
 
 		return infId;
 	},

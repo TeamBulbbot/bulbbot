@@ -1,0 +1,61 @@
+const Command = require("../../structures/Command")
+const {Warn} = require("../../utils/moderation/actions");
+const { UserMentionStrict, NonDigits } = require("../../utils/Regex");
+
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
+            description: "Warns multiple selected users",
+            category: "Moderation",
+            aliases: ["mwarn"],
+            usage: "!multiwarn <user> <user2>... [reason]",
+            argList: ["user:User"],
+            minArgs: 1,
+            maxArgs: -1,
+            clearance: 50
+        });
+    }
+
+    async run(message, args) {
+        const targets = args.slice(0).join(" ").match(UserMentionStrict);
+        let reason = args.slice(0).join("").replace(UserMentionStrict, "");
+
+        if (reason === "") reason = this.client.bulbutils.translate("global_no_reason");
+        let fullList = "";
+
+        for (let i = 0; i < targets.length; i++) {
+            const t = targets[i].replace(NonDigits, "");
+            const target = await message.guild.member(t);
+            let infId;
+
+            if (!target) {
+                message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+                continue;
+            }
+
+            infId = await Warn(this.client,
+                message.guild,
+                target,
+                message.author,
+                this.client.bulbutils.translate("global_mod_action_log", {
+                    action: "Warned",
+                    moderator_tag: message.author.tag,
+                    moderator_id: message.author.id,
+                    target_tag: target.user.tag,
+                    target_id: target.user.id,
+                    reason,
+                }),
+                reason
+            )
+
+            fullList += `**${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infId}]\`\` `;
+        }
+
+        return message.channel.send(
+            this.client.bulbutils.translate("multiwarn_success", {
+                full_list: fullList,
+                reason,
+            }),
+        );
+    }
+}

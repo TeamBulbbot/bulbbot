@@ -87,6 +87,8 @@
 
 	"multikick_success": "{emote_kick} Kicked {full_list} for {reason}",
 
+	"multiwarn_success": "{emote_kick} Warned {full_list} for {reason}",
+
 	"softban_success": "{emote_ban} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
 	"deafen_already_deaf": "{emote_warn} User is already deafened!",

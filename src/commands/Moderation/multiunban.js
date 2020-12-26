@@ -10,7 +10,7 @@ module.exports = class extends (
 			description: "Unbans multiple people from a guild",
 			category: "Moderation",
 			aliases: ["munban"],
-			usage: "!multiunban <user> <user2>.... [reason]",
+			usage: "!multiunban <user> <user2>... [reason]",
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,
