@@ -1,4 +1,5 @@
 const Event = require("../structures/Event");
+const CreateGuild = require("../utils/guilds/CreateGuild");
 
 module.exports = class extends (
 	Event
@@ -7,14 +8,7 @@ module.exports = class extends (
 		super(...args, {});
 	}
 
-	run(guild) {
-		// TODO
-		/*
-		guild.id
-		guild.name
-		*/
-
-		// add guild to the database
-		console.log("join guild:", guild);
+	async run(guild) {
+		await CreateGuild(guild);
 	}
 };
