@@ -6,9 +6,6 @@
 - guild
     - get info about a guild based on the guild id
 
-- leave
-    - leave the specified guild by id
-
 - analytics
     - get analytics about the bot
 
