@@ -105,6 +105,8 @@
 	"slowmode_success_remove": "{emote_confirm} Successfully removed slowmode from {channel}",
 	"slowmode_success": "{emote_confirm} Successfully set slowmode in {channel} to **{slowmode}**",
 
+	"tempban_invalid_1y": "{emote_warn} Tempban duration cannot be higher than **1 year**!",
+
 	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
 	"lockdown_locked": "{emote_confirm} Successfully locked down channel {channel}",
 	"lockdown_unlocked": "{emote_confirm} Successfully unlocked channel {channel}",

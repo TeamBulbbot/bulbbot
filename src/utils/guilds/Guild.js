@@ -21,6 +21,20 @@ module.exports = {
 		}
 		return dbGuild.GuildConfiguration.Prefix;
 	},
+
+	/**
+	 *
+	 * @param guild		Guild ID parsed from the message event
+	 * @returns {Promise<{type: *}>}	Guild Prefix
+	 */
+	async getMuteRole(guild) {
+		const dbGuild = await sequelize.models.Guild.findOne({
+			where: { GuildId: guild.id },
+			include: [{ model: sequelize.models.GuildConfiguration }],
+		});
+
+		return dbGuild.GuildConfiguration.MuteRole;
+	},
 	/**
 	 * Removed and immediately created a new Guild object in the database
 	 *

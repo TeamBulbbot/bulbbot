@@ -1,13 +1,12 @@
 const sequelize = require("../database/connection");
 const Emotes = require("../../emotes.json");
 const moment = require("moment");
-const BulbBotUtils = require("../BulbBotUtils")
+const utils = new (require("../BulbBotUtils"))()
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
 		const betterAction = BetterActions(action);
-		const utils = new BulbBotUtils()
 
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
