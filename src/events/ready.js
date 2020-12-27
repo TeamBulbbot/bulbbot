@@ -1,5 +1,6 @@
 const Event = require("../structures/Event");
 const { TempbanRestore } = require("../utils/moderation/temp");
+
 module.exports = class extends (
 	Event
 ) {

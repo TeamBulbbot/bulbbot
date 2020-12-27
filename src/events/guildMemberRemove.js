@@ -9,6 +9,8 @@ module.exports = class extends (
 	}
 
 	run(member) {
+		// TODO
+		// make a check if the user was kicked or left from the guild
 		SendEventLog(this.client, member.guild, "joinleave", `**Member left:** **${member.user.tag}** \`(${member.user.id})\` `);
 	}
 };
