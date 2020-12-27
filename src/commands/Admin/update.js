@@ -19,7 +19,7 @@ module.exports = class extends (
 		shell.cd(`${p}/../../../`);
 		const resp = shell.exec("git pull");
 
-		return message.channel.send(resp.stdout, { code: "txt" });
+		return message.channel.send(resp.stdout, { code: "yaml" });
 
 		// TODO
 		// figure out a way to restart the program
