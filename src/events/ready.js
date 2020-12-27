@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-
+const { TempbanRestore } = require("../utils/moderation/temp");
 module.exports = class extends (
 	Event
 ) {
@@ -9,7 +9,7 @@ module.exports = class extends (
 		});
 	}
 
-	run() {
+	async run() {
 		this.client.user.setPresence({
 			status: global.config.client.status,
 			activity: {
@@ -17,6 +17,8 @@ module.exports = class extends (
 				type: global.config.client.type,
 			},
 		});
+
+		await TempbanRestore(this.client);
 
 		console.log(
 			[
