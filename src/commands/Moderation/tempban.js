@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { Ban, ForceBan, Unban } = require("../../utils/moderation/actions");
+const { TempBan, ForceBan, UnbanTemp } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
 const utils = new (require("../../utils/BulbBotUtils"))();
 
@@ -62,7 +62,7 @@ module.exports = class extends (
 				target,
 				message.author,
 				this.client.bulbutils.translate("global_mod_action_log", {
-					action: "Temporarily Forcebanned",
+					action: "Temp-banned",
 					moderator_tag: message.author.tag,
 					moderator_id: message.author.id,
 					target_tag: target.tag,
@@ -82,18 +82,19 @@ module.exports = class extends (
 			}
 
 			target = target.user;
-			infId = await Ban(
+			infId = await TempBan(
 				this.client,
 				message.guild,
 				target,
 				message.author,
 				this.client.bulbutils.translate("global_mod_action_log", {
-					action: "Temporarily banned",
+					action: "Temp-banned",
 					moderator_tag: message.author.tag,
 					moderator_id: message.author.id,
 					target_tag: target.tag,
 					target_id: target.id,
 					reason,
+					until: (Date.now() + parse(args[1]))
 				}),
 				reason,
 			);
@@ -111,29 +112,20 @@ module.exports = class extends (
 		const client = this.client;
 		setTimeout(async function () {
 			console.log(client);
-			infId = await Unban(
+			infId = await UnbanTemp(
 				client,
 				message.guild,
 				target,
-				message.author,
+				client.user,
 				utils.translate("global_mod_action_log", {
-					action: "Unban",
-					moderator_tag: message.author.tag,
-					moderator_id: message.author.id,
+					action: "Auto-unbanned",
+					moderator_tag: client.user.tag,
+					moderator_id: client.user.id,
 					target_tag: target.tag,
 					target_id: target.id,
 					reason,
 				}),
 				reason,
-			);
-
-			return message.channel.send(
-				utils.translate("unban_success", {
-					target_tag: target.tag,
-					target_id: target.id,
-					reason,
-					infractionId: infId,
-				}),
 			);
 		}, duration);
 	}

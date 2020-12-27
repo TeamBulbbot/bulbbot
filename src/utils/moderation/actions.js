@@ -1,5 +1,5 @@
 const { createInfraction } = require("../InfractionUtils");
-const { SendModAction } = require("./log");
+const { SendModAction, SendModActionTemp, SendAutoUnban } = require("./log");
 
 module.exports = {
 	Warn: async (client, guild, target, moderator, reason, reasonLog) => {
@@ -27,6 +27,14 @@ module.exports = {
 		return infId;
 	},
 
+	TempBan: async (client, guild, target, moderator, reason, reasonLog, until) => {
+		await guild.member(target.id).ban({ reason });
+		const infId = await createInfraction(guild.id, "Temp-ban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendModActionTemp(client, guild, "temp-banned", target, moderator, reasonLog, infId, until);
+
+		return infId;
+	},
+
 	ForceBan: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.members.ban(target.id, { reason });
 		const infId = await createInfraction(guild.id, "Forceban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
@@ -45,12 +53,18 @@ module.exports = {
 		return infId;
 	},
 
-	TempBan: async () => {},
-
 	Unban: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.members.unban(target.id, reason);
 		const infId = await createInfraction(guild.id, "Unban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "unbanned", target, moderator, reasonLog, infId);
+
+		return infId;
+	},
+
+	UnbanTemp: async (client, guild, target, moderator, reason, reasonLog) => {
+		await guild.members.unban(target.id, reason);
+		const infId = await createInfraction(guild.id, "Auto-unban", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendAutoUnban(client, guild, "automatically unbanned", target, moderator, reasonLog, infId);
 
 		return infId;
 	},
