@@ -13,8 +13,6 @@ module.exports = class extends (
 		this.client.prefix = await getPrefix(message.guild);
 		activity_guilds(message.guild.id);
 
-		return;
-
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 		if (!message.guild || message.author.bot) return;
 		if (message.content.match(mentionRegex)) message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
