@@ -70,7 +70,7 @@ module.exports = {
 	},
 
 	Deafen: async (client, guild, target, moderator, reason, reasonLog) => {
-		await target.voice.setDeaf(true)
+		await target.voice.setDeaf(true);
 		const infId = await createInfraction(guild.id, "Deafen", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "deafened", target.user, moderator, reasonLog, infId);
 
@@ -78,7 +78,7 @@ module.exports = {
 	},
 
 	Undeafen: async (client, guild, target, moderator, reason, reasonLog) => {
-		await target.voice.setDeaf(false)
+		await target.voice.setDeaf(false);
 		const infId = await createInfraction(guild.id, "Undeafen", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "undeafened", target.user, moderator, reasonLog, infId);
 
@@ -86,7 +86,7 @@ module.exports = {
 	},
 
 	Voicekick: async (client, guild, target, moderator, reason, reasonLog) => {
-		await target.voice.kick()
+		await target.voice.kick();
 		const infId = await createInfraction(guild.id, "Voice kick", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "voice-kicked", target.user, moderator, reasonLog, infId);
 
