@@ -34,9 +34,9 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({user_discriminator})/g, key.user_discriminator);
 		response = response.replace(/({user_avatar})/g, key.user_avatar);
 		response = response.replace(/({user_bot})/g, key.user_bot);
-		response = response.replace(/({user_age})/g, formatDays(key.user_age));
-		response = response.replace(/({user_premium})/g, formatDays(key.user_premium));
-		response = response.replace(/({user_joined})/g, formatDays(key.user_joined));
+		response = response.replace(/({user_age})/g, this.formatDays(key.user_age));
+		response = response.replace(/({user_premium})/g, this.formatDays(key.user_premium));
+		response = response.replace(/({user_joined})/g, this.formatDays(key.user_joined));
 		response = response.replace(/({user_roles})/g, key.user_roles);
 		response = response.replace(/({user_infractions})/g, key.user_infractions);
 		if (key.user_infractions !== undefined) {
@@ -59,7 +59,7 @@ module.exports = class BulbBotUtils {
 			response = response.replace(/({guild_features})/g, this.guildFeatures(key.guild.features));
 			response = response.replace(/({guild_region})/g, this.guildRegion(key.guild.region));
 			response = response.replace(/({guild_verification})/g, key.guild.verificationLevel);
-			response = response.replace(/({guild_age})/g, formatDays(key.guild.createdTimestamp));
+			response = response.replace(/({guild_age})/g, this.formatDays(key.guild.createdTimestamp));
 			response = response.replace(/({guild_members})/g, key.guild.memberCount);
 
 			response = response.replace(/({guild_max})/g, key.guild.maximumMembers);
@@ -325,12 +325,12 @@ module.exports = class BulbBotUtils {
 
 		return user;
 	}
+
+	formatDays(start) {
+		const end = moment.utc().format("YYYY-MM-DD");
+		const date = moment(moment.utc(start).format("YYYY-MM-DD"));
+		const days = moment.duration(date.diff(end)).asDays();
+
+		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\``;
+	}
 };
-
-function formatDays(start) {
-	const end = moment.utc().format("YYYY-MM-DD");
-	const date = moment(moment.utc(start).format("YYYY-MM-DD"));
-	const days = moment.duration(date.diff(end)).asDays();
-
-	return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\``;
-}
