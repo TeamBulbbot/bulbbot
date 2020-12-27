@@ -2,6 +2,7 @@ const Command = require("../../structures/Command");
 const { TempBan, ForceBan, UnbanTemp } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
 const utils = new (require("../../utils/BulbBotUtils"))();
+const { TempbanCreate, TempbanDelete } = require("../../utils/moderation/temp");
 
 const parse = require("parse-duration");
 
@@ -30,6 +31,7 @@ module.exports = class extends (
 		let duration = parse(args[1]);
 		let notInGuild = !target;
 		let infId = null;
+		let tempbanId;
 
 		const banList = await message.guild.fetchBans();
 		const bannedUser = banList.find(user => user.user.id === targetId);
@@ -94,11 +96,13 @@ module.exports = class extends (
 					target_tag: target.tag,
 					target_id: target.id,
 					reason,
-					until: (Date.now() + parse(args[1]))
+					until: Date.now() + parse(args[1]),
 				}),
 				reason,
 			);
 		}
+
+		tempbanId = await TempbanCreate(message.guild.id, target.tag, target.id, reason, Date.now() + parse(args[1]));
 
 		message.channel.send(
 			this.client.bulbutils.translate("ban_success", {
@@ -111,7 +115,6 @@ module.exports = class extends (
 
 		const client = this.client;
 		setTimeout(async function () {
-			console.log(client);
 			infId = await UnbanTemp(
 				client,
 				message.guild,
@@ -127,6 +130,8 @@ module.exports = class extends (
 				}),
 				reason,
 			);
+
+			TempbanDelete(tempbanId);
 		}, duration);
 	}
 };
