@@ -10,6 +10,7 @@ embedColor: "#7289DA"
 
 # client
 client:
+  tag: "Bulbbot#9083"
   id: "755149065137815623"
   game: "Philip suffer in code"
   type: "WATCHING"
