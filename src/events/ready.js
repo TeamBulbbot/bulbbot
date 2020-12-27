@@ -10,6 +10,14 @@ module.exports = class extends (
 	}
 
 	run() {
+		this.client.user.setPresence({
+			status: global.config.client.status,
+			activity: {
+				name: global.config.client.game,
+				type: global.config.client.type,
+			},
+		});
+
 		console.log(
 			[
 				`${this.client.user.username} successfully logged and ready`,

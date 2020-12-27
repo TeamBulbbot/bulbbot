@@ -27,7 +27,7 @@ module.exports = class extends (
 		const attach = reaction.message.attachments.first();
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(pglobal.config.embedColor)
 			.setAuthor(reaction.message.author.tag, reaction.message.author.avatarURL())
 			.setDescription(
 				reaction.message.content +

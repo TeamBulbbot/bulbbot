@@ -62,7 +62,7 @@ module.exports = class extends (
 		});
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
 			.addField(this.client.bulbutils.translate("serverinfo_server_stats"), serverStats, true)

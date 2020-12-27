@@ -39,7 +39,7 @@ module.exports = class extends (
 		inviteInfo += `${Emotes.status.OFFLINE}: \`${invite.memberCount}\`\n\n`;
 
 		let embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setTitle(guild.description !== null ? `${guild.description}` : "")
 			.setAuthor(`${guild.name} (${guild.id})`, guild.iconURL({ dynamic: true }))
 			.setDescription(desc)

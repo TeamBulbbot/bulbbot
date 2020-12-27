@@ -1,0 +1,31 @@
+---
+name: "Bulbbot"
+developers: ["190160914765316096", "439396770695479297"]
+version: 0.0.1
+lib: Discord.JS
+
+# configs
+prefix: "!"
+embedColor: "#7289DA"
+
+# client
+client:
+  id: "755149065137815623"
+  game: "AAAAAA"
+  type: "WATCHING"
+  status: "online"
+  fetchAllUsers: false
+  disableMentions: "everyone"
+
+# server
+server:
+  prometheusHost: "localhost"
+  prometheusPort: 8080
+
+# support
+supportInvite: "https://discord.gg/cacUmbQ"
+
+# logs
+botDM: "785213905207164948"
+invite: "786180293740199986"
+error: "786179914251370537"

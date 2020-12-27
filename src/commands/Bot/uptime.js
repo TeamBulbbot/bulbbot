@@ -27,7 +27,7 @@ module.exports = class extends (
 		if (secs > 0) uptime += `${secs} second(s)`;
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setDescription(this.client.bulbutils.translate("uptime_uptime", { uptime }))
 			.setFooter(
 				this.client.bulbutils.translate("global_executed_by", {

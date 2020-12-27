@@ -59,7 +59,7 @@ module.exports = class extends (
 		description += this.client.bulbutils.translate("userinfo_embed_infractions", { user_infractions: infs.length });
 
 		let color;
-		if (user.roles === undefined || user.roles.highest.name === "@everyone") color = process.env.EMBED_COLOR;
+		if (user.roles === undefined || user.roles.highest.name === "@everyone") color = global.config.embedColor;
 		else color = user.roles.highest.hexColor;
 
 		const embed = new Discord.MessageEmbed()

@@ -4,8 +4,8 @@ const client = require("prom-client");
 module.exports = {
 	init: async () => {
 		const server = Hapi.server({
-			port: 8080,
-			host: "localhost",
+			port: global.config.server.prometheusPort,
+			host: global.config.server.prometheusHost,
 		});
 
 		server.route({

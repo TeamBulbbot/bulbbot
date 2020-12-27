@@ -17,7 +17,7 @@ module.exports = {
 
 		if (dbGuild === null) {
 			await CreateGuild(guild);
-			return process.env.PREFIX;
+			return global.config.prefix;
 		}
 		return dbGuild.GuildConfiguration.Prefix;
 	},

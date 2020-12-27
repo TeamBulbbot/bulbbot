@@ -8,7 +8,7 @@ const sequelize = require("../database/connection");
  */
 module.exports = async guild => {
 	const config = await sequelize.models.GuildConfiguration.create({
-		Prefix: process.env.PREFIX,
+		Prefix: global.config.prefix,
 	});
 	const logging = await sequelize.models.GuildLogging.create({});
 

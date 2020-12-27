@@ -13,11 +13,11 @@ module.exports = class extends (
 	}
 
 	async run(message, args) {
-		const botInvite = `https://discord.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=1544940655`;
-		const guildInvite = "https://discord.gg/cacUmbQ";
+		const botInvite = `https://discord.com/oauth2/authorize?client_id=${global.config.client.id}&scope=bot&permissions=1544940655`;
+		const guildInvite = global.config.supportInvite;
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setDescription(this.client.bulbutils.translate("invite_desc", { bot_invite: botInvite, support_guild: guildInvite }))
 			.setFooter(
 				this.client.bulbutils.translate("global_executed_by", {

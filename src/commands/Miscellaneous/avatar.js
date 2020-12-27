@@ -43,7 +43,7 @@ module.exports = class extends (
 		});
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setAuthor(`${user.tag} (${user.id})`, user.avatarURL({ dynamic: true }))
 			.setDescription(desc)
 			.setImage(user.avatarURL({ dynamic: true, size: 4096 }))

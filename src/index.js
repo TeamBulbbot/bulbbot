@@ -1,11 +1,12 @@
 const BulbBotClient = require("./structures/BulbBotClient");
 const db = require("./utils/database/connection");
 const server = require("./utils/prometheus/server");
-
+require("./structures/Config");
 require("dotenv").config();
+
 const config = {
 	token: process.env.TOKEN,
-	prefix: process.env.PREFIX,
+	prefix: global.config.prefix,
 	defaultPerms: ["SEND_MESSAGES", "VIEW_CHANNEL"],
 	clearance: "0",
 };

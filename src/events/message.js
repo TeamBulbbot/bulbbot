@@ -41,8 +41,7 @@ module.exports = class extends (
 				}
 			}
 
-			const developers = process.env.DEVELOPERS.split(",");
-			if (command.devOnly) if (!developers.includes(message.author.id)) return;
+			if (command.devOnly) if (!global.config.developers.includes(message.author.id)) return;
 
 			if (command.maxArgs < args.length && command.maxArgs !== -1) {
 				return message.channel.send(

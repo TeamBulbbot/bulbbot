@@ -17,7 +17,7 @@ module.exports = class extends (
 		const apiLatency = Math.round(this.client.ws.ping);
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setDescription(this.client.bulbutils.translate("ping_latency", { latency_bot: latency, latency_ws: apiLatency }))
 			.setFooter(
 				this.client.bulbutils.translate("global_executed_by", {

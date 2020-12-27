@@ -26,7 +26,7 @@ module.exports = class extends (
 		if (desc.length === 0) desc = this.client.bulbutils.translate("global_user_not_found");
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setAuthor(`Query: ${query}`)
 			.setDescription(desc)
 			.setFooter(

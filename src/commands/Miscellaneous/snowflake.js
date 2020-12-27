@@ -31,7 +31,7 @@ module.exports = class extends (
 		desc += `**Creation**\n${formatDays(deconstruct.date)}\n`;
 
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setDescription(desc)
 			.setFooter(
 				this.client.bulbutils.translate("global_executed_by", {

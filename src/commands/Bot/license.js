@@ -14,7 +14,7 @@ module.exports = class extends (
 
 	async run(message, args) {
 		const embed = new Discord.MessageEmbed()
-			.setColor(process.env.EMBED_COLOR)
+			.setColor(global.config.embedColor)
 			.setDescription(this.client.bulbutils.translate("license_license"))
 			.setFooter(
 				this.client.bulbutils.translate("global_executed_by", {
