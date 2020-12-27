@@ -9,9 +9,6 @@
 - analytics
     - get analytics about the bot
 
-- update
-    - pull the latest from master
-
 - restart
     - restart the bot
 
