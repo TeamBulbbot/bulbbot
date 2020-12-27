@@ -24,6 +24,47 @@ module.exports = {
 			}))
 	},
 
+	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
+		const dbGuild = await GetDBGuild(guild.id);
+		const betterAction = BetterActions(action);
+
+		if (dbGuild.GuildLogging.ModAction === null) return;
+
+		client.channels.cache
+			.get(dbGuild.GuildLogging.ModAction)
+			.send(utils.translate("global_logging_unban_auto", {
+				timestamp: moment().format("hh:mm:ss a"),
+				target_tag: target.tag,
+				user_id: target.id,
+				moderator_tag: moderator.tag,
+				moderator_id: moderator.id,
+				reason: log,
+				infractionId: infId,
+				action: betterAction
+			}))
+	},
+
+	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
+		const dbGuild = await GetDBGuild(guild.id);
+		const betterAction = BetterActions(action);
+
+		if (dbGuild.GuildLogging.ModAction === null) return;
+
+		client.channels.cache
+			.get(dbGuild.GuildLogging.ModAction)
+			.send(utils.translate("global_logging_mod_temp", {
+				timestamp: moment().format("hh:mm:ss a"),
+				target_tag: target.tag,
+				user_id: target.id,
+				moderator_tag: moderator.tag,
+				moderator_id: moderator.id,
+				reason: log,
+				infractionId: infId,
+				action: betterAction,
+				until: moment(until).format("MMM Do YYYY, h:mm:ss a")
+			}))
+	},
+
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
 		const dbGuild = await GetDBGuild(guild.id);
 		const betterAction = BetterActions(action);
