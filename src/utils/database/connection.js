@@ -29,6 +29,7 @@ const models = [
 	require("./models/Infraction"),
 	require("./models/Starboard"),
 	require("./models/StarboardPost"),
+	require("./models/Tempban"),
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);

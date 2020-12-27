@@ -8,6 +8,7 @@ function ApplyExtra(sequelize) {
 		Infraction,
 		Starboard,
 		StarboardPost,
+		Tempban,
 	} = sequelize.models;
 
 	Guild.belongsTo(GuildConfiguration, {});
@@ -19,6 +20,8 @@ function ApplyExtra(sequelize) {
 	Guild.hasMany(Infraction, {});
 	Guild.hasMany(GuildModerationRoles, {});
 	Guild.hasMany(GuildOverrideCommands, {});
+
+	Guild.hasMany(Tempban, {});
 }
 
 module.exports = { ApplyExtra };
