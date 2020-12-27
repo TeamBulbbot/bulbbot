@@ -1,4 +1,5 @@
 const Event = require("../structures/Event");
+const { SendEventLog } = require("../utils/moderation/log");
 
 module.exports = class extends (
 	Event
@@ -8,7 +9,13 @@ module.exports = class extends (
 	}
 
 	run(member) {
-		// TODO
-		console.log("removed guild member:", member);
+		SendEventLog(
+			this.client,
+			member.guild,
+			"joinleave",
+			`**Member left:** **${member.user.tag}** \`(${member.user.id})\` - **Joined Server:** ${this.client.bulbutils.formatDays(
+				member.user.joinedTimestamp,
+			)}`,
+		);
 	}
 };
