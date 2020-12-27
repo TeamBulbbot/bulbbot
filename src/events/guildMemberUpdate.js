@@ -9,7 +9,5 @@ module.exports = class extends (
 
 	run(oldMember, newMember) {
 		// TODO
-		console.log("old member:", oldMember);
-		console.log("new member:", newMember);
 	}
 };
