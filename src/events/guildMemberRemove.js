@@ -9,13 +9,6 @@ module.exports = class extends (
 	}
 
 	run(member) {
-		SendEventLog(
-			this.client,
-			member.guild,
-			"joinleave",
-			`**Member left:** **${member.user.tag}** \`(${member.user.id})\` - **Joined Server:** ${this.client.bulbutils.formatDays(
-				member.user.joinedTimestamp,
-			)}`,
-		);
+		SendEventLog(this.client, member.guild, "joinleave", `**Member left:** **${member.user.tag}** \`(${member.user.id})\` `);
 	}
 };
