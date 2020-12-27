@@ -9,7 +9,13 @@ module.exports = class extends (
 	}
 
 	run(member) {
-		// TODO
-		SendEventLog(this.client, member.guild, "member", `**New member:** **${member.tag}** (${member.id})`);
+		SendEventLog(
+			this.client,
+			member.guild,
+			"joinleave",
+			`**New member:** **${member.user.tag}** \`(${member.user.id})\` - **Account created:** ${this.client.bulbutils.formatDays(
+				member.user.createdAt,
+			)}`,
+		);
 	}
 };
