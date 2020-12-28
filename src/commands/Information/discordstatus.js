@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 			const inciUpdates = incident.incident_updates[0];
 			if (inciUpdates !== null) {
-				msg += "\n\n**Updates**\n ";
+				msg += "\n\n**Updates**\n";
 				msg += `**Status Update: ** ${inciUpdates.status}\n`;
 				msg += `**Information:** ${inciUpdates.body}\n`;
 				msg += `**Date:** ${inciUpdates.created_at}\n`;
