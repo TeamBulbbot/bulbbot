@@ -12,7 +12,7 @@ module.exports = class extends (
 			argList: ["level:integer"],
 			minArgs: 1,
 			maxArgs: -1,
-			clearance: 50,
+			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["MANAGE_GUILD"],
 		});

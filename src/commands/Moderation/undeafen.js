@@ -8,7 +8,7 @@ module.exports = class extends Command {
             description: "Undeafens a member from a Voice Channel they're connected to",
             category: "Moderation",
             usage: "!undeafen <user> [reason]",
-            argList: ["user:User"],
+            argList: ["member:Member"],
             minArgs: 1,
             maxArgs: -1,
             clearance: 50,

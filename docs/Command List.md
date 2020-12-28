@@ -46,3 +46,11 @@ WIP
 | multiunban | `munban` | 50 | Unbans multiple people from a guild | !multiunban \<user\> \<user2\>... [reason] | `user:User`, `reason:string` | 1:-1 |
 | multikick | `mkick` | 50 | Warns multiple selected users | !multiban \<member\> \<member2\>... [reason] | `member:Member`, `reason:string` | 1:-1 |
 | purge | `clear` | 50 | Purges messages from a chat | !purge \<amount\> | `amount:integer` | 1:1 |
+| slowmode | N/A | 50 | Sets a slowmode to the selected channel | !slowmode \<duration\> [channel] | `duration:Duration`, `channel:Channel` | 1:2 |
+| softban | `cleanban` | 50 | Bans and unbans a user from the guild | !softban \<user\> [reason] | `user:User`, `reason:string` | 1:-1 |
+| tempban | N/A | 50 | Temporarily bans or forcebans a user from the guild | !tempban \<user\> \<duration\> [reason] | `user:User`, `duration:Duration`, `reason:string` | 2:-1 |
+| unban | `pardon` | 50 | Unban a user from the guild | !unban \<user\> [reason] | `user:User`, `reason:string` | 1:-1 |
+| undeafen | N/A | 50 | Undeafens a member from a Voice Channel they're connected to | !undeafen \<member\> [reason] | `member:Member`, `reason:string` | 1:-1 |
+| verification | N/A | 75 | Changes the server verification level | !verification \<level\> | `level:integer`| 1:1 |
+| voicekick | `vckick` | 50 | Kicks a member from the Voice Channel they're connected to | !voicekick \<member\> [reason] | `member:Member`, `reason:string` | 1:-1 |
+| warn | N/A | 50 | Warns the selected guild member | !warn \<member\> [reason] | `member:Member`, `reason:string` | 1:-1 |

@@ -7,9 +7,9 @@ module.exports = class extends Command {
         super(...args, {
             description: "Kicks a member from the Voice Channel they're connected to",
             category: "Moderation",
-            usage: "!voicekick <user> [reason]",
+            usage: "!voicekick <member> [reason]",
             aliases: ["vckick"],
-            argList: ["user:User"],
+            argList: ["member:Member"],
             minArgs: 1,
             maxArgs: -1,
             clearance: 50,
