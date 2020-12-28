@@ -11,8 +11,8 @@
 	"global_no_reason": "No reason given",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 
-	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
-	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_tools} **Correct usage:** {usage}",
+	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
+	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
 
 	"userinfo_embed_id": "**ID:** {user_id}\n",
 	"userinfo_embed_username": "**Username:** {user_name}\n",
