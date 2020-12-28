@@ -1,7 +1,7 @@
 # Commands
 
 In this article you'll learn everything you need to know about 
-Bulbbot commands, how to use parameters etc. so you can become the ultimate Bulbbot command master
+Bulbbot commands, how to use arguments etc. so you can become the ultimate Bulbbot command master
 
 ### Command categories
 Every command has a **category** it belongs to. This means that
