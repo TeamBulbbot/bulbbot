@@ -1,15 +1,15 @@
 const Event = require("../structures/Event");
 
 module.exports = class extends (
-	Event
+    Event
 ) {
-	constructor(...args) {
-		super(...args, {});
-	}
+    constructor(...args) {
+        super(...args, {});
+    }
 
-	run(oldRole, newRole) {
-		// TODO
-		console.log("old role:", oldRole);
-		console.log("new role:", newRole);
-	}
+    run(oldRole, newRole) {
+        // TODO
+        console.log("old role:", oldRole);
+        console.log("new role:", newRole);
+    }
 };

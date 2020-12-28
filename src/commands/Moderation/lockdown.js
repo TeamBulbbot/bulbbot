@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command")
-const { NonDigits } = require("../../utils/Regex");
+const {NonDigits} = require("../../utils/Regex");
 
 module.exports = class extends Command {
     constructor(...args) {

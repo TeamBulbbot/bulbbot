@@ -1,15 +1,15 @@
 const Event = require("../structures/Event");
 
 module.exports = class extends (
-	Event
+    Event
 ) {
-	constructor(...args) {
-		super(...args, {});
-	}
+    constructor(...args) {
+        super(...args, {});
+    }
 
-	run(oldMessage, newMessage) {
-		// TODO
-		//console.log("old message:", oldMessage);
-		//console.log("new message:", newMessage);
-	}
+    run(oldMessage, newMessage) {
+        // TODO
+        //console.log("old message:", oldMessage);
+        //console.log("new message:", newMessage);
+    }
 };

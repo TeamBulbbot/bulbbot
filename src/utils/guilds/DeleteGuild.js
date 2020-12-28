@@ -6,24 +6,24 @@ const sequelize = require("../database/connection");
  * @returns {Promise<void>}
  */
 module.exports = async guildId => {
-	const dbGuild = await sequelize.models.Guild.findOne({
-		where: { GuildId: guildId },
-		include: [
-			{ model: sequelize.models.GuildConfiguration },
-			{ model: sequelize.models.GuildLogging },
-			{ model: sequelize.models.Infraction },
-			{ model: sequelize.models.Starboard },
-		],
-	});
+    const dbGuild = await sequelize.models.Guild.findOne({
+        where: {GuildId: guildId},
+        include: [
+            {model: sequelize.models.GuildConfiguration},
+            {model: sequelize.models.GuildLogging},
+            {model: sequelize.models.Infraction},
+            {model: sequelize.models.Starboard},
+        ],
+    });
 
-	if (dbGuild === null) {
-		console.log(`Unable to find the db table for guild: ${guildId}`);
-		return;
-	}
+    if (dbGuild === null) {
+        console.log(`Unable to find the db table for guild: ${guildId}`);
+        return;
+    }
 
-	await dbGuild.destroy().catch(err => console.log(`Unable to delete the Guild table for: ${guildId}: `, err));
-	await dbGuild.GuildConfiguration.destroy().catch(err => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
-	await dbGuild.GuildLogging.destroy().catch(err => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
-	await dbGuild.Infractions.forEach(inf => inf.destroy().catch(err => console.log(`Unable to delete the Infraction table for: ${guildId}: `, err)));
-	await dbGuild.Starboard.destroy().catch(err => console.log(`Unable to delete the Starboard table for: ${guildId}: `, err));
+    await dbGuild.destroy().catch(err => console.log(`Unable to delete the Guild table for: ${guildId}: `, err));
+    await dbGuild.GuildConfiguration.destroy().catch(err => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
+    await dbGuild.GuildLogging.destroy().catch(err => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
+    await dbGuild.Infractions.forEach(inf => inf.destroy().catch(err => console.log(`Unable to delete the Infraction table for: ${guildId}: `, err)));
+    await dbGuild.Starboard.destroy().catch(err => console.log(`Unable to delete the Starboard table for: ${guildId}: `, err));
 };

@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command")
 const {Warn} = require("../../utils/moderation/actions");
-const { UserMentionStrict, NonDigits } = require("../../utils/Regex");
+const {UserMentionStrict, NonDigits} = require("../../utils/Regex");
 
 module.exports = class extends Command {
     constructor(...args) {

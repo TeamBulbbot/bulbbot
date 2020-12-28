@@ -1,15 +1,15 @@
 const Event = require("../structures/Event");
 
 module.exports = class extends (
-	Event
+    Event
 ) {
-	constructor(...args) {
-		super(...args, {});
-	}
+    constructor(...args) {
+        super(...args, {});
+    }
 
-	run(oldGuild, newGuild) {
-		// TODO
-		console.log("old guild:", oldGuild);
-		console.log("new guild:", newGuild);
-	}
+    run(oldGuild, newGuild) {
+        // TODO
+        console.log("old guild:", oldGuild);
+        console.log("new guild:", newGuild);
+    }
 };

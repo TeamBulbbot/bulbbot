@@ -1,13 +1,13 @@
 const Event = require("../structures/Event");
 
 module.exports = class extends (
-	Event
+    Event
 ) {
-	constructor(...args) {
-		super(...args, {});
-	}
+    constructor(...args) {
+        super(...args, {});
+    }
 
-	run(error) {
-		console.error("error: ", error);
-	}
+    run(error) {
+        console.error("error: ", error);
+    }
 };

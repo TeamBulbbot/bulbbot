@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command")
 const parse = require("parse-duration")
-const { NonDigits } = require("../../utils/Regex");
+const {NonDigits} = require("../../utils/Regex");
 
 module.exports = class extends Command {
     constructor(...args) {
@@ -36,7 +36,10 @@ module.exports = class extends Command {
         await channel.setRateLimitPerUser(duration / 1000)
 
         if (duration === parse("0s")) message.channel.send(this.client.bulbutils.translate("slowmode_success_remove", {channel}))
-        else if (args.length === 1) message.channel.send(this.client.bulbutils.translate("slowmode_success", {channel, slowmode: args[0]}))
+        else if (args.length === 1) message.channel.send(this.client.bulbutils.translate("slowmode_success", {
+            channel,
+            slowmode: args[0]
+        }))
         else message.channel.send(this.client.bulbutils.translate("slowmode_success", {channel, slowmode: args[1]}))
     }
 }

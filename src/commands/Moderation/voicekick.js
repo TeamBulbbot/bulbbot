@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command")
-const { Voicekick } = require("../../utils/moderation/actions");
-const { NonDigits } = require("../../utils/Regex");
+const {Voicekick} = require("../../utils/moderation/actions");
+const {NonDigits} = require("../../utils/Regex");
 
 module.exports = class extends Command {
     constructor(...args) {

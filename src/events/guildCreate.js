@@ -2,13 +2,13 @@ const Event = require("../structures/Event");
 const CreateGuild = require("../utils/guilds/CreateGuild");
 
 module.exports = class extends (
-	Event
+    Event
 ) {
-	constructor(...args) {
-		super(...args, {});
-	}
+    constructor(...args) {
+        super(...args, {});
+    }
 
-	async run(guild) {
-		await CreateGuild(guild);
-	}
+    async run(guild) {
+        await CreateGuild(guild);
+    }
 };

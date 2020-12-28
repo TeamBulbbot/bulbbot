@@ -2,13 +2,13 @@ const Event = require("../structures/Event");
 const DeleteGuild = require("../utils/guilds/DeleteGuild");
 
 module.exports = class extends (
-	Event
+    Event
 ) {
-	constructor(...args) {
-		super(...args, {});
-	}
+    constructor(...args) {
+        super(...args, {});
+    }
 
-	async run(guild) {
-		await DeleteGuild(guild.id);
-	}
+    async run(guild) {
+        await DeleteGuild(guild.id);
+    }
 };

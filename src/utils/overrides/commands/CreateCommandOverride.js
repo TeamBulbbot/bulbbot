@@ -10,25 +10,25 @@ const sequelize = require("../../database/connection");
  * @returns {Promise<void>}
  */
 module.exports = async (guildId, commandName, enabled, newClearanceLevel) => {
-	const dbGuild = await sequelize.models.Guild.findOne({
-		where: { GuildId: guildId },
-		include: [
-			{
-				model: sequelize.models.GuildOverrideCommands,
-				required: false,
-				where: {
-					CommandName: commandName,
-				},
-			},
-		],
-	});
-	if (dbGuild === null) return;
-	if (dbGuild.GuildOverrideCommands[0] !== undefined) return;
+    const dbGuild = await sequelize.models.Guild.findOne({
+        where: {GuildId: guildId},
+        include: [
+            {
+                model: sequelize.models.GuildOverrideCommands,
+                required: false,
+                where: {
+                    CommandName: commandName,
+                },
+            },
+        ],
+    });
+    if (dbGuild === null) return;
+    if (dbGuild.GuildOverrideCommands[0] !== undefined) return;
 
-	await sequelize.models.GuildOverrideCommands.create({
-		Enabled: enabled,
-		CommandName: commandName,
-		ClearanceLevel: newClearanceLevel,
-		GuildId: dbGuild.id,
-	});
+    await sequelize.models.GuildOverrideCommands.create({
+        Enabled: enabled,
+        CommandName: commandName,
+        ClearanceLevel: newClearanceLevel,
+        GuildId: dbGuild.id,
+    });
 };
