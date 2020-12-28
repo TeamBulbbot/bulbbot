@@ -1,14 +1,14 @@
-const {DataTypes} = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-    sequelize.define("Guild", {
-        GuildId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        Name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
+	sequelize.define("Guild", {
+		GuildId: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		Name: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+	});
 };
