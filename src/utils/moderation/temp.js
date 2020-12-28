@@ -30,11 +30,11 @@ module.exports = {
 
 		const time = Date.now();
 
-		table.Tempbans.forEach(async tb => {
+		for (const tb of table.Tempbans) {
 			const dbGuild = await sequelize.models.Guild.findOne({
 				where: { id: tb.GuildId },
 			});
-			if (dbGuild === null) return;
+			if (dbGuild === null) continue;
 
 			const target = {
 				tag: tb.TargetTag,
@@ -61,7 +61,7 @@ module.exports = {
 						tb.Reason,
 					);
 				} catch (error) {
-					return;
+					continue;
 				}
 
 				await TempBanDel(tb.id);
@@ -86,7 +86,7 @@ module.exports = {
 					await TempBanDel(tb.id);
 				}, tb.ExpireTime - time);
 			}
-		});
+		}
 	},
 };
 
