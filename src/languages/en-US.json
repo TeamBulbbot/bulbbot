@@ -114,7 +114,7 @@
 	"lockdown_locked": "{emote_confirm} Successfully locked down channel {channel}",
 	"lockdown_unlocked": "{emote_confirm} Successfully unlocked channel {channel}",
 
-	"warn_success": "{emote_success} Successfully warned **{user_name}#{user_discriminator}** `({user_id})` for **{reason}**`[{infractionId}]`",
+	"warn_success": "{emote_success} Warned **{user_name}#{user_discriminator}** `({user_id})` for **{reason}**`[{infractionId}]`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
