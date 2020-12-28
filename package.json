@@ -34,6 +34,7 @@
 		"winston": "^3.3.3"
 	},
 	"devDependencies": {
+		"prettier": "^2.2.1",
 		"sequelize-cli": "^6.2.0"
 	}
 }
