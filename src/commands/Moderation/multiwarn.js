@@ -8,7 +8,7 @@ module.exports = class extends Command {
             description: "Warns multiple selected users",
             category: "Moderation",
             aliases: ["mwarn"],
-            usage: "!multiwarn <user> <user2>... [reason]",
+            usage: "!multiwarn <member> <member2>... [reason]",
             argList: ["user:User"],
             minArgs: 1,
             maxArgs: -1,
