@@ -109,18 +109,18 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({support_guild})/g, key.support_guild);
 
 		response = response.replace(/({emote_warn})/g, Emotes.actions.WARN);
-		response = response.replace(/({emote_confirm})/g, Emotes.actions.CONFIRM);
-		response = response.replace(/({emote_tools})/g, Emotes.other.tools);
-		response = response.replace(/({emote_github})/g, Emotes.other.github);
+		response = response.replace(/({emote_wrench})/g, Emotes.actions.WRENCH);
+		response = response.replace(/({emote_github})/g, Emotes.other.GITHUB);
 		response = response.replace(/({emote_owner})/g, Emotes.other.GUILD_OWNER);
 		response = response.replace(/({emote_online})/g, Emotes.status.ONLINE);
 		response = response.replace(/({emote_idle})/g, Emotes.status.IDLE);
 		response = response.replace(/({emote_dnd})/g, Emotes.status.DND);
 		response = response.replace(/({emote_offline})/g, Emotes.status.OFFLINE);
 
-		response = response.replace(/({emote_ban})/g, Emotes.actions.ban);
-		response = response.replace(/({emote_kick})/g, Emotes.actions.kick);
-		response = response.replace(/({emote_unban})/g, Emotes.actions.unban);
+		response = response.replace(/({emote_ban})/g, Emotes.actions.BAN);
+		response = response.replace(/({emote_unban})/g, Emotes.actions.UNBAN);
+		response = response.replace(/({emote_kick})/g, Emotes.actions.KICK);
+		response = response.replace(/({emote_mute})/g, Emotes.actions.MUTE);
 
 		response = response.replace(/({full_list})/g, key.full_list);
 
