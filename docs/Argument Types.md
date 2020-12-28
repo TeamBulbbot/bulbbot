@@ -66,6 +66,13 @@ A valid role ID. For example
 
 - `742095496142913587`
 
+### Emote
+
+Ideograms used in messages. For example
+
+- Custom Emote `<:Bulbbot:772800352147210260>`
+- Unicode Emote `❤️`
+
 ### duration
 
 A value that specify X amount of time.
