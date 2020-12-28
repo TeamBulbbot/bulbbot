@@ -10,7 +10,7 @@ Any `text`.
 
 Any `number`.
 
-### bool
+### boolean
 
 A value that is either `true` or `false`.
 
