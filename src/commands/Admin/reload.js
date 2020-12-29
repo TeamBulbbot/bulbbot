@@ -1,0 +1,20 @@
+const Command = require("../../structures/Command")
+const shell = require("shelljs");
+
+module.exports = class extends Command {
+    constructor(...args) {
+        super(...args, {
+            description: "Relaods the bot",
+            category: "Admin",
+            usage: "!reload",
+            devOnly: true,
+        });
+    }
+
+    async run(message) {
+        message.channel.send("The bot is shutting down...").then(() => {
+            this.client.destroy()
+            shell.exec("npm run start")
+        })
+    }
+}
