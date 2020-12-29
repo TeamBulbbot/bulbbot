@@ -9,7 +9,21 @@ module.exports = {
 		return infId;
 	},
 
-	Mute: async () => {},
+	Mute: async (client, guild, target, moderator, reason, reasonLog, muteRole, until) => {
+		await guild.member(target.id).roles.add(muteRole)
+		const infId = await createInfraction(guild.id, "Mute", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		await SendModActionTemp(client, guild, "muted", target.user, moderator, reasonLog, infId, until);
+
+		return infId;
+	},
+
+	Unmute: async (client, guild, target, moderator, reason, reasonLog, muteRole) => {
+		await guild.member(target.id).roles.remove(muteRole)
+		const infId = await createInfraction(guild.id, "Unmute", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		await SendAutoUnban(client, guild, "automatically unmuted", target.user, moderator, reasonLog, infId);
+
+		return infId;
+	},
 
 	Kick: async (client, guild, target, moderator, reason, reasonLog) => {
 		await guild.member(target.id).kick(reason);

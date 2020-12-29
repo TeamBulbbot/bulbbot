@@ -124,9 +124,9 @@ module.exports = class extends Command {
 					moderator_id: client.user.id,
 					target_tag: target.tag,
 					target_id: target.id,
-					reason,
+					reason: "Automatic unban",
 				}),
-				reason,
+				"Automatic unban",
 			);
 
 			TempbanDelete(tempbanId);
