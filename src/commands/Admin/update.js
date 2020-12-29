@@ -13,11 +13,19 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const p = path.resolve(__dirname, "");
-		shell.cd(`${p}/../../../`);
-		const resp = shell.exec("git pull");
+		message.channel.send(this.client.bulbutils.translate("global_loading")).then(msg => {
+			const p = path.resolve(__dirname, "");
+			shell.cd(`${p}/../../../`);
+			const resp = shell.exec("git pull");
+			msg.edit(resp.stdout, { code: "yaml" });
 
-		return message.channel.send(resp.stdout, { code: "yaml" });
+			if (resp.stdout !== "Already up to date.\n") {
+				message.channel.send("Restarting the bot...").then(() => {
+					this.client.destroy();
+					shell.exec("npm run start");
+				});
+			}
+		});
 
 		// TODO
 		// figure out a way to restart the program

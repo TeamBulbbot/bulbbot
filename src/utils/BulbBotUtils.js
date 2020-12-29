@@ -83,9 +83,20 @@ module.exports = class BulbBotUtils {
 			response = response.replace(/({guild_booster_boosters})/g, key.guild.premiumSubscriptionCount);
 		}
 
-		if (key.channel) {
-			response = response.replace(/({channel})/g, key.channel);
-		}
+		if (key.channel) response = response.replace(/({channel})/g, key.channel);
+
+		response = response.replace(/({user_tag})/g, key.user_tag);
+
+		response = response.replace(/({channel_id})/g, key.channel_id);
+		response = response.replace(/({channel_type})/g, key.channel_type);
+		response = response.replace(/({channel_name})/g, key.channel_name);
+		response = response.replace(/({channel_topic})/g, key.channel_topic);
+		response = response.replace(/({oldchannel_topic})/g, key.oldchannel_topic);
+		response = response.replace(/({newchannel_topic})/g, key.newchannel_topic);
+		response = response.replace(/({oldchannel_name})/g, key.oldchannel_name);
+		response = response.replace(/({newchannel_name})/g, key.newchannel_name);
+		response = response.replace(/({oldchannel_type})/g, key.oldchannel_type);
+		response = response.replace(/({newchannel_type})/g, key.newchannel_type);
 
 		response = response.replace(/({slowmode})/g, key.slowmode);
 
@@ -116,6 +127,9 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_idle})/g, Emotes.status.IDLE);
 		response = response.replace(/({emote_dnd})/g, Emotes.status.DND);
 		response = response.replace(/({emote_offline})/g, Emotes.status.OFFLINE);
+		response = response.replace(/({emote_loading})/g, Emotes.other.LOADING);
+		response = response.replace(/({emote_join})/g, Emotes.other.JOIN);
+		response = response.replace(/({emote_leave})/g, Emotes.other.LEAVE);
 
 		response = response.replace(/({emote_ban})/g, Emotes.actions.BAN);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.UNBAN);

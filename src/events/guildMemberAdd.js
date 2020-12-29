@@ -11,9 +11,11 @@ module.exports = class extends Event {
 			this.client,
 			member.guild,
 			"joinleave",
-			`**New member:** **${member.user.tag}** \`(${member.user.id})\` - **Account created:** ${this.client.bulbutils.formatDays(
-				member.user.createdAt,
-			)}`,
+			this.client.bulbutils.translate("event_member_joined", {
+				user_tag: member.user.tag,
+				user_id: member.user.id,
+				user_age: member.user.createdAt,
+			}),
 		);
 	}
 };
