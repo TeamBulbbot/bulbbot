@@ -6,6 +6,7 @@ module.exports = {
 	 *
 	 * @param guildId               Guild ID where the Infraction is being stored from
 	 * @param action                Mod action type
+	 * @param active                false, permanent, unix
 	 * @param reason                Reason specified by the responsible moderator
 	 * @param target                User receiving the infraction
 	 * @param targetId              ID of the user receiving the infraction
@@ -13,7 +14,7 @@ module.exports = {
 	 * @param moderatorId           ID of the responsible moderator
 	 * @returns InfId               The infraction id of the infraction created
 	 */
-	createInfraction: async (guildId, action, reason, target, targetId, moderator, moderatorId) => {
+	createInfraction: async (guildId, action, active, reason, target, targetId, moderator, moderatorId) => {
 		const dbGuild = await sequelize.models.Guild.findOne({
 			where: { GuildId: guildId },
 		});
@@ -21,6 +22,7 @@ module.exports = {
 
 		const inf = await sequelize.models.Infraction.create({
 			Action: action,
+			Active: active,
 			Reason: reason,
 			Target: target,
 			TargetId: targetId,

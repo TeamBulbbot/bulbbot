@@ -14,7 +14,7 @@ module.exports = class extends Event {
 		if (executor.id === this.client.user.id) return;
 		if (reason === null) reason = this.client.bulbutils.translate("global_no_reason");
 
-		const infId = await createInfraction(guild.id, "Manual unban", reason, target.tag, target.id, executor.tag, executor.id);
+		const infId = await createInfraction(guild.id, "Manual unban", "false", reason, target.tag, target.id, executor.tag, executor.id);
 		await SendModAction(this.client, guild, "manually unbanned", target, executor, reason, infId);
 	}
 };

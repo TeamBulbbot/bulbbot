@@ -6,6 +6,10 @@ module.exports = sequelize => {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		Active: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		Reason: {
 			type: DataTypes.STRING,
 			allowNull: false,

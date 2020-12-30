@@ -24,7 +24,16 @@ module.exports = class extends Command {
 		switch (args[0].toLowerCase()) {
 			case "create":
 			case "add":
-				const id = await createInfraction(message.guild.id, "ban", "big sleep", target.tag, target.id, message.author.tag, message.author.id);
+				const id = await createInfraction(
+					message.guild.id,
+					"ban",
+					"false",
+					"big sleep",
+					target.tag,
+					target.id,
+					message.author.tag,
+					message.author.id,
+				);
 				message.channel.send("Created an infraction for ``" + target.tag + "`` with the id of ``" + id + "``");
 				break;
 
