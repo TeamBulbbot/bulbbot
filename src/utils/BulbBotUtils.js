@@ -335,6 +335,7 @@ module.exports = class BulbBotUtils {
 				avatarUrl: userObject.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.bot,
 				createdAt: userObject.createdAt,
+				nickname: null,
 			};
 		}
 		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
