@@ -38,7 +38,6 @@ module.exports = class extends Command {
 
 		description += this.client.bulbutils.translate("userinfo_embed_id", { user_id: user.id });
 		description += this.client.bulbutils.translate("userinfo_embed_username", { user_name: user.username });
-		console.log(user.nickname);
 		if (user.nickname !== null) description += this.client.bulbutils.translate("userinfo_embed_nickname", { user_nickname: user.nickname });
 		description += this.client.bulbutils.translate("userinfo_embed_profile", { user_id: user.id });
 		description += this.client.bulbutils.translate("userinfo_embed_avatar", { user_avatar: user.avatarUrl });
