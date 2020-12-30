@@ -20,3 +20,4 @@ db.authenticate()
 	.catch(err => console.log("Database connection error: ", err));
 
 client.login().catch(err => console.log("Client connection error: ", err));
+require("./utils/prometheus/Data")(client);

@@ -18,14 +18,38 @@ const activityGuilds = new client.Counter({
 	labelNames: ["guild_id"],
 });
 
+const totalGuilds = new client.Gauge({
+	name: "total_guild",
+	help: "How many guilds the bot is in",
+});
+
+const totalMembers = new client.Gauge({
+	name: "total_member_count",
+	help: "How many members that the bot see",
+});
+
+const clientPing = new client.Gauge({
+	name: "client_ws_ping",
+	help: "Current ping of the bot",
+});
+
 module.exports = {
-	client_event: function client_event(eventType) {
+	client_event: eventType => {
 		clientEvent.inc({ event_type: eventType });
 	},
-	client_command_usage: function client_command_usage(commandName) {
+	client_command_usage: commandName => {
 		clientCommandUsage.inc({ command_name: commandName });
 	},
-	activity_guilds: function activity_guilds(guildId) {
+	activity_guilds: guildId => {
 		activityGuilds.inc({ guild_id: guildId });
+	},
+	total_guilds: guildCount => {
+		totalGuilds.set(guildCount);
+	},
+	total_members: members => {
+		totalMembers.set(members);
+	},
+	client_ping: ping => {
+		clientPing.set(ping);
 	},
 };
