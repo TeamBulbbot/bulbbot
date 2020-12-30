@@ -121,7 +121,6 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({support_guild})/g, key.support_guild);
 
 		response = response.replace(/({emote_warn})/g, Emotes.actions.WARN);
-		response = response.replace(/({emote_success})/g, Emotes.actions.CONFIRM);
 		response = response.replace(/({emote_wrench})/g, Emotes.actions.WRENCH);
 		response = response.replace(/({emote_github})/g, Emotes.other.GITHUB);
 		response = response.replace(/({emote_owner})/g, Emotes.other.GUILD_OWNER);
@@ -132,6 +131,7 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_loading})/g, Emotes.other.LOADING);
 		response = response.replace(/({emote_join})/g, Emotes.other.JOIN);
 		response = response.replace(/({emote_leave})/g, Emotes.other.LEAVE);
+		response = response.replace(/({emote_success})/g, Emotes.other.CONFIRM);
 
 		response = response.replace(/({emote_ban})/g, Emotes.actions.BAN);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.UNBAN);
