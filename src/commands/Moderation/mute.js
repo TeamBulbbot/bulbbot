@@ -32,6 +32,7 @@ module.exports = class extends Command {
 		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
 		if (!muteRole) return message.channel.send(this.client.bulbutils.translate("mute_muterole_not_found"));
 		if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+		if (target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(this.client.bulbutils.translate("mute_already_muted"));
 
 		if (duration < parse("0s") || duration === null) return message.channel.send(this.client.bulbutils.translate("tempban_invalid_0s"));
 		if (duration > parse("1y")) return message.channel.send(this.client.bulbutils.translate("tempban_invalid_1y"));
@@ -68,7 +69,7 @@ module.exports = class extends Command {
 
 		const client = this.client;
 		setTimeout(async function () {
-			if (await getActive(infId) === "false") return;
+			if ((await getActive(infId)) === "false") return;
 			await setActive(infId, "false");
 
 			infId = await Unmute(

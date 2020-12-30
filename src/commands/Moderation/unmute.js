@@ -27,6 +27,7 @@ module.exports = class extends Command {
 		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
 		if (!muteRole) return message.channel.send(this.client.bulbutils.translate("mute_muterole_not_found"));
 		if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+		if (!target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(this.client.bulbutils.translate("mute_not_muted"));
 
 		infId = await UnmuteManual(
 			this.client,
