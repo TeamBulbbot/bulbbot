@@ -5,6 +5,7 @@ const { getMuteRole } = require("../../utils/guilds/Guild");
 
 const utils = new (require("../../utils/BulbBotUtils"))();
 const parse = require("parse-duration");
+const { getActive, setActive } = require("../../utils/InfractionUtils");
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -14,7 +15,7 @@ module.exports = class extends Command {
 			aliases: ["tempmute"],
 			usage: "!mute <member> <duration> [reason]",
 			argList: ["member:Member", "duration:Duration"],
-			minArgs: 1,
+			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,
 		});
@@ -50,7 +51,8 @@ module.exports = class extends Command {
 				until: Date.now() + parse(args[1]),
 			}),
 			reason,
-			muteRole
+			muteRole,
+			Date.now() + parse(args[1]),
 		);
 
 		message.channel.send(
@@ -66,6 +68,9 @@ module.exports = class extends Command {
 
 		const client = this.client;
 		setTimeout(async function () {
+			if (await getActive(infId) === "false") return;
+			await setActive(infId, "false");
+
 			infId = await Unmute(
 				client,
 				message.guild,
@@ -80,7 +85,7 @@ module.exports = class extends Command {
 					reason: "Automatic unmute",
 				}),
 				"Automatic unmute",
-				muteRole
+				muteRole,
 			);
 
 			//TEMPMUTE DELETE FUNCTION

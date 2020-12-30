@@ -125,4 +125,40 @@ module.exports = {
 
 		return dbGuild.Infractions;
 	},
+
+	setActive: async (infId, active) => {
+		const dbInf = await sequelize.models.Infraction.findOne({
+			where: { id: infId },
+		});
+
+		dbInf.Active = active;
+		await dbInf.save();
+	},
+
+	getActive: async (infId) => {
+		const dbInf = await sequelize.models.Infraction.findOne({
+			where: { id: infId },
+		});
+
+		return dbInf.Active;
+	},
+
+	getLatestMute: async (guildId, offenderId) => {
+		const dbGuild = await sequelize.models.Guild.findOne({
+			where: { GuildId: guildId },
+			include: [
+				{
+					model: sequelize.models.Infraction,
+					where: {
+						TargetId: offenderId,
+						Action: "Mute"
+					},
+				},
+			],
+		});
+
+		if (dbGuild === null) return [];
+
+		return dbGuild.Infractions.reverse()[0].id;
+	},
 };
