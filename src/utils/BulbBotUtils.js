@@ -131,7 +131,7 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_loading})/g, Emotes.other.LOADING);
 		response = response.replace(/({emote_join})/g, Emotes.other.JOIN);
 		response = response.replace(/({emote_leave})/g, Emotes.other.LEAVE);
-		response = response.replace(/({emote_success})/g, Emotes.other.CONFIRM);
+		response = response.replace(/({emote_success})/g, Emotes.other.SUCCESS);
 
 		response = response.replace(/({emote_ban})/g, Emotes.actions.BAN);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.UNBAN);
