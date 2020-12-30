@@ -1,6 +1,7 @@
 const Event = require("../structures/Event");
 const { getPrefix } = require("../utils/guilds/Guild");
 const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
+const DirectMessage = require("../utils/DirectMessages");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -8,6 +9,8 @@ module.exports = class extends Event {
 	}
 
 	async run(message) {
+		if (message.channel.type === "dm") return DirectMessage(this.client, message);
+
 		this.client.prefix = await getPrefix(message.guild);
 		activity_guilds(message.guild.id);
 

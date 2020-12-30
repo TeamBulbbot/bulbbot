@@ -6,7 +6,6 @@ const utils = new (require("../BulbBotUtils"))();
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
 		client.channels.cache.get(dbGuild.GuildLogging.ModAction).send(
@@ -19,15 +18,13 @@ module.exports = {
 				reason: log,
 				infractionId: infId,
 				action: action,
-				emoji: BetterActions(action)
+				emoji: BetterActions(action),
 			}),
 		);
 	},
 
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const betterAction = BetterActions(action);
-
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
 		client.channels.cache.get(dbGuild.GuildLogging.ModAction).send(
@@ -40,15 +37,13 @@ module.exports = {
 				reason: log,
 				infractionId: infId,
 				action: action,
-				emoji: BetterActions(action)
+				emoji: BetterActions(action),
 			}),
 		);
 	},
 
 	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const betterAction = BetterActions(action);
-
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
 		client.channels.cache.get(dbGuild.GuildLogging.ModAction).send(
@@ -62,15 +57,13 @@ module.exports = {
 				infractionId: infId,
 				action: action,
 				until: moment(until).format("MMM Do YYYY, h:mm:ss a"),
-				emoji: BetterActions(action)
+				emoji: BetterActions(action),
 			}),
 		);
 	},
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const betterAction = BetterActions(action);
-
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
 		client.channels.cache
@@ -86,6 +79,8 @@ module.exports = {
 	},
 
 	SendEventLog: async (client, guild, part, log) => {
+		if (guild === undefined) return;
+
 		const dbGuild = await GetDBGuild(guild.id);
 		const logChannel = GetPart(dbGuild, part);
 
