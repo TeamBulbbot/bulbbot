@@ -9,9 +9,6 @@
 - analytics
     - get analytics about the bot
 
-- restart
-    - restart the bot
-
 - uploadlog
     - uploadlogs
     - logs
