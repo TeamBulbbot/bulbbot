@@ -51,6 +51,7 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({target_id})/g, key.target_id);
 		response = response.replace(/({target_tag})/g, key.target_tag);
 		response = response.replace(/({action})/g, key.action);
+		response = response.replace(/({emoji})/g, key.emoji);
 
 		response = response.replace(/({infractionId})/g, key.infractionId);
 

@@ -97,6 +97,7 @@ module.exports = class extends Command {
 					until: Date.now() + parse(args[1]),
 				}),
 				reason,
+				Date.now() + parse(args[1])
 			);
 		}
 

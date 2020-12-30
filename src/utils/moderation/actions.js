@@ -19,7 +19,7 @@ module.exports = {
 
 	UnmuteManual: async (client, guild, target, moderator, reason, reasonLog, muteRole) => {
 		await guild.member(target.id).roles.remove(muteRole)
-		const infId = await createInfraction(guild.id, "Unmuted", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		const infId = await createInfraction(guild.id, "Unmute", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "unmuted", target.user, moderator, reasonLog, infId);
 
 		return infId;

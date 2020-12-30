@@ -5,9 +5,9 @@
 	"global_user_not_found": "{emote_warn} Could not find the specified user",
 	"global_channel_not_found": "{emote_warn} Could not find the specified channel",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
-	"global_logging_mod": "`[{timestamp}]` **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
-	"global_logging_unban_auto": "`[{timestamp}]` **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
-	"global_logging_mod_temp": "`[{timestamp}]` **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` until **{until}** for **{reason}** `[#{infractionId}]`",
+	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
+	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` until **{until}** for **{reason}** `[#{infractionId}]`",
 	"global_no_reason": "No reason given",
 	"global_loading": "{emote_loading} Loading...",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
@@ -68,14 +68,14 @@
 	"serverinfo_emotes_too_many": " and **{guild_emotes_left}** more",
 	"serverinfo_emotes_none": "No emotes",
 
-	"ban_success": "{emote_ban} Banned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"ban_success": "{emote_success} Banned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 	"ban_fail": "{emote_warn} Unable to ban **{target_tag}** `({target_id})`",
 	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` is already banned with the reason `{reason}`",
 
 	"not_banned": "{emote_warn} **{target_tag}** `({target_id})` is not already banned",
-	"unban_success": "{emote_unban} Unbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"unban_success": "{emote_success} Unbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
-	"kick_success": "{emote_kick} Kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"kick_success": "{emote_success} Kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 	"kick_fail": "{emote_warn} Unable to kick **{target_tag}** `({target_id})`",
 
 	"purge_too_many": "{emote_warn} Can only purge a max of 200 messages at a time",
@@ -83,7 +83,7 @@
 	"verification_non_integer": "{emote_warn} Level needs to be an integer",
 	"verification_community_zero": "{emote_warn} Verification level cannot be set to `0` for community servers!",
 	"verification_level_error": "{emote_warn} Verification level cannot be greater than `4` or less than `0`",
-	"verification_level_success": "{emote_warn} Server verification level changed to `{level}`",
+	"verification_level_success": "{emote_success} Server verification level changed to `{level}`",
 
 	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 
@@ -97,23 +97,23 @@
 
 	"inviteinfo_error": "{emote_warn} Unable to find a guild with that invite",
 
-	"multiban_success": "{emote_ban} Banned {full_list} for **{reason}**",
+	"multiban_success": "{emote_success} Banned {full_list} for **{reason}**",
 
-	"multiunban_success": "{emote_unban} Unbanned {full_list} for **{reason}**",
+	"multiunban_success": "{emote_success} Unbanned {full_list} for **{reason}**",
 
-	"multikick_success": "{emote_kick} Kicked {full_list} for **{reason}**",
+	"multikick_success": "{emote_success} Kicked {full_list} for **{reason}**",
 
-	"multiwarn_success": "{emote_kick} Warned {full_list} for **{reason}**",
+	"multiwarn_success": "{emote_success} Warned {full_list} for **{reason}**",
 
-	"softban_success": "{emote_ban} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"softban_success": "{emote_success} Softbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
 	"deafen_already_deaf": "{emote_warn} User is already deafened!",
-	"deafen_success": "{emote_kick} Deafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"deafen_success": "{emote_success} Deafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
 	"undeafen_not_deaf": "{emote_warn} User is not deafened!",
-	"undeafen_success": "{emote_kick} Undeafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"undeafen_success": "{emote_success} Undeafened **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
-	"voicekick_success": "{emote_kick} Voice kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"voicekick_success": "{emote_success} Voice kicked **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
 	"slowmode_invalid_0s": "{emote_warn} Slowmode duration cannot be lower than **0 seconds**!",
 	"slowmode_invalid_6h": "{emote_warn} Slowmode duration cannot be higher than **6 hours**!",
@@ -121,15 +121,15 @@
 	"slowmode_success_remove": "{emote_confirm} Successfully removed slowmode from {channel}",
 	"slowmode_success": "{emote_confirm} Successfully set slowmode in {channel} to **{slowmode}**",
 
-	"tempban_invalid_0s": "{emote_warn} Tempban duration cannot be lower than **0 seconds**!",
-	"tempban_invalid_1y": "{emote_warn} Tempban duration cannot be higher than **1 year**!",
+	"tempban_invalid_0s": "{emote_warn} Duration cannot be lower than **0 seconds**!",
+	"tempban_invalid_1y": "{emote_warn} Duration cannot be higher than **1 year**!",
 
 	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
 	"lockdown_locked": "{emote_confirm} Successfully locked down channel {channel}",
 	"lockdown_unlocked": "{emote_confirm} Successfully unlocked channel {channel}",
 
 	"mute_muterole_not_found": "{emote_warn} This guild does not have a mute role configured!\n{emote_wrench} **Tip:** You can configure the mute role using the `!configure mute_role` command",
-	"mute_success": "{emote_mute} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 	"mute_not_muted": "{emote_warn} The specified user is not currently muted!",
 	"mute_already_muted": "{emote_warn} The specified user is already muted!",
 

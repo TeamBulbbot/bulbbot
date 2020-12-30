@@ -6,7 +6,6 @@ const utils = new (require("../BulbBotUtils"))();
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const betterAction = BetterActions(action);
 
 		if (dbGuild.GuildLogging.ModAction === null) return;
 
@@ -19,7 +18,8 @@ module.exports = {
 				moderator_id: moderator.id,
 				reason: log,
 				infractionId: infId,
-				action: betterAction,
+				action: action,
+				emoji: BetterActions(action)
 			}),
 		);
 	},
@@ -39,7 +39,8 @@ module.exports = {
 				moderator_id: moderator.id,
 				reason: log,
 				infractionId: infId,
-				action: betterAction,
+				action: action,
+				emoji: BetterActions(action)
 			}),
 		);
 	},
@@ -59,8 +60,9 @@ module.exports = {
 				moderator_id: moderator.id,
 				reason: log,
 				infractionId: infId,
-				action: betterAction,
+				action: action,
 				until: moment(until).format("MMM Do YYYY, h:mm:ss a"),
+				emoji: BetterActions(action)
 			}),
 		);
 	},
@@ -119,23 +121,38 @@ function GetPart(dbGuild, part) {
 
 function BetterActions(action) {
 	switch (action.toLowerCase()) {
-		case "softban":
-			action = `${Emotes.actions.ban} Softbanned`;
+		case "softbanned":
+			action = `${Emotes.actions.BAN}`;
 			break;
-		case "ban":
-			action = `${Emotes.actions.ban} Banned`;
+		case "banned":
+			action = `${Emotes.actions.BAN}`;
 			break;
-		case "unban":
-			action = `${Emotes.actions.unban} Unbanned`;
+		case "unbanned":
+			action = `${Emotes.actions.UNBAN}`;
 			break;
-		case "forceban":
-			action = `${Emotes.actions.ban} Forcebanned`;
+		case "force-banned":
+			action = `${Emotes.actions.BAN}`;
 			break;
-		case "kick":
-			action = `${Emotes.actions.kick} Kicked`;
+		case "kicked":
+			action = `${Emotes.actions.KICK}`;
 			break;
-		case "purge":
-			action = `${Emotes.actions.warn} Message purge by`;
+		case "muted":
+			action = `${Emotes.actions.MUTE}`;
+			break;
+		case "warned":
+			action = `${Emotes.actions.WARN}`;
+			break;
+		case "unmuted":
+			action = `${Emotes.actions.UNBAN}`;
+			break;
+		case "automatically unmuted":
+			action = `${Emotes.actions.UNBAN}`;
+			break;
+		case "automatically unbanned":
+			action = `${Emotes.actions.UNBAN}`;
+			break;
+		case "temp-banned":
+			action = `${Emotes.actions.BAN}`;
 			break;
 		default:
 			break;
