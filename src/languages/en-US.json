@@ -31,7 +31,7 @@
 	"userinfo_embed_id": "**ID:** {user_id}\n",
 	"userinfo_embed_username": "**Username:** {user_name}\n",
 	"userinfo_embed_nickname": "**Nickname:** {user_nickname}\n",
-	"userinfo_embed_profile": "**Profile:** <@{user_id}>\n",
+	"userinfo_embed_profile": "**Profile:** <@{user_id}> [`Profile`](https://discord.com/users/{user_id})\n",
 	"userinfo_embed_avatar": "**Avatar URL:** [Link]({user_avatar})\n",
 	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
 	"userinfo_embed_created": "**Account Creation:** {user_age}\n",
