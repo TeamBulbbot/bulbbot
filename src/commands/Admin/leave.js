@@ -1,4 +1,6 @@
 const Command = require("../../structures/Command");
+const Emotes = require("../../emotes.json");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -22,12 +24,15 @@ module.exports = class extends Command {
 		}
 
 		message.channel.send(`Are you sure you want the bot to leave **${guild.name}**?`).then(msg => {
-			msg.react("742096152861868104").then(() => {
-				msg.react("742096153172115507");
+			msg.react(Emotes.other.success.replace(NonDigits, "")).then(() => {
+				msg.react(Emotes.other.fail.replace(NonDigits, ""));
 			});
 
 			const filter = (reaction, user) => {
-				return ["742096152861868104", "742096153172115507"].includes(reaction.emoji.id) && user.id === message.author.id;
+				return (
+					[Emotes.other.success.replace(NonDigits, ""), Emotes.other.fail.replace(NonDigits, "")].includes(reaction.emoji.id) &&
+					user.id === message.author.id
+				);
 			};
 
 			msg
@@ -42,11 +47,11 @@ module.exports = class extends Command {
 					// BUG (p4)
 					// if you try to the current guild where the command is fired
 					// the bot will crash
-					if (reaction.emoji.id === "742096152861868104") {
+					if (reaction.emoji.id === Emotes.other.success.replace(NonDigits, "")) {
 						guild.leave();
 						await msg.reactions.removeAll();
 						return message.channel.send("Sir yes sir, bot yeeted");
-					} else if (reaction.emoji.id === "742096153172115507") {
+					} else if (reaction.emoji.id === Emotes.other.fail.replace(NonDigits, "")) {
 						await msg.reactions.removeAll();
 						return message.channel.send("Operation canceled");
 					}
