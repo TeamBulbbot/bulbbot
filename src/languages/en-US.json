@@ -133,7 +133,7 @@
 	"mute_not_muted": "{emote_warn} The specified user is not currently muted!",
 	"mute_already_muted": "{emote_warn} The specified user is already muted!",
 
-	"warn_success": "{emote_success} Warned **{user_name}#{user_discriminator}** `({user_id})` for **{reason}**`[{infractionId}]`",
+	"warn_success": "{emote_success} Warned **{user_name}#{user_discriminator}** `({user_id})` for **{reason}** `[#{infractionId}]`",
 
 	"unmute_success": "{emote_success} Unmuted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
