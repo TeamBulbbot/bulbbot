@@ -44,7 +44,7 @@ module.exports = class extends Command {
 						user_name: await client.bulbutils.userObject(true, message.member).username,
 						user_discriminator: await client.bulbutils.userObject(true, message.member).discriminator,
 					}),
-					message.author.avatarURL({ dynamic: true }),
+					await this.client.bulbutils.userObject(true, message.member).avatarUrl,
 				)
 				.setTimestamp();
 

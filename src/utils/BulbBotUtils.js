@@ -316,7 +316,7 @@ module.exports = class BulbBotUtils {
 				username: userObject.user.username,
 				discriminator: userObject.user.discriminator,
 				avatar: userObject.user.avatar,
-				avatarUrl: userObject.user.avatarURL({ dynamic: true }),
+				avatarUrl: userObject.user.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.user.bot,
 
 				roles: userObject.roles,
@@ -332,11 +332,12 @@ module.exports = class BulbBotUtils {
 				username: userObject.username,
 				discriminator: userObject.discriminator,
 				avatar: userObject.avatar,
-				avatarUrl: userObject.avatarURL({ dynamic: true }),
+				avatarUrl: userObject.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.bot,
 				createdAt: userObject.createdAt,
 			};
 		}
+		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
 
 		return user;
 	}

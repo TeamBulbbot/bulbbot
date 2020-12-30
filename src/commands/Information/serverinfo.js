@@ -89,7 +89,7 @@ module.exports = class extends Command {
 					user_name: message.author.username,
 					user_discriminator: message.author.discriminator,
 				}),
-				message.author.avatarURL({ dynamic: true }),
+				await this.client.bulbutils.userObject(true, message.member).avatarUrl,
 			)
 			.setTimestamp();
 
