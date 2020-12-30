@@ -26,8 +26,5 @@ module.exports = class extends Command {
 				});
 			}
 		});
-
-		// TODO
-		// figure out a way to restart the program
 	}
 };
