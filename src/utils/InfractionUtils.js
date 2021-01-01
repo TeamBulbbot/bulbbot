@@ -59,6 +59,29 @@ module.exports = {
 	},
 
 	/**
+	 *
+	 * @param guildId
+	 * @param infId
+	 * @returns {Promise<boolean|*>}
+	 */
+	getInfraction: async (guildId, infId) => {
+		const dbGuild = await sequelize.models.Guild.findOne({
+			where: { GuildId: guildId },
+			include: [
+				{
+					model: sequelize.models.Infraction,
+					where: {
+						id: infId,
+					},
+				},
+			],
+		});
+
+		if (dbGuild === null) return false;
+		return dbGuild.Infractions[0]
+	},
+
+	/**
 	 * Returns all Infractions stored for the specified guild
 	 *
 	 * @param guildId           Guild ID

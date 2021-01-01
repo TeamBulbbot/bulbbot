@@ -139,6 +139,13 @@
 
 	"infraction_not_found": "{emote_warn} Infraction **#{infractionId}** could not be found!",
 	"infraction_delete_success": "{emote_success} Infraction **#{infractionId}** successfully deleted!",
+	"infraction_info_inf_id": "**Infraction ID:** {infractionId}\n",
+	"infraction_info_target": "**Target:** {target_tag} `({target_id})`\n",
+	"infraction_info_moderator": "**Moderator:** {moderator_tag} `({moderator_id})`\n",
+	"infraction_info_created": "**Created:** {timestamp}\n",
+	"infraction_info_active": "**Active:** {emoji}",
+	"infraction_info_expires": "**Expires:** {timestamp}",
+	"infraction_info_reason": "\n\n**Reason:** {reason}",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
