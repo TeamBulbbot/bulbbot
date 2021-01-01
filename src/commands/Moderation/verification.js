@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			description: "Changes the server verification level",
 			category: "Moderation",
 			usage: "!verification <level>",
-			argList: ["level:integer"],
+			argList: ["level:int"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 75,

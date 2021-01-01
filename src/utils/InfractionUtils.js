@@ -1,4 +1,5 @@
 const sequelize = require("./database/connection");
+const { Op } = require("sequelize")
 
 module.exports = {
 	/**
@@ -39,7 +40,7 @@ module.exports = {
 	 *
 	 * @param guildId       Guild ID where the infarction is being deleted
 	 * @param infId         Infraction ID
-	 * @returns {Promise<void>}
+	 * @returns {Promise<boolean>}
 	 */
 	deleteInfraction: async (guildId, infId) => {
 		const dbGuild = await sequelize.models.Guild.findOne({
@@ -53,8 +54,9 @@ module.exports = {
 				},
 			],
 		});
-		if (dbGuild === null) return;
+		if (dbGuild === null) return false;
 		await dbGuild.Infractions[0].destroy();
+		return true;
 	},
 
 	/**
@@ -71,7 +73,7 @@ module.exports = {
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions;
+		return dbGuild.Infractions.reverse();
 	},
 
 	/**
@@ -97,7 +99,7 @@ module.exports = {
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions;
+		return dbGuild.Infractions.reverse();
 	},
 
 	/**
@@ -123,7 +125,7 @@ module.exports = {
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions;
+		return dbGuild.Infractions.reverse();
 	},
 
 	setActive: async (infId, active) => {

@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { createInfraction } = require("../../utils/InfractionUtils");
+const { createInfraction, deleteInfraction } = require("../../utils/InfractionUtils");
 const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {
@@ -18,9 +18,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		// TESTING FILE STILL VERY MUCH WORK IN PROGRESS
-
-		const target = await this.client.users.fetch(args[1].replace(NonDigits, ""));
+		//const target = await this.client.users.fetch(args[1].replace(NonDigits, ""));
 		switch (args[0].toLowerCase()) {
 			case "create":
 			case "add":
@@ -35,6 +33,35 @@ module.exports = class extends Command {
 					message.author.id,
 				);
 				message.channel.send("Created an infraction for ``" + target.tag + "`` with the id of ``" + id + "``");
+				break;
+
+			case "delete":
+			case "remove":
+				const inf = args[1];
+
+				if (!args[1])
+					return message.channel.send(
+						this.client.bulbutils.translate("event_message_args_missing", {
+							arg: "infraction:int",
+							arg_expected: 2,
+							arg_provided: 1,
+							usage: "!infraction delete <infraction>",
+						}),
+					);
+
+				if (!(await deleteInfraction(message.guild.id, inf))) {
+					return message.channel.send(
+						this.client.bulbutils.translate("infraction_not_found", {
+							infractionId: inf,
+						}),
+					);
+				}
+
+				message.channel.send(
+					this.client.bulbutils.translate("infraction_delete_success", {
+						infractionId: inf,
+					}),
+				);
 				break;
 
 			default:

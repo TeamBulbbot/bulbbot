@@ -137,6 +137,9 @@
 
 	"unmute_success": "{emote_success} Unmuted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
+	"infraction_not_found": "{emote_warn} Infraction **#{infractionId}** could not be found!",
+	"infraction_delete_success": "{emote_success} Infraction **#{infractionId}** successfully deleted!",
+
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
 }
