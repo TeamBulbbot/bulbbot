@@ -12,7 +12,7 @@ module.exports = class BulbBotUtils {
 	 *
 	 * @param string    Translatable string from the lang file
 	 * @param key       Values that should be replaced by the function
-	 * @returns {*}     Resolved translated string
+	 * @returns {string}     Resolved translated string
 	 */
 	translate(string, key = {}) {
 		let response;

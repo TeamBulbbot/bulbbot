@@ -118,15 +118,15 @@
 	"slowmode_invalid_0s": "{emote_warn} Slowmode duration cannot be lower than **0 seconds**!",
 	"slowmode_invalid_6h": "{emote_warn} Slowmode duration cannot be higher than **6 hours**!",
 
-	"slowmode_success_remove": "{emote_confirm} Successfully removed slowmode from {channel}",
-	"slowmode_success": "{emote_confirm} Successfully set slowmode in {channel} to **{slowmode}**",
+	"slowmode_success_remove": "{emote_success} Successfully removed slowmode from {channel}",
+	"slowmode_success": "{emote_success} Successfully set slowmode in {channel} to **{slowmode}**",
 
 	"tempban_invalid_0s": "{emote_warn} Duration cannot be lower than **0 seconds**!",
 	"tempban_invalid_1y": "{emote_warn} Duration cannot be higher than **1 year**!",
 
 	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
-	"lockdown_locked": "{emote_confirm} Successfully locked down channel {channel}",
-	"lockdown_unlocked": "{emote_confirm} Successfully unlocked channel {channel}",
+	"lockdown_locked": "{emote_success} Successfully locked down channel {channel}",
+	"lockdown_unlocked": "{emote_success} Successfully unlocked channel {channel}",
 
 	"mute_muterole_not_found": "{emote_warn} This guild does not have a mute role configured!\n{emote_wrench} **Tip:** You can configure the mute role using the `!configure mute_role` command",
 	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
