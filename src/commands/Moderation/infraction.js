@@ -2,7 +2,7 @@ const Command = require("../../structures/Command");
 const Discord = require("discord.js");
 const { createInfraction, deleteInfraction, getInfraction } = require("../../utils/InfractionUtils");
 const Emotes = require("../../emotes.json");
-const { ReasonImage } = require("../../utils/Regex")
+const { ReasonImage } = require("../../utils/Regex");
 
 const moment = require("moment");
 
@@ -116,7 +116,7 @@ module.exports = class extends Command {
 					reason: inf.Reason,
 				});
 
-				const image = inf.Reason.match(ReasonImage)
+				const image = inf.Reason.match(ReasonImage);
 
 				const embed = new Discord.MessageEmbed()
 					.setTitle(prettify(inf.Action))
@@ -131,7 +131,7 @@ module.exports = class extends Command {
 						}),
 						message.author.avatarURL(),
 					)
-					.setTimestamp()
+					.setTimestamp();
 
 				message.channel.send(embed);
 				break;
