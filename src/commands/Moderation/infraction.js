@@ -2,6 +2,7 @@ const Command = require("../../structures/Command");
 const Discord = require("discord.js");
 const { createInfraction, deleteInfraction, getInfraction } = require("../../utils/InfractionUtils");
 const Emotes = require("../../emotes.json");
+const { ReasonImage } = require("../../utils/Regex")
 
 const moment = require("moment");
 
@@ -50,17 +51,17 @@ module.exports = class extends Command {
 						}),
 					);
 
-				if (!(await deleteInfraction(message.guild.id, args[0]))) {
+				if (!(await deleteInfraction(message.guild.id, args[1]))) {
 					return message.channel.send(
 						this.client.bulbutils.translate("infraction_not_found", {
-							infractionId: args[0],
+							infractionId: args[1],
 						}),
 					);
 				}
 
 				message.channel.send(
 					this.client.bulbutils.translate("infraction_delete_success", {
-						infractionId: args[0],
+						infractionId: args[1],
 					}),
 				);
 				break;
@@ -115,10 +116,13 @@ module.exports = class extends Command {
 					reason: inf.Reason,
 				});
 
+				const image = inf.Reason.match(ReasonImage)
+
 				const embed = new Discord.MessageEmbed()
 					.setTitle(prettify(inf.Action))
 					.setDescription(description)
 					.setColor(process.env.EMBED_COLOR)
+					.setImage(image ? image[0] : null)
 					.setThumbnail(user.avatarUrl)
 					.setFooter(
 						this.client.bulbutils.translate("global_executed_by", {
@@ -127,7 +131,7 @@ module.exports = class extends Command {
 						}),
 						message.author.avatarURL(),
 					)
-					.setTimestamp();
+					.setTimestamp()
 
 				message.channel.send(embed);
 				break;
