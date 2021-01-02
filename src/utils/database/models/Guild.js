@@ -1,12 +1,12 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("Guild", {
-		GuildId: {
+	sequelize.define("guild", {
+		guildId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		Name: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

@@ -3,16 +3,16 @@ const { UnbanTemp } = require("./actions");
 
 module.exports = {
 	TempbanCreate: async (guildId, targetTag, targetId, reason, expireTime) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 		});
 		if (dbGuild === null) return;
-		const tempban = await sequelize.models.Tempban.create({
-			TargetTag: targetTag,
-			TargetId: targetId,
-			Reason: reason,
-			ExpireTime: parseInt(expireTime),
-			GuildId: dbGuild.id,
+		const tempban = await sequelize.models.tempban.create({
+			targetTag,
+			targetId,
+			reason,
+			expireTime: parseInt(expireTime),
+			guildId: dbGuild.id,
 		});
 
 		return tempban.id;
@@ -22,26 +22,26 @@ module.exports = {
 	},
 
 	TempbanRestore: async client => {
-		const table = await sequelize.models.Guild.findOne({
+		const table = await sequelize.models.guild.findOne({
 			where: {},
-			include: [{ model: sequelize.models.Tempban }],
+			include: [{ model: sequelize.models.tempban }],
 		});
 		if (table === null) return;
 
 		const time = Date.now();
 
-		for (const tb of table.Tempbans) {
-			const dbGuild = await sequelize.models.Guild.findOne({
-				where: { id: tb.GuildId },
+		for (const tb of table.tempbans) {
+			const dbGuild = await sequelize.models.guild.findOne({
+				where: { id: tb.guildId },
 			});
 			if (dbGuild === null) continue;
 
 			const target = {
-				tag: tb.TargetTag,
-				id: tb.TargetId,
+				tag: tb.targetTag,
+				id: tb.targetId,
 			};
 
-			const guild = await client.guilds.cache.get(dbGuild.GuildId);
+			const guild = await client.guilds.cache.get(dbGuild.guildId);
 
 			if (tb.ExpireTime - time <= 0) {
 				try {
@@ -91,11 +91,11 @@ module.exports = {
 };
 
 async function TempBanDel(tempbanId) {
-	const dbGuild = await sequelize.models.Guild.findOne({
+	const dbGuild = await sequelize.models.guild.findOne({
 		where: {},
 		include: [
 			{
-				model: sequelize.models.Tempban,
+				model: sequelize.models.tempban,
 				where: {
 					id: tempbanId,
 				},
@@ -104,5 +104,5 @@ async function TempBanDel(tempbanId) {
 	});
 	if (dbGuild === null) return;
 
-	await dbGuild.Tempbans[0].destroy();
+	await dbGuild.tempbans[0].destroy();
 }

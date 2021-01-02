@@ -2,12 +2,12 @@ const sequelize = require("../database/connection");
 
 module.exports = {
 	ChangeModAction: async (guildId, channelId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.GuildLoggings }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildLoggings }],
 		});
 
-		dbGuild.GuildLoggings.ModAction = channelId;
-		await dbGuild.GuildLoggings.save();
+		dbGuild.guildLoggings.modAction = channelId;
+		await dbGuild.guildLoggings.save();
 	},
 };

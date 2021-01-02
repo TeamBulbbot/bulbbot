@@ -2,42 +2,42 @@ const sequelize = require("../database/connection");
 
 module.exports = {
 	ChangePrefix: async (guildId, prefix) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.GuildConfiguration }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
-		dbGuild.GuildConfiguration.Prefix = prefix;
-		await dbGuild.GuildConfiguration.save();
+		dbGuild.guildConfiguration.prefix = prefix;
+		await dbGuild.guildConfiguration.save();
 	},
 
 	ChangeTrackAnalytics: async (guildId, value) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.GuildConfiguration }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
-		dbGuild.GuildConfiguration.TrackAnalytics = value;
-		await dbGuild.GuildConfiguration.save();
+		dbGuild.guildConfiguration.trackAnalytics = value;
+		await dbGuild.guildConfiguration.save();
 	},
 
 	ChangeLanguage: async (guildId, language) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.GuildConfiguration }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
-		dbGuild.GuildConfiguration.Language = language;
-		await dbGuild.GuildConfiguration.save();
+		dbGuild.guildConfiguration.language = language;
+		await dbGuild.guildConfiguration.save();
 	},
 
 	ChangeMuteRole: async (guildId, muteRoleId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.GuildConfiguration }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
-		dbGuild.GuildConfiguration.MuteRole = muteRoleId;
-		await dbGuild.GuildConfiguration.save();
+		dbGuild.guildConfiguration.muteRole = muteRoleId;
+		await dbGuild.guildConfiguration.save();
 	},
 };

@@ -1,27 +1,27 @@
 function ApplyExtra(sequelize) {
 	const {
-		Guild,
-		GuildConfiguration,
-		GuildLogging,
-		GuildModerationRoles,
-		GuildOverrideCommands,
-		Infraction,
-		Starboard,
-		StarboardPost,
-		Tempban,
+		guild,
+		guildConfiguration,
+		guildLogging,
+		guildModerationRoles,
+		guildOverrideCommands,
+		infraction,
+		starboard,
+		starboardPost,
+		tempban,
 	} = sequelize.models;
 
-	Guild.belongsTo(GuildConfiguration, {});
-	Guild.belongsTo(GuildLogging, {});
-	Guild.belongsTo(Starboard, {});
+	guild.belongsTo(guildConfiguration, {});
+	guild.belongsTo(guildLogging, {});
+	guild.belongsTo(starboard, {});
 
-	Starboard.hasMany(StarboardPost, {});
+	starboard.hasMany(starboardPost, {});
 
-	Guild.hasMany(Infraction, {});
-	Guild.hasMany(GuildModerationRoles, {});
-	Guild.hasMany(GuildOverrideCommands, {});
+	guild.hasMany(infraction, {});
+	guild.hasMany(guildModerationRoles, {});
+	guild.hasMany(guildOverrideCommands, {});
 
-	Guild.hasMany(Tempban, {});
+	guild.hasMany(tempban, {});
 }
 
 module.exports = { ApplyExtra };

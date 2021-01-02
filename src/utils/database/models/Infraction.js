@@ -1,32 +1,32 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("Infraction", {
-		Action: {
+	sequelize.define("infraction", {
+		action: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		Active: {
+		active: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		Reason: {
+		reason: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		Target: {
+		target: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		TargetId: {
+		targetId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		Moderator: {
+		moderator: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		ModeratorId: {
+		moderatorId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

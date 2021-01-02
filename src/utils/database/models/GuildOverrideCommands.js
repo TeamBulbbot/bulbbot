@@ -1,16 +1,16 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("GuildOverrideCommands", {
-		Enabled: {
+	sequelize.define("guildOverrideCommands", {
+		enabled: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
 		},
-		CommandName: {
+		commandName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		ClearanceLevel: {
+		clearanceLevel: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},

@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("StarboardPost", {
-		OGMessageId: {
+	sequelize.define("starboardPost", {
+		ogMessageId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

@@ -1,20 +1,20 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("Tempban", {
-		TargetTag: {
+	sequelize.define("tempban", {
+		targetTag: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		TargetId: {
+		targetId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		Reason: {
+		reason: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		ExpireTime: {
+		expireTime: {
 			type: DataTypes.BIGINT,
 			allowNull: false,
 		},

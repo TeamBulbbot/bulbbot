@@ -1,12 +1,12 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("GuildModerationRoles", {
-		RoleId: {
+	sequelize.define("guildModerationRoles", {
+		roleId: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		ClearanceLevel: {
+		clearanceLevel: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},

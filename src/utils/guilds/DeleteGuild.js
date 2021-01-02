@@ -6,13 +6,13 @@ const sequelize = require("../database/connection");
  * @returns {Promise<void>}
  */
 module.exports = async guildId => {
-	const dbGuild = await sequelize.models.Guild.findOne({
-		where: { GuildId: guildId },
+	const dbGuild = await sequelize.models.guild.findOne({
+		where: { guildId },
 		include: [
-			{ model: sequelize.models.GuildConfiguration },
-			{ model: sequelize.models.GuildLogging },
-			{ model: sequelize.models.Infraction },
-			{ model: sequelize.models.Starboard },
+			{ model: sequelize.models.guildConfiguration },
+			{ model: sequelize.models.guildLogging },
+			{ model: sequelize.models.infraction },
+			{ model: sequelize.models.starboard },
 		],
 	});
 
@@ -22,8 +22,8 @@ module.exports = async guildId => {
 	}
 
 	await dbGuild.destroy().catch(err => console.log(`Unable to delete the Guild table for: ${guildId}: `, err));
-	await dbGuild.GuildConfiguration.destroy().catch(err => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
-	await dbGuild.GuildLogging.destroy().catch(err => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
-	await dbGuild.Infractions.forEach(inf => inf.destroy().catch(err => console.log(`Unable to delete the Infraction table for: ${guildId}: `, err)));
-	await dbGuild.Starboard.destroy().catch(err => console.log(`Unable to delete the Starboard table for: ${guildId}: `, err));
+	await dbGuild.guildConfiguration.destroy().catch(err => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
+	await dbGuild.guildLogging.destroy().catch(err => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
+	await dbGuild.infractions.forEach(inf => inf.destroy().catch(err => console.log(`Unable to delete the Infraction table for: ${guildId}: `, err)));
+	await dbGuild.starboard.destroy().catch(err => console.log(`Unable to delete the Starboard table for: ${guildId}: `, err));
 };

@@ -6,9 +6,9 @@ const utils = new (require("../BulbBotUtils"))();
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		if (dbGuild.GuildLogging.ModAction === null) return;
+		if (dbGuild.guildLogging.modAction === null) return;
 
-		client.channels.cache.get(dbGuild.GuildLogging.ModAction).send(
+		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
 			utils.translate("global_logging_mod", {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
@@ -25,9 +25,9 @@ module.exports = {
 
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		if (dbGuild.GuildLogging.ModAction === null) return;
+		if (dbGuild.guildLogging.modAction === null) return;
 
-		client.channels.cache.get(dbGuild.GuildLogging.ModAction).send(
+		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
 			utils.translate("global_logging_unban_auto", {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
@@ -44,9 +44,9 @@ module.exports = {
 
 	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		if (dbGuild.GuildLogging.ModAction === null) return;
+		if (dbGuild.guildLogging.modAction === null) return;
 
-		client.channels.cache.get(dbGuild.GuildLogging.ModAction).send(
+		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
 			utils.translate("global_logging_mod_temp", {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
@@ -64,10 +64,10 @@ module.exports = {
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		if (dbGuild.GuildLogging.ModAction === null) return;
+		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache
-			.get(dbGuild.GuildLogging.ModAction)
+			.get(dbGuild.guildLogging.modAction)
 			.send(
 				`\`[${moment().format("hh:mm:ss a")}]\` ${betterAction} **${moderator.tag}** \`(${moderator.id})\` **${amount}** messages was removed in <#${
 					channel.id
@@ -92,19 +92,19 @@ module.exports = {
 function GetPart(dbGuild, part) {
 	switch (part.toLowerCase()) {
 		case "message":
-			part = dbGuild.GuildLogging.Message;
+			part = dbGuild.guildLogging.message;
 			break;
 		case "role":
-			part = dbGuild.GuildLogging.Role;
+			part = dbGuild.guildLogging.role;
 			break;
 		case "member":
-			part = dbGuild.GuildLogging.Member;
+			part = dbGuild.guildLogging.member;
 			break;
 		case "channel":
-			part = dbGuild.GuildLogging.Channel;
+			part = dbGuild.guildLogging.channel;
 			break;
 		case "joinleave":
-			part = dbGuild.GuildLogging.JoinLeave;
+			part = dbGuild.guildLogging.joinLeave;
 			break;
 		default:
 			part = null;
@@ -157,8 +157,8 @@ function BetterActions(action) {
 }
 
 function GetDBGuild(guildId) {
-	return sequelize.models.Guild.findOne({
-		where: { GuildId: guildId },
-		include: [{ model: sequelize.models.GuildLogging }],
+	return sequelize.models.guild.findOne({
+		where: { guildId },
+		include: [{ model: sequelize.models.guildLogging }],
 	});
 }

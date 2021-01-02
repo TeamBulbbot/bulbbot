@@ -2,9 +2,9 @@ const sequelize = require("../database/connection");
 
 module.exports = {
 	GetGuild: async guildId => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.Starboard }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.starboard }],
 		});
 
 		if (dbGuild === null) return;
@@ -13,13 +13,13 @@ module.exports = {
 	},
 
 	CheckIfMessageAlreadyInDB: async (id, messageId) => {
-		const guild = await sequelize.models.Starboard.findOne({
+		const guild = await sequelize.models.starboard.findOne({
 			where: { id },
 			include: [
 				{
-					model: sequelize.models.StarboardPost,
+					model: sequelize.models.starboardPost,
 					where: {
-						OGMessageId: messageId,
+						ogMessageId: messageId,
 					},
 				},
 			],

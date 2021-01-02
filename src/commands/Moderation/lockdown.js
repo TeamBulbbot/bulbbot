@@ -23,10 +23,10 @@ module.exports = class extends Command {
 		if (args[1] !== "true" && args[1] !== "false") return message.channel.send(this.client.bulbutils.translate("lockdown_not_boolean"));
 
 		if (args[1] === "true") {
-			await channel.updateOverwrite(message.guild.roles.everyone.id, {SEND_MESSAGES: false});
+			await channel.updateOverwrite(message.guild.roles.everyone.id, { SEND_MESSAGES: false });
 			return message.channel.send(this.client.bulbutils.translate("lockdown_locked", { channel }));
 		} else {
-			await channel.updateOverwrite(message.guild.roles.everyone.id, {SEND_MESSAGES: true});
+			await channel.updateOverwrite(message.guild.roles.everyone.id, { SEND_MESSAGES: true });
 			return message.channel.send(this.client.bulbutils.translate("lockdown_unlocked", { channel }));
 		}
 	}

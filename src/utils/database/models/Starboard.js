@@ -1,21 +1,21 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("Starboard", {
-		Enabled: {
+	sequelize.define("starboard", {
+		enabled: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 			allowNull: false,
 		},
-		ChannelId: {
+		channelId: {
 			type: DataTypes.STRING,
 		},
-		Emoji: {
+		emoji: {
 			type: DataTypes.STRING,
 			defaultValue: "2b50", // ⭐
 			allowNull: false,
 		},
-		MinimumCount: {
+		minimumCount: {
 			type: DataTypes.INTEGER,
 			defaultValue: 3,
 			allowNull: false,

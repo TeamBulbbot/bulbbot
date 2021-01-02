@@ -10,16 +10,16 @@ module.exports = {
 	 * @returns Guild prefix
 	 */
 	async getPrefix(guild) {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guild.id },
-			include: [{ model: sequelize.models.GuildConfiguration }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId: guild.id },
+			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
 		if (dbGuild === null) {
 			await CreateGuild(guild);
 			return global.config.prefix;
 		}
-		return dbGuild.GuildConfiguration.Prefix;
+		return dbGuild.guildConfiguration.prefix;
 	},
 
 	/**
@@ -28,12 +28,12 @@ module.exports = {
 	 * @returns {Promise<{type: *}>}    Guild Prefix
 	 */
 	async getMuteRole(guild) {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guild.id },
-			include: [{ model: sequelize.models.GuildConfiguration }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId: guild.id },
+			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
-		return dbGuild.GuildConfiguration.MuteRole;
+		return dbGuild.guildConfiguration.muteRole;
 	},
 	/**
 	 * Removed and immediately created a new Guild object in the database

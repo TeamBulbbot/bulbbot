@@ -1,20 +1,20 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("GuildConfiguration", {
-		Prefix: {
+	sequelize.define("guildConfiguration", {
+		prefix: {
 			type: DataTypes.STRING,
 			defaultValue: "!",
 		},
-		TrackAnalytics: {
+		trackAnalytics: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
 		},
-		Language: {
+		language: {
 			type: DataTypes.STRING,
 			defaultValue: "en-US",
 		},
-		MuteRole: {
+		muteRole: {
 			type: DataTypes.STRING,
 		},
 	});

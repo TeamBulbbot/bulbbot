@@ -44,9 +44,9 @@ module.exports = class extends Event {
 
 		this.client.channels.cache.get(config.ChannelId).send(embed);
 
-		await sequelize.models.StarboardPost.create({
-			OGMessageId: reaction.message.id,
-			StarboardId: dbGuild.id,
+		await sequelize.models.starboardPost.create({
+			ogMessageId: reaction.message.id,
+			starboardId: dbGuild.id,
 		});
 	}
 };

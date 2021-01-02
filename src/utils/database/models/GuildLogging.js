@@ -1,23 +1,23 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = sequelize => {
-	sequelize.define("GuildLogging", {
-		ModAction: {
+	sequelize.define("guildLogging", {
+		modAction: {
 			type: DataTypes.STRING,
 		},
-		Message: {
+		message: {
 			type: DataTypes.STRING,
 		},
-		Role: {
+		role: {
 			type: DataTypes.STRING,
 		},
-		Member: {
+		member: {
 			type: DataTypes.STRING,
 		},
-		Channel: {
+		channel: {
 			type: DataTypes.STRING,
 		},
-		JoinLeave: {
+		joinLeave: {
 			type: DataTypes.STRING,
 		},
 	});

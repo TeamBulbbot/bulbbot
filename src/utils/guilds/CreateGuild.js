@@ -7,18 +7,18 @@ const sequelize = require("../database/connection");
  * @returns {Promise<void>}
  */
 module.exports = async guild => {
-	const config = await sequelize.models.GuildConfiguration.create({
-		Prefix: global.config.prefix,
+	const config = await sequelize.models.guildConfiguration.create({
+		prefix: global.config.prefix,
 	});
-	const logging = await sequelize.models.GuildLogging.create({});
+	const logging = await sequelize.models.guildLogging.create({});
 
-	const starboard = await sequelize.models.Starboard.create({});
+	const starboard = await sequelize.models.starboard.create({});
 
-	await sequelize.models.Guild.create({
-		Name: guild.name,
-		GuildId: guild.id,
-		GuildConfigurationId: config.id,
-		GuildLoggingId: logging.id,
-		StarboardId: starboard.id,
+	await sequelize.models.guild.create({
+		name: guild.name,
+		guildId: guild.id,
+		guildConfigurationId: config.id,
+		guildLoggingId: logging.id,
+		starboardId: starboard.id,
 	});
 };

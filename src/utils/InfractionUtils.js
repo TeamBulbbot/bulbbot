@@ -15,20 +15,20 @@ module.exports = {
 	 * @returns InfId               The ID of the created infraction
 	 */
 	createInfraction: async (guildId, action, active, reason, target, targetId, moderator, moderatorId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 		});
 		if (dbGuild === null) return;
 
-		const inf = await sequelize.models.Infraction.create({
-			Action: action,
-			Active: active,
-			Reason: reason,
-			Target: target,
-			TargetId: targetId,
-			Moderator: moderator,
-			ModeratorId: moderatorId,
-			GuildId: dbGuild.id,
+		const inf = await sequelize.models.infraction.create({
+			action,
+			active,
+			reason,
+			target,
+			targetId,
+			moderator,
+			moderatorId,
+			guildId: dbGuild.id,
 		});
 
 		return inf.id;
@@ -42,11 +42,11 @@ module.exports = {
 	 * @returns {Promise<boolean>}
 	 */
 	deleteInfraction: async (guildId, infId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 			include: [
 				{
-					model: sequelize.models.Infraction,
+					model: sequelize.models.infraction,
 					where: {
 						id: infId,
 					},
@@ -54,7 +54,7 @@ module.exports = {
 			],
 		});
 		if (dbGuild === null) return false;
-		await dbGuild.Infractions[0].destroy();
+		await dbGuild.infractions[0].destroy();
 		return true;
 	},
 
@@ -65,11 +65,11 @@ module.exports = {
 	 * @returns {Promise<boolean|*>}
 	 */
 	getInfraction: async (guildId, infId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 			include: [
 				{
-					model: sequelize.models.Infraction,
+					model: sequelize.models.infraction,
 					where: {
 						id: infId,
 					},
@@ -77,8 +77,10 @@ module.exports = {
 			],
 		});
 
+		console.log(dbGuild.infractions);
+
 		if (dbGuild === null) return false;
-		return dbGuild.Infractions[0]
+		return dbGuild.infractions[0];
 	},
 
 	/**
@@ -88,14 +90,14 @@ module.exports = {
 	 * @returns {Promise<*[]|*>}    Returned infraction array
 	 */
 	getAllInfractions: async guildId => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
-			include: [{ model: sequelize.models.Infraction }],
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.infraction }],
 		});
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions.reverse();
+		return dbGuild.infractions.reverse();
 	},
 
 	/**
@@ -107,13 +109,13 @@ module.exports = {
 	 * @returns {Promise<*[]|*>}    Returned infraction array
 	 */
 	getOffenderInfractions: async (guildId, offenderId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 			include: [
 				{
-					model: sequelize.models.Infraction,
+					model: sequelize.models.infraction,
 					where: {
-						TargetId: offenderId,
+						targetId: offenderId,
 					},
 				},
 			],
@@ -121,7 +123,7 @@ module.exports = {
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions.reverse();
+		return dbGuild.infractions.reverse();
 	},
 
 	/**
@@ -133,13 +135,13 @@ module.exports = {
 	 * @returns {Promise<*[]|*>}    Returned infraction array
 	 */
 	getModeratorInfractions: async (guildId, moderatorId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 			include: [
 				{
-					model: sequelize.models.Infraction,
+					model: sequelize.models.infraction,
 					where: {
-						ModeratorId: moderatorId,
+						moderatorId,
 					},
 				},
 			],
@@ -147,7 +149,7 @@ module.exports = {
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions.reverse();
+		return dbGuild.infractions.reverse();
 	},
 
 	/**
@@ -159,11 +161,11 @@ module.exports = {
 	 * @returns {Promise<void>}
 	 */
 	setActive: async (infId, active) => {
-		const dbInf = await sequelize.models.Infraction.findOne({
+		const dbInf = await sequelize.models.infraction.findOne({
 			where: { id: infId },
 		});
 
-		dbInf.Active = active;
+		dbInf.active = active;
 		await dbInf.save();
 	},
 
@@ -174,11 +176,11 @@ module.exports = {
 	 * @returns {Promise<{allowNull: boolean, type: *}|*>}		Returned value, either a boolean or a Unix timestamp
 	 */
 	getActive: async infId => {
-		const dbInf = await sequelize.models.Infraction.findOne({
+		const dbInf = await sequelize.models.infraction.findOne({
 			where: { id: infId },
 		});
 
-		return dbInf.Active;
+		return dbInf.active;
 	},
 
 	/**
@@ -189,14 +191,14 @@ module.exports = {
 	 * @returns {Promise<*[]|*>}		The latest Mute infraction stored in the database
 	 */
 	getLatestMute: async (guildId, offenderId) => {
-		const dbGuild = await sequelize.models.Guild.findOne({
-			where: { GuildId: guildId },
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
 			include: [
 				{
-					model: sequelize.models.Infraction,
+					model: sequelize.models.infraction,
 					where: {
-						TargetId: offenderId,
-						Action: "Mute",
+						targetId: offenderId,
+						action: "Mute",
 					},
 				},
 			],
@@ -204,6 +206,6 @@ module.exports = {
 
 		if (dbGuild === null) return [];
 
-		return dbGuild.Infractions.reverse()[0].id;
+		return dbGuild.infractions.reverse()[0].id;
 	},
 };
