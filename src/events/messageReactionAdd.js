@@ -9,18 +9,18 @@ module.exports = class extends Event {
 		super(...args);
 	}
 
-	async run(reaction, user) {
+	async run(reaction) {
 		if (reaction.message.channel.nsfw) return;
 
 		const dbGuild = await GetGuild(reaction.message.guild.id);
-		const config = dbGuild.Starboard;
+		const config = dbGuild.starboard;
 		const reactionEmote = emojiUnicode(reaction._emoji.name);
 
-		if (!config.Enabled) return;
+		if (!config.enabled) return;
 		if (config.Emoji !== reactionEmote) return;
-		if (config.ChannelId === null) return;
-		if (config.MiniumCount < reaction.count) return;
-		if (await CheckIfMessageAlreadyInDB(dbGuild.Starboard.id, reaction.message.id)) return;
+		if (config.channelId === null) return;
+		if (config.miniumCount < reaction.count) return;
+		if (await CheckIfMessageAlreadyInDB(dbGuild.starboard.id, reaction.message.id)) return;
 
 		const attach = reaction.message.attachments.first();
 
@@ -42,7 +42,7 @@ module.exports = class extends Event {
 			.setFooter(`#${reaction.message.channel.name}`)
 			.setTimestamp();
 
-		this.client.channels.cache.get(config.ChannelId).send(embed);
+		this.client.channels.cache.get(config.channelId).send(embed);
 
 		await sequelize.models.starboardPost.create({
 			ogMessageId: reaction.message.id,

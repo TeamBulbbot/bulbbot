@@ -146,6 +146,7 @@
 	"infraction_info_active": "**Active:** {emoji}",
 	"infraction_info_expires": "**Expires:** {timestamp}",
 	"infraction_info_reason": "\n\n**Reason:** {reason}",
+	"infraction_list_not_found": "{emote_warn} This guild does not seem to have any infractions!",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"

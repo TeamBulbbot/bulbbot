@@ -93,7 +93,7 @@ module.exports = {
 			include: [{ model: sequelize.models.infraction }],
 		});
 
-		if (dbGuild === null) return [];
+		if (dbGuild === null) return null;
 
 		return dbGuild.infractions.reverse();
 	},
