@@ -31,6 +31,16 @@ module.exports = class extends Command {
 				await require("./Infraction/list").Call(this.client, message);
 				break;
 
+			case "msearch":
+			case "modsearch":
+				await require("./Infraction/modsearch").Call(this.client, message, args);
+				break;
+
+			case "osearch":
+			case "offendersearch":
+				await require("./Infraction/offendersearch").Call(this.client, message, args);
+				break;
+
 			default:
 				break;
 		}

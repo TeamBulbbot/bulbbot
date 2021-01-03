@@ -352,4 +352,39 @@ module.exports = class BulbBotUtils {
 
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\``;
 	}
+
+	prettify(action) {
+		let finalString = "";
+		switch (action) {
+			case "Ban":
+				finalString = `${Emotes.actions.BAN} Ban`;
+				break;
+			case "Forceban":
+				finalString = `${Emotes.actions.BAN} Forceban`;
+				break;
+			case "Kick":
+				finalString = `${Emotes.actions.KICK} Kick`;
+				break;
+			case "Mute":
+				finalString = `${Emotes.actions.MUTE} Mute`;
+				break;
+			case "Warn":
+				finalString = `${Emotes.actions.WARN} Warn`;
+				break;
+			case "Unmute":
+				finalString = `${Emotes.actions.UNBAN} Unmute`;
+				break;
+			case "Unban":
+				finalString = `${Emotes.actions.UNBAN} Unban`;
+				break;
+			case "true":
+				finalString = `${Emotes.status.ONLINE} True`;
+				break;
+			case "false":
+				finalString = `${Emotes.other.INF2} False`;
+				break;
+		}
+
+		return finalString;
+	}
 };

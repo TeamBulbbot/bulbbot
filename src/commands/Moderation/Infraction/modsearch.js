@@ -1,17 +1,36 @@
-const { getAllInfractions } = require("../../../utils/InfractionUtils");
 const { ReasonImage } = require("../../../utils/Regex");
+const { getModeratorInfractions } = require("../../../utils/InfractionUtils");
+const { NonDigits } = require("../../../utils/Regex");
 
 const Emotes = require("../../../emotes.json");
 
-const moment = require("moment");
 const Discord = require("discord.js");
+const moment = require("moment");
 const embedPagination = require("discord.js-pagination")
 
 module.exports = {
-	Call: async (client, message) => {
+	Call: async (client, message, args) => {
 		let pages = [];
 
-		const infs = await getAllInfractions(message.guild.id);
+		if (args.length < 2)
+			return message.channel.send(
+				client.bulbutils.translate("event_message_args_missing", {
+					arg: "user:User",
+					arg_expected: 2,
+					arg_provided: 1,
+					usage: "!infraction info <user>",
+				}),
+			);
+
+		const targetId = args[1].replace(NonDigits, "");
+		let user;
+		try {
+            user = await client.users.fetch(targetId);
+        } catch (err) {
+            return message.channel.send(client.bulbutils.translate("global_user_not_found"));
+        }
+
+		const infs = await getModeratorInfractions(message.guild.id, user.id);
 		for (let i = 0; i < 50; i++) {
 			if (infs[i] === undefined) continue;
 
@@ -45,20 +64,20 @@ module.exports = {
 
 			const image = infs[i].reason.match(ReasonImage);
 
-            const embed = new Discord.MessageEmbed()
-                .setTitle(client.bulbutils.prettify(infs[i].action))
-                .setDescription(description)
-                .setColor(process.env.EMBED_COLOR)
-                .setImage(image ? image[0] : null)
-                .setTimestamp();
+			const embed = new Discord.MessageEmbed()
+				.setTitle(client.bulbutils.prettify(infs[i].action))
+				.setDescription(description)
+				.setColor(process.env.EMBED_COLOR)
+				.setImage(image ? image[0] : null)
+				.setTimestamp();
 
-            pages.push(embed)
+			pages.push(embed);
 		}
 
 		if (pages.length === 0) {
 			return message.channel.send(client.bulbutils.translate("infraction_list_not_found"));
 		}
 
-        await embedPagination(message, pages, ["⏪", "⏩"], 120000);
+		await embedPagination(message, pages, ["⏪", "⏩"], 120000);
 	},
 };
