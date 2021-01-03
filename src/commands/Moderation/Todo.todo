@@ -2,9 +2,6 @@
     - multivckick
     - mvckick
 
-- infraction
-    - inf
-
 - automod
     - blacklisted words
     - regex

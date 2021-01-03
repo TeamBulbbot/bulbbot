@@ -105,6 +105,8 @@
 
 	"multiwarn_success": "{emote_success} {full_list} have been warned for **{reason}**",
 
+	"multivoicekick_success": "{emote_success} {full_list} have been voice-kicked for **{reason}**",
+
 	"softban_success": "{emote_success} **{target_tag}** `({target_id})` has been soft-banned for **{reason}** `[#{infractionId}]`",
 
 	"deafen_already_deaf": "{emote_warn} User is already deafened!",

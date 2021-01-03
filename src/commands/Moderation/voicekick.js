@@ -34,7 +34,7 @@ module.exports = class extends Command {
 			target,
 			message.author,
 			this.client.bulbutils.translate("global_mod_action_log", {
-				action: "Deafened",
+				action: "Voice-kicked",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
 				target_tag: target.user.tag,

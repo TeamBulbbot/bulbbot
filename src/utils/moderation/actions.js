@@ -109,7 +109,7 @@ module.exports = {
 
 	Voicekick: async (client, guild, target, moderator, reason, reasonLog) => {
 		await target.voice.kick();
-		const infId = await createInfraction(guild.id, "Voice kick", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		const infId = await createInfraction(guild.id, "Voice-kick", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "voice-kicked", target.user, moderator, reasonLog, infId);
 
 		return infId;
