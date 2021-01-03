@@ -77,8 +77,6 @@ module.exports = {
 			],
 		});
 
-		console.log(dbGuild.infractions);
-
 		if (dbGuild === null) return false;
 		return dbGuild.infractions[0];
 	},

@@ -25,7 +25,7 @@ module.exports = class Util {
 
 	async loadCommands() {
 		console.log("Beginning to register commands. This may take a while!");
-		return glob(`${this.directory}commands/**/*.js`).then(commands => {
+		return glob(`${this.directory}commands/*/*.js`).then(commands => {
 			for (const commandFile of commands) {
 				delete require.cache[commandFile];
 				const { name } = path.parse(commandFile);
