@@ -60,10 +60,11 @@ module.exports = {
 	},
 
 	/**
+	 * Returns the selected infraction
 	 *
-	 * @param guildId
-	 * @param infId
-	 * @returns {Promise<boolean|*>}
+	 * @param guildId		Guild ID where the infraction is being stored
+	 * @param infId			The unique ID of the infraction
+	 * @returns {Promise<boolean|*>}	Returned infraction object
 	 */
 	getInfraction: async (guildId, infId) => {
 		const dbGuild = await sequelize.models.guild.findOne({
@@ -151,6 +152,14 @@ module.exports = {
 		return dbGuild.infractions.reverse();
 	},
 
+	/**
+	 * Returns an array of Infractions where the specified user ID is either stored an Target ID or Moderator ID
+	 *
+	 * @param guildId		ID of the guild where the Infractions are being stored
+	 * @param moderatorId	ID of the user being searched
+	 * @param targetId		ID of the user being searched
+	 * @returns {Promise<*[]|*>}		Returned array of infractions
+	 */
 	getAllUserInfractions: async (guildId, moderatorId, targetId) => {
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },
@@ -158,10 +167,7 @@ module.exports = {
 				{
 					model: sequelize.models.infraction,
 					where: {
-						[Op.or]: [
-							{ moderatorId },
-							{ targetId }
-						],
+						[Op.or]: [{ moderatorId }, { targetId }],
 					},
 				},
 			],
@@ -203,6 +209,13 @@ module.exports = {
 		return dbInf.active;
 	},
 
+	/**
+	 * Sets the moderator and moderatorId fields of the specified Infraction to the new specified user values
+	 *
+	 * @param infId		Unique ID of the selected Infraction
+	 * @param moderator		User object of the new Moderator
+	 * @returns {Promise<void>}
+	 */
 	setModerator: async (infId, moderator) => {
 		const dbInf = await sequelize.models.infraction.findOne({
 			where: { id: infId },
@@ -213,6 +226,13 @@ module.exports = {
 		await dbInf.save();
 	},
 
+	/**
+	 * Sets the reason field of the specified Infraction to the new updated value
+	 *
+	 * @param infId		Unique ID of the selected infraction
+	 * @param reason	New updated reason
+	 * @returns {Promise<void>}
+	 */
 	setReason: async (infId, reason) => {
 		const dbInf = await sequelize.models.infraction.findOne({
 			where: { id: infId },
