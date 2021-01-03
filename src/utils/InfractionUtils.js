@@ -203,6 +203,16 @@ module.exports = {
 		return dbInf.active;
 	},
 
+	setModerator: async (infId, moderator) => {
+		const dbInf = await sequelize.models.infraction.findOne({
+			where: { id: infId },
+		});
+
+		dbInf.moderator = moderator.tag;
+		dbInf.moderatorId = moderator.id;
+		await dbInf.save();
+	},
+
 	/**
 	 * Returns the latest Mute infraction for the provided Guild and User
 	 *

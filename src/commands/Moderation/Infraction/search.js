@@ -18,7 +18,7 @@ module.exports = {
                     arg: "user:User",
                     arg_expected: 2,
                     arg_provided: 1,
-                    usage: "!infraction info <user>",
+                    usage: "!infraction search <user>",
                 }),
             );
 
