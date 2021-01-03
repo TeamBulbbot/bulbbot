@@ -213,6 +213,15 @@ module.exports = {
 		await dbInf.save();
 	},
 
+	setReason: async (infId, reason) => {
+		const dbInf = await sequelize.models.infraction.findOne({
+			where: { id: infId },
+		});
+
+		dbInf.reason = reason;
+		await dbInf.save();
+	},
+
 	/**
 	 * Returns the latest Mute infraction for the provided Guild and User
 	 *

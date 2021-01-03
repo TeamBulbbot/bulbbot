@@ -10,7 +10,7 @@ module.exports = class extends Command {
 			userPerms: ["MANAGE_GUILD"],
 			clearance: 50,
 			minArgs: 1,
-			maxArgs: 2,
+			maxArgs: -1,
 			argList: ["action:string"],
 		});
 	}
@@ -47,6 +47,10 @@ module.exports = class extends Command {
 
 			case "claim":
 				await require("./Infraction/claim").Call(this.client, message, args);
+				break;
+
+			case "update":
+				await require("./Infraction/update").Call(this.client, message, args);
 				break;
 
 			default:
