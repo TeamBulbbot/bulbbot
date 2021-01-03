@@ -1,4 +1,5 @@
 const sequelize = require("./database/connection");
+const { Op } = require("sequelize");
 
 module.exports = {
 	/**
@@ -140,6 +141,27 @@ module.exports = {
 					model: sequelize.models.infraction,
 					where: {
 						moderatorId,
+					},
+				},
+			],
+		});
+
+		if (dbGuild === null) return [];
+
+		return dbGuild.infractions.reverse();
+	},
+
+	getAllUserInfractions: async (guildId, moderatorId, targetId) => {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.infraction,
+					where: {
+						[Op.or]: [
+							{ moderatorId },
+							{ targetId }
+						],
 					},
 				},
 			],
