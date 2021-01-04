@@ -11,7 +11,7 @@ module.exports = sequelize => {
 			allowNull: false,
 		},
 		reason: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(10000),
 			allowNull: false,
 		},
 		target: {
