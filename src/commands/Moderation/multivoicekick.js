@@ -8,6 +8,11 @@ module.exports = class extends Command {
 			description: "Kicks multiple members from the Voice Channel they're connected to",
 			category: "Moderation",
 			usage: "!multivoicekick <member> <member2>... [reason]",
+			examples: [
+				"multivoicekick @mrphilip#0001 @Kluk##6589",
+				"multivoicekick 190160914765316096 439396770695479297 rude user",
+				"multivoicekick @mrphilip#0001 @Kluk##6589 rude user",
+			],
 			aliases: ["mvckick"],
 			argList: ["member:Member"],
 			minArgs: 1,
@@ -22,22 +27,22 @@ module.exports = class extends Command {
 		const targets = args.slice(0).join(" ").match(UserMentionStrict);
 		let reason = args.slice(targets.length).join("").replace(UserMentionStrict, "");
 
-        if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
+		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
-            const t = targets[i].replace(NonDigits, "");
-            const target = await message.guild.member(t);
-            let infId;
+			const t = targets[i].replace(NonDigits, "");
+			const target = await message.guild.member(t);
+			let infId;
 
-            if (!target) {
-                message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
-                return;
-            }
-            if (!target.voice.channel) {
-                message.channel.send(this.client.bulbutils.translate("global_not_in_voice"));
-                return;
-            }
+			if (!target) {
+				message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+				return;
+			}
+			if (!target.voice.channel) {
+				message.channel.send(this.client.bulbutils.translate("global_not_in_voice"));
+				return;
+			}
 
 			infId = await Voicekick(
 				this.client,

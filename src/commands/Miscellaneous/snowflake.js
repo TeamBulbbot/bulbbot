@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			description: "Gets information about a given snowflake",
 			category: "Miscellaneous",
 			usage: "!snowflake <snowflake>",
+			examples: ["snowflake 190160914765316096"],
 			argList: ["snowflake:integer"],
 			minArgs: 1,
 			maxArgs: -1,
@@ -19,14 +20,12 @@ module.exports = class extends Command {
 		const snowflake = args[0].replace(NonDigits, "");
 		if (snowflake <= Discord.SnowflakeUtil.EPOCH) return message.channel.send(this.client.bulbutils.translate("invalid_snowflake", { snowflake }));
 		const deconstruct = Discord.SnowflakeUtil.deconstruct(snowflake);
-		let passedAnything = false;
 
 		let desc = `**❄️ [Snowflake](https://discord.com/developers/docs/reference#snowflakes) information**\n\n`;
 
-		// Check if its a user
-		if (!passedAnything) desc += this.client.bulbutils.translate("snowflake_info");
-
 		desc += `**Creation**\n${formatDays(deconstruct.date)}\n`;
+		desc += `**Timestamp**\n${deconstruct.timestamp}\n\n`;
+		desc += `**Binary**\n${deconstruct.binary}\n`;
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)

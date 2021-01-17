@@ -9,6 +9,11 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["mban"],
 			usage: "!multiban <user> <user2>.... [reason]",
+			examples: [
+				"multiban @mrphilip#0001 @Kluk##6589",
+				"multiban 190160914765316096 439396770695479297 rude user",
+				"multiban @mrphilip#0001 @Kluk##6589 rude user",
+			],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,

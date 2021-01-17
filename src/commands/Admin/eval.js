@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			category: "Admin",
 			aliases: ["ev"],
 			usage: "!eval <code>",
+			examples: ["eval message.channel.send('hi')"],
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["code:string"],

@@ -9,6 +9,11 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["mwarn"],
 			usage: "!multiwarn <member> <member2>... [reason]",
+			examples: [
+				"multiwarn @mrphilip#0001 @Kluk##6589",
+				"multiwarn 190160914765316096 439396770695479297 rude user",
+				"multiwarn @mrphilip#0001 @Kluk##6589 rude user",
+			],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,

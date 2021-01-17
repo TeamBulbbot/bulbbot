@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Kicks a member from the Voice Channel they're connected to",
 			category: "Moderation",
 			usage: "!voicekick <member> [reason]",
+			examples: ["voicekick 190160914765316096", "voicekick 190160914765316096 rude user", "voicekick @mrphilip#0001 rude user"],
 			aliases: ["vckick"],
 			argList: ["member:Member"],
 			minArgs: 1,

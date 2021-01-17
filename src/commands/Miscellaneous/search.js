@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			description: "Search the current guild for a given query",
 			category: "Miscellaneous",
 			usage: "!search <query>",
+			examples: ["search mrphilip"],
 			argList: ["query:string"],
 			minArgs: 1,
 			maxArgs: -1,

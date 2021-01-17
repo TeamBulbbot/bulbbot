@@ -11,6 +11,7 @@ module.exports = class extends Command {
 			description: "Sends a bigger version of the given emote(s)",
 			category: "Miscellaneous",
 			usage: "!jumbo <emote>",
+			examples: ["jumbo 🍰"],
 			argList: ["emote:Emote"],
 			minArgs: 1,
 			maxArgs: -1,

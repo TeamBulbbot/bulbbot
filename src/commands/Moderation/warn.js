@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Warns the selected guild member",
 			category: "Moderation",
 			usage: "!warn <member> [reason]",
+			examples: ["warn 190160914765316096", "warn 190160914765316096 rude user", "warn @mrphilip#0001 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,
 			maxArgs: -1,

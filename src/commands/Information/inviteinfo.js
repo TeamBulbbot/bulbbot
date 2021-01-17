@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			category: "Information",
 			aliases: ["inv"],
 			usage: "!inviteinfo <invitecode>",
+			examples: ["inviteinfo cacUmbQ", "inviteinfo https://discord.gg/cacUmbQ"],
 			argList: ["invitecode:string"],
 			minArgs: 1,
 			maxArgs: -1,

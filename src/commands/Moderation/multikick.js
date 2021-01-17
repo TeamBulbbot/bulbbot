@@ -9,6 +9,11 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["mkick"],
 			usage: "!multikick <member> <member2>.... [reason]",
+			examples: [
+				"multikick @mrphilip#0001 @Kluk##6589",
+				"multikick 190160914765316096 439396770695479297 rude user",
+				"multikick @mrphilip#0001 @Kluk##6589 rude user",
+			],
 			argList: ["member:Member"],
 			minArgs: 1,
 			maxArgs: -1,

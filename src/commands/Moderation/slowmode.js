@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Sets a slowmode to the selected channel",
 			category: "Moderation",
 			usage: "!slowmode [channel] <duration>",
+			examples: ["slowmode 60m", "slowmode 743855098073186435 30m", "slowmode #general 0s"],
 			argList: ["duration:Duration"],
 			minArgs: 1,
 			maxArgs: 2,

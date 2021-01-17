@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Leaves the specified guild",
 			category: "Admin",
 			usage: "!leave <guild>",
+			examples: ["leave 742094927403679816"],
 			argList: ["guild:Guild"],
 			minArgs: 1,
 			maxArgs: 1,

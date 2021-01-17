@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			description: "Locks/unlocks a selected channel",
 			category: "Moderation",
 			usage: "!lockdown <channel> <lock>",
+			examples: ["lockdown 743855098073186435 true", "lockdown #general false"],
 			argList: ["channel:Channel", "lock:boolean"],
 			minArgs: 2,
 			maxArgs: 2,

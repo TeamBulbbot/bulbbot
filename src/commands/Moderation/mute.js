@@ -14,6 +14,7 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["tempmute"],
 			usage: "!mute <member> <duration> [reason]",
+			examples: ["mute 190160914765316096 5m", "mute 190160914765316096 1h rude user", "mute @mrphilip#0001 24h rude user"],
 			argList: ["member:Member", "duration:Duration"],
 			minArgs: 2,
 			maxArgs: -1,

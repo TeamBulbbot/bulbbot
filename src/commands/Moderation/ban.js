@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["terminate", "yeet"],
 			usage: "!ban <user> [reason]",
+			examples: ["ban 190160914765316096", "ban 190160914765316096 rude user", "ban @mrphilip#0001 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,

@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["pardon"],
 			usage: "!unban <user> [reason]",
+			examples: ["unban 190160914765316096", "unban 190160914765316096 nice user", "unban @mrphilip#0001 nice user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,

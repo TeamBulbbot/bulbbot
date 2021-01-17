@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Kicks a user from the guild",
 			category: "Moderation",
 			usage: "!kick <member> [reason]",
+			examples: ["kick 190160914765316096", "kick 190160914765316096 rude user", "kick @mrphilip#0001 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,
 			maxArgs: -1,

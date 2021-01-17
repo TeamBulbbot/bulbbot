@@ -10,6 +10,7 @@ module.exports = class extends Command {
 			category: "Information",
 			aliases: ["whois", "info", "user"],
 			usage: "!userinfo [user]",
+			examples: ["userinfo", "userinfo 190160914765316096", "userinfo @mrphilip#0001"],
 			clearance: 50,
 			maxArgs: 1,
 		});

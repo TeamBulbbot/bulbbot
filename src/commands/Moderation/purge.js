@@ -10,6 +10,7 @@ module.exports = class extends Command {
 			category: "Moderation",
 			aliases: ["clear"],
 			usage: "!purge <amount>",
+			examples: ["purge 30"],
 			argList: ["amount:integer"],
 			minArgs: 1,
 			maxArgs: -1,
