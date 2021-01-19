@@ -11,10 +11,9 @@ module.exports = class extends Event {
 
 	async run(message) {
 		if (message.channel.type === "dm") return DirectMessage(this.client, message);
-
-		await AutoMod.Master(message)
-
 		this.client.prefix = await getPrefix(message.guild);
+
+		await AutoMod.Master(message);
 		activity_guilds(message.guild.id);
 
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);

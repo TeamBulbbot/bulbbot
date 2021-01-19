@@ -5,6 +5,9 @@ module.exports = sequelize => {
 		modAction: {
 			type: DataTypes.STRING,
 		},
+		automod: {
+			type: DataTypes.STRING,
+		},
 		message: {
 			type: DataTypes.STRING,
 		},

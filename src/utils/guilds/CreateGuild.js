@@ -22,6 +22,6 @@ module.exports = async guild => {
 		guildConfigurationId: config.id,
 		guildLoggingId: logging.id,
 		starboardId: starboard.id,
-		automodId: automod.id
+		automodId: automod.id,
 	});
 };
