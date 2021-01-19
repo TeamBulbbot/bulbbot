@@ -9,24 +9,18 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-	    let description = ""
-        description += "**Infraction ID:** 2021\n"
-        description += "**Target:** KlukCZ589 `(439396770695479297)`\n"
-        description += "**Moderator:** KlukCZ589 `(439396770695479297)`\n"
-        description += "**Created:** Dec 30th 2020, 6:54:00 pm\n"
-        description += "**Active:** <:INF2:791310258249007164> False\n"
-        description += "**Expires:** Expired\n\n"
-        description += "**Reason:** bad boyo (https://cdn.klukcz.me/img/wEqQDpry.png)\n"
-
 		const embed = new Discord.MessageEmbed()
-            .setTitle("<:bulbBAN:793193105523736576> Tempban")
-		    .setDescription(description)
-            .setColor(process.env.EMBED_COLOR)
-            .setThumbnail("https://cdn.discordapp.com/avatars/439396770695479297/8b6bc6c5883068ad800f123ce0d1b445.webp?size=4096")
-            .setImage("https://cdn.klukcz.me/img/wEqQDpry.png")
-            .setFooter("Executed by: KlukCZ#6589", "https://cdn.discordapp.com/avatars/439396770695479297/8b6bc6c5883068ad800f123ce0d1b445.webp?size=4096")
-            .setTimestamp()
+		.setTitle("Discord Testers")
+			.setThumbnail("https://cdn.discordapp.com/icons/197038439483310086/cd91b75395f029d6f6ac52110c4e9a91.webp?size=256")
+			.setDescription("Hello,\n" +
+				"Discord Testers is focused on maintaining a safe and secure environment for our community, and you account was flagged for violations of our server rules.\n" +
+				"\n" +
+				"Test warn, plz ignore\n" +
+				"\n" +
+				"Your actions are in violation of our server rules and are issuing you this warning. This is your 1st official warning on record. If the behavior continues, we may take further action against your account, up to and including permanent removal from the server.\n" +
+				"~~Sincerely,\n" +
+				"Discord Trust and Safety~~");
 
-        message.channel.send(embed)
+		message.channel.send(embed)
 	}
 };

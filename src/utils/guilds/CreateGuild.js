@@ -14,11 +14,14 @@ module.exports = async guild => {
 
 	const starboard = await sequelize.models.starboard.create({});
 
+	const automod = await sequelize.models.automod.create({});
+
 	await sequelize.models.guild.create({
 		name: guild.name,
 		guildId: guild.id,
 		guildConfigurationId: config.id,
 		guildLoggingId: logging.id,
 		starboardId: starboard.id,
+		automodId: automod.id
 	});
 };

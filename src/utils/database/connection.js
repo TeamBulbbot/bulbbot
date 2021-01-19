@@ -30,6 +30,7 @@ const models = [
 	require("./models/starboard"),
 	require("./models/starboardPost"),
 	require("./models/tempban"),
+	require("./models/automod")
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);
