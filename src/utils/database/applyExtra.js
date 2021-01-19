@@ -9,11 +9,13 @@ function ApplyExtra(sequelize) {
 		starboard,
 		starboardPost,
 		tempban,
+		automod
 	} = sequelize.models;
 
 	guild.belongsTo(guildConfiguration, {});
 	guild.belongsTo(guildLogging, {});
 	guild.belongsTo(starboard, {});
+	guild.belongsTo(automod, {})
 
 	starboard.hasMany(starboardPost, {});
 

@@ -1,13 +1,12 @@
 const Event = require("../structures/Event");
+const AutoMod = require("../utils/AutoMod");
 
 module.exports = class extends Event {
 	constructor(...args) {
 		super(...args, {});
 	}
 
-	run(oldMessage, newMessage) {
-		// TODO
-		//console.log("old message:", oldMessage);
-		//console.log("new message:", newMessage);
+	async run(oldMessage, newMessage) {
+		await AutoMod.Master(newMessage)
 	}
 };
