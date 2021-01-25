@@ -87,6 +87,16 @@ module.exports = {
 		if (logChannel === null) return;
 		client.channels.cache.get(logChannel).send(`\`[${moment().format("hh:mm:ss a")}]\` ${log}`);
 	},
+
+	SendAutoModLog: async (client, guildId, log) => {
+		if (guildId === undefined) return;
+
+		const dbGuild = await GetDBGuild(guildId);
+		const logChannel = GetPart(dbGuild, "automod");
+
+		if (logChannel === null) return;
+		client.channels.cache.get(logChannel).send(`\`[${moment().format("hh:mm:ss a")}]\` ${log}`);
+	},
 };
 
 function GetPart(dbGuild, part) {
@@ -105,6 +115,9 @@ function GetPart(dbGuild, part) {
 			break;
 		case "joinleave":
 			part = dbGuild.guildLogging.joinLeave;
+			break;
+		case "automod":
+			part = dbGuild.guildLogging.automod;
 			break;
 		default:
 			part = null;

@@ -10,14 +10,20 @@ module.exports = class extends Event {
 	}
 
 	async run(message) {
+		// handle dms
 		if (message.channel.type === "dm") return DirectMessage(this.client, message);
+
+		// grab the prefix for the guild
 		this.client.prefix = await getPrefix(message.guild);
 
-		await AutoMod.Master(message);
+		// guild activity
 		activity_guilds(message.guild.id);
-
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 		if (!message.guild || message.author.bot) return;
+
+		// auto mod
+		await AutoMod.Master(this.client, message);
+
 		if (message.content.match(mentionRegex)) message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
 		if (!message.content.startsWith(this.client.prefix)) return;
 

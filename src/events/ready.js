@@ -16,7 +16,6 @@ module.exports = class extends Event {
 				type: global.config.client.type,
 			},
 		});
-
 		await TempbanRestore(this.client);
 
 		console.log(

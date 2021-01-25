@@ -1,46 +1,72 @@
 const AutoModCache = require("../structures/AutoModCache");
 const AutoModUtils = require("../utils/AutoModUtils");
 const { AutoMod_INVITE, AutoMod_WEBSITE, UserMentionStrict } = require("./Regex");
+const { SendAutoModLog } = require("../utils/moderation/log");
+const Emotes = require("../emotes.json");
 
 module.exports = {
-	Master: async message => {
-		if (message.author.id === global.config.client.id) return;
+	Master: async (client, message) => {
+		if (message === undefined || message.author.id === global.config.client.id) return;
 		const dbGuild = await AutoModUtils.getGuildAutoMod(message.guild.id);
-		if (dbGuild === null) return;
-		if (!dbGuild.enabled) return;
 
-		if (await hasInvite(message)) {
-			await AutoModUtils.resolveAction(message, await AutoModUtils.getPunishment(dbGuild, "INVITE"));
-			// TODO SEND AUTOMOD LOG
+		return;
+
+		// TODO make a check if a user has > 25 clearance level and return
+		if (dbGuild.automod === null || !dbGuild.automod.enabled) return;
+
+		if (await hasInvite(message, dbGuild.automod)) {
+			await AutoModUtils.resolveAction(client, message, dbGuild.automod.punishmentInvites, `Violated \`DISCORD INVITE\` in #${message.channel.name}`);
+			await SendAutoModLog(
+				client,
+				dbGuild.guildId,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` violated \`DISCORD INVITE\` in <#${message.channel.id}>`,
+			);
 			return message.delete();
 		}
 
-		if (await hasSwearWords(message)) {
-			await AutoModUtils.resolveAction(message, await AutoModUtils.getPunishment(dbGuild, "WORDS"));
-			// TODO SEND AUTOMOD LOG
+		if (await hasSwearWords(message, dbGuild.automod)) {
+			await AutoModUtils.resolveAction(client, message, dbGuild.automod.punishmentWords, `Violated \`FORBIDDEN WORDS\` in #${message.channel.name}`);
+			await SendAutoModLog(
+				client,
+				dbGuild.guildId,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` violated \`FORBIDDEN WORDS\` in <#${message.channel.id}>`,
+			);
 			return message.delete();
 		}
 
-		if (await hasWebsite(message)) {
-			await AutoModUtils.resolveAction(message, await AutoModUtils.getPunishment(dbGuild, "WEBSITE"));
-			// TODO SEND AUTOMOD LOG
+		if (await hasWebsite(message, dbGuild.automod)) {
+			await AutoModUtils.resolveAction(
+				client,
+				message,
+				dbGuild.automod.punishmentWebsite,
+				`Violated \`FORBIDDEN WEBSITE\` in #${message.channel.name}`,
+			);
+			await SendAutoModLog(
+				client,
+				dbGuild.guildId,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` violated \`FORBIDDEN WEBSITE\` in <#${message.channel.id}>`,
+			);
 			return message.delete();
 		}
 
-		if (!(await hasMentions(message))) await AutoModCache.set(message, message.guild.id, "messages", message.author.id, 1, 10000);
+		if (await hasMentions(message)) {
+			await AutoModCache.set(message, message.guild.id, "messages", message.author.id, 1, 10000);
+		}
 	},
 };
 
-async function hasInvite(message) {
+async function hasInvite(message, dbGuild) {
+	if (dbGuild.punishmentInvites === null) return false;
 	const allowed_invites = dbGuild.inviteWhitelist;
 	for (const invite of allowed_invites) {
 		let regex = new RegExp(`(http://|https://)?(www.)?(discord.gg|discord.me|discordapp.com/invite|discord.com/invite)/(${invite})+`, "gi");
 		if (message.content.match(regex)) return false;
 	}
+
 	return message.content.match(AutoMod_INVITE);
 }
 
-async function hasSwearWords(message) {
+async function hasSwearWords(message, dbGuild) {
 	const word_blacklist = dbGuild.wordBlacklist;
 	for (const word of word_blacklist) {
 		const regex = new RegExp(`(${word})`, "gi");
@@ -52,6 +78,7 @@ async function hasSwearWords(message) {
 
 async function hasMentions(message) {
 	let mentionCount = message.content.match(UserMentionStrict);
+
 	if (mentionCount && mentionCount.length > 0) {
 		await AutoModCache.set(message, message.guild.id, "mentions", message.author.id, mentionCount.length, 15000);
 		return true;
@@ -60,6 +87,7 @@ async function hasMentions(message) {
 	return false;
 }
 
-async function hasWebsite(message) {
+async function hasWebsite(message, dbGuild) {
+	if (dbGuild.punishmentWebsite === null) return false;
 	return !!message.content.match(AutoMod_WEBSITE);
 }

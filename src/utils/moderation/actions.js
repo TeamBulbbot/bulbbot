@@ -18,7 +18,7 @@ module.exports = {
 	},
 
 	UnmuteManual: async (client, guild, target, moderator, reason, reasonLog, muteRole) => {
-		await guild.member(target.id).roles.remove(muteRole)
+		await guild.member(target.id).roles.remove(muteRole);
 		const infId = await createInfraction(guild.id, "Unmute", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "unmuted", target.user, moderator, reasonLog, infId);
 
@@ -34,7 +34,9 @@ module.exports = {
 	},
 
 	Kick: async (client, guild, target, moderator, reason, reasonLog) => {
-		await guild.member(target.id).kick(reason);
+		const offender = guild.member(target.id);
+		if (!offender.kickable) return;
+		await offender.kick(reason);
 		const infId = await createInfraction(guild.id, "Kick", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "kicked", target, moderator, reasonLog, infId);
 
@@ -42,7 +44,9 @@ module.exports = {
 	},
 
 	Ban: async (client, guild, target, moderator, reason, reasonLog) => {
-		await guild.member(target.id).ban({ reason });
+		const offender = guild.member(target.id);
+		if (!offender.bannable) return;
+		await offender.ban({ reason });
 		const infId = await createInfraction(guild.id, "Ban", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "banned", target, moderator, reasonLog, infId);
 
