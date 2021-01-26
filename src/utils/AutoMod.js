@@ -17,7 +17,7 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>`,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
 			return message.delete();
 		}
@@ -32,7 +32,7 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${message.channel.id}>`,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
 			return message.delete();
 		}
@@ -47,13 +47,13 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WEBSITE\` check in <#${message.channel.id}>`,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WEBSITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
 			return message.delete();
 		}
 
-		if (await hasMentions(message)) {
-			await AutoModCache.set(message, message.guild.id, "messages", message.author.id, 1, 10000);
+		if (await hasMentions(client, message)) {
+			await AutoModCache.set(client, message, message.guild.id, "messages", message.author.id, 1, 10000);
 		}
 	},
 };
@@ -79,11 +79,11 @@ async function hasSwearWords(message, dbGuild) {
 	return false;
 }
 
-async function hasMentions(message) {
+async function hasMentions(client, message) {
 	let mentionCount = message.content.match(UserMentionStrict);
 
 	if (mentionCount && mentionCount.length > 0) {
-		await AutoModCache.set(message, message.guild.id, "mentions", message.author.id, mentionCount.length, 15000);
+		await AutoModCache.set(client, message, message.guild.id, "mentions", message.author.id, mentionCount.length, 15000);
 		return true;
 	}
 

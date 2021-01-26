@@ -16,7 +16,7 @@ client:
   tag: "Bulbbot#9083"           # bot full tag
   id: "755149065137815623"      # bot id
   game: "Version 0.0.1"         # what the game activity should be
-  type: "COMPETING"             # COMPETING (5), CUSTOM (4), LISTENING (2), STREAMING (1), PLAYING (0)
+  type: "COMPETING"             # COMPETING (5), WATCHING(3), LISTENING (2), STREAMING (1), PLAYING (0)
   status: "online"              # online, idle, dnd, invisible
   fetchAllUsers: false          # if the bot should fetch all the user on start
   disableMentions: "everyone"   # disable certain mentions
