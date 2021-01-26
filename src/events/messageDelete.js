@@ -8,10 +8,11 @@ module.exports = class extends Event {
 
 	run(message) {
 		if (message.author.id === this.client.user.id) return;
+
 		let msg = `Message from **${message.author.tag}** \`${message.author.id}\` was deleted in <#${message.channel.id}>\n\`Id (channel-message): ${message.channel.id}-${message.id}\`\n`;
 
-		if (message.attachments.first()) msg += `**Attachment:** ${message.attachments.first().proxyURL}\n`;
-		if (message.content) msg += `**Content:** ${message.content}`;
+		if (message.attachments.first()) msg += `**A:** ${message.attachments.first().proxyURL}\n`;
+		if (message.content) msg += `**C:** ${message.content}`;
 
 		if (msg.length >= 2000) {
 			SendEventLog(this.client, message.guild, "message", msg.substring(0, 1500));

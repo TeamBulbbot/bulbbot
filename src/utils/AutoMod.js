@@ -9,8 +9,6 @@ module.exports = {
 		if (message === undefined || message.author.id === global.config.client.id) return;
 		const dbGuild = await AutoModUtils.getGuildAutoMod(message.guild.id);
 
-		return;
-
 		// TODO make a check if a user has > 25 clearance level and return
 		if (dbGuild.automod === null || !dbGuild.automod.enabled) return;
 
@@ -19,17 +17,22 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` violated \`DISCORD INVITE\` in <#${message.channel.id}>`,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>`,
 			);
 			return message.delete();
 		}
 
 		if (await hasSwearWords(message, dbGuild.automod)) {
-			await AutoModUtils.resolveAction(client, message, dbGuild.automod.punishmentWords, `Violated \`FORBIDDEN WORDS\` in #${message.channel.name}`);
+			await AutoModUtils.resolveAction(
+				client,
+				message,
+				dbGuild.automod.punishmentWords,
+				`Violated \`FORBIDDEN WORDS\` check in #${message.channel.name}`,
+			);
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` violated \`FORBIDDEN WORDS\` in <#${message.channel.id}>`,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${message.channel.id}>`,
 			);
 			return message.delete();
 		}
@@ -44,7 +47,7 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` violated \`FORBIDDEN WEBSITE\` in <#${message.channel.id}>`,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WEBSITE\` check in <#${message.channel.id}>`,
 			);
 			return message.delete();
 		}

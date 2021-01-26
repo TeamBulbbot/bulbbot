@@ -14,6 +14,8 @@ module.exports = {
 		};
 
 		switch (action.toUpperCase()) {
+			case "LOG":
+				break;
 			case "WARN":
 				await Warn(
 					client,

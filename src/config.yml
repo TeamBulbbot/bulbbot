@@ -1,32 +1,35 @@
 ---
-name: "Bulbbot"
-developers: ["190160914765316096", "439396770695479297"]
-version: 0.0.1
-lib: Discord.JS
+name: "Bulbbot"                 # project name
+developers: [                   # developers id stored in array for devOnly commands
+  "190160914765316096",           # mrphilip
+  "439396770695479297"            # Kluk
+ ]
+version: 0.0.1                  # current version
+lib: Discord.JS                 # lib used for the bot
 
 # configs
-prefix: "!"
-embedColor: "#7289DA"
+prefix: "!"                     # default prefix
+embedColor: "#7289DA"           # default embed color
 
 # client
 client:
-  tag: "Bulbbot#9083"
-  id: "755149065137815623"
-  game: "Kluk suffer in code"
-  type: "WATCHING"
-  status: "online"
-  fetchAllUsers: false
-  disableMentions: "everyone"
+  tag: "Bulbbot#9083"           # bot full tag
+  id: "755149065137815623"      # bot id
+  game: "Version 0.0.1"         # what the game activity should be
+  type: "COMPETING"             # COMPETING (5), CUSTOM (4), LISTENING (2), STREAMING (1), PLAYING (0)
+  status: "online"              # online, idle, dnd, invisible
+  fetchAllUsers: false          # if the bot should fetch all the user on start
+  disableMentions: "everyone"   # disable certain mentions
 
 # server
-server:
-  prometheusHost: "localhost"
-  prometheusPort: 8080
+server:                         
+  prometheusHost: "localhost"   # host for prometheus
+  prometheusPort: 8080          # port for prometheus
 
 # support
-supportInvite: "https://discord.gg/cacUmbQ"
+supportInvite: "https://discord.gg/cacUmbQ" # support guild invite link
 
 # logs
-botDM: "785213905207164948"
-invite: "786180293740199986"
-error: "786179914251370537"
+botDM: "785213905207164948"     # channel id for bot dms 
+invite: "786180293740199986"    # channel id for bot invites
+error: "786179914251370537"     # channel id for bot errors
