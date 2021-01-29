@@ -28,6 +28,8 @@
 	"event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})` - **Account created:** {user_age}",
 	"event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`",
 
+	"help_command_not_found": "Unable to find any commands with that name",
+
 	"userinfo_embed_id": "**ID:** {user_id}\n",
 	"userinfo_embed_username": "**Username:** {user_name}\n",
 	"userinfo_embed_nickname": "**Nickname:** {user_nickname}\n",
@@ -90,6 +92,8 @@
 	"uptime_uptime": "The current uptime is **{uptime}**",
 
 	"license_license": "📜 This bot is licensed under the MIT license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+	"privacy_policy": "📜 View the privacy policy of the bot **[here](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
 
 	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**",
 

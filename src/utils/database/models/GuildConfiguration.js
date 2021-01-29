@@ -6,10 +6,6 @@ module.exports = sequelize => {
 			type: DataTypes.STRING,
 			defaultValue: "!",
 		},
-		trackAnalytics: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: true,
-		},
 		language: {
 			type: DataTypes.STRING,
 			defaultValue: "en-US",

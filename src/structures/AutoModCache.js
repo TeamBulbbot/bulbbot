@@ -36,7 +36,12 @@ module.exports = {
 			cache[guild]["messages"][user] >= (await AutoModUtils.getMessageLimit(message.guild.id)) &&
 			(await AutoModUtils.getMessageLimit(message.guild.id)) !== 0
 		) {
-			await AutoModUtils.resolveAction(message, await AutoModUtils.getPunishment(message.guild.id, "MESSAGES"));
+			await AutoModUtils.resolveAction(
+				client,
+				message,
+				dbGuild.automod.punishmentMessages,
+				`Violated \`MAX MESSAGES\` check in #${message.channel.name}`,
+			);
 			delete cache[guild]["messages"][user];
 		}
 
