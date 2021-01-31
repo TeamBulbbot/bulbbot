@@ -17,13 +17,13 @@ module.exports = class extends Command {
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
 			.setDescription(
-				this.client.bulbutils.translate("ping_latency", {
+				await this.client.bulbutils.translate("ping_latency", {
 					latency_bot: latency,
 					latency_ws: apiLatency,
 				}),
 			)
 			.setFooter(
-				this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),

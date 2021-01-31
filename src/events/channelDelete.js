@@ -6,12 +6,12 @@ module.exports = class extends Event {
 		super(...args, {});
 	}
 
-	run(channel) {
+	async run(channel) {
 		SendEventLog(
 			this.client,
 			channel.guild,
 			"channel",
-			this.client.bulbutils.translate("event_channel_delete", {
+			await this.client.bulbutils.translate("event_channel_delete", {
 				channel_name: channel.name,
 				channel_id: channel.id,
 				channel_type: channel.type,

@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		const targets = args.slice(0).join(" ").match(UserMentionStrict);
 		let reason = args.slice(targets.length).join("").replace(UserMentionStrict, "");
 
-		if (reason === "") reason = this.client.bulbutils.translate("global_no_reason");
+		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason");
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
@@ -36,7 +36,7 @@ module.exports = class extends Command {
 			try {
 				target = await this.client.users.fetch(targets[i].replace(NonDigits, ""));
 			} catch (error) {
-				message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+				message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 			}
 
 			infId = await Unban(
@@ -44,7 +44,7 @@ module.exports = class extends Command {
 				message.guild,
 				target,
 				message.author,
-				this.client.bulbutils.translate("global_mod_action_log", {
+				await this.client.bulbutils.translate("global_mod_action_log", {
 					action: "Unban",
 					moderator_tag: message.author.tag,
 					moderator_id: message.author.id,
@@ -59,7 +59,7 @@ module.exports = class extends Command {
 		}
 
 		return message.channel.send(
-			this.client.bulbutils.translate("multiunban_success", {
+			await this.client.bulbutils.translate("multiunban_success", {
 				full_list: fullList,
 				reason,
 			}),

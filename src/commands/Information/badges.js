@@ -81,7 +81,7 @@ module.exports = class extends Command {
 			.setColor(global.config.embedColor)
 			.setDescription(desc.join("\n"))
 			.setFooter(
-				this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),

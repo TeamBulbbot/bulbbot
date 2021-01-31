@@ -25,7 +25,7 @@ module.exports = class extends Command {
 		try {
 			target = await this.client.users.fetch(targetId);
 		} catch (error) {
-			return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
+			return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		}
 		let reason = args.slice(1).join(" ");
 		let infId = null;
@@ -35,20 +35,20 @@ module.exports = class extends Command {
 
 		if (!bannedUser) {
 			return message.channel.send(
-				this.client.bulbutils.translate("not_banned", {
+				await this.client.bulbutils.translate("not_banned", {
 					target_tag: target.tag,
 					target_id: target.id,
 				}),
 			);
 		}
-		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
 
 		infId = await Unban(
 			this.client,
 			message.guild,
 			target,
 			message.author,
-			this.client.bulbutils.translate("global_mod_action_log", {
+			await this.client.bulbutils.translate("global_mod_action_log", {
 				action: "Unban",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
@@ -60,7 +60,7 @@ module.exports = class extends Command {
 		);
 
 		return message.channel.send(
-			this.client.bulbutils.translate("unban_success", {
+			await this.client.bulbutils.translate("unban_success", {
 				target_tag: target.tag,
 				target_id: target.id,
 				reason,

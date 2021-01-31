@@ -30,20 +30,21 @@ module.exports = class extends Command {
 		let reason = args.slice(2).join(" ");
 		let infId = null;
 
-		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
-		if (!muteRole) return message.channel.send(this.client.bulbutils.translate("mute_muterole_not_found"));
-		if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
-		if (target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(this.client.bulbutils.translate("mute_already_muted"));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
+		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found"));
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+		if (target.roles.cache.find(role => role.id === muteRole))
+			return message.channel.send(await this.client.bulbutils.translate("mute_already_muted"));
 
-		if (duration < parse("0s") || duration === null) return message.channel.send(this.client.bulbutils.translate("tempban_invalid_0s"));
-		if (duration > parse("1y")) return message.channel.send(this.client.bulbutils.translate("tempban_invalid_1y"));
+		if (duration < parse("0s") || duration === null) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s"));
+		if (duration > parse("1y")) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_1y"));
 
 		infId = await Mute(
 			this.client,
 			message.guild,
 			target,
 			message.author,
-			this.client.bulbutils.translate("global_mod_action_log", {
+			await this.client.bulbutils.translate("global_mod_action_log", {
 				action: "Muted",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
@@ -58,7 +59,7 @@ module.exports = class extends Command {
 		);
 
 		message.channel.send(
-			this.client.bulbutils.translate("mute_success", {
+			await this.client.bulbutils.translate("mute_success", {
 				target_tag: target.user.tag,
 				target_id: target.user.id,
 				reason,

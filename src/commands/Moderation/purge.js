@@ -22,7 +22,7 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const amount = args[0];
-		if (amount > 200) return message.channel.send(this.client.bulbutils.translate("purge_too_many"));
+		if (amount > 200) return message.channel.send(await this.client.bulbutils.translate("purge_too_many"));
 		let deleteMsg = [];
 		let a = 0;
 

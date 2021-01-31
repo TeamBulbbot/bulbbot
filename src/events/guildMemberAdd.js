@@ -6,12 +6,12 @@ module.exports = class extends Event {
 		super(...args, {});
 	}
 
-	run(member) {
+	async run(member) {
 		SendEventLog(
 			this.client,
 			member.guild,
 			"joinleave",
-			this.client.bulbutils.translate("event_member_joined", {
+			await this.client.bulbutils.translate("event_member_joined", {
 				user_tag: member.user.tag,
 				user_id: member.user.id,
 				user_age: member.user.createdAt,

@@ -1,7 +1,7 @@
-const lang = require("./../languages/en-US.json");
 const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
 const Emotes = require("./../Emotes.json");
 const moment = require("moment");
+const sequelize = require("./database/connection");
 
 module.exports = class BulbBotUtils {
 	constructor(client) {
@@ -14,12 +14,22 @@ module.exports = class BulbBotUtils {
 	 * @param key       Values that should be replaced by the function
 	 * @returns {string}     Resolved translated string
 	 */
-	translate(string, key = {}) {
+	async translate(string, key = {}) {
 		let response;
+
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId: global.currentGuildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+
+		let lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+
 		try {
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
 		} catch (err) {
-			throw new TranslatorException(`${string} is not a valid translatable string`);
+			lang = require(`./../languages/en-US.json`);
+			response = JSON.parse(JSON.stringify(lang))[string].toString();
+			//throw new TranslatorException(`${string} is not a valid translatable string`);
 		}
 
 		response = response.replace(/({latency_bot})/g, key.latency_bot);

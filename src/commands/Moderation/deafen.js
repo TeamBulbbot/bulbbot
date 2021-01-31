@@ -24,17 +24,17 @@ module.exports = class extends Command {
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 
-		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
-		if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
-		if (!target.voice.channel) return message.channel.send(this.client.bulbutils.translate("global_not_in_voice"));
-		if (target.voice.serverDeaf) return message.channel.send(this.client.bulbutils.translate("deafen_already_deaf"));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+		if (!target.voice.channel) return message.channel.send(await this.client.bulbutils.translate("global_not_in_voice"));
+		if (target.voice.serverDeaf) return message.channel.send(await this.client.bulbutils.translate("deafen_already_deaf"));
 
 		infId = await Deafen(
 			this.client,
 			message.guild,
 			target,
 			message.author,
-			this.client.bulbutils.translate("global_mod_action_log", {
+			await this.client.bulbutils.translate("global_mod_action_log", {
 				action: "Deafened",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
@@ -46,7 +46,7 @@ module.exports = class extends Command {
 		);
 
 		return message.channel.send(
-			this.client.bulbutils.translate("deafen_success", {
+			await this.client.bulbutils.translate("deafen_success", {
 				target_tag: target.user.tag,
 				target_id: target.user.id,
 				reason,

@@ -25,16 +25,16 @@ module.exports = class extends Command {
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 
-		if (!reason) reason = this.client.bulbutils.translate("global_no_reason");
-		if (!target) return message.channel.send(this.client.bulbutils.translate("global_user_not_found"));
-		if (!target.voice.channel) return message.channel.send(this.client.bulbutils.translate("global_not_in_voice"));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+		if (!target.voice.channel) return message.channel.send(await this.client.bulbutils.translate("global_not_in_voice"));
 
 		infId = await Voicekick(
 			this.client,
 			message.guild,
 			target,
 			message.author,
-			this.client.bulbutils.translate("global_mod_action_log", {
+			await this.client.bulbutils.translate("global_mod_action_log", {
 				action: "Voice-kicked",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
@@ -46,7 +46,7 @@ module.exports = class extends Command {
 		);
 
 		return message.channel.send(
-			this.client.bulbutils.translate("voicekick_success", {
+			await this.client.bulbutils.translate("voicekick_success", {
 				target_tag: target.user.tag,
 				target_id: target.user.id,
 				reason,

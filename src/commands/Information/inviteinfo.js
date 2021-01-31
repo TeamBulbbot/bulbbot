@@ -22,7 +22,7 @@ module.exports = class extends Command {
 		try {
 			invite = await this.client.fetchInvite(code);
 		} catch (error) {
-			return message.channel.send(this.client.bulbutils.translate("inviteinfo_error"));
+			return message.channel.send(await this.client.bulbutils.translate("inviteinfo_error"));
 		}
 
 		const guild = invite.guild;
@@ -49,7 +49,7 @@ module.exports = class extends Command {
 					: guild.iconURL({ dynamic: true, size: 4096 }),
 			)
 			.setFooter(
-				this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),

@@ -18,7 +18,8 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const snowflake = args[0].replace(NonDigits, "");
-		if (snowflake <= Discord.SnowflakeUtil.EPOCH) return message.channel.send(this.client.bulbutils.translate("invalid_snowflake", { snowflake }));
+		if (snowflake <= Discord.SnowflakeUtil.EPOCH)
+			return message.channel.send(await this.client.bulbutils.translate("invalid_snowflake", { snowflake }));
 		const deconstruct = Discord.SnowflakeUtil.deconstruct(snowflake);
 
 		let desc = `**❄️ [Snowflake](https://discord.com/developers/docs/reference#snowflakes) information**\n\n`;
@@ -31,7 +32,7 @@ module.exports = class extends Command {
 			.setColor(global.config.embedColor)
 			.setDescription(desc)
 			.setFooter(
-				this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),

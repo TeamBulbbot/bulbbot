@@ -24,24 +24,24 @@ module.exports = class extends Command {
 		if (!args[1]) targetChannel = message.channel.id;
 		const channel = message.guild.channels.cache.get(targetChannel);
 
-		if (!channel) return message.channel.send(this.client.bulbutils.translate("global_channel_not_found"));
+		if (!channel) return message.channel.send(await this.client.bulbutils.translate("global_channel_not_found"));
 
 		if (args.length === 1) duration = parse(args[0]);
 		else duration = parse(args[1]);
 
-		if (duration < parse("0s") || duration === null) return message.channel.send(this.client.bulbutils.translate("slowmode_invalid_0s"));
-		if (duration > parse("6h")) return message.channel.send(this.client.bulbutils.translate("slowmode_invalid_6h"));
+		if (duration < parse("0s") || duration === null) return message.channel.send(await this.client.bulbutils.translate("slowmode_invalid_0s"));
+		if (duration > parse("6h")) return message.channel.send(await this.client.bulbutils.translate("slowmode_invalid_6h"));
 
 		await channel.setRateLimitPerUser(duration / 1000);
 
-		if (duration === parse("0s")) message.channel.send(this.client.bulbutils.translate("slowmode_success_remove", { channel }));
+		if (duration === parse("0s")) message.channel.send(await this.client.bulbutils.translate("slowmode_success_remove", { channel }));
 		else if (args.length === 1)
 			message.channel.send(
-				this.client.bulbutils.translate("slowmode_success", {
+				await this.client.bulbutils.translate("slowmode_success", {
 					channel,
 					slowmode: args[0],
 				}),
 			);
-		else message.channel.send(this.client.bulbutils.translate("slowmode_success", { channel, slowmode: args[1] }));
+		else message.channel.send(await this.client.bulbutils.translate("slowmode_success", { channel, slowmode: args[1] }));
 	}
 };

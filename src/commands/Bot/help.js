@@ -16,7 +16,7 @@ module.exports = class extends Command {
 	async run(message, args) {
 		const command = this.client.commands.get(args[0].toLowerCase()) || this.client.commands.get(this.client.aliases.get(args[0].toLowerCase()));
 
-		if (command === undefined || command.devOnly) return message.channel.send(this.client.bulbutils.translate("help_command_not_found"));
+		if (command === undefined || command.devOnly) return message.channel.send(await await this.client.bulbutils.translate("help_command_not_found"));
 		else {
 			let msg = `**${this.client.prefix}${command.name}** ${command.aliases.length !== 0 ? `(${command.aliases.join("**,** ")})` : ""}\n`;
 			msg += `> ${command.description}\n\n`;

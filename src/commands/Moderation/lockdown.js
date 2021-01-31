@@ -19,16 +19,16 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const channel = message.guild.channels.cache.get(args[0].replace(NonDigits, ""));
-		if (!channel) return message.channel.send(this.client.bulbutils.translate("global_channel_not_found"));
+		if (!channel) return message.channel.send(await this.client.bulbutils.translate("global_channel_not_found"));
 
-		if (args[1] !== "true" && args[1] !== "false") return message.channel.send(this.client.bulbutils.translate("lockdown_not_boolean"));
+		if (args[1] !== "true" && args[1] !== "false") return message.channel.send(await this.client.bulbutils.translate("lockdown_not_boolean"));
 
 		if (args[1] === "true") {
 			await channel.updateOverwrite(message.guild.roles.everyone.id, { SEND_MESSAGES: false });
-			return message.channel.send(this.client.bulbutils.translate("lockdown_locked", { channel }));
+			return message.channel.send(await this.client.bulbutils.translate("lockdown_locked", { channel }));
 		} else {
 			await channel.updateOverwrite(message.guild.roles.everyone.id, { SEND_MESSAGES: true });
-			return message.channel.send(this.client.bulbutils.translate("lockdown_unlocked", { channel }));
+			return message.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", { channel }));
 		}
 	}
 };

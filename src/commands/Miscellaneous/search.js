@@ -22,14 +22,14 @@ module.exports = class extends Command {
 			if (similarity(member.user.username, query) >= 0.6) desc.push(`${member.user.tag} (${member.user.id})`);
 		});
 		desc.sort();
-		if (desc.length === 0) desc = this.client.bulbutils.translate("global_user_not_found");
+		if (desc.length === 0) desc = await this.client.bulbutils.translate("global_user_not_found");
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
 			.setAuthor(`Query: ${query}`)
 			.setDescription(desc)
 			.setFooter(
-				this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),
