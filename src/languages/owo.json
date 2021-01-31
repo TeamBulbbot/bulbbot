@@ -1,0 +1,93 @@
+{
+	"global_executed_by": "OwO E-Executed by OwO {user_name}#{user_discriminator}",
+	"global_missing_permission": ":lock: M-M-Missing pewmission(s)",
+	"global_missing_permission_bot": "The bot is missing cwuciaw pewmission to pewfowm this command! P-P-Pwease check the bots pewmission",
+	"global_user_not_found": "{emote_warn} Couwd nyot find the specified usew",
+	"global_channel_not_found": "{emote_warn} Couwd nyot find the specified c-channyew",
+	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Tawget: OwO {target_tag} ({target_id}) | Weason: {reason}",
+	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has b-been {action} by **{moderator_tag}** `({moderator_id})` fow **{reason}** `[#{infractionId}]`",
+	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` a-aftew theiw tempowawy wempowawy p-punyishment expiwed `[#{infractionId}]`",
+	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` untiw **{until}** f-fow **{reason}** `[#{infractionId}]`",
+	"global_no_reason": "Nyo weason given",
+	"global_loading": "{emote_loading} W-Woading...",
+	"global_not_in_voice": "{emote_warn} Usew is nyot connyected to a Voice Channyew!",
+
+	"event_message_args_unexpected": "{emote_warn} Unyexpected awgument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Cowwect usage:** {usage}",
+	"event_message_args_missing": "{emote_warn} Missing awgument OwO `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Cowwect usage:** {usage}",
+
+	"event_channel_create": "*Channyew cweated:**  <#{channel_id}> `({channel_type})`",
+	"event_channel_delete": "**Channyew deweted:** #{channel_name} `({channel_id})` `({channel_type})`",
+	"event_channel_update_topic_added": "<#{channel_id}> channyew topic was added `{channel_topic}`\n",
+	"event_channel_update_topic_removed": "<#{channel_id}> h-hannyew t-topic was wemoved\n",
+	"event_channel_update_topic_updated": "<#{channel_id}> channyew t-topic was changed f-fwom `{oldchannel_topic}` to `{newchannel_topic}`\n",
+	"event_channel_update_name": "<#{channel_id}> nyame was changed fwom OwO `#{oldchannel_name}` to `#{newchannel_name}`\n",
+	"event_channel_update_type": "<#{channel_id}> type was changed fwom OwO `{oldchannel_type}` to `{newchannel_type}`\n",
+	"event_channel_update_nsfw_enabled": "<#{channel_id}> nsfw was `enyabwed`\n",
+	"event_channel_update_nsfw_disabled": "<#{channel_id}> n-nsfw was `disabwed`\n",
+
+	"event_member_joined": "{emote_join} **Nyew membew:** **{user_tag}** `({user_id})` - *blushes* **Account cweated:** {user_age}",
+	"event_member_left": "{emote_leave} **Membew weft:** **{user_tag}** `({user_id})`",
+
+	"help_command_not_found": "Unyabwe to f-find any commands with that nyame",
+
+	"userinfo_embed_id": "**ID:** {user_id}\n",
+	"userinfo_embed_username": "**Usewnyame:** {user_name}\n",
+	"userinfo_embed_nickname": "**Nyicknyame:** {user_nickname}\n",
+	"userinfo_embed_profile": "**Pwofiwe:** <@{user_id}> [`Pwofiwe`](https://discord.com/users/{user_id})\n",
+	"userinfo_embed_avatar": "**Avataw UWW:** [Link]({user_avatar})\n",
+	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
+	"userinfo_embed_created": "**Account Cweation:** {user_age}\n",
+	"userinfo_embed_joined": "**Joinyed Guiwd:** {user_joined}\n",
+	"userinfo_embed_premium": "**Boosting since:** {user_premium}\n",
+	"userinfo_embed_roles": "**Wowes:** {user_roles}\n",
+	"userinfo_embed_infractions": "\n**Infwactions:** {emote_inf} **{user_infractions}** infwaction(s) on this sewvew",
+
+	"serverinfo_embed_owner": "{emote_owner} ***nuzzles* Ownyew:** <@{guild_owner_name}> `{guild_owner_id}`\n",
+	"serverinfo_embed_features": "**Featuwes:**\n{guild_features}\n",
+	"serverinfo_embed_region": "**Wegion:** {guild_region}\n",
+	"serverinfo_embed_verification": "**Vewification wevew:** {guild_verification}\n",
+	"serverinfo_embed_created": "**Cweated at:** {guild_age}",
+
+	"serverinfo_server_stats": "**Sewvew stats**",
+	"serverinfo_channel_stats": "**Channyew stats**",
+	"serverinfo_booster_stats": "**Boostew stats**",
+	"serverinfo_server_stats_total": "Totaw OwO: **{guild_members}**/{guild_max}\n",
+	"serverinfo_server_stats_online": "{emote_online}: **{guild_online}**\n",
+	"serverinfo_server_stats_idle": "{emote_idle}: **{guild_idle}**\n",
+	"serverinfo_server_stats_dnd": "{emote_dnd}: **{guild_dnd}**\n",
+	"serverinfo_server_stats_offline": "{emote_offline}: **{guild_offline}**\n",
+	"serverinfo_channel_stats_voice": "Voice Channyews: **{guild_voice}**\n",
+	"serverinfo_channel_stats_text": "Text OwO Channyews: **{guild_text}**\n",
+	"serverinfo_channel_stats_category": "Kittehegowy wittehegowy: **{guild_category}**\n",
+	"serverinfo_booster_tier": "Boostew Tiew: **{guild_booster_tier}**\n",
+	"serverinfo_booster_boosters": "Boostews OwO: **{guild_booster_boosters}**\n",
+	"serverinfo_booster_tier_1": "Emote swots: **100**\nAudio q-quawity wuawity: **128** kbps\n",
+	"serverinfo_booster_tier_2": "Emote swots: **150**\nAudio q-quawity wuawity:: **256** kbps\n*nuzzles* Upwoad wimit: **50 MB**\n",
+	"serverinfo_booster_tier_3": "Emote swots: **250**\nAudio q-quawity wuawity:: **384** kbps\n*nuzzles* Upwoad wimit: **100 MB**\n",
+	"serverinfo_roles": "Wowes OwO ({guild_amount_roles})",
+	"serverinfo_emotes": "Emotes ({guild_amount_emotes})",
+	"serverinfo_roles_too_many": " and **{guild_roles_left}** mowe",
+	"serverinfo_emotes_too_many": " and **{guild_emotes_left}** mowe",
+	"serverinfo_emotes_none": "Nyo emotes (・`ω´・)",
+
+	"ban_success": "{emote_success} **{target_tag}** `({target_id})` has been bannyed fow **{reason}** `[#{infractionId}]`",
+	"ban_fail": "{emote_warn} OwO Unyabwe to ban **{target_tag}** `({target_id})`",
+	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` OwO whats this? is awweady weady b-bannyed with the w-weason `{reason}`",
+
+	"not_banned": "{emote_warn} **{target_tag}** `({target_id})` is nyot awweady weady bannyed",
+	"unban_success": "{emote_success} **{target_tag}** `({target_id})` *blushes* has been unbannyed fow OwO **{reason}** `[#{infractionId}]`",
+
+	"kick_success": "{emote_success} **{target_tag}** `({target_id})` has been kicked fow  **{reason}** `[#{infractionId}]`",
+	"kick_fail": "{emote_warn} Unyabwe to kick OwO **{target_tag}** `({target_id})`",
+
+	"purge_too_many": "{emote_warn} Can onwy puwge a max of 200 messages a-at a time OwO",
+
+	"verification_non_integer": "{emote_warn} Wevew nyeeds to b-be an integew",
+	"verification_community_zero": "{emote_warn} Vewification wevew cannyot be set to `0` fow communyity w-wommunyity sewvews!",
+	"verification_level_error": "{emote_warn} Vewification wevew cannyot be g-gweatew than `4` ow wess t-than `0`",
+	"verification_level_success": "{emote_success} Sewvew vewification wevew changed to OwO `{level}`",
+
+	"ping_latency": "Bot watency i-is **{latency_bot}ms**\nWebSocket watency is **{latency_ws}ms**",
+
+	"uptime_uptime": "The cuwwent uptime i-is **{uptime}**"
+}
