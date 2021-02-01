@@ -89,5 +89,73 @@
 
 	"ping_latency": "Bot watency i-is **{latency_bot}ms**\nWebSocket watency is **{latency_ws}ms**",
 
-	"uptime_uptime": "The cuwwent uptime i-is **{uptime}**"
+	"uptime_uptime": "The cuwwent uptime i-is **{uptime}**",
+
+	"license_license": "📜 T-T-This b-b-b-bot is wicensed u-undew the MIT wicense, fow mowe info s-see the fuww wicense **[hewe](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+	"privacy_policy": "📜 View the pwivacy wivacy powicy wowicy of the bot **[hewe](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
+
+	"github_source_code": "{emote_github} This bot i-is fuwwy wuwwy open souwce and you can find aww of the souwce code **[hewe](https://github.com/TestersQTs/Bulbbot)**",
+
+	"invite_desc": "**Invite the bot to youw sewvew**\n{bot_invite}\n\n**Join the suppowt sewvew**\n{support_guild}",
+
+	"inviteinfo_error": "{emote_warn} Unyabwe t-to find a-a guiwd with that invite",
+
+	"multiban_success": "{emote_success} {full_list} have b-been bannyed f-f-fow **{reason}**",
+
+	"multiunban_success": "{emote_success} {full_list} have b-b-been unbannyed fow **{reason}**",
+
+	"multikick_success": "{emote_success} {full_list} have been kicked fow **{reason}**",
+
+	"multiwarn_success": "{emote_success} {full_list} h-have been wawnyed fow OwO **{reason}**",
+
+	"multivoicekick_success": "{emote_success} {full_list} have been voice-kicked fow **{reason}**",
+
+	"softban_success": "{emote_success} **{target_tag}** `({target_id})` h-has been soft-bannyed fow **{reason}** `[#{infractionId}]`",
+
+	"deafen_already_deaf": "{emote_warn} Usew is awweady weady deafenyed!",
+	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` has b-been deafenyed fow **{reason}** `[#{infractionId}]`",
+
+	"undeafen_not_deaf": "{emote_warn} Usew is nyot deafenyed!",
+	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` has been undeafenyed fow **{reason}** `[#{infractionId}]`",
+
+	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` has been voice-kicked fow **{reason}** `[#{infractionId}]`",
+
+	"slowmode_invalid_0s": "{emote_warn} S-Swowmode duwation cannyot be wowew t-than **0 seconds**!",
+	"slowmode_invalid_6h": "{emote_warn} Swowmode duwation cannyot be highew than **6 houws**!",
+
+	"slowmode_success_remove": "{emote_success} Successfuwwy Wuccessfuwwy wemoved swowmode fwom {channel}",
+	"slowmode_success": "{emote_success} Successfuwwy Wuccessfuwwy set swowmode in {channel} to **{slowmode}**",
+
+	"tempban_invalid_0s": "{emote_warn} Duwation cannyot be wowew than **0 seconds**!",
+	"tempban_invalid_1y": "{emote_warn} Duwation cannyot be highew than **1 yeaw**!",
+
+	"lockdown_not_boolean": "{emote_warn} Awgument `wock` vawue must be a Boowean! (`twue` ow `fawse`)",
+	"lockdown_locked": "{emote_success} Successfuwwy Wuccessfuwwy wocked down channyew {channel}",
+	"lockdown_unlocked": "{emote_success} Successfuwwy Wuccessfuwwy unwocked channyew {channel}",
+
+	"mute_muterole_not_found": "{emote_warn} This guiwd does n-nyot have a mute wowe configuwed!\n{emote_wrench}**Tip:** You can configuwe the mute wowe using the `!configure mute_role` command OwO",
+	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"mute_not_muted": "{emote_warn} The specified usew is nyot cuwwentwy wuwwentwy muted!",
+	"mute_already_muted": "{emote_warn} The specified usew is awweady weady muted!",
+
+	"warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` has been wawnyed fow **{reason}** `[#{infractionId}]`",
+
+	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` has been unmuted fow **{reason}** `[#{infractionId}]`",
+
+	"infraction_not_found": "{emote_warn} Infwaction **#{infractionId}** couwd nyot be found!",
+	"infraction_delete_success": "{emote_success} Infwaction **#{infractionId}** s-s-successfuwwy wuccessfuwwy deweted!",
+	"infraction_info_inf_id": "**Infwaction ID:** {infractionId}\n",
+	"infraction_info_target": "**OwO T-Tawget:** {target_tag} `({target_id})`\n",
+	"infraction_info_moderator": "**Modewatow:** {moderator_tag} `({moderator_id})`\n",
+	"infraction_info_created": "**Cweated OwO:** {timestamp}\n",
+	"infraction_info_active": "**Active:** {emoji}",
+	"infraction_info_expires": "**E-Expiwes OwO:** {timestamp}",
+	"infraction_info_reason": "\n\n**hehe Weason:** {reason}",
+	"infraction_list_not_found": "{emote_warn} This guiwd does nyot seem to have any infwactions!",
+	"infraction_claim_success": "{emote_success} You have cwaimed wesponsibiwity ovew infwaction **#{infractionId}**",
+	"infraction_update_success": "{emote_success} Infwaction **#{infractionId}** has been updated!",
+
+	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invawid snyowfwake",
+	"snowflake_info": "I don't knyow if this snyowfwake b-bewongs to anyonye ow a-anything\n\n"
 }
