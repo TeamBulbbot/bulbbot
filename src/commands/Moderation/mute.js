@@ -2,11 +2,9 @@ const Command = require("../../structures/Command");
 const { Mute, Unmute } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
 const { getMuteRole } = require("../../utils/guilds/Guild");
-
 const utils = new (require("../../utils/BulbBotUtils"))();
 const parse = require("parse-duration");
 const { getActive, setActive } = require("../../utils/InfractionUtils");
-
 module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
@@ -21,7 +19,6 @@ module.exports = class extends Command {
 			clearance: 50,
 		});
 	}
-
 	async run(message, args) {
 		const targetId = args[0].replace(NonDigits, "");
 		const target = message.guild.member(targetId);
@@ -35,7 +32,6 @@ module.exports = class extends Command {
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (target.roles.cache.find(role => role.id === muteRole))
 			return message.channel.send(await this.client.bulbutils.translate("mute_already_muted"));
-
 		if (duration < parse("0s") || duration === null) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s"));
 		if (duration > parse("1y")) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_1y"));
 
@@ -68,7 +64,6 @@ module.exports = class extends Command {
 		);
 
 		//TEMPMUTE CREATE FUNCTION
-
 		const client = this.client;
 		setTimeout(async function () {
 			if ((await getActive(infId)) === "false") return;

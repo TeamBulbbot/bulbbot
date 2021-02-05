@@ -1,4 +1,3 @@
-const Discord = require("discord.js");
 const Command = require("../../structures/Command");
 const Jimp = require("jimp");
 const fs = require("fs");
@@ -30,13 +29,11 @@ module.exports = class extends Command {
 			let url;
 
 			emote = emote.match(Emote);
-			if (emote === null) {
-				url = `https://twemoji.maxcdn.com/v/latest/72x72/${emojiUnicode(args[i]).split(" ").join("-")}.png`;
-			} else {
+			if (emote === null) url = `https://twemoji.maxcdn.com/v/latest/72x72/${emojiUnicode(args[i]).split(" ").join("-")}.png`;
+			else {
 				emote = emote[0].substring(1).slice(0, -1);
 				url = `https://cdn.discordapp.com/emojis/${emote}.png?v=1`;
 			}
-
 			let image = await Jimp.read(url);
 			image.resize(size, Jimp.AUTO);
 			await image.writeAsync(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
