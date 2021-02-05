@@ -44,10 +44,10 @@ module.exports = class extends Event {
 				}
 			}
 
-			const clientPermCheck = command.userPerms ? this.client.defaultPerms.add(command.clientPerms) : this.client.defaultPerms;
+			const clientPermCheck = command.clientPerms;
 			if (clientPermCheck) {
-				const missing = message.channel.permissionsFor(message.member).missing(clientPermCheck);
-				if (missing.length) {
+				const missing = message.guild.me.hasPermission(clientPermCheck);
+				if (!missing) {
 					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission_bot"));
 				}
 			}

@@ -9,7 +9,7 @@ module.exports = {
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
-			utils.translate("global_logging_mod", {
+			await utils.translate("global_logging_mod", {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
 				user_id: target.id,
@@ -28,7 +28,7 @@ module.exports = {
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
-			utils.translate("global_logging_unban_auto", {
+			await utils.translate("global_logging_unban_auto", {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
 				user_id: target.id,
@@ -47,7 +47,7 @@ module.exports = {
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
-			utils.translate("global_logging_mod_temp", {
+			await utils.translate("global_logging_mod_temp", {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
 				user_id: target.id,

@@ -6,7 +6,7 @@ const Emotes = require("../../../emotes.json");
 
 const Discord = require("discord.js");
 const moment = require("moment");
-const embedPagination = require("discord.js-pagination")
+const embedPagination = require("discord.js-pagination");
 
 module.exports = {
 	Call: async (client, message, args) => {
@@ -25,40 +25,40 @@ module.exports = {
 		const targetId = args[1].replace(NonDigits, "");
 		let user;
 		try {
-            user = await client.users.fetch(targetId);
-        } catch (err) {
-            return message.channel.send(client.bulbutils.translate("global_user_not_found"));
-        }
+			user = await client.users.fetch(targetId);
+		} catch (err) {
+			return message.channel.send(await client.bulbutils.translate("global_user_not_found"));
+		}
 
 		const infs = await getModeratorInfractions(message.guild.id, user.id);
 		for (let i = 0; i < 50; i++) {
 			if (infs[i] === undefined) continue;
 
 			let description = "";
-			description += client.bulbutils.translate("infraction_info_inf_id", { infractionId: infs[i].id });
-			description += client.bulbutils.translate("infraction_info_target", {
+			description += await client.bulbutils.translate("infraction_info_inf_id", { infractionId: infs[i].id });
+			description += await client.bulbutils.translate("infraction_info_target", {
 				target_tag: infs[i].target,
 				target_id: infs[i].targetId,
 			});
-			description += client.bulbutils.translate("infraction_info_moderator", {
+			description += await client.bulbutils.translate("infraction_info_moderator", {
 				moderator_tag: infs[i].moderator,
 				moderator_id: infs[i].moderatorId,
 			});
-			description += client.bulbutils.translate("infraction_info_created", {
+			description += await client.bulbutils.translate("infraction_info_created", {
 				timestamp: moment(Date.parse(infs[i].createdAt)).format("MMM Do YYYY, h:mm:ss a"),
 			});
 
 			if (infs[i].active !== "false" && infs[i].active !== "true") {
-				description += client.bulbutils.translate("infraction_info_expires", {
+				description += await client.bulbutils.translate("infraction_info_expires", {
 					timestamp: `${Emotes.status.ONLINE} ${moment(parseInt(infs[i].active)).format("MMM Do YYYY, h:mm:ss a")}`,
 				});
 			} else {
-				description += client.bulbutils.translate("infraction_info_active", {
+				description += await client.bulbutils.translate("infraction_info_active", {
 					emoji: client.bulbutils.prettify(infs[i].active),
 				});
 			}
 
-			description += client.bulbutils.translate("infraction_info_reason", {
+			description += await client.bulbutils.translate("infraction_info_reason", {
 				reason: infs[i].reason,
 			});
 
@@ -74,9 +74,7 @@ module.exports = {
 			pages.push(embed);
 		}
 
-		if (pages.length === 0) {
-			return message.channel.send(client.bulbutils.translate("infraction_list_not_found"));
-		}
+		if (pages.length === 0) return message.channel.send(await client.bulbutils.translate("infraction_list_not_found"));
 
 		await embedPagination(message, pages, ["⏪", "⏩"], 120000);
 	},

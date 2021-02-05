@@ -96,7 +96,7 @@ module.exports = {
 	},
 
 	Deafen: async (client, guild, target, moderator, reason, reasonLog) => {
-		await target.voice.setDeaf(true);
+		await target.voice.setDeaf(true, { reason });
 		const infId = await createInfraction(guild.id, "Deafen", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "deafened", target.user, moderator, reasonLog, infId);
 
