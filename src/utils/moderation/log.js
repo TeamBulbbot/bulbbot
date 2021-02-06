@@ -69,9 +69,9 @@ module.exports = {
 		client.channels.cache
 			.get(dbGuild.guildLogging.modAction)
 			.send(
-				`\`[${moment().format("hh:mm:ss a")}]\` ${betterAction} **${moderator.tag}** \`(${moderator.id})\` **${amount}** messages was removed in <#${
-					channel.id
-				}>`,
+				`\`[${moment().format("hh:mm:ss a")}]\` ${BetterActions("trash")} **${moderator.tag}** \`(${
+					moderator.id
+				})\` **${amount}** messages was removed in <#${channel.id}>`,
 				{
 					files: [file],
 				},

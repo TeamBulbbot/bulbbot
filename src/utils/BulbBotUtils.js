@@ -16,20 +16,26 @@ module.exports = class BulbBotUtils {
 	 */
 	async translate(string, key = {}) {
 		let response;
+		let lang;
 
-		const db = await sequelize.models.guild.findOne({
-			where: { guildId: global.currentGuildId },
-			include: [{ model: sequelize.models.guildConfiguration }],
-		});
-
-		let lang = require(`./../languages/${db.guildConfiguration.language}.json`);
-
-		try {
-			response = JSON.parse(JSON.stringify(lang))[string].toString();
-		} catch (err) {
+		if (!global.currentGuildId) {
 			lang = require(`./../languages/en-US.json`);
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
-			//throw new TranslatorException(`${string} is not a valid translatable string`);
+		} else {
+			const db = await sequelize.models.guild.findOne({
+				where: { guildId: global.currentGuildId },
+				include: [{ model: sequelize.models.guildConfiguration }],
+			});
+
+			lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+
+			try {
+				response = JSON.parse(JSON.stringify(lang))[string].toString();
+			} catch (err) {
+				lang = require(`./../languages/en-US.json`);
+				response = JSON.parse(JSON.stringify(lang))[string].toString();
+				//throw new TranslatorException(`${string} is not a valid translatable string`);
+			}
 		}
 
 		response = response.replace(/({latency_bot})/g, key.latency_bot);

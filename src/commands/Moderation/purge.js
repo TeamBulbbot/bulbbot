@@ -23,6 +23,7 @@ module.exports = class extends Command {
 	async run(message, args) {
 		const amount = args[0];
 		if (amount > 200) return message.channel.send(await this.client.bulbutils.translate("purge_too_many"));
+		if (amount <= 0) return message.channel.send(await this.client.bulbutils.translate("purge_too_few"));
 		let deleteMsg = [];
 		let a = 0;
 
@@ -67,6 +68,6 @@ module.exports = class extends Command {
 		// TODO
 		// - send message back to user
 
-		fs.unlinkSync(`./src/files/purge/${message.guild.id}.txt`);
+		//fs.unlinkSync(`./src/files/purge/${message.guild.id}.txt`);
 	}
 };

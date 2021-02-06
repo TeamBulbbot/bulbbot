@@ -14,7 +14,7 @@ module.exports = {
 
 		if (args.length < 2)
 			return message.channel.send(
-				client.bulbutils.translate("event_message_args_missing", {
+				await client.bulbutils.translate("event_message_args_missing", {
 					arg: "user:User",
 					arg_expected: 2,
 					arg_provided: 1,

@@ -7,7 +7,7 @@ module.exports = class extends Event {
 	}
 
 	async run(member) {
-		SendEventLog(
+		await SendEventLog(
 			this.client,
 			member.guild,
 			"joinleave",
