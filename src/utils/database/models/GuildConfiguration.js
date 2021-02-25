@@ -5,13 +5,20 @@ module.exports = sequelize => {
 		prefix: {
 			type: DataTypes.STRING,
 			defaultValue: "!",
+			allowNull: false,
 		},
 		language: {
 			type: DataTypes.STRING,
 			defaultValue: "en-US",
+			allowNull: false,
 		},
 		muteRole: {
 			type: DataTypes.STRING,
+		},
+		premiumGuild: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+			allowNull: false,
 		},
 	});
 };

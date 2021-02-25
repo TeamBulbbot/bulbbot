@@ -7,6 +7,7 @@ module.exports = class extends Event {
 
 	run(oldGuild, newGuild) {
 		// TODO
+		return;
 		console.log("old guild:", oldGuild);
 		console.log("new guild:", newGuild);
 	}

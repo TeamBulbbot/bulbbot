@@ -8,6 +8,7 @@ module.exports = class extends Event {
 	run(invite) {
 		// TODO
 		// log somewhere
+		return;
 		console.log(`Invite deleted: \`${invite.code}\``);
 	}
 };

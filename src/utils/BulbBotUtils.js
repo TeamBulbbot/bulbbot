@@ -69,6 +69,13 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({action})/g, key.action);
 		response = response.replace(/({emoji})/g, key.emoji);
 
+		response = response.replace(/({part})/g, key.part);
+		response = response.replace(/({prefix})/g, key.prefix);
+		response = response.replace(/({language})/g, key.language);
+		response = response.replace(/({languages})/g, key.languages);
+		response = response.replace(/({clearance})/g, key.clearance);
+		response = response.replace(/({command})/g, key.command);
+
 		response = response.replace(/({infractionId})/g, key.infractionId);
 
 		if (key.guild) {

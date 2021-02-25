@@ -1,7 +1,0 @@
-- automod
-    - url bans
-        - whitelist on urls
-    - spam
-        - emoji spam
-        - character spam
-        - line spam

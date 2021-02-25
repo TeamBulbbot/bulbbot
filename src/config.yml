@@ -4,7 +4,7 @@ developers: [                   # developers id stored in array for devOnly comm
   "190160914765316096",           # mrphilip
   "439396770695479297"            # Kluk
  ]
-version: 0.0.1                  # current version
+version: 1.0.0                  # current version
 lib: Discord.JS                 # lib used for the bot
 
 # configs
@@ -15,7 +15,7 @@ embedColor: "#7289DA"           # default embed color
 client:
   tag: "Bulbbot#9083"           # bot full tag
   id: "755149065137815623"      # bot id
-  game: "Version 0.0.1"         # what the game activity should be
+  game: "something"             # what the game activity should be
   type: "COMPETING"             # COMPETING (5), WATCHING(3), LISTENING (2), STREAMING (1), PLAYING (0)
   status: "online"              # online, idle, dnd, invisible
   fetchAllUsers: false          # if the bot should fetch all the user on start
@@ -30,6 +30,6 @@ server:
 supportInvite: "https://discord.gg/cacUmbQ" # support guild invite link
 
 # logs
-botDM: "785213905207164948"     # channel id for bot dms 
-invite: "786180293740199986"    # channel id for bot invites
-error: "786179914251370537"     # channel id for bot errors
+botDM: "761572579504160788"     # channel id for bot dms 
+invite: "771491209977528340"    # channel id for bot invites
+error: "810530397804953611"     # channel id for bot errors

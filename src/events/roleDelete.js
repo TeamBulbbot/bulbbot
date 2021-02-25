@@ -7,6 +7,7 @@ module.exports = class extends Event {
 
 	run(role) {
 		// TODO
+		return;
 		console.log("deleted role:", role);
 	}
 };

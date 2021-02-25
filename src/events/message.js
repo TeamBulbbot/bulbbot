@@ -1,8 +1,10 @@
 const Event = require("../structures/Event");
-const { getPrefix } = require("../utils/guilds/Guild");
+const { getPrefix, isPremiumGuild } = require("../utils/guilds/Guild");
 const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
 const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");
+const GetGuildOverrideForCommand = require("../utils/clearance/commands/GetGuildOverrideForCommand");
+const UserClearance = require("../utils/clearance/user/UserClearance");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -33,6 +35,25 @@ module.exports = class extends Event {
 
 		const command = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
 		if (command) {
+			if (command.premium && !(await isPremiumGuild(message.guild.id)))
+				return message.channel.send(await this.client.bulbutils.translate("premium_message"));
+
+			const commandOverride = await GetGuildOverrideForCommand(message.guild.id, command.name);
+			const userClearance = await UserClearance(message, message.guild.id);
+			let clearance = 0;
+
+			if (message.guild.ownerID === message.author.id) clearance = 100;
+			else if (message.member.guild.me.hasPermission("ADMINISTRATOR")) clearance = 75;
+			if (userClearance > clearance) clearance = userClearance;
+
+			if (commandOverride !== undefined) {
+				if (!commandOverride.enabled) return;
+
+				if (commandOverride.clearanceLevel > clearance) return;
+			}
+
+			global.userClearance = clearance;
+
 			const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
 			if (userPermCheck) {
 				const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
@@ -47,9 +68,7 @@ module.exports = class extends Event {
 			const clientPermCheck = command.clientPerms;
 			if (clientPermCheck) {
 				const missing = message.guild.me.hasPermission(clientPermCheck);
-				if (!missing) {
-					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission_bot"));
-				}
+				if (!missing) return message.channel.send(await this.client.bulbutils.translate("global_missing_permission_bot"));
 			}
 
 			if (command.devOnly) if (!global.config.developers.includes(message.author.id)) return;

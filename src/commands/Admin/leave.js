@@ -25,13 +25,13 @@ module.exports = class extends Command {
 		}
 
 		message.channel.send(`Are you sure you want the bot to leave **${guild.name}**?`).then(msg => {
-			msg.react(Emotes.other.success.replace(NonDigits, "")).then(() => {
-				msg.react(Emotes.other.fail.replace(NonDigits, ""));
+			msg.react(Emotes.other.SUCCESS.replace(NonDigits, "")).then(() => {
+				msg.react(Emotes.other.FAIL.replace(NonDigits, ""));
 			});
 
 			const filter = (reaction, user) => {
 				return (
-					[Emotes.other.success.replace(NonDigits, ""), Emotes.other.fail.replace(NonDigits, "")].includes(reaction.emoji.id) &&
+					[Emotes.other.SUCCESS.replace(NonDigits, ""), Emotes.other.FAIL.replace(NonDigits, "")].includes(reaction.emoji.id) &&
 					user.id === message.author.id
 				);
 			};
@@ -48,11 +48,11 @@ module.exports = class extends Command {
 					// BUG (p4)
 					// if you try to the current guild where the command is fired
 					// the bot will crash
-					if (reaction.emoji.id === Emotes.other.success.replace(NonDigits, "")) {
+					if (reaction.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
 						guild.leave();
 						await msg.reactions.removeAll();
 						return message.channel.send("Sir yes sir, bot yeeted");
-					} else if (reaction.emoji.id === Emotes.other.fail.replace(NonDigits, "")) {
+					} else if (reaction.emoji.id === Emotes.other.FAIL.replace(NonDigits, "")) {
 						await msg.reactions.removeAll();
 						return message.channel.send("Operation canceled");
 					}

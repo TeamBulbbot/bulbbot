@@ -11,16 +11,6 @@ module.exports = {
 		await dbGuild.guildConfiguration.save();
 	},
 
-	ChangeTrackAnalytics: async (guildId, value) => {
-		const dbGuild = await sequelize.models.guild.findOne({
-			where: { guildId },
-			include: [{ model: sequelize.models.guildConfiguration }],
-		});
-
-		dbGuild.guildConfiguration.trackAnalytics = value;
-		await dbGuild.guildConfiguration.save();
-	},
-
 	ChangeLanguage: async (guildId, language) => {
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },

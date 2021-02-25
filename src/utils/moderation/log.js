@@ -6,6 +6,7 @@ const utils = new (require("../BulbBotUtils"))();
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
+
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
@@ -100,6 +101,7 @@ module.exports = {
 };
 
 function GetPart(dbGuild, part) {
+	if (dbGuild === null) return null;
 	switch (part.toLowerCase()) {
 		case "message":
 			part = dbGuild.guildLogging.message;

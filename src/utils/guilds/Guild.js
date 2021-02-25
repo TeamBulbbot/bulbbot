@@ -22,6 +22,15 @@ module.exports = {
 		return dbGuild.guildConfiguration.prefix;
 	},
 
+	async isPremiumGuild(guildId) {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+
+		return dbGuild.guildConfiguration.premiumGuild;
+	},
+
 	/**
 	 *
 	 * @param guild        Guild ID parsed from the message event
@@ -32,7 +41,6 @@ module.exports = {
 			where: { guildId: guild.id },
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
-
 		return dbGuild.guildConfiguration.muteRole;
 	},
 	/**

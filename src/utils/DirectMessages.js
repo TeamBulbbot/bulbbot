@@ -5,7 +5,7 @@ module.exports = (client, msg) => {
 		.setColor(global.config.embedColor)
 		.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.avatarURL({ dynamic: true }))
 		.setDescription(msg.content)
-		.setFooter(`Message ID: ${msg.id}`)
+		.setFooter(`Id: ${msg.channel.id}-${msg.id}`)
 		.setImage(msg.attachments.first() !== undefined ? msg.attachments.first().proxyURL : "")
 		.setTimestamp();
 

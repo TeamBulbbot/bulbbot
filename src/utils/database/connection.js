@@ -21,16 +21,16 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 });
 
 const models = [
-	require("./models/guild.js"),
-	require("./models/guildConfiguration"),
-	require("./models/guildLogging"),
-	require("./models/guildModerationRoles"),
-	require("./models/guildOverrideCommands"),
-	require("./models/infraction"),
-	require("./models/starboard"),
-	require("./models/starboardPost"),
-	require("./models/tempban"),
-	require("./models/automod")
+	require("./models/Guild.js"),
+	require("./models/GuildConfiguration"),
+	require("./models/GuildLogging"),
+	require("./models/GuildModerationRoles"),
+	require("./models/GuildOverrideCommands"),
+	require("./models/Infraction"),
+	require("./models/Starboard"),
+	require("./models/StarboardPost"),
+	require("./models/Tempban"),
+	require("./models/AutoMod"),
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);

@@ -8,6 +8,7 @@ module.exports = class extends Event {
 	run(invite) {
 		// TODO
 		// log somewhere
+		return;
 		console.log(
 			`Invite created: \`${invite.code}\`, temporary: ${invite.temporary}, expires: ${invite.maxAge}, max uses: ${invite.maxUses}, created by: **${invite.inviter.tag}** \`(${invite.inviter.id})\``,
 		);

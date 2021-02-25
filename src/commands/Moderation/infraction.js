@@ -19,11 +19,11 @@ module.exports = class extends Command {
 		switch (args[0].toLowerCase()) {
 			case "delete":
 			case "remove":
-				await require("./Infraction/delete").Call(this.client, message, args)
+				await require("./Infraction/delete").Call(this.client, message, args);
 				break;
 
 			case "info":
-				await require("./Infraction/info").Call(this.client, message, args)
+				await require("./Infraction/info").Call(this.client, message, args);
 				break;
 
 			case "list":
@@ -54,6 +54,7 @@ module.exports = class extends Command {
 				break;
 
 			default:
+				message.channel.send("invalid usage of the command, TODO");
 				break;
 		}
 	}

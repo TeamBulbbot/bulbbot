@@ -7,6 +7,7 @@ module.exports = class extends Event {
 
 	run(oldRole, newRole) {
 		// TODO
+		return;
 		console.log("old role:", oldRole);
 		console.log("new role:", newRole);
 	}

@@ -11,6 +11,7 @@ module.exports = class extends Event {
 
 	async run(reaction) {
 		if (reaction.message.channel.nsfw) return;
+		return;
 
 		const dbGuild = await GetGuild(reaction.message.guild.id);
 		const config = dbGuild.starboard;

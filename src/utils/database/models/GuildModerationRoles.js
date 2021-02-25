@@ -7,7 +7,7 @@ module.exports = sequelize => {
 			allowNull: false,
 		},
 		clearanceLevel: {
-			type: DataTypes.STRING,
+			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
 	});
