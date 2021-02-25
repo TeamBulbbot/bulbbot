@@ -6,8 +6,8 @@ module.exports = async guildId => {
 		include: [
 			{ model: sequelize.models.guildConfiguration },
 			{ model: sequelize.models.guildLogging },
-			{ model: sequelize.models.guildOverrideCommands },
-			{ model: sequelize.models.guildModerationRoles },
+			//	{ model: sequelize.models.guildOverrideCommands },
+			//	{ model: sequelize.models.guildModerationRoles },
 		],
 	});
 
