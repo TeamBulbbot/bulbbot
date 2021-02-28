@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "!configure <part>",
 			examples: ["override create", "override remove", "override disable"],
-			argList: ["part:Part"],
+			argList: ["setting:string"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 75,

@@ -12,7 +12,7 @@
 	"global_loading": "{emote_loading} Loading...",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
 
-	"premium_message": "Premium command, become a patreon and get access to it <https://www.patreon.com/bulbbot>",
+	"premium_message": "This is a premium command, become a Patreon and get access to it <https://www.patreon.com/bulbbot>",
 
 	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
@@ -30,13 +30,11 @@
 	"event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})` - **Account created:** {user_age}",
 	"event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`",
 
-	"config_language_success": "{emote_success} Successfully changed the language to `{language}`",
-	"config_language_invalid_args": "{emote_warn} Invalid language, select one from {languages}",
-	"config_language_missing_args": "{emote_warn} Missing required argument `language`",
+	"config_language_success": "{emote_success} Successfully changed server the language to `{language}`",
+	"config_language_invalid_args": "{emote_warn} Invalid language provided!\n{emote_wrench} Select a valid language from `{languages}`",
 
 	"config_logging_success": "{emote_success} Successfully started logging {part} in {channel}",
-	"config_logging_missing_args": "{emote_warn} Missing required argument `channel`",
-	"config_logging_invalid_channel": "{emote_warn} Not a valid channel",
+	"config_logging_invalid_channel": "{emote_warn} Cannot resolve `{channel_name}` as a valid channel!",
 	"config_logging_unable_to_send_messages": "{emote_warn} Cannot post messages in that channel",
 
 	"config_mute_success": "{emote_success} Successfully updated the muted role",
