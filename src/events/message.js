@@ -44,7 +44,7 @@ module.exports = class extends Event {
 			let clearance = 0;
 
 			if (message.guild.ownerID === message.author.id) clearance = 100;
-			else if (message.member.guild.me.hasPermission("ADMINISTRATOR")) clearance = 75;
+			if (message.guild.me.permissions.has("ADMINISTRATOR")) clearance = 75;
 			if (userClearance > clearance) clearance = userClearance;
 
 			if (commandOverride !== undefined) {
