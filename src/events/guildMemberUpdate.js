@@ -17,6 +17,9 @@ module.exports = class extends Event {
 
 		let message = "";
 		let role;
+		let audit;
+		let auditLog;
+		let executor;
 
 		switch (change) {
 			case "nickname":
@@ -32,22 +35,51 @@ module.exports = class extends Event {
 				break;
 			case "newrole":
 				role = newMember.guild.roles.cache.get(newMember._roles.diff(oldMember._roles)[0]);
+				audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 
-				message = await this.client.bulbutils.translate("event_member_update_role_add", {
-					user_tag: newMember.user.tag,
-					user_id: newMember.user.id,
-					role: role.name,
-				});
+				auditLog = audit.entries.first();
+				executor = auditLog.executor;
+
+				if (auditLog) {
+					message = await this.client.bulbutils.translate("event_member_update_role_add_audit", {
+						user_tag: newMember.user.tag,
+						user_id: newMember.user.id,
+						role: role.name,
+						moderator_tag: executor.tag,
+						moderator_id: executor.id,
+					});
+				} else {
+					message = await this.client.bulbutils.translate("event_member_update_role_add", {
+						user_tag: newMember.user.tag,
+						user_id: newMember.user.id,
+						role: role.name,
+					});
+				}
 
 				break;
 			case "removedrole":
 				role = newMember.guild.roles.cache.get(oldMember._roles.diff(newMember._roles)[0]);
+				audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 
-				message = await this.client.bulbutils.translate("event_member_update_role_remove", {
-					user_tag: newMember.user.tag,
-					user_id: newMember.user.id,
-					role: role.name,
-				});
+				auditLog = audit.entries.first();
+				executor = auditLog.executor;
+
+				if (auditLog) {
+					message = await this.client.bulbutils.translate("event_member_update_role_remove_audit", {
+						user_tag: newMember.user.tag,
+						user_id: newMember.user.id,
+						role: role.name,
+						moderator_tag: executor.tag,
+						moderator_id: executor.id,
+					});
+				} else {
+					message = await this.client.bulbutils.translate("event_member_update_role_remove", {
+						user_tag: newMember.user.tag,
+						user_id: newMember.user.id,
+						role: role.name,
+					});
+				}
+
 				break;
 			default:
 				break;

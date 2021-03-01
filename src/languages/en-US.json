@@ -33,6 +33,8 @@
 	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` has changed their nickname from `{nick_old}` to `{nick_new}`",
 	"event_member_update_role_add": "{emote_warn} The **{role}** role has been added to **{user_tag}** `({user_id})`",
 	"event_member_update_role_remove": "{emote_warn} The **{role}** role has been removed from **{user_tag}** `({user_id})`",
+	"event_member_update_role_add_audit": "{emote_warn} The **{role}** role has been added to **{user_tag}** `({user_id})` by **{moderator_tag}** `({moderator_id})`",
+	"event_member_update_role_remove_audit": "{emote_warn} The **{role}** role has been removed from **{user_tag}** `({user_id})` by **{moderator_tag}** `({moderator_id})`",
 
 	"config_language_success": "{emote_success} Successfully changed server the language to `{language}`",
 	"config_language_invalid_args": "{emote_warn} Invalid language provided!\n{emote_wrench} Select a valid language from `{languages}`",
