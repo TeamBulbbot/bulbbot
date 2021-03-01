@@ -1,8 +1,4 @@
 <div align="center">
-    <img src="https://cdn.mrphilip.xyz/bulbbot.png" width="140px" height="140px" /><br>
-</div>
-
-<div align="center">
 
 ![GitHub](https://img.shields.io/discord/742094927403679816?label=Discord&logo=Discord&logoColor=white)
 ![Github](https://img.shields.io/github/issues/TestersQTs/Bulbbot?color=red&label=Active%20issues&logo=github)
@@ -16,13 +12,15 @@ Bulbbot is a powerful discord moderation bot written in Javascript using the dis
 
 ## Add the bot to your Discord server
 
-Click [here](https://discord.com/oauth2/authorize?client_id=755149065137815623&scope=bot&permissions=1544940655) to invite the bot to your server.
+Click [here](https://discord.com/oauth2/authorize?client_id=755149065137815623&scope=bot&permissions=1573252311) to invite the bot to your server.
 
-The defualt prefix of the bot is `!`, but it can easily be changed with the `configure` command. To change the prefix just type `!configure prefix <prefix>`
+The defualt prefix of the bot is `!`, but it can easily be changed with the `configure` command. To change the prefix just type
+`!configure prefix <prefix>`
 
 ## License
 
-This project is licensed under the MIT License, see the [LICENSE](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE) file for more information.
+This project is licensed under the MIT License, see the [LICENSE](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE) file for more
+information.
 
 ## Developers
 
@@ -37,4 +35,4 @@ This project is licensed under the MIT License, see the [LICENSE](https://github
 - Website: https://mrphilip.xyz/
 - Twitter: [@y3ll0wLife](https://twitter.com/y3ll0wLife)
 - Github: [@y3ll0wlife](https://github.com/y3ll0wlife)
-- Discord: mrphilip#0001 (190160914765316096)
+- Discord: mrphilip#2938 (190160914765316096)
