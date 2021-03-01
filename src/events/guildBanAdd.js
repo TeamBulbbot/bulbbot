@@ -8,6 +8,10 @@ module.exports = class extends Event {
 	}
 
 	async run(guild, target) {
+		// TODO
+		// split the message for non audit log bans
+		if (!guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
+
 		const auditLog = await guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_ADD" });
 
 		const banLog = auditLog.entries.first();

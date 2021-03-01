@@ -35,10 +35,12 @@ module.exports = class extends Event {
 				break;
 			case "newrole":
 				role = newMember.guild.roles.cache.get(newMember._roles.diff(oldMember._roles)[0]);
-				audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
+				if (newMember.guild.me.hasPermission("VIEW_AUDIT_LOG")) {
+					audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 
-				auditLog = audit.entries.first();
-				executor = auditLog.executor;
+					auditLog = audit.entries.first();
+					executor = auditLog.executor;
+				}
 
 				if (auditLog) {
 					message = await this.client.bulbutils.translate("event_member_update_role_add_audit", {
@@ -59,10 +61,12 @@ module.exports = class extends Event {
 				break;
 			case "removedrole":
 				role = newMember.guild.roles.cache.get(oldMember._roles.diff(newMember._roles)[0]);
-				audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
+				if (newMember.guild.me.hasPermission("VIEW_AUDIT_LOG")) {
+					audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 
-				auditLog = audit.entries.first();
-				executor = auditLog.executor;
+					auditLog = audit.entries.first();
+					executor = auditLog.executor;
+				}
 
 				if (auditLog) {
 					message = await this.client.bulbutils.translate("event_member_update_role_remove_audit", {
