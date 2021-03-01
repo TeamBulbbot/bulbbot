@@ -24,7 +24,7 @@ client:
 # server
 server:                         
   prometheusHost: "localhost"   # host for prometheus
-  prometheusPort: 8080          # port for prometheus
+  prometheusPort: 7070          # port for prometheus
 
 # support
 supportInvite: "https://discord.gg/cacUmbQ" # support guild invite link
