@@ -11,7 +11,7 @@ module.exports = class extends Command {
 			aliases: ["overrides"],
 			usage: "!settings",
 			clearance: 75,
-			clientPerms: ["MANAGE_GUILD"],
+			userPerms: ["MANAGE_GUILD"],
 		});
 	}
 

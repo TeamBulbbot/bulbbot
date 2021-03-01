@@ -12,7 +12,7 @@ module.exports = class extends Command {
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 75,
-			clientPerms: ["MANAGE_GUILD"],
+			userPerms: ["MANAGE_GUILD"],
 		});
 	}
 

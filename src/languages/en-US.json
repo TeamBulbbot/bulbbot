@@ -1,7 +1,7 @@
 {
 	"global_executed_by": "Executed by {user_name}#{user_discriminator}",
 	"global_missing_permission": ":lock: Missing permission(s)",
-	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission",
+	"global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission.\n{missing}",
 	"global_user_not_found": "{emote_warn} Could not find the specified user",
 	"global_channel_not_found": "{emote_warn} Could not find the specified channel",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
@@ -220,6 +220,7 @@
 	"infraction_list_not_found": "{emote_warn} This guild does not seem to have any infractions!",
 	"infraction_claim_success": "{emote_success} You have claimed responsibility over infraction **#{infractionId}**",
 	"infraction_update_success": "{emote_success} Infraction **#{infractionId}** has been updated!",
+	"infraction_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"

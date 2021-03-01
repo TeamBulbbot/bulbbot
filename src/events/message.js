@@ -5,6 +5,7 @@ const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");
 const GetGuildOverrideForCommand = require("../utils/clearance/commands/GetGuildOverrideForCommand");
 const UserClearance = require("../utils/clearance/user/UserClearance");
+const Discord = require("discord.js");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -57,6 +58,7 @@ module.exports = class extends Event {
 			const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
 			if (userPermCheck) {
 				const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
+
 				if (missing.length) {
 					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
 						message.delete({ timeout: 5000 });
@@ -68,7 +70,13 @@ module.exports = class extends Event {
 			const clientPermCheck = command.clientPerms;
 			if (clientPermCheck) {
 				const missing = message.guild.me.hasPermission(clientPermCheck);
-				if (!missing) return message.channel.send(await this.client.bulbutils.translate("global_missing_permission_bot"));
+
+				if (!missing)
+					return message.channel.send(
+						await this.client.bulbutils.translate("global_missing_permission_bot", {
+							missing: clientPermCheck.toArray().join(", "),
+						}),
+					);
 			}
 
 			if (command.devOnly) if (!global.config.developers.includes(message.author.id)) return;

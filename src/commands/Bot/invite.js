@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const botInvite = `https://discord.com/oauth2/authorize?client_id=${global.config.client.id}&scope=bot&permissions=1544940655`;
+		const botInvite = `https://discord.com/oauth2/authorize?client_id=${global.config.client.id}&scope=bot&permissions=1573252311`;
 		const guildInvite = global.config.supportInvite;
 
 		const embed = new Discord.MessageEmbed()

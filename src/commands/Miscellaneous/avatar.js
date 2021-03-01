@@ -28,24 +28,29 @@ module.exports = class extends Command {
 		let desc = "";
 		const formats = ["png", "jpg", "webp"];
 		const sizes = [64, 128, 512, 4096];
-		if (user.avatarURL({ dynamic: true }).endsWith(".gif")) {
+		if (user.avatar !== null && user.avatarURL({ dynamic: true }).endsWith(".gif")) {
 			desc += "**gif: **";
 			sizes.forEach(size => {
 				desc += `[[${size}]](${user.avatarURL({ format: "gif", size })}) `;
 			});
 		}
+		let avatar;
+
 		formats.forEach(format => {
 			desc += `\n**${format}: **`;
 			sizes.forEach(size => {
-				desc += `[[${size}]](${user.avatarURL({ format, size })}) `;
+				if (user.avatar === null) avatar = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
+				else avatar = user.avatarURL({ format, size });
+
+				desc += `[[${size}]](${avatar}) `;
 			});
 		});
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
-			.setAuthor(`${user.tag} (${user.id})`, user.avatarURL({ dynamic: true }))
+			.setAuthor(`${user.tag} (${user.id})`, user.avatar !== null ? user.avatarURL({ dynamic: true }) : avatar)
 			.setDescription(desc)
-			.setImage(user.avatarURL({ dynamic: true, size: 4096 }))
+			.setImage(user.avatar !== null ? user.avatarURL({ dynamic: true, size: 4096 }) : avatar)
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
