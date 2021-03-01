@@ -30,6 +30,10 @@
 	"event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})` - **Account created:** {user_age}",
 	"event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`",
 
+	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` has changed their nickname from `{nick_old}` to `{nick_new}`",
+	"event_member_update_role_add": "{emote_warn} The **{role}** role has been added to **{user_tag}** `({user_id})`",
+	"event_member_update_role_remove": "{emote_warn} The **{role}** role has been removed from **{user_tag}** `({user_id})`",
+
 	"config_language_success": "{emote_success} Successfully changed server the language to `{language}`",
 	"config_language_invalid_args": "{emote_warn} Invalid language provided!\n{emote_wrench} Select a valid language from `{languages}`",
 

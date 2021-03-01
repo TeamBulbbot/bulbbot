@@ -1,5 +1,6 @@
 const Event = require("../structures/Event");
 const { SendEventLog } = require("../utils/moderation/log");
+const { Util } = require("discord.js");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -14,11 +15,50 @@ module.exports = class extends Event {
 		else if (oldMember.nickname !== newMember.nickname) change = "nickname";
 		else return;
 
-		console.log(oldMember);
-
 		let message = "";
-		let role = "";
+		let role;
 
-		await SendEventLog(this.client, newMember.guild, "member", change);
+		switch (change) {
+			case "nickname":
+				if (oldMember.nickname === null) oldMember.nickname = oldMember.user.username;
+				if (newMember.nickname === null) newMember.nickname = newMember.user.username;
+
+				message = await this.client.bulbutils.translate("event_member_update_nickname", {
+					user_tag: newMember.user.tag,
+					user_id: newMember.user.id,
+					nick_old: oldMember.nickname,
+					nick_new: newMember.nickname,
+				});
+				break;
+			case "newrole":
+				role = newMember.guild.roles.cache.get(newMember._roles.diff(oldMember._roles)[0]);
+
+				message = await this.client.bulbutils.translate("event_member_update_role_add", {
+					user_tag: newMember.user.tag,
+					user_id: newMember.user.id,
+					role: role.name,
+				});
+
+				break;
+			case "removedrole":
+				role = newMember.guild.roles.cache.get(oldMember._roles.diff(newMember._roles)[0]);
+
+				message = await this.client.bulbutils.translate("event_member_update_role_remove", {
+					user_tag: newMember.user.tag,
+					user_id: newMember.user.id,
+					role: role.name,
+				});
+				break;
+			default:
+				break;
+		}
+
+		await SendEventLog(this.client, newMember.guild, "member", Util.removeMentions(message));
 	}
+};
+
+Array.prototype.diff = function (a) {
+	return this.filter(function (i) {
+		return a.indexOf(i) < 0;
+	});
 };

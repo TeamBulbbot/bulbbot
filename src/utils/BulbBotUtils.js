@@ -45,6 +45,10 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({timestamp})/g, key.timestamp);
 		response = response.replace(/({until})/g, key.until);
 
+		response = response.replace(/({nick_old})/g, key.nick_old);
+		response = response.replace(/({nick_new})/g, key.nick_new);
+		response = response.replace(/({role})/g, key.role);
+
 		response = response.replace(/({user_id})/g, key.user_id);
 		response = response.replace(/({user_name})/g, key.user_name);
 		response = response.replace(/({user_nickname})/g, key.user_nickname);

@@ -1,5 +1,6 @@
 const Event = require("../structures/Event");
 const { SendEventLog } = require("../utils/moderation/log");
+const { Util } = require("discord.js");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -13,10 +14,12 @@ module.exports = class extends Event {
 			this.client,
 			member.guild,
 			"joinleave",
-			await this.client.bulbutils.translate("event_member_left", {
-				user_tag: member.user.tag,
-				user_id: member.user.id,
-			}),
+			Util.removeMentions(
+				await this.client.bulbutils.translate("event_member_left", {
+					user_tag: member.user.tag,
+					user_id: member.user.id,
+				}),
+			),
 		);
 	}
 };
