@@ -13,7 +13,7 @@ module.exports = async (guildId, commandName) => {
 			},
 		],
 	});
-	if (ddbGuild.guildOverrideCommands[0] === undefined) return false;
+	if (dbGuild.guildOverrideCommands[0] === undefined) return false;
 
 	await dbGuild.guildOverrideCommands[0].destroy();
 	return true;
