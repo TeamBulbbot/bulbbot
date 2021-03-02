@@ -46,6 +46,10 @@ module.exports = class extends Command {
 				await require("./override/disable")(this.client, message, args);
 				break;
 
+			// override list
+			case "list":
+				await require("./override/list")(this.client, message, args);
+				break;
 			default:
 				message.channel.send(await this.client.bulbutils.translate("override_invalid_arguments"));
 				break;

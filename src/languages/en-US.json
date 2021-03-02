@@ -89,7 +89,7 @@
 	"override_remove_non_existent_override_role": "{emote_warn} No role override was found with that id/mention",
 	"override_remove_success": "{emote_success} Successfully removed the command",
 
-	"override_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`",
+	"override_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
 	"config_invalid_arguments": "{emote_warn} Missing required argument `part`, can be one of the following `prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
 
 	"help_command_not_found": "Unable to find any commands with that name",

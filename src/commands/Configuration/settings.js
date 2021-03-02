@@ -6,7 +6,7 @@ const Emotes = require("../../emotes.json");
 module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
-			description: "Get the settings and overrides for the guild",
+			description: "Get the settings for the guild",
 			category: "Configuration",
 			aliases: ["overrides"],
 			usage: "!settings",
@@ -38,7 +38,7 @@ module.exports = class extends Command {
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
-			.setAuthor(`Settings and overrides for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+			.setAuthor(`Settings for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
 			.setDescription(configs + loggingModule)
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", {
