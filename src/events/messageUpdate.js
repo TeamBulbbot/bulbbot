@@ -10,6 +10,7 @@ module.exports = class extends Event {
 
 	async run(oldMessage, newMessage) {
 		if (newMessage.author.id === this.client.user.id) return;
+		if (oldMessage.content === newMessage.content) return;
 		await AutoMod.Master(newMessage);
 
 		let msg = `Message from **${newMessage.author.tag}** \`${newMessage.author.id}\` was updated in <#${newMessage.channel.id}>\n\`Id (channel-message): ${newMessage.channel.id}-${newMessage.id}\`\n`;
