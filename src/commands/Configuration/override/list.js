@@ -8,14 +8,18 @@ module.exports = async (client, message, args) => {
 	let roles = ``;
 	let commands = ``;
 
-	data.guildModerationRoles.forEach(role => {
-		roles += `<@&${role.roleId}> \`(${role.roleId})\` → \`${role.clearanceLevel}\` \n`;
-	});
-	data.guildOverrideCommands.forEach(command => {
-		commands += `\`${command.commandName}\` → \`${command.clearanceLevel}\`  ${
-			command.enabled !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF
-		}\n`;
-	});
+	if (data.guildModerationRoles[0] !== undefined) {
+		data.guildModerationRoles.forEach(role => {
+			roles += `<@&${role.roleId}> \`(${role.roleId})\` → \`${role.clearanceLevel}\` \n`;
+		});
+	}
+	if (data.guildOverrideCommands[0] !== undefined) {
+		data.guildOverrideCommands.forEach(command => {
+			commands += `\`${command.commandName}\` → \`${command.clearanceLevel}\`  ${
+				command.enabled !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF
+			}\n`;
+		});
+	}
 
 	const embed = new Discord.MessageEmbed()
 		.setColor(global.config.embedColor)

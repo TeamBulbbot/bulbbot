@@ -16,8 +16,6 @@ module.exports = async guildId => {
 	});
 
 	if (dbGuild === null) return;
-	if (dbGuild.guildModerationRoles[0] === undefined) return;
-	if (dbGuild.guildOverrideCommands[0] === undefined) return;
 
 	return dbGuild;
 };
