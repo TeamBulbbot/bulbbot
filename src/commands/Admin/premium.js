@@ -16,14 +16,21 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
+		let guild;
+		try {
+			guild = await this.client.guilds.fetch(args[1]);
+		} catch (err) {
+			return message.channel.send("Could not fetch the specified guild!");
+		}
+
 		switch (args[0].toLowerCase()) {
 			case "enable":
-				await Enable(args[1]);
-				message.channel.send(`Enabled premium for guild \`${args[1]}\``);
+				await Enable(guild.id);
+				message.channel.send(`Enabled premium for guild \`${guild.id}\``);
 				break;
 			case "disable":
-				await Disable(args[1]);
-				message.channel.send(`Disabled premium for guild \`${args[1]}\``);
+				await Disable(guild.id);
+				message.channel.send(`Disabled premium for guild \`${guild.id}\``);
 				break;
 			default:
 				break;
