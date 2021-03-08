@@ -15,7 +15,9 @@
 	"global_cannot_action_self": "{emote_warn} You cannot perform this action on yourself!",
 	"global_cannot_action_owner": "{emote_warn} You cannot perform this action on the server owner!",
 	"global_cannot_action_role_equal": "{emote_warn} You cannot perform this action on **{user_tag}** as you do not have a higher role than them!",
+	"global_cannot_action_role_equal_bot": "{emote_warn} You cannot perform this action on **{user_tag}** as I do not have a higher role than them!",
 	"global_cannot_action_role_higher": "{emote_warn} You cannot perform this action on **{user_tag}** as they have a higher role than you!",
+	"global_cannot_action_role_higher_bot": "{emote_warn} You cannot perform this action on **{user_tag}** as they have a higher role than me!",
 	"global_cannot_action_bot_self": "{emote_warn} You cannot perform this action on the bot!",
 
 	"premium_message": "This is a premium command, become a Patreon and get access to it <https://www.patreon.com/bulbbot>",
