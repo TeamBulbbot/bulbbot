@@ -26,6 +26,8 @@ module.exports = class extends Command {
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
 
+		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+
 		infId = await Warn(
 			this.client,
 			message.guild,

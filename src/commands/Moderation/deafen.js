@@ -24,6 +24,8 @@ module.exports = class extends Command {
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 
+		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (!target.voice.channel) return message.channel.send(await this.client.bulbutils.translate("global_not_in_voice"));
