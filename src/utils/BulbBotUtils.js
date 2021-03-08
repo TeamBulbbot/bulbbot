@@ -440,6 +440,8 @@ module.exports = class BulbBotUtils {
 		if (message.guild.me.roles.highest.id === user.roles.highest.id) return 6;
 
 		if (user.roles.highest.rawPosition >= message.guild.me.roles.highest.rawPosition) return 7;
+
+		return 0
 	}
 
 	async ResolveUserHandle(message, handle, user) {
@@ -471,6 +473,9 @@ module.exports = class BulbBotUtils {
 			case 7:
 				message.channel.send(await this.translate("global_cannot_action_role_higher_bot", { user_tag: user.tag }));
 				return true
+
+			case 0:
+				return false
 
 			default:
 				return false;
