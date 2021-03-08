@@ -36,7 +36,9 @@ module.exports = class extends Command {
 			let target = await message.guild.member(t);
 			const notInGuild = !target;
 
-			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+			if (!notInGuild) {
+				if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+			}
 
 			if (notInGuild) {
 				try {

@@ -26,7 +26,9 @@ module.exports = class extends Command {
 		let notInGuild = !target;
 		let infId = null;
 
-		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+		if (!notInGuild) {
+			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+		}
 
 		const banList = await message.guild.fetchBans();
 		const bannedUser = banList.find(user => user.user.id === targetId);
