@@ -146,6 +146,11 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({level})/g, key.level);
 
+		response = response.replace(/({item})/g, key.item);
+		response = response.replace(/({part})/g, key.part);
+		response = response.replace(/({punishment})/g, key.punishment);
+		response = response.replace(/({limit})/g, key.limit);
+
 		response = response.replace(/({bot_invite})/g, key.bot_invite);
 		response = response.replace(/({support_guild})/g, key.support_guild);
 
@@ -441,7 +446,7 @@ module.exports = class BulbBotUtils {
 
 		if (user.roles.highest.rawPosition >= message.guild.me.roles.highest.rawPosition) return 7;
 
-		return 0
+		return 0;
 	}
 
 	async ResolveUserHandle(message, handle, user) {
@@ -472,10 +477,10 @@ module.exports = class BulbBotUtils {
 
 			case 7:
 				message.channel.send(await this.translate("global_cannot_action_role_higher_bot", { user_tag: user.tag }));
-				return true
+				return true;
 
 			case 0:
-				return false
+				return false;
 
 			default:
 				return false;

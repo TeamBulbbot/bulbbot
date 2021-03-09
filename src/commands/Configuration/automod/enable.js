@@ -2,5 +2,5 @@ const { enable } = require("../../../utils/AutoModUtils");
 
 module.exports = async (client, message, args) => {
 	enable(message.guild.id);
-	message.channel.send("enabled automod");
+	message.channel.send(await client.bulbutils.translate("automod_enabled"));
 };
