@@ -100,6 +100,8 @@
 	"override_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
 	"config_invalid_arguments": "{emote_warn} Missing required argument `part`, can be one of the following `prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
 
+	"automod_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
+
 	"help_command_not_found": "Unable to find any commands with that name",
 
 	"userinfo_embed_id": "**ID:** {user_id}\n",
