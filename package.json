@@ -8,10 +8,7 @@
 		"dev": "nodemon",
 		"db-sync": "node src/utils/database/sync.js"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/TestersQTs/Bulbbot.git"
-	},
+	"repository": "git+https://github.com/TestersQTs/Bulbbot.git",
 	"author": "TesterQTs",
 	"license": "MIT",
 	"bugs": {

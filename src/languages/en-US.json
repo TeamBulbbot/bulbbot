@@ -100,6 +100,35 @@
 	"override_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
 	"config_invalid_arguments": "{emote_warn} Missing required argument `part`, can be one of the following `prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
 
+	"automod_missing_part_v1": "{emote_warn} Missing required argument `part`, can be either `website`, `invites` or `words`",
+	"automod_missing_part_v2": "{emote_warn} Missing required agument `part`, can be either `website`, `invites`, `words`, `mentions` or `messages`",
+	"automod_missing_part_v3": "{emote_warn} Missing required argument `part`, can be either `mentions` or `messages`",
+
+	"automod_missing_limit": "{emote_warn} Missing required argument `limit`, can be any value higher `0`",
+	"automod_missing_item_add": "{emote_warn} Missing required argument `item` that should be added to the automod",
+	"automod_missing_item_remove": "{emote_warn} Missing required argument `item` that should be removed from the automod",
+	"automod_missing_punishment": "{emote_warn} Missing required argument `punishment`, can be either `LOG`, `WARN`, `KICK` or `BAN`",
+
+	"automod_invalid_part_v1": "{emote_warn} Invalid argument `part`, can be either `website`, `invites` or `words`",
+	"automod_invalid_part_v2": "{emote_warn} Invalid argument `part`, can be either `website`, `invites`, `words`, `mentions` or `messages`",
+	"automod_invalid_part_v3": "{emote_warn} Invalid argument `mentions` or `messages`",
+
+	"automod_non_number": "{emote_warn} `{limit}` is not a valid number",
+	"automod_less_than_zero": "{emote_warn} `{limit}` cannot be less than 0",
+
+	"automod_not_already_in_database": "{emote_warn} Item `{item}` is not already in the automod",
+	"automod_already_in_database": "{emote_warn} Item `{item}` is already in the automod",
+	"automod_added_to_the_database": "{emote_success} Added `{item}` to `{part}` in the automod",
+	"automod_removed_from_the_database": "{emote_success} Removed `{item}` from `{part}` in the automod",
+
+	"automod_updated_limit": "{emote_success} Updated the limit on `{part}` with a limit of `{limit}`",
+	"automod_updated_punishment": "{emote_success} Updated the punishment on `{part}` with a new punishment of `{punishment}`",
+
+	"automod_enabled": "{emote_success} Enabled the automod",
+	"automod_disabled": "{emote_success} Disabled the automod",
+	"automod_disabled_feature": "{emote_success} Disabled `{part}`",
+	"automod_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
+
 	"help_command_not_found": "Unable to find any commands with that name",
 
 	"userinfo_embed_id": "**ID:** {user_id}\n",

@@ -11,6 +11,7 @@ module.exports = {
 
 		// TODO make a check if a user has > 25 clearance level and return
 		if (dbGuild.automod === null || !dbGuild.automod.enabled) return;
+		if (message.member.hasPermission("MANAGE_MESSAGES")) return;
 
 		if (await hasInvite(message, dbGuild.automod)) {
 			await AutoModUtils.resolveAction(client, message, dbGuild.automod.punishmentInvites, `Violated \`DISCORD INVITE\` in #${message.channel.name}`);
@@ -19,6 +20,7 @@ module.exports = {
 				dbGuild.guildId,
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
+
 			return message.delete();
 		}
 

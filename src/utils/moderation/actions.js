@@ -36,6 +36,7 @@ module.exports = {
 	Kick: async (client, guild, target, moderator, reason, reasonLog) => {
 		const offender = guild.member(target.id);
 		if (!offender.kickable) return;
+		reason = await reason;
 		await offender.kick(reason);
 		const infId = await createInfraction(guild.id, "Kick", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "kicked", target, moderator, reasonLog, infId);
@@ -46,6 +47,7 @@ module.exports = {
 	Ban: async (client, guild, target, moderator, reason, reasonLog) => {
 		const offender = guild.member(target.id);
 		if (!offender.bannable) return;
+		reason = await reason;
 		await offender.ban({ reason });
 		const infId = await createInfraction(guild.id, "Ban", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "banned", target, moderator, reasonLog, infId);
@@ -54,6 +56,7 @@ module.exports = {
 	},
 
 	TempBan: async (client, guild, target, moderator, reason, reasonLog, until) => {
+		reason = await reason;
 		await guild.member(target.id).ban({ reason });
 		const infId = await createInfraction(guild.id, "Temp-ban", until, reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModActionTemp(client, guild, "temp-banned", target, moderator, reasonLog, infId, until);
@@ -62,6 +65,7 @@ module.exports = {
 	},
 
 	ForceBan: async (client, guild, target, moderator, reason, reasonLog) => {
+		reason = await reason;
 		await guild.members.ban(target.id, { reason });
 		const infId = await createInfraction(guild.id, "Forceban", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "force-banned", target, moderator, reasonLog, infId);
@@ -70,6 +74,7 @@ module.exports = {
 	},
 
 	SoftBan: async (client, guild, target, moderator, reason, reasonLog, days) => {
+		reason = await reason;
 		await guild.member(target.id).ban({ reason, days });
 		await guild.members.unban(target.id, reason);
 
@@ -80,6 +85,7 @@ module.exports = {
 	},
 
 	Unban: async (client, guild, target, moderator, reason, reasonLog) => {
+		reason = await reason;
 		await guild.members.unban(target.id, reason);
 		const infId = await createInfraction(guild.id, "Unban", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, "unbanned", target, moderator, reasonLog, infId);
@@ -88,6 +94,7 @@ module.exports = {
 	},
 
 	UnbanTemp: async (client, guild, target, moderator, reason, reasonLog) => {
+		reason = await reason;
 		await guild.members.unban(target.id, reason);
 		const infId = await createInfraction(guild.id, "Auto-unban", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendAutoUnban(client, guild, "automatically unbanned", target, moderator, reasonLog, infId);

@@ -115,4 +115,243 @@ module.exports = {
 
 		return db.automod.limitMessages;
 	},
+
+	getSettings: async guildId => {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		if (!db) return null;
+		return db.automod;
+	},
+
+	changeLimit: async (guildId, part, limit) => {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		if (!db) return false;
+		SetLimit(db, part, limit);
+	},
+
+	changePunishment: async (guildId, part, punishment) => {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		if (!db) return false;
+		SetPunishment(db, part, punishment);
+	},
+
+	append: async (guildId, part, item) => {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		switch (part.toLowerCase()) {
+			case "website":
+				if (db.automod.websiteWhitelist.includes(item)) return 1;
+
+				db.automod.changed("websiteWhitelist", true);
+				db.automod.websiteWhitelist.push(item);
+				break;
+			case "invites":
+				if (db.automod.inviteWhitelist.includes(item)) return 1;
+
+				db.automod.changed("inviteWhitelist", true);
+				db.automod.inviteWhitelist.push(item);
+				break;
+			case "words":
+				if (db.automod.wordBlacklist.includes(item)) return 1;
+
+				db.automod.changed("wordBlacklist", true);
+				db.automod.wordBlacklist.push(item);
+				break;
+			default:
+				return -1;
+		}
+
+		db.automod.update(
+			{
+				websiteWhitelist: db.automod.websiteWhitelist,
+			},
+			{
+				where: { guildId },
+			},
+		);
+
+		await db.automod.save();
+	},
+
+	remove: async (guildId, part, item) => {
+		function removeItemOnce(arr, value) {
+			var index = arr.indexOf(value);
+			if (index > -1) {
+				arr.splice(index, 1);
+			}
+			return arr;
+		}
+
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		switch (part.toLowerCase()) {
+			case "website":
+				if (!db.automod.websiteWhitelist.includes(item)) return 1;
+
+				db.automod.changed("websiteWhitelist", true);
+				db.automod.websiteWhitelist = removeItemOnce(db.automod.websiteWhitelist, item);
+
+				break;
+			case "invites":
+				if (!db.automod.inviteWhitelist.includes(item)) return 1;
+
+				db.automod.changed("inviteWhitelist", true);
+				db.automod.inviteWhitelist = removeItemOnce(db.automod.websiteWhitelist, item);
+				break;
+			case "words":
+				if (!db.automod.wordBlacklist.includes(item)) return 1;
+
+				db.automod.changed("wordBlacklist", true);
+				db.automod.wordBlacklist = removeItemOnce(db.automod.websiteWhitelist, item);
+				break;
+			default:
+				return -1;
+		}
+
+		db.automod.update(
+			{
+				websiteWhitelist: db.automod.websiteWhitelist,
+			},
+			{
+				where: { guildId },
+			},
+		);
+
+		await db.automod.save();
+	},
+
+	enable: async guildId => {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		if (!db) return false;
+		db.automod.enabled = true;
+		await db.automod.save();
+	},
+
+	disable: async (guildId, part) => {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [
+				{
+					model: sequelize.models.automod,
+				},
+			],
+		});
+
+		if (!db) return false;
+		if (!part) {
+			db.automod.enabled = false;
+			await db.automod.save();
+		} else DisablePart(db, part);
+	},
 };
+
+async function DisablePart(db, part) {
+	if (db === null) return false;
+	switch (part.toLowerCase()) {
+		case "website":
+			db.automod.punishmentWebsite = null;
+			break;
+		case "invites":
+			db.automod.punishmentInvites = null;
+			break;
+		case "words":
+			db.automod.punishmentWords = null;
+			break;
+		case "mentions":
+			db.automod.punishmentMentions = null;
+			break;
+		case "messages":
+			db.automod.punishmentMessages = null;
+			break;
+		default:
+			return false;
+	}
+
+	await db.automod.save();
+}
+
+async function SetLimit(db, part, limit) {
+	if (db === null) return false;
+	switch (part.toLowerCase()) {
+		case "mentions":
+			db.automod.limitMentions = limit;
+			break;
+		case "messages":
+			db.automod.limitMessages = limit;
+			break;
+		default:
+			return false;
+	}
+
+	await db.automod.save();
+}
+
+async function SetPunishment(db, part, punishment) {
+	if (db === null) return false;
+	switch (part.toLowerCase()) {
+		case "website":
+			db.automod.punishmentWebsite = punishment;
+			break;
+		case "invites":
+			db.automod.punishmentInvites = punishment;
+			break;
+		case "words":
+			db.automod.punishmentWords = punishment;
+			break;
+		case "mentions":
+			db.automod.punishmentMentions = punishment;
+			break;
+		case "messages":
+			db.automod.punishmentMessages = punishment;
+			break;
+		default:
+			return false;
+	}
+
+	await db.automod.save();
+}
