@@ -24,7 +24,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const targets = args.slice(0).join(" ").match(UserMentionStrict);
+		const targets = [...args.slice(0).join(" ").matchAll(UserMentionStrict)].map(subarr => subarr.slice(1)).flat(Infinity);
 		let reason = args.slice(targets.length).join(" ").replace(UserMentionStrict, "");
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
