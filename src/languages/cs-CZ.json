@@ -1,0 +1,235 @@
+{
+	"global_executed_by": "Vyžádáno od {user_name}#{user_discriminator}",
+	"global_missing_permission": ":lock: Nedostatečné oprávnění",
+	"global_missing_permission_bot": "Bot nemá dostatečné oprávnění použít tento příkaz! Zkotroluj prosím jeho oprávnění.\n{missing}",
+	"global_user_not_found": "{emote_warn} Zadaný uživatel nenalezen",
+	"global_channel_not_found": "{emote_warn} Zadaný kanál nenalezen",
+	"global_mod_action_log": "{action} od: {moderator_tag} ({moderator_id}) | Uživatel: {target_tag} ({target_id}) | Důvod: {reason}",
+	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`byl {action} od **{moderator_tag}** `({moderator_id})` z důvodu **{reason}** `[#{infractionId}]`",
+	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`byl {action} od **{moderator_tag}** `({moderator_id})` poté co jeho dočasný trest vypršel `[#{infractionId}]`",
+	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`byl {action} od **{moderator_tag}** `({moderator_id})` do **{until}** z důvodu **{reason}** `[#{infractionId}]`",
+	"global_no_reason": "Bez důvodu",
+	"global_loading": "{emote_loading} Načítání...",
+	"global_not_in_voice": "{emote_warn} Uživatel není připojen v Hlasovém Kanálu!",
+
+	"global_cannot_action_self": "{emote_warn} Tuto akci nemůžeš provést na sobě!",
+	"global_cannot_action_owner": "{emote_warn} Tuto akci nemůžeš provést na majiteli serveru!",
+	"global_cannot_action_role_equal": "{emote_warn} Tuto akci nemůžeš provést na **{user_tag}** protože nemáš větší roli než oni!",
+	"global_cannot_action_role_equal_bot": "{emote_warn} YTuto akci nemůžeš provést na **{user_tag}** protože nemám větši roli než oni!",
+	"global_cannot_action_role_higher": "{emote_warn} Tuto akci nemůžeš provést na **{user_tag}** protože má větší roli než ty!",
+	"global_cannot_action_role_higher_bot": "{emote_warn} Tuto akci nemůžeš provést na **{user_tag}** protože má vetší roli než já!",
+	"global_cannot_action_bot_self": "{emote_warn} Tuto akci nemůžeš provést na botovi!",
+
+	"premium_message": "This is a premium command, become a Patreon and get access to it <https://www.patreon.com/bulbbot>",
+
+	"event_message_args_unexpected": "{emote_warn} Nečekaný argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Správné použití:** {usage}",
+	"event_message_args_missing": "{emote_warn} Chybí argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Správné použití:** {usage}",
+
+	"event_channel_create": "**Vytvořen kanál:** <#{channel_id}> `({channel_type})`",
+	"event_channel_delete": "**Kanál odstraněn:** #{channel_name} `({channel_id})` `({channel_type})`",
+	"event_channel_update_topic_added": "<#{channel_id}> temá kanálu přidáno `{channel_topic}`\n",
+	"event_channel_update_topic_removed": "<#{channel_id}> temá kanálu odebránp\n",
+	"event_channel_update_topic_updated": "<#{channel_id}> téma kanálu změněno z `{oldchannel_topic}` na `{newchannel_topic}`\n",
+	"event_channel_update_name": "<#{channel_id}> název změnen z `#{oldchannel_name}` na `#{newchannel_name}`\n",
+	"event_channel_update_type": "<#{channel_id}> typ zněmen z `{oldchannel_type}` na `{newchannel_type}`\n",
+	"event_channel_update_nsfw_enabled": "<#{channel_id}> NSFW byl `zapnut`\n",
+	"event_channel_update_nsfw_disabled": "<#{channel_id}> NSFW byl `vypnut`\n",
+
+	"event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})` - **Account created:** {user_age}",
+	"event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`",
+
+	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` has changed their nickname from `{nick_old}` to `{nick_new}`",
+	"event_member_update_role_add": "{emote_warn} Role **{role}** byla přídaná **{user_tag}** `({user_id})`",
+	"event_member_update_role_remove": "{emote_warn} Role **{role}** byla odebrána **{user_tag}** `({user_id})`",
+	"event_member_update_role_add_audit": "{emote_warn} Role **{role}** byla přidána **{user_tag}** `({user_id})` moderátorem **{moderator_tag}** `({moderator_id})`",
+	"event_member_update_role_remove_audit": "{emote_warn} Role **{role}** byla odebrána **{user_tag}** `({user_id})` moderátorem **{moderator_tag}** `({moderator_id})`",
+
+	"config_language_success": "{emote_success} Jazyk serveru změněn na `{language}`",
+	"config_language_invalid_args": "{emote_warn} Invalid language provided!\n{emote_wrench} Select a valid language from `{languages}`",
+
+	"config_logging_success": "{emote_success} Successfully started logging {part} in {channel}",
+	"config_logging_invalid_channel": "{emote_warn} Cannot resolve `{channel_name}` as a valid channel!",
+	"config_logging_unable_to_send_messages": "{emote_warn} Cannot post messages in that channel",
+
+	"config_mute_success": "{emote_success} Mute role byla aktualizována",
+	"config_mute_missing_args": "{emote_warn} Chybí argument `role`",
+	"config_mute_invalid_role": "{emote_warn} Zadaná role není platná role",
+	"config_mute_unable_to_manage": "{emote_warn} Tuto roli nemohu spravovat, posuň mojí roli výše než zadanou roli",
+
+	"config_prefix_success": "{emote_success} Prefix změněn na `{prefix}`",
+	"config_prefix_missing_args": "{emote_warn} Chybí argument `prefix`",
+
+	"override_create_invalid_part": "{emote_warn} Chabí argument `part`, který může být `role` nebo `command`",
+	"override_create_missing_name": "{emote_warn} Chybí argument `role/command name`",
+	"override_create_missing_clearance": "{emote_warn} Chybí argument `clearance`",
+	"override_create_non_number": "{emote_warn} `{clearance}` není platný level povolení",
+	"override_create_less_than_0": "{emote_warn} Level povolení nesmí být nižší než 0",
+	"override_create_more_than_100": "{emote_warn} Level povolení nesmí být vyšší než nebo roven 100",
+	"override_create_higher_than_yourself": "{emote_warn} You cannot create an override with a higher clearance level than your clearance level",
+	"override_create_invalid_role": "{emote_warn} Zadaná role není platná",
+	"override_create_invalid_command": "{emote_warn} `{command}` není platný příkaz",
+	"override_create_success": "{emote_success} Successfully created an override with the clearance level of `{clearance}`",
+
+	"override_disable_missing_command": "{emote_warn} Chybí argument `command`",
+	"override_disable_invalid_command": "{emote_warn} `{command}` není příkaz!",
+	"override_disable_success": "{emote_success} Vypnut příkaz `{command}`",
+
+	"override_enable_missing_command": "{emote_warn} Chybí argument `command`",
+	"override_enable_invalid_command": "{emote_warn} `{command}` není příkaz!",
+	"override_enable_success": "{emote_success} Zapnut příkaz `{command}`",
+
+	"override_edit_invalid_part": "{emote_warn} Chybí argument `part`, který může být `role` nebo `command`",
+	"override_edit_missing_name": "{emote_warn} Chabí argument `role/command name`",
+	"override_edit_missing_clearance": "{emote_warn} Chybí argument `clearance`",
+	"override_edit_non_number": "{emote_warn} `{clearance}` není platný level povolení",
+	"override_edit_less_than_0": "{emote_warn} Level povolení nesmí být menší než 0",
+	"override_edit_more_than_100": "{emote_warn} Level povolení nesmí být větší než nebo roven 100",
+	"override_edit_higher_than_yourself": "{emote_warn} You cannot create an override with a higher clearance level than your clearance level",
+	"override_edit_invalid_role": "{emote_warn} Not a valid role",
+	"override_edit_invalid_command": "{emote_warn} `{command}` is not a valid command",
+	"override_edit_non_existent_override_command": "{emote_warn} No override was found for that command, you need to create an override to be able to edit it",
+	"override_edit_non_existent_override_role": "{emote_warn} No override was found for that role, you need to create an override to be able to edit it",
+	"override_edit_success": "{emote_success} Successfully updated the override with a new clearance level of `{clearance}`",
+
+	"override_remove_invalid_part": "{emote_warn} Missing required argument `part`, can be either `role` or `command`",
+	"override_remove_missing_name": "{emote_warn} Missing required argument `role/command name`",
+	"override_remove_non_existent_override_command": "{emote_warn} No command override was found with that name",
+	"override_remove_non_existent_override_role": "{emote_warn} No role override was found with that id/mention",
+	"override_remove_success": "{emote_success} Successfully removed the command",
+
+	"override_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
+	"config_invalid_arguments": "{emote_warn} Missing required argument `part`, can be one of the following `prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
+
+	"help_command_not_found": "Unable to find any commands with that name",
+
+	"userinfo_embed_id": "**ID:** {user_id}\n",
+	"userinfo_embed_username": "**Jméno:** {user_name}\n",
+	"userinfo_embed_nickname": "**Přezdívka:** {user_nickname}\n",
+	"userinfo_embed_profile": "**Profil:** <@{user_id}> [`Profile`](https://discord.com/users/{user_id})\n",
+	"userinfo_embed_avatar": "**Avatar URL:** [Link]({user_avatar})\n",
+	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
+	"userinfo_embed_created": "**Účet vytvořen:** {user_age}\n",
+	"userinfo_embed_joined": "**Připojil se:** {user_joined}\n",
+	"userinfo_embed_premium": "**VYlepšuje of:** {user_premium}\n",
+	"userinfo_embed_roles": "**Role:** {user_roles}\n",
+	"userinfo_embed_infractions": "\n**Přestupky:** {emote_inf} **{user_infractions}** přestupků na tomto serveru",
+
+	"serverinfo_embed_owner": "{emote_owner} **Majitel:** <@{guild_owner_name}> `{guild_owner_id}`\n",
+	"serverinfo_embed_features": "**Vlastnosti:**\n{guild_features}\n",
+	"serverinfo_embed_region": "**Región:** {guild_region}\n",
+	"serverinfo_embed_verification": "**Level ověření:** {guild_verification}\n",
+	"serverinfo_embed_created": "**Vytvořen:** {guild_age}",
+
+	"serverinfo_server_stats": "**Server statistiky**",
+	"serverinfo_channel_stats": "**Channel statistiky**",
+	"serverinfo_booster_stats": "**Statistiky vylepšení**",
+	"serverinfo_server_stats_total": "Celkem: **{guild_members}**/{guild_max}\n",
+	"serverinfo_server_stats_online": "{emote_online}: **{guild_online}**\n",
+	"serverinfo_server_stats_idle": "{emote_idle}: **{guild_idle}**\n",
+	"serverinfo_server_stats_dnd": "{emote_dnd}: **{guild_dnd}**\n",
+	"serverinfo_server_stats_offline": "{emote_offline}: **{guild_offline}**\n",
+	"serverinfo_channel_stats_voice": "Hlasové kanály: **{guild_voice}**\n",
+	"serverinfo_channel_stats_text": "Textové kanály: **{guild_text}**\n",
+	"serverinfo_channel_stats_category": "Kategorie: **{guild_category}**\n",
+	"serverinfo_booster_tier": "Úrověň vylepšení: **{guild_booster_tier}**\n",
+	"serverinfo_booster_boosters": "Boosteři: **{guild_booster_boosters}**\n",
+	"serverinfo_booster_tier_1": "Emoji sloty: **100**\nKvalita zvuku: **128** kbps\n",
+	"serverinfo_booster_tier_2": "Emoji sloty: **150**\nKvalita zvuku: **256** kbps\nUpload limit: **50 MB**\n",
+	"serverinfo_booster_tier_3": "Emoji sloty: **250**\nKvalita zvuku: **384** kbps\nUpload limit: **100 MB**\n",
+	"serverinfo_roles": "Role ({guild_amount_roles})",
+	"serverinfo_emotes": "Emoji ({guild_amount_emotes})",
+	"serverinfo_roles_too_many": " a **{guild_roles_left}** dalších",
+	"serverinfo_emotes_too_many": " a **{guild_emotes_left}** dalších",
+	"serverinfo_emotes_none": "Žádné emoji",
+
+	"ban_success": "{emote_success} **{target_tag}** `({target_id})` byl zabanován z důvodu **{reason}** `[#{infractionId}]`",
+	"ban_fail": "{emote_warn} Nemohu zabanovat **{target_tag}** `({target_id})`",
+	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` byl již zabanován `{reason}`",
+
+	"not_banned": "{emote_warn} **{target_tag}** `({target_id})` není zabanován",
+	"unban_success": "{emote_success} **{target_tag}** `({target_id})` byl odbanován z důvodu **{reason}** `[#{infractionId}]`",
+
+	"kick_success": "{emote_success} **{target_tag}** `({target_id})` byl vyhozen z důvodu **{reason}** `[#{infractionId}]`",
+	"kick_fail": "{emote_warn} Nemohu vyhodit **{target_tag}** `({target_id})`",
+
+	"purge_too_many": "{emote_warn} Můžeš vymazat maximum 200 zpráv najednou",
+	"purge_too_few": "{emote_warn} Nemůžeš vymazat méně jak 1 zprávu :confused: proč bys to vůbec dělal",
+
+	"verification_non_integer": "{emote_warn} Level musí být číslo",
+	"verification_community_zero": "{emote_warn} Level ověření nesmí být `0` pro komunitní servery!",
+	"verification_level_error": "{emote_warn} Level oveření nesmí bát větší jak `4` nebo menší jak `0`",
+	"verification_level_success": "{emote_success} level ověření změněn na `{level}`",
+
+	"ping_latency": "Odezva bota je **{latency_bot}ms**\nOdezva WebSocketu je **{latency_ws}ms**",
+
+	"uptime_uptime": "The current uptime is **{uptime}**",
+
+	"license_license": "📜 Tento bot je licensovaný pod licensí MIT, pro více informací klikni **[zde](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+	"privacy_policy": "📜 View the privacy policy of the bot **[here](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
+
+	"github_source_code": "{emote_github} Tento bot je plně open-source a jeho zdrojový kód najdeš **[zde](https://github.com/TestersQTs/Bulbbot)**",
+
+	"invite_desc": "**Přizvi BulbBota na svůj server**\n{bot_invite}\n\n**Připoj se na náš support server**\n{support_guild}",
+
+	"inviteinfo_error": "{emote_warn} Nemohu najít server s touto pozvánkou",
+
+	"multiban_success": "{emote_success} {full_list} byli zabanováni z důvodu **{reason}**",
+
+	"multiunban_success": "{emote_success} {full_list} byli odbanování z důvodu **{reason}**",
+
+	"multikick_success": "{emote_success} {full_list} byli vyhozeni z důvodu **{reason}**",
+
+	"multiwarn_success": "{emote_success} {full_list} byli varování z důvodu **{reason}**",
+
+	"multivoicekick_success": "{emote_success} {full_list} byli vyhozeni z hlasových kanálů z důvodu **{reason}**",
+
+	"softban_success": "{emote_success} **{target_tag}** `({target_id})` byl soft-zabanován z důvodu **{reason}** `[#{infractionId}]`",
+
+	"deafen_already_deaf": "{emote_warn} Uživatel je již ztulemn!",
+	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` byl ztlumen z důvodu **{reason}** `[#{infractionId}]`",
+
+	"undeafen_not_deaf": "{emote_warn} Uživatel není ztlumen!",
+	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` byl odtlumen z důvodu **{reason}** `[#{infractionId}]`",
+
+	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` byl vyhozen z hlasového kanálu z důvodu **{reason}** `[#{infractionId}]`",
+
+	"slowmode_invalid_0s": "{emote_warn} Pomalý režim nemůže být menší než **0 sekund**!",
+	"slowmode_invalid_6h": "{emote_warn} POmalý režim neůže být delší než **6 hodin**!",
+
+	"slowmode_success_remove": "{emote_success} Odebrán pomalý režim z kanálu {channel}",
+	"slowmode_success": "{emote_success} Pomalý řezim v kanálu {channel} byl nastaven na **{slowmode}**",
+
+	"tempban_invalid_0s": "{emote_warn} Doba nesmí být menší než **0 sekund**!",
+	"tempban_invalid_1y": "{emote_warn} Doba nesmí být větší než **1 rok**!",
+
+	"lockdown_not_boolean": "{emote_warn} Argument `lock` musí být typu Boolean! (`true` nebo `false`)",
+	"lockdown_locked": "{emote_success} Uzamčen kanál {channel}",
+	"lockdown_unlocked": "{emote_success} Odemčen kanál {channel}",
+
+	"mute_muterole_not_found": "{emote_warn} Tento server nemá nakonfigurovanou mute roli!\n{emote_wrench} **Typ:** Mute roli můžeš nakonfigurovat pomocí `!configure mute_role` command",
+	"mute_success": "{emote_success} Umlčen **{target_tag}** `({target_id})` z důvodu **{reason}** `[#{infractionId}]`",
+	"mute_not_muted": "{emote_warn} Uživatel ještě není umlčen!",
+	"mute_already_muted": "{emote_warn} Uživatel je již umlčen!",
+
+	"warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` byl varován z důvodu **{reason}** `[#{infractionId}]`",
+
+	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` byl odmlčen z důvodu **{reason}** `[#{infractionId}]`",
+
+	"infraction_not_found": "{emote_warn} Přestupek **#{infractionId}** nemohl být nalezen!",
+	"infraction_delete_success": "{emote_success} Přestupek **#{infractionId}** byl vymazán!",
+	"infraction_info_inf_id": "**ID Přestupku:** {infractionId}\n",
+	"infraction_info_target": "**Uživatel:** {target_tag} `({target_id})`\n",
+	"infraction_info_moderator": "**Moderátor:** {moderator_tag} `({moderator_id})`\n",
+	"infraction_info_created": "**Vytvořeno:** {timestamp}\n",
+	"infraction_info_active": "**Aktivní:** {emoji}",
+	"infraction_info_expires": "**Končí:** {timestamp}",
+	"infraction_info_reason": "\n\n**Důvod:** {reason}",
+	"infraction_list_not_found": "{emote_warn} Tento server nemá zatím zaznamenané žádné přestupky!",
+	"infraction_claim_success": "{emote_success} Převzal jsi zodpovědnost pro přestupek **#{infractionId}**",
+	"infraction_update_success": "{emote_success} Přestupek **#{infractionId}** byl aktualizován!",
+	"infraction_invalid_arguments": "{emote_warn} Chybí argument `action`, který může být `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
+
+	"invalid_snowflake": "{emote_warn} `{snowflake}` není SnowFlake",
+	"snowflake_info": "Nevím jestli tento SnowFlake někomu nebo nečemu patří\n\n"
+}
