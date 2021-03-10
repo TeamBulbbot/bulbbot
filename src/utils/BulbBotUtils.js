@@ -440,7 +440,7 @@ module.exports = class BulbBotUtils {
 
 		if (user.id === this.client.user.id) return 4;
 
-		if (user.roles.highest >= message.member.roles.highest) return 5;
+		if (user.roles.highest.rawPosition >= message.member.roles.highest.rawPosition) return 5;
 
 		if (message.guild.me.roles.highest.id === user.roles.highest.id) return 6;
 
