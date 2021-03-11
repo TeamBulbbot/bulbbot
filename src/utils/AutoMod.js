@@ -1,6 +1,6 @@
 const AutoModCache = require("../structures/AutoModCache");
 const AutoModUtils = require("../utils/AutoModUtils");
-const { AutoMod_INVITE, AutoMod_WEBSITE, UserMentionStrict } = require("./Regex");
+const { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } = require("./Regex");
 const { SendAutoModLog } = require("../utils/moderation/log");
 const Emotes = require("../emotes.json");
 
@@ -82,7 +82,7 @@ async function hasSwearWords(message, dbGuild) {
 }
 
 async function hasMentions(client, message) {
-	let mentionCount = message.content.match(UserMentionStrict);
+	let mentionCount = message.content.match(UserMention);
 
 	if (mentionCount && mentionCount.length > 0) {
 		await AutoModCache.set(client, message, message.guild.id, "mentions", message.author.id, mentionCount.length, 15000);

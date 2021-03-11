@@ -1,6 +1,6 @@
 const Command = require("../../structures/Command");
 const { Warn } = require("../../utils/moderation/actions");
-const { UserMentionStrict, NonDigits } = require("../../utils/Regex");
+const { UserMentionAndId, NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -22,18 +22,20 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const targets = args.slice(0).join(" ").match(UserMentionStrict);
-		let reason = args.slice(targets.length).join(" ").replace(UserMentionStrict, "");
+		const targets = args.slice(0).join(" ").match(UserMentionAndId);
+		let reason = args.slice(targets.length).join(" ").replace(UserMentionAndId, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason");
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
+			if (targets[i] === undefined) continue;
+
 			const t = targets[i].replace(NonDigits, "");
 			const target = await message.guild.member(t);
 			let infId;
 
-			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
 			if (!target) {
 				message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));

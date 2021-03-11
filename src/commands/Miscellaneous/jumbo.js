@@ -2,7 +2,7 @@ const Command = require("../../structures/Command");
 const Jimp = require("jimp");
 const fs = require("fs");
 const emojiUnicode = require("emoji-unicode");
-const { Emote } = require("../../utils/Regex");
+const { CustomEmote } = require("../../utils/Regex");
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -28,7 +28,7 @@ module.exports = class extends Command {
 			let emote = args[i];
 			let url;
 
-			emote = emote.match(Emote);
+			emote = emote.match(CustomEmote);
 			if (emote === null) url = `https://twemoji.maxcdn.com/v/latest/72x72/${emojiUnicode(args[i]).split(" ").join("-")}.png`;
 			else {
 				emote = emote[0].substring(1).slice(0, -1);
