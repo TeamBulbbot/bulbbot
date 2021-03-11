@@ -260,5 +260,20 @@
 	"infraction_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
-	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n"
+	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n",
+
+	"action_warn": "warned",
+	"action_mute": "muted",
+	"action_unmute": "unmuted",
+	"action_unmute_auto": "automatically unmuted",
+	"action_kick": "kicked",
+	"action_ban": "banned",
+	"action_ban_temp": "temp-banned",
+	"action_ban_force": "force-banned",
+	"action_ban_soft": "soft-banned",
+	"action_unban": "unbanned",
+	"action_unban_auto": "automatically unbanned",
+	"action_deafen": "deafened",
+	"action_undeafen": "undeafened",
+	"action_kick_voice": "voice-kicked"
 }

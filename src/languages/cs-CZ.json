@@ -59,7 +59,7 @@
 	"config_prefix_success": "{emote_success} Prefix změněn na `{prefix}`",
 	"config_prefix_missing_args": "{emote_warn} Chybí argument `prefix`",
 
-	"override_create_invalid_part": "{emote_warn} Chabí argument `part`, který může být `role` nebo `command`",
+	"override_create_invalid_part": "{emote_warn} Chybí argument `part`, který může být `role` nebo `command`",
 	"override_create_missing_name": "{emote_warn} Chybí argument `role/command name`",
 	"override_create_missing_clearance": "{emote_warn} Chybí argument `clearance`",
 	"override_create_non_number": "{emote_warn} `{clearance}` není platný level povolení",
@@ -231,5 +231,20 @@
 	"infraction_invalid_arguments": "{emote_warn} Chybí argument `action`, který může být `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
 
 	"invalid_snowflake": "{emote_warn} `{snowflake}` není SnowFlake",
-	"snowflake_info": "Nevím jestli tento SnowFlake někomu nebo nečemu patří\n\n"
+	"snowflake_info": "Nevím jestli tento SnowFlake někomu nebo nečemu patří\n\n",
+
+	"action_warn": "varován",
+	"action_mute": "umlčen",
+	"action_unmute": "odmlčen",
+	"action_unmute_auto": "automaticky odmlčen",
+	"action_kick": "vyhozen",
+	"action_ban": "zabanován",
+	"action_ban_temp": "dočasně zabanován",
+	"action_ban_force": "force zabanován",
+	"action_ban_soft": "soft zabanován",
+	"action_unban": "odbanován",
+	"action_unban_auto": "automaticky odmlčen",
+	"action_deafen": "ztlumen",
+	"action_undeafen": "odtlumen",
+	"action_kick_voice": "vyhozen z hlasového kanálu"
 }
