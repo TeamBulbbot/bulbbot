@@ -54,7 +54,13 @@ module.exports = class extends Command {
 				break;
 
 			default:
-				message.channel.send(await this.client.bulbutils.translate("automod_invalid_arguments"));
+				message.channel.send(
+					await this.client.bulbutils.translate("event_message_args_unexpected_list", {
+						arg: args[0].toLowerCase(),
+						arg_expected: "action:string",
+						usage: "`enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
+					}),
+				);
 				break;
 		}
 	}

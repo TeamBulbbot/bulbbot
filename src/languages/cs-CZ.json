@@ -24,6 +24,8 @@
 
 	"event_message_args_unexpected": "{emote_warn} Nečekaný argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Správné použití:** {usage}",
 	"event_message_args_missing": "{emote_warn} Chybí argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Správné použití:** {usage}",
+	"event_message_args_unexpected_list": "{emote_warn} Argument `{arg}` nebyl rozpoznán jako `{arg_expected}`.\n{emote_wrench} **Očekávané argumenty:** {usage}",
+	"event_message_args_missing_list": "{emote_warn} Chybí argument `{arg}`. Očekáváno argimentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Očekávané argumenty:** {usage}",
 
 	"event_channel_create": "**Vytvořen kanál:** <#{channel_id}> `({channel_type})`",
 	"event_channel_delete": "**Kanál odstraněn:** #{channel_name} `({channel_id})` `({channel_type})`",
@@ -96,9 +98,6 @@
 	"override_remove_non_existent_override_command": "{emote_warn} No command override was found with that name",
 	"override_remove_non_existent_override_role": "{emote_warn} No role override was found with that id/mention",
 	"override_remove_success": "{emote_success} Successfully removed the command",
-
-	"override_invalid_arguments": "{emote_warn} Chybí argument `action`, který může být `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
-	"config_invalid_arguments": "{emote_warn} Chybí argument `part`, který může být `prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
 
 	"help_command_not_found": "Příkaz s tímto jménem nebyl nalezen",
 

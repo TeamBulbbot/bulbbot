@@ -24,6 +24,8 @@
 
 	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
+	"event_message_args_unexpected_list": "{emote_warn} Cannot parse `{arg}` as `{arg_expected}`.\n{emote_wrench} **Correct arguments:** {usage}",
+	"event_message_args_missing_list": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct arguments:** {usage}",
 
 	"event_channel_create": "**Channel created:** <#{channel_id}> `({channel_type})`",
 	"event_channel_delete": "**Channel deleted:** #{channel_name} `({channel_id})` `({channel_type})`",
@@ -97,21 +99,9 @@
 	"override_remove_non_existent_override_role": "{emote_warn} No role override was found with that id/mention",
 	"override_remove_success": "{emote_success} Successfully removed the command",
 
-	"override_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
-	"config_invalid_arguments": "{emote_warn} Missing required argument `part`, can be one of the following `prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
-
-	"automod_missing_part_v1": "{emote_warn} Missing required argument `part`, can be either `website`, `invites` or `words`",
-	"automod_missing_part_v2": "{emote_warn} Missing required agument `part`, can be either `website`, `invites`, `words`, `mentions` or `messages`",
-	"automod_missing_part_v3": "{emote_warn} Missing required argument `part`, can be either `mentions` or `messages`",
-
 	"automod_missing_limit": "{emote_warn} Missing required argument `limit`, can be any value higher `0`",
-	"automod_missing_item_add": "{emote_warn} Missing required argument `item` that should be added to the automod",
 	"automod_missing_item_remove": "{emote_warn} Missing required argument `item` that should be removed from the automod",
 	"automod_missing_punishment": "{emote_warn} Missing required argument `punishment`, can be either `LOG`, `WARN`, `KICK` or `BAN`",
-
-	"automod_invalid_part_v1": "{emote_warn} Invalid argument `part`, can be either `website`, `invites` or `words`",
-	"automod_invalid_part_v2": "{emote_warn} Invalid argument `part`, can be either `website`, `invites`, `words`, `mentions` or `messages`",
-	"automod_invalid_part_v3": "{emote_warn} Invalid argument `mentions` or `messages`",
 
 	"automod_non_number": "{emote_warn} `{limit}` is not a valid number",
 	"automod_less_than_zero": "{emote_warn} `{limit}` cannot be less than 0",
@@ -127,7 +117,6 @@
 	"automod_enabled": "{emote_success} Enabled the automod",
 	"automod_disabled": "{emote_success} Disabled the automod",
 	"automod_disabled_feature": "{emote_success} Disabled `{part}`",
-	"automod_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
 
 	"help_command_not_found": "Unable to find any commands with that name",
 

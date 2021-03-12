@@ -70,7 +70,14 @@ module.exports = class extends Command {
 				break;
 
 			default:
-				message.channel.send(await this.client.bulbutils.translate("config_invalid_arguments"));
+				message.channel.send(
+					await this.client.bulbutils.translate("event_message_args_unexpected_list", {
+						arg: args[0].toLowerCase(),
+						arg_expected: "part:string",
+						usage:
+							"`prefix`, `language`, `mute_role|mute`, `mod_action|modaction|mod`, `automod`, `messagelogs|message`, `rolelogs|role`, `memberlogs|member`, `channelogs|channel`, `joinleavelogs|joinleave`",
+					}),
+				);
 				break;
 		}
 	}
