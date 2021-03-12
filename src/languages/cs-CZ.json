@@ -47,8 +47,8 @@
 	"config_language_success": "{emote_success} Jazyk serveru změněn na `{language}`",
 	"config_language_invalid_args": "{emote_warn} Zadán neplatný jazyk!\n{emote_wrench} Vyber si jazyk z `{languages}`",
 
-	"config_logging_success": "{emote_success} Začaů jsem zaznamenávat {part} v {channel}",
-	"config_logging_invalid_channel": "{emote_warn} `{channel_name}` nebyl rozpoznán jako platná kanál!",
+	"config_logging_success": "{emote_success} Začal jsem zaznamenávat {part} v {channel}",
+	"config_logging_invalid_channel": "{emote_warn} `{channel_name}` nebyl rozpoznán jako platný kanál!",
 	"config_logging_unable_to_send_messages": "{emote_warn} V zadaném kanále nemohu posílat zprávy",
 
 	"config_mute_success": "{emote_success} Mute role byla aktualizována",
@@ -110,13 +110,13 @@
 	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
 	"userinfo_embed_created": "**Účet vytvořen:** {user_age}\n",
 	"userinfo_embed_joined": "**Připojil se:** {user_joined}\n",
-	"userinfo_embed_premium": "**VYlepšuje of:** {user_premium}\n",
+	"userinfo_embed_premium": "**Vylepšuje of:** {user_premium}\n",
 	"userinfo_embed_roles": "**Role:** {user_roles}\n",
 	"userinfo_embed_infractions": "\n**Přestupky:** {emote_inf} **{user_infractions}** přestupků na tomto serveru",
 
 	"serverinfo_embed_owner": "{emote_owner} **Majitel:** <@{guild_owner_name}> `{guild_owner_id}`\n",
 	"serverinfo_embed_features": "**Vlastnosti:**\n{guild_features}\n",
-	"serverinfo_embed_region": "**Región:** {guild_region}\n",
+	"serverinfo_embed_region": "**Region:** {guild_region}\n",
 	"serverinfo_embed_verification": "**Level ověření:** {guild_verification}\n",
 	"serverinfo_embed_created": "**Vytvořen:** {guild_age}",
 
@@ -164,7 +164,7 @@
 
 	"uptime_uptime": "TBot běží již **{uptime}**",
 
-	"license_license": "📜 Tento bot je licensovaný pod licensí MIT, pro více informací klikni **[zde](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+	"license_license": "📜 Tento bot je licensovaný pod licencí MIT, pro více informací klikni **[zde](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
 
 	"privacy_policy": "📜 Zásady ochrany osobních údajů najdeš na **[here](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
 
@@ -186,7 +186,7 @@
 
 	"softban_success": "{emote_success} **{target_tag}** `({target_id})` byl soft-zabanován z důvodu **{reason}** `[#{infractionId}]`",
 
-	"deafen_already_deaf": "{emote_warn} Uživatel je již ztulemn!",
+	"deafen_already_deaf": "{emote_warn} Uživatel je již ztlumen!",
 	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` byl ztlumen z důvodu **{reason}** `[#{infractionId}]`",
 
 	"undeafen_not_deaf": "{emote_warn} Uživatel není ztlumen!",
