@@ -110,7 +110,7 @@
 	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
 	"userinfo_embed_created": "**Účet vytvořen:** {user_age}\n",
 	"userinfo_embed_joined": "**Připojil se:** {user_joined}\n",
-	"userinfo_embed_premium": "**Vylepšuje of:** {user_premium}\n",
+	"userinfo_embed_premium": "**Vylepšuje od:** {user_premium}\n",
 	"userinfo_embed_roles": "**Role:** {user_roles}\n",
 	"userinfo_embed_infractions": "\n**Přestupky:** {emote_inf} **{user_infractions}** přestupků na tomto serveru",
 
