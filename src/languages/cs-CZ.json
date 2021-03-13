@@ -25,23 +25,23 @@
 	"event_message_args_unexpected": "{emote_warn} Nečekaný argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Správné použití:** {usage}",
 	"event_message_args_missing": "{emote_warn} Chybí argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Správné použití:** {usage}",
 	"event_message_args_unexpected_list": "{emote_warn} Argument `{arg}` nebyl rozpoznán jako `{arg_expected}`.\n{emote_wrench} **Očekávané argumenty:** {usage}",
-	"event_message_args_missing_list": "{emote_warn} Chybí argument `{arg}`. Očekáváno argimentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Očekávané argumenty:** {usage}",
+	"event_message_args_missing_list": "{emote_warn} Chybí argument `{arg}`. Očekáváno argumentů `{arg_expected}` dostal jsem `{arg_provided}`\n{emote_wrench} **Očekávané argumenty:** {usage}",
 
 	"event_channel_create": "**Vytvořen kanál:** <#{channel_id}> `({channel_type})`",
 	"event_channel_delete": "**Kanál odstraněn:** #{channel_name} `({channel_id})` `({channel_type})`",
-	"event_channel_update_topic_added": "<#{channel_id}> temá kanálu přidáno `{channel_topic}`\n",
-	"event_channel_update_topic_removed": "<#{channel_id}> temá kanálu odebránp\n",
+	"event_channel_update_topic_added": "<#{channel_id}> téma kanálu přidáno `{channel_topic}`\n",
+	"event_channel_update_topic_removed": "<#{channel_id}> téma kanálu odebráno\n",
 	"event_channel_update_topic_updated": "<#{channel_id}> téma kanálu změněno z `{oldchannel_topic}` na `{newchannel_topic}`\n",
 	"event_channel_update_name": "<#{channel_id}> název změnen z `#{oldchannel_name}` na `#{newchannel_name}`\n",
 	"event_channel_update_type": "<#{channel_id}> typ zněmen z `{oldchannel_type}` na `{newchannel_type}`\n",
-	"event_channel_update_nsfw_enabled": "<#{channel_id}> NSFW byl `zapnut`\n",
-	"event_channel_update_nsfw_disabled": "<#{channel_id}> NSFW byl `vypnut`\n",
+	"event_channel_update_nsfw_enabled": "<#{channel_id}> NSFW režim byl `zapnut`\n",
+	"event_channel_update_nsfw_disabled": "<#{channel_id}> NSFW režim byl `vypnut`\n",
 
 	"event_member_joined": "{emote_join} **Nový uživatel:** **{user_tag}** `({user_id})` - **Účet vytvořen:** {user_age}",
 	"event_member_left": "{emote_leave} **Uživatel se odpojil:** **{user_tag}** `({user_id})`",
 
 	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` si změnil přezdívku z `{nick_old}` na `{nick_new}`",
-	"event_member_update_role_add": "{emote_warn} Role **{role}** byla přídaná **{user_tag}** `({user_id})`",
+	"event_member_update_role_add": "{emote_warn} Role **{role}** byla přidána **{user_tag}** `({user_id})`",
 	"event_member_update_role_remove": "{emote_warn} Role **{role}** byla odebrána **{user_tag}** `({user_id})`",
 	"event_member_update_role_add_audit": "{emote_warn} Role **{role}** byla přidána **{user_tag}** `({user_id})` moderátorem **{moderator_tag}** `({moderator_id})`",
 	"event_member_update_role_remove_audit": "{emote_warn} Role **{role}** byla odebrána **{user_tag}** `({user_id})` moderátorem **{moderator_tag}** `({moderator_id})`",
@@ -81,7 +81,7 @@
 	"override_enable_success": "{emote_success} Zapnut příkaz `{command}`",
 
 	"override_edit_invalid_part": "{emote_warn} Chybí argument `part`, který může být `role` nebo `command`",
-	"override_edit_missing_name": "{emote_warn} Chabí argument `role/command name`",
+	"override_edit_missing_name": "{emote_warn} Chybí argument `role/command name`",
 	"override_edit_missing_clearance": "{emote_warn} Chybí argument `clearance`",
 	"override_edit_non_number": "{emote_warn} `{clearance}` není platný level povolení",
 	"override_edit_less_than_0": "{emote_warn} Level povolení nesmí být menší než 0",
@@ -119,8 +119,8 @@
 	"serverinfo_embed_verification": "**Level ověření:** {guild_verification}\n",
 	"serverinfo_embed_created": "**Vytvořen:** {guild_age}",
 
-	"serverinfo_server_stats": "**Server statistiky**",
-	"serverinfo_channel_stats": "**Channel statistiky**",
+	"serverinfo_server_stats": "**Statistiky serveru**",
+	"serverinfo_channel_stats": "**Statistiky kanálu**",
 	"serverinfo_booster_stats": "**Statistiky vylepšení**",
 	"serverinfo_server_stats_total": "Celkem: **{guild_members}**/{guild_max}\n",
 	"serverinfo_server_stats_online": "{emote_online}: **{guild_online}**\n",
@@ -151,12 +151,12 @@
 	"kick_success": "{emote_success} **{target_tag}** `({target_id})` byl vyhozen z důvodu **{reason}** `[#{infractionId}]`",
 	"kick_fail": "{emote_warn} Nemohu vyhodit **{target_tag}** `({target_id})`",
 
-	"purge_too_many": "{emote_warn} Můžeš vymazat maximum 200 zpráv najednou",
+	"purge_too_many": "{emote_warn} Můžeš vymazat maximálně 200 zpráv najednou",
 	"purge_too_few": "{emote_warn} Nemůžeš vymazat méně jak 1 zprávu :confused: proč bys to vůbec dělal",
 
 	"verification_non_integer": "{emote_warn} Level musí být číslo",
 	"verification_community_zero": "{emote_warn} Level ověření nesmí být `0` pro komunitní servery!",
-	"verification_level_error": "{emote_warn} Level oveření nesmí bát větší jak `4` nebo menší jak `0`",
+	"verification_level_error": "{emote_warn} Level oveření nesmí být větší jak `4` nebo menší jak `0`",
 	"verification_level_success": "{emote_success} level ověření změněn na `{level}`",
 
 	"ping_latency": "Odezva bota je **{latency_bot}ms**\nOdezva WebSocketu je **{latency_ws}ms**",
@@ -194,7 +194,7 @@
 	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` byl vyhozen z hlasového kanálu z důvodu **{reason}** `[#{infractionId}]`",
 
 	"slowmode_invalid_0s": "{emote_warn} Pomalý režim nemůže být menší než **0 sekund**!",
-	"slowmode_invalid_6h": "{emote_warn} Pomalý režim neůže být delší než **6 hodin**!",
+	"slowmode_invalid_6h": "{emote_warn} Pomalý režim nemůže být delší než **6 hodin**!",
 
 	"slowmode_success_remove": "{emote_success} Odebrán pomalý režim z kanálu {channel}",
 	"slowmode_success": "{emote_success} Pomalý řezim v kanálu {channel} byl nastaven na **{slowmode}**",
