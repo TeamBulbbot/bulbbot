@@ -115,7 +115,7 @@ module.exports = class extends Event {
 		} catch (err) {
 			const embed = new Discord.MessageEmbed()
 				.setColor("RED")
-				.setTitle("New error")
+				.setTitle("New error | Message even")
 				.addField("Name", err.name, true)
 				.addField("Message", err.message, true)
 				.addField("String", err.toString(), true)
