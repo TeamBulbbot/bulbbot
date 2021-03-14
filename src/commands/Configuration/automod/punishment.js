@@ -44,5 +44,5 @@ module.exports = async (client, message, args) => {
 
 	await changePunishment(message.guild.id, part.toLowerCase(), punishment.toUpperCase());
 
-	message.channel.send(await client.bulbutils.translate("automod_updated_punishment", { part, limit }));
+	message.channel.send(await client.bulbutils.translate("automod_updated_punishment", { part, punishment }));
 };

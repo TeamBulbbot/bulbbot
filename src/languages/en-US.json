@@ -11,6 +11,7 @@
 	"global_no_reason": "No reason given",
 	"global_loading": "{emote_loading} Loading...",
 	"global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
+	"global_unknown_error": "{emote_warn} An unknown error has occurred, please try again later or if you are still experiencing this issue contact the developers",
 
 	"global_cannot_action_self": "{emote_warn} You cannot perform this action on yourself!",
 	"global_cannot_action_owner": "{emote_warn} You cannot perform this action on the server owner!",
