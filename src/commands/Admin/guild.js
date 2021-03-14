@@ -19,7 +19,7 @@ module.exports = class extends Command {
 	
 		switch (args[0].toLowerCase()) {
 			case "db-yeet":
-				await DeleteGuild(guild.id);
+				await DeleteGuild(args[1]);
 				message.channel.send("success deleted that guild from the database")
 				break;
 		
