@@ -16,13 +16,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		let guild;
-		try {
-			guild = await this.client.guilds.fetch(args[1]);
-		} catch (err) {
-			return message.channel.send("Could not fetch the specified guild!");
-		}
-
+	
 		switch (args[0].toLowerCase()) {
 			case "db-yeet":
 				await DeleteGuild(guild.id);
