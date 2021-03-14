@@ -16,8 +16,9 @@ module.exports = {
 		});
 
 		if (dbGuild === null) {
-			await CreateGuild(guild);
-			return global.config.prefix;
+			//await CreateGuild(guild);
+			// return global.config.prefix;
+			return false;
 		}
 		return dbGuild.guildConfiguration.prefix;
 	},

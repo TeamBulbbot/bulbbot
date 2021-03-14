@@ -8,6 +8,7 @@ module.exports = {
 	Master: async (client, message) => {
 		if (message === undefined || message.author.id === global.config.client.id) return;
 		const dbGuild = await AutoModUtils.getGuildAutoMod(message.guild.id);
+		if (dbGuild === null) return;
 
 		// TODO make a check if a user has > 25 clearance level and return
 		if (dbGuild.automod === null || !dbGuild.automod.enabled) return;
