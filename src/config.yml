@@ -30,6 +30,7 @@ server:
 supportInvite: "https://discord.gg/cacUmbQ" # support guild invite link
 
 # logs
-botDM: "761572579504160788"     # channel id for bot dms 
-invite: "771491209977528340"    # channel id for bot invites
-error: "810530397804953611"     # channel id for bot errors
+botDM: "761572579504160788"       # channel id for bot dms 
+invite: "771491209977528340"      # channel id for bot invites
+error: "810530397804953611"       # channel id for bot errors
+translation: "820689105854660699" # channel id for untranslated strings

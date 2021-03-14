@@ -32,6 +32,9 @@ module.exports = class BulbBotUtils {
 			try {
 				response = JSON.parse(JSON.stringify(lang))[string].toString();
 			} catch (err) {
+				
+				this.client.channels.cache.get(global.config.translation).send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``)
+			
 				lang = require(`./../languages/en-US.json`);
 				response = JSON.parse(JSON.stringify(lang))[string].toString();
 				//throw new TranslatorException(`${string} is not a valid translatable string`);
