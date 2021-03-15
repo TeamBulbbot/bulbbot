@@ -59,11 +59,11 @@ module.exports = class Util {
 				if (!(event instanceof Event)) throw new EventException(`Event '${name}' doesn't belong in Events.`);
 
 				this.client.events.set(event.name, event);
-				event.emitter[event.type](name, (...args) => {
+				event.emitter[event.type](name, async (...args) => {
 					try {
-						event.run(...args)
+						await event.run(...args)
 					} catch (err) {
-						this.client.bulbutils.log(err)
+						await this.client.bulbutils.log(err)
 					}
 
 					metrics.client_event(event.name);
