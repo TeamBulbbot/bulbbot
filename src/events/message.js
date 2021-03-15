@@ -54,13 +54,20 @@ module.exports = class extends Event {
 			if (commandOverride !== undefined) {
 				if (!commandOverride.enabled) return;
 
-				if (commandOverride.clearanceLevel > clearance) return;
+				if (commandOverride.clearanceLevel >= clearance) return;
 			}
 
 			global.userClearance = clearance;
 
+			if (command.clearance > clearance) {
+				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
+					message.delete({ timeout: 5000 });
+					msg.delete({ timeout: 5000 });
+				});
+			}
+
 			const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
-			if (userPermCheck) {
+			if (userPermCheck && clearance < command.clearance) {
 				const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
 
 				if (missing.length) {
