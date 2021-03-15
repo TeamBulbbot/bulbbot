@@ -1,6 +1,7 @@
 const BulbBotClient = require("./structures/BulbBotClient");
 const db = require("./utils/database/connection");
 const server = require("./utils/prometheus/server");
+const Discord = require("discord.js");
 require("./structures/Config");
 require("dotenv").config();
 

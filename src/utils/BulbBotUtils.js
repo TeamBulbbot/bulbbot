@@ -2,6 +2,7 @@ const { TranslatorException } = require("./../structures/exceptions/TranslatorEx
 const Emotes = require("./../Emotes.json");
 const moment = require("moment");
 const sequelize = require("./database/connection");
+const Discord = require("discord.js");
 
 module.exports = class BulbBotUtils {
 	constructor(client) {
@@ -488,5 +489,30 @@ module.exports = class BulbBotUtils {
 			default:
 				return false;
 		}
+	}
+
+	async log(err, message, channel = global.config.error) {
+		const embed = new Discord.MessageEmbed()
+			.setColor("RED")
+			.setTitle(`New error | ${err.name}`)
+			.addField("Name", err.name, true)
+			.addField("Message", err.message, true)
+			.addField("String", err.toString(), true)
+			.setDescription(
+				`
+				**Stack Trace**
+				\`\`\`${err.stack}\`\`\`		
+					`,
+			)
+			.setTimestamp();
+
+		if (message) {
+				embed.addField("Guild Id", message.guild.id, true)
+				.addField("User", `${message.author.tag} \`(${message.author.id})\``, true)
+				.addField("Message Content", message.content, true)
+
+			message.channel.send(await this.client.bulbutils.translate("global_unknown_error"))
+		}
+		this.client.channels.cache.get(channel).send(embed);
 	}
 };
