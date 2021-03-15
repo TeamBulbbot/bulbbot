@@ -107,9 +107,12 @@ module.exports = class extends Event {
 				);
 			}
 
-			command.run(message, args).catch(err => {
-				this.client.bulbutils.log(err, message)
-			});
+			try {
+				command.run(message, args)
+			} catch (err) {
+				await this.client.bulbutils.log(err, message)
+			}
+
 			client_command_usage(command.name);
 		}
 	}

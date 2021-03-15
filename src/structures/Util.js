@@ -60,9 +60,12 @@ module.exports = class Util {
 
 				this.client.events.set(event.name, event);
 				event.emitter[event.type](name, (...args) => {
-					event.run(...args).catch(err => {
+					try {
+						event.run(...args)
+					} catch (err) {
 						this.client.bulbutils.log(err)
-					});
+					}
+
 					metrics.client_event(event.name);
 				});
 				console.log(`Successfully registered event '${event.name}'`);
