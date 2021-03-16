@@ -28,7 +28,7 @@ module.exports = async (client, message, args) => {
 			const command = client.commands.get(name.toLowerCase()) || client.commands.get(client.aliases.get(name.toLowerCase()));
 			if (command === undefined) return message.channel.send(await client.bulbutils.translate("override_create_invalid_command", { command: name }));
 
-			await CreateCommandOverride(message.guild.id, name, true, clearance);
+			await CreateCommandOverride(message.guild.id, command.name, true, clearance);
 			break;
 		default:
 			break;

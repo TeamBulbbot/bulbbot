@@ -16,7 +16,8 @@ module.exports = async (client, message, args) => {
 			break;
 
 		case "command":
-			if (!(await RemoveCommandOverride(message.guild.id, name)))
+			const cTemp = client.commands.get(name.toLowerCase()) || client.commands.get(client.aliases.get(name.toLowerCase()));
+			if (!cTemp || !(await RemoveCommandOverride(message.guild.id, cTemp.name)))
 				return message.channel.send(await client.bulbutils.translate("override_remove_non_existent_override_command"));
 			break;
 		default:

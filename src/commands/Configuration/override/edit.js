@@ -30,7 +30,7 @@ module.exports = async (client, message, args) => {
 			const command = client.commands.get(name.toLowerCase()) || client.commands.get(client.aliases.get(name.toLowerCase()));
 			if (command === undefined) return message.channel.send(await client.bulbutils.translate("override_edit_invalid_command", { command: name }));
 
-			if (!(await EditCommand(message.guild.id, name, clearance)))
+			if (!(await EditCommand(message.guild.id, command.name, clearance)))
 				return message.channel.send(await client.bulbutils.translate("override_edit_non_existent_override_command"));
 
 			break;

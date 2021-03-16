@@ -6,7 +6,7 @@ module.exports = async (client, message, args) => {
 	const cTemp = client.commands.get(command.toLowerCase()) || client.commands.get(client.aliases.get(command.toLowerCase()));
 	if (cTemp === undefined) return message.channel.send(await client.bulbutils.translate("override_disable_invalid_command", { command }));
 
-	DisableCommand(message.guild.id, cTemp);
+	await DisableCommand(message.guild.id, cTemp);
 
 	message.channel.send(await client.bulbutils.translate("override_disable_success", { command }));
 };

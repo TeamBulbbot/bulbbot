@@ -52,10 +52,9 @@ module.exports = class extends Event {
 			if (userClearance > clearance) clearance = userClearance;
 
 			if (commandOverride !== undefined) {
-				console.log(commandOverride.clearanceLevel)
 				if (!commandOverride.enabled) return;
 
-				if (commandOverride.clearanceLevel >= clearance) {
+				if (commandOverride.clearanceLevel > clearance) {
 					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
 						message.delete({ timeout: 5000 });
 						msg.delete({ timeout: 5000 });
@@ -64,8 +63,6 @@ module.exports = class extends Event {
 			}
 
 			global.userClearance = clearance;
-
-			console.log([command.clearance, clearance])
 
 			if (command.clearance > clearance && !commandOverride) {
 				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
