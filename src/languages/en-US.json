@@ -252,6 +252,8 @@
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n",
 
+	"commands_help": "You can find all the commands BulbBot offers at our [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/Command%20List.md)",
+
 	"action_warn": "warned",
 	"action_mute": "muted",
 	"action_unmute": "unmuted",
