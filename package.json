@@ -22,7 +22,6 @@
 		"discord.js-pagination": "^1.0.3",
 		"dotenv": "^8.2.0",
 		"emoji-unicode": "^2.0.1",
-		"jimp": "^0.16.1",
 		"js-yaml": "^3.14.1",
 		"moment": "^2.29.1",
 		"parse-duration": "^0.4.4",
@@ -30,6 +29,7 @@
 		"pg-hstore": "^2.3.3",
 		"prom-client": "^13.0.0",
 		"sequelize": "^6.3.5",
+		"sharp": "^0.27.2",
 		"shelljs": "^0.8.4",
 		"unicode": "^12.1.0",
 		"winston": "^3.3.3"

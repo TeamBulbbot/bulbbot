@@ -1,7 +1,7 @@
 const { createInfraction } = require("../InfractionUtils");
 const { SendModAction, SendModActionTemp, SendAutoUnban } = require("./log");
-const utils = require("../BulbBotUtils")
-const Utils = new utils()
+const utils = require("../BulbBotUtils");
+const Utils = new utils();
 
 module.exports = {
 	Warn: async (client, guild, target, moderator, reason, reasonLog) => {
