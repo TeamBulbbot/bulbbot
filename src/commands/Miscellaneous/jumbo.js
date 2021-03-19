@@ -65,14 +65,40 @@ module.exports = class extends Command {
 						console.error(err);
 					});
 
-				imgPath.push({
-					input: `src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`,
-					gravity: "southeast",
-					top: size,
-					left: size * i,
-					density: 2400,
-					premultiplied: true,
-				});
+				try {
+					imgPath.push({
+						input: `src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`,
+						gravity: "southeast",
+						top: size,
+						left: size * i,
+						density: 2400,
+						premultiplied: true,
+					});
+				} catch (error) {
+					if (CustomEmote.test(emote)) throw error;
+
+					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ").join("-").split("-fe0f").join("")}.svg`;
+					await axios
+						.get(url, { responseType: "arraybuffer" })
+						.then(async res => {
+							return await sharp(res.data, { density: 2400 })
+								.png()
+								.resize(size, size)
+								.toFile(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
+						})
+						.catch(err => {
+							console.error(err);
+						});
+
+					imgPath.push({
+						input: `src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`,
+						gravity: "southeast",
+						top: size,
+						left: size * i,
+						density: 2400,
+						premultiplied: true,
+					});
+				}
 			}
 
 			await sharp(`src/files/jumbo/${message.author.id}-${message.guild.id}.png`)
