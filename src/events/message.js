@@ -120,9 +120,9 @@ module.exports = class extends Event {
 			}
 
 			try {
-				await command.run(message, args).catch()
+				await command.run(message, args).catch();
 			} catch (error) {
-				await this.client.bulbutils.log(error, message)
+				await this.client.bulbutils.log(error, message);
 			}
 
 			client_command_usage(command.name);

@@ -2,8 +2,18 @@ const BulbBotClient = require("./structures/BulbBotClient");
 const db = require("./utils/database/connection");
 const server = require("./utils/prometheus/server");
 const Discord = require("discord.js");
+
+// Logging (DO NOT REMOVE)
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
+
 require("./structures/Config");
 require("dotenv").config();
+
+Sentry.init({
+	dsn: process.env.SENTRY_DSN,
+	tracesSampleRate: 1.0,
+});
 
 const config = {
 	token: process.env.TOKEN,

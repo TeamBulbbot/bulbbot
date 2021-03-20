@@ -3,6 +3,8 @@ const Emotes = require("./../Emotes.json");
 const moment = require("moment");
 const sequelize = require("./database/connection");
 const Discord = require("discord.js");
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
 
 module.exports = class BulbBotUtils {
 	constructor(client) {
@@ -33,9 +35,10 @@ module.exports = class BulbBotUtils {
 			try {
 				response = JSON.parse(JSON.stringify(lang))[string].toString();
 			} catch (err) {
-				
-				this.client.channels.cache.get(global.config.translation).send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``)
-			
+				this.client.channels.cache
+					.get(global.config.translation)
+					.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
+
 				lang = require(`./../languages/en-US.json`);
 				response = JSON.parse(JSON.stringify(lang))[string].toString();
 				//throw new TranslatorException(`${string} is not a valid translatable string`);
@@ -492,6 +495,11 @@ module.exports = class BulbBotUtils {
 	}
 
 	async log(err, message, channel = global.config.error) {
+		message.channel.send(await this.client.bulbutils.translate("global_unknown_error"));
+
+		if (process.env.ENVIRONMENT === "dev") return;
+		Sentry.captureException(err);
+
 		const embed = new Discord.MessageEmbed()
 			.setColor("RED")
 			.setTitle(`New error | ${err.name}`)
@@ -507,11 +515,10 @@ module.exports = class BulbBotUtils {
 			.setTimestamp();
 
 		if (message) {
-				embed.addField("Guild Id", message.guild.id, true)
+			embed
+				.addField("Guild Id", message.guild.id, true)
 				.addField("User", `${message.author.tag} \`(${message.author.id})\``, true)
-				.addField("Message Content", message.content, true)
-
-			message.channel.send(await this.client.bulbutils.translate("global_unknown_error"))
+				.addField("Message Content", message.content, true);
 		}
 		this.client.channels.cache.get(channel).send(embed);
 	}

@@ -61,9 +61,9 @@ module.exports = class Util {
 				this.client.events.set(event.name, event);
 				event.emitter[event.type](name, async (...args) => {
 					try {
-						await event.run(...args)
+						await event.run(...args);
 					} catch (err) {
-						await this.client.bulbutils.log(err)
+						await this.client.bulbutils.log(err);
 					}
 
 					metrics.client_event(event.name);
