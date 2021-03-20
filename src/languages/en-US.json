@@ -121,6 +121,8 @@
 
 	"help_command_not_found": "Unable to find any commands with that name",
 
+	"jumbo_invalid_emoji": "{emote_warn} Invalid emoji, please use a valid emoji",
+
 	"userinfo_embed_id": "**ID:** {user_id}\n",
 	"userinfo_embed_username": "**Username:** {user_name}\n",
 	"userinfo_embed_nickname": "**Nickname:** {user_nickname}\n",
