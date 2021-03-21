@@ -20,5 +20,8 @@ module.exports = sequelize => {
 			defaultValue: false,
 			allowNull: false,
 		},
+		autorole: {
+			type: DataTypes.STRING
+		}
 	});
 };

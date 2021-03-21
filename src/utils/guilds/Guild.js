@@ -54,4 +54,12 @@ module.exports = {
 		await DeleteGuild(guild.id);
 		await CreateGuild(guild);
 	},
+
+	async getAutoRole(guild) {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId: guild.id },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+		return dbGuild.guildConfiguration.autorole;
+	}
 };

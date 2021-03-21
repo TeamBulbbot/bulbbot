@@ -62,6 +62,8 @@
 	"config_prefix_success": "{emote_success} Successfully updated the prefix to `{prefix}`",
 	"config_prefix_missing_args": "{emote_warn} Missing required argument `prefix`",
 
+	"config_autorole_success": "{emote_success} Successfully changed the autorole",
+
 	"override_create_invalid_part": "{emote_warn} Missing required argument `part`, can be either `role` or `command`",
 	"override_create_missing_name": "{emote_warn} Missing required argument `role/command name`",
 	"override_create_missing_clearance": "{emote_warn} Missing required argument `clearance`",

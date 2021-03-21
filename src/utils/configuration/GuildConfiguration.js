@@ -30,4 +30,14 @@ module.exports = {
 		dbGuild.guildConfiguration.muteRole = muteRoleId;
 		await dbGuild.guildConfiguration.save();
 	},
+
+	ChangeAutoRole: async(guildId, autoRoleID) => {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+
+		dbGuild.guildConfiguration.autorole = autoRoleID;
+		await dbGuild.guildConfiguration.save()
+	}
 };

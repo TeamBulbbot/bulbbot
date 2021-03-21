@@ -497,7 +497,7 @@ module.exports = class BulbBotUtils {
 	async log(err, message, channel = global.config.error) {
 		if (message) message.channel.send(await this.client.bulbutils.translate("global_unknown_error"));
 
-		if (process.env.ENVIRONMENT === "dev") console.error(err);
+		if (process.env.ENVIRONMENT === "dev") return console.error(err);
 		Sentry.captureException(err);
 
 		const embed = new Discord.MessageEmbed()

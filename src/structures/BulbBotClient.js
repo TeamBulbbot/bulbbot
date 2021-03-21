@@ -1,4 +1,4 @@
-const { Client, Collection, Permissions } = require("discord.js");
+const { Client, Collection, Permissions, Structures } = require("discord.js");
 const Util = require("./Util");
 const BulbBotUtils = require("./../utils/BulbBotUtils");
 
@@ -20,6 +20,23 @@ module.exports = class BulbBotClient extends Client {
 		this.utils = new Util(this);
 
 		this.bulbutils = new BulbBotUtils(this);
+
+		Structures.extend('GuildMember', GuildMember => {
+			class GuildMemberWithPending extends GuildMember {
+				pending = false;
+
+				constructor(client, data, guild) {
+					super(client, data, guild);
+					this.pending = data.pending || false;
+				}
+
+				_patch(data) {
+					super._patch(data);
+					this.pending = data.pending || false;
+				}
+			}
+			return GuildMemberWithPending;
+		});
 	}
 
 	validate(options) {

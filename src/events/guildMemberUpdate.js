@@ -1,6 +1,7 @@
 const Event = require("../structures/Event");
 const { SendEventLog } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
+const { getAutoRole } = require("../utils/guilds/Guild");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -8,6 +9,8 @@ module.exports = class extends Event {
 	}
 
 	async run(oldMember, newMember) {
+		if (oldMember.pending && !newMember.pending) newMember.roles.add(newMember.guild.roles.cache.get(await getAutoRole(newMember.guild)))
+
 		let change = "";
 
 		if (oldMember._roles.length !== newMember._roles.length)
