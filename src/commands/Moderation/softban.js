@@ -25,12 +25,12 @@ module.exports = class extends Command {
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
 
 		const banList = await message.guild.fetchBans();
 		const bannedUser = banList.find(user => user.user.id === targetId);
 
-		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
 
 		if (bannedUser) {

@@ -286,7 +286,7 @@ module.exports = {
 		if (!part) {
 			db.automod.enabled = false;
 			await db.automod.save();
-		} else DisablePart(db, part);
+		} else await DisablePart(db, part);
 	},
 };
 
