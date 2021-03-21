@@ -20,6 +20,8 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		try {
+			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many"));
+
 			const size = 250;
 			const imgPath = [];
 
@@ -43,7 +45,7 @@ module.exports = class extends Command {
 				emote = emote.match(CustomEmote);
 
 				if (emote === null) {
-					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ")[0]}.svg`;
+					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ").join("-")}.svg`;
 				} else {
 					emote = emote[0].substring(1).slice(0, -1);
 					emote = emote.match(GetEverythingAfterColon);
