@@ -122,6 +122,7 @@
 	"help_command_not_found": "Unable to find any commands with that name",
 
 	"jumbo_invalid_emoji": "{emote_warn} Invalid emoji, please use a valid emoji",
+	"jumbo_too_many": "{emote_warn} Too many emoji, the bot currently only supports a max of 10 emojis at a time",
 
 	"userinfo_embed_id": "**ID:** {user_id}\n",
 	"userinfo_embed_username": "**Username:** {user_name}\n",
