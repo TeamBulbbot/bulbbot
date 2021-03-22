@@ -272,5 +272,27 @@
 	"action_unban_auto": "automatically unbanned",
 	"action_deafen": "deafened",
 	"action_undeafen": "undeafened",
-	"action_kick_voice": "voice-kicked"
+	"action_kick_voice": "voice-kicked",
+	
+	"8ball_question_not_defined": "You need to ask a question to the 8ball",
+	"8ball_response_one": "It is certain.",
+	"8ball_response_two": "It is decidedly so.",
+	"8ball_response_three": "Without a doubt",
+	"8ball_response_four": "Yes - definitely.",
+	"8ball_response_five": "You may rely on it.",
+	"8ball_response_six": "As I see it, yes.",
+	"8ball_response_seven": "Most likely.",
+	"8ball_response_eight": "Outlook good.",
+	"8ball_response_nine": "Yes.",
+	"8ball_response_ten": "Signs point to yes.",
+	"8ball_response_eleven": "Reply hazy, try again.",
+	"8ball_response_twelve": "Ask again later.",
+	"8ball_response_thirteen": "Better not tell you now.",
+	"8ball_response_fourteen": "Cannot predict now.",
+	"8ball_response_fifteen": "Concentrate and ask again.",
+	"8ball_response_sixteen": "Don't count on it.",
+	"8ball_response_seventeen": "My reply is no.",
+	"8ball_response_eighteen": "My sources say no.",
+	"8ball_response_nineteen": "Outlook not so good.",
+	"8ball_response_twenty": "Very doubtful."
 }
