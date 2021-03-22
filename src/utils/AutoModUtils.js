@@ -251,7 +251,7 @@ module.exports = {
 				break;
 
 			case "words_token":
-				if (!db.automod.wordBlacklist.includes(item)) return 1;
+				if (!db.automod.wordBlacklistToken.includes(item)) return 1;
 
 				db.automod.changed("wordBlacklistToken", true);
 				db.automod.wordBlacklist = removeItemOnce(db.automod.wordBlacklistToken, item);
