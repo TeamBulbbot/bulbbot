@@ -75,6 +75,12 @@ async function hasInvite(message, dbGuild) {
 async function hasSwearWords(message, dbGuild) {
 	const word_blacklist = dbGuild.wordBlacklist;
 	for (const word of word_blacklist) {
+		const regex = new RegExp(`(?:^|\\W)${word}(?:$|\\W)`, "gi");
+		if (message.content.match(regex)) return true;
+	}
+
+	const word_blacklist_token = dbGuild.wordBlacklistToken;
+	for (const word of word_blacklist_token) {
 		const regex = new RegExp(`(${word})`, "gi");
 		if (message.content.match(regex)) return true;
 	}

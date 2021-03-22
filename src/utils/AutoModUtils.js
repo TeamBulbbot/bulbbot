@@ -1,6 +1,6 @@
 const sequelize = require("../utils/database/connection");
 const AutoModException = require("../structures/exceptions/AutoModException");
-const { Warn, Kick, Ban } = require("../utils/moderation/actions");
+const { Warn, Kick, CleanBan } = require("../utils/moderation/actions");
 
 module.exports = {
 	resolveAction: async (client, message, action, reason) => {
@@ -51,7 +51,7 @@ module.exports = {
 				);
 				break;
 			case "BAN":
-				await Ban(
+				await CleanBan(
 					client,
 					message.guild,
 					target.user,
@@ -65,6 +65,7 @@ module.exports = {
 						reason,
 					}),
 					reason,
+					7
 				);
 				break;
 			default:
@@ -187,6 +188,13 @@ module.exports = {
 				db.automod.changed("wordBlacklist", true);
 				db.automod.wordBlacklist.push(item);
 				break;
+
+			case "words_token":
+				if (db.automod.wordBlacklist.includes(item)) return 1;
+
+				db.automod.changed("wordBlacklistToken", true);
+				db.automod.wordBlacklistToken.push(item);
+				break;
 			default:
 				return -1;
 		}
@@ -239,7 +247,14 @@ module.exports = {
 				if (!db.automod.wordBlacklist.includes(item)) return 1;
 
 				db.automod.changed("wordBlacklist", true);
-				db.automod.wordBlacklist = removeItemOnce(db.automod.websiteWhitelist, item);
+				db.automod.wordBlacklist = removeItemOnce(db.automod.wordBlacklist, item);
+				break;
+
+			case "words_token":
+				if (!db.automod.wordBlacklist.includes(item)) return 1;
+
+				db.automod.changed("wordBlacklistToken", true);
+				db.automod.wordBlacklist = removeItemOnce(db.automod.wordBlacklistToken, item);
 				break;
 			default:
 				return -1;

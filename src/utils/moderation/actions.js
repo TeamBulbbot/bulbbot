@@ -86,6 +86,16 @@ module.exports = {
 		return infId;
 	},
 
+	CleanBan: async (client, guild, target, moderator, reason, reasonLog, days) => {
+		reason = await reason;
+		await guild.member(target.id).ban({ reason, days });
+
+		const infId = await createInfraction(guild.id, "Softban", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
+		await SendModAction(client, guild, await Utils.translate("action_ban_soft"), target, moderator, reasonLog, infId);
+
+		return infId;
+	},
+
 	Unban: async (client, guild, target, moderator, reason, reasonLog) => {
 		reason = await reason;
 		await guild.members.unban(target.id, reason);

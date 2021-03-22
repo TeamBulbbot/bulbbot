@@ -24,12 +24,12 @@ module.exports = async (client, message, args) => {
 			}),
 		);
 
-	if (!["website", "invites", "words"].includes(part.toLowerCase()))
+	if (!["website", "invites", "words", "words_token"].includes(part.toLowerCase()))
 		return message.channel.send(
 			await client.bulbutils.translate("event_message_args_unexpected_list", {
 				arg: item,
 				arg_expected: "part:string",
-				usage: "`website`, `invites` or `words`",
+				usage: "`website`, `invites`, `words` or `words_token`",
 			}),
 		);
 

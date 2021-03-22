@@ -26,6 +26,10 @@ module.exports = sequelize => {
 				type: DataTypes.ARRAY(DataTypes.STRING),
 				defaultValue: [],
 			},
+			wordBlacklistToken: {
+				type: DataTypes.ARRAY(DataTypes.STRING),
+				defaultValue: [],
+			},
 			punishmentWords: {
 				type: DataTypes.STRING,
 			},

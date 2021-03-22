@@ -14,12 +14,12 @@ module.exports = async (client, message, args) => {
 		);
 
 	if (!item) return message.channel.send(await client.bulbutils.translate("automod_missing_item_remove"));
-	if (!["website", "invites", "words"].includes(part.toLowerCase()))
+	if (!["website", "invites", "words", "words_token"].includes(part.toLowerCase()))
 		return message.channel.send(
 			await client.bulbutils.translate("automod_missing_punishment", {
 				arg: part,
 				arg_expected: "part:string",
-				usage: "`website`, `invites` or `words`",
+				usage: "`website`, `invites`, `words` or `words_token`",
 			}),
 		);
 
