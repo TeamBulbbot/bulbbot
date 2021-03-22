@@ -17,31 +17,33 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		if (!args[0]) {
-            message.channel.send("You didn't ask a question");
+            message.channel.send(await this.client.bulbutils.translate("8ball_question_not_defined");
             return;
         }
 
         const responses = [
-            "It is certain.",
-            "It is decidedly so.",
-            "Without a doubt",
-            "Yes - definitely.",
-            "You may rely on it.",
-            "As I see it, yes.",
-            "Most likely.",
-            "Outlook good.",
-            "Yes.",
-            "Signs point to yes.",
-            "Reply hazy, try again.",
-            "Ask again later.",
-            "Better not tell you now.",
-            "Cannot predict now.",
-            "Concentrate and ask again.",
-            "Don't count on it.",
-            "My reply is no.",
-            "My sources say no.",
-            "Outlook not so good.",
-            "Very doubtful."
+            await this.client.bulbutils.transalate("8ball_response_one"),
+		    await this.client.bulbutils.transalate("8ball_response_one"),
+		    await this.client.bulbutils.transalate("8ball_response_two"),
+		    await this.client.bulbutils.transalate("8ball_response_three"),
+		    await this.client.bulbutils.transalate("8ball_response_four"),
+		    await this.client.bulbutils.transalate("8ball_response_five"),
+		    await this.client.bulbutils.transalate("8ball_response_six"),
+		    await this.client.bulbutils.transalate("8ball_response_seven"),
+		    await this.client.bulbutils.transalate("8ball_response_eight"),
+		    await this.client.bulbutils.transalate("8ball_response_nine"),
+		    await this.client.bulbutils.transalate("8ball_response_ten"),
+		    await this.client.bulbutils.transalate("8ball_response_eleven"),
+		    await this.client.bulbutils.transalate("8ball_response_twelve"),
+		    await this.client.bulbutils.transalate("8ball_response_thirteen"),
+		    await this.client.bulbutils.transalate("8ball_response_fourteen"),
+		    await this.client.bulbutils.transalate("8ball_response_fifteen"),
+		    await this.client.bulbutils.transalate("8ball_response_sixteen"),
+		    await this.client.bulbutils.transalate("8ball_response_seventeen"),
+		    await this.client.bulbutils.transalate("8ball_response_eighteen"),
+		    await this.client.bulbutils.transalate("8ball_response_nineteen"),
+		    await this.client.bulbutils.transalate("8ball_response_twenty"),
+		    await this.client.bulbutils.transalate("8ball_response_twentyone")
         ];
 
         const answer = responses[Math.floor(Math.random() * responses.length)];
