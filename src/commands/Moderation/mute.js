@@ -17,6 +17,7 @@ module.exports = class extends Command {
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,
+			clientPerms: ["MANAGE_ROLES"],
 		});
 	}
 	async run(message, args) {
@@ -27,7 +28,7 @@ module.exports = class extends Command {
 		let reason = args.slice(2).join(" ");
 		let infId = null;
 
-		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
 		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found"));
