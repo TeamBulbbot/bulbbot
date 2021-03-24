@@ -133,7 +133,7 @@
 	"userinfo_embed_avatar": "**Avatar URL:** [Link]({user_avatar})\n",
 	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
 	"userinfo_embed_created": "**Account Creation:** {user_age}\n",
-	"userinfo_embed_joined": "**Joined Guild:** {user_joined}\n",
+	"userinfo_embed_joined": "**Joined Server:** {user_joined}\n",
 	"userinfo_embed_premium": "**Boosting since:** {user_premium}\n",
 	"userinfo_embed_roles": "**Roles:** {user_roles}\n",
 	"userinfo_embed_infractions": "\n**Infractions:** {emote_inf} **{user_infractions}** infraction(s) on this server",
@@ -196,7 +196,7 @@
 
 	"invite_desc": "**Invite the bot to your server**\n{bot_invite}\n\n**Join the support server**\n{support_guild}",
 
-	"inviteinfo_error": "{emote_warn} Unable to find a guild with that invite",
+	"inviteinfo_error": "{emote_warn} Unable to find a server with that invite",
 
 	"multiban_success": "{emote_success} {full_list} have been banned for **{reason}**",
 
@@ -231,7 +231,7 @@
 	"lockdown_locked": "{emote_success} Successfully locked down channel {channel}",
 	"lockdown_unlocked": "{emote_success} Successfully unlocked channel {channel}",
 
-	"mute_muterole_not_found": "{emote_warn} This guild does not have a mute role configured!\n{emote_wrench} **Tip:** You can configure the mute role using the `!configure mute_role` command",
+	"mute_muterole_not_found": "{emote_warn} This server does not have a mute role configured!\n{emote_wrench} **Tip:** You can configure the mute role using the `!configure mute_role` command",
 	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 	"mute_not_muted": "{emote_warn} The specified user is not currently muted!",
 	"mute_already_muted": "{emote_warn} The specified user is already muted!",
@@ -249,7 +249,7 @@
 	"infraction_info_active": "**Active:** {emoji}",
 	"infraction_info_expires": "**Expires:** {timestamp}",
 	"infraction_info_reason": "\n\n**Reason:** {reason}",
-	"infraction_list_not_found": "{emote_warn} This guild does not seem to have any infractions!",
+	"infraction_list_not_found": "{emote_warn} This server does not seem to have any infractions!",
 	"infraction_claim_success": "{emote_success} You have claimed responsibility over infraction **#{infractionId}**",
 	"infraction_update_success": "{emote_success} Infraction **#{infractionId}** has been updated!",
 	"infraction_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
