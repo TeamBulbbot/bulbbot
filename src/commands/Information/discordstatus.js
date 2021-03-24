@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			category: "Information",
 			aliases: ["dstatus"],
 			usage: "!discordstatus",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

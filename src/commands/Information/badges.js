@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Returns the amount of badges in the server",
 			category: "Bot",
 			usage: "!badges",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

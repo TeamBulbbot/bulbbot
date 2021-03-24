@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			category: "Bot",
 			aliases: ["support"],
 			usage: "!invite",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

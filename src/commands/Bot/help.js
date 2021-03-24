@@ -10,6 +10,7 @@ module.exports = class extends Command {
 			examples: ["help ping"],
 			minArgs: 1,
 			maxArgs: -1,
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

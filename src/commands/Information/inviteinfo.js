@@ -13,6 +13,7 @@ module.exports = class extends Command {
 			argList: ["invitecode:string"],
 			minArgs: 1,
 			maxArgs: -1,
+			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 		});
 	}
 

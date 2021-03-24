@@ -13,6 +13,7 @@ module.exports = class extends Command {
 			maxArgs: -1,
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

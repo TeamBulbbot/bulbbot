@@ -16,7 +16,7 @@ module.exports = class extends Command {
 			maxArgs: -1,
 			clearance: 50,
 			userPerms: ["MANAGE_MESSAGES"],
-			clientPerms: ["MANAGE_MESSAGES"],
+			clientPerms: ["MANAGE_MESSAGES", "ATTACH_FILES"],
 		});
 	}
 

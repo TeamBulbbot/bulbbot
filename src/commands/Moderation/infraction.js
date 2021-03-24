@@ -12,6 +12,7 @@ module.exports = class extends Command {
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["action:string"],
+			clientPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"],
 		});
 	}
 

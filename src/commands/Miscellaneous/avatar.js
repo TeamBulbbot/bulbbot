@@ -11,6 +11,7 @@ module.exports = class extends Command {
 			examples: ["avatar", "avatar 190160914765316096", "avatar @mrphilip#0001"],
 			argList: ["user:User"],
 			maxArgs: 1,
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

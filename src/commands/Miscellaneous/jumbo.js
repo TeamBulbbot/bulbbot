@@ -15,6 +15,7 @@ module.exports = class extends Command {
 			argList: ["emote:Emote"],
 			minArgs: 1,
 			maxArgs: -1,
+			clientPerms: ["ATTACH_FILES"],
 		});
 	}
 

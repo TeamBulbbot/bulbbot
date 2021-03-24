@@ -13,6 +13,7 @@ module.exports = class extends Command {
 			examples: ["userinfo", "userinfo 190160914765316096", "userinfo @mrphilip#0001"],
 			clearance: 50,
 			maxArgs: 1,
+			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 		});
 	}
 

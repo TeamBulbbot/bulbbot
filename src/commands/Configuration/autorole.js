@@ -14,6 +14,7 @@ module.exports = class extends Command {
 			maxArgs: 1,
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
+			clientPerms: ["MANAGE_ROLES"],
 			premium: true,
 		});
 	}
@@ -25,6 +26,6 @@ module.exports = class extends Command {
 			return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage"));
 
 		await ChangeAutoRole(message.guild.id, role.id);
-		message.channel.send(await this.client.bulbutils.translate("config_autorole_success"))
+		message.channel.send(await this.client.bulbutils.translate("config_autorole_success"));
 	}
 };

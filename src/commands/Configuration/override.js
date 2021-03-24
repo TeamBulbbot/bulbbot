@@ -13,6 +13,7 @@ module.exports = class extends Command {
 			maxArgs: -1,
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
@@ -51,11 +52,13 @@ module.exports = class extends Command {
 				await require("./override/list")(this.client, message, args);
 				break;
 			default:
-				message.channel.send(await this.client.bulbutils.translate("event_message_args_unexpected_list", {
-					arg: args[0].toLowerCase(),
-					arg_expected: "action:string",
-					usage: "`add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
-				}));
+				message.channel.send(
+					await this.client.bulbutils.translate("event_message_args_unexpected_list", {
+						arg: args[0].toLowerCase(),
+						arg_expected: "action:string",
+						usage: "`add|create`, `delete|remove`, `cfg|edit`, `enable`, `disable`, `list`",
+					}),
+				);
 				break;
 		}
 	}

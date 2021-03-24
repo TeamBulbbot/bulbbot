@@ -5,7 +5,6 @@ const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");
 const GetGuildOverrideForCommand = require("../utils/clearance/commands/GetGuildOverrideForCommand");
 const UserClearance = require("../utils/clearance/user/UserClearance");
-const Discord = require("discord.js");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -85,12 +84,13 @@ module.exports = class extends Event {
 
 			const clientPermCheck = command.clientPerms;
 			if (clientPermCheck) {
-				const missing = message.guild.me.hasPermission(clientPermCheck);
+				let missing = !message.guild.me.hasPermission(clientPermCheck);
+				if (!missing) missing = !message.guild.me.permissionsIn(message.channel).has(clientPermCheck);
 
-				if (!missing)
+				if (missing)
 					return message.channel.send(
 						await this.client.bulbutils.translate("global_missing_permission_bot", {
-							missing: clientPermCheck.toArray().join(", "),
+							missing: clientPermCheck.toArray().map(perm => `\`${perm}\` `),
 						}),
 					);
 			}

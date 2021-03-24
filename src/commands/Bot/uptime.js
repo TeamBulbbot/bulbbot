@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			description: "Return the current uptime of the bot",
 			category: "Bot",
 			usage: "!uptime",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

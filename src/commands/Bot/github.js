@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			category: "Bot",
 			aliases: ["code", "sourcecode"],
 			usage: "!github",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

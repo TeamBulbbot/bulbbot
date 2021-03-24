@@ -10,6 +10,7 @@ module.exports = class extends Command {
 			usage: "!serverinfo",
 			userPerms: ["MANAGE_GUILD"],
 			clearance: 50,
+			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 		});
 	}
 

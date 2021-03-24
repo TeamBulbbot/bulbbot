@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			description: "Returns a help article",
 			category: "Bot",
 			usage: "!commands",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
@@ -23,6 +24,6 @@ module.exports = class extends Command {
 			)
 			.setTimestamp();
 
-		message.channel.send(embed)
+		message.channel.send(embed);
 	}
 };

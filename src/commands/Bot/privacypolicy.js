@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			description: "Returns the privacy policy for the bot",
 			category: "Bot",
 			usage: "!privacypolicy",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

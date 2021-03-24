@@ -12,6 +12,7 @@ module.exports = class extends Command {
 			usage: "!settings",
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 

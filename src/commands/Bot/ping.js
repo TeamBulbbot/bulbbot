@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			description: "Return the Websocket and API latency",
 			category: "Bot",
 			usage: "!ping",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
