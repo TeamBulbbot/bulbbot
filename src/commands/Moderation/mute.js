@@ -28,11 +28,11 @@ module.exports = class extends Command {
 		let reason = args.slice(2).join(" ");
 		let infId = null;
 
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
 		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found"));
-		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
 		if (target.roles.cache.find(role => role.id === muteRole))
 			return message.channel.send(await this.client.bulbutils.translate("mute_already_muted"));
 		if (duration < parse("0s") || duration === null) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s"));
