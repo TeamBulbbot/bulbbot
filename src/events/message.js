@@ -28,7 +28,11 @@ module.exports = class extends Event {
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 
 		// auto mod
-		await AutoMod.Master(this.client, message);
+		try {
+			await AutoMod.Master(this.client, message);
+		} catch (err) {
+
+		}
 
 		if (message.content.match(mentionRegex)) return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
 		if (!message.content.startsWith(this.client.prefix)) return;
