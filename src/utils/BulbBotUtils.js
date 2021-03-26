@@ -29,8 +29,8 @@ module.exports = class BulbBotUtils {
 				where: { guildId: global.currentGuildId },
 				include: [{ model: sequelize.models.guildConfiguration }],
 			});
-
-			lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+			if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
+			else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
 
 			try {
 				response = JSON.parse(JSON.stringify(lang))[string].toString();

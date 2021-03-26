@@ -10,6 +10,7 @@ module.exports = class extends Event {
 	async run(member) {
 		// TODO
 		// make a check if the user was kicked or left from the guild
+
 		await SendEventLog(
 			this.client,
 			member.guild,
