@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node src/index.js",
 		"dev": "nodemon",
-		"pm2-start": "pm2 start src/index.js --watch --log ./logs/ --time --name bulbbot",
+		"pm2-start": "pm2 start src/index.js --output ./logs/log.log --error ./logs/error.log --time --name bulbbot",
 		"db-sync": "node src/utils/database/sync.js"
 	},
 	"repository": "git+https://github.com/TestersQTs/Bulbbot.git",

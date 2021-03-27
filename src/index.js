@@ -52,7 +52,7 @@ process.on("uncaughtException", function (err) {
 	console.error(err);
 });
 
-process.on("unhandledRejection", function(err) {
+process.on("unhandledRejection", function (err) {
 	const embed = new Discord.MessageEmbed()
 		.setColor("RED")
 		.setTitle("New error | Uncaught Exception")
@@ -69,4 +69,4 @@ process.on("unhandledRejection", function(err) {
 	client.channels.cache.get(global.config.error).send(embed);
 
 	console.error(err);
-})
+});
