@@ -9,7 +9,8 @@ module.exports = class extends Event {
 	}
 
 	async run(oldMember, newMember) {
-		if (oldMember.pending && !newMember.pending && await getAutoRole(newMember.guild) !== null) newMember.roles.add(newMember.guild.roles.cache.get(await getAutoRole(newMember.guild)))
+		if (oldMember.pending && !newMember.pending && (await getAutoRole(newMember.guild)) !== null)
+			newMember.roles.add(newMember.guild.roles.cache.get(await getAutoRole(newMember.guild)));
 
 		let change = "";
 

@@ -1,4 +1,5 @@
 const Event = require("../structures/Event");
+const { getAutoRole } = require("../utils/guilds/Guild");
 const { SendEventLog } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
 
@@ -20,5 +21,8 @@ module.exports = class extends Event {
 				}),
 			),
 		);
+
+		if (!member.pending && (await getAutoRole(member.guild)) !== null)
+			member.roles.add(member.guild.roles.cache.get(await getAutoRole(member.guild)));
 	}
 };
