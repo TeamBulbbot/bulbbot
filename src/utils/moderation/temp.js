@@ -1,5 +1,6 @@
 const sequelize = require("../database/connection");
-const { UnbanTemp } = require("./actions");
+const {getMuteRole} = require("../guilds/Guild");
+const { UnbanTemp, Unmute } = require("./actions");
 
 module.exports = {
 	TempbanCreate: async (guildId, targetTag, targetId, reason, expireTime) => {
@@ -43,7 +44,7 @@ module.exports = {
 
 			const guild = await client.guilds.cache.get(dbGuild.guildId);
 
-			if (tb.ExpireTime - time <= 0) {
+			if (tb.expireTime - time <= 0) {
 				try {
 					await UnbanTemp(
 						client,
@@ -56,9 +57,9 @@ module.exports = {
 							moderator_id: client.user.id,
 							target_tag: target.tag,
 							target_id: target.TargetId,
-							reason: tb.Reason,
+							reason: tb.reason,
 						}),
-						tb.Reason,
+						tb.reason,
 					);
 				} catch (error) {
 					continue;
@@ -78,13 +79,104 @@ module.exports = {
 							moderator_id: client.user.id,
 							target_tag: target.tag,
 							target_id: target.TargetId,
-							reason: tb.Reason,
+							reason: tb.reason,
 						}),
-						tb.Reason,
+						tb.reason,
 					);
 
 					await TempBanDel(tb.id);
-				}, tb.ExpireTime - time);
+				}, tb.expireTime - time);
+			}
+		}
+	},
+
+	TempmuteCreate: async (guildId, targetTag, targetId, reason, expireTime) => {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+		});
+		if (dbGuild === null) return;
+		const tempmute = await sequelize.models.tempmute.create({
+			targetTag,
+			targetId,
+			reason,
+			expireTime: parseInt(expireTime),
+			guildId: dbGuild.id,
+		});
+
+		return tempmute.id;
+	},
+	TempmuteDelete: tempmuteId => {
+		TempMuteDel(tempmuteId);
+	},
+
+	TempmuteRestore: async client => {
+		const table = await sequelize.models.guild.findOne({
+			where: {},
+			include: [{ model: sequelize.models.tempmute }],
+		});
+		if (table === null) return;
+
+		const time = Date.now();
+
+		for (const tb of table.tempmutes) {
+			const dbGuild = await sequelize.models.guild.findOne({
+				where: { id: tb.guildId },
+			});
+			console.log(tb, [tb.dataValues.reason, tb.dataValues.targetTag])
+			if (dbGuild === null) continue;
+
+			const target = {
+				tag: tb.targetTag,
+				id: tb.targetId,
+			};
+
+			const guild = await client.guilds.cache.get(dbGuild.guildId);
+
+			console.log(tb.expireTime - time)
+			if (tb.expireTime - time <= 0) {
+				try {
+					await Unmute(
+						client,
+						guild,
+						target,
+						client.user,
+						client.bulbutils.translate("global_mod_action_log", {
+							action: "Auto-unmuted",
+							moderator_tag: client.user.tag,
+							moderator_id: client.user.id,
+							target_tag: target.tag,
+							target_id: target.TargetId,
+							reason: tb.reason,
+						}),
+						tb.reason,
+						await getMuteRole(guild)
+					);
+				} catch (error) {
+					continue;
+				}
+
+				await TempMuteDel(tb.id);
+			} else {
+				setTimeout(async function () {
+					await Unmute(
+						client,
+						guild,
+						target,
+						client.user,
+						client.bulbutils.translate("global_mod_action_log", {
+							action: "Auto-unmuted",
+							moderator_tag: client.user.tag,
+							moderator_id: client.user.id,
+							target_tag: target.tag,
+							target_id: target.TargetId,
+							reason: tb.reason,
+						}),
+						tb.reason,
+						await getMuteRole(guild)
+					);
+
+					await TempMuteDel(tb.id);
+				}, tb.expireTime - time);
 			}
 		}
 	},
@@ -105,4 +197,21 @@ async function TempBanDel(tempbanId) {
 	if (dbGuild === null) return;
 
 	await dbGuild.tempbans[0].destroy();
+}
+
+async function TempMuteDel(tempmuteId) {
+	const dbGuild = await sequelize.models.guild.findOne({
+		where: {},
+		include: [
+			{
+				model: sequelize.models.tempmute,
+				where: {
+					id: tempmuteId,
+				},
+			},
+		],
+	});
+	if (dbGuild === null) return;
+
+	await dbGuild.tempmutes[0].destroy();
 }

@@ -5,6 +5,8 @@ const { getMuteRole } = require("../../utils/guilds/Guild");
 const utils = new (require("../../utils/BulbBotUtils"))();
 const parse = require("parse-duration");
 const { getActive, setActive } = require("../../utils/InfractionUtils");
+const { TempmuteCreate, TempmuteDelete } = require("../../utils/moderation/temp");
+
 module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
@@ -57,6 +59,8 @@ module.exports = class extends Command {
 			Date.now() + parse(args[1]),
 		);
 
+		let tempmuteId = await TempmuteCreate(message.guild.id, target.user.tag, target.user.id, reason, Date.now() + parse(args[1]));
+
 		message.channel.send(
 			await this.client.bulbutils.translate("mute_success", {
 				target_tag: target.user.tag,
@@ -66,7 +70,6 @@ module.exports = class extends Command {
 			}),
 		);
 
-		//TEMPMUTE CREATE FUNCTION
 		const client = this.client;
 		setTimeout(async function () {
 			if ((await getActive(infId)) === "false") return;
@@ -75,7 +78,7 @@ module.exports = class extends Command {
 			infId = await Unmute(
 				client,
 				message.guild,
-				target,
+				target.user,
 				client.user,
 				utils.translate("global_mod_action_log", {
 					action: "Unmuted",
@@ -89,7 +92,7 @@ module.exports = class extends Command {
 				muteRole,
 			);
 
-			//TEMPMUTE DELETE FUNCTION
+			TempmuteDelete(tempmuteId);
 		}, duration);
 	}
 };

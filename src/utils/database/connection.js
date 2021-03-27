@@ -31,6 +31,7 @@ const models = [
 	require("./models/StarboardPost"),
 	require("./models/Tempban"),
 	require("./models/AutoMod"),
+	require("./models/Tempmute")
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);

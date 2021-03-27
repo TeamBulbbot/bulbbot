@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-const { TempbanRestore } = require("../utils/moderation/temp");
+const { TempbanRestore, TempmuteRestore } = require("../utils/moderation/temp");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -17,6 +17,7 @@ module.exports = class extends Event {
 			},
 		});
 		await TempbanRestore(this.client);
+		await TempmuteRestore(this.client)
 
 		console.log(
 			[

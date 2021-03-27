@@ -9,7 +9,8 @@ function ApplyExtra(sequelize) {
 		starboard,
 		starboardPost,
 		tempban,
-		automod
+		automod,
+		tempmute
 	} = sequelize.models;
 
 	guild.belongsTo(guildConfiguration, {});
@@ -24,6 +25,7 @@ function ApplyExtra(sequelize) {
 	guild.hasMany(guildOverrideCommands, {});
 
 	guild.hasMany(tempban, {});
+	guild.hasMany(tempmute, {});
 }
 
 module.exports = { ApplyExtra };

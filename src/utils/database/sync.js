@@ -5,7 +5,7 @@ async function sync() {
 	console.log("Starting database sync...");
 
 	//await sequelize.sync();
-	await sequelize.sync({ force: true });
+	await sequelize.sync({ alter: true });
 
 	const end = new Date().getTime();
 

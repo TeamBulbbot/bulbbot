@@ -30,7 +30,7 @@ module.exports = {
 	Unmute: async (client, guild, target, moderator, reason, reasonLog, muteRole) => {
 		if(!guild.member(target.id) || !guild) return
 		await guild.member(target.id).roles.remove(muteRole);
-		const infId = await createInfraction(guild.id, "Unmute", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		const infId = await createInfraction(guild.id, "Unmute", "true", reasonLog, target.tag, target.id, moderator.tag, moderator.id);
 		await SendAutoUnban(client, guild, await Utils.translate("action_unmute_auto"), target.user, moderator, reasonLog, infId);
 
 		return infId;
