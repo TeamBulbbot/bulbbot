@@ -19,8 +19,8 @@ module.exports = class extends Event {
 			channel_id: newMessage.channel.id,
 			after_channel_id: newMessage.channel.id,
 			after_id: newMessage.id,
-			before: oldMessage.content,
-			after: newMessage.content,
+			before: Util.cleanContent(oldMessage.content, oldMessage),
+			after: Util.cleanContent(newMessage.content, newMessage),
 		});
 
 		if (msg.length >= 2000) {
