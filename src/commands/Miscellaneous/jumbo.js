@@ -54,18 +54,30 @@ module.exports = class extends Command {
 					url = `https://cdn.discordapp.com/emojis/${emote[0]}.png?v=1`;
 				}
 
-				await axios
-					.get(url, { responseType: "arraybuffer" })
-					.then(async res => {
+				try {
+					await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
 						return await sharp(res.data, { density: 2400 })
 							.png()
 							.resize(size, size)
 							.toFile(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
-					})
-					.catch(err => {
-						console.error(err);
 					});
+				} catch (error) {
+					if (CustomEmote.test(emote)) throw error;
 
+					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ").join("-").split("-fe0f").join("")}.svg`;
+
+					await axios
+						.get(url, { responseType: "arraybuffer" })
+						.then(async res => {
+							return await sharp(res.data, { density: 2400 })
+								.png()
+								.resize(size, size)
+								.toFile(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
+						})
+						.catch(err => {
+							console.error(err);
+						});
+				}
 				imgPath.push({
 					input: `src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`,
 					gravity: "southeast",
