@@ -20,10 +20,7 @@ module.exports = class extends Command {
 			msg.edit(resp.stdout, { code: "yaml" });
 
 			if (resp.stdout !== "Already up to date.\n") {
-				message.channel.send("Restarting the bot...").then(() => {
-					this.client.destroy();
-					shell.exec("npm run start");
-				});
+				message.channel.send("Restarting the bot...");
 			}
 		});
 	}

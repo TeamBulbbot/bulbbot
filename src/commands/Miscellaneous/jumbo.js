@@ -20,6 +20,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
+		return;
 		try {
 			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many"));
 
