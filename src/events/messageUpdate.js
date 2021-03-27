@@ -13,13 +13,19 @@ module.exports = class extends Event {
 		if (oldMessage.content === newMessage.content) return;
 		await AutoMod.Master(newMessage);
 
-		let msg = `Message from **${newMessage.author.tag}** \`${newMessage.author.id}\` was updated in <#${newMessage.channel.id}>\n\`Id (channel-message): ${newMessage.channel.id}-${newMessage.id}\`\n`;
-		if (oldMessage.content) msg += `**B:** ${Util.cleanContent(oldMessage.content, oldMessage)}\n`;
-		if (newMessage.content) msg += `**A:** ${Util.cleanContent(newMessage.content, newMessage)}`;
+		let msg = await this.client.bulbutils.translate("event_message_edit", {
+			target_tag: newMessage.author.tag,
+			target_id: newMessage.author.id,
+			channel_id: newMessage.channel.id,
+			after_channel_id: newMessage.channel.id,
+			after_id: newMessage.id,
+			before: oldMessage.content,
+			after: newMessage.content,
+		});
 
 		if (msg.length >= 2000) {
-			SendEventLog(this.client, newMessage.guild, "message", msg.substring(0, 1500));
-			SendEventLog(this.client, newMessage.guild, "message", msg.substring(1500, msg.length));
-		} else SendEventLog(this.client, newMessage.guild, "message", msg);
+			await SendEventLog(this.client, newMessage.guild, "message", msg.substring(0, 1500));
+			await SendEventLog(this.client, newMessage.guild, "message", msg.substring(1500, msg.length));
+		} else await SendEventLog(this.client, newMessage.guild, "message", msg);
 	}
 };

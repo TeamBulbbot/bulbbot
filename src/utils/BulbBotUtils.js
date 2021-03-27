@@ -124,6 +124,15 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({user_tag})/g, key.user_tag);
 
+		response = response.replace(/({before})/g, key.before);
+		response = response.replace(/({after})/g, key.after);
+		response = response.replace(/({after_channel_id})/g, key.after_channel_id);
+		response = response.replace(/({after_id})/g, key.after_id);
+
+		response = response.replace(/({content})/g, key.content);
+		response = response.replace(/({attachment})/g, key.attachment);
+		response = response.replace(/({embed})/g, key.embed);
+
 		response = response.replace(/({channel_id})/g, key.channel_id);
 		response = response.replace(/({channel_type})/g, key.channel_type);
 		response = response.replace(/({channel_name})/g, key.channel_name);
@@ -173,6 +182,8 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_join})/g, Emotes.other.JOIN);
 		response = response.replace(/({emote_leave})/g, Emotes.other.LEAVE);
 		response = response.replace(/({emote_success})/g, Emotes.other.SUCCESS);
+		response = response.replace(/({emote_trash})/g, Emotes.other.TRASH);
+		response = response.replace(/({emote_edit})/g, Emotes.other.EDIT);
 
 		response = response.replace(/({emote_ban})/g, Emotes.actions.BAN);
 		response = response.replace(/({emote_unban})/g, Emotes.actions.UNBAN);
