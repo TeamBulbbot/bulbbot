@@ -1,10 +1,13 @@
 {
 	"name": "bulbbot",
-	"script": "./index.js",
+	"script": "./src/index.js",
 	"watch": true,
-	"ignore_watch": ["node_modules", "logs", "docs"],
+	"watch_options": {
+		"followSymlinks": false
+	},
+	"ignore_watch": ["node_modules", "logs", "docs", "src/files"],
 	"time": true,
-	"error_file": "../logs/err.log",
-	"out_file": "../logs/out.log",
-	"log_file": "../logs/combined.log"
+	"error_file": "./logs/err.log",
+	"out_file": "./logs/out.log",
+	"log_file": "./logs/combined.log"
 }
