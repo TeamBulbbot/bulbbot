@@ -8,7 +8,7 @@
 	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`wurde von **{moderator_tag}** `({moderator_id})` für **{reason}** `[#{infractionId}]` {action}",
 	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`wurde von **{moderator_tag}** `({moderator_id})` {action}, da die Strafe abgesessen wurde `[#{infractionId}]`",
 	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`wurde von **{moderator_tag}** `({moderator_id})` bis **{until}** für **{reason}** `[#{infractionId}]` {action}",
-	"global_no_reason": "Keine Begründung gegeben",
+	"global_no_reason": "Keine Begründung angegeben",
 	"global_loading": "{emote_loading} Lädt...",
 	"global_not_in_voice": "{emote_warn} Nutzer ist mit keinem Sprachkanal verbunden!",
 	"global_unknown_error": "{emote_warn} Ein unbekannter Fehler ist aufgetreten, bitte versuche es später erneut. Falls der Fehler immer noch erscheint, kontaktiere bitte den Entwickler",
@@ -23,12 +23,12 @@
 
 	"premium_message": "Das ist ein Premium Befehl! Du kannst auf diesen Befehl zugreifen, in dem du uns auf Patreon unterstützt: <https://www.patreon.com/bulbbot>",
 
-	"event_message_args_unexpected": "{emote_warn} Unerwartetes Argument `{arg}`. Erwartet `{arg_expected}` bekommen `{arg_provided}`\n{emote_wrench} **Korrekte Benutzung:** {usage}",
-	"event_message_args_missing": "{emote_warn} Fehlendes Argument `{arg}`. Erwartet `{arg_expected}` bekommen `{arg_provided}`\n{emote_wrench} **Korrekte Benutzung:** {usage}",
-	"event_message_args_unexpected_list": "{emote_warn} Kann nicht analysieren `{arg}` als `{arg_expected}`.\n{emote_wrench} **Richtige Benutzung:** {usage}",
-	"event_message_args_missing_list": "{emote_warn} Fehlende argumente `{arg}`. Erwartet `{arg_expected}` bekommen `{arg_provided}`\n{emote_wrench} **Richtige Benutzung:** {usage}",
-	"event_message_edit": "{emote_edit} Nachricht von **{target_tag}** `{target_id}` wurde Bearbeitet in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**B:** {before}\n**A:** {after}",
-	"event_message_delete": "{emote_trash} Nachricht von **{target_tag}** `{target_id}` wurde gelöscht in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-${after_id}`\n**C:** {content} \n**A:** {attachment}\n**E:** {embed}",
+	"event_message_args_unexpected": "{emote_warn} Unerwartetes Argument `{arg}`. `{arg_expected}` erwartet, `{arg_provided}` bekommen\n{emote_wrench} **Korrekte Benutzung:** {usage}",
+	"event_message_args_missing": "{emote_warn} Fehlendes Argument `{arg}`.`{arg_expected}` erwartet, `{arg_provided}` bekommen\n{emote_wrench} **Korrekte Benutzung:** {usage}",
+	"event_message_args_unexpected_list": "{emote_warn} Kann `{arg}` nicht als `{arg_expected}` interpretieren.\n{emote_wrench} **Richtige Benutzung:** {usage}",
+	"event_message_args_missing_list": "{emote_warn} Fehlende Argumente `{arg}`. `{arg_expected}` erwartet, `{arg_provided}` bekommen\n{emote_wrench} **Richtige Benutzung:** {usage}",
+	"event_message_args_missing": "{emote_warn} Fehlendes Argument `{arg}`.`{arg_expected}` erwartet, `{arg_provided}` bekommen\n{emote_wrench} **Korrekte Benutzung:** {usage}",
+	"event_message_delete": "{emote_trash} Nachricht von **{target_tag}** `{target_id}` wurde in <#{channel_id}> gelöscht\n`ID (Kanal-Nachricht): {after_channel_id}-${after_id}`\n**Inhalt:** {content} \n**Angehängte Datei:** {attachment}\n**Embed:** {embed}",
 
 	"event_channel_create": "**Kanal erstellt:** <#{channel_id}> `({channel_type})`",
 	"event_channel_delete": "**Kanal gelöscht:** #{channel_name} `({channel_id})` `({channel_type})`",
@@ -45,8 +45,8 @@
 
 	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` hat seinen Nicknamen von `{nick_old}` auf `{nick_new} gesetzt`",
 	"event_member_update_role_add": "{emote_warn} Die Rolle **{role}** wurde zu **{user_tag}** `({user_id}) hinzugefügt`",
-	"event_member_update_role_remove": "{emote_warn} Die Rolle **{role}** wurde von **{user_tag}** `({user_id}) entfernt`",
-	"event_member_update_role_add_audit": "{emote_warn} Die Rolle **{role}** Wurde zu **{user_tag}** `({user_id}) hinzugefügt` von **{moderator_tag}** `({moderator_id})`",
+	"event_member_update_role_remove": "{emote_warn} Die Rolle **{role}** wurde von **{user_tag}** `({user_id})` entfernt",
+	"event_member_update_role_add_audit": "{emote_warn} Die Rolle **{role}** wurde von **{moderator_tag}** `({moderator_id})` zu **{user_tag}** `({user_id})` hinzugefügt",
 	"event_member_update_role_remove_audit": "{emote_warn} Die Rolle **{role}** wurde entfernt von **{user_tag}** `({user_id})` von **{moderator_tag}** `({moderator_id})`",
 
 	"config_language_success": "{emote_success} Sprache wurde erfolgreicht zu: `{language} geändert`",
@@ -140,14 +140,14 @@
 	"userinfo_embed_roles": "**Rollen:** {user_roles}\n",
 	"userinfo_embed_infractions": "\n**Verwarnungen:** {emote_inf} **{user_infractions}** infraction(s) auf diesem Server",
 
-	"serverinfo_embed_owner": "{emote_owner} **Owner:** <@{guild_owner_name}> `{guild_owner_id}`\n",
+	"serverinfo_embed_owner": "{emote_owner} **Besitzer:** <@{guild_owner_name}> `{guild_owner_id}`\n",
 	"serverinfo_embed_features": "**Funktionen:**\n{guild_features}\n",
 	"serverinfo_embed_region": "**Region:** {guild_region}\n",
-	"serverinfo_embed_verification": "**Verifikations level:** {guild_verification}\n",
+	"serverinfo_embed_verification": "**Verifikationsstufe:** {guild_verification}\n",
 	"serverinfo_embed_created": "**Erstellt am:** {guild_age}",
 
 	"serverinfo_server_stats": "**Server stats**",
-	"serverinfo_channel_stats": "**Channel stats**",
+	"serverinfo_channel_stats": "**Kanal stats**",
 	"serverinfo_booster_stats": "**Booster stats**",
 	"serverinfo_server_stats_total": "Total: **{guild_members}**/{guild_max}\n",
 	"serverinfo_server_stats_online": "{emote_online}: **{guild_online}**\n",
@@ -159,9 +159,9 @@
 	"serverinfo_channel_stats_category": "Category: **{guild_category}**\n",
 	"serverinfo_booster_tier": "Booster Level: **{guild_booster_tier}**\n",
 	"serverinfo_booster_boosters": "Booster: **{guild_booster_boosters}**\n",
-	"serverinfo_booster_tier_1": "Emoji slots: **100**\nAudio quality: **128** kbps\n",
-	"serverinfo_booster_tier_2": "Emoji slots: **150**\nAudio quality: **256** kbps\nUpload limit: **50 MB**\n",
-	"serverinfo_booster_tier_3": "Emoji slots: **250**\nAudio quality: **384** kbps\nUpload limit: **100 MB**\n",
+	"serverinfo_booster_tier_1": "Emoji slots: **100**\nAudio Qualität: **128** kbps\n",
+	"serverinfo_booster_tier_2": "Emoji slots: **150**\nAudio Qualität: **256** kbps\nUpload limit: **50 MB**\n",
+	"serverinfo_booster_tier_3": "Emoji slots: **250**\nAudio Qualität: **384** kbps\nUpload limit: **100 MB**\n",
 	"serverinfo_roles": "Rollen ({guild_amount_roles})",
 	"serverinfo_emotes": "Emojis ({guild_amount_emotes})",
 	"serverinfo_roles_too_many": " und **{guild_roles_left}** mehr",
@@ -182,9 +182,9 @@
 	"purge_too_few": "{emote_warn} Du kannst nicht weniger als eine Nachricht von mir löschen lassen :confused: Warum sollte man sowas überhaupt machen",
 
 	"verification_non_integer": "{emote_warn} Level benötigt zum Integrieren",
-	"verification_community_zero": "{emote_warn} Verifikations-Level für Community-Server nicht unter `0` gesetzt werden!",
-	"verification_level_error": "{emote_warn} Das Verifikations-Level kann nicht höer als `4` oder niedriger als `0` gesetzt werden",
-	"verification_level_success": "{emote_success} Das Verifikations-Level wurde erfolreich zu  `{level}` geändert",
+	"verification_community_zero": "{emote_warn} Die Verifizierungsstufe für Community-Server nicht unter `0` gesetzt werden!",
+	"verification_level_error": "{emote_warn} Die Verifizierungsstufe kann nicht höer als `4` oder niedriger als `0` gesetzt werden",
+	"verification_level_success": "{emote_success} Die Verifizierungsstufe wurde erfolreich auf `{level}` gesetzt",
 
 	"ping_latency": "Der Bot Ping beträgt: **{latency_bot}ms**\nWebSocket Ping ist **{latency_ws}ms**",
 
@@ -192,13 +192,13 @@
 
 	"license_license": "📜 Der Bot ist unter der MIT license lizensiert, Für mehr Informationen und um die volle Lienz lesen zu können, drücke auf Folgenden Link: **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
 
-	"privacy_policy": "📜 Lese hier die Datenschutzbestimmungen **[here](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
+	"privacy_policy": "📜 Lese hier die Datenschutzbestimmungen: **[Klicke Hier](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
 
-	"github_source_code": "{emote_github} Der Bot ist komplett Opensource, Du kannst hier den Source-Code Finden: **[here](https://github.com/TestersQTs/Bulbbot)**",
+	"github_source_code": "{emote_github} Der Bot ist komplett Opensource, Hier kannst du den Source-Code finden: **[Klicke Hier](https://github.com/TestersQTs/Bulbbot)**",
 
 	"invite_desc": "**Lade Bulbbot hier zu deinem Server ein:**\n{bot_invite}\n\n**Support-Server**\n{support_guild}",
 
-	"inviteinfo_error": "{emote_warn} Ich konnte keinen Server mit dem Einladungslink finden",
+	"inviteinfo_error": "{emote_warn} Ich konnte keinen Server finden der dem Einladungslink Entspricht",
 
 	"multiban_success": "{emote_success} {full_list} wurden gebannt für **{reason}**",
 
