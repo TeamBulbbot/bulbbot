@@ -1,4 +1,4 @@
-# Přidavaní Bulbbot
+# Přidavaní Bulbbota
 Přidat BulbBota můžete lehce přes tento [odkaz](https://bulbbot.mrphilip.xyz/invite)
 
 ### Permission Breakdown
