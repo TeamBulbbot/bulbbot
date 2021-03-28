@@ -21,7 +21,7 @@
 	"global_cannot_action_role_higher_bot": "{emote_warn} You cannot perform this action on **{user_tag}** as they have a higher role than me!",
 	"global_cannot_action_bot_self": "{emote_warn} You cannot perform this action on the bot!",
 
-	"premium_message": "This is a premium command, become a Patreon and get access to it <https://www.patreon.com/bulbbot>",
+	"premium_message": "This is a premium command, become a Patron and get access to it <https://www.patreon.com/bulbbot>",
 
 	"event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
