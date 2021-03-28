@@ -40,11 +40,11 @@
 	"event_channel_update_nsfw_enabled": "in <#{channel_id}> wurde NSFW `aktiviert`\n",
         "event_channel_update_nsfw_disabled": "in <#{channel_id}> wurde NSFW `deaktiviert`\n",
 
-	"event_member_joined": "{emote_join} **Neues Mitglied:** **{user_tag}** `({user_id})` - **Account erstellt:** {user_age}",
-	"event_member_left": "{emote_leave}  **{user_tag}** `({user_id})` hat uns Verlassen",
+	"event_member_joined": "{emote_join} **Mitglied ist dem Server beigetreten:** **{user_tag}** `({user_id})` - **Account erstellt:** {user_age}",
+        "event_member_left": "{emote_leave} ****{user_tag}** `({user_id})` hat den Server verlassen:**",
 
-	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` hat seinen Nicknamen von `{nick_old}` zu `{nick_new} geändert`",
-	"event_member_update_role_add": "{emote_warn} Die Rolle **{role}** wurde zu  **{user_tag}**  `({user_id}) hinzugefügt`",
+	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` hat seinen Nicknamen von `{nick_old}` auf `{nick_new} gesetzt`",
+	"event_member_update_role_add": "{emote_warn} Die Rolle **{role}** wurde zu **{user_tag}** `({user_id}) hinzugefügt`",
 	"event_member_update_role_remove": "{emote_warn} Die Rolle **{role}** wurde von **{user_tag}** `({user_id}) entfernt`",
 	"event_member_update_role_add_audit": "{emote_warn} Die Rolle **{role}** Wurde zu **{user_tag}** `({user_id}) hinzugefügt` von **{moderator_tag}** `({moderator_id})`",
 	"event_member_update_role_remove_audit": "{emote_warn} Die Rolle **{role}** wurde entfernt von **{user_tag}** `({user_id})` von **{moderator_tag}** `({moderator_id})`",
@@ -53,8 +53,8 @@
 	"config_language_invalid_args": "{emote_warn} Falsche Sprache angegeben!\n{emote_wrench} Wähle eine Sprache von `{languages}`",
 
 	"config_logging_success": "{emote_success} Erfolgreich Loggin {part} in {channel} aktiviert",
-	"config_logging_invalid_channel": "{emote_warn}  `{channel_name}` ist kein gültiger Kanal!",
-	"config_logging_unable_to_send_messages": "{emote_warn} Ich kann in dem Kanal keine Nachrichten schreiben",
+	"config_logging_invalid_channel": "{emote_warn} `{channel_name}` existiert nicht!",
+	"config_logging_unable_to_send_messages": "{emote_warn} Ich kann in diesem Kanal keine Nachrichten schreiben",
 
 	"config_mute_success": "{emote_success} Die Muted Rolle wurde erfolreich eingerichtet",
 	"config_mute_missing_args": "{emote_warn} Fehlendes Argument `role`",
@@ -182,8 +182,8 @@
 	"purge_too_few": "{emote_warn} Du kannst nicht weniger als eine Nachricht von mir löschen lassen :confused: Warum sollte man sowas überhaupt machen",
 
 	"verification_non_integer": "{emote_warn} Level benötigt zum Integrieren",
-	"verification_community_zero": "{emote_warn} Verifikations Level für Community-Server nicht unter `0` gesetzt werden!",
-	"verification_level_error": "{emote_warn} Das Verifikations Level kann nicht höer als `4` oder niedriger als `0` gesetzt werden",
+	"verification_community_zero": "{emote_warn} Verifikations-Level für Community-Server nicht unter `0` gesetzt werden!",
+	"verification_level_error": "{emote_warn} Das Verifikations-Level kann nicht höer als `4` oder niedriger als `0` gesetzt werden",
 	"verification_level_success": "{emote_success} Das Verifikations-Level wurde erfolreich zu  `{level}` geändert",
 
 	"ping_latency": "Der Bot Ping beträgt: **{latency_bot}ms**\nWebSocket Ping ist **{latency_ws}ms**",
@@ -259,20 +259,20 @@
 	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
 	"snowflake_info": "Ich weiß nicht ob irgendjemanden oder irgenetwass diese Schneeflocke gehört\n\n",
 
-	"commands_help": "Hier kannst du eine komplette Lister aller Befehle sehen: [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
+	"commands_help": "Hier kannst du eine komplette Liste aller Befehle sehen: [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
 
 	"action_warn": "verwarnt",
-	"action_mute": "muted",
-	"action_unmute": "entmutet",
+	"action_mute": "stummgeschaltet",
+	"action_unmute": "entstummt",
 	"action_unmute_auto": "automatisch entmutet",
-	"action_kick": "kicked",
-	"action_ban": "banned",
+	"action_kick": "gekkickt",
+	"action_ban": "gebannt",
 	"action_ban_temp": "temporär gebannt",
 	"action_ban_force": "force-banned",
-	"action_ban_soft": "soft-banned",
+	"action_ban_soft": "leichter-ban",
 	"action_unban": "entbannt",
-	"action_unban_auto": "Automatisch Entbannt",
+	"action_unban_auto": "automatisch Entbannt",
 	"action_deafen": "deafened",
 	"action_undeafen": "undeafened",
-	"action_kick_voice": "voice-kicked"
+	"action_kick_voice": "voice-kick"
 }
