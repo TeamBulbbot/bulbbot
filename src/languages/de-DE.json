@@ -1,0 +1,278 @@
+{
+	"global_executed_by": "Ausgeführt von {user_name}#{user_discriminator}",
+	"global_missing_permission": ":lock: Fehlende Rechte",
+	"global_missing_permission_bot": "Dem Bot fehlen Berechtigungen um dies durchzuführen! Bitte überprüfe die Rechte für den Bot.\n{missing}",
+	"global_user_not_found": "{emote_warn} Benutzer konnte nicht gefunden werden",
+	"global_channel_not_found": "{emote_warn} Channel konnte nicht gefunden werden",
+	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Grund: {reason}",
+	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`wurde für {action} von **{moderator_tag}** `({moderator_id})` für **{reason}** `[#{infractionId}]`",
+	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`wurde für {action} von **{moderator_tag}** `({moderator_id})` Nachdem die Strafe abgelaufen ist `[#{infractionId}]`",
+	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`wurde für {action} von **{moderator_tag}** `({moderator_id})` bis **{until}** für **{reason}** `[#{infractionId}]`",
+	"global_no_reason": "Keine Begründung gegeben",
+	"global_loading": "{emote_loading} Lädt...",
+	"global_not_in_voice": "{emote_warn} Benutzer ist mit keinem Voice-Channel verbunden!",
+	"global_unknown_error": "{emote_warn} Ein Unbekannter Fehler ist aufgetreteb, Bitte versuche es später wieder wenn der Fehler immer noch ist, kontaktiere bitte einen Entwickler",
+
+	"global_cannot_action_self": "{emote_warn} Du kannst diese Aktion nicht an dir Selbst durchführen!",
+	"global_cannot_action_owner": "{emote_warn} Du kannst diese Aktion nicht am Server-Besitzer durchführen!",
+	"global_cannot_action_role_equal": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da du keine Höhere Rolle als der User hast!",
+	"global_cannot_action_role_equal_bot": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da meine Rolle niedriger ist als die Rolle vom User!",
+	"global_cannot_action_role_higher": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, Da er eine höhere Rolle als du hast!",
+	"global_cannot_action_role_higher_bot": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da er eine Höhere Rolle als ich hat!",
+	"global_cannot_action_bot_self": "{emote_warn} You cannot perform this action on the bot!",
+
+	"premium_message": "Das ist ein Premium Befehl, Werde Patreon und bekomme Zugriff auf die Premium Befhele <https://www.patreon.com/bulbbot>",
+
+	"event_message_args_unexpected": "{emote_warn} Unerwartetes Argument `{arg}`. Erwartet `{arg_expected}` bekommen `{arg_provided}`\n{emote_wrench} **Korrekte Benutzung:** {usage}",
+	"event_message_args_missing": "{emote_warn} Fehlendes Argument `{arg}`. Erwartet `{arg_expected}` bekommen `{arg_provided}`\n{emote_wrench} **Korrekte Benutzung:** {usage}",
+	"event_message_args_unexpected_list": "{emote_warn} Kann nicht analysieren `{arg}` als `{arg_expected}`.\n{emote_wrench} **Richtige Benutzung:** {usage}",
+	"event_message_args_missing_list": "{emote_warn} Fehlende argumente `{arg}`. Erwartet `{arg_expected}` bekommen `{arg_provided}`\n{emote_wrench} **Richtige Benutzung:** {usage}",
+	"event_message_edit": "{emote_edit} Nachricht von **{target_tag}** `{target_id}` wurde Bearbeitet in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**B:** {before}\n**A:** {after}",
+	"event_message_delete": "{emote_trash} Nachricht von **{target_tag}** `{target_id}` wurde gelöscht in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-${after_id}`\n**C:** {content} \n**A:** {attachment}\n**E:** {embed}",
+
+	"event_channel_create": "**Kanal erstellt:** <#{channel_id}> `({channel_type})`",
+	"event_channel_delete": "**Kanal geköscht:** #{channel_name} `({channel_id})` `({channel_type})`",
+	"event_channel_update_topic_added": "<#{channel_id}> Kanal Thema wurde hinzugefügt `{channel_topic}`\n",
+	"event_channel_update_topic_removed": "<#{channel_id}> Kanal Thema wurde entfernt\n",
+	"event_channel_update_topic_updated": "<#{channel_id}> Kanal Thema wurde von `{oldchannel_topic}` zu `{newchannel_topic} geändert`\n",
+	"event_channel_update_name": "<#{channel_id}> Name wurde von `#{oldchannel_name}` zu `#{newchannel_name} geändert`\n",
+	"event_channel_update_type": "<#{channel_id}> Art wurde von `{oldchannel_type}` zu `{newchannel_type} geändert`\n",
+	"event_channel_update_nsfw_enabled": "<#{channel_id}> nsfw wurde `aktiviert`\n",
+  "event_channel_update_nsfw_disabled": "<#{channel_id}> nsfw wurde `deaktiviert`\n",
+
+	"event_member_joined": "{emote_join} **Neues Mitglied:** **{user_tag}** `({user_id})` - **Account erstellt:** {user_age}",
+	"event_member_left": "{emote_leave} **Mitglied hat uns Verlassen:** **{user_tag}** `({user_id})`",
+
+	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` hat seinen Nicknamen von `{nick_old}` zu `{nick_new} geändert`",
+	"event_member_update_role_add": "{emote_warn} Die Rolle **{role}** wurde zu  **{user_tag}**  `({user_id}) hinzugefügt`",
+	"event_member_update_role_remove": "{emote_warn} Die Rolle **{role}** wurde von **{user_tag}** `({user_id}) entfernt`",
+	"event_member_update_role_add_audit": "{emote_warn} Die Rolle **{role}** Wurde zu **{user_tag}** `({user_id}) hinzugefügt` von **{moderator_tag}** `({moderator_id})`",
+	"event_member_update_role_remove_audit": "{emote_warn} Die Rolle **{role}** wurde entfernt von **{user_tag}** `({user_id})` von **{moderator_tag}** `({moderator_id})`",
+
+	"config_language_success": "{emote_success} Sprache wurde erfolgreicht zu: `{language} geändert`",
+	"config_language_invalid_args": "{emote_warn} Falsche Sprache angegeben!\n{emote_wrench} Wähle eine Sprache von `{languages}`",
+
+	"config_logging_success": "{emote_success} Erfolgreich Loggin {part} in {channel} aktiviert",
+	"config_logging_invalid_channel": "{emote_warn}  `{channel_name}` ist kein gültiger Kanal!",
+	"config_logging_unable_to_send_messages": "{emote_warn} Ich kann in dem Kanal keine Nachrichten schreiben",
+
+	"config_mute_success": "{emote_success} Die Muted Rolle wurde erfolreich eingerichtet",
+	"config_mute_missing_args": "{emote_warn} Fehlendes Argument `role`",
+	"config_mute_invalid_role": "{emote_warn} Keine gültige Rolle",
+	"config_mute_unable_to_manage": "{emote_warn} Ich bin nicht in der Lage die Rolle zu verwalten, Verschiebe meine Rolle über die Mute Rolle",
+
+	"config_prefix_success": "{emote_success} Prfix erfolreich zu: `{prefix} aktualisiert`",
+	"config_prefix_missing_args": "{emote_warn} Fehlendes Argument `prefix`",
+
+	"config_autorole_success": "{emote_success} die automatische Rolel wurde erfolgreich gewechselt",
+
+	"override_create_invalid_part": "{emote_warn} Fehldendes Argument `part`, Es kann entweder `role` oder `command` sein",
+	"override_create_missing_name": "{emote_warn} Fehlendes Argument `role/command name`",
+	"override_create_missing_clearance": "{emote_warn} Fehlendes Argument `clearance`",
+	"override_create_non_number": "{emote_warn} `{clearance}` Kein gültiger Slowmode",
+	"override_create_less_than_0": "{emote_warn} die überschreibung kann nicht unter 0 sein",
+	"override_create_more_than_100": "{emote_warn} die überschreibung kann nicht über 100 sein",
+	"override_create_higher_than_yourself": "{emote_warn} du kannst keinen größeren Slowmode erstellen",
+	"override_create_invalid_role": "{emote_warn} Keine Gültige Rolle",
+	"override_create_invalid_command": "{emote_warn} `{command}` ist kein gültiger Befehl",
+	"override_create_success": "{emote_success} Erfolgreich einen Override mit dem Level `{clearance}` erstellt",
+
+	"override_disable_missing_command": "{emote_warn} Fehlender Befehl",
+	"override_disable_invalid_command": "{emote_warn} `{command}` Ist kein Gültiger Command",
+	"override_disable_success": "{emote_success} Ich habe erfolgreich folgenden Command deaktiviert `{command}`",
+
+	"override_enable_missing_command": "{emote_warn} Fehlender Befehl",
+	"override_enable_invalid_command": "{emote_warn} `{command}` ist kein gültiger befehl",
+	"override_enable_success": "{emote_success} ich habe erfolgreich den folgenden befehl aktiviert `{command}`",
+
+	"override_edit_invalid_part": "{emote_warn} Fehlendes argument `part`, es kann entweder `role` oder `command`",
+	"override_edit_missing_name": "{emote_warn} Fehlendes Argument `role/command name`",
+	"override_edit_missing_clearance": "{emote_warn} Fehlendes Argument `clearance`",
+	"override_edit_non_number": "{emote_warn} `{clearance}` ist kein Gültiger Typ",
+	"override_edit_less_than_0": "{emote_warn} die slowmode geschwindigkeit kann nicht kleiner oder gleich 0 sein",
+	"override_edit_more_than_100": "{emote_warn} die slowmode geschiwndigkeit kann nicht größer als 100 sein",
+	"override_edit_higher_than_yourself": "{emote_warn} Du kannst keinen slowmode erstellen der eine größere Geschwindigkeit hat",
+	"override_edit_invalid_role": "{emote_warn} Keine Gültige Rolle",
+	"override_edit_invalid_command": "{emote_warn} `{command}` ist kein Gültiger Befehl",
+	"override_edit_non_existent_override_command": "{emote_warn} Ich konnte keien Überschreibung finden, du musst erster eine Erstellen damit ich sie bearbeiten kann",
+	"override_edit_non_existent_override_role": "{emote_warn} Für die Rolle wurde keine Überschreibung gefunden",
+	"override_edit_success": "{emote_success} Erfolgreich die Überschreibung auf `{clearance}` geändert",
+
+	"override_remove_invalid_part": "{emote_warn} Fehlendes Argument `part`, Es kann entweder `role` oder `command`",
+	"override_remove_missing_name": "{emote_warn} Fehlendes Argument `role/command name`",
+	"override_remove_non_existent_override_command": "{emote_warn} Keine Befehl Überschreibung mit dem Namen gefunden",
+	"override_remove_non_existent_override_role": "{emote_warn} Keine Rollen überschreibung würde mit der id/mention gefunden",
+	"override_remove_success": "{emote_success} der befehl wurde erfolreich entfernt",
+
+	"automod_missing_limit": "{emote_warn} Fehlendes Argument `limit`, kann jeder Wert über `0` sein",
+	"automod_missing_item_remove": "{emote_warn} Fehlendes Argument `item` sollte vom Automod entfernt werden",
+	"automod_missing_punishment": "{emote_warn} Fehlendes Argument `punishment`, Es kann entweder `LOG`, `WARN`, `KICK` oder `BAN`",
+
+	"automod_non_number": "{emote_warn} `{limit}` ist keine gültige Nummer",
+	"automod_less_than_zero": "{emote_warn} `{limit}` kann nicht kleiner als 0 sein",
+
+	"automod_not_already_in_database": "{emote_warn} Item `{item}` ist noch nicht in der automod Datenbank",
+	"automod_already_in_database": "{emote_warn} Item `{item}` ist bereits in der automod datenbank",
+	"automod_added_to_the_database": "{emote_success}  `{item}` wurde zu `{part}` in den automod hinzugefügt",
+	"automod_removed_from_the_database": "{emote_success} `{item}` wurde von `{part}` entfernt",
+
+	"automod_updated_limit": "{emote_success} Das limit wurde in `{part}` mit einem Limit von `{limit}` geupdatet",
+	"automod_updated_punishment": "{emote_success} Erfolgreich eine Bestrafung für `{part}`hinzugefügt,Die Strafe ist: `{punishment}`",
+
+	"automod_enabled": "{emote_success} Automod aktiviert",
+	"automod_disabled": "{emote_success} Automod deaktiviert",
+	"automod_disabled_feature": "{emote_success} `{part}` deaktiviert",
+
+	"help_command_not_found": "Nicht möglich einen Befehl mit dem Namen zu finden",
+
+	"jumbo_invalid_emoji": "{emote_warn} Bitte benutze einen Gültigen Emoji",
+	"jumbo_too_many": "{emote_warn} Du kannst nur 10 Emojis auf einmal benutzen",
+
+	"userinfo_embed_id": "**ID:** {user_id}\n",
+	"userinfo_embed_username": "**Username:** {user_name}\n",
+	"userinfo_embed_nickname": "**Nickname:** {user_nickname}\n",
+	"userinfo_embed_profile": "**Profile:** <@{user_id}> [`Profile`](https://discord.com/users/{user_id})\n",
+	"userinfo_embed_avatar": "**Avatar URL:** [Link]({user_avatar})\n",
+	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
+	"userinfo_embed_created": "**Erstellungsdatum des Accounts:** {user_age}\n",
+	"userinfo_embed_joined": "**gejojnt am:** {user_joined}\n",
+	"userinfo_embed_premium": "**Boosted Seit:** {user_premium}\n",
+	"userinfo_embed_roles": "**Rollen:** {user_roles}\n",
+	"userinfo_embed_infractions": "\n**Verwarnungen:** {emote_inf} **{user_infractions}** infraction(s) auf diesem Server",
+
+	"serverinfo_embed_owner": "{emote_owner} **Owner:** <@{guild_owner_name}> `{guild_owner_id}`\n",
+	"serverinfo_embed_features": "**Funktionen:**\n{guild_features}\n",
+	"serverinfo_embed_region": "**Region:** {guild_region}\n",
+	"serverinfo_embed_verification": "**Verifikations level:** {guild_verification}\n",
+	"serverinfo_embed_created": "**Erstellt am:** {guild_age}",
+
+	"serverinfo_server_stats": "**Server stats**",
+	"serverinfo_channel_stats": "**Channel stats**",
+	"serverinfo_booster_stats": "**Booster stats**",
+	"serverinfo_server_stats_total": "Total: **{guild_members}**/{guild_max}\n",
+	"serverinfo_server_stats_online": "{emote_online}: **{guild_online}**\n",
+	"serverinfo_server_stats_idle": "{emote_idle}: **{guild_idle}**\n",
+	"serverinfo_server_stats_dnd": "{emote_dnd}: **{guild_dnd}**\n",
+	"serverinfo_server_stats_offline": "{emote_offline}: **{guild_offline}**\n",
+	"serverinfo_channel_stats_voice": "Voice Channels: **{guild_voice}**\n",
+	"serverinfo_channel_stats_text": "Text Channels: **{guild_text}**\n",
+	"serverinfo_channel_stats_category": "Category: **{guild_category}**\n",
+	"serverinfo_booster_tier": "Booster Level: **{guild_booster_tier}**\n",
+	"serverinfo_booster_boosters": "Booster: **{guild_booster_boosters}**\n",
+	"serverinfo_booster_tier_1": "Emoji slots: **100**\nAudio quality: **128** kbps\n",
+	"serverinfo_booster_tier_2": "Emoji slots: **150**\nAudio quality: **256** kbps\nUpload limit: **50 MB**\n",
+	"serverinfo_booster_tier_3": "Emoji slots: **250**\nAudio quality: **384** kbps\nUpload limit: **100 MB**\n",
+	"serverinfo_roles": "Rollen ({guild_amount_roles})",
+	"serverinfo_emotes": "Emojis ({guild_amount_emotes})",
+	"serverinfo_roles_too_many": " und **{guild_roles_left}** mehr",
+	"serverinfo_emotes_too_many": " und **{guild_emotes_left}** mehr",
+	"serverinfo_emotes_none": "Keine Emojis",
+
+	"ban_success": "{emote_success} **{target_tag}** `({target_id})` wurde für **{reason}** `[#{infractionId}] gebannt`",
+	"ban_fail": "{emote_warn} Nichtmöglich **{target_tag}** `({target_id})` zu bannen",
+	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` Ist bereits mit folgender Begründung gebannt: `{reason}`",
+
+	"not_banned": "{emote_warn} **{target_tag}** `({target_id})` ist noch nicht gebannt",
+	"unban_success": "{emote_success} **{target_tag}** `({target_id})` wurde für **{reason}** `[#{infractionId}]` entbannt",
+
+	"kick_success": "{emote_success} **{target_tag}** `({target_id})` wurde für **{reason}** `[#{infractionId}]` gekickt",
+	"kick_fail": "{emote_warn} Nichtmöglich **{target_tag}** `({target_id})` zu kicken",
+
+	"purge_too_many": "{emote_warn} Ich kann nur 200 Nachrichten gleichzeitig löschen",
+	"purge_too_few": "{emote_warn} Du kannst nicht weniger als eine Nachricht von mir löschen lassen :confused: Warum sollte man sowas überhaupt machen",
+
+	"verification_non_integer": "{emote_warn} Level benötigt zum Integrieren",
+	"verification_community_zero": "{emote_warn} Verifikations Level für Community-Server nicht unter `0` gesetzt werden!",
+	"verification_level_error": "{emote_warn} Das Verifikations Level kann nicht höer als `4` oder niedriger als `0` gesetzt werden",
+	"verification_level_success": "{emote_success} Das Verifikations-Level wurde erfolreich zu  `{level}` geändert",
+
+	"ping_latency": "Der Bot Ping beträgt: **{latency_bot}ms**\nWebSocket Ping ist **{latency_ws}ms**",
+
+	"uptime_uptime": "Der Bot ist seit **{uptime}** online",
+
+	"license_license": "📜 Der Bot ist unter der MIT license lizensiert, Für mehr Informationen und um die volle Lienz lesen zu können, drücke auf Folgenden Link: **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+	"privacy_policy": "📜 Lese hier die Datenschutzbestimmungen **[here](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
+
+	"github_source_code": "{emote_github} Der Bot ist komplett Opensource, Du kannst hier den Source-Code Finden: **[here](https://github.com/TestersQTs/Bulbbot)**",
+
+	"invite_desc": "**Lade Bulbbot hier zu deinem Server ein:**\n{bot_invite}\n\n**Support-Server**\n{support_guild}",
+
+	"inviteinfo_error": "{emote_warn} Ich konnte keinen Server mit dem Einladungslink finden",
+
+	"multiban_success": "{emote_success} {full_list} wurden gebannt für **{reason}**",
+
+	"multiunban_success": "{emote_success} {full_list} wurden entbannt für **{reason}**",
+
+	"multikick_success": "{emote_success} {full_list} Wurden gekickt für **{reason}**",
+
+	"multiwarn_success": "{emote_success} {full_list} Wurden verwarnt für **{reason}**",
+
+	"multivoicekick_success": "{emote_success} {full_list} wurden aus dem Voice-Channel für Folgenden Grund Entfernt: **{reason}**",
+
+	"softban_success": "{emote_success} **{target_tag}** `({target_id})` Wurde für Folgenden Grund gebannt: **{reason}** `[#{infractionId}]`",
+
+	"deafen_already_deaf": "{emote_warn} Der Benutzer ist schon Kopfhörer Stummgeschaltet!",
+	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` Kann wegen folgendem Grund nichtsmeht hören: **{reason}** `[#{infractionId}]`",
+
+	"undeafen_not_deaf": "{emote_warn} Benutzer ist nicht Kopfhörer stummgeschaltet!",
+	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` Kann wegen folgendem Grund wieder hören: **{reason}** `[#{infractionId}]`",
+
+	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` Wurde wegen Folgendem Grund aus dem Voice-Channel entfernt: **{reason}** `[#{infractionId}]`",
+
+	"slowmode_invalid_0s": "{emote_warn} Die Slowmode geschwindigkeit kann nicht unter **0 seconds** sein! ",
+	"slowmode_invalid_6h": "{emote_warn} Die Slowmode Geschwindigkeit kann nicht höher als **6 hours** sein!",
+
+	"slowmode_success_remove": "{emote_success} Der Slowmode wurde von folgendem Channel entfernt: {channel}",
+	"slowmode_success": "{emote_success} Der Slowmode wurde erfolgreich in {channel} zu **{slowmode}** gesetzt",
+
+	"tempban_invalid_0s": "{emote_warn} Die Länge kann nicht unter **0 sekunden** sein!",
+	"tempban_invalid_1y": "{emote_warn} Die Länge kann nicht über **einem Jahr** sein!",
+
+	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
+	"lockdown_locked": "{emote_success} Der Kanal {channel} wurde erfolgreich gesperrt",
+	"lockdown_unlocked": "{emote_success} Erfolgreich folgenden Kanal entsperrt: {channel}",
+
+	"mute_muterole_not_found": "{emote_warn} Die Mute Rolle wurde nochnicht konfiguriert!\n{emote_wrench} **Tip:** So kannst du die Mute Rolle Konfigurieren: `!configure mute_role`",
+	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` für **{reason}** `[#{infractionId}]`",
+	"mute_not_muted": "{emote_warn} Der User ist nochnicht gemutet!",
+	"mute_already_muted": "{emote_warn} Der User ist schon gemutet!",
+
+	"warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` wurde für den folgenden Grund verwarnt: **{reason}** `[#{infractionId}]`",
+
+	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` Wurde für Folgenden Grund entmutet: **{reason}** `[#{infractionId}]`",
+
+	"infraction_not_found": "{emote_warn} Verwarnung **#{infractionId}** Konnte nicht gefunden werden!",
+	"infraction_delete_success": "{emote_success} Verwarnung **#{infractionId}** wurde erfolgreich gemutet!",
+	"infraction_info_inf_id": "**Infraction ID:** {infractionId}\n",
+	"infraction_info_target": "**User:** {target_tag} `({target_id})`\n",
+	"infraction_info_moderator": "**Moderator:** {moderator_tag} `({moderator_id})`\n",
+	"infraction_info_created": "**Erstellt:** {timestamp}\n",
+	"infraction_info_active": "**Aktiv:** {emoji}",
+	"infraction_info_expires": "**Läuft ab:** {timestamp}",
+	"infraction_info_reason": "\n\n**Grund:** {reason}",
+	"infraction_list_not_found": "{emote_warn} Der Server hat noch keine Verwarnungen!",
+	"infraction_claim_success": "{emote_success} Du bist nun für folgende Verwarnung zuständig: **#{infractionId}**",
+	"infraction_update_success": "{emote_success} Verwarnung **#{infractionId}** wurde editiert!",
+	"infraction_invalid_arguments": "{emote_warn} Fehlendes Argument `action`, Es kann eins der Folgenden sein: `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
+
+	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
+	"snowflake_info": "Ich weiß nicht ob irgendjemanden oder irgenetwass diese Schneeflocke gehört\n\n",
+
+	"commands_help": "Hier kannst du eine komplette Lister aller Befehle sehen: [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
+
+	"action_warn": "verwarnt",
+	"action_mute": "muted",
+	"action_unmute": "entmutet",
+	"action_unmute_auto": "automatisch entmutet",
+	"action_kick": "kicked",
+	"action_ban": "banned",
+	"action_ban_temp": "temporär gebannt",
+	"action_ban_force": "force-banned",
+	"action_ban_soft": "soft-banned",
+	"action_unban": "entbannt",
+	"action_unban_auto": "Automatisch Entbannt",
+	"action_deafen": "deafened",
+	"action_undeafen": "undeafened",
+	"action_kick_voice": "voice-kicked"
+}
