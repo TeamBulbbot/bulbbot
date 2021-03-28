@@ -47,10 +47,10 @@
 	"event_member_update_role_add": "{emote_warn} Die Rolle **{role}** wurde zu **{user_tag}** `({user_id}) hinzugefügt`",
 	"event_member_update_role_remove": "{emote_warn} Die Rolle **{role}** wurde von **{user_tag}** `({user_id})` entfernt",
 	"event_member_update_role_add_audit": "{emote_warn} Die Rolle **{role}** wurde von **{moderator_tag}** `({moderator_id})` zu **{user_tag}** `({user_id})` hinzugefügt",
-	"event_member_update_role_remove_audit": "{emote_warn} Die Rolle **{role}** wurde entfernt von **{user_tag}** `({user_id})` von **{moderator_tag}** `({moderator_id})`",
+	"event_member_update_role_remove_audit": "{emote_warn} Die Rolle **{role}** wurde durch **{moderator_tag}** `({moderator_id})` von **{user_tag}** `({user_id})` entfernt",
 
-	"config_language_success": "{emote_success} Sprache wurde erfolgreicht zu: `{language} geändert`",
-	"config_language_invalid_args": "{emote_warn} Falsche Sprache angegeben!\n{emote_wrench} Wähle eine Sprache von `{languages}`",
+	"config_language_success": "{emote_success} Sprache wurde erfolgreicht auf `{language} gesetzt`",
+	"config_language_invalid_args": "{emote_warn} Ungültige Sprache angegeben!\n{emote_wrench} Wähle eine Sprache aus der folgenden Liste: `{languages}`",
 
 	"config_logging_success": "{emote_success} Erfolgreich Loggin {part} in {channel} aktiviert",
 	"config_logging_invalid_channel": "{emote_warn} `{channel_name}` existiert nicht!",
@@ -58,7 +58,7 @@
 
 	"config_mute_success": "{emote_success} Die Muted Rolle wurde erfolreich eingerichtet",
 	"config_mute_missing_args": "{emote_warn} Fehlendes Argument `role`",
-	"config_mute_invalid_role": "{emote_warn} Keine gültige Rolle",
+	"config_mute_invalid_role": "{emote_warn} Diese Rolle existiert nicht",
 	"config_mute_unable_to_manage": "{emote_warn} Ich bin nicht in der Lage die Rolle zu verwalten, Verschiebe meine Rolle über die Mute Rolle",
 
 	"config_prefix_success": "{emote_success} Prfix erfolreich zu: `{prefix} aktualisiert`",
@@ -113,7 +113,7 @@
 
 	"automod_not_already_in_database": "{emote_warn} Item `{item}` ist noch nicht in der automod Datenbank",
 	"automod_already_in_database": "{emote_warn} Item `{item}` ist bereits in der automod datenbank",
-	"automod_added_to_the_database": "{emote_success}  `{item}` wurde zu `{part}` in den automod hinzugefügt",
+	"automod_added_to_the_database": "{emote_success} `{item}` wurde zu `{part}` in den automod hinzugefügt",
 	"automod_removed_from_the_database": "{emote_success} `{item}` wurde von `{part}` entfernt",
 
 	"automod_updated_limit": "{emote_success} Das limit wurde in `{part}` mit einem Limit von `{limit}` geupdatet",
@@ -206,46 +206,46 @@
 
 	"multikick_success": "{emote_success} {full_list} Wurden gekickt für **{reason}**",
 
-	"multiwarn_success": "{emote_success} {full_list} Wurden verwarnt für **{reason}**",
+	"multiwarn_success": "{emote_success} {full_list} wurde wegen des folgenden Grundes verwarnt: **{reason}**",
 
-	"multivoicekick_success": "{emote_success} {full_list} wurden aus dem Voice-Channel für Folgenden Grund Entfernt: **{reason}**",
+	"multivoicekick_success": "{emote_success} {full_list} wurden wurde wegen des folgenden Grundes aus dem Sprachkanal entfernt: **{reason}**",
 
-	"softban_success": "{emote_success} **{target_tag}** `({target_id})` Wurde für Folgenden Grund gebannt: **{reason}** `[#{infractionId}]`",
+	"softban_success": "{emote_success} **{target_tag}** `({target_id})` wurde wegen des folgenden Grundes gebannt: **{reason}** `[#{infractionId}]`",
 
 	"deafen_already_deaf": "{emote_warn} Der Benutzer ist schon Kopfhörer Stummgeschaltet!",
 	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` Kann wegen folgendem Grund nichtsmeht hören: **{reason}** `[#{infractionId}]`",
 
 	"undeafen_not_deaf": "{emote_warn} Benutzer ist nicht Kopfhörer stummgeschaltet!",
-	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` Kann wegen folgendem Grund wieder hören: **{reason}** `[#{infractionId}]`",
+	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` kann wegen des folgenden Grundes wieder zuhören: **{reason}** `[#{infractionId}]`",
 
-	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` Wurde wegen Folgendem Grund aus dem Voice-Channel entfernt: **{reason}** `[#{infractionId}]`",
+	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` wurde wegen des folgenden Grundes aus dem Sprachkanal entfernt: **{reason}** `[#{infractionId}]`",
 
-	"slowmode_invalid_0s": "{emote_warn} Die Slowmode geschwindigkeit kann nicht unter **0 seconds** sein! ",
-	"slowmode_invalid_6h": "{emote_warn} Die Slowmode Geschwindigkeit kann nicht höher als **6 hours** sein!",
+	"slowmode_invalid_0s": "{emote_warn} Der Slow-Modus kann nicht kürzer als **0 Sekunden** sein! ",
+	"slowmode_invalid_6h": "{emote_warn} Der Slow-Modus kann nicht länger als **6 Stunden** sein!",
 
-	"slowmode_success_remove": "{emote_success} Der Slowmode wurde von folgendem Channel entfernt: {channel}",
-	"slowmode_success": "{emote_success} Der Slowmode wurde erfolgreich in {channel} zu **{slowmode}** gesetzt",
+	"slowmode_success_remove": "{emote_success} Der Slow-Modus wurde von dem folgendem Kanal entfernt: {channel}",
+	"slowmode_success": "{emote_success} Der Slow-Modus wurde in {channel} erfolgreich auf **{slowmode}** gesetzt",
 
-	"tempban_invalid_0s": "{emote_warn} Die Länge kann nicht unter **0 sekunden** sein!",
-	"tempban_invalid_1y": "{emote_warn} Die Länge kann nicht über **einem Jahr** sein!",
+	"tempban_invalid_0s": "{emote_warn} Die Dauer kann nicht unter **0 Sekunden** sein!",
+	"tempban_invalid_1y": "{emote_warn} Die Dauer kann nicht über **1 Jahr** sein!",
 
-	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
+	"lockdown_not_boolean": "{emote_warn} Das `lock` Argument muss eine Boolesche Variable sein! (`true` oder `false`)",
 	"lockdown_locked": "{emote_success} Der Kanal {channel} wurde erfolgreich gesperrt",
-	"lockdown_unlocked": "{emote_success} Erfolgreich folgenden Kanal entsperrt: {channel}",
+	"lockdown_unlocked": "{emote_success} Der Kanal {channel} wurde erfolgreich entsperrt",
 
 	"mute_muterole_not_found": "{emote_warn} Die Mute Rolle wurde nochnicht konfiguriert!\n{emote_wrench} **Tip:** So kannst du die Mute Rolle Konfigurieren: `!configure mute_role`",
-	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` für **{reason}** `[#{infractionId}]`",
-	"mute_not_muted": "{emote_warn} Der User ist nochnicht gemutet!",
-	"mute_already_muted": "{emote_warn} Der User ist schon gemutet!",
+	"mute_success": "{emote_success} **{target_tag}** `({target_id})` wurde wegen des folgenden Grundes stummgeschaltet: **{reason}** `[#{infractionId}]`",
+	"mute_not_muted": "{emote_warn} Der Nutzer ist noch nicht stummgeschaltet!",
+	"mute_already_muted": "{emote_warn} Der Nutzer ist schon stummgeschaltet!",
 
-	"warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` wurde für den folgenden Grund verwarnt: **{reason}** `[#{infractionId}]`",
+	"warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` wurde wegen des folgenden Grundes verwarnt: **{reason}** `[#{infractionId}]`",
 
-	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` Wurde für Folgenden Grund entmutet: **{reason}** `[#{infractionId}]`",
+	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` wurde wegen des folgenden Grundes entmutet: **{reason}** `[#{infractionId}]`",
 
-	"infraction_not_found": "{emote_warn} Verwarnung **#{infractionId}** Konnte nicht gefunden werden!",
+	"infraction_not_found": "{emote_warn} Verwarnung **#{infractionId}** konnte nicht gefunden werden!",
 	"infraction_delete_success": "{emote_success} Verwarnung **#{infractionId}** wurde erfolgreich gelöscht!",
 	"infraction_info_inf_id": "**Infraction ID:** {infractionId}\n",
-	"infraction_info_target": "**User:** {target_tag} `({target_id})`\n",
+	"infraction_info_target": "**Nutzer:** {target_tag} `({target_id})`\n",
 	"infraction_info_moderator": "**Moderator:** {moderator_tag} `({moderator_id})`\n",
 	"infraction_info_created": "**Erstellt:** {timestamp}\n",
 	"infraction_info_active": "**Aktiv:** {emoji}",
@@ -254,10 +254,10 @@
 	"infraction_list_not_found": "{emote_warn} Der Server hat noch keine Verwarnungen!",
 	"infraction_claim_success": "{emote_success} Du bist nun für folgende Verwarnung zuständig: **#{infractionId}**",
 	"infraction_update_success": "{emote_success} Verwarnung **#{infractionId}** wurde editiert!",
-	"infraction_invalid_arguments": "{emote_warn} Fehlendes Argument `action`, Es kann eins der Folgenden sein: `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
+	"infraction_invalid_arguments": "{emote_warn} Fehlendes Argument `action`, wähle ein Argument aus der folgenden Liste: `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
 
-	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
-	"snowflake_info": "Ich weiß nicht ob irgendjemanden oder irgenetwass diese Schneeflocke gehört\n\n",
+	"invalid_snowflake": "{emote_warn} `{snowflake}` ist eine ungültige Snowflake ID",
+	"snowflake_info": "Ich weiß nicht, ob diese Snowflake ID jemandem or etwas gehört\n\n",
 
 	"commands_help": "Hier kannst du eine komplette Liste aller Befehle sehen: [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
 
