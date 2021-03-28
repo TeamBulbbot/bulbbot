@@ -11,7 +11,7 @@ Každý příkaz má specifickou uroveň ověření přednastavenou . To indikuj
 
 ### Specialní případy
 Role sami o sobě můžou také ovlivnit uroveň ověŕení. Uživatel který má roli s oprávněním `ADMINISTRATOR` bude mu automaticky přidělena uroveň ověření hodnoty `75` i když jejich role není konfigurovaná jako **Administrátor**
-- Roli s oprávněním `ADMINISTRATOR` bude ji automaticky přidělena uroveň ověření  `75`
+-Pokud má role oprávnéní `ADMINISTRATOR` bude ji automaticky přidělena uroveň ověření `75`
 - Majitelovi serveru bude automaticky přidělana uroveň ověření hodnoty `100`
 
 ### Uprava ověření
