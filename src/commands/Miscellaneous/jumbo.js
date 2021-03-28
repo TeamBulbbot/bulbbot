@@ -20,7 +20,6 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		return;
 		try {
 			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many"));
 
@@ -67,17 +66,12 @@ module.exports = class extends Command {
 
 					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ").join("-").split("-fe0f").join("")}.svg`;
 
-					await axios
-						.get(url, { responseType: "arraybuffer" })
-						.then(async res => {
-							return await sharp(res.data, { density: 2400 })
-								.png()
-								.resize(size, size)
-								.toFile(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
-						})
-						.catch(err => {
-							console.error(err);
-						});
+					await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+						return await sharp(res.data, { density: 2400 })
+							.png()
+							.resize(size, size)
+							.toFile(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
+					});
 				}
 				imgPath.push({
 					input: `src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`,
