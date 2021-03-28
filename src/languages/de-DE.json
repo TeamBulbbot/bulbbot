@@ -243,7 +243,7 @@
 	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` Wurde für Folgenden Grund entmutet: **{reason}** `[#{infractionId}]`",
 
 	"infraction_not_found": "{emote_warn} Verwarnung **#{infractionId}** Konnte nicht gefunden werden!",
-	"infraction_delete_success": "{emote_success} Verwarnung **#{infractionId}** wurde erfolgreich gemutet!",
+	"infraction_delete_success": "{emote_success} Verwarnung **#{infractionId}** wurde erfolgreich gelöscht!",
 	"infraction_info_inf_id": "**Infraction ID:** {infractionId}\n",
 	"infraction_info_target": "**User:** {target_tag} `({target_id})`\n",
 	"infraction_info_moderator": "**Moderator:** {moderator_tag} `({moderator_id})`\n",
