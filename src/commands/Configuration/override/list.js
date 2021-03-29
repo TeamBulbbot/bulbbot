@@ -26,7 +26,7 @@ module.exports = async (client, message, args) => {
 		.setAuthor(`Overrides for ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
 		.setDescription(roles + commands)
 		.setFooter(
-			await client.bulbutils.translate("global_executed_by", {
+			await client.bulbutils.translate("global_executed_by", message.guild.id, {
 				user_name: await client.bulbutils.userObject(true, message.member).username,
 				user_discriminator: await client.bulbutils.userObject(true, message.member).discriminator,
 			}),

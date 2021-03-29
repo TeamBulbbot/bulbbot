@@ -6,7 +6,7 @@ module.exports = async (client, message, args) => {
 
 	if (!part)
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_missing_list", {
+			await client.bulbutils.translate("event_message_args_missing_list", message.guild.id, {
 				arg: "part:string",
 				arg_expected: 3,
 				arg_provided: 1,
@@ -16,7 +16,7 @@ module.exports = async (client, message, args) => {
 
 	if (!punishment)
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_missing_list", {
+			await client.bulbutils.translate("event_message_args_missing_list", message.guild.id, {
 				arg: "punishment:string",
 				arg_expected: 3,
 				arg_provided: 1,
@@ -26,7 +26,7 @@ module.exports = async (client, message, args) => {
 
 	if (!["website", "invites", "words", "mentions", "messages"].includes(part.toLowerCase()))
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_unexpected_list", {
+			await client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {
 				arg: part,
 				arg_expected: "part:string",
 				usage: "`website`, `invites`, `words`, `mentions` or `messages`",
@@ -35,7 +35,7 @@ module.exports = async (client, message, args) => {
 
 	if (!["LOG", "WARN", "KICK", "BAN"].includes(punishment.toUpperCase()))
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_unexpected_list", {
+			await client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {
 				arg: punishment,
 				arg_expected: "punishment:string",
 				usage: "`LOG`, `WARN`, `KICK` or `BAN`",
@@ -44,5 +44,5 @@ module.exports = async (client, message, args) => {
 
 	await changePunishment(message.guild.id, part.toLowerCase(), punishment.toUpperCase());
 
-	message.channel.send(await client.bulbutils.translate("automod_updated_punishment", { part, punishment }));
+	message.channel.send(await client.bulbutils.translate("automod_updated_punishment", message.guild.id, { part, punishment }));
 };

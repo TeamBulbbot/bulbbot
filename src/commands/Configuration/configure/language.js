@@ -4,12 +4,15 @@ const fs = require("fs");
 module.exports = async (client, message, args) => {
 	const language = args[1];
 
-	if (!language) return message.channel.send(await client.bulbutils.translate("event_message_args_missing", {
-		arg: "language:string",
-		arg_expected: 1,
-		arg_provided: 0,
-		usage: "!configure language <language>"
-	}));
+	if (!language)
+		return message.channel.send(
+			await client.bulbutils.translate("event_message_args_missing", message.guild.id, {
+				arg: "language:string",
+				arg_expected: 1,
+				arg_provided: 0,
+				usage: "!configure language <language>",
+			}),
+		);
 
 	const validLangs = [];
 	fs.readdirSync(__dirname + "/../../../languages").forEach(f => {
@@ -18,11 +21,11 @@ module.exports = async (client, message, args) => {
 
 	if (!validLangs.includes(language))
 		return message.channel.send(
-			await client.bulbutils.translate("config_language_invalid_args", {
+			await client.bulbutils.translate("config_language_invalid_args", message.guild.id, {
 				languages: validLangs.join(", "),
 			}),
 		);
 
 	await ChangeLanguage(message.guild.id, language);
-	message.channel.send(await client.bulbutils.translate("config_language_success", { language }));
+	message.channel.send(await client.bulbutils.translate("config_language_success", message.guild.id, { language }));
 };

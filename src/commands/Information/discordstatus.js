@@ -41,7 +41,7 @@ module.exports = class extends Command {
 				.setTitle("Discord Status Updates")
 				.setDescription(`**API Latency:** ${ping} ms\n\n**Latest incident**\n${msg}`)
 				.setFooter(
-					await client.bulbutils.translate("global_executed_by", {
+					await client.bulbutils.translate("global_executed_by", message.guild.id, {
 						user_name: await client.bulbutils.userObject(true, message.member).username,
 						user_discriminator: await client.bulbutils.userObject(true, message.member).discriminator,
 					}),

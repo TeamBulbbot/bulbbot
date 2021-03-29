@@ -12,22 +12,28 @@ const { NonDigits } = require("../../../utils/Regex");
 module.exports = async (client, message, args, part) => {
 	let channel = args[1];
 
-	if (!channel) return message.channel.send(await client.bulbutils.translate("event_message_args_missing", {
-		arg: "channel:Channel",
-		arg_expected: 1,
-		arg_provided: 0,
-		usage: "!configure logging <channel>"
-	}));
+	if (!channel)
+		return message.channel.send(
+			await client.bulbutils.translate("event_message_args_missing", message.guild.id, {
+				arg: "channel:Channel",
+				arg_expected: 1,
+				arg_provided: 0,
+				usage: "!configure logging <channel>",
+			}),
+		);
 
 	if (channel === "remove") channel = null;
 	else {
 		channel = channel.replace(NonDigits, "");
 		const cTemp = message.guild.channels.cache.get(channel);
-		if (cTemp === undefined) return message.channel.send(await client.bulbutils.translate("config_logging_invalid_channel", {
-			channel_name: args[1]
-		}));
+		if (cTemp === undefined)
+			return message.channel.send(
+				await client.bulbutils.translate("config_logging_invalid_channel", message.guild.id, {
+					channel_name: args[1],
+				}),
+			);
 		if (!cTemp.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
-			return message.channel.send(await client.bulbutils.translate("config_logging_unable_to_send_messages"));
+			return message.channel.send(await client.bulbutils.translate("config_logging_unable_to_send_messages", message.guild.id));
 	}
 	const gId = message.guild.id;
 
@@ -58,5 +64,7 @@ module.exports = async (client, message, args, part) => {
 			return;
 	}
 
-	message.channel.send(await client.bulbutils.translate("config_logging_success", { part: `\`${part}\``, channel: `<#${channel}>` }));
+	message.channel.send(
+		await client.bulbutils.translate("config_logging_success", message.guild.id, { part: `\`${part}\``, channel: `<#${channel}>` }),
+	);
 };

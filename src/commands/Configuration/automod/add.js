@@ -6,7 +6,7 @@ module.exports = async (client, message, args) => {
 
 	if (!part)
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_missing_list", {
+			await client.bulbutils.translate("event_message_args_missing_list", message.guild.id, {
 				arg: "part:string",
 				arg_expected: 3,
 				arg_provided: 1,
@@ -16,7 +16,7 @@ module.exports = async (client, message, args) => {
 
 	if (!item)
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_missing_list", {
+			await client.bulbutils.translate("event_message_args_missing_list", message.guild.id, {
 				arg: "part:string",
 				arg_expected: 3,
 				arg_provided: 2,
@@ -26,7 +26,7 @@ module.exports = async (client, message, args) => {
 
 	if (!["website", "invites", "words", "words_token"].includes(part.toLowerCase()))
 		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_unexpected_list", {
+			await client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {
 				arg: item,
 				arg_expected: "part:string",
 				usage: "`website`, `invites`, `words` or `words_token`",
@@ -34,7 +34,7 @@ module.exports = async (client, message, args) => {
 		);
 
 	const error = await append(message.guild.id, part.toLowerCase(), item);
-	if (error === 1) return message.channel.send(await client.bulbutils.translate("automod_already_in_database", { item }));
+	if (error === 1) return message.channel.send(await client.bulbutils.translate("automod_already_in_database", message.guild.id, { item }));
 
-	message.channel.send(await client.bulbutils.translate("automod_added_to_the_database", { part, item }));
+	message.channel.send(await client.bulbutils.translate("automod_added_to_the_database", message.guild.id, { part, item }));
 };

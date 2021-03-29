@@ -10,7 +10,7 @@ module.exports = class extends Event {
 	async run(message) {
 		if (message.author.id === this.client.user.id) return;
 
-		let msg = await this.client.bulbutils.translate("event_message_delete", {
+		let msg = await this.client.bulbutils.translate("event_message_delete", message.guild.id, {
 			target_tag: message.author.tag,
 			target_id: message.author.id,
 			channel_id: message.channel.id,
@@ -18,7 +18,7 @@ module.exports = class extends Event {
 			after_id: message.id,
 			content: message.content ? Util.cleanContent(message.content, message) : "",
 			attachment: message.attachments.first() ? message.attachments.first().proxyURL : "None",
-			embed: message.embeds.length !== 0 ? "[Embed]" : "None"
+			embed: message.embeds.length !== 0 ? "[Embed]" : "None",
 		});
 
 		if (msg.length >= 2000) {
