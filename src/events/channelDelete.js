@@ -11,7 +11,7 @@ module.exports = class extends Event {
 			this.client,
 			channel.guild,
 			"channel",
-			await this.client.bulbutils.translate("event_channel_delete", {
+			await this.client.bulbutils.translate("event_channel_delete", channel.guild.id, {
 				channel_name: channel.name,
 				channel_id: channel.id,
 				channel_type: channel.type,

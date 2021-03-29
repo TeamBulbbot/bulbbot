@@ -32,13 +32,14 @@ module.exports = class extends Command {
 		let infId = null;
 		let tempbanId;
 
-		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return
+		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
 		const banList = await message.guild.fetchBans();
 		const bannedUser = banList.find(user => user.user.id === targetId);
 
-		if (duration < parse("0s") || duration === null) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s"));
-		if (duration > parse("1y")) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_1y"));
+		if (duration < parse("0s") || duration === null)
+			return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s", message.guild.id));
+		if (duration > parse("1y")) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_1y", message.guild.id));
 
 		if (bannedUser) {
 			return message.channel.send(
@@ -49,12 +50,12 @@ module.exports = class extends Command {
 				}),
 			);
 		}
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
 		if (!target) {
 			try {
 				target = await this.client.users.fetch(targetId);
 			} catch (error) {
-				return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+				return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
 			}
 		}
 
@@ -64,7 +65,7 @@ module.exports = class extends Command {
 				message.guild,
 				target,
 				message.author,
-				await this.client.bulbutils.translate("global_mod_action_log", {
+				await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 					action: "Temp-banned",
 					moderator_tag: message.author.tag,
 					moderator_id: message.author.id,
@@ -77,7 +78,7 @@ module.exports = class extends Command {
 		} else {
 			if (!target.bannable) {
 				return message.channel.send(
-					await this.client.bulbutils.translate("ban_fail", {
+					await this.client.bulbutils.translate("ban_fail", message.guild.id, {
 						target_tag: target.user.tag,
 						target_id: target.user.id,
 					}),
@@ -90,7 +91,7 @@ module.exports = class extends Command {
 				message.guild,
 				target,
 				message.author,
-				await this.client.bulbutils.translate("global_mod_action_log", {
+				await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 					action: "Temp-banned",
 					moderator_tag: message.author.tag,
 					moderator_id: message.author.id,
@@ -107,7 +108,7 @@ module.exports = class extends Command {
 		tempbanId = await TempbanCreate(message.guild.id, target.tag, target.id, reason, Date.now() + parse(args[1]));
 
 		message.channel.send(
-			await this.client.bulbutils.translate("ban_success", {
+			await this.client.bulbutils.translate("ban_success", message.guild.id, {
 				target_tag: target.tag,
 				target_id: target.id,
 				reason,
@@ -122,7 +123,7 @@ module.exports = class extends Command {
 				message.guild,
 				target,
 				client.user,
-				utils.translate("global_mod_action_log", {
+				utils.translate("global_mod_action_log", message.guild.id, {
 					action: "Auto-unbanned",
 					moderator_tag: client.user.tag,
 					moderator_id: client.user.id,

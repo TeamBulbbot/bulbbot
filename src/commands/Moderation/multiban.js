@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		const targets = args.slice(0).join(" ").match(UserMentionAndId);
 		let reason = args.slice(targets.length).join(" ").replace(UserMentionAndId, "");
 
-		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason");
+		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
@@ -46,7 +46,7 @@ module.exports = class extends Command {
 				try {
 					target = await this.client.users.fetch(t);
 				} catch (error) {
-					message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+					message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
 					continue;
 				}
 				infId = await ForceBan(
@@ -54,7 +54,7 @@ module.exports = class extends Command {
 					message.guild,
 					target,
 					message.author,
-					await this.client.bulbutils.translate("global_mod_action_log", {
+					await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 						action: "Forcebanned",
 						moderator_tag: message.author.tag,
 						moderator_id: message.author.id,
@@ -67,7 +67,7 @@ module.exports = class extends Command {
 			} else {
 				if (!target.bannable) {
 					return message.channel.send(
-						await this.client.bulbutils.translate("ban_fail", {
+						await this.client.bulbutils.translate("ban_fail", message.guild.id, {
 							target_tag: target.user.tag,
 							target_id: target.user.id,
 						}),
@@ -79,7 +79,7 @@ module.exports = class extends Command {
 					message.guild,
 					target,
 					message.author,
-					await this.client.bulbutils.translate("global_mod_action_log", {
+					await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 						action: "Banned",
 						moderator_tag: message.author.tag,
 						moderator_id: message.author.id,
@@ -95,7 +95,7 @@ module.exports = class extends Command {
 		}
 
 		return message.channel.send(
-			await this.client.bulbutils.translate("multiban_success", {
+			await this.client.bulbutils.translate("multiban_success", message.guild.id, {
 				full_list: fullList,
 				reason,
 			}),

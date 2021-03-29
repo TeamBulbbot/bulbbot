@@ -22,8 +22,8 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const amount = args[0];
-		if (amount > 200) return message.channel.send(await this.client.bulbutils.translate("purge_too_many"));
-		if (amount <= 0) return message.channel.send(await this.client.bulbutils.translate("purge_too_few"));
+		if (amount > 200) return message.channel.send(await this.client.bulbutils.translate("purge_too_many", message.guild.id));
+		if (amount <= 0) return message.channel.send(await this.client.bulbutils.translate("purge_too_few", message.guild.id));
 		let deleteMsg = [];
 		let a = 0;
 

@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		message.channel.send(await this.client.bulbutils.translate("global_loading")).then(msg => {
+		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild.id)).then(msg => {
 			const p = path.resolve(__dirname, "");
 			shell.cd(`${p}/../../../`);
 			const resp = shell.exec("git pull");

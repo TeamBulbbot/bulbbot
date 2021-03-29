@@ -71,7 +71,7 @@ module.exports = class extends Command {
 
 			default:
 				message.channel.send(
-					await this.client.bulbutils.translate("event_message_args_unexpected_list", {
+					await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {
 						arg: args[0].toLowerCase(),
 						arg_expected: "part:string",
 						usage:

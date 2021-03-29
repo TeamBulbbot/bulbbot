@@ -30,21 +30,17 @@ module.exports = class extends Event {
 		// auto mod
 		try {
 			await AutoMod.Master(this.client, message);
-		} catch (err) {
-
-		}
+		} catch (err) {}
 
 		if (message.content.match(mentionRegex)) return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
 		if (!message.content.startsWith(this.client.prefix)) return;
-
-		global.currentGuildId = message.guild.id;
 
 		const [cmd, ...args] = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
 
 		const command = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
 		if (command) {
 			if (command.premium && !(await isPremiumGuild(message.guild.id)))
-				return message.channel.send(await this.client.bulbutils.translate("premium_message"));
+				return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
 			const commandOverride = await GetGuildOverrideForCommand(message.guild.id, command.name);
 			const userClearance = await UserClearance(message, message.guild.id);
@@ -58,7 +54,7 @@ module.exports = class extends Event {
 				if (!commandOverride.enabled) return;
 
 				if (commandOverride.clearanceLevel > clearance) {
-					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
+					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 						message.delete({ timeout: 5000 });
 						msg.delete({ timeout: 5000 });
 					});
@@ -68,7 +64,7 @@ module.exports = class extends Event {
 			global.userClearance = clearance;
 
 			if (command.clearance > clearance && !commandOverride) {
-				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
+				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 					message.delete({ timeout: 5000 });
 					msg.delete({ timeout: 5000 });
 				});
@@ -79,7 +75,7 @@ module.exports = class extends Event {
 				const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
 
 				if (missing.length) {
-					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission")).then(msg => {
+					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 						message.delete({ timeout: 5000 });
 						msg.delete({ timeout: 5000 });
 					});
@@ -93,7 +89,7 @@ module.exports = class extends Event {
 
 				if (missing)
 					return message.channel.send(
-						await this.client.bulbutils.translate("global_missing_permission_bot", {
+						await this.client.bulbutils.translate("global_missing_permission_bot", message.guild.id, {
 							missing: clientPermCheck.toArray().map(perm => `\`${perm}\` `),
 						}),
 					);
@@ -103,7 +99,7 @@ module.exports = class extends Event {
 
 			if (command.maxArgs < args.length && command.maxArgs !== -1) {
 				return message.channel.send(
-					await this.client.bulbutils.translate("event_message_args_unexpected", {
+					await this.client.bulbutils.translate("event_message_args_unexpected", message.guild.id, {
 						arg: args[command.maxArgs],
 						arg_expected: command.maxArgs,
 						arg_provided: args.length,
@@ -114,7 +110,7 @@ module.exports = class extends Event {
 
 			if (command.minArgs > args.length) {
 				return message.channel.send(
-					await this.client.bulbutils.translate("event_message_args_missing", {
+					await this.client.bulbutils.translate("event_message_args_missing", message.guild.id, {
 						arg: command.argList[args.length],
 						arg_expected: command.minArgs,
 						arg_provided: args.length,

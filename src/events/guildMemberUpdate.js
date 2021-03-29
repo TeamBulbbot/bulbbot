@@ -30,7 +30,7 @@ module.exports = class extends Event {
 				if (oldMember.nickname === null) oldMember.nickname = oldMember.user.username;
 				if (newMember.nickname === null) newMember.nickname = newMember.user.username;
 
-				message = await this.client.bulbutils.translate("event_member_update_nickname", {
+				message = await this.client.bulbutils.translate("event_member_update_nickname", newMember.guild.id, {
 					user_tag: newMember.user.tag,
 					user_id: newMember.user.id,
 					nick_old: oldMember.nickname,
@@ -47,7 +47,7 @@ module.exports = class extends Event {
 				}
 
 				if (auditLog) {
-					message = await this.client.bulbutils.translate("event_member_update_role_add_audit", {
+					message = await this.client.bulbutils.translate("event_member_update_role_add_audit", newMember.guild.id, {
 						user_tag: newMember.user.tag,
 						user_id: newMember.user.id,
 						role: role.name,
@@ -55,7 +55,7 @@ module.exports = class extends Event {
 						moderator_id: executor.id,
 					});
 				} else {
-					message = await this.client.bulbutils.translate("event_member_update_role_add", {
+					message = await this.client.bulbutils.translate("event_member_update_role_add", newMember.guild.id, {
 						user_tag: newMember.user.tag,
 						user_id: newMember.user.id,
 						role: role.name,
@@ -73,7 +73,7 @@ module.exports = class extends Event {
 				}
 
 				if (auditLog) {
-					message = await this.client.bulbutils.translate("event_member_update_role_remove_audit", {
+					message = await this.client.bulbutils.translate("event_member_update_role_remove_audit", newMember.guild.id, {
 						user_tag: newMember.user.tag,
 						user_id: newMember.user.id,
 						role: role.name,
@@ -81,7 +81,7 @@ module.exports = class extends Event {
 						moderator_id: executor.id,
 					});
 				} else {
-					message = await this.client.bulbutils.translate("event_member_update_role_remove", {
+					message = await this.client.bulbutils.translate("event_member_update_role_remove", newMember.guild.id, {
 						user_tag: newMember.user.tag,
 						user_id: newMember.user.id,
 						role: role.name,

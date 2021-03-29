@@ -13,36 +13,32 @@ module.exports = class BulbBotUtils {
 
 	/**
 	 *
-	 * @param string    Translatable string from the lang file
-	 * @param key       Values that should be replaced by the function
-	 * @returns {string}     Resolved translated string
+	 * @param string    		Translatable string from the lang file
+	 * @param key       		Values that should be replaced by the function
+	 * @param guildId			Guild id
+	 * @returns {string}     	Resolved translated string
 	 */
-	async translate(string, key = {}) {
+	async translate(string, guildId, key = {}) {
 		let response;
 		let lang;
 
-		if (!global.currentGuildId) {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+		if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
+		else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+
+		try {
+			response = JSON.parse(JSON.stringify(lang))[string].toString();
+		} catch (err) {
+			this.client.channels.cache
+				.get(global.config.translation)
+				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
+
 			lang = require(`./../languages/en-US.json`);
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
-		} else {
-			const db = await sequelize.models.guild.findOne({
-				where: { guildId: global.currentGuildId },
-				include: [{ model: sequelize.models.guildConfiguration }],
-			});
-			if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
-			else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
-
-			try {
-				response = JSON.parse(JSON.stringify(lang))[string].toString();
-			} catch (err) {
-				this.client.channels.cache
-					.get(global.config.translation)
-					.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
-
-				lang = require(`./../languages/en-US.json`);
-				response = JSON.parse(JSON.stringify(lang))[string].toString();
-				//throw new TranslatorException(`${string} is not a valid translatable string`);
-			}
+			//throw new TranslatorException(`${string} is not a valid translatable string`);
 		}
 
 		response = response.replace(/({latency_bot})/g, key.latency_bot);
@@ -506,7 +502,7 @@ module.exports = class BulbBotUtils {
 	}
 
 	async log(err, message, channel = global.config.error) {
-		if (message) message.channel.send(await this.client.bulbutils.translate("global_unknown_error"));
+		if (message) message.channel.send(await this.client.bulbutils.translate("global_unknown_error", message.guild.id));
 
 		if (process.env.ENVIRONMENT === "dev") return console.error(err);
 		Sentry.captureException(err);

@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		const targets = args.slice(0).join(" ").match(UserMentionAndId);
 		let reason = args.slice(targets.length).join(" ").replace(UserMentionAndId, "");
 
-		if (reason == "") reason = await this.client.bulbutils.translate("global_no_reason");
+		if (reason == "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
 		let fullList = "";
 
 		for (let i = 0; i < targets.length; i++) {
@@ -40,11 +40,11 @@ module.exports = class extends Command {
 			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
 			if (!target) {
-				message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+				message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
 				return;
 			}
 			if (!target.voice.channel) {
-				message.channel.send(await this.client.bulbutils.translate("global_not_in_voice"));
+				message.channel.send(await this.client.bulbutils.translate("global_not_in_voice", message.guild.id));
 				return;
 			}
 
@@ -53,7 +53,7 @@ module.exports = class extends Command {
 				message.guild,
 				target,
 				message.author,
-				await this.client.bulbutils.translate("global_mod_action_log", {
+				await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 					action: "Voice-kicked",
 					moderator_tag: message.author.tag,
 					moderator_id: message.author.id,
@@ -68,7 +68,7 @@ module.exports = class extends Command {
 		}
 
 		return message.channel.send(
-			await this.client.bulbutils.translate("multivoicekick_success", {
+			await this.client.bulbutils.translate("multivoicekick_success", message.guild.id, {
 				full_list: fullList,
 				reason,
 			}),

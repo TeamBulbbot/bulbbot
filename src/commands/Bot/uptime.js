@@ -27,9 +27,9 @@ module.exports = class extends Command {
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
-			.setDescription(await this.client.bulbutils.translate("uptime_uptime", { uptime }))
+			.setDescription(await this.client.bulbutils.translate("uptime_uptime", message.guild.id, { uptime }))
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),

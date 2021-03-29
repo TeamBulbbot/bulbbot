@@ -14,7 +14,7 @@ module.exports = class extends Event {
 			member.guild,
 			"joinleave",
 			Util.removeMentions(
-				await this.client.bulbutils.translate("event_member_joined", {
+				await this.client.bulbutils.translate("event_member_joined", member.guild.id, {
 					user_tag: member.user.tag,
 					user_id: member.user.id,
 					user_age: member.user.createdAt,

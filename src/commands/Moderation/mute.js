@@ -30,22 +30,23 @@ module.exports = class extends Command {
 		let reason = args.slice(2).join(" ");
 		let infId = null;
 
-		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
 		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
-		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found"));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
+		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found", message.guild.id));
 		if (target.roles.cache.find(role => role.id === muteRole))
-			return message.channel.send(await this.client.bulbutils.translate("mute_already_muted"));
-		if (duration < parse("0s") || duration === null) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s"));
-		if (duration > parse("1y")) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_1y"));
+			return message.channel.send(await this.client.bulbutils.translate("mute_already_muted", message.guild.id));
+		if (duration < parse("0s") || duration === null)
+			return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_0s", message.guild.id));
+		if (duration > parse("1y")) return message.channel.send(await this.client.bulbutils.translate("tempban_invalid_1y", message.guild.id));
 
 		infId = await Mute(
 			this.client,
 			message.guild,
 			target,
 			message.author,
-			await this.client.bulbutils.translate("global_mod_action_log", {
+			await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 				action: "Muted",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
@@ -62,7 +63,7 @@ module.exports = class extends Command {
 		let tempmuteId = await TempmuteCreate(message.guild.id, target.user.tag, target.user.id, reason, Date.now() + parse(args[1]));
 
 		message.channel.send(
-			await this.client.bulbutils.translate("mute_success", {
+			await this.client.bulbutils.translate("mute_success", message.guild.id, {
 				target_tag: target.user.tag,
 				target_id: target.user.id,
 				reason,

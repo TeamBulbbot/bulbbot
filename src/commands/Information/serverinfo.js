@@ -18,30 +18,30 @@ module.exports = class extends Command {
 		const guild = message.guild;
 
 		let description = "";
-		description += await this.client.bulbutils.translate("serverinfo_embed_owner", { guild });
-		description += await this.client.bulbutils.translate("serverinfo_embed_features", { guild });
-		description += await this.client.bulbutils.translate("serverinfo_embed_region", { guild });
-		description += await this.client.bulbutils.translate("serverinfo_embed_verification", { guild });
-		description += await this.client.bulbutils.translate("serverinfo_embed_created", { guild });
+		description += await this.client.bulbutils.translate("serverinfo_embed_owner", message.guild.id, { guild });
+		description += await this.client.bulbutils.translate("serverinfo_embed_features", message.guild.id, { guild });
+		description += await this.client.bulbutils.translate("serverinfo_embed_region", message.guild.id, { guild });
+		description += await this.client.bulbutils.translate("serverinfo_embed_verification", message.guild.id, { guild });
+		description += await this.client.bulbutils.translate("serverinfo_embed_created", message.guild.id, { guild });
 
 		let serverStats = "";
-		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_total", { guild });
-		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_online", { guild });
-		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_idle", { guild });
-		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_dnd", { guild });
-		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_offline", { guild });
+		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_total", message.guild.id, { guild });
+		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_online", message.guild.id, { guild });
+		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_idle", message.guild.id, { guild });
+		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_dnd", message.guild.id, { guild });
+		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_offline", message.guild.id, { guild });
 
 		let channelStats = "";
-		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_voice", { guild });
-		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_text", { guild });
-		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_category", { guild });
+		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_voice", message.guild.id, { guild });
+		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_text", message.guild.id, { guild });
+		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_category", message.guild.id, { guild });
 
 		let boosterStats = "";
-		boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier", { guild });
-		boosterStats += await this.client.bulbutils.translate("serverinfo_booster_boosters", { guild });
-		if (guild.premiumTier === 1) boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_1", { guild });
-		else if (guild.premiumTier === 2) boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_2", { guild });
-		else if (guild.premiumTier === 3) boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_3", { guild });
+		boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier", message.guild.id, { guild });
+		boosterStats += await this.client.bulbutils.translate("serverinfo_booster_boosters", message.guild.id, { guild });
+		if (guild.premiumTier === 1) boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_1", message.guild.id, { guild });
+		else if (guild.premiumTier === 2) boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_2", message.guild.id, { guild });
+		else if (guild.premiumTier === 3) boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_3", message.guild.id, { guild });
 
 		let guildRoles = [];
 		let guildEmotes = [];
@@ -64,13 +64,13 @@ module.exports = class extends Command {
 			.setColor(global.config.embedColor)
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
-			.addField(await this.client.bulbutils.translate("serverinfo_server_stats"), serverStats, true)
-			.addField(await this.client.bulbutils.translate("serverinfo_channel_stats"), channelStats, true)
-			.addField(await this.client.bulbutils.translate("serverinfo_booster_stats"), boosterStats, true)
+			.addField(await this.client.bulbutils.translate("serverinfo_server_stats"), message.guild.id, serverStats, true)
+			.addField(await this.client.bulbutils.translate("serverinfo_channel_stats"), message.guild.id, channelStats, true)
+			.addField(await this.client.bulbutils.translate("serverinfo_booster_stats"), message.guild.id, boosterStats, true)
 			.addField(
 				await this.client.bulbutils.translate("serverinfo_roles", { guild_amount_roles: amountOfRoles }),
 				`${guildRoles.join(" ")} ${
-					rolesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_roles_too_many", { guild_roles_left: rolesLeft }) : ""
+					rolesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_roles_too_many", message.guild.id, { guild_roles_left: rolesLeft }) : ""
 				}`,
 				true,
 			)
@@ -78,15 +78,17 @@ module.exports = class extends Command {
 				await this.client.bulbutils.translate("serverinfo_emotes", { guild_amount_emotes: amountOfEmotes }),
 				amountOfEmotes !== 0
 					? `${guildEmotes.join(" ")} ${
-							emotesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_emotes_too_many", { guild_emotes_left: emotesLeft }) : ""
+							emotesLeft !== 0
+								? await this.client.bulbutils.translate("serverinfo_emotes_too_many", message.guild.id, { guild_emotes_left: emotesLeft })
+								: ""
 					  }`
-					: await this.client.bulbutils.translate("serverinfo_emotes_none"),
+					: await this.client.bulbutils.translate("serverinfo_emotes_none", message.guild.id),
 				true,
 			)
 			.setDescription(description)
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
 					user_name: message.author.username,
 					user_discriminator: message.author.discriminator,
 				}),
