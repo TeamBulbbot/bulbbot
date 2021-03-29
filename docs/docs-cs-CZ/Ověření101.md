@@ -10,19 +10,19 @@ Každý příkaz má specifickou uroveň ověření přednastavenou . To indikuj
 - Majitel serveru (`100`)
 
 ### Specialní případy
-Role sami o sobě můžou také ovlivnit uroveň ověŕení. Uživatel který má roli s oprávněním `ADMINISTRATOR` bude mu automaticky přidělena uroveň ověření hodnoty `75` i když jejich role není konfigurovaná jako **Administrátor**
+Role sami o sobě můžou také ovlivnit uroveň ověření. Uživatel který má roli s oprávněním `ADMINISTRATOR` bude mu automaticky přidělena uroveň ověření hodnoty `75` i když jejich role není konfigurovaná jako **Administrátor**
 -Pokud má role oprávnéní `ADMINISTRATOR` bude ji automaticky přidělena uroveň ověření `75`
 - Majitelovi serveru bude automaticky přidělana uroveň ověření hodnoty `100`
 
 ### Uprava ověření
-To view all of the custom clearance levels set in your server run the following command:
-``!override list`` - this will return all of the custom clearance levels for both roles and commands and if the commands are enabled or disabled.
+Abyste mohli vidět všechny upravené urovně oveření definované ve vašem serveru použijte následující příkaz:
+``!override list`` - toto zobrazí všechny definované urovně ověrení pro role a příkazy a pokud jsou příkazy zapnuté nebo vypnuté
 
-## Custom Role Clearance
-If you would like to add a custom clearance level tied to a role run use the following command:
-``!override create role <role id> <clearance>`` - this will set the new clearance level to that role.
+## Upravené ověření rolí
+Pokud byste rádi přidali upravenou urověň ověření vzpjatou s rolí použíjte nasledující příkaz:
+``!override create role <ID role> <ověření>`` - toto nastaví novou uroveň ověření pro danou roli.
 
-To modify or edit an existing roles clearance run the following command:
+K modifikaci nebo upravení urovně ověření existující použíjte následující příkaz:
 ``!override edit role <role id> <new clearance>`` - this will set the clearance level to the new level.
 
 And to remove a roles clearance run the following command:
