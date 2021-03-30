@@ -4,6 +4,7 @@ module.exports = async (client, message, args) => {
 	const prefix = args[1];
 
 	if (!prefix) return message.channel.send(await client.bulbutils.translate("config_prefix_missing_args", message.guild.id));
+	if (prefix.length > 255) return message.channel.send(await client.bulbutils.translate("config_prefix_too_long", message.guild.id));
 
 	ChangePrefix(message.guild.id, prefix);
 

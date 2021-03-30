@@ -63,6 +63,7 @@
 
 	"config_prefix_success": "{emote_success} Successfully updated the prefix to `{prefix}`",
 	"config_prefix_missing_args": "{emote_warn} Missing required argument `prefix`",
+	"config_prefix_too_long": "{emote_warn} That prefix name is too long, please make it shorter than 255 characters",
 
 	"config_autorole_success": "{emote_success} Successfully changed the autorole",
 
