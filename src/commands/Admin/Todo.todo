@@ -1,14 +1,6 @@
-- exec
-    - exec shell commands
-- git
-    - exec git commands
-
 - guild
     - get info about a guild based on the guild id
-
-- analytics
-    - get analytics about the bot
-
+    
 - uploadlog
     - uploadlogs
     - logs
