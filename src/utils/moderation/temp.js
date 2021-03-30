@@ -1,5 +1,5 @@
 const sequelize = require("../database/connection");
-const {getMuteRole} = require("../guilds/Guild");
+const { getMuteRole } = require("../guilds/Guild");
 const { UnbanTemp, Unmute } = require("./actions");
 
 module.exports = {
@@ -122,7 +122,7 @@ module.exports = {
 			const dbGuild = await sequelize.models.guild.findOne({
 				where: { id: tb.guildId },
 			});
-			console.log(tb, [tb.dataValues.reason, tb.dataValues.targetTag])
+			console.log(tb, [tb.dataValues.reason, tb.dataValues.targetTag]);
 			if (dbGuild === null) continue;
 
 			const target = {
@@ -132,7 +132,7 @@ module.exports = {
 
 			const guild = await client.guilds.cache.get(dbGuild.guildId);
 
-			console.log(tb.expireTime - time)
+			console.log(tb.expireTime - time);
 			if (tb.expireTime - time <= 0) {
 				try {
 					await Unmute(
@@ -140,7 +140,7 @@ module.exports = {
 						guild,
 						target,
 						client.user,
-						client.bulbutils.translate("global_mod_action_log", {
+						client.bulbutils.translate("global_mod_action_log", dbGuild.guildId, {
 							action: "Auto-unmuted",
 							moderator_tag: client.user.tag,
 							moderator_id: client.user.id,
@@ -149,7 +149,7 @@ module.exports = {
 							reason: tb.reason,
 						}),
 						tb.reason,
-						await getMuteRole(guild)
+						await getMuteRole(guild),
 					);
 				} catch (error) {
 					continue;
@@ -163,7 +163,7 @@ module.exports = {
 						guild,
 						target,
 						client.user,
-						client.bulbutils.translate("global_mod_action_log", {
+						client.bulbutils.translate("global_mod_action_log", dbGuild.guildId, {
 							action: "Auto-unmuted",
 							moderator_tag: client.user.tag,
 							moderator_id: client.user.id,
@@ -172,7 +172,7 @@ module.exports = {
 							reason: tb.reason,
 						}),
 						tb.reason,
-						await getMuteRole(guild)
+						await getMuteRole(guild),
 					);
 
 					await TempMuteDel(tb.id);

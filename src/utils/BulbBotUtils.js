@@ -466,31 +466,31 @@ module.exports = class BulbBotUtils {
 	async ResolveUserHandle(message, handle, user) {
 		switch (handle) {
 			case 1:
-				message.channel.send(await this.translate("global_cannot_action_self"));
+				message.channel.send(await this.translate("global_cannot_action_self", message.guild.id));
 				return true;
 
 			case 2:
-				message.channel.send(await this.translate("global_cannot_action_owner"));
+				message.channel.send(await this.translate("global_cannot_action_owner", message.guild.id));
 				return true;
 
 			case 3:
-				message.channel.send(await this.translate("global_cannot_action_role_equal", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 4:
-				message.channel.send(await this.translate("global_cannot_action_bot_self"));
+				message.channel.send(await this.translate("global_cannot_action_bot_self", message.guild.id));
 				return true;
 
 			case 5:
-				message.channel.send(await this.translate("global_cannot_action_role_higher", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_higher", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 6:
-				message.channel.send(await this.translate("global_cannot_action_role_equal_bot", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_equal_bot", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 7:
-				message.channel.send(await this.translate("global_cannot_action_role_higher_bot", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_higher_bot", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 0:

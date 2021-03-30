@@ -5,13 +5,13 @@ const utils = new (require("../BulbBotUtils"))();
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
-		global.currentGuildId = guild.id
+		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
-			await utils.translate("global_logging_mod", {
+			await utils.translate("global_logging_mod", guild.id, {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
 				user_id: target.id,
@@ -26,12 +26,12 @@ module.exports = {
 	},
 
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
-		global.currentGuildId = guild.id
+		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
-			await utils.translate("global_logging_unban_auto", {
+			await utils.translate("global_logging_unban_auto", guild.id, {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
 				user_id: target.id,
@@ -46,12 +46,12 @@ module.exports = {
 	},
 
 	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
-		global.currentGuildId = guild.id
+		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
-			await utils.translate("global_logging_mod_temp", {
+			await utils.translate("global_logging_mod_temp", guild.id, {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
 				user_id: target.id,
@@ -67,7 +67,7 @@ module.exports = {
 	},
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
-		global.currentGuildId = guild.id
+		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
@@ -84,7 +84,7 @@ module.exports = {
 	},
 
 	SendEventLog: async (client, guild, part, log) => {
-		global.currentGuildId = guild.id
+		global.currentGuildId = guild.id;
 		if (guild === undefined) return;
 
 		const dbGuild = await GetDBGuild(guild.id);
@@ -95,7 +95,7 @@ module.exports = {
 	},
 
 	SendAutoModLog: async (client, guildId, log) => {
-		global.currentGuildId = guild.id
+		global.currentGuildId = guild.id;
 		if (guildId === undefined) return;
 
 		const dbGuild = await GetDBGuild(guildId);
