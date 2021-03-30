@@ -13,8 +13,7 @@ module.exports = class extends Command {
 
 	async run(message) {
 		message.channel.send("The bot is shutting down...").then(() => {
-			this.client.destroy();
-			shell.exec("npm run start");
+			shell.exec("pm2 reload bulbbot");
 		});
 	}
 };
