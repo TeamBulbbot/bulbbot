@@ -27,6 +27,7 @@ module.exports = {
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
+		if (target === undefined) return;
 
 		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
 			await utils.translate("global_logging_unban_auto", guild.id, {

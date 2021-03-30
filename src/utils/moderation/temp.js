@@ -140,7 +140,7 @@ module.exports = {
 						guild,
 						target,
 						client.user,
-						client.bulbutils.translate("global_mod_action_log", dbGuild.guildId, {
+						client.bulbutils.translate("global_mod_action_log", guild.id, {
 							action: "Auto-unmuted",
 							moderator_tag: client.user.tag,
 							moderator_id: client.user.id,
@@ -163,7 +163,7 @@ module.exports = {
 						guild,
 						target,
 						client.user,
-						client.bulbutils.translate("global_mod_action_log", dbGuild.guildId, {
+						client.bulbutils.translate("global_mod_action_log", guild.id, {
 							action: "Auto-unmuted",
 							moderator_tag: client.user.tag,
 							moderator_id: client.user.id,
