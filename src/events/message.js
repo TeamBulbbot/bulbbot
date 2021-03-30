@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-const { getPrefix, isPremiumGuild } = require("../utils/guilds/Guild");
+const { getConfig, isPremiumGuild } = require("../utils/guilds/Guild");
 const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
 const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");
@@ -16,12 +16,15 @@ module.exports = class extends Event {
 		if (message.channel.type === "dm") return DirectMessage(this.client, message);
 		if (!message.guild || message.author.bot) return;
 
-		// grab the prefix for the guild
-		this.client.prefix = await getPrefix(message.guild);
-		if (this.client.prefix === false && message.content.startsWith(global.config.prefix))
+		const { prefix, premiumGuild } = await getConfig(message.guild);
+
+		if (prefix === undefined && message.content.startsWith(global.config.prefix))
 			return message.channel.send(
 				"Please remove and re add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild",
 			);
+
+		// set the prefix for the guild
+		this.client.prefix = prefix;
 
 		// guild activity
 		activity_guilds(message.guild.id);
@@ -39,8 +42,7 @@ module.exports = class extends Event {
 
 		const command = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
 		if (command) {
-			if (command.premium && !(await isPremiumGuild(message.guild.id)))
-				return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
+			if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
 			const commandOverride = await GetGuildOverrideForCommand(message.guild.id, command.name);
 			const userClearance = await UserClearance(message, message.guild.id);
