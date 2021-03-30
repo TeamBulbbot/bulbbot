@@ -5,7 +5,6 @@ const utils = new (require("../BulbBotUtils"))();
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
-		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 
 		if (dbGuild.guildLogging.modAction === null) return;
@@ -26,7 +25,6 @@ module.exports = {
 	},
 
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
-		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
@@ -46,7 +44,6 @@ module.exports = {
 	},
 
 	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
-		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
@@ -67,7 +64,6 @@ module.exports = {
 	},
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
-		global.currentGuildId = guild.id;
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
@@ -84,7 +80,6 @@ module.exports = {
 	},
 
 	SendEventLog: async (client, guild, part, log) => {
-		global.currentGuildId = guild.id;
 		if (guild === undefined) return;
 
 		const dbGuild = await GetDBGuild(guild.id);
@@ -95,7 +90,6 @@ module.exports = {
 	},
 
 	SendAutoModLog: async (client, guildId, log) => {
-		global.currentGuildId = guild.id;
 		if (guildId === undefined) return;
 
 		const dbGuild = await GetDBGuild(guildId);
