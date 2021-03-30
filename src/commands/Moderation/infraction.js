@@ -55,7 +55,7 @@ module.exports = class extends Command {
 				break;
 
 			default:
-				message.channel.send(await this.client.bulbutils.translate("infraction_invalid_arguments"));
+				message.channel.send(await this.client.bulbutils.translate("infraction_invalid_arguments", message.guild.id));
 				break;
 		}
 	}

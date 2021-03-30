@@ -3,9 +3,10 @@ const { ChangePrefix } = require("../../../utils/configuration/GuildConfiguratio
 module.exports = async (client, message, args) => {
 	const prefix = args[1];
 
-	if (!prefix) return message.channel.send(await client.bulbutils.translate("config_prefix_missing_args"));
+	if (!prefix) return message.channel.send(await client.bulbutils.translate("config_prefix_missing_args", message.guild.id));
+	if (prefix.length > 255) return message.channel.send(await client.bulbutils.translate("config_prefix_too_long", message.guild.id));
 
 	ChangePrefix(message.guild.id, prefix);
 
-	message.channel.send(await client.bulbutils.translate("config_prefix_success", { prefix }));
+	message.channel.send(await client.bulbutils.translate("config_prefix_success", message.guild.id, { prefix }));
 };

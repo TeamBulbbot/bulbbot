@@ -2,11 +2,12 @@ const { DisableCommand } = require("../../../utils/clearance/commands/CommandOve
 
 module.exports = async (client, message, args) => {
 	const command = args[1];
-	if (!command) return message.channel.send(await client.bulbutils.translate("override_disable_missing_command"));
+	if (!command) return message.channel.send(await client.bulbutils.translate("override_disable_missing_command", message.guild.id));
 	const cTemp = client.commands.get(command.toLowerCase()) || client.commands.get(client.aliases.get(command.toLowerCase()));
-	if (cTemp === undefined) return message.channel.send(await client.bulbutils.translate("override_disable_invalid_command", { command }));
+	if (cTemp === undefined)
+		return message.channel.send(await client.bulbutils.translate("override_disable_invalid_command", message.guild.id, { command }));
 
 	await DisableCommand(message.guild.id, cTemp);
 
-	message.channel.send(await client.bulbutils.translate("override_disable_success", { command }));
+	message.channel.send(await client.bulbutils.translate("override_disable_success", message.guild.id, { command }));
 };

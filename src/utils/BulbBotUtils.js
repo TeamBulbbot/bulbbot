@@ -13,36 +13,32 @@ module.exports = class BulbBotUtils {
 
 	/**
 	 *
-	 * @param string    Translatable string from the lang file
-	 * @param key       Values that should be replaced by the function
-	 * @returns {string}     Resolved translated string
+	 * @param string    		Translatable string from the lang file
+	 * @param key       		Values that should be replaced by the function
+	 * @param guildId			Guild id
+	 * @returns {string}     	Resolved translated string
 	 */
-	async translate(string, key = {}) {
+	async translate(string, guildId, key = {}) {
 		let response;
 		let lang;
 
-		if (!global.currentGuildId) {
+		const db = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+		if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
+		else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+
+		try {
+			response = JSON.parse(JSON.stringify(lang))[string].toString();
+		} catch (err) {
+			this.client.channels.cache
+				.get(global.config.translation)
+				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
+
 			lang = require(`./../languages/en-US.json`);
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
-		} else {
-			const db = await sequelize.models.guild.findOne({
-				where: { guildId: global.currentGuildId },
-				include: [{ model: sequelize.models.guildConfiguration }],
-			});
-			if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
-			else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
-
-			try {
-				response = JSON.parse(JSON.stringify(lang))[string].toString();
-			} catch (err) {
-				this.client.channels.cache
-					.get(global.config.translation)
-					.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
-
-				lang = require(`./../languages/en-US.json`);
-				response = JSON.parse(JSON.stringify(lang))[string].toString();
-				//throw new TranslatorException(`${string} is not a valid translatable string`);
-			}
+			//throw new TranslatorException(`${string} is not a valid translatable string`);
 		}
 
 		response = response.replace(/({latency_bot})/g, key.latency_bot);
@@ -470,31 +466,31 @@ module.exports = class BulbBotUtils {
 	async ResolveUserHandle(message, handle, user) {
 		switch (handle) {
 			case 1:
-				message.channel.send(await this.translate("global_cannot_action_self"));
+				message.channel.send(await this.translate("global_cannot_action_self", message.guild.id));
 				return true;
 
 			case 2:
-				message.channel.send(await this.translate("global_cannot_action_owner"));
+				message.channel.send(await this.translate("global_cannot_action_owner", message.guild.id));
 				return true;
 
 			case 3:
-				message.channel.send(await this.translate("global_cannot_action_role_equal", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 4:
-				message.channel.send(await this.translate("global_cannot_action_bot_self"));
+				message.channel.send(await this.translate("global_cannot_action_bot_self", message.guild.id));
 				return true;
 
 			case 5:
-				message.channel.send(await this.translate("global_cannot_action_role_higher", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_higher", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 6:
-				message.channel.send(await this.translate("global_cannot_action_role_equal_bot", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_equal_bot", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 7:
-				message.channel.send(await this.translate("global_cannot_action_role_higher_bot", { user_tag: user.tag }));
+				message.channel.send(await this.translate("global_cannot_action_role_higher_bot", message.guild.id, { user_tag: user.tag }));
 				return true;
 
 			case 0:
@@ -506,7 +502,7 @@ module.exports = class BulbBotUtils {
 	}
 
 	async log(err, message, channel = global.config.error) {
-		if (message) message.channel.send(await this.client.bulbutils.translate("global_unknown_error"));
+		if (message) message.channel.send(await this.client.bulbutils.translate("global_unknown_error", message.guild.id));
 
 		if (process.env.ENVIRONMENT === "dev") return console.error(err);
 		Sentry.captureException(err);

@@ -3,6 +3,17 @@ const DeleteGuild = require("./DeleteGuild");
 const sequelize = require("../database/connection");
 
 module.exports = {
+	async getConfig(guild) {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId: guild.id },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+
+		if (dbGuild === null) return false;
+
+		return dbGuild.guildConfiguration;
+	},
+
 	/**
 	 * Fetches the Guild prefix from the database
 	 *
@@ -61,5 +72,5 @@ module.exports = {
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 		return dbGuild.guildConfiguration.autorole;
-	}
+	},
 };

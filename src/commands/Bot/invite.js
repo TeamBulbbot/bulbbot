@@ -19,13 +19,13 @@ module.exports = class extends Command {
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
 			.setDescription(
-				await this.client.bulbutils.translate("invite_desc", {
+				await this.client.bulbutils.translate("invite_desc", message.guild.id, {
 					bot_invite: botInvite,
 					support_guild: guildInvite,
 				}),
 			)
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),

@@ -13,15 +13,11 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		message.channel.send(await this.client.bulbutils.translate("global_loading")).then(msg => {
+		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild.id)).then(msg => {
 			const p = path.resolve(__dirname, "");
 			shell.cd(`${p}/../../../`);
-			const resp = shell.exec("git pull");
+			const resp = shell.exec("pm2 pull bulbbot");
 			msg.edit(resp.stdout, { code: "yaml" });
-
-			if (resp.stdout !== "Already up to date.\n") {
-				message.channel.send("Restarting the bot...");
-			}
 		});
 	}
 };

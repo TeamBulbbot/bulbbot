@@ -47,7 +47,7 @@
 	"event_member_update_role_remove_audit": "{emote_warn} Role **{role}** byla odebrána **{user_tag}** `({user_id})` moderátorem **{moderator_tag}** `({moderator_id})`",
 
 	"config_language_success": "{emote_success} Jazyk serveru změněn na `{language}`",
-	"config_language_invalid_args": "{emote_warn} Zadán neplatný jazyk!\n{emote_wrench} Vyber si jazyk z `{languages}`",
+	"config_language_invalid_args": "{emote_warn} Zadán neplatný jazyk!\n{emote_wrench} Vyber si jazyk z {languages}",
 
 	"config_logging_success": "{emote_success} Začal jsem zaznamenávat {part} v {channel}",
 	"config_logging_invalid_channel": "{emote_warn} `{channel_name}` nebyl rozpoznán jako platný kanál!",

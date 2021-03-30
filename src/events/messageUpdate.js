@@ -13,7 +13,7 @@ module.exports = class extends Event {
 		if (oldMessage.content === newMessage.content) return;
 		await AutoMod.Master(newMessage);
 
-		let msg = await this.client.bulbutils.translate("event_message_edit", {
+		let msg = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
 			target_tag: newMessage.author.tag,
 			target_id: newMessage.author.id,
 			channel_id: newMessage.channel.id,

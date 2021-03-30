@@ -25,17 +25,18 @@ module.exports = class extends Command {
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason");
-		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found"));
-		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found"));
-		if (!target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translate("mute_not_muted"));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
+		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found", message.guild.id));
+		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
+		if (!target.roles.cache.find(role => role.id === muteRole))
+			return message.channel.send(await this.client.bulbutils.translate("mute_not_muted", message.guild.id));
 
 		infId = await UnmuteManual(
 			this.client,
 			message.guild,
 			target,
 			message.author,
-			await this.client.bulbutils.translate("global_mod_action_log", {
+			await this.client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 				action: "Unmuted",
 				moderator_tag: message.author.tag,
 				moderator_id: message.author.id,
@@ -48,7 +49,7 @@ module.exports = class extends Command {
 		);
 
 		message.channel.send(
-			await this.client.bulbutils.translate("unmute_success", {
+			await this.client.bulbutils.translate("unmute_success", message.guild.id, {
 				target_tag: target.user.tag,
 				target_id: target.user.id,
 				reason,

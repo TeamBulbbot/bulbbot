@@ -37,7 +37,7 @@ module.exports = class extends Command {
 					.reduce((a, b) => a + b)}\``,
 			)
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", {
+				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
 					user_name: await this.client.bulbutils.userObject(true, message.member).username,
 					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
 				}),
@@ -48,20 +48,3 @@ module.exports = class extends Command {
 		return message.channel.send(embed);
 	}
 };
-
-function delta() {
-	const cpus = os.cpus();
-
-	return cpus.map(cpu => {
-		const times = cpu.times;
-		return {
-			tick: Object.keys(times)
-				.filter(time => time !== "idle")
-				.reduce((tick, time) => {
-					tick += times[time];
-					return tick;
-				}, 0),
-			idle: times.idle,
-		};
-	});
-}

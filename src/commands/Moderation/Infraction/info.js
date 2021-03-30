@@ -10,7 +10,7 @@ module.exports = {
 	Call: async (client, message, args) => {
 		if (!args[1])
 			return message.channel.send(
-				await client.bulbutils.translate("event_message_args_missing", {
+				await client.bulbutils.translate("event_message_args_missing", message.guild.id, {
 					arg: "infraction:int",
 					arg_expected: 2,
 					arg_provided: 1,
@@ -20,7 +20,7 @@ module.exports = {
 
 		if (!(await getInfraction(message.guild.id, args[1]))) {
 			return message.channel.send(
-				await client.bulbutils.translate("infraction_not_found", {
+				await client.bulbutils.translate("infraction_not_found", message.guild.id, {
 					infractionId: args[1],
 				}),
 			);
@@ -30,30 +30,30 @@ module.exports = {
 		const user = await client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
 
 		let description = "";
-		description += await client.bulbutils.translate("infraction_info_inf_id", { infractionId: args[1] });
-		description += await client.bulbutils.translate("infraction_info_target", {
+		description += await client.bulbutils.translate("infraction_info_inf_id", message.guild.id, { infractionId: args[1] });
+		description += await client.bulbutils.translate("infraction_info_target", message.guild.id, {
 			target_tag: inf.target,
 			target_id: inf.targetId,
 		});
-		description += await client.bulbutils.translate("infraction_info_moderator", {
+		description += await client.bulbutils.translate("infraction_info_moderator", message.guild.id, {
 			moderator_tag: inf.moderator,
 			moderator_id: inf.moderatorId,
 		});
-		description += await client.bulbutils.translate("infraction_info_created", {
+		description += await client.bulbutils.translate("infraction_info_created", message.guild.id, {
 			timestamp: moment(Date.parse(inf.createdAt)).format("MMM Do YYYY, h:mm:ss a"),
 		});
 
 		if (inf.active !== "false" && inf.active !== "true") {
-			description += await client.bulbutils.translate("infraction_info_expires", {
+			description += await client.bulbutils.translate("infraction_info_expires", message.guild.id, {
 				timestamp: `${Emotes.status.ONLINE} ${moment(parseInt(inf.active)).format("MMM Do YYYY, h:mm:ss a")}`,
 			});
 		} else {
-			description += await client.bulbutils.translate("infraction_info_active", {
+			description += await client.bulbutils.translate("infraction_info_active", message.guild.id, {
 				emoji: prettify(inf.active),
 			});
 		}
 
-		description += await client.bulbutils.translate("infraction_info_reason", {
+		description += await client.bulbutils.translate("infraction_info_reason", message.guild.id, {
 			reason: inf.reason,
 		});
 
@@ -66,7 +66,7 @@ module.exports = {
 			.setImage(image ? image[0] : null)
 			.setThumbnail(user.avatarUrl)
 			.setFooter(
-				await client.bulbutils.translate("global_executed_by", {
+				await client.bulbutils.translate("global_executed_by", message.guild.id, {
 					user_name: message.author.username,
 					user_discriminator: message.author.discriminator,
 				}),

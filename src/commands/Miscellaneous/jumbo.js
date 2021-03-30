@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		try {
-			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many"));
+			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many", message.guild.id));
 
 			const size = 250;
 			const imgPath = [];
@@ -102,7 +102,7 @@ module.exports = class extends Command {
 				}
 			}
 		} catch (error) {
-			return message.channel.send(await this.client.bulbutils.translate("jumbo_invalid_emoji"));
+			return message.channel.send(await this.client.bulbutils.translate("jumbo_invalid_emoji", message.guild.id));
 		}
 	}
 };

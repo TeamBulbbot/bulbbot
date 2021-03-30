@@ -19,14 +19,14 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const level = parseInt(args[0].replace(NonDigits, ""));
-		if (level === "") return message.channel.send(await this.client.bulbutils.translate("verification_non_integer"));
+		if (level === "") return message.channel.send(await this.client.bulbutils.translate("verification_non_integer", message.guild.id));
 		if (message.guild.features.includes("COMMUNITY") && level === 0)
-			return message.channel.send(await this.client.bulbutils.translate("verification_community_zero"));
+			return message.channel.send(await this.client.bulbutils.translate("verification_community_zero", message.guild.id));
 
-		if (level > 4 || level < 0) return message.channel.send(await this.client.bulbutils.translate("verification_level_error"));
+		if (level > 4 || level < 0) return message.channel.send(await this.client.bulbutils.translate("verification_level_error", message.guild.id));
 
 		await message.guild.setVerificationLevel(level);
-		message.channel.send(await this.client.bulbutils.translate("verification_level_success", { level }));
+		message.channel.send(await this.client.bulbutils.translate("verification_level_success", message.guild.id, { level }));
 
 		// TODO
 		// - send this as a mod action log
