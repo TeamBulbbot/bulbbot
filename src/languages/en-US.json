@@ -50,7 +50,7 @@
 	"event_member_update_role_remove_audit": "{emote_warn} The **{role}** role has been removed from **{user_tag}** `({user_id})` by **{moderator_tag}** `({moderator_id})`",
 
 	"config_language_success": "{emote_success} Successfully changed server the language to `{language}`",
-	"config_language_invalid_args": "{emote_warn} Invalid language provided!\n{emote_wrench} Select a valid language from `{languages}`",
+	"config_language_invalid_args": "{emote_warn} Invalid language provided!\n{emote_wrench} Select a valid language from {languages}",
 
 	"config_logging_success": "{emote_success} Successfully started logging {part} in {channel}",
 	"config_logging_invalid_channel": "{emote_warn} Cannot resolve `{channel_name}` as a valid channel!",
