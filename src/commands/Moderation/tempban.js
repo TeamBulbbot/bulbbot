@@ -43,7 +43,7 @@ module.exports = class extends Command {
 
 		if (bannedUser) {
 			return message.channel.send(
-				await this.client.bulbutils.translate("already_banned", {
+				await this.client.bulbutils.translate("already_banned", message.guild.id, {
 					target_tag: bannedUser.user.tag,
 					target_id: bannedUser.user.id,
 					reason: bannedUser.reason,

@@ -18,7 +18,7 @@ module.exports = class BulbBotUtils {
 	 * @param guildId			Guild id
 	 * @returns {string}     	Resolved translated string
 	 */
-	async translate(string, guildId, key = {}) {
+	async translate(string, guildId = "742094927403679816", key = {}) {
 		let response;
 		let lang;
 
