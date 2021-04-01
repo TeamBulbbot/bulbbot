@@ -22,7 +22,7 @@ module.exports = {
 					message.guild,
 					target,
 					client.user,
-					client.bulbutils.translate("global_mod_action_log", {
+					client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 						action: "Warned",
 						moderator_tag: client.user.tag,
 						moderator_id: client.user.id,
@@ -39,7 +39,7 @@ module.exports = {
 					message.guild,
 					target.user,
 					client.user,
-					client.bulbutils.translate("global_mod_action_log", {
+					client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 						action: "Kicked",
 						moderator_tag: client.user.tag,
 						moderator_id: client.user.id,
@@ -56,7 +56,7 @@ module.exports = {
 					message.guild,
 					target.user,
 					client.user,
-					client.bulbutils.translate("global_mod_action_log", {
+					client.bulbutils.translate("global_mod_action_log", message.guild.id, {
 						action: "Banned",
 						moderator_tag: client.user.tag,
 						moderator_id: client.user.id,
@@ -65,7 +65,7 @@ module.exports = {
 						reason,
 					}),
 					reason,
-					7
+					7,
 				);
 				break;
 			default:

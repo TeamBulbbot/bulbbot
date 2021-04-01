@@ -81,7 +81,7 @@ module.exports = class extends Command {
 				message.guild,
 				target.user,
 				client.user,
-				utils.translate("global_mod_action_log", {
+				utils.translate("global_mod_action_log", message.guild.id, {
 					action: "Unmuted",
 					moderator_tag: client.user.tag,
 					moderator_id: client.user.id,
