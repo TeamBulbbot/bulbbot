@@ -18,7 +18,7 @@ Sentry.init({
 const config = {
 	token: process.env.TOKEN,
 	prefix: global.config.prefix,
-	defaultPerms: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+	defaultPerms: ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 	clearance: "0",
 };
 

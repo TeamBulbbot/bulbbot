@@ -86,8 +86,8 @@ module.exports = class extends Event {
 
 			const clientPermCheck = command.clientPerms;
 			if (clientPermCheck) {
-				let missing = !message.guild.me.hasPermission(clientPermCheck);
-				if (!missing) missing = !message.guild.me.permissionsIn(message.channel).has(clientPermCheck);
+				let missing = !message.guild.me.hasPermission("");
+				//if (!missing) missing = !message.guild.me.permissionsIn(message.channel).has(clientPermCheck);
 
 				if (missing)
 					return message.channel.send(
