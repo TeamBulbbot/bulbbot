@@ -18,14 +18,18 @@ module.exports = async guildId => {
 	});
 
 	if (dbGuild === null) {
-		console.log(`Unable to find the db table for guild: ${guildId}`);
+		console.log(`[DB - DeleteGuild] Unable to find the db table for guild: ${guildId}`);
 		return;
 	}
 
-	await dbGuild.destroy().catch(err => console.log(`Unable to delete the Guild table for: ${guildId}: `, err));
-	await dbGuild.guildConfiguration.destroy().catch(err => console.log(`Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
-	await dbGuild.automod.destroy().catch(err => console.log(`Unable to delete the Automod table for: ${guildId}: `, err));
-	await dbGuild.guildLogging.destroy().catch(err => console.log(`Unable to delete the GuildLogging table for: ${guildId}: `, err));
-	await dbGuild.infractions.forEach(inf => inf.destroy().catch(err => console.log(`Unable to delete the Infraction table for: ${guildId}: `, err)));
-	await dbGuild.starboard.destroy().catch(err => console.log(`Unable to delete the Starboard table for: ${guildId}: `, err));
+	await dbGuild.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Guild table for: ${guildId}: `, err));
+	await dbGuild.guildConfiguration
+		.destroy()
+		.catch(err => console.log(`[DB - DeleteGuild] Unable to delete the GuildConfiguration table for: ${guildId}: `, err));
+	await dbGuild.automod.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Automod table for: ${guildId}: `, err));
+	await dbGuild.guildLogging.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the GuildLogging table for: ${guildId}: `, err));
+	await dbGuild.infractions.forEach(inf =>
+		inf.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Infraction table for: ${guildId}: `, err)),
+	);
+	await dbGuild.starboard.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Starboard table for: ${guildId}: `, err));
 };

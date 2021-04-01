@@ -88,6 +88,7 @@ module.exports = {
 				}, tb.expireTime - time);
 			}
 		}
+		console.log("[CLIENT - Temp Bans] Successfully restored the temp bans");
 	},
 
 	TempmuteCreate: async (guildId, targetTag, targetId, reason, expireTime) => {
@@ -122,7 +123,7 @@ module.exports = {
 			const dbGuild = await sequelize.models.guild.findOne({
 				where: { id: tb.guildId },
 			});
-			console.log(tb, [tb.dataValues.reason, tb.dataValues.targetTag]);
+			//console.log(tb, [tb.dataValues.reason, tb.dataValues.targetTag]);
 			if (dbGuild === null) continue;
 
 			const target = {
@@ -132,7 +133,7 @@ module.exports = {
 
 			const guild = await client.guilds.cache.get(dbGuild.guildId);
 
-			console.log(tb.expireTime - time);
+			//console.log(tb.expireTime - time);
 			if (tb.expireTime - time <= 0) {
 				try {
 					await Unmute(
@@ -179,6 +180,7 @@ module.exports = {
 				}, tb.expireTime - time);
 			}
 		}
+		console.log("[CLIENT - Mutes] Successfully restored the mute");
 	},
 };
 

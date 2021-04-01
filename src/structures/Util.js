@@ -24,7 +24,7 @@ module.exports = class Util {
 	}
 
 	async loadCommands() {
-		console.log("Beginning to register commands. This may take a while!");
+		console.log("[CLIENT] Started registering commands...");
 		return glob(`${this.directory}commands/*/*.js`).then(commands => {
 			for (const commandFile of commands) {
 				delete require.cache[commandFile];
@@ -41,13 +41,14 @@ module.exports = class Util {
 						this.client.aliases.set(alias, command.name);
 					}
 				}
-				console.log(`Successfully registered command '${command.name}'`);
+				// console.log(`Successfully registered command '${command.name}'`);
 			}
+			console.log("[CLIENT] Successfully registered all commands");
 		});
 	}
 
 	async loadEvents() {
-		console.log("Beginning to register events. This may take a while!");
+		console.log("[CLIENT] Started registering events...");
 		return glob(`${this.directory}events/**/*.js`).then(events => {
 			for (const eventFile of events) {
 				delete require.cache[eventFile];
@@ -68,8 +69,9 @@ module.exports = class Util {
 
 					metrics.client_event(event.name);
 				});
-				console.log(`Successfully registered event '${event.name}'`);
+				//console.log(`Successfully registered event '${event.name}'`);
 			}
+			console.log("[CLIENT] Successfully registered all events");
 		});
 	}
 };

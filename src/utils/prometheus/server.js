@@ -25,7 +25,7 @@ module.exports = {
 		});
 
 		await server.start();
-		console.log(`Server running on ${server.info.uri}`);
+		console.log(`[SERVER] Server started on ${server.info.uri}`);
 
 		process.on("unhandledRejection", err => {
 			console.log(err);

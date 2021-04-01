@@ -16,14 +16,16 @@ module.exports = class extends Event {
 				type: global.config.client.type,
 			},
 		});
+		console.log("[CLIENT - Temp Bans] Started to restore temp bans...");
 		await TempbanRestore(this.client);
-		await TempmuteRestore(this.client)
+		console.log("[CLIENT - Mutes] Started to restore mutes");
+		await TempmuteRestore(this.client);
 
 		console.log(
 			[
-				`${this.client.user.username} successfully logged and ready`,
-				`Listening to ${this.client.commands.size} command(s)`,
-				`Listening to ${this.client.events.size} event(s)`,
+				`[CLIENT] ${this.client.user.username} successfully logged and ready`,
+				`[CLIENT] Listening to ${this.client.commands.size} command(s)`,
+				`[CLIENT] Listening to ${this.client.events.size} event(s)`,
 			].join("\n"),
 		);
 	}

@@ -24,13 +24,13 @@ const config = {
 
 const client = new BulbBotClient(config);
 
-server.init().catch(err => console.log("Server connection error: ", err));
+server.init().catch(err => console.log("[SERVER] Connection error: ", err));
 
 db.authenticate()
-	.then(() => console.log("Database connected..."))
-	.catch(err => console.log("Database connection error: ", err));
+	.then(() => console.log("[DB] Connecting..."))
+	.catch(err => console.log("[DB] Connection error: ", err));
 
-client.login().catch(err => console.log("Client connection error: ", err));
+client.login().catch(err => console.log("[CLIENT] Connection error: ", err));
 require("./utils/prometheus/Data")(client);
 
 process.on("uncaughtException", function (err) {
