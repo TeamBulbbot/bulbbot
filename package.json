@@ -34,7 +34,7 @@
 		"sequelize": "^6.6.2",
 		"sharp": "^0.27.2",
 		"shelljs": "^0.8.4",
-		"unicode": "^12.1.0"
+		"unicode": "^13.0.0"
 	},
 	"devDependencies": {
 		"prettier": "^2.2.1",
