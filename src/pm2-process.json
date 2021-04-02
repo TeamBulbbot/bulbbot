@@ -1,7 +1,7 @@
 {
 	"name": "bulbbot",
 	"script": "./src/index.js",
-	"watch": true,
+	"watch": false,
 	"watch_options": {
 		"followSymlinks": false
 	},
