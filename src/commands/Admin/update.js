@@ -18,6 +18,7 @@ module.exports = class extends Command {
 			shell.cd(`${p}/../../../`);
 			const resp = shell.exec("pm2 pull bulbbot");
 			msg.edit(resp.stdout, { code: "yaml" });
+			shell.exec("pm2 restart bulbbot");
 		});
 	}
 };
