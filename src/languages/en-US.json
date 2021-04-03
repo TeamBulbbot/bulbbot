@@ -139,7 +139,7 @@
 	"userinfo_embed_joined": "**Joined Server:** {user_joined}\n",
 	"userinfo_embed_premium": "**Boosting since:** {user_premium}\n",
 	"userinfo_embed_roles": "**Roles:** {user_roles}\n",
-	"userinfo_embed_infractions": "\n**Infractions:** {emote_inf} **{user_infractions}** infraction(s) on this server",
+	"userinfo_embed_infractions": "\n**Infractions:** {emote_inf} **{user_infractions}** {infractions, plural, =0 {infractions} one {infraction} other {infractions}} on this server",
 
 	"serverinfo_embed_owner": "{emote_owner} **Owner:** <@{guild_owner_name}> `{guild_owner_id}`\n",
 	"serverinfo_embed_features": "**Features:**\n{guild_features}\n",

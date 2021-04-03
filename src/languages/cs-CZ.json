@@ -111,7 +111,7 @@
 	"userinfo_embed_joined": "**Připojil se:** {user_joined}\n",
 	"userinfo_embed_premium": "**Vylepšuje od:** {user_premium}\n",
 	"userinfo_embed_roles": "**Role:** {user_roles}\n",
-	"userinfo_embed_infractions": "\n**Přestupky:** {emote_inf} **{user_infractions}** přestupků na tomto serveru",
+	"userinfo_embed_infractions": "\n**Přestupky:** {emote_inf} **{user_infractions}** {infractions, plural, =0 {přestupků} one {přestupek} other {přestupků}} na tomto serveru",
 
 	"serverinfo_embed_owner": "{emote_owner} **Majitel:** <@{guild_owner_name}> `{guild_owner_id}`\n",
 	"serverinfo_embed_features": "**Vlastnosti:**\n{guild_features}\n",

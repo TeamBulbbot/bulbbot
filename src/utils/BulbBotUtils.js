@@ -6,6 +6,8 @@ const Discord = require("discord.js");
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 
+const MessageFormat = require("@messageformat/core")
+
 module.exports = class BulbBotUtils {
 	constructor(client) {
 		this.client = client;
@@ -187,6 +189,11 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({emote_mute})/g, Emotes.actions.MUTE);
 
 		response = response.replace(/({full_list})/g, key.full_list);
+
+		const mf = new MessageFormat("en")
+		const output = mf.compile(response)
+
+		response = output({ infractions: key.user_infractions })
 
 		return response;
 	}
