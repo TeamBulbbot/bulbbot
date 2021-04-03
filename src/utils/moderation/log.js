@@ -9,7 +9,10 @@ module.exports = {
 
 		if (dbGuild.guildLogging.modAction === null) return;
 
-		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
+		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
+		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		modChannel.send(
 			await utils.translate("global_logging_mod", guild.id, {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
@@ -29,7 +32,10 @@ module.exports = {
 		if (dbGuild.guildLogging.modAction === null) return;
 		if (target === undefined) return;
 
-		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
+		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
+		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		modChannel.send(
 			await utils.translate("global_logging_unban_auto", guild.id, {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
@@ -48,7 +54,10 @@ module.exports = {
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
-		client.channels.cache.get(dbGuild.guildLogging.modAction).send(
+		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
+		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		modChannel.send(
 			await utils.translate("global_logging_mod_temp", guild.id, {
 				timestamp: moment().format("hh:mm:ss a"),
 				target_tag: target.tag,
@@ -68,16 +77,17 @@ module.exports = {
 		const dbGuild = await GetDBGuild(guild.id);
 		if (dbGuild.guildLogging.modAction === null) return;
 
-		client.channels.cache
-			.get(dbGuild.guildLogging.modAction)
-			.send(
-				`\`[${moment().format("hh:mm:ss a")}]\` ${BetterActions("trash")} **${moderator.tag}** \`(${
-					moderator.id
-				})\` **${amount}** messages was removed in <#${channel.id}>`,
-				{
-					files: [file],
-				},
-			);
+		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
+		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		modChannel.send(
+			`\`[${moment().format("hh:mm:ss a")}]\` ${BetterActions("trash")} **${moderator.tag}** \`(${
+				moderator.id
+			})\` **${amount}** messages was removed in <#${channel.id}>`,
+			{
+				files: [file],
+			},
+		);
 	},
 
 	SendEventLog: async (client, guild, part, log) => {
