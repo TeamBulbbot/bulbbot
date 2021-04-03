@@ -30,10 +30,14 @@ module.exports = class extends Event {
 		activity_guilds(message.guild.id);
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 
+		// fetch user clearance
+		const clearance = await UserClearance(message, message.guild.id);
+
 		// auto mod
-		try {
-			await AutoMod.Master(this.client, message);
-		} catch (err) {}
+		if (clearance < 25)
+			try {
+				await AutoMod.Master(this.client, message);
+			} catch (err) {}
 
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;
 		if (message.content.match(mentionRegex) && message.content.replace(mentionRegex, "").trim().length === 0)
@@ -47,7 +51,6 @@ module.exports = class extends Event {
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
 		const commandOverride = await GetGuildOverrideForCommand(message.guild.id, command.name);
-		const clearance = await UserClearance(message, message.guild.id);
 
 		if (commandOverride !== undefined) {
 			if (!commandOverride.enabled) return;
