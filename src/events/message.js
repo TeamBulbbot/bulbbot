@@ -35,10 +35,10 @@ module.exports = class extends Event {
 			await AutoMod.Master(this.client, message);
 		} catch (err) {}
 
-		if (message.content.match(mentionRegex) && message.content.split(" ").length === 1)
-			return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;
-		if (message.content.match(mentionRegex)) message.content = `!${message.content.split(" ")[1]}`;
+		if (message.content.match(mentionRegex) && message.content.replace(mentionRegex, "").trim().length === 0)
+			return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
+		if (message.content.match(mentionRegex)) message.content = `!${message.content.replace(mentionRegex, "").trim()}`;
 
 		const [cmd, ...args] = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
 		const command = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
