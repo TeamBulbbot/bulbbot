@@ -51,11 +51,12 @@ module.exports = class extends Event {
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
 		const commandOverride = await GetGuildOverrideForCommand(message.guild.id, command.name);
+		const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
+		const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
 
 		if (commandOverride !== undefined) {
 			if (!commandOverride.enabled) return;
-
-			if (commandOverride.clearanceLevel > clearance) {
+			if (commandOverride.clearanceLevel > clearance && missing.length) {
 				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 					message.delete({ timeout: 5000 });
 					msg.delete({ timeout: 5000 });
@@ -72,10 +73,7 @@ module.exports = class extends Event {
 			});
 		}
 
-		const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
-		if (userPermCheck && clearance < command.clearance) {
-			const missing = message.channel.permissionsFor(message.member).missing(userPermCheck);
-
+		if (userPermCheck && !(clearance < command.clearance)) {
 			if (missing.length) {
 				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 					message.delete({ timeout: 5000 });
