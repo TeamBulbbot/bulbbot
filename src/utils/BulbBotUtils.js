@@ -1,4 +1,4 @@
-const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
+//const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
 const Emotes = require("./../Emotes.json");
 const moment = require("moment");
 const sequelize = require("./database/connection");
@@ -6,7 +6,7 @@ const Discord = require("discord.js");
 const Sentry = require("@sentry/node");
 const Tracing = require("@sentry/tracing");
 
-const MessageFormat = require("@messageformat/core")
+const MessageFormat = require("@messageformat/core");
 
 module.exports = class BulbBotUtils {
 	constructor(client) {
@@ -190,10 +190,10 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({full_list})/g, key.full_list);
 
-		const mf = new MessageFormat("en")
-		const output = mf.compile(response)
+		const mf = new MessageFormat("en");
+		const output = mf.compile(response);
 
-		response = output({ infractions: key.user_infractions })
+		response = output({ infractions: key.user_infractions });
 
 		return response;
 	}
