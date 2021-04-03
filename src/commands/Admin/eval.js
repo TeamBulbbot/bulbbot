@@ -32,7 +32,7 @@ module.exports = class extends Command {
 
 			await message.channel.send(await clean(evaled), { code: "js" });
 		} catch (err) {
-			message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+			message.channel.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``);
 		}
 	}
 };

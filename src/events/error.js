@@ -6,6 +6,6 @@ module.exports = class extends Event {
 	}
 
 	run(error) {
-		console.error("error: ", error);
+		console.error("[CLIENT ERROR]: ", error);
 	}
 };

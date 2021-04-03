@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const level = parseInt(args[0].replace(NonDigits, ""));
-		if (level === "") return message.channel.send(await this.client.bulbutils.translate("verification_non_integer", message.guild.id));
+		if (!level && level !== 0) return message.channel.send(await this.client.bulbutils.translate("verification_non_integer", message.guild.id));
 		if (message.guild.features.includes("COMMUNITY") && level === 0)
 			return message.channel.send(await this.client.bulbutils.translate("verification_community_zero", message.guild.id));
 

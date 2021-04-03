@@ -5,9 +5,7 @@ module.exports = class extends Event {
 		super(...args, {});
 	}
 
-	run(role) {
-		// TODO
-		return;
-		console.log("deleted role:", role);
+	run(info) {
+		if (process.env.ENVIRONMENT === "prod") console.info("[CLIENT DEBUG]: ", info);
 	}
 };

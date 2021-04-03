@@ -6,6 +6,6 @@ module.exports = class extends Event {
 	}
 
 	run(info) {
-		console.warn("warning: ", info);
+		console.warn("[CLIENT WARN]: ", info);
 	}
 };

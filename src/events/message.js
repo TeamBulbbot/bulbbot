@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-const { getConfig, isPremiumGuild } = require("../utils/guilds/Guild");
+const { getConfig } = require("../utils/guilds/Guild");
 const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
 const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");

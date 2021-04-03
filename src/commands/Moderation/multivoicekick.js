@@ -37,15 +37,14 @@ module.exports = class extends Command {
 			const target = await message.guild.member(t);
 			let infId;
 
-			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
-
 			if (!target) {
 				message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
-				return;
+				continue;
 			}
+			if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) continue;
 			if (!target.voice.channel) {
 				message.channel.send(await this.client.bulbutils.translate("global_not_in_voice", message.guild.id));
-				return;
+				continue;
 			}
 
 			infId = await Voicekick(

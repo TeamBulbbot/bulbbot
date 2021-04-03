@@ -5,10 +5,7 @@ module.exports = class extends Event {
 		super(...args, {});
 	}
 
-	run(oldGuild, newGuild) {
-		// TODO
-		return;
-		console.log("old guild:", oldGuild);
-		console.log("new guild:", newGuild);
+	run(info) {
+		console.info("[CLIENT RATELIMIT]: ", info);
 	}
 };
