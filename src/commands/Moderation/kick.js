@@ -24,10 +24,9 @@ module.exports = class extends Command {
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 
-		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
-
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
+		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
 		if (!target.kickable) {
 			return message.channel.send(
