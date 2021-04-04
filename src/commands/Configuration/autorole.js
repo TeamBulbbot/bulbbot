@@ -20,14 +20,20 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const roleId = args[0].replace(NonDigits, "");
-		const role = message.guild.roles.cache.get(roleId);
-
+		let role = null;
+		if (args[0] !== "disable") {
+			role = message.guild.roles.cache.get(args[0].replace(NonDigits, ""));
+			if (message.guild.me.roles.highest.rawPosition < role.rawPosition)
+				return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id));
+		}
 		if (role === undefined) return message.channel.send(await this.client.bulbutils.translate("config_mute_invalid_role", message.guild.id));
-		if (message.guild.me.roles.highest.rawPosition < role.rawPosition)
-			return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id));
 
-		await ChangeAutoRole(message.guild.id, role.id);
-		message.channel.send(await this.client.bulbutils.translate("config_autorole_success", message.guild.id));
+		if (role !== null) {
+			await ChangeAutoRole(message.guild.id, role.id);
+			return message.channel.send(await this.client.bulbutils.translate("config_autorole_success", message.guild.id));
+		} else {
+			await ChangeAutoRole(message.guild.id, null);
+			return message.channel.send(await this.client.bulbutils.translate("config_autorole_disable", message.guild.id));
+		}
 	}
 };

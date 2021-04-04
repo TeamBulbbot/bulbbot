@@ -66,6 +66,7 @@
 	"config_prefix_too_long": "{emote_warn} That prefix name is too long, please make it shorter than 255 characters",
 
 	"config_autorole_success": "{emote_success} Successfully changed the autorole",
+	"config_autorole_disable": "{emote_success} Successfully disabled the autorole",
 
 	"override_create_invalid_part": "{emote_warn} Missing required argument `part`, can be either `role` or `command`",
 	"override_create_missing_name": "{emote_warn} Missing required argument `role/command name`",
