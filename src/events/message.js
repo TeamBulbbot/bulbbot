@@ -56,7 +56,7 @@ module.exports = class extends Event {
 
 		if (commandOverride !== undefined) {
 			if (!commandOverride.enabled) return;
-			if (commandOverride.clearanceLevel > clearance && missing.length) {
+			if (commandOverride.clearanceLevel > clearance) {
 				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 					message.delete({ timeout: 5000 });
 					msg.delete({ timeout: 5000 });
