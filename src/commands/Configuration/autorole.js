@@ -1,5 +1,6 @@
 const Command = require("../../structures/Command");
 const { ChangeAutoRole } = require("../../utils/configuration/GuildConfiguration");
+const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -19,7 +20,9 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const role = message.guild.roles.cache.get(args[0]);
+		const roleId = args[0].replace(NonDigits, "");
+		const role = message.guild.roles.cache.get(roleId);
+
 		if (role === undefined) return message.channel.send(await this.client.bulbutils.translate("config_mute_invalid_role", message.guild.id));
 		if (message.guild.me.roles.highest.rawPosition < role.rawPosition)
 			return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id));
