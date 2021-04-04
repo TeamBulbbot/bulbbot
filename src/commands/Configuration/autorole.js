@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			description: "Configure the autole in your server",
 			category: "Configuration",
 			aliases: ["ar"],
-			usage: "!autorole <Role>",
+			usage: "!autorole <role>",
 			examples: ["autorole @Cool Role", "autorole 787036080746397759"],
 			argList: ["role:Role"],
 			minArgs: 1,
@@ -15,7 +15,6 @@ module.exports = class extends Command {
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["MANAGE_ROLES"],
-			premium: true,
 		});
 	}
 
