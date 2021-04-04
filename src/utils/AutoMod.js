@@ -5,13 +5,13 @@ const { SendAutoModLog } = require("../utils/moderation/log");
 const Emotes = require("../emotes.json");
 
 module.exports = {
-	Master: async (client, message) => {
+	Master: async (client, message, clearance) => {
 		if (message === undefined || message.author.id === global.config.client.id) return;
 		const dbGuild = await AutoModUtils.getGuildAutoMod(message.guild.id);
 		if (dbGuild === null) return;
 
 		if (dbGuild.automod === null || !dbGuild.automod.enabled) return;
-		if (await UserClearance(message, message.guild.id) >= 25) return;
+		if (clearance >= 25) return;
 		if (message.member.hasPermission("MANAGE_MESSAGES")) return;
 
 		if (await hasInvite(message, dbGuild.automod)) {

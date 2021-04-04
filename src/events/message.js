@@ -36,7 +36,7 @@ module.exports = class extends Event {
 		// auto mod
 		if (clearance < 25)
 			try {
-				await AutoMod.Master(this.client, message);
+				await AutoMod.Master(this.client, message, clearance);
 			} catch (err) {}
 
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;
