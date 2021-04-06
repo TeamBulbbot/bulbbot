@@ -1,4 +1,5 @@
 const Command = require("./../../structures/Command");
+const fs = require("fs");
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -26,9 +27,17 @@ module.exports = class extends Command {
 			let evaled = eval(code);
 
 			if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-
-			if (evaled.length > 2000) evaled = evaled.substring(0, 1980) + "...";
 			if (evaled.includes(process.env.TOKEN)) evaled = evaled.replace(process.env.TOKEN, "Y0U.TH0UGHT.1_W0ULD.L34V3_MY_D1SC0RD_T0K3N_H3R3");
+
+			if (evaled.length > 2000) {
+				fs.writeFile(`./src/files/eval/${message.guild.id}.txt`, await clean(evaled), function (err) {
+					if (err) console.error(err);
+				});
+
+				return message.channel.send("The evaled code is more than 2000 charcters so I am giving you a file instead have fun 🙂", {
+					files: [`./src/files/eval/${message.guild.id}.txt`],
+				});
+			}
 
 			await message.channel.send(await clean(evaled), { code: "js" });
 		} catch (err) {
