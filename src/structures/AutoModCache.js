@@ -42,6 +42,11 @@ module.exports = {
 				dbGuild.automod.punishmentMessages,
 				`Violated \`MAX MESSAGES\` check in #${message.channel.name}`,
 			);
+			await SendAutoModLog(
+				client,
+				guild,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MESSAGES\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
+			);
 			delete cache[guild]["messages"][user];
 		}
 

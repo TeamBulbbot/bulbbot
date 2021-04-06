@@ -22,7 +22,7 @@ module.exports = {
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
 
-			return message.delete();
+			message.delete();
 		}
 
 		if (await hasSwearWords(message, dbGuild.automod)) {
@@ -37,7 +37,7 @@ module.exports = {
 				dbGuild.guildId,
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
-			return message.delete();
+			message.delete();
 		}
 
 		if (await hasWebsite(message, dbGuild.automod)) {
@@ -52,12 +52,14 @@ module.exports = {
 				dbGuild.guildId,
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WEBSITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
 			);
-			return message.delete();
+			message.delete();
 		}
 
 		if (await hasMentions(client, message)) {
-			await AutoModCache.set(client, message, message.guild.id, "messages", message.author.id, 1, 10000);
+			return await AutoModCache.set(client, message, message.guild.id, "messages", message.author.id, 1, 10000);
 		}
+
+		await AutoModCache.set(client, message, message.guild.id, "messages", message.author.id, 1, 10000);
 	},
 };
 
