@@ -19,7 +19,7 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>\`\`\`${message.content}\`\`\``,
 			);
 
 			message.delete();
@@ -35,7 +35,7 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${message.channel.id}>\n**Blacklisted words:** \`${await hasSwearWords(message, dbGuild.automod)}\`\n\`\`\`${message.content}\`\`\``,
 			);
 			message.delete();
 		}
@@ -78,13 +78,13 @@ async function hasSwearWords(message, dbGuild) {
 	const word_blacklist = dbGuild.wordBlacklist;
 	for (const word of word_blacklist) {
 		const regex = new RegExp(`(?:^|\\W)${word}(?:$|\\W)`, "gi");
-		if (message.content.match(regex)) return true;
+		if (message.content.match(regex)) return word;
 	}
 
 	const word_blacklist_token = dbGuild.wordBlacklistToken;
 	for (const word of word_blacklist_token) {
 		const regex = new RegExp(`(${word})`, "gi");
-		if (message.content.match(regex)) return true;
+		if (message.content.match(regex)) return word;
 	}
 
 	return false;

@@ -22,12 +22,12 @@ module.exports = {
 				client,
 				message,
 				dbGuild.automod.punishmentMentions,
-				`Violated \`MAX MENTIONS\` check in #${message.channel.name}`,
+				`Violated \`MAX MENTIONS\` check in #${message.channel.name} (${cache[guild]["mentions"][user]}/15s)`,
 			);
 			await SendAutoModLog(
 				client,
 				guild,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MENTIONS\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MENTIONS\` check in <#${message.channel.id}>. Mentions (${cache[guild]["mentions"][user]}/15.0s)`,
 			);
 			delete cache[guild]["mentions"][user];
 		}
@@ -40,12 +40,12 @@ module.exports = {
 				client,
 				message,
 				dbGuild.automod.punishmentMessages,
-				`Violated \`MAX MESSAGES\` check in #${message.channel.name}`,
+				`Violated \`MAX MESSAGES\` check in #${message.channel.name} (${cache[guild]["messages"][user]}/10s)`,
 			);
 			await SendAutoModLog(
 				client,
 				guild,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MESSAGES\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MESSAGES\` check in <#${message.channel.id}>. Messages (${cache[guild]["messages"][user]}/10.0s)`,
 			);
 			delete cache[guild]["messages"][user];
 		}
