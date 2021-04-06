@@ -175,6 +175,9 @@ function BetterActions(action) {
 		case "temp-banned":
 			action = `${Emotes.actions.BAN}`;
 			break;
+		case "trash":
+			action = `${Emotes.other.TRASH}`;
+			break;
 		default:
 			break;
 	}

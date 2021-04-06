@@ -8,7 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			description: "Purges messages from a chat",
 			category: "Moderation",
-			aliases: ["clear"],
+			aliases: ["clear", "prune"],
 			usage: "!purge <amount>",
 			examples: ["purge 30"],
 			argList: ["amount:integer"],
@@ -22,34 +22,23 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const amount = args[0];
-		if (amount > 200) return message.channel.send(await this.client.bulbutils.translate("purge_too_many", message.guild.id));
+		if (amount > 99) return message.channel.send(await this.client.bulbutils.translate("purge_too_many", message.guild.id));
 		if (amount <= 0) return message.channel.send(await this.client.bulbutils.translate("purge_too_few", message.guild.id));
-		let deleteMsg = [];
-		let a = 0;
-
-		for (let i = 1; i <= amount; i++) {
-			if (i % 100 === 0) {
-				deleteMsg.push(100);
-				a = i;
-			}
-		}
-		if (amount - a !== 0) deleteMsg.push(amount - a);
 
 		let delMsgs = `Message purge in #${message.channel.name} (${message.channel.id}) by ${message.author.tag} (${
 			message.author.id
 		}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
 
-		for (let i = 0; i < deleteMsg.length; i++) {
-			const msgs = await message.channel.messages.fetch({
-				limit: deleteMsg[i],
-			});
+		const msgs = await message.channel.messages.fetch({
+			limit: parseInt(amount) + 1,
+		});
 
-			msgs.map(m => {
-				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content}\n`;
-			});
+		msgs.map(m => {
+			delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content}\n`;
+		});
 
-			await message.channel.bulkDelete(msgs);
-		}
+		let deletedMessages = 0;
+		await message.channel.bulkDelete(msgs, true).then(msg => (deletedMessages = msg.size));
 
 		fs.writeFile(`./src/files/purge/${message.guild.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);
@@ -59,7 +48,7 @@ module.exports = class extends Command {
 			this.client,
 			message.guild,
 			"Purge",
-			amount,
+			deletedMessages,
 			`./src/files/purge/${message.guild.id}.txt`,
 			message.channel,
 			message.author,
