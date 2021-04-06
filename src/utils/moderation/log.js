@@ -83,7 +83,7 @@ module.exports = {
 		modChannel.send(
 			`\`[${moment().format("hh:mm:ss a")}]\` ${BetterActions("trash")} **${moderator.tag}** \`(${
 				moderator.id
-			})\` **${amount}** messages was removed in <#${channel.id}>`,
+			})\` has removed **${amount}** messages in <#${channel.id}>`,
 			{
 				files: [file],
 			},
@@ -176,7 +176,7 @@ function BetterActions(action) {
 			action = `${Emotes.actions.BAN}`;
 			break;
 		case "trash":
-			action = `${Emotes.other.TRASH}`;
+			action = `${Emotes.other.TRASH}`
 			break;
 		default:
 			break;
