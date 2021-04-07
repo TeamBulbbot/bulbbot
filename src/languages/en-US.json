@@ -182,6 +182,7 @@
 
 	"purge_too_many": "{emote_warn} Can only purge a max of 99 messages at a time",
 	"purge_too_few": "{emote_warn} You cannot purge less than 1 message :confused: why would you even do that",
+	"purge_success": "{emote_success} Successfully purged **{count}** messages",
 
 	"verification_non_integer": "{emote_warn} Level needs to be an integer",
 	"verification_community_zero": "{emote_warn} Verification level cannot be set to `0` for community servers!",

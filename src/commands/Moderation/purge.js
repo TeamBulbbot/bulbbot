@@ -6,9 +6,9 @@ module.exports = class extends Command {
 			description: "Purges messages from a chat",
 			category: "Moderation",
 			aliases: ["clear", "clean"],
-			usage: "!purge <amount>",
-			examples: ["purge 30"],
-			argList: ["amount:integer"],
+			usage: "!purge <type> [argument] <amount>",
+			examples: ["purge bots 30"],
+			argList: ["action:string"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -25,12 +25,24 @@ module.exports = class extends Command {
 			case "user":
 				await require("./Purge/user").Call(this.client, message, args);
 				break;
+			case "between":
+				await require("./Purge/between").Call(this.client, message, args);
+				break;
+			case "images":
+				await require("./Purge/images").Call(this.client, message, args);
+				break;
+			case "embeds":
+				await require("./Purge/embeds").Call(this.client, message, args);
+				break;
+			case "bots":
+				await require("./Purge/bots").Call(this.client, message, args);
+				break;
 			default:
 				message.channel.send(
 					await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {
 						arg: args[0].toLowerCase(),
 						arg_expected: "action:string",
-						usage: "`all`, `user`",
+						usage: "`all`, `user`, `between`, `images`, `embeds`, `bots`",
 					}),
 				);
 				break;

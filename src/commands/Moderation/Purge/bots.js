@@ -1,12 +1,10 @@
-const { NonDigits } = require("../../../utils/Regex");
-
 const { SendModActionFile } = require("../../../utils/moderation/log");
 const fs = require("fs");
 const moment = require("moment");
 
 module.exports = {
 	Call: async (client, message, args) => {
-		let amount = args[2];
+		let amount = args[1];
 		if (!args[1])
 			return message.channel.send(
 				await client.bulbutils.translate("event_message_args_missing", message.guild.id, {
@@ -16,9 +14,6 @@ module.exports = {
 					usage: "!purge all <count>",
 				}),
 			);
-		const user = message.guild.member(args[1].replace(NonDigits, ""));
-		if (!user) return message.channel.send(await client.bulbutils.translate("global_user_not_found", message.guild.id));
-
 		if (amount > 100) return message.channel.send(await client.bulbutils.translate("purge_too_many", message.guild.id));
 		if (amount <= 1 || isNaN(amount)) return message.channel.send(await client.bulbutils.translate("purge_too_few", message.guild.id));
 
@@ -46,7 +41,7 @@ module.exports = {
 			});
 
 			msgs.map(async m => {
-				if (user.user.id === m.author.id) {
+				if (m.author.bot) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);
 					amount++;

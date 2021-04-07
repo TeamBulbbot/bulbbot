@@ -159,6 +159,7 @@ module.exports = class BulbBotUtils {
 		response = response.replace(/({snowflake})/g, key.snowflake);
 
 		response = response.replace(/({level})/g, key.level);
+		response = response.replace(/({count})/g, key.count);
 
 		response = response.replace(/({item})/g, key.item);
 		response = response.replace(/({part})/g, key.part);
