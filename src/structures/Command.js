@@ -13,6 +13,7 @@ module.exports = class Command {
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();
 		this.clearance = options.clearance || 0;
+		this.subDevOnly = options.subDevOnly || false;
 		this.devOnly = options.devOnly || false;
 		this.premium = options.premium || false;
 		this.maxArgs = options.maxArgs || 0;

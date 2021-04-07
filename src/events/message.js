@@ -97,6 +97,8 @@ module.exports = class extends Event {
 				);
 		}
 
+		if (command.subDevOnly)
+			if (!global.config.developers.includes(message.author.id) && !global.config.subDevelopers.includes(message.author.id)) return;
 		if (command.devOnly) if (!global.config.developers.includes(message.author.id)) return;
 
 		if (command.maxArgs < args.length && command.maxArgs !== -1) {

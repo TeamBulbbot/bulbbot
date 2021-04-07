@@ -1,9 +1,12 @@
 ---
 name: "Bulbbot"                 # project name
-developers: [                   # developers id stored in array for devOnly commands
+developers: [                   # developers id stored in array for devOnly & subDevOnly commands
   "190160914765316096",           # mrphilip
   "439396770695479297"            # Kluk
  ]
+subDevelopers: [                # sub developers of the bot, giving access to the subDevOnly commands
+  "193160566334947340"            # wakfi
+]
 version: 1.0.0                  # current version
 lib: Discord.JS                 # lib used for the bot
 

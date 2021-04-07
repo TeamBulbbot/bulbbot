@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			description: "Pulls the latest code from master and reloads the bot",
 			category: "Admin",
 			usage: "!update",
-			devOnly: true,
+			subDevOnly: true,
 		});
 	}
 

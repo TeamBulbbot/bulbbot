@@ -10,7 +10,7 @@ module.exports = class extends Command {
 			description: "Get analytics on how the bot is performing",
 			category: "Admin",
 			usage: "!analytics",
-			devOnly: true,
+			subDevOnly: true,
 		});
 	}
 
