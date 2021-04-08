@@ -11,7 +11,7 @@ module.exports = {
 					arg: "amount:int",
 					arg_expected: 2,
 					arg_provided: 1,
-					usage: "!purge all <count>",
+					usage: "!purge embeds <count>",
 				}),
 			);
 		if (amount > 100) return message.channel.send(await client.bulbutils.translate("purge_too_many", message.guild.id));

@@ -37,6 +37,12 @@ module.exports = class extends Command {
 			case "bots":
 				await require("./Purge/bots").Call(this.client, message, args);
 				break;
+			case "emojis":
+				await require("./Purge/emojis").Call(this.client, message, args);
+				break;
+			case "contains":
+				await require("./Purge/contains").Call(this.client, message, args);
+				break;
 			default:
 				message.channel.send(
 					await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {

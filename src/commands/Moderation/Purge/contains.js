@@ -10,14 +10,12 @@ module.exports = {
 		if (!args[1])
 			return message.channel.send(
 				await client.bulbutils.translate("event_message_args_missing", message.guild.id, {
-					arg: "amount:int",
+					arg: "expression:string",
 					arg_expected: 2,
 					arg_provided: 1,
-					usage: "!purge user <user> <count>",
+					usage: "!purge contains <expression> <count>",
 				}),
 			);
-		const user = message.guild.member(args[1].replace(NonDigits, ""));
-		if (!user) return message.channel.send(await client.bulbutils.translate("global_user_not_found", message.guild.id));
 
 		if (amount > 100) return message.channel.send(await client.bulbutils.translate("purge_too_many", message.guild.id));
 		if (amount <= 1 || isNaN(amount)) return message.channel.send(await client.bulbutils.translate("purge_too_few", message.guild.id));
@@ -45,8 +43,9 @@ module.exports = {
 				limit: deleteMsg[i],
 			});
 
+			const regex = new RegExp(`(?:^|\\W)${args[1]}(?:$|\\W)`, "gi");
 			msgs.map(async m => {
-				if (user.user.id === m.author.id) {
+				if (m.content.match(regex)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);
 					amount++;
