@@ -12,6 +12,11 @@ module.exports = sequelize => {
 			defaultValue: "en-US",
 			allowNull: false,
 		},
+		timezone: {
+			type: DataTypes.STRING,
+			defaultValue: "UTC",
+			allowNull: false,
+		},
 		muteRole: {
 			type: DataTypes.STRING,
 		},

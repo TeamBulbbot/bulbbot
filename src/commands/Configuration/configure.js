@@ -18,6 +18,11 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		switch (args[0].toLowerCase()) {
+			//!configure timezone <timezone>
+			case "timezone":
+			case "tz":
+				await require("./configure/timezone")(this.client, message, args)
+				break;
 			// configure prefix <prefix>
 			case "prefix":
 				await require("./configure/prefix")(this.client, message, args);

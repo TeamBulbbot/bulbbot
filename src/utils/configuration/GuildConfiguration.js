@@ -39,5 +39,24 @@ module.exports = {
 
 		dbGuild.guildConfiguration.autorole = autoRoleID;
 		await dbGuild.guildConfiguration.save()
+	},
+
+	GetTimezone: async(guildId) => {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+
+		return dbGuild.guildConfiguration.timezone;
+	},
+
+	ChangeTimezone: async(guildId, timezone) => {
+		const dbGuild = await sequelize.models.guild.findOne({
+			where: { guildId },
+			include: [{ model: sequelize.models.guildConfiguration }],
+		});
+
+		dbGuild.guildConfiguration.timezone = timezone;
+		await dbGuild.guildConfiguration.save()
 	}
 };

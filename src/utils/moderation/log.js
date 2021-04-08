@@ -2,10 +2,14 @@ const sequelize = require("../database/connection");
 const Emotes = require("../../emotes.json");
 const moment = require("moment");
 const utils = new (require("../BulbBotUtils"))();
+require("moment-timezone");
+
+const { GetTimezone } = require("../configuration/GuildConfiguration");
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
+		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
 
 		if (dbGuild.guildLogging.modAction === null) return;
 
@@ -14,7 +18,7 @@ module.exports = {
 
 		modChannel.send(
 			await utils.translate("global_logging_mod", guild.id, {
-				timestamp: moment().format("hh:mm:ss a"),
+				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				target_tag: target.tag,
 				user_id: target.id,
 				moderator_tag: moderator.tag,
@@ -29,6 +33,7 @@ module.exports = {
 
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
+		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
 		if (dbGuild.guildLogging.modAction === null) return;
 		if (target === undefined) return;
 
@@ -37,7 +42,7 @@ module.exports = {
 
 		modChannel.send(
 			await utils.translate("global_logging_unban_auto", guild.id, {
-				timestamp: moment().format("hh:mm:ss a"),
+				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				target_tag: target.tag,
 				user_id: target.id,
 				moderator_tag: moderator.tag,
@@ -52,6 +57,7 @@ module.exports = {
 
 	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
 		const dbGuild = await GetDBGuild(guild.id);
+		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
@@ -59,7 +65,7 @@ module.exports = {
 
 		modChannel.send(
 			await utils.translate("global_logging_mod_temp", guild.id, {
-				timestamp: moment().format("hh:mm:ss a"),
+				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				target_tag: target.tag,
 				user_id: target.id,
 				moderator_tag: moderator.tag,
@@ -67,7 +73,7 @@ module.exports = {
 				reason: log,
 				infractionId: infId,
 				action: action,
-				until: moment(until).format("MMM Do YYYY, h:mm:ss a"),
+				until: moment(until).tz(zone).format("MMM Do YYYY, h:mm:ssa z"),
 				emoji: BetterActions(action),
 			}),
 		);
@@ -75,13 +81,14 @@ module.exports = {
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
 		const dbGuild = await GetDBGuild(guild.id);
+		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
 		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		modChannel.send(
-			`\`[${moment().format("hh:mm:ss a")}]\` ${BetterActions("trash")} **${moderator.tag}** \`(${
+			`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${BetterActions("trash")} **${moderator.tag}** \`(${
 				moderator.id
 			})\` has removed **${amount}** messages in <#${channel.id}>`,
 			{
@@ -92,22 +99,24 @@ module.exports = {
 
 	SendEventLog: async (client, guild, part, log) => {
 		if (guild === undefined) return;
+		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
 
 		const dbGuild = await GetDBGuild(guild.id);
 		const logChannel = GetPart(dbGuild, part);
 
 		if (logChannel === null) return;
-		client.channels.cache.get(logChannel).send(`\`[${moment().format("hh:mm:ss a")}]\` ${log}`);
+		client.channels.cache.get(logChannel).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	},
 
 	SendAutoModLog: async (client, guildId, log) => {
 		if (guildId === undefined) return;
+		const zone = client.bulbutils.timezones[await GetTimezone(guildId)]
 
 		const dbGuild = await GetDBGuild(guildId);
 		const logChannel = GetPart(dbGuild, "automod");
 
 		if (logChannel === null) return;
-		client.channels.cache.get(logChannel).send(`\`[${moment().format("hh:mm:ss a")}]\` ${log}`);
+		client.channels.cache.get(logChannel).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	},
 };
 
@@ -176,7 +185,7 @@ function BetterActions(action) {
 			action = `${Emotes.actions.BAN}`;
 			break;
 		case "trash":
-			action = `${Emotes.other.TRASH}`
+			action = `${Emotes.other.TRASH}`;
 			break;
 		default:
 			break;

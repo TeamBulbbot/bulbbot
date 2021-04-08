@@ -48,6 +48,7 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({uptime})/g, key.uptime);
 		response = response.replace(/({timestamp})/g, key.timestamp);
+		response = response.replace(/({zone})/g, key.zone);
 		response = response.replace(/({until})/g, key.until);
 
 		response = response.replace(/({nick_old})/g, key.nick_old);
@@ -536,5 +537,34 @@ module.exports = class BulbBotUtils {
 				.addField("Message Content", message.content, true);
 		}
 		this.client.channels.cache.get(channel).send(embed);
+	}
+
+	timezones =  {
+		"ANAT": "Asia/Anadyr",
+		"AEDT": "Australia/Melbourne",
+		"AEST": "Australia/Brisbane",
+		"JST": "Asia/Tokyo",
+		"AWST": "Asia/Shanghai",
+		"WIB": "Asia/Jakarta",
+		"BTT": "Asia/Dhaka",
+		"UZT": "Asia/Tashkent",
+		"GST": "Asia/Dubai",
+		"MSK": "Europe/Moscow",
+		"CEST": "Europe/Brussels",
+		"BST": "Europe/London",
+		"GMT": "Africa/Accra",
+		"CVT": "Atlantic/Cape_Verde",
+		"WGST": "America/Nuuk",
+		"ART": "America/Buenos_Aires",
+		"EDT": "America/New_York",
+		"CDT": "America/Chicago",
+		"CST": "America/Mexico_City",
+		"PDT": "America/Los_Angeles",
+		"AKDT": "America/Anchorage",
+		"HDT": "America/Adak",
+		"HST": "Pacific/Honolulu",
+		"NUT": "Pacific/Fiji",
+		"AoE": "Pacific/Wallis",
+		"UTC": "UTC"
 	}
 };
