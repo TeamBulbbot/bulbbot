@@ -31,32 +31,34 @@ module.exports = {
 		await dbGuild.guildConfiguration.save();
 	},
 
-	ChangeAutoRole: async(guildId, autoRoleID) => {
+	ChangeAutoRole: async (guildId, autoRoleID) => {
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
 		dbGuild.guildConfiguration.autorole = autoRoleID;
-		await dbGuild.guildConfiguration.save()
+		await dbGuild.guildConfiguration.save();
 	},
 
-	GetTimezone: async(guildId) => {
+	GetTimezone: async guildId => {
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
+		if (dbGuild === null) return "UTC";
+
 		return dbGuild.guildConfiguration.timezone;
 	},
 
-	ChangeTimezone: async(guildId, timezone) => {
+	ChangeTimezone: async (guildId, timezone) => {
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
 
 		dbGuild.guildConfiguration.timezone = timezone;
-		await dbGuild.guildConfiguration.save()
-	}
+		await dbGuild.guildConfiguration.save();
+	},
 };
