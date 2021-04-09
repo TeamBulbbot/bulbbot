@@ -1,4 +1,4 @@
-//const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
+const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
 const Emotes = require("./../Emotes.json");
 const moment = require("moment");
 const sequelize = require("./database/connection");
@@ -39,8 +39,11 @@ module.exports = class BulbBotUtils {
 				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
 
 			lang = require(`./../languages/en-US.json`);
-			response = JSON.parse(JSON.stringify(lang))[string].toString();
-			//throw new TranslatorException(`${string} is not a valid translatable string`);
+			try {
+				response = JSON.parse(JSON.stringify(lang))[string].toString();
+			} catch (anotherErr) {
+				throw new TranslatorException(`"${string}" is not a valid translatable string`);
+			}
 		}
 
 		response = response.replace(/({latency_bot})/g, key.latency_bot);
