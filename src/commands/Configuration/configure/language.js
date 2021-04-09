@@ -22,7 +22,8 @@ module.exports = async (client, message, args) => {
 	if (!validLangs.includes(language))
 		return message.channel.send(
 			await client.bulbutils.translate("config_language_invalid_args", message.guild.id, {
-				languages: validLangs.map(lang => `\`${lang}\` `).join(""),
+				language: language,
+				languages: validLangs.map(lang => `\`${lang}\` `).join("")
 			}),
 		);
 
