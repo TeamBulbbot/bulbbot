@@ -43,6 +43,8 @@ module.exports = {
 	 * @returns {Promise<boolean>}
 	 */
 	deleteInfraction: async (guildId, infId) => {
+		if (infId === "") return false;
+
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },
 			include: [
@@ -56,6 +58,7 @@ module.exports = {
 		});
 		if (dbGuild === null) return false;
 		await dbGuild.infractions[0].destroy();
+
 		return true;
 	},
 
@@ -67,6 +70,7 @@ module.exports = {
 	 * @returns {Promise<boolean|*>}	Returned infraction object
 	 */
 	getInfraction: async (guildId, infId) => {
+		if (infId === "") return false;
 		const dbGuild = await sequelize.models.guild.findOne({
 			where: { guildId },
 			include: [
@@ -217,13 +221,16 @@ module.exports = {
 	 * @returns {Promise<void>}
 	 */
 	setModerator: async (infId, moderator) => {
+		if (infId === "") return false;
 		const dbInf = await sequelize.models.infraction.findOne({
 			where: { id: infId },
 		});
 
-		dbInf.moderator = moderator.tag;
+		dbInf.moderator = moderator.username;
 		dbInf.moderatorId = moderator.id;
 		await dbInf.save();
+
+		return true;
 	},
 
 	/**
