@@ -1,6 +1,4 @@
 const sequelize = require("./connection");
-const GuildConfiguration = require.resolve("./models/GuildConfiguration");
-const Language = require.resolve("../../commands/Configuration/configure/language");
 
 module.exports = class DatabaseManager {
 	/**
