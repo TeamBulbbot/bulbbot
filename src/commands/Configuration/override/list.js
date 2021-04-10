@@ -1,9 +1,9 @@
-const ClearanceList = require("../../../utils/clearance/ClearanceList");
+const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"))
 const Discord = require("discord.js");
 const Emotes = require("../../../emotes.json");
 
 module.exports = async (client, message, args) => {
-	const data = await ClearanceList(message.guild.id);
+	const data = await ClearanceManager.getClearanceList(message.guild.id);
 
 	let roles = ``;
 	let commands = ``;

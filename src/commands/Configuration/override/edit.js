@@ -1,5 +1,4 @@
-const { EditCommand } = require("../../../utils/clearance/commands/CommandOverrideUtils");
-const { EditMod } = require("../../../utils/clearance/user/ModOverrideUtils");
+const ClearanceUtils = new (require("../../../utils/clearance/ClearanceManager"))
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args) => {
@@ -24,7 +23,7 @@ module.exports = async (client, message, args) => {
 			const rTemp = message.guild.roles.cache.get(name.replace(NonDigits, ""));
 			if (rTemp === undefined) return message.channel.send(await client.bulbutils.translate("override_edit_invalid_role", message.guild.id));
 
-			if (!(await EditMod(message.guild.id, name.replace(NonDigits, ""), clearance)))
+			if (!(await ClearanceUtils.editModOverride(message.guild.id, name.replace(NonDigits, ""), clearance)))
 				return message.channel.send(await client.bulbutils.translate("override_edit_non_existent_override_role", message.guild.id));
 
 			break;
@@ -34,7 +33,7 @@ module.exports = async (client, message, args) => {
 			if (command === undefined)
 				return message.channel.send(await client.bulbutils.translate("override_edit_invalid_command", message.guild.id, { command: name }));
 
-			if (!(await EditCommand(message.guild.id, command.name, clearance)))
+			if (!(await ClearanceUtils.editCommand(message.guild.id, command.name, clearance)))
 				return message.channel.send(await client.bulbutils.translate("override_edit_non_existent_override_command", message.guild.id));
 
 			break;

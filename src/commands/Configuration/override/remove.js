@@ -1,5 +1,4 @@
-const RemoveCommandOverride = require("../../../utils/clearance/commands/RemoveCommandOverride");
-const RemoveModOverride = require("../../../utils/clearance/user/RemoveModOverride");
+const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"))
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args) => {
@@ -12,13 +11,13 @@ module.exports = async (client, message, args) => {
 
 	switch (part) {
 		case "role":
-			if (!(await RemoveModOverride(message.guild.id, name.replace(NonDigits, ""))))
+			if (!(await ClearanceManager.deleteModOverride(message.guild.id, name.replace(NonDigits, ""))))
 				return message.channel.send(await client.bulbutils.translate("override_remove_non_existent_override_role", message.guild.id));
 			break;
 
 		case "command":
 			const cTemp = client.commands.get(name.toLowerCase()) || client.commands.get(client.aliases.get(name.toLowerCase()));
-			if (!cTemp || !(await RemoveCommandOverride(message.guild.id, cTemp.name)))
+			if (!cTemp || !(await ClearanceManager.deleteCommandOverride(message.guild.id, cTemp.name)))
 				return message.channel.send(await client.bulbutils.translate("override_remove_non_existent_override_command", message.guild.id));
 			break;
 		default:
