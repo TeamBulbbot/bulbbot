@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const DeleteGuild = require("../../utils/guilds/DeleteGuild");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -19,7 +19,7 @@ module.exports = class extends Command {
 	
 		switch (args[0].toLowerCase()) {
 			case "db-yeet":
-				await DeleteGuild(args[1]);
+				await DatabaseManager.deleteGuild(args[1]);
 				message.channel.send("success deleted that guild from the database")
 				break;
 		

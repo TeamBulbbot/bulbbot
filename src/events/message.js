@@ -1,10 +1,10 @@
 const Event = require("../structures/Event");
-const { getConfig } = require("../utils/guilds/Guild");
 const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
 const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");
 const GetGuildOverrideForCommand = require("../utils/clearance/commands/GetGuildOverrideForCommand");
 const UserClearance = require("../utils/clearance/user/UserClearance");
+const DatabaseManager = new (require("../utils/database/DatabaseManager"))
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -16,7 +16,7 @@ module.exports = class extends Event {
 		if (message.channel.type === "dm") return DirectMessage(this.client, message);
 		if (!message.guild || message.author.bot) return;
 
-		const { prefix, premiumGuild } = await getConfig(message.guild);
+		const { prefix, premiumGuild } = await DatabaseManager.getConfig(message.guild)
 
 		if (prefix === undefined && message.content.startsWith(global.config.prefix))
 			return message.channel.send(

@@ -1,7 +1,7 @@
 const Command = require("../../structures/Command");
 const { Mute, Unmute } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
-const { getMuteRole } = require("../../utils/guilds/Guild");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
 const utils = new (require("../../utils/BulbBotUtils"))();
 const parse = require("parse-duration");
 const { getActive, setActive } = require("../../utils/InfractionUtils");
@@ -25,7 +25,7 @@ module.exports = class extends Command {
 	async run(message, args) {
 		const targetId = args[0].replace(NonDigits, "");
 		const target = message.guild.member(targetId);
-		const muteRole = await getMuteRole(message.guild);
+		const muteRole = await DatabaseManager.getMuteRole(message.guild);
 		const duration = parse(args[1]);
 		let reason = args.slice(2).join(" ");
 		let infId = null;

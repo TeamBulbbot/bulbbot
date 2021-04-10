@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { Enable, Disable } = require("../../utils/configuration/PremiumUtils");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -25,11 +25,11 @@ module.exports = class extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "enable":
-				await Enable(guild.id);
+				await DatabaseManager.setPremium(guild.id, true);
 				message.channel.send(`Enabled premium for guild \`${guild.id}\``);
 				break;
 			case "disable":
-				await Disable(guild.id);
+				await DatabaseManager.setPremium(guild.id, false);
 				message.channel.send(`Disabled premium for guild \`${guild.id}\``);
 				break;
 			default:

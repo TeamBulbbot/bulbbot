@@ -2,7 +2,7 @@ const Command = require("../../structures/Command");
 const { setActive, getLatestMute } = require("../../utils/InfractionUtils");
 const { UnmuteManual } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
-const { getMuteRole } = require("../../utils/guilds/Guild");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -21,7 +21,7 @@ module.exports = class extends Command {
 	async run(message, args) {
 		const targetId = args[0].replace(NonDigits, "");
 		const target = message.guild.member(targetId);
-		const muteRole = await getMuteRole(message.guild);
+		const muteRole = await DatabaseManager.getMuteRole(message.guild);
 		let reason = args.slice(1).join(" ");
 		let infId = null;
 

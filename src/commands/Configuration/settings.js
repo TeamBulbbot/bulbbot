@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const GetConfig = require("../../utils/configuration/GetConfig");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
 const Discord = require("discord.js");
 const Emotes = require("../../emotes.json");
 
@@ -16,8 +16,8 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message, args) {
-		const data = await GetConfig(message.guild.id);
+	async run(message) {
+		const data = await DatabaseManager.getFullGuildConfig(message.guild.id);
 
 		const configs = `
 		**Configuration **

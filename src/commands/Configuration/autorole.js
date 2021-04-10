@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { ChangeAutoRole } = require("../../utils/configuration/GuildConfiguration");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
 const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {
@@ -29,10 +29,10 @@ module.exports = class extends Command {
 		if (role === undefined) return message.channel.send(await this.client.bulbutils.translate("config_mute_invalid_role", message.guild.id));
 
 		if (role !== null) {
-			await ChangeAutoRole(message.guild.id, role.id);
+			await DatabaseManager.setAutoRole(message.guild.id, role.id);
 			return message.channel.send(await this.client.bulbutils.translate("config_autorole_success", message.guild.id));
 		} else {
-			await ChangeAutoRole(message.guild.id, null);
+			await DatabaseManager.setAutoRole(message.guild.id, null);
 			return message.channel.send(await this.client.bulbutils.translate("config_autorole_disable", message.guild.id));
 		}
 	}

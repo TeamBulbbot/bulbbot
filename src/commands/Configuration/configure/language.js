@@ -1,4 +1,4 @@
-const { ChangeLanguage } = require("../../../utils/configuration/GuildConfiguration");
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"))
 const fs = require("fs");
 
 module.exports = async (client, message, args) => {
@@ -27,6 +27,6 @@ module.exports = async (client, message, args) => {
 			}),
 		);
 
-	await ChangeLanguage(message.guild.id, language);
+	await DatabaseManager.setLanguage(message.guild.id, language);
 	message.channel.send(await client.bulbutils.translate("config_language_success", message.guild.id, { language }));
 };
