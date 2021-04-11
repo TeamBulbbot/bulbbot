@@ -1,4 +1,4 @@
-const ClearanceUtils = new (require("../../../utils/clearance/ClearanceManager"))
+const ClearanceUtils = new (require("../../../utils/clearance/ClearanceManager"));
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args) => {

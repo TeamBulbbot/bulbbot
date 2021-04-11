@@ -4,12 +4,12 @@ const moment = require("moment");
 const utils = new (require("../BulbBotUtils"))();
 require("moment-timezone");
 
-const DatabaseManager = new (require("../database/DatabaseManager"))
+const DatabaseManager = new (require("../database/DatabaseManager"));
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
 
 		if (dbGuild.guildLogging.modAction === null) return;
 
@@ -33,7 +33,7 @@ module.exports = {
 
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
 		if (dbGuild.guildLogging.modAction === null) return;
 		if (target === undefined) return;
 
@@ -57,7 +57,7 @@ module.exports = {
 
 	SendModActionTemp: async (client, guild, action, target, moderator, log, infId, until) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
@@ -81,7 +81,7 @@ module.exports = {
 
 	SendModActionFile: async (client, guild, action, amount, file, channel, moderator) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
 		if (dbGuild.guildLogging.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
@@ -99,7 +99,7 @@ module.exports = {
 
 	SendEventLog: async (client, guild, part, log) => {
 		if (guild === undefined) return;
-		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
 
 		const dbGuild = await GetDBGuild(guild.id);
 		const logChannel = GetPart(dbGuild, part);
@@ -110,7 +110,7 @@ module.exports = {
 
 	SendAutoModLog: async (client, guildId, log) => {
 		if (guildId === undefined) return;
-		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guildId)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guildId)];
 
 		const dbGuild = await GetDBGuild(guildId);
 		const logChannel = GetPart(dbGuild, "automod");

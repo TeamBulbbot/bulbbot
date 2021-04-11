@@ -1,4 +1,4 @@
-const DatabaseManager = new (require("../../../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"));
 
 module.exports = async (client, message, args) => {
 	const timezone = args[1];

@@ -1,4 +1,4 @@
-const DatabaseManager = new (require("../../../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"));
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args, part) => {

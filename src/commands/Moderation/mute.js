@@ -1,7 +1,7 @@
 const Command = require("../../structures/Command");
 const { Mute, Unmute } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
-const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"));
 const utils = new (require("../../utils/BulbBotUtils"))();
 const parse = require("parse-duration");
 const { getActive, setActive } = require("../../utils/InfractionUtils");

@@ -1,4 +1,4 @@
-const sequelize = require("../database/connection")
+const sequelize = require("../database/connection");
 
 module.exports = class ClearanceManager {
 	//FIXME: I actually dunno what this does. Pls Philip fix the JavaDoc

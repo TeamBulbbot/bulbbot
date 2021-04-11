@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const DatabaseManager = new (require("../../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"));
 const { NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {

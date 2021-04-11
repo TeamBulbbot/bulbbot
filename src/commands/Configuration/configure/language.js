@@ -1,4 +1,4 @@
-const DatabaseManager = new (require("../../../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"));
 const fs = require("fs");
 
 module.exports = async (client, message, args) => {

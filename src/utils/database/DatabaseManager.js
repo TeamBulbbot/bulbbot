@@ -58,9 +58,9 @@ module.exports = class DatabaseManager {
 		await dbGuild["guildConfiguration"]
 			.destroy()
 			.catch(err => console.log(`[DB - DeleteGuild] Unable to delete the GuildLogging table for: ${guildID}: `, err));
-		await dbGuild.infractions.forEach(inf =>
-			inf.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Infraction table for: ${guildID}: `, err)),
-		);
+		await dbGuild.infractions.forEach(inf => {
+			inf.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Infraction table for: ${guildID}: `, err));
+		});
 		await dbGuild["starboard"].destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Starboard table for: ${guildID}: `, err));
 	}
 

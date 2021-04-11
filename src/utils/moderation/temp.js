@@ -1,5 +1,5 @@
 const sequelize = require("../database/connection");
-const DatabaseManager = new (require("../database/DatabaseManager"))
+const DatabaseManager = new (require("../database/DatabaseManager"));
 const { UnbanTemp, Unmute } = require("./actions");
 
 module.exports = {

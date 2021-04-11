@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-const DatabaseManager = new (require("../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../utils/database/DatabaseManager"));
 const { SendEventLog } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
 

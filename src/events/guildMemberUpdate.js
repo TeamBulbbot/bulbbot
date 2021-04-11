@@ -1,7 +1,7 @@
 const Event = require("../structures/Event");
 const { SendEventLog } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
-const DatabaseManager = new (require("../utils/database/DatabaseManager"))
+const DatabaseManager = new (require("../utils/database/DatabaseManager"));
 
 module.exports = class extends Event {
 	constructor(...args) {

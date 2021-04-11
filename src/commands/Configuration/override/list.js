@@ -1,4 +1,4 @@
-const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"))
+const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"));
 const Discord = require("discord.js");
 const Emotes = require("../../../emotes.json");
 

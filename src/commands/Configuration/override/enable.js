@@ -1,4 +1,4 @@
-const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"))
+const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"));
 
 module.exports = async (client, message, args) => {
 	const command = args[1];
