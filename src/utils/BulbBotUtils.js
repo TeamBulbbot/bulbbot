@@ -200,7 +200,7 @@ module.exports = class BulbBotUtils {
 		const mf = new MessageFormat("en");
 		const output = mf.compile(response);
 
-		response = output({ infractions: key.user_infractions });
+		if (key.user_infractions !== undefined) response = output({ infractions: key.user_infractions });
 
 		return response;
 	}
