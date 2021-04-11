@@ -1,5 +1,5 @@
 const sequelize = require("../database/connection");
-const { getMuteRole } = require("../guilds/Guild");
+const DatabaseManager = new (require("../database/DatabaseManager"));
 const { UnbanTemp, Unmute } = require("./actions");
 
 module.exports = {
@@ -150,7 +150,7 @@ module.exports = {
 							reason: tb.reason,
 						}),
 						tb.reason,
-						await getMuteRole(guild),
+						await DatabaseManager.getMuteRole(guild),
 					);
 				} catch (error) {
 					continue;
@@ -173,7 +173,7 @@ module.exports = {
 							reason: tb.reason,
 						}),
 						tb.reason,
-						await getMuteRole(guild),
+						await DatabaseManager.getMuteRole(guild),
 					);
 
 					await TempMuteDel(tb.id);

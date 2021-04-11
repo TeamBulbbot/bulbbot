@@ -1,5 +1,4 @@
-const { ChangeTimezone } = require("../../../utils/configuration/GuildConfiguration");
-const fs = require("fs");
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"));
 
 module.exports = async (client, message, args) => {
 	const timezone = args[1];
@@ -23,6 +22,6 @@ module.exports = async (client, message, args) => {
 			}),
 		);
 
-	await ChangeTimezone(message.guild.id, timezone);
+	await DatabaseManager.setTimezone(message.guild.id, timezone);
 	message.channel.send(await client.bulbutils.translate("config_timezone_success", message.guild.id, { zone: timezone }));
 };

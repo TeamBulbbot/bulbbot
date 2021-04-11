@@ -1,5 +1,4 @@
-const CreateCommandOverride = require("../../../utils/clearance/commands/CreateCommandOverride");
-const CreateModOverride = require("../../../utils/clearance/user/CreateModOverride");
+const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"));
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args) => {
@@ -24,7 +23,7 @@ module.exports = async (client, message, args) => {
 			const rTemp = message.guild.roles.cache.get(name.replace(NonDigits, ""));
 			if (rTemp === undefined) return message.channel.send(await client.bulbutils.translate("override_create_invalid_role", message.guild.id));
 
-			await CreateModOverride(message.guild.id, name.replace(NonDigits, ""), clearance);
+			await ClearanceManager.createModOverride(message.guild.id, name.replace(NonDigits, ""), clearance);
 			break;
 
 		case "command":
@@ -32,7 +31,7 @@ module.exports = async (client, message, args) => {
 			if (command === undefined)
 				return message.channel.send(await client.bulbutils.translate("override_create_invalid_command", message.guild.id, { command: name }));
 
-			await CreateCommandOverride(message.guild.id, command.name, true, clearance);
+			await ClearanceManager.createCommandOverride(message.guild.id, command.name, true, clearance);
 			break;
 		default:
 			break;

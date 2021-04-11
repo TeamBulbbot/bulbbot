@@ -1,10 +1,9 @@
 const Event = require("../structures/Event");
-const { getConfig } = require("../utils/guilds/Guild");
 const { client_command_usage, activity_guilds } = require("../utils/prometheus/metrics");
 const DirectMessage = require("../utils/DirectMessages");
 const AutoMod = require("../utils/AutoMod");
-const GetGuildOverrideForCommand = require("../utils/clearance/commands/GetGuildOverrideForCommand");
-const UserClearance = require("../utils/clearance/user/UserClearance");
+const ClearanceManager = new (require("../utils/clearance/ClearanceManager"));
+const DatabaseManager = new (require("../utils/database/DatabaseManager"));
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -16,7 +15,7 @@ module.exports = class extends Event {
 		if (message.channel.type === "dm") return DirectMessage(this.client, message);
 		if (!message.guild || message.author.bot) return;
 
-		const { prefix, premiumGuild } = await getConfig(message.guild);
+		const { prefix, premiumGuild } = await DatabaseManager.getConfig(message.guild);
 
 		if (prefix === undefined && message.content.startsWith(global.config.prefix))
 			return message.channel.send(
@@ -31,7 +30,7 @@ module.exports = class extends Event {
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 
 		// fetch user clearance
-		const clearance = await UserClearance(message, message.guild.id);
+		const clearance = await ClearanceManager.getUserClearance(message, message.guild.id);
 
 		// auto mod
 		if (clearance < 25)
@@ -50,13 +49,13 @@ module.exports = class extends Event {
 		if (!command) return;
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
-		const commandOverride = await GetGuildOverrideForCommand(message.guild.id, command.name);
+		const commandOverride = await ClearanceManager.getCommandOverride(message.guild.id, command.name);
 		const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
 		const missing = message.guild.me.permissionsIn(message.channel).has(userPermCheck);
 
 		if (commandOverride !== undefined) {
-			if (!commandOverride.enabled) return;
-			if (commandOverride.clearanceLevel > clearance) {
+			if (!commandOverride["enabled"]) return;
+			if (commandOverride["clearanceLevel"] > clearance) {
 				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 					message.delete({ timeout: 5000 });
 					msg.delete({ timeout: 5000 });

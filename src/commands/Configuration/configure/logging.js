@@ -1,12 +1,4 @@
-const {
-	ChangeAutoMod,
-	ChangeChannel,
-	ChangeJoinLeave,
-	ChangeMember,
-	ChangeMessage,
-	ChangeModAction,
-	ChangeRole,
-} = require("../../../utils/configuration/GuildLogging");
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"));
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args, part) => {
@@ -39,25 +31,25 @@ module.exports = async (client, message, args, part) => {
 
 	switch (part) {
 		case "modaction":
-			await ChangeModAction(gId, channel);
+			await DatabaseManager.setModAction(gId, channel);
 			break;
 		case "automod":
-			await ChangeAutoMod(gId, channel);
+			await DatabaseManager.setAutoMod(gId, channel);
 			break;
 		case "message":
-			await ChangeMessage(gId, channel);
+			await DatabaseManager.setMessage(gId, channel);
 			break;
 		case "role":
-			await ChangeRole(gId, channel);
+			await DatabaseManager.setRole(gId, channel);
 			break;
 		case "member":
-			await ChangeMember(gId, channel);
+			await DatabaseManager.setMember(gId, channel);
 			break;
 		case "channel":
-			await ChangeChannel(gId, channel);
+			await DatabaseManager.setChannel(gId, channel);
 			break;
 		case "joinleave":
-			await ChangeJoinLeave(gId, channel);
+			await DatabaseManager.setJoinLeave(gId, channel);
 			break;
 		default:
 			message.channel.send("contact the developers this should not happen");

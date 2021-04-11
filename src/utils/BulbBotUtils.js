@@ -14,11 +14,13 @@ module.exports = class BulbBotUtils {
 	}
 
 	/**
+	 * Translates the provided translatable resolvable
 	 *
+	 * @throws TranslatorException
 	 * @param string    		Translatable string from the lang file
 	 * @param key       		Values that should be replaced by the function
-	 * @param guildId			Guild id
-	 * @returns {string}     	Resolved translated string
+	 * @param guildId   		Guild id
+	 * @returns {string}		Resolved translated string
 	 */
 	async translate(string, guildId = "742094927403679816", key = {}) {
 		let response;
@@ -28,15 +30,15 @@ module.exports = class BulbBotUtils {
 			where: { guildId },
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
-		if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
-		else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+		if (db === null || db["guildConfiguration"] === null) lang = require(`./../languages/en-US.json`);
+		else lang = require(`./../languages/${db["guildConfiguration"].language}.json`);
 
 		try {
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
 		} catch (err) {
 			this.client.channels.cache
 				.get(global.config.translation)
-				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
+				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db["guildConfiguration"].language}\``);
 
 			lang = require(`./../languages/en-US.json`);
 			try {
