@@ -7,6 +7,8 @@ module.exports = class extends Event {
 	}
 
 	async run(channel) {
+		if (channel === undefined) return;
+
 		SendEventLog(
 			this.client,
 			channel.guild,
