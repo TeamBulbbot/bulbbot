@@ -4,7 +4,7 @@ module.exports = class DatabaseManager {
 	/**
 	 * Created the Guild database record from provided {@link Guild} object
 	 *
-	 * @param guild	The parsed {@link Guild} object from the {@link guildCreate} event
+	 * @param guild             The parsed {@link Guild} object from the {@link guildCreate} event
 	 * @returns {Promise<void>}
 	 */
 	 async createGuild(guild) {
@@ -30,7 +30,7 @@ module.exports = class DatabaseManager {
 	/**
 	 * Deletes the guild record from the database
 	 *
-	 * @param guildID	Guild ID parsed from the {@link guildDelete} event
+	 * @param guildID           Guild ID parsed from the {@link guildDelete} event
 	 * @returns {Promise<void>}
 	 */
 	async deleteGuild(guildID) {
@@ -67,8 +67,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Returns the entire {@link GuildConfiguration} table for the provided guild
 	 *
-	 * @param guild	The {@link Guild} object that should be searched in the database
-	 * @returns {Promise<null|string>}	The returned {@link GuildConfiguration} table or null if not found
+	 * @param guild                    The {@link Guild} object that should be searched in the database
+	 * @returns {Promise<null|string>} The returned {@link GuildConfiguration} table or null if not found
 	 */
 	async getConfig(guild) {
 		const response = await sequelize.models.guild.findOne({
@@ -83,7 +83,7 @@ module.exports = class DatabaseManager {
 	/**
 	 * Returns the full {@link Guild} configuration object
 	 *
-	 * @param guildId	ID of the {@link Guild} that should be searched in the database
+	 * @param guildId             ID of the {@link Guild} that should be searched in the database
 	 * @returns {Promise<string>}
 	 */
 	async getFullGuildConfig(guildId) {
@@ -102,8 +102,8 @@ module.exports = class DatabaseManager {
 	 * Returns the Guild's prefix
 	 *
 	 * @deprecated
-	 * @param guild	The {@link Guild} object that should be searched in the database
-	 * @returns {Promise<null|string>}	Returns the Guild's prefix or null if not found
+	 * @param guild                    The {@link Guild} object that should be searched in the database
+	 * @returns {Promise<null|string>} Returns the Guild's prefix or null if not found
 	 */
 	async getPrefix(guild) {
 		const response = await sequelize.models.guild.findOne({
@@ -118,8 +118,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changed the prefix of the provided {@link Guild} object
 	 *
-	 * @param guildId	ID of the {@link Guild} where the prefix should be changed
-	 * @param prefix	The new prefix
+	 * @param guildId           ID of the {@link Guild} where the prefix should be changed
+	 * @param prefix            The new prefix
 	 * @returns {Promise<void>}
 	 */
 	async setPrefix(guildId, prefix) {
@@ -136,7 +136,7 @@ module.exports = class DatabaseManager {
 	 * Returns if the Guild is premium or not
 	 *
 	 * @deprecated
-	 * @param guild	The {@link Guild} object that should be searched in the database
+	 * @param guild                    	The {@link Guild} object that should be searched in the database
 	 * @returns {Promise<null|boolean>}	Returns a boolean if the Guild is premium or not and null if not found
 	 */
 	async getPremium(guild) {
@@ -152,8 +152,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Enables or disabled BulbBot premium for the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where BulbBot premium should be enabled/disabled
-	 * @param premium	Boolean value, either true of false. Indicates whether premium should be enabled or disabled
+	 * @param guildId           ID of the {@link Guild} where BulbBot premium should be enabled/disabled
+	 * @param premium           Boolean value, either true of false. Indicates whether premium should be enabled or disabled
 	 * @returns {Promise<void>}
 	 */
 	async setPremium(guildId, premium) {
@@ -169,8 +169,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Returns the Mute role for the provided guild
 	 *
-	 * @param guild	The {@link Guild} object that should be searched in the database
-	 * @returns {Promise<Role|null>}	The returned Mute role or null if not found
+	 * @param guild                  The {@link Guild} object that should be searched in the database
+	 * @returns {Promise<Role|null>} The returned Mute role or null if not found
 	 */
 	async getMuteRole(guild) {
 		const response = await sequelize.models.guild.findOne({
@@ -185,8 +185,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the Mute {@link Role} in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the mute role should be changed
-	 * @param muteRoleID	ID of the Mute {@link Role}
+	 * @param guildId           ID of the {@link Guild} where the mute role should be changed
+	 * @param muteRoleID        ID of the Mute {@link Role}
 	 * @returns {Promise<void>}
 	 */
 	async setMuteRole(guildId, muteRoleID) {
@@ -202,8 +202,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Returns the Auto role for the provided guild
 	 *
-	 * @param guild	The {@link Guild} object that should be searched in the database
-	 * @returns {Promise<Role|null>}	The returned Auto role or null if not found
+	 * @param guild                  The {@link Guild} object that should be searched in the database
+	 * @returns {Promise<Role|null>} The returned Auto role or null if not found
 	 */
 	async getAutoRole(guild) {
 		const response = await sequelize.models.guild.findOne({
@@ -218,8 +218,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the Auto {@link Role} in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the auto role should be changed
-	 * @param autoRoleID	ID of the Auto {@link Role}
+	 * @param guildId           ID of the {@link Guild} where the auto role should be changed
+	 * @param autoRoleID        ID of the Auto {@link Role}
 	 * @returns {Promise<void>}
 	 */
 	async setAutoRole(guildId, autoRoleID) {
@@ -235,8 +235,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the default language in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the default language should be changed
-	 * @param language	The new updated language resolvable.
+	 * @param guildId           ID of the {@link Guild} where the default language should be changed
+	 * @param language          The new updated language resolvable.
 	 * @see Language
 	 * @returns {Promise<void>}
 	 */
@@ -253,7 +253,7 @@ module.exports = class DatabaseManager {
 	/**
 	 * Returns the timezone configuration for the provided {@link Guild}
 	 *
-	 * @param guildId	The {@link Guild} object that should be searched in the database
+	 * @param guildId             The {@link Guild} object that should be searched in the database
 	 * @returns {Promise<string>} Returned {@link Guild} timezone
 	 */
 	async getTimezone(guildId) {
@@ -270,8 +270,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the timezone in the provided {@link Guild}
 	 *
-	 * @param guildId	The {@link Guild} object that should be searched in the database
-	 * @param timezone The timezone resolvable that should be updated
+	 * @param guildId           The {@link Guild} object that should be searched in the database
+	 * @param timezone          The timezone resolvable that should be updated
 	 * @returns {Promise<void>}
 	 */
 	async setTimezone(guildId, timezone) {
@@ -287,7 +287,7 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the ModAction logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId ID of the {@link Guild} where the logging channel should be updated
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
 	 * @param channelID
 	 * @returns {Promise<void>}
 	 */
@@ -304,8 +304,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the ModAction logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the logging channel should be updated
-	 * @param channelID ID of the {@link Channel} where the actions should be logged
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
+	 * @param channelID         ID of the {@link Channel} where the actions should be logged
 	 * @returns {Promise<void>}
 	 */
 	async setAutoMod(guildId, channelID) {
@@ -321,8 +321,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the Message logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the logging channel should be updated
-	 * @param channelID	ID of the {@link Channel} where the actions should be logged
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
+	 * @param channelID         ID of the {@link Channel} where the actions should be logged
 	 * @returns {Promise<void>}
 	 */
 	async setMessage(guildId, channelID) {
@@ -338,8 +338,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the Role logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the logging channel should be updated
-	 * @param channelID	ID of the {@link Channel} where the actions should be logged
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
+	 * @param channelID         ID of the {@link Channel} where the actions should be logged
 	 * @returns {Promise<void>}
 	 */
 	async setRole(guildId, channelID) {
@@ -355,8 +355,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the Member logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the logging channel should be updated
-	 * @param channelID	ID of the {@link Channel} where the actions should be logged
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
+	 * @param channelID         ID of the {@link Channel} where the actions should be logged
 	 * @returns {Promise<void>}
 	 */
 	async setMember(guildId, channelID) {
@@ -372,8 +372,8 @@ module.exports = class DatabaseManager {
 	/**
 	 * Changes the Channel logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the logging channel should be updated
-	 * @param channelID	ID of the {@link Channel} where the actions should be logged
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
+	 * @param channelID         ID of the {@link Channel} where the actions should be logged
 	 * @returns {Promise<void>}
 	 */
 	async setChannel(guildId, channelID) {
@@ -389,8 +389,8 @@ module.exports = class DatabaseManager {
 	/**
 	 *Changes the JoinLeave logging channel in the provided {@link Guild}
 	 *
-	 * @param guildId	ID of the {@link Guild} where the logging channel should be updated
-	 * @param channelID	ID of the {@link Channel} where the actions should be logged
+	 * @param guildId           ID of the {@link Guild} where the logging channel should be updated
+	 * @param channelID         ID of the {@link Channel} where the actions should be logged
 	 * @returns {Promise<void>}
 	 */
 	async setJoinLeave(guildId, channelID) {
