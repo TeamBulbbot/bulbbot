@@ -36,3 +36,8 @@ information.
 - Twitter: [@y3ll0wLife](https://twitter.com/y3ll0wLife)
 - Github: [@y3ll0wlife](https://github.com/y3ll0wlife)
 - Discord: mrphilip#2938 (190160914765316096)
+
+👤 **wakfi**
+
+- Github: [@wakfi](https://github.com/wakfi)
+- Discord: wakfi#6999 (193160566334947340)
