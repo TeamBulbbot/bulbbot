@@ -42,7 +42,7 @@ module.exports = {
 				id: tb.targetId,
 			};
 
-			const guild = await client.guilds.cache.get(dbGuild.guildId);
+			const guild = await client.guilds.fetch(dbGuild.guildId);
 
 			if (tb.expireTime - time <= 0) {
 				try {
@@ -131,7 +131,7 @@ module.exports = {
 				id: tb.targetId,
 			};
 
-			const guild = await client.guilds.cache.get(dbGuild.guildId);
+			const guild = await client.guilds.fetch(dbGuild.guildId);
 
 			//console.log(tb.expireTime - time);
 			if (tb.expireTime - time <= 0) {
