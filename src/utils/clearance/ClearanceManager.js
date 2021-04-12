@@ -4,7 +4,7 @@ module.exports = class ClearanceManager {
 	//FIXME: I actually dunno what this does. Pls Philip fix the JavaDoc
 	/**
 	 *
-	 * @param   guildId
+	 * @param {Snowflake} guildId
 	 * @returns {Promise<number>}
 	 */
 	async getClearanceList(guildId) {
@@ -30,9 +30,9 @@ module.exports = class ClearanceManager {
 	/**
 	 * Edits the selected command override
 	 *
-	 * @param guildId              ID of the {@link Guild} where the override should be edited
-	 * @param commandName          The command override name
-	 * @param clearanceLevel       The new clearance level
+	 * @param {Snowflake} guildId              ID of the {@link Guild} where the override should be edited
+	 * @param {String} commandName          The command override name
+	 * @param {Number} clearanceLevel       The new clearance level
 	 * @returns {Promise<boolean>}
 	 */
 	async editCommand(guildId, commandName, clearanceLevel) {
@@ -58,8 +58,8 @@ module.exports = class ClearanceManager {
 	/**
 	 * Enables the selected command in the provided {@link Guild}
 	 *
-	 * @param guildId              ID of the {@link Guild} where the command should be enabled
-	 * @param commandName          Name of the command that should be enabled
+	 * @param {Snowflake} guildId              ID of the {@link Guild} where the command should be enabled
+	 * @param {String} commandName          Name of the command that should be enabled
 	 * @returns {Promise<boolean>}
 	 */
 	async enableCommand(guildId, commandName) {
@@ -83,8 +83,8 @@ module.exports = class ClearanceManager {
 	/**
 	 * Disables the selected command in the provided {@link Guild}
 	 *
-	 * @param guildId              ID of the {@link Guild} where the command should be disabled
-	 * @param command              Name of the command that should be disabled
+	 * @param {Snowflake} guildId              ID of the {@link Guild} where the command should be disabled
+	 * @param {String} command              Name of the command that should be disabled
 	 * @returns {Promise<boolean>}
 	 */
 	async disableCommand(guildId, command) {
@@ -113,10 +113,10 @@ module.exports = class ClearanceManager {
 	/**
 	 * Creates a command override for the provided guild
 	 *
-	 * @param guildId               Guild ID
-	 * @param enabled               If the command is enabled or disabled
-	 * @param commandName           Name of the command
-	 * @param newClearanceLevel     The new clearance level for the command
+	 * @param {Snowflake} guildId               Guild ID
+	 * @param {boolean} enabled               If the command is enabled or disabled
+	 * @param {String} commandName           Name of the command
+	 * @param {Number} newClearanceLevel     The new clearance level for the command
 	 * @returns {Promise<void>}
 	 */
 	async createCommandOverride(guildId, commandName, enabled, newClearanceLevel) {
@@ -146,8 +146,8 @@ module.exports = class ClearanceManager {
 	/**
 	 * Returns the override for the provided command in the selected {@link Guild}
 	 *
-	 * @param guildId        ID of the {@link Guild} where the command should be enabled
-	 * @param commandName    Name of the command that should be searched for
+	 * @param {Snowflake} guildId        ID of the {@link Guild} where the command should be enabled
+	 * @param {Number} commandName    Name of the command that should be searched for
 	 * @returns {Promise<*>}
 	 */
 	async getCommandOverride(guildId, commandName) {
@@ -170,8 +170,8 @@ module.exports = class ClearanceManager {
 	/**
 	 * Deletes the selected command override in the provided {@link Guild}
 	 *
-	 * @param guildId              ID of the {@link Guild} where the command should be enabled
-	 * @param commandName          Name of the command that should be deleted
+	 * @param {Snowflake} guildId              ID of the {@link Guild} where the command should be enabled
+	 * @param {String} commandName          Name of the command that should be deleted
 	 * @returns {Promise<boolean>}
 	 */
 	async deleteCommandOverride(guildId, commandName) {
@@ -196,9 +196,9 @@ module.exports = class ClearanceManager {
 	/**
 	 * Creates a mod override for the provided {@link Role} ID
 	 *
-	 * @param guildId           ID of the {@link Guild} where the override should be created
-	 * @param roleId            ID of the {@link Role} that should be overwritten
-	 * @param clearanceLevel    The clearance level that should be assigned to the role
+	 * @param {Snowflake} guildId           ID of the {@link Guild} where the override should be created
+	 * @param {Snowflake} roleId            ID of the {@link Role} that should be overwritten
+	 * @param {Number} clearanceLevel    The clearance level that should be assigned to the role
 	 * @returns {Promise<void>}
 	 */
 	async createModOverride(guildId, roleId, clearanceLevel) {
@@ -227,9 +227,9 @@ module.exports = class ClearanceManager {
 	/**
 	 * Edits the selected {@link Role} override
 	 *
-	 * @param guildId              ID of the {@link Guild} where the override should be edited
-	 * @param roleId               ID of the {@link Role} that should be edited
-	 * @param clearanceLevel       The new clearance level that should be assigned to the role
+	 * @param {Snowflake} guildId              ID of the {@link Guild} where the override should be edited
+	 * @param {Snowflake} roleId               ID of the {@link Role} that should be edited
+	 * @param {Number} clearanceLevel       The new clearance level that should be assigned to the role
 	 * @returns {Promise<boolean>}
 	 */
 	async editModOverride(guildId, roleId, clearanceLevel) {
@@ -258,8 +258,8 @@ module.exports = class ClearanceManager {
 	/**
 	 * Deletes the selected {@link Role} override
 	 *
-	 * @param guildId              ID of the {@link Guild} where the override should be deleted
-	 * @param roleId               ID of the {@link Role} that should be deleted
+	 * @param {Snowflake} guildId              ID of the {@link Guild} where the override should be deleted
+	 * @param {Snowflake} roleId               ID of the {@link Role} that should be deleted
 	 * @returns {Promise<boolean>}
 	 */
 	async deleteModOverride(guildId, roleId) {
@@ -285,8 +285,8 @@ module.exports = class ClearanceManager {
 	/**
 	 * returns the provided {@link User}'s clearance
 	 *
-	 * @param message             Message provided by the {@link message} event
-	 * @param guildId             ID of the guild provided by the {@link message} event
+	 * @param {Message} message             Message provided by the {@link message} event
+	 * @param {Snowflake} guildId             ID of the guild provided by the {@link message} event
 	 * @returns {Promise<number>}
 	 */
 	async getUserClearance(message, guildId) {
