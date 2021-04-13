@@ -87,6 +87,7 @@ module.exports = {
 
 		return db;
 	},
+
 	getMentionsLimit: async guildId => {
 		const db = await sequelize.models.guild.findOne({
 			where: { guildId },
