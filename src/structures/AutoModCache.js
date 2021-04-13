@@ -23,7 +23,7 @@ module.exports = {
 				client,
 				message,
 				dbGuild.automod.punishmentMessages,
-				`Violated \`MAX MESSAGES\` check in #${message.channel.name} (${cache[guild]["messages"][user]["time"]}/10s)`,
+				`Violated \`MAX MESSAGES\` check in #${message.channel.name} (${cache[guild]["messages"][user]["count"]}/10s)`,
 			);
 			await SendAutoModLog(
 				client,
@@ -42,7 +42,7 @@ module.exports = {
 				client,
 				message,
 				dbGuild.automod.punishmentMentions,
-				`Violated \`MAX MENTIONS\` check in #${message.channel.name} (${cache[guild]["mentions"][user]["time"]}/15s)`,
+				`Violated \`MAX MENTIONS\` check in #${message.channel.name} (${cache[guild]["mentions"][user]["count"]}/15s)`,
 			);
 			await SendAutoModLog(
 				client,
