@@ -15,10 +15,8 @@ module.exports = {
 
 		const messageLimit = await AutoModUtils.getMessageLimit(message.guild.id);
 		const mentionsLimit = await AutoModUtils.getMentionsLimit(message.guild.id);
-		console.log(JSON.stringify(cache));
 
 		if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
-			console.log("messages");
 			await AutoModUtils.resolveAction(
 				client,
 				message,
@@ -34,10 +32,8 @@ module.exports = {
 			);
 			delete cache[guild]["messages"][user];
 		}
-		console.log(JSON.stringify(cache))
 
 		if (cache[guild]["mentions"][user] && cache[guild]["mentions"][user]["count"] >= mentionsLimit && mentionsLimit !== 0) {
-			console.log("mentions");
 			await AutoModUtils.resolveAction(
 				client,
 				message,
@@ -61,7 +57,6 @@ module.exports = {
 			cache[guild][category][user]["time"] = Date.now();
 			if (cache[guild][category][user]["count"] <= 0) delete cache[guild][category][user];
 			if (Object.keys(cache[guild]["messages"]).length === 0 && Object.keys(cache[guild]["mentions"]).length === 0) delete cache[guild];
-			console.log(JSON.stringify(cache));
 		}, timeout);
 	},
 
