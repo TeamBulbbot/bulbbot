@@ -30,7 +30,7 @@
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.33",
 		"parse-duration": "^0.4.4",
-		"pg": "^8.5.1",
+		"pg": "^8.6.0",
 		"pg-hstore": "^2.3.3",
 		"prom-client": "^13.1.0",
 		"sequelize": "^6.6.2",
