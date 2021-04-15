@@ -34,6 +34,7 @@ module.exports = class BulbBotUtils {
 		try {
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
 		} catch (err) {
+			if (!this.client && key.client) this.client = key.client;
 			this.client.channels.cache
 				.get(global.config.translation)
 				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
@@ -53,6 +54,7 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({nick_old})/g, key.nick_old);
 		response = response.replace(/({nick_new})/g, key.nick_new);
+		response = response.replace(/({nick_length})/g, key.nick_length);
 		response = response.replace(/({role})/g, key.role);
 
 		response = response.replace(/({missing})/g, key.missing);
@@ -525,7 +527,8 @@ module.exports = class BulbBotUtils {
 			.setDescription(
 				`
 				**Stack Trace**
-				\`\`\`${err.stack}\`\`\`		
+				\`\`\`
+				${err.stack}\`\`\`		
 					`,
 			)
 			.setTimestamp();

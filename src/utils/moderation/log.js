@@ -31,6 +31,18 @@ module.exports = {
 		);
 	},
 
+	SendModActionPreformatted: async (client, guild, log) => {
+		const dbGuild = await GetDBGuild(guild.id);
+		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
+
+		if (dbGuild.guildLogging.modAction === null) return;
+
+		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
+		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+	},
+
 	SendAutoUnban: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
 		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
