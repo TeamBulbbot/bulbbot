@@ -1,4 +1,4 @@
-const { ChangeMuteRole } = require("../../../utils/configuration/GuildConfiguration");
+const DatabaseManager = new (require("../../../utils/database/DatabaseManager"));
 const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = async (client, message, args) => {
@@ -6,7 +6,7 @@ module.exports = async (client, message, args) => {
 
 	if (!role) return message.channel.send(await client.bulbutils.translate("config_mute_missing_args", message.guild.id));
 
-	if (role === "remove") ChangeMuteRole(message.guild.id, null);
+	if (role === "remove") await DatabaseManager.setMuteRole(message.guild.id, null);
 	else {
 		role = role.replace(NonDigits, "");
 
@@ -15,7 +15,7 @@ module.exports = async (client, message, args) => {
 		if (message.guild.me.roles.highest.rawPosition < rTemp.rawPosition)
 			return message.channel.send(await client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id));
 
-		ChangeMuteRole(message.guild.id, role);
+		await DatabaseManager.setMuteRole(message.guild.id, role);
 	}
 
 	message.channel.send(await client.bulbutils.translate("config_mute_success", message.guild.id));

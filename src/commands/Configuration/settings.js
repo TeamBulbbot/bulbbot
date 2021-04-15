@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const GetConfig = require("../../utils/configuration/GetConfig");
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"))();
 const Discord = require("discord.js");
 const Emotes = require("../../emotes.json");
 
@@ -16,19 +16,21 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(message, args) {
-		const data = await GetConfig(message.guild.id);
+	async run(message) {
+		const data = await DatabaseManager.getFullGuildConfig(message.guild.id);
 
 		const configs = `
 		**Configuration **
 		Prefix: \`${data.guildConfiguration.prefix}\`
-		Bot Language: \`${data.guildConfiguration.language}\`
+		Bot language: \`${data.guildConfiguration.language}\`
 		Premium server: ${data.guildConfiguration.premiumGuild !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}
 		Mute role: ${data.guildConfiguration.muteRole !== null ? `<@&${data.guildConfiguration.muteRole}>` : Emotes.other.SWITCHOFF}
+		Auto role:  ${data.guildConfiguration.autorole !== null ? `<@&${data.guildConfiguration.autorole}>` : Emotes.other.SWITCHOFF}
 		`;
 
 		const loggingModule = `
 		**Logging**
+		Logging timezone: \`${data.guildConfiguration.timezone}\`
 		Mod actions: ${data.guildLogging.modAction !== null ? `<#${data.guildLogging.modAction}>` : Emotes.other.SWITCHOFF}
 		Automod: ${data.guildLogging.automod !== null ? `<#${data.guildLogging.automod}>` : Emotes.other.SWITCHOFF}
 		Message logs: ${data.guildLogging.message !== null ? `<#${data.guildLogging.message}>` : Emotes.other.SWITCHOFF}

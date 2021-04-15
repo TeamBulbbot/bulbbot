@@ -1,4 +1,4 @@
-const { DisableCommand } = require("../../../utils/clearance/commands/CommandOverrideUtils");
+const ClearanceManager = new (require("../../../utils/clearance/ClearanceManager"));
 
 module.exports = async (client, message, args) => {
 	const command = args[1];
@@ -7,7 +7,7 @@ module.exports = async (client, message, args) => {
 	if (cTemp === undefined)
 		return message.channel.send(await client.bulbutils.translate("override_disable_invalid_command", message.guild.id, { command }));
 
-	await DisableCommand(message.guild.id, cTemp);
+	await ClearanceManager.disableCommand(message.guild.id, cTemp);
 
 	message.channel.send(await client.bulbutils.translate("override_disable_success", message.guild.id, { command }));
 };

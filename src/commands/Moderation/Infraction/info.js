@@ -1,5 +1,5 @@
 const { getInfraction } = require("../../../utils/InfractionUtils");
-const { ReasonImage } = require("../../../utils/Regex");
+const { ReasonImage, NonDigits } = require("../../../utils/Regex");
 
 const Emotes = require("../../../emotes.json");
 
@@ -18,15 +18,16 @@ module.exports = {
 				}),
 			);
 
-		if (!(await getInfraction(message.guild.id, args[1]))) {
+		const inf = await getInfraction(message.guild.id, args[1].replace(NonDigits, ""));
+
+		if (!inf) {
 			return message.channel.send(
 				await client.bulbutils.translate("infraction_not_found", message.guild.id, {
-					infractionId: args[1],
+					infractionId: args[1].replace(NonDigits, ""),
 				}),
 			);
 		}
 
-		const inf = await getInfraction(message.guild.id, args[1]);
 		const user = await client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
 
 		let description = "";

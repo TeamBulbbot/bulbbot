@@ -1,4 +1,5 @@
 const { getInfraction, setModerator } = require("../../../utils/InfractionUtils");
+const { NonDigits } = require("../../../utils/Regex");
 
 module.exports = {
 	Call: async (client, message, args) => {
@@ -12,7 +13,7 @@ module.exports = {
 				}),
 			);
 
-		if (!(await getInfraction(message.guild.id, args[1]))) {
+		if (!(await setModerator(args[1].replace(NonDigits, ""), message.author))) {
 			return message.channel.send(
 				await client.bulbutils.translate("infraction_not_found", message.guild.id, {
 					infractionId: args[1],
@@ -20,7 +21,6 @@ module.exports = {
 			);
 		}
 
-		await setModerator(args[1], message.author);
 		return message.channel.send(await client.bulbutils.translate("infraction_claim_success", message.guild.id, { infractionId: args[1] }));
 	},
 };

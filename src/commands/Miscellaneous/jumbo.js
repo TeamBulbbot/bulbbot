@@ -73,10 +73,11 @@ module.exports = class extends Command {
 							.toFile(`src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`);
 					});
 				}
+
 				imgPath.push({
 					input: `src/files/jumbo/${i}-${message.author.id}-${message.guild.id}.png`,
 					gravity: "southeast",
-					top: size,
+					top: 0,
 					left: size * i,
 					density: 2400,
 					premultiplied: true,

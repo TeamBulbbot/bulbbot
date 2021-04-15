@@ -1,4 +1,4 @@
-//const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
+const { TranslatorException } = require("./../structures/exceptions/TranslatorException");
 const Emotes = require("./../Emotes.json");
 const moment = require("moment");
 const sequelize = require("./database/connection");
@@ -14,11 +14,13 @@ module.exports = class BulbBotUtils {
 	}
 
 	/**
+	 * Translates the provided translatable resolvable
 	 *
+	 * @throws TranslatorException
 	 * @param string    		Translatable string from the lang file
 	 * @param key       		Values that should be replaced by the function
-	 * @param guildId			Guild id
-	 * @returns {string}     	Resolved translated string
+	 * @param guildId   		Guild id
+	 * @returns {string}		Resolved translated string
 	 */
 	async translate(string, guildId = "742094927403679816", key = {}) {
 		let response;
@@ -28,8 +30,8 @@ module.exports = class BulbBotUtils {
 			where: { guildId },
 			include: [{ model: sequelize.models.guildConfiguration }],
 		});
-		if (db === null || db.guildConfiguration === null) lang = require(`./../languages/en-US.json`);
-		else lang = require(`./../languages/${db.guildConfiguration.language}.json`);
+		if (db === null || db["guildConfiguration"] === null) lang = require(`./../languages/en-US.json`);
+		else lang = require(`./../languages/${db["guildConfiguration"].language}.json`);
 
 		try {
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
@@ -37,11 +39,14 @@ module.exports = class BulbBotUtils {
 			if (!this.client && key.client) this.client = key.client;
 			this.client.channels.cache
 				.get(global.config.translation)
-				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db.guildConfiguration.language}\``);
+				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db["guildConfiguration"].language}\``);
 
 			lang = require(`./../languages/en-US.json`);
-			response = JSON.parse(JSON.stringify(lang))[string].toString();
-			//throw new TranslatorException(`${string} is not a valid translatable string`);
+			try {
+				response = JSON.parse(JSON.stringify(lang))[string].toString();
+			} catch (anotherErr) {
+				throw new TranslatorException(`"${string}" is not a valid translatable string`);
+			}
 		}
 
 		response = response.replace(/({latency_bot})/g, key.latency_bot);
@@ -194,10 +199,12 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({full_list})/g, key.full_list);
 
-		const mf = new MessageFormat("en");
-		const output = mf.compile(response);
+		if (key.user_infractions !== undefined) {
+			const mf = new MessageFormat("en");
+			const output = mf.compile(response);
 
-		response = output({ infractions: key.user_infractions });
+			response = output({ infractions: key.user_infractions });
+		}
 
 		return response;
 	}
@@ -542,32 +549,32 @@ module.exports = class BulbBotUtils {
 		this.client.channels.cache.get(channel).send(embed);
 	}
 
-	timezones =  {
-		"ANAT": "Asia/Anadyr",
-		"AEDT": "Australia/Melbourne",
-		"AEST": "Australia/Brisbane",
-		"JST": "Asia/Tokyo",
-		"AWST": "Asia/Shanghai",
-		"WIB": "Asia/Jakarta",
-		"BTT": "Asia/Dhaka",
-		"UZT": "Asia/Tashkent",
-		"GST": "Asia/Dubai",
-		"MSK": "Europe/Moscow",
-		"CEST": "Europe/Brussels",
-		"BST": "Europe/London",
-		"GMT": "Africa/Accra",
-		"CVT": "Atlantic/Cape_Verde",
-		"WGST": "America/Nuuk",
-		"ART": "America/Buenos_Aires",
-		"EDT": "America/New_York",
-		"CDT": "America/Chicago",
-		"CST": "America/Mexico_City",
-		"PDT": "America/Los_Angeles",
-		"AKDT": "America/Anchorage",
-		"HDT": "America/Adak",
-		"HST": "Pacific/Honolulu",
-		"NUT": "Pacific/Fiji",
-		"AoE": "Pacific/Wallis",
-		"UTC": "UTC"
-	}
+	timezones = {
+		ANAT: "Asia/Anadyr",
+		AEDT: "Australia/Melbourne",
+		AEST: "Australia/Brisbane",
+		JST: "Asia/Tokyo",
+		AWST: "Asia/Shanghai",
+		WIB: "Asia/Jakarta",
+		BTT: "Asia/Dhaka",
+		UZT: "Asia/Tashkent",
+		GST: "Asia/Dubai",
+		MSK: "Europe/Moscow",
+		CEST: "Europe/Brussels",
+		BST: "Europe/London",
+		GMT: "Africa/Accra",
+		CVT: "Atlantic/Cape_Verde",
+		WGST: "America/Nuuk",
+		ART: "America/Buenos_Aires",
+		EDT: "America/New_York",
+		CDT: "America/Chicago",
+		CST: "America/Mexico_City",
+		PDT: "America/Los_Angeles",
+		AKDT: "America/Anchorage",
+		HDT: "America/Adak",
+		HST: "Pacific/Honolulu",
+		NUT: "Pacific/Fiji",
+		AoE: "Pacific/Wallis",
+		UTC: "UTC",
+	};
 };

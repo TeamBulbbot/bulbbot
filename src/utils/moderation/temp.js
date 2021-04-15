@@ -1,5 +1,5 @@
 const sequelize = require("../database/connection");
-const { getMuteRole } = require("../guilds/Guild");
+const DatabaseManager = new (require("../database/DatabaseManager"))();
 const { UnbanTemp, Unmute } = require("./actions");
 
 module.exports = {
@@ -23,72 +23,71 @@ module.exports = {
 	},
 
 	TempbanRestore: async client => {
-		const table = await sequelize.models.guild.findOne({
+		const dbData = await sequelize.models.guild.findAll({
 			where: {},
 			include: [{ model: sequelize.models.tempban }],
 		});
-		if (table === null) return;
-
 		const time = Date.now();
 
-		for (const tb of table.tempbans) {
-			const dbGuild = await sequelize.models.guild.findOne({
-				where: { id: tb.guildId },
-			});
-			if (dbGuild === null) continue;
+		dbData.forEach(async dbGuild => {
+			if (dbGuild.tempbans === undefined || dbGuild.tempbans.length == 0) return;
 
-			const target = {
-				tag: tb.targetTag,
-				id: tb.targetId,
-			};
+			for (const ban of dbGuild.tempbans) {
+				const guild = await client.guilds.fetch(dbGuild.guildId);
+				if (guild === null || guild === undefined) return;
 
-			const guild = await client.guilds.cache.get(dbGuild.guildId);
+				const target = {
+					tag: ban.targetTag,
+					id: ban.targetId,
+				};
 
-			if (tb.expireTime - time <= 0) {
-				try {
-					await UnbanTemp(
-						client,
-						guild,
-						target,
-						client.user,
-						client.bulbutils.translate("global_mod_action_log", {
-							action: "Auto-unbanned",
-							moderator_tag: client.user.tag,
-							moderator_id: client.user.id,
-							target_tag: target.tag,
-							target_id: target.TargetId,
-							reason: tb.reason,
-						}),
-						tb.reason,
-					);
-				} catch (error) {
-					continue;
+				if (ban.expireTime - time <= 0) {
+					try {
+						await UnbanTemp(
+							client,
+							guild,
+							target,
+							client.user,
+							client.bulbutils.translate("global_mod_action_log", guild.id, {
+								action: "Auto-unbanned",
+								moderator_tag: client.user.tag,
+								moderator_id: client.user.id,
+								target_tag: target.tag,
+								target_id: target.targetId,
+								reason: ban.reason,
+							}),
+							ban.reason,
+						);
+					} catch (error) {
+						console.error(`[Client - Temp Bans - Restore] ${error} ${target.tag} (${target.id}) ; Guild ID: ${guild.id}`);
+					}
+					await TempBanDel(ban.id);
+					console.log(`[CLIENT - Temp Bans] Successfully removed a ban from target ${target.tag} (${target.id}) ; Guild ID: ${guild.id}`);
+				} else {
+					console.log(`[CLIENT - Temp Bans] Successfully set a timer on the ban on target ${target.tag} (${target.id})`);
+					setTimeout(async function () {
+						await UnbanTemp(
+							client,
+							guild,
+							target,
+							client.user,
+							client.bulbutils.translate("global_mod_action_log", guild.id, {
+								action: "Auto-unbanned",
+								moderator_tag: client.user.tag,
+								moderator_id: client.user.id,
+								target_tag: target.tag,
+								target_id: target.targetId,
+								reason: ban.reason,
+							}),
+							ban.reason,
+						);
+
+						await TempBanDel(ban.id);
+					}, ban.expireTime - time);
 				}
-
-				await TempBanDel(tb.id);
-			} else {
-				setTimeout(async function () {
-					await UnbanTemp(
-						client,
-						guild,
-						target,
-						client.user,
-						client.bulbutils.translate("global_mod_action_log", {
-							action: "Auto-unbanned",
-							moderator_tag: client.user.tag,
-							moderator_id: client.user.id,
-							target_tag: target.tag,
-							target_id: target.TargetId,
-							reason: tb.reason,
-						}),
-						tb.reason,
-					);
-
-					await TempBanDel(tb.id);
-				}, tb.expireTime - time);
 			}
-		}
-		console.log("[CLIENT - Temp Bans] Successfully restored the temp bans");
+			console.log("[CLIENT - Temp Bans] Successfully restored the temp bans");
+		});
 	},
 
 	TempmuteCreate: async (guildId, targetTag, targetId, reason, expireTime) => {
@@ -111,76 +110,74 @@ module.exports = {
 	},
 
 	TempmuteRestore: async client => {
-		const table = await sequelize.models.guild.findOne({
+		const dbData = await sequelize.models.guild.findAll({
 			where: {},
 			include: [{ model: sequelize.models.tempmute }],
 		});
-		if (table === null) return;
-
 		const time = Date.now();
 
-		for (const tb of table.tempmutes) {
-			const dbGuild = await sequelize.models.guild.findOne({
-				where: { id: tb.guildId },
-			});
-			//console.log(tb, [tb.dataValues.reason, tb.dataValues.targetTag]);
-			if (dbGuild === null) continue;
+		dbData.forEach(async dbGuild => {
+			if (dbGuild.tempmutes === undefined || dbGuild.tempmutes.length == 0) return;
 
-			const target = {
-				tag: tb.targetTag,
-				id: tb.targetId,
-			};
+			for (const mute of dbGuild.tempmutes) {
+				const guild = await client.guilds.fetch(dbGuild.guildId);
+				if (guild === null || guild === undefined) return;
 
-			const guild = await client.guilds.cache.get(dbGuild.guildId);
+				const target = {
+					tag: mute.targetTag,
+					id: mute.targetId,
+				};
 
-			//console.log(tb.expireTime - time);
-			if (tb.expireTime - time <= 0) {
-				try {
-					await Unmute(
-						client,
-						guild,
-						target,
-						client.user,
-						client.bulbutils.translate("global_mod_action_log", guild.id, {
-							action: "Auto-unmuted",
-							moderator_tag: client.user.tag,
-							moderator_id: client.user.id,
-							target_tag: target.tag,
-							target_id: target.TargetId,
-							reason: tb.reason,
-						}),
-						tb.reason,
-						await getMuteRole(guild),
-					);
-				} catch (error) {
-					continue;
+				if (mute.expireTime - time <= 0) {
+					try {
+						await Unmute(
+							client,
+							guild,
+							target,
+							client.user,
+							client.bulbutils.translate("global_mod_action_log", guild.id, {
+								action: "Auto-unmuted",
+								moderator_tag: client.user.tag,
+								moderator_id: client.user.id,
+								target_tag: target.tag,
+								target_id: target.targetId,
+								reason: mute.reason,
+							}),
+							mute.reason,
+							await DatabaseManager.getMuteRole(guild),
+						);
+					} catch (error) {
+						console.error(`[Client - Mutes - Restore] ${error} ${target.tag} (${target.id}) ; Guild ID: ${guild.id}`);
+					}
+
+					await TempMuteDel(mute.id);
+					console.log(`[CLIENT - Mutes] Successfully removed a mute on target ${target.tag} (${target.id}) ; Guild ID: ${guild.id}`);
+				} else {
+					console.log(`[CLIENT - Mutes] Successfully set a mute on target ${target.tag} (${target.id}) ; Guild ID: ${guild.id}`);
+					setTimeout(async function () {
+						await Unmute(
+							client,
+							guild,
+							target,
+							client.user,
+							client.bulbutils.translate("global_mod_action_log", guild.id, {
+								action: "Auto-unmuted",
+								moderator_tag: client.user.tag,
+								moderator_id: client.user.id,
+								target_tag: target.tag,
+								target_id: target.targetId,
+								reason: mute.reason,
+							}),
+							mute.reason,
+							await DatabaseManager.getMuteRole(guild),
+						);
+
+						await TempMuteDel(mute.id);
+					}, mute.expireTime - time);
 				}
-
-				await TempMuteDel(tb.id);
-			} else {
-				setTimeout(async function () {
-					await Unmute(
-						client,
-						guild,
-						target,
-						client.user,
-						client.bulbutils.translate("global_mod_action_log", guild.id, {
-							action: "Auto-unmuted",
-							moderator_tag: client.user.tag,
-							moderator_id: client.user.id,
-							target_tag: target.tag,
-							target_id: target.TargetId,
-							reason: tb.reason,
-						}),
-						tb.reason,
-						await getMuteRole(guild),
-					);
-
-					await TempMuteDel(tb.id);
-				}, tb.expireTime - time);
 			}
-		}
-		console.log("[CLIENT - Mutes] Successfully restored the mute");
+			console.log("[CLIENT - Mutes] Successfully restored the mutes");
+		});
 	},
 };
 

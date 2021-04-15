@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-const DeleteGuild = require("../utils/guilds/DeleteGuild");
+const DatabaseManager = new (require("../utils/database/DatabaseManager"));
 const Emote = require("../emotes.json");
 
 module.exports = class extends Event {
@@ -8,7 +8,7 @@ module.exports = class extends Event {
 	}
 
 	async run(guild) {
-		await DeleteGuild(guild.id);
+		await DatabaseManager.deleteGuild(guild.id);
 
 		this.client.channels.cache
 			.get(global.config.invite)
