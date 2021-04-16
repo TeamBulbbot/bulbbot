@@ -13,8 +13,9 @@ module.exports = class extends Event {
 		if (!guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
 
 		const auditLog = await guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_ADD" });
-
 		const banLog = auditLog.entries.first();
+		if (!unbanLog) return;
+
 		let { executor, reason } = banLog;
 		if (executor.id === this.client.user.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", guild.id);

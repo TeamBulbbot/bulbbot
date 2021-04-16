@@ -4,7 +4,7 @@ const moment = require("moment");
 const utils = new (require("../BulbBotUtils"))();
 require("moment-timezone");
 
-const DatabaseManager = new (require("../database/DatabaseManager"));
+const DatabaseManager = new (require("../database/DatabaseManager"))();
 
 module.exports = {
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
@@ -118,6 +118,19 @@ module.exports = {
 
 		if (logChannel === null) return;
 		client.channels.cache.get(logChannel).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+	},
+
+	SendEventLogFile: async (client, guild, part, log, file) => {
+		if (guild === undefined) return;
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
+
+		const dbGuild = await GetDBGuild(guild.id);
+		const logChannel = GetPart(dbGuild, part);
+
+		if (logChannel === null) return;
+		client.channels.cache.get(logChannel).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`, {
+			files: [file],
+		});
 	},
 
 	SendAutoModLog: async (client, guildId, log) => {

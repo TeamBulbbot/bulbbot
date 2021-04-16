@@ -75,9 +75,7 @@ module.exports = {
 			pages.push(embed);
 		}
 
-		if (pages.length === 0) {
-			return message.channel.send(await client.bulbutils.translate("infraction_list_not_found", message.guild.id));
-		}
+		if (pages.length === 0) return message.channel.send(await client.bulbutils.translate("infraction_search_not_found", message.guild.id));
 
 		await embedPagination(message, pages, ["⏪", "⏩"], 120000);
 	},

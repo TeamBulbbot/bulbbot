@@ -519,6 +519,10 @@ module.exports = class BulbBotUtils {
 		}
 	}
 
+	async sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
 	async log(err, message, channel = global.config.error) {
 		if (message) message.channel.send(await this.client.bulbutils.translate("global_unknown_error", message.guild.id));
 

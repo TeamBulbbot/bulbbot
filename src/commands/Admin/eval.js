@@ -34,9 +34,11 @@ module.exports = class extends Command {
 					if (err) console.error(err);
 				});
 
-				return message.channel.send("The evaled code is more than 2000 charcters so I am giving you a file instead have fun 🙂", {
+				await message.channel.send("The evaled code is more than 2000 charcters so I am giving you a file instead have fun 🙂", {
 					files: [`./src/files/eval/${message.guild.id}.txt`],
 				});
+
+				return fs.unlinkSync(`./src/files/eval/${message.guild.id}.txt`);
 			}
 
 			await message.channel.send(await clean(evaled), { code: "js" });
