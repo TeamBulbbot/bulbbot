@@ -2,7 +2,7 @@ const Command = require("../../structures/Command");
 const { setActive, getLatestMute } = require("../../utils/InfractionUtils");
 const { UnmuteManual } = require("../../utils/moderation/actions");
 const { NonDigits } = require("../../utils/Regex");
-const DatabaseManager = new (require("../../utils/database/DatabaseManager"))();
+const DatabaseManager = new (require("../../utils/database/DatabaseManager"));
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -15,7 +15,6 @@ module.exports = class extends Command {
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
-			clientPerms: ["MANAGE_ROLES"],
 		});
 	}
 

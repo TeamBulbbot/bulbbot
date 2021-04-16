@@ -402,12 +402,4 @@ module.exports = class DatabaseManager {
 		dbGuild["guildLogging"].joinLeave = channelID;
 		await dbGuild["guildLogging"].save();
 	}
-
-	async isUserMuted(targetId, muteRoleID) {
-		const response = await sequelize.models.tempmute.findOne({
-			where: { targetId }
-		})
-
-		return response !== null;
-	}
 };
