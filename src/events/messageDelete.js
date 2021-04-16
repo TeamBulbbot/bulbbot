@@ -1,6 +1,7 @@
 const Event = require("../structures/Event");
-const { SendEventLog } = require("../utils/moderation/log");
+const { SendEventLog, SendEventLogFile } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
+const fs = require("fs");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -21,9 +22,11 @@ module.exports = class extends Event {
 			embed: message.embeds.length !== 0 ? "[Embed]" : "None",
 		});
 
-		if (msg.length >= 2000) {
-			await SendEventLog(this.client, message.guild, "message", msg.substring(0, 1500));
-			await SendEventLog(this.client, message.guild, "message", msg.substring(1500, msg.length));
+		if (msg.length >= 1850) {
+			fs.writeFile(`./src/files/events/MESSAGE_DELETE-${message.guild.id}.txt`, msg, function (err) {
+				if (err) console.error(err);
+			});
+			await SendEventLogFile(this.client, message.guild, "message", "", `./src/files/events/MESSAGE_DELETE-${message.guild.id}.txt`);
 		} else await SendEventLog(this.client, message.guild, "message", msg);
 	}
 };
