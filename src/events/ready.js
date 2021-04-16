@@ -1,6 +1,5 @@
 const Event = require("../structures/Event");
 const { TempbanRestore, TempmuteRestore } = require("../utils/moderation/temp");
-const fs = require("fs")
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -29,7 +28,5 @@ module.exports = class extends Event {
 				`[CLIENT] Listening to ${this.client.events.size} event(s)`,
 			].join("\n"),
 		);
-
-		fs.writeFileSync("./src/files/watchdog/watchdog.txt", "")
 	}
 };
