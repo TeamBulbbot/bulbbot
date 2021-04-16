@@ -6,6 +6,7 @@
 	"global_channel_not_found": "{emote_warn} Could not find the specified channel",
 	"global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
 	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+	"global_logging_mute_restore": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has rejoined the server before their mute expired and has been automatically muted again.",
 	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
 	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` until **{until}** for **{reason}** `[#{infractionId}]`",
 	"global_no_reason": "No reason given",

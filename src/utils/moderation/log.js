@@ -7,6 +7,25 @@ require("moment-timezone");
 const DatabaseManager = new (require("../database/DatabaseManager"));
 
 module.exports = {
+	SendMuteRestore: async (client, guild, target) => {
+		const dbGuild = await GetDBGuild(guild.id);
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
+
+		if (dbGuild.guildLogging.modAction === null) return;
+
+		const modChannel = client.channels.cache.get(dbGuild.guildLogging.modAction);
+		if (!modChannel.guild.me.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		modChannel.send(
+			await utils.translate("global_logging_mute_restore", guild.id, {
+				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
+				target_tag: target.tag,
+				user_id: target.id,
+				emoji: BetterActions("muted"),
+			}),
+		);
+	},
+
 	SendModAction: async (client, guild, action, target, moderator, log, infId) => {
 		const dbGuild = await GetDBGuild(guild.id);
 		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
