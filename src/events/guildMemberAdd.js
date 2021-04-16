@@ -1,6 +1,6 @@
 const Event = require("../structures/Event");
 const DatabaseManager = new (require("../utils/database/DatabaseManager"));
-const { SendEventLog } = require("../utils/moderation/log");
+const { SendEventLog, SendMuteRestore } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
 
 module.exports = class extends Event {
@@ -21,6 +21,11 @@ module.exports = class extends Event {
 				}),
 			),
 		);
+
+		if (await DatabaseManager.isUserMuted(member.user.id)) {
+			member.roles.add(await DatabaseManager.getMuteRole(member.guild));
+			await SendMuteRestore(this.client, member.guild, member.user)
+		}
 
 		if (!member.pending && (await DatabaseManager.getAutoRole(member.guild)) !== null)
 			member.roles.add(member.guild.roles.cache.get(await DatabaseManager.getAutoRole(member.guild)));
