@@ -1,5 +1,5 @@
 const Event = require("../structures/Event");
-const DatabaseManager = new (require("../utils/database/DatabaseManager"));
+const DatabaseManager = new (require("../utils/database/DatabaseManager"))();
 const Emote = require("../emotes.json");
 
 module.exports = class extends Event {
@@ -8,6 +8,8 @@ module.exports = class extends Event {
 	}
 
 	async run(guild) {
+		if (!guild) return;
+
 		await DatabaseManager.createGuild(guild);
 
 		this.client.channels.cache
