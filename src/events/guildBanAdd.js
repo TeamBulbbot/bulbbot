@@ -14,7 +14,7 @@ module.exports = class extends Event {
 
 		const auditLog = await guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_ADD" });
 		const banLog = auditLog.entries.first();
-		if (!unbanLog) return;
+		if (!banLog) return;
 
 		let { executor, reason } = banLog;
 		if (executor.id === this.client.user.id) return;
