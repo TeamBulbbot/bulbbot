@@ -19,11 +19,20 @@ module.exports = class extends Command {
 		const mins = Math.floor(time.asMinutes() - days * 24 * 60 - hours * 60);
 		const secs = Math.floor(time.asSeconds() - days * 24 * 60 * 60 - hours * 60 * 60 - mins * 60);
 
-		let uptime = "";
-		if (days > 0) uptime += `${days} day(s), `;
-		if (hours > 0) uptime += `${hours} hour(s), `;
-		if (mins > 0) uptime += `${mins} minute(s), `;
-		if (secs > 0) uptime += `${secs} second(s)`;
+		const timeStrings = [];
+		if (days > 0) timeStrings.push(`${days} day${days == 1 ? "" : "s"}`);
+		if (hours > 0) timeStrings.push(`${hours} hour${hours == 1 ? "" : "s"}`);
+		if (mins > 0) timeStrings.push(`${mins} minute${mins == 1 ? "" : "s"}`);
+		if (secs > 0) timeStrings.push(`${secs} second${secs == 1 ? "" : "s"}`);
+		
+		const uptime = (() => { // Dynamic assignment
+			const last = timeStrings.pop();
+			if(timeStrings.length > 1)
+				return timeStrings.join(", ") + ", and " + last;
+			else
+				timeStrings.push(last);
+				return timeStrings.join(" and ")
+		})();
 
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
