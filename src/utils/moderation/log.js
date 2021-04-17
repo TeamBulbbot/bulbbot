@@ -33,7 +33,7 @@ module.exports = {
 
 	SendModActionPreformatted: async (client, guild, log) => {
 		const dbGuild = await GetDBGuild(guild.id);
-		const zone = client.bulbutils.timezones[await GetTimezone(guild.id)]
+		const zone = client.bulbutils.timezones[await DatabaseManager.getTimezone(guild.id)];
 
 		if (dbGuild.guildLogging.modAction === null) return;
 

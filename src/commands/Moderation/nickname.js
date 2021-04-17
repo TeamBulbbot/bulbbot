@@ -7,11 +7,13 @@ module.exports = class extends Command {
 		super(...args, {
 			description: "Nicknames a user from the current server",
 			category: "Moderation",
+			aliases: ["nick"],
 			usage: "!nickname <member> [nickname] [reason]",
 			argList: ["member:Member"],
 			examples: ["!nickname @KlukCZ#6589 QT"],
 			minArgs: 1,
 			maxArgs: -1,
+			clearance: 50,
 			clientPerms: ["MANAGE_NICKNAMES"],
 		});
 	}
@@ -24,26 +26,35 @@ module.exports = class extends Command {
 		const target = message.guild.member(targetId);
 		const nickmatch = QuoteMarked.exec(argString);
 		const nickname = (nickmatch ? nickmatch[1] : args[1]).trim() ?? "";
-		const reason = args.slice(1 + nickname.split(' ').length)?.join(" ").trim() || await this.client.bulbutils.translate("global_no_reason", message.guild.id);
+		const reason =
+			args
+				.slice(1 + nickname.split(" ").length)
+				?.join(" ")
+				.trim() || (await this.client.bulbutils.translate("global_no_reason", message.guild.id));
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild.id));
 		if (await this.client.bulbutils.ResolveUserHandle(message, await this.client.bulbutils.CheckUser(message, target), target.user)) return;
 
-		if(nickname.length > 32) 
-			return message.channel.send(await this.client.bulbutils.translate("nickname_too_long", message.guild.id, {
-				nick_length: nickname.length.toString(),
-			}));
-		if(!nickname && !target.nickname)
-			return message.channel.send(await this.client.bulbutils.translate("already_no_nickname", message.guild.id, {
-				target_tag: target.user.tag,
-				target_id: target.user.id,
-			}));
-		if(nickname === target.nickname)
-			return message.channel.send(await this.client.bulbutils.translate("already_has_nickname", message.guild.id, {
-				target_tag: target.user.tag,
-				target_id: target.user.id,
-				nick_new: target.nickname,
-			}));
-
+		if (nickname.length > 32)
+			return message.channel.send(
+				await this.client.bulbutils.translate("nickname_too_long", message.guild.id, {
+					nick_length: nickname.length.toString(),
+				}),
+			);
+		if (!nickname && !target.nickname)
+			return message.channel.send(
+				await this.client.bulbutils.translate("already_no_nickname", message.guild.id, {
+					target_tag: target.user.tag,
+					target_id: target.user.id,
+				}),
+			);
+		if (nickname === target.nickname)
+			return message.channel.send(
+				await this.client.bulbutils.translate("already_has_nickname", message.guild.id, {
+					target_tag: target.user.tag,
+					target_id: target.user.id,
+					nick_new: target.nickname,
+				}),
+			);
 
 		const nickOld = target.nickname || target.user.username;
 		let infId = null;
@@ -65,12 +76,14 @@ module.exports = class extends Command {
 				nickOld,
 				nickname,
 			);
-		} catch(e) {
-			console.error(e.stack)
-			return message.channel.send(await this.client.bulbutils.translate("change_nick_fail", message.guild.id, {
-				target_tag: target.user.tag,
-				target_id: target.user.id,
-			}));
+		} catch (e) {
+			console.error(e.stack);
+			return message.channel.send(
+				await this.client.bulbutils.translate("change_nick_fail", message.guild.id, {
+					target_tag: target.user.tag,
+					target_id: target.user.id,
+				}),
+			);
 		}
 
 		return message.channel.send(
