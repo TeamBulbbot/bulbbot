@@ -22,6 +22,10 @@ The defualt prefix of the bot is `!`, but it can easily be changed with the `con
 This project is licensed under the MIT License, see the [LICENSE](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE) file for more
 information.
 
+## Cloning the bot and running a local copy
+
+You can find a more detailed explanation of how to clone, setup and run the bot locally on your machine [here](https://www.notion.so/How-to-setup-a-local-dev-environment-e02c5c648ebb40458408ccc2a26c1f61)
+
 ## Developers
 
 👤 **KlukCZ**

@@ -197,10 +197,12 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({full_list})/g, key.full_list);
 
-		const mf = new MessageFormat("en");
-		const output = mf.compile(response);
+		if (key.user_infractions !== undefined) {
+			const mf = new MessageFormat("en");
+			const output = mf.compile(response);
 
-		if (key.user_infractions !== undefined) response = output({ infractions: key.user_infractions });
+			response = output({ infractions: key.user_infractions });
+		}
 
 		return response;
 	}
@@ -513,6 +515,10 @@ module.exports = class BulbBotUtils {
 			default:
 				return false;
 		}
+	}
+
+	async sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
 	async log(err, message, channel = global.config.error) {

@@ -1,7 +1,8 @@
 const Event = require("../structures/Event");
 const AutoMod = require("../utils/AutoMod");
-const { SendEventLog } = require("../utils/moderation/log");
+const { SendEventLog, SendEventLogFile } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
+const fs = require("fs");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -23,9 +24,12 @@ module.exports = class extends Event {
 			after: Util.cleanContent(newMessage.content, newMessage),
 		});
 
-		if (msg.length >= 2000) {
-			await SendEventLog(this.client, newMessage.guild, "message", msg.substring(0, 1500));
-			await SendEventLog(this.client, newMessage.guild, "message", msg.substring(1500, msg.length));
+		if (msg.length >= 1850) {
+			fs.writeFile(`./src/files/events/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, msg, async function (err) {
+				if (err) console.error(err);
+			});
+
+			await SendEventLogFile(this.client, newMessage.guild, "message", "", `./src/files/events/MESSAGE_UPDATE-${newMessage.guild.id}.txt`);
 		} else await SendEventLog(this.client, newMessage.guild, "message", msg);
 	}
 };
