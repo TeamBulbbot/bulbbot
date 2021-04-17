@@ -211,6 +211,8 @@
 
 	"multikick_success": "{emote_success} {full_list} have been kicked for **{reason}**",
 
+	"multimute_success": "{emote_success} {full_list} have been muted for **{reason}**",
+
 	"multiwarn_success": "{emote_success} {full_list} have been warned for **{reason}**",
 
 	"multivoicekick_success": "{emote_success} {full_list} have been voice-kicked for **{reason}**",
