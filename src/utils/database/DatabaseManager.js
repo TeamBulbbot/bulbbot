@@ -30,12 +30,12 @@ module.exports = class DatabaseManager {
 	/**
 	 * Deletes the guild record from the database
 	 *
-	 * @param {Snowflake} guildID           Guild ID parsed from the {@link guildDelete} event
+	 * @param {Snowflake} guildId           Guild ID parsed from the {@link guildDelete} event
 	 * @returns {Promise<void>}
 	 */
-	async deleteGuild(guildID) {
+	async deleteGuild(guildId) {
 		const dbGuild = await sequelize.models.guild.findOne({
-			where: { guildID },
+			where: { guildId },
 			include: [
 				{ model: sequelize.models.guildConfiguration },
 				{ model: sequelize.models.automod },
