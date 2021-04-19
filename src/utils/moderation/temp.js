@@ -33,13 +33,8 @@ module.exports = {
 			if (dbGuild.tempbans === undefined || dbGuild.tempbans.length == 0) return;
 
 			for (const ban of dbGuild.tempbans) {
-				let guild;
-				try {
-					guild = await client.guilds.fetch(dbGuild.guildId);
-				} catch {
-					await TempBanDel(mute.id);
-					return;
-				}
+				const guild = await client.guilds.fetch(dbGuild.guildId);
+				if (guild === null || guild === undefined) return;
 
 				const target = {
 					tag: ban.targetTag,
@@ -125,13 +120,8 @@ module.exports = {
 			if (dbGuild.tempmutes === undefined || dbGuild.tempmutes.length == 0) return;
 
 			for (const mute of dbGuild.tempmutes) {
-				let guild;
-				try {
-					guild = await client.guilds.fetch(dbGuild.guildId);
-				} catch {
-					await TempMuteDel(mute.id);
-					return;
-				}
+				const guild = await client.guilds.fetch(dbGuild.guildId);
+				if (guild === null || guild === undefined) return;
 
 				const target = {
 					tag: mute.targetTag,

@@ -49,6 +49,7 @@ module.exports = {
 
 	Ban: async (client, guild, target, moderator, reason, reasonLog) => {
 		const offender = guild.member(target.id);
+		if (!offender) return;
 		if (!offender.bannable) return;
 		reason = await reason;
 		await offender.ban({ reason });

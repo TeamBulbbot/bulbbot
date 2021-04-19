@@ -14,6 +14,8 @@ module.exports = class extends Event {
 
 		const auditLog = await guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_REMOVE" });
 		const unbanLog = auditLog.entries.first();
+		if (!unbanLog) return;
+
 		let { executor, reason } = unbanLog;
 		if (executor.id === this.client.user.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", guild.id);

@@ -30,8 +30,13 @@ module.exports = class extends Command {
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild.id);
 		let fullList = "";
 
+		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild.id)).then(msg => {
+			msg.delete({ timeout: (args.length - 0.5) * global.config.massCommandSleep });
+		});
+
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
+			await this.client.bulbutils.sleep(global.config.massCommandSleep);
 
 			let target;
 			let infId = null;
