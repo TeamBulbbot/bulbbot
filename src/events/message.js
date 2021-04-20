@@ -106,7 +106,7 @@ module.exports = class extends Event {
 					arg: args[command.maxArgs],
 					arg_expected: command.maxArgs,
 					arg_provided: args.length,
-					usage: command.usage,
+					usage: command.usage.replace('!',prefix),
 				}),
 			);
 		}
@@ -117,7 +117,7 @@ module.exports = class extends Event {
 					arg: command.argList[args.length],
 					arg_expected: command.minArgs,
 					arg_provided: args.length,
-					usage: command.usage,
+					usage: command.usage.replace('!',prefix),
 				}),
 			);
 		}

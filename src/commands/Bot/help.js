@@ -22,7 +22,7 @@ module.exports = class extends Command {
 		else {
 			let msg = `**${this.client.prefix}${command.name}** ${command.aliases.length !== 0 ? `(${command.aliases.join("**,** ")})` : ""}\n`;
 			msg += `> ${command.description}\n\n`;
-			msg += `**Usage:** \`${command.usage}\`\n`;
+			msg += `**Usage:** \`${command.usage.replace('!',this.client.prefix)}\`\n`;
 
 			if (command.examples.length !== 0) {
 				msg += `**Examples:**\n`;

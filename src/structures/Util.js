@@ -69,7 +69,7 @@ module.exports = class Util {
 
 					metrics.client_event(event.name);
 				});
-				//console.log(`Successfully registered event '${event.name}'`);
+				// console.log(`Successfully registered event '${event.name}'`);
 			}
 			console.log("[CLIENT] Successfully registered all events");
 		});
