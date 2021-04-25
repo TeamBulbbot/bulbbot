@@ -1,5 +1,5 @@
 const { createInfraction } = require("../InfractionUtils");
-const { SendModAction, SendModActionTemp, SendAutoUnban } = require("./log");
+const { SendModAction, SendModActionPreformatted, SendModActionTemp, SendAutoUnban } = require("./log");
 const utils = require("../BulbBotUtils");
 const Utils = new utils();
 
@@ -136,6 +136,25 @@ module.exports = {
 		await target.voice.kick();
 		const infId = await createInfraction(guild.id, "Voice-kick", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
 		await SendModAction(client, guild, await Utils.translate("action_kick_voice", guild.id), target.user, moderator, reasonLog, infId);
+
+		return infId;
+	},
+
+	ChangeNick: async (client, guild, target, moderator, reason, reasonLog, nickOld, nickNew) => {
+		await target.setNickname(nickNew, reason);
+		const infId = await createInfraction(guild.id, "Change-nickname", "true", reasonLog, target.user.tag, target.user.id, moderator.tag, moderator.id);
+		await SendModActionPreformatted(client, guild, await Utils.translate(nickNew ? "change_nick_mod_action_log" : "remove_nick_mod_action_log", guild.id, {
+			action: await Utils.translate(nickNew ? "action_change_nick" : "action_remove_nick", guild.id, {client: client}),
+			target_tag: target.user.tag,
+			user_id: target.user.id,
+			nick_old: nickOld,
+			nick_new: nickNew,
+			moderator_tag: moderator.tag,
+			moderator_id: moderator.id,
+			reason: reasonLog,
+			infractionId: infId,
+			client: client,
+		}));
 
 		return infId;
 	},
