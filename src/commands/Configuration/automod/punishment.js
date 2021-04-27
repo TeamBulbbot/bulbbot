@@ -14,15 +14,7 @@ module.exports = async (client, message, args) => {
 			}),
 		);
 
-	if (!punishment)
-		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_missing_list", message.guild.id, {
-				arg: "punishment:string",
-				arg_expected: 3,
-				arg_provided: 1,
-				usage: "`LOG`, `WARN`, `KICK` or `BAN`",
-			}),
-		);
+	if (!punishment) return message.channel.send(await client.bulbutils.translate("automod_missing_punishment", message.guild.id));
 
 	if (!["website", "invites", "words", "mentions", "messages"].includes(part.toLowerCase()))
 		return message.channel.send(

@@ -109,6 +109,7 @@
 	"override_remove_success": "{emote_success} Successfully removed the command",
 
 	"automod_missing_limit": "{emote_warn} Missing required argument `limit`, can be any value higher `0`",
+	"automod_missing_item_add": "{emote_warn} Missing required argument `item` that should be added to the automod",
 	"automod_missing_item_remove": "{emote_warn} Missing required argument `item` that should be removed from the automod",
 	"automod_missing_punishment": "{emote_warn} Missing required argument `punishment`, can be either `LOG`, `WARN`, `KICK` or `BAN`",
 

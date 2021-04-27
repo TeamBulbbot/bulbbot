@@ -12,6 +12,8 @@ exports.ReasonImage = /((?:https?:\/\/)[a-z0-9]+(?:[-.][a-z0-9]+)*\.[a-z]{2,5}(?
 exports.QuoteMarked = /"(.*?)"/;
 
 exports.AutoMod_INVITE = /(?:https?:\/\/)?(?:www\.)?discord(?:\.gg|\.me|(?:app)?\.com\/invite)\/([A-Za-z0-9-]+)/;
-exports.AutoMod_WEBSITE = /(?:https?:\/\/)?((?:[A-Za-z0-9]+\.){1,128}(?:[A-Za-z0-9]{2,63})(?:\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;%=-]*)?)/;
+exports.AutoMod_WEBSITE = /(?:https?:\/\/)?((?:[A-Za-z0-9]+\.){1,128}(?:[A-Za-z0-9]{2,63}))(\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;%=-]*)?/;
 
+// Almost none of the above regexes have the global flag because it can create difficult & confusing problems
+// Create a top-level const using this function for any regex that needs to be global
 exports.makeGlobal = (regex) => new RegExp(regex, 'g');

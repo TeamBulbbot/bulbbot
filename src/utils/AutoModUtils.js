@@ -1,6 +1,7 @@
 const sequelize = require("../utils/database/connection");
 const AutoModException = require("../structures/exceptions/AutoModException");
 const { Warn, Kick, CleanBan } = require("../utils/moderation/actions");
+const { AutoMod_INVITE, AutoMod_WEBSITE } = require("./Regex");
 
 module.exports = {
 	resolveAction: async (client, message, action, reason) => {
@@ -172,16 +173,19 @@ module.exports = {
 
 		switch (part.toLowerCase()) {
 			case "website":
-				if (db.automod.websiteWhitelist.includes(item)) return 1;
+				let websiteItem = (AutoMod_WEBSITE.exec(item) ?? [null, item]).slice(1).join("");
+				if (websiteItem.endsWith("/")) websiteItem = websiteItem.slice(0, -1);
+				if (db.automod.websiteWhitelist.includes(websiteItem)) return 1;
 
 				db.automod.changed("websiteWhitelist", true);
-				db.automod.websiteWhitelist.push(item);
+				db.automod.websiteWhitelist.push(websiteItem);
 				break;
 			case "invites":
-				if (db.automod.inviteWhitelist.includes(item)) return 1;
+				const inviteItem = (AutoMod_INVITE.exec(item) ?? [null, item])[1];
+				if (db.automod.inviteWhitelist.includes(inviteItem)) return 1;
 
 				db.automod.changed("inviteWhitelist", true);
-				db.automod.inviteWhitelist.push(item);
+				db.automod.inviteWhitelist.push(inviteItem);
 				break;
 			case "words":
 				if (db.automod.wordBlacklist.includes(item)) return 1;
@@ -189,9 +193,8 @@ module.exports = {
 				db.automod.changed("wordBlacklist", true);
 				db.automod.wordBlacklist.push(item);
 				break;
-
 			case "words_token":
-				if (db.automod.wordBlacklist.includes(item)) return 1;
+				if (db.automod.wordBlacklistToken.includes(item)) return 1;
 
 				db.automod.changed("wordBlacklistToken", true);
 				db.automod.wordBlacklistToken.push(item);
@@ -232,17 +235,20 @@ module.exports = {
 
 		switch (part.toLowerCase()) {
 			case "website":
-				if (!db.automod.websiteWhitelist.includes(item)) return 1;
+				const websiteItem = (AutoMod_WEBSITE.exec(item) ?? [null, "", item]).slice(1).join("");
+				if (websiteItem.endsWith("/")) websiteItem = websiteItem.slice(0, -1);
+				if (!db.automod.websiteWhitelist.includes(websiteItem)) return 1;
 
 				db.automod.changed("websiteWhitelist", true);
-				db.automod.websiteWhitelist = removeItemOnce(db.automod.websiteWhitelist, item);
+				db.automod.websiteWhitelist = removeItemOnce(db.automod.websiteWhitelist, websiteItem);
 
 				break;
 			case "invites":
-				if (!db.automod.inviteWhitelist.includes(item)) return 1;
+				const inviteItem = (AutoMod_INVITE.exec(item) ?? [null, item])[1];
+				if (!db.automod.inviteWhitelist.includes(inviteItem)) return 1;
 
 				db.automod.changed("inviteWhitelist", true);
-				db.automod.inviteWhitelist = removeItemOnce(db.automod.websiteWhitelist, item);
+				db.automod.inviteWhitelist = removeItemOnce(db.automod.inviteWhitelist, inviteItem);
 				break;
 			case "words":
 				if (!db.automod.wordBlacklist.includes(item)) return 1;
@@ -255,7 +261,7 @@ module.exports = {
 				if (!db.automod.wordBlacklistToken.includes(item)) return 1;
 
 				db.automod.changed("wordBlacklistToken", true);
-				db.automod.wordBlacklist = removeItemOnce(db.automod.wordBlacklistToken, item);
+				db.automod.wordBlacklistToken = removeItemOnce(db.automod.wordBlacklistToken, item);
 				break;
 			default:
 				return -1;
