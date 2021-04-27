@@ -57,6 +57,10 @@ module.exports = class extends Command {
 			}),
 		);
 
-		await setActive(await getLatestMute(message.guild.id, target.id), "false");
+		const latestMute = await getLatestMute(message.guild.id, target.id);
+		// This fails if the target has the mute role but has never been muted, resulting in latestMute = []
+		// I'd prefer to change it to return `null` or something instead, if it won't break anything
+		if (!(latestMute instanceof Array))
+			await setActive(latestMute, "false");
 	}
 };
