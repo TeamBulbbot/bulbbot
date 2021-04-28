@@ -17,7 +17,7 @@ module.exports = {
 		const mentionsLimit = await AutoModUtils.getMentionsLimit(message.guild.id);
 
 		if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
-			await AutoModUtils.resolveAction(
+			let punishment = await AutoModUtils.resolveAction(
 				client,
 				message,
 				dbGuild.automod.punishmentMessages,
@@ -28,13 +28,15 @@ module.exports = {
 				guild,
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MESSAGES\` check in <#${
 					message.channel.id
-				}>. Messages (${cache[guild]["messages"][user]["count"]}/${(Date.now() - cache[guild]["messages"][user]["time"]) / 1000}s)`,
+				}>. | Punishment: **${punishment}** | Messages (${cache[guild]["messages"][user]["count"]}/${
+					(Date.now() - cache[guild]["messages"][user]["time"]) / 1000
+				}s)`,
 			);
 			delete cache[guild]["messages"][user];
 		}
 
 		if (cache[guild]["mentions"][user] && cache[guild]["mentions"][user]["count"] >= mentionsLimit && mentionsLimit !== 0) {
-			await AutoModUtils.resolveAction(
+			let punishment = await AutoModUtils.resolveAction(
 				client,
 				message,
 				dbGuild.automod.punishmentMentions,
@@ -45,7 +47,9 @@ module.exports = {
 				guild,
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`MAX MENTIONS\` check in <#${
 					message.channel.id
-				}>. Mentions (${cache[guild]["mentions"][user]["count"]}/${(Date.now() - cache[guild]["mentions"][user]["time"]) / 1000}s)`,
+				}>. | Punishment: **${punishment}** | Mentions (${cache[guild]["mentions"][user]["count"]}/${
+					(Date.now() - cache[guild]["mentions"][user]["time"]) / 1000
+				}s)`,
 			);
 			delete cache[guild]["mentions"][user];
 		}

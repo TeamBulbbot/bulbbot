@@ -72,6 +72,8 @@ module.exports = {
 			default:
 				throw new AutoModException(`'${action}' is not a valid resolvable action!`);
 		}
+
+		return action.toUpperCase();
 	},
 
 	getGuildAutoMod: async guildId => {

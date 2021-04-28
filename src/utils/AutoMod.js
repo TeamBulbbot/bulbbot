@@ -18,18 +18,23 @@ module.exports = {
 		let shouldDelete = false;
 
 		if (await hasInvite(message, dbGuild.automod)) {
-			await AutoModUtils.resolveAction(client, message, dbGuild.automod.punishmentInvites, `Violated \`DISCORD INVITE\` in #${message.channel.name}`);
+			let punishment = await AutoModUtils.resolveAction(
+				client,
+				message,
+				dbGuild.automod.punishmentInvites,
+				`Violated \`DISCORD INVITE\` in #${message.channel.name}`,
+			);
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}>\`\`\`${message.content}\`\`\``,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`DISCORD INVITE\` check in <#${message.channel.id}> | Punishment: **${punishment}**\`\`\`${message.content}\`\`\``,
 			);
 
 			shouldDelete = true;
 		}
 
 		if (await hasSwearWords(message, dbGuild.automod)) {
-			await AutoModUtils.resolveAction(
+			let punishment = await AutoModUtils.resolveAction(
 				client,
 				message,
 				dbGuild.automod.punishmentWords,
@@ -40,13 +45,15 @@ module.exports = {
 				dbGuild.guildId,
 				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WORDS\` check in <#${
 					message.channel.id
-				}>\n**Blacklisted words:** \`${await hasSwearWords(message, dbGuild.automod)}\`\n\`\`\`${message.content}\`\`\``,
+				}> | Punishment: **${punishment}**\n**Blacklisted words:** \`${await hasSwearWords(message, dbGuild.automod)}\`\n\`\`\`${
+					message.content
+				}\`\`\``,
 			);
 			shouldDelete = true;
 		}
 
 		if (await hasWebsite(message, dbGuild.automod)) {
-			await AutoModUtils.resolveAction(
+			let punishment = await AutoModUtils.resolveAction(
 				client,
 				message,
 				dbGuild.automod.punishmentWebsite,
@@ -55,21 +62,19 @@ module.exports = {
 			await SendAutoModLog(
 				client,
 				dbGuild.guildId,
-				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WEBSITE\` check in <#${message.channel.id}>\n\`\`\`${message.content}\`\`\``,
+				`${Emotes.actions.WARN} **${message.author.tag}** \`${message.author.id}\` has violated the \`FORBIDDEN WEBSITE\` check in <#${message.channel.id}> | Punishment: **${punishment}**\n\`\`\`${message.content}\`\`\``,
 			);
 			shouldDelete = true;
 		}
 
-		
 		const mentionCount = await hasMentions(client, message);
 		if (mentionCount) {
 			const mentionsLimit = await AutoModUtils.getMentionsLimit(message.guild.id);
-			if (mentionsLimit)
-				shouldDelete = mentionCount >= mentionsLimit;
+			if (mentionsLimit) shouldDelete = mentionCount >= mentionsLimit;
 		}
 
 		await AutoModCache.set(client, message, message.guild.id, "messages", message.author.id, 1, 10000);
-		if (shouldDelete) await message.delete({reason: "AutoMod"});
+		if (shouldDelete) await message.delete({ reason: "AutoMod" });
 	},
 };
 
@@ -80,7 +85,7 @@ async function hasInvite(message, dbGuild) {
 
 	let match;
 	const AutoMod_INVITE_Global = makeGlobal(AutoMod_INVITE);
-	while (match = AutoMod_INVITE_Global.exec(message.content)) {
+	while ((match = AutoMod_INVITE_Global.exec(message.content))) {
 		if (!allowed_invites.includes(match[1])) return true;
 	}
 
@@ -120,12 +125,12 @@ async function hasWebsite(message, dbGuild) {
 
 	let match;
 	const AutoMod_WEBSITE_Global = makeGlobal(AutoMod_WEBSITE);
-	while (match = AutoMod_WEBSITE_Global.exec(message.content)) {
+	while ((match = AutoMod_WEBSITE_Global.exec(message.content))) {
 		let website = match.slice(1).join("");
 		if (website.endsWith("/")) website = website.slice(0, -1);
 		if (AutoMod_INVITE.test(website)) continue;
 		if (!allowed_websites.includes(website)) return true;
 	}
-	
+
 	return false;
 }
