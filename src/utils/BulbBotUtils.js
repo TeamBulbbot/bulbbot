@@ -64,12 +64,15 @@ module.exports = class BulbBotUtils {
 
 		response = response.replace(/({missing})/g, key.missing);
 
+		response = response.replace(/({time})/g, key.time);
+
 		response = response.replace(/({user_id})/g, key.user_id);
 		response = response.replace(/({user_name})/g, key.user_name);
 		response = response.replace(/({user_nickname})/g, key.user_nickname);
 		response = response.replace(/({user_discriminator})/g, key.user_discriminator);
 		response = response.replace(/({user_avatar})/g, key.user_avatar);
 		response = response.replace(/({user_bot})/g, key.user_bot);
+		response = response.replace(/({user_joined})/g, this.formatDays(key.user_joined));
 		response = response.replace(/({user_age})/g, this.formatDays(key.user_age));
 		response = response.replace(/({user_premium})/g, this.formatDays(key.user_premium));
 		response = response.replace(/({user_joined})/g, this.formatDays(key.user_joined));
@@ -417,6 +420,11 @@ module.exports = class BulbBotUtils {
 		const days = moment.duration(date.diff(end)).asDays();
 
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\``;
+	}
+
+	formatSmall(start) {
+		const string = moment(new Date(start)).fromNow();
+		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 
 	prettify(action) {

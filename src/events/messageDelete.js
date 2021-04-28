@@ -2,6 +2,7 @@ const Event = require("../structures/Event");
 const { SendEventLog, SendEventLogFile } = require("../utils/moderation/log");
 const { Util } = require("discord.js");
 const fs = require("fs");
+const moment = require("moment");
 
 module.exports = class extends Event {
 	constructor(...args) {
@@ -12,14 +13,15 @@ module.exports = class extends Event {
 		if (message.author.id === this.client.user.id) return;
 
 		let msg = await this.client.bulbutils.translate("event_message_delete", message.guild.id, {
-			target_tag: message.author.tag,
+			target_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 			target_id: message.author.id,
 			channel_id: message.channel.id,
 			after_channel_id: message.channel.id,
 			after_id: message.id,
-			content: message.content ? Util.cleanContent(message.content, message) : "",
-			attachment: message.attachments.first() ? message.attachments.first().proxyURL : "None",
-			embed: message.embeds.length !== 0 ? "[Embed]" : "None",
+			time: `[${this.client.bulbutils.formatSmall(message.createdTimestamp)}]`,
+			content: message.content ? `**C:** ${Util.cleanContent(message.content, message)}` : "",
+			attachment: message.attachments.first() ? `**A**: ${message.attachments.first().proxyURL}` : "",
+			embed: message.embeds.length !== 0 ? "**E:** [Embed]" : "",
 		});
 
 		if (msg.length >= 1850) {

@@ -15,11 +15,12 @@ module.exports = class extends Event {
 		await AutoMod.Master(newMessage);
 
 		let msg = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
-			target_tag: newMessage.author.tag,
+			target_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 			target_id: newMessage.author.id,
 			channel_id: newMessage.channel.id,
 			after_channel_id: newMessage.channel.id,
 			after_id: newMessage.id,
+			time: `[${this.client.bulbutils.formatSmall(newMessage.editedTimestamp)}]`,
 			before: Util.cleanContent(oldMessage.content, oldMessage),
 			after: Util.cleanContent(newMessage.content, newMessage),
 		});
