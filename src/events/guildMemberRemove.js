@@ -19,6 +19,7 @@ module.exports = class extends Event {
 				await this.client.bulbutils.translate("event_member_left", member.guild.id, {
 					user_tag: member.user.tag,
 					user_id: member.user.id,
+					user_joined: member.joinedTimestamp,
 				}),
 			),
 		);

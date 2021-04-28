@@ -27,8 +27,8 @@
 	"event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
 	"event_message_args_unexpected_list": "{emote_warn} Cannot parse `{arg}` as `{arg_expected}`.\n{emote_wrench} **Correct arguments:** {usage}",
 	"event_message_args_missing_list": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct arguments:** {usage}",
-	"event_message_edit": "{emote_edit} Message from **{target_tag}** `{target_id}` was updated in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**B:** {before}\n**A:** {after}",
-	"event_message_delete": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**C:** {content} \n**A:** {attachment}\n**E:** {embed}",
+	"event_message_edit": "{emote_edit} Message from **{target_tag}** `{target_id}` was updated in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}` | {time}\n**B:** {before}\n**A:** {after}",
+	"event_message_delete": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}` | {time}\n{content} \n{attachment}\n{embed}",
 
 	"event_channel_create": "**Channel created:** <#{channel_id}> `({channel_type})`",
 	"event_channel_delete": "**Channel deleted:** #{channel_name} `({channel_id})` `({channel_type})`",
@@ -40,8 +40,8 @@
 	"event_channel_update_nsfw_enabled": "<#{channel_id}> nsfw was `enabled`\n",
 	"event_channel_update_nsfw_disabled": "<#{channel_id}> nsfw was `disabled`\n",
 
-	"event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})` - **Account created:** {user_age}",
-	"event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`",
+	"event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})`\n**Account created:** {user_age}",
+	"event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`\n**Joined Server:** {user_joined}",
 
 	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` has changed their nickname from `{nick_old}` to `{nick_new}`",
 	"event_member_update_role_add": "{emote_warn} The **{role}** role has been added to **{user_tag}** `({user_id})`",
