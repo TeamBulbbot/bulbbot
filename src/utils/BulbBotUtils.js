@@ -419,12 +419,28 @@ module.exports = class BulbBotUtils {
 		const date = moment(moment.utc(start).format("YYYY-MM-DD"));
 		const days = moment.duration(date.diff(end)).asDays();
 
-		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} days ago)\`\``;
+		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} day(s) ago)\`\``;
 	}
 
 	formatSmall(start) {
 		const string = moment(new Date(start)).fromNow();
 		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+	getUptime(timestamp) {
+		const time = moment.duration(timestamp, "milliseconds");
+		const days = Math.floor(time.asDays());
+		const hours = Math.floor(time.asHours() - days * 24);
+		const mins = Math.floor(time.asMinutes() - days * 24 * 60 - hours * 60);
+		const secs = Math.floor(time.asSeconds() - days * 24 * 60 * 60 - hours * 60 * 60 - mins * 60);
+
+		let uptime = "";
+		if (days > 0) uptime += `${days} day(s), `;
+		if (hours > 0) uptime += `${hours} hour(s), `;
+		if (mins > 0) uptime += `${mins} minute(s), `;
+		if (secs > 0) uptime += `${secs} second(s)`;
+
+		return uptime;
 	}
 
 	prettify(action) {
