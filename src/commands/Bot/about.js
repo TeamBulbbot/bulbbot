@@ -15,8 +15,6 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		//
-
 		shell.cd(`${__dirname}/../../../`);
 		const commitHash = shell.exec(`git rev-parse --short HEAD`, { silent: true }).stdout;
 		const commitTime = shell.exec(`git log -1 --format=%cd`, { silent: true }).stdout;
