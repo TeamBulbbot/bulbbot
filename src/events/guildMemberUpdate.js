@@ -32,26 +32,7 @@ module.exports = class extends Event {
 					audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
 
 					auditLog = audit.entries.first();
-					if(auditLog && auditLog.changes[0].key === "nick") executor = auditLog.executor;
-				}
-				if(executor && newMember.user.id !== executor.id)
-				{
-					if(this.client.user.id === executor.id) return; // Assume already mod logged (if configued)
-					const guild = newMember.guild;
-					const target = auditLog.target || newMember.user;
-					const reason = auditLog.reason || await this.client.bulbutils.translate("global_no_reason", guild.id);
-					const infId = await createInfraction(guild.id, "Manual nickname", "false", reason, target.tag, target.id, executor.tag, executor.id);
-					return void await SendModActionPreformatted(this.client, guild, await this.client.bulbutils.translate(newMember.nickname ? "change_nick_mod_action_log" : "remove_nick_mod_action_log", guild.id, {
-						action: `manually ${await this.client.bulbutils.translate(newMember.nickname ? "action_change_nick" : "action_remove_nick", guild.id)}`,
-						target_tag: target.tag,
-						user_id: target.id,
-						nick_old: oldMember.nickname || target.username,
-						nick_new: newMember.nickname || target.username,
-						moderator_tag: executor.tag,
-						moderator_id: executor.id,
-						reason,
-						infractionId: infId,
-					}));
+					if (auditLog && auditLog.changes[0].key === "nick") executor = auditLog.executor;
 				}
 
 				if (oldMember.nickname === null) oldMember.nickname = oldMember.user.username;
