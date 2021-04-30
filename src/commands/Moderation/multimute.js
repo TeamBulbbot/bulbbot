@@ -106,7 +106,6 @@ module.exports = class extends Command {
 				TempmuteDelete(tempmuteId);
 			}, duration);
 		}
-		// TODO: use mass unmute
 
 		return message.channel.send(
 			await this.client.bulbutils.translate("multimute_success", message.guild.id, {

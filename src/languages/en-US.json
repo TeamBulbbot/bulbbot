@@ -205,6 +205,10 @@
 
 	"inviteinfo_error": "{emote_warn} Unable to find a server with that invite",
 
+	"multimute_success": "{emote_success} {full_list} have been muted for **{reason}**",
+
+	"multiunmute_success": "{emote_success} {full_list} have been unmuted for **{reason}**",
+
 	"multiban_success": "{emote_success} {full_list} have been banned for **{reason}**",
 
 	"multiunban_success": "{emote_success} {full_list} have been unbanned for **{reason}**",
