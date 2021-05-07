@@ -35,6 +35,8 @@ module.exports = class extends Command {
 		
 		let fullList = "";
 
+		// TODO: should global_loading message be shown?
+
 		for (let i = 0; i < targets.length; i++) {
 
 			if (targets[i] === undefined) continue;
