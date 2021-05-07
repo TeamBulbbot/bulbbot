@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
 	"name": "bulbbot",
 	"version": "0.0.1",
@@ -44,3 +45,51 @@
 		"sequelize-cli": "^6.2.0"
 	}
 }
+=======
+{
+	"name": "bulbbot",
+	"version": "0.0.1",
+	"description": "A discord moderation bot written in Discord.JS",
+	"main": "src/index.js",
+	"scripts": {
+		"start": "node src/index.js",
+		"dev": "nodemon",
+		"pm2-start": "pm2 start src/index.js --watch --output ./logs/log.log --error ./logs/error.log --time --name bulbbot",
+		"db-sync": "node src/utils/database/sync.js"
+	},
+	"repository": "git+https://github.com/TestersQTs/Bulbbot.git",
+	"author": "TesterQTs",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/TestersQTs/Bulbbot/issues"
+	},
+	"homepage": "https://github.com/TestersQTs/Bulbbot#readme",
+	"dependencies": {
+		"@hapi/hapi": "^20.1.2",
+		"@messageformat/runtime": "^3.0.0-beta.2",
+		"@sentry/node": "^6.2.5",
+		"@sentry/tracing": "^6.3.3",
+		"axios": "^0.21.1",
+		"discord.js": "^12.5.3",
+		"discord.js-pagination": "^1.0.3",
+		"dotenv": "^8.2.0",
+		"emoji-unicode": "^2.0.1",
+		"js-yaml": "^4.1.0",
+		"moment": "^2.29.1",
+		"moment-timezone": "^0.5.33",
+		"parse-duration": "^0.4.4",
+		"pg": "^8.6.0",
+		"pg-hstore": "^2.3.3",
+		"prom-client": "^13.1.0",
+		"sequelize": "^6.6.2",
+		"sharp": "^0.28.1",
+		"shelljs": "^0.8.4",
+		"unicode": "^12.1.0"
+	},
+	"devDependencies": {
+		"@messageformat/core": "^3.0.0-beta.3",
+		"prettier": "^2.2.1",
+		"sequelize-cli": "^6.2.0"
+	}
+}
+>>>>>>> 2d108616cd868102ddbfe1865b8f55403c54e133

@@ -10,20 +10,12 @@ module.exports = async (client, message, args) => {
 				arg: "part:string",
 				arg_expected: 3,
 				arg_provided: 1,
-				usage: "`website`, `invites` or `words`",
+				usage: "`website`, `invites`, `words` or `words_token`",
 			}),
 		);
 
-	if (!item)
-		return message.channel.send(
-			await client.bulbutils.translate("event_message_args_missing_list", message.guild.id, {
-				arg: "part:string",
-				arg_expected: 3,
-				arg_provided: 2,
-				usage: "`website`, `invites`, `words`, `mentions` or `messages`",
-			}),
-		);
-
+	if (!item) return message.channel.send(await client.bulbutils.translate("automod_missing_item_add", message.guild.id));
+	
 	if (!["website", "invites", "words", "words_token"].includes(part.toLowerCase()))
 		return message.channel.send(
 			await client.bulbutils.translate("event_message_args_unexpected_list", message.guild.id, {

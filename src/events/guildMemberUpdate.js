@@ -1,5 +1,6 @@
 const Event = require("../structures/Event");
-const { SendEventLog } = require("../utils/moderation/log");
+const { SendModActionPreformatted, SendEventLog } = require("../utils/moderation/log");
+const { createInfraction } = require(`../utils/InfractionUtils`);
 const { Util } = require("discord.js");
 const DatabaseManager = new (require("../utils/database/DatabaseManager"))();
 
@@ -27,6 +28,13 @@ module.exports = class extends Event {
 
 		switch (change) {
 			case "nickname":
+				if (newMember.guild.me.hasPermission("VIEW_AUDIT_LOG")) {
+					audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
+
+					auditLog = audit.entries.first();
+					if (auditLog && auditLog.changes[0].key === "nick") executor = auditLog.executor;
+				}
+
 				if (oldMember.nickname === null) oldMember.nickname = oldMember.user.username;
 				if (newMember.nickname === null) newMember.nickname = newMember.user.username;
 

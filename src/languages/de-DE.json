@@ -16,7 +16,7 @@
 	"global_cannot_action_self": "{emote_warn} Du kannst diese Aktion nicht an dir selbst durchführen!",
 	"global_cannot_action_owner": "{emote_warn} Du kannst diese Aktion nicht am Servereigentümer durchführen!",
 	"global_cannot_action_role_equal": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da du keine höhere Rolle als der Nutzer hast!",
-    "global_cannot_action_role_equal_bot": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da ich keine höhere Rolle als der Nutzer habe!",
+	"global_cannot_action_role_equal_bot": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da ich keine höhere Rolle als der Nutzer habe!",
 	"global_cannot_action_role_higher": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da der Nutzer eine höhere Rolle als du hat!",
 	"global_cannot_action_role_higher_bot": "{emote_warn} Du kannst diese Aktion nicht an **{user_tag}** durchführen, da der Nutzer eine höhere Rolle als ich hat!",
 	"global_cannot_action_bot_self": "{emote_warn} Du kannst diese Aktion nicht an mir selbst durchführen!",
@@ -28,20 +28,20 @@
 	"event_message_args_unexpected_list": "{emote_warn} Kann `{arg}` nicht als `{arg_expected}` interpretieren.\n{emote_wrench} **Korrekte Benutzung:** {usage}",
 	"event_message_args_missing_list": "{emote_warn} Fehlendes Argument `{arg}`. `{arg_expected}` erwartet, `{arg_provided}` bekommen\n{emote_wrench} **Korrekte Benutzung:** {usage}",
 	"event_message_edit": "{emote_edit} Nachricht von **{target_tag}** `{target_id}` wurde in <#{channel_id}> geändert\n`ID (channel-message): {after_channel_id}-{after_id}`\n**Vorher:** {before}\n**Nachher:** {after}",
-	"event_message_delete": "{emote_trash} Nachricht von **{target_tag}** `{target_id}` wurde in <#{channel_id}> entfernt\n`ID (Kanal-Nachricht): {after_channel_id}-${after_id}`\n**Inhalt:** {content} \n**Angehängte Datei:** {attachment}\n**Embed:** {embed}",
+	"event_message_delete": "{emote_trash} Nachricht von **{target_tag}** `{target_id}` wurde in <#{channel_id}> entfernt\n`ID (Kanal-Nachricht): {after_channel_id}-${after_id}`\n{content} \n{attachment}\n{embed}",
 
 	"event_channel_create": "**Kanal erstellt:** <#{channel_id}> `({channel_type})`",
 	"event_channel_delete": "**Kanal entfernt:** #{channel_name} `({channel_id})` `({channel_type})`",
 	"event_channel_update_topic_added": "Kanalthema in <#{channel_id}> wurde hinzugefügt: `{channel_topic}`\n",
-    "event_channel_update_topic_removed": "Kanalthema von <#{channel_id}> wurde entfernt\n",
+	"event_channel_update_topic_removed": "Kanalthema von <#{channel_id}> wurde entfernt\n",
 	"event_channel_update_topic_updated": "Kanalthema von <#{channel_id}> wurde von `{oldchannel_topic}` auf `{newchannel_topic} gesetzt`\n",
 	"event_channel_update_name": "Kanalname von <#{channel_id}> wurde von `#{oldchannel_name}` auf `#{newchannel_name}` gesetzt\n",
 	"event_channel_update_type": "Der Kanaltyp von <#{channel_id}> wurde von `{oldchannel_type}` auf `{newchannel_type} gesetzt`\n",
 	"event_channel_update_nsfw_enabled": "Im Kanal <#{channel_id}> wurde die NSFW-Kennzeichnung `hinzugefügt`\n",
-    "event_channel_update_nsfw_disabled": "Im Kanal <#{channel_id}> wurde die NSFW-Kennzeichnung `entfernt`\n\n",
+	"event_channel_update_nsfw_disabled": "Im Kanal <#{channel_id}> wurde die NSFW-Kennzeichnung `entfernt`\n\n",
 
 	"event_member_joined": "{emote_join} Mitglied ist dem Server **beigetreten:** **{user_tag}** `({user_id})` - **Account erstellt:** {user_age}",
-    "event_member_left": "{emote_leave} Mitglied hat den Server **verlassen:** **{user_tag}** `({user_id})`",
+	"event_member_left": "{emote_leave} Mitglied hat den Server **verlassen:** **{user_tag}** `({user_id})`",
 
 	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` hat seinen Nicknamen von `{nick_old}` auf `{nick_new} gesetzt`",
 	"event_member_update_role_add": "{emote_warn} Die Rolle **{role}** wurde zu **{user_tag}** `({user_id}) hinzugefügt`",
@@ -95,7 +95,7 @@
 	"override_edit_higher_than_yourself": "{emote_warn} Du kannst keinen Override erstellen, der einen höheren Freigabelevel als deine eigenen Overrides hat",
 	"override_edit_invalid_role": "{emote_warn} Diese Rolle existiert nicht",
 	"override_edit_invalid_command": "{emote_warn} Der Befehl `{command}` existiert nicht",
-	"override_edit_non_existent_override_command": "{emote_warn} Es konnte kein Override für diesen Befehl gefunden werden. Bitte erstelle erst einen Override, bevor du ihn änderst", 
+	"override_edit_non_existent_override_command": "{emote_warn} Es konnte kein Override für diesen Befehl gefunden werden. Bitte erstelle erst einen Override, bevor du ihn änderst",
 	"override_edit_non_existent_override_role": "{emote_warn} Es konnte kein Override für diese Rolle gefunden werden. Bitte erstelle erst einen Override, bevor du ihn änderst",
 	"override_edit_success": "{emote_success} Erfolgreich einen Override auf das Level `{clearance}` gesetzt",
 
@@ -178,8 +178,8 @@
 
 	"kick_success": "{emote_success} **{target_tag}** `({target_id})` wurde wegen des folgenden Grundes gekickt: **{reason}** `[#{infractionId}]`",
 	"kick_fail": "{emote_warn} **{target_tag}** `({target_id})` konnte nicht gekickt werden",
-	
-	"purge_too_many": "{emote_warn} Es können maximal 200 Nachrichten auf einmal gelöscht werden", 
+
+	"purge_too_many": "{emote_warn} Es können maximal 200 Nachrichten auf einmal gelöscht werden",
 	"purge_too_few": "{emote_warn} Es kann nicht weniger als eine Nachricht gelöscht werden... :confused: Warum würde man das überhaupt probieren",
 
 	"verification_non_integer": "{emote_warn} Level muss ein Integer sein",
@@ -188,19 +188,19 @@
 	"verification_level_success": "{emote_success} Die Verifizierungsstufe wurde erfolreich auf `{level}` gesetzt",
 
 	"ping_latency": "Der Bot Ping beträgt **{latency_bot}ms**\nDer WebSocket Ping beträgt **{latency_ws}ms**",
-	
+
 	"uptime_uptime": "Der Bot ist seit **{uptime}** online",
 
 	"license_license": "📜 Der Bot ist mit der MIT License lizensiert. Du kannst genauere Informationen und die volle Lizens auf unserer **[Github Seite](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)** einsehen",
 
 	"privacy_policy": "📜 Unsere Datenschutzerklärung kannst du **[hier](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)** finden",
 
-	"github_source_code": "{emote_github} Dieser Bot ist ein Open Source-Projekt! Du kannst unseren Source-Code **[hier](https://github.com/TestersQTs/Bulbbot) finden**", 
+	"github_source_code": "{emote_github} Dieser Bot ist ein Open Source-Projekt! Du kannst unseren Source-Code **[hier](https://github.com/TestersQTs/Bulbbot) finden**",
 
 	"invite_desc": "**Hier kannst du den Bot zu deinem Server einladen**\n{bot_invite}\n\n**Bei Fragen helfen wir dir in unserem Support Server gerne weiter**\n{support_guild}",
 
 	"inviteinfo_error": "{emote_warn} Es konnte kein Server mit diesem Einladungslink gefunden werden",
-	
+
 	"multiban_success": "{emote_success} {full_list} wurden wegen des folgenden Grundes gebannt: **{reason}**",
 
 	"multiunban_success": "{emote_success} {full_list} wurden wegen des folgenden Grundes entbannt: **{reason}**",
@@ -215,7 +215,7 @@
 
 	"deafen_already_deaf": "{emote_warn} Der Nutzer wurde bereits vom Zuhören verwehrt!",
 	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` wurden wegen des folgenden Grundes vom Zuhören verwehrt: **{reason}** `[#{infractionId}]`",
-	
+
 	"undeafen_not_deaf": "{emote_warn} Dieser Nutzer ist zur Zeit nicht vom Zuhören verwehrt worden!",
 	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` ist wegen des folgenden Grundes wieder zum Zuhören befugt: **{reason}** `[#{infractionId}]`",
 

@@ -15,7 +15,7 @@ module.exports = async (client, message, args) => {
         ${settings.inviteWhitelist.length !== 0 ? `Whitelisted invites: ${settings.inviteWhitelist.join(" ")}` : "Whitelisted invites: None"}
 
         Words: ${settings.punishmentWords !== null ? `\`${settings.punishmentWords}\`` : Emotes.other.SWITCHOFF}
-        ${settings.wordBlacklist.length !== 0 ? `Blacklisted wordes: ${settings.wordBlacklist.join(" ")}` : "Blacklisted wordes: None"}
+        ${settings.wordBlacklist.length !== 0 ? `Blacklisted words: ${settings.wordBlacklist.join(" ")}` : "Blacklisted words: None"}
 
         Mentions: ${settings.punishmentMentions !== null ? `\`${settings.punishmentMentions}\`` : Emotes.other.SWITCHOFF}
         Limit mentions: ${settings.limitMentions}
