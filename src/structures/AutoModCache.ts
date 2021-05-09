@@ -1,7 +1,3 @@
-//import BulbBotClient from "./BulbBotClient";
-//import { DMChannel, Message, Snowflake } from "discord.js";
-//import Emotes from "../emotes.json";
-
 let cache: any = {};
 
 /*export async function set(

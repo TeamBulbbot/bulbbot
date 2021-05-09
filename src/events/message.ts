@@ -1,13 +1,16 @@
 import Event from "../structures/Event";
-import { Message } from "discord.js";
+import { Message, User } from "discord.js";
 import Command from "../structures/Command";
 import DMUtils from "../utils/DMUtils";
 import DatabaseManager from "../utils/managers/DatabaseManager";
 import ClearanceManager from "../utils/managers/ClearanceManager";
 import * as Config from "../structures/Config";
+import LoggingManager from "../utils/managers/LoggingManager";
+import {SubCommand} from "../structures/SubCommand";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
+const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any) {
@@ -121,6 +124,19 @@ export default class extends Event {
 					usage: command.usage.replace("!", prefix),
 				}),
 			);
+		}
+
+		let used: string = `${prefix}${command.name}`;
+		args.forEach(arg => (used += ` ${arg}`));
+		await loggingManager.sendCommandLog(this.client, message.guild, <User>message.member?.user, message.channel.id, used);
+
+		let sCmd: SubCommand;
+		if (command.subCommands) {
+			for (const subCommand of command.subCommands) {
+				// @ts-ignore
+				sCmd = new subCommand(this.client, args[0]);
+				if (args[0] === sCmd.name || sCmd.aliases.includes(args[0])) return await sCmd.run(message, args);
+			}
 		}
 
 		await command.run(message, args);

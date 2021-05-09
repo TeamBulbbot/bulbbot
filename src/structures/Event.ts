@@ -7,7 +7,6 @@ export default class {
     public readonly type: string;
     public readonly emitter: any;
 
-
     constructor(client: BulbBotClient, name: string, options: any) {
         this.client = client;
         this.name = name;
@@ -15,7 +14,7 @@ export default class {
         this.emitter = (typeof options.emitter === "string" ? this.client[options.emitter] : options.emitter) || this.client;
     }
 
-    async run(...args: any) {
+    public async run(...args: any) {
         throw new EventException(`Event ${this.name} doesn't contain a run method!`)
     }
 }

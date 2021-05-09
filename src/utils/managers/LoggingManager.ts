@@ -1,5 +1,5 @@
 import BulbBotClient from "../../structures/BulbBotClient";
-import { Guild, TextChannel, User } from "discord.js";
+import { Guild, Snowflake, TextChannel, User } from "discord.js";
 import DatabaseManager from "./DatabaseManager";
 import * as Emotes from "../../emotes.json";
 import moment, { MomentInput } from "moment";
@@ -8,9 +8,17 @@ import "moment-timezone";
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class {
-	async sendModAction(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
-		const dbGuild: object = databaseManager.getLoggingConfig(guild.id);
-		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+	async sendModAction(
+		client: BulbBotClient,
+		guildID: Snowflake,
+		action: string,
+		target: User,
+		moderator: User,
+		log: string,
+		infID: number,
+	): Promise<void> {
+		const dbGuild: object = await databaseManager.getLoggingConfig(guildID);
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guildID)];
 
 		if (dbGuild["modAction"] === null) return;
 
@@ -18,7 +26,7 @@ export default class {
 		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translate("global_logging_mod", guild.id, {
+			await client.bulbutils.translate("global_logging_mod", guildID, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa zz"),
 				target_tag: target.tag,
 				user_id: target.id,
@@ -88,9 +96,34 @@ export default class {
 		);
 	}
 
+	async sendCommandLog(
+		client: BulbBotClient,
+		guild: Guild,
+		moderator: User,
+		channelID: Snowflake,
+		command: string
+	): Promise<void> {
+		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+		if (dbGuild["modAction"] === null) return;
+
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
+		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		await modChannel.send(
+			await client.bulbutils.translate("global_logging_command", guild.id, {
+				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
+				moderator_tag: moderator.tag,
+				moderator_id: moderator.id,
+				channel_id: channelID,
+				command: command
+			}),
+		);
+	}
+
 	private betterActions(action: string): string {
-		switch (action.toLowerCase()) {
-			case "softbanned":
+		switch (action) {
+			case "soft-banned":
 				action = `${Emotes.actions.BAN}`;
 				break;
 			case "banned":

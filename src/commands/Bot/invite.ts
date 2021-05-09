@@ -1,28 +1,28 @@
 import Command from "../../structures/Command";
+import {Message, MessageEmbed} from "discord.js";
 import * as Config from "../../structures/Config";
-import { ColorResolvable, Message, MessageEmbed } from "discord.js";
 
 export default class extends Command {
-	constructor(...args: any) {
+	constructor(...args) {
 		// @ts-ignore
 		super(...args, {
-			description: "Return the Websocket and API latency",
+			description: "Returns the invite link for the bot and the support guild",
 			category: "Bot",
-			usage: "!ping",
+			aliases: ["support"],
+			usage: "!invite",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
 	async run(message: Message): Promise<void> {
-		const latency: number = Math.floor(new Date().getTime() - message.createdTimestamp);
-		const apiLatency: number = Math.round(this.client.ws.ping);
+		const botInvite: string = `https://discord.com/oauth2/authorize?client_id=${Config.id}&scope=bot&permissions=1573252311`;
 
 		const embed: MessageEmbed = new MessageEmbed()
-			.setColor(<ColorResolvable>Config.embedColor)
+			.setColor(Config.embedColor)
 			.setDescription(
-				await this.client.bulbutils.translate("ping_latency", message.guild?.id, {
-					latency_bot: latency,
-					latency_ws: apiLatency,
+				await this.client.bulbutils.translate("invite_desc", message.guild?.id, {
+					bot_invite: botInvite,
+					support_guild: Config.supportInvite,
 				}),
 			)
 			.setFooter(
@@ -30,7 +30,7 @@ export default class extends Command {
 					user_name: message.author.username,
 					user_discriminator: message.author.discriminator,
 				}),
-				<string>message.author.avatarURL(),
+				<string>message.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 

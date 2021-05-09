@@ -9,7 +9,7 @@ export const subDevelopers: string[] = [
     "193160566334947340"
 ];
 export const version: string = "1.0.0";
-export const lib: string = "Discord.TS";
+export const lib: string = "Discord.JS";
 
 // Configs
 export const prefix: string = "!";
@@ -19,11 +19,12 @@ export const massCommandSleep: number = 850;
 // Client
 export const tag: string = "Bulbbot#9083";
 export const id: Snowflake = "755149065137815623";
-export const game: string = "the light shine";
+export const game: string = "Kluk suffer in TypeScript";
 export const type: string = "WATCHING";
 export const status: string = "online";
 export const fetchAllUsers: boolean = false;
 export const disableMentions: string = "everyone";
+export const supportInvite: string = "https://bulbbot.mrphilip.xyz/discord";
 
 // Server
 export const prometheusHost: string = "localhost";

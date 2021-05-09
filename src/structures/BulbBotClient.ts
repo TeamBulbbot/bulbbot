@@ -4,21 +4,23 @@ import Event from "./Event";
 import Util from "./Util";
 import Command from "./Command";
 import BulbBotUtils from "../utils/BulbBotUtils";
+import * as Config from "../structures/Config";
 
 export default class extends Client {
-	public prefix: string = "";
+	public prefix: string = Config.prefix;
 	public commands: Collection<string, Command>;
 	public aliases: Collection<string, string>;
 	public events: Collection<string, Event>;
 	public defaultPerms;
-	private utils;
+	private readonly utils;
 	public bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
 
 	constructor(options: any) {
 		super({
-			disableMentions: "everyone",
-			fetchAllMembers: false,
+			// @ts-ignore
+			disableMentions: Config.disableMentions,
+			fetchAllMembers: Config.fetchAllUsers,
 		});
 		this.validate(options);
 
@@ -28,7 +30,7 @@ export default class extends Client {
 		this.events = new Collection();
 
 		this.utils = new Util(this);
-		this.bulbutils = new BulbBotUtils();
+		this.bulbutils = new BulbBotUtils(this);
 	}
 
 	validate(options: any): void {

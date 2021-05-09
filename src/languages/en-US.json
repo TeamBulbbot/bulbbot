@@ -1,25 +1,26 @@
 {
   "global_executed_by": "Executed by {user_name}#{user_discriminator}",
-  "global_missing_permission": ":lock: Missing permission(s)",
+  "global_missing_permission": "{emote_lock} Missing permission(s)",
   "global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission.\n{missing}",
-  "global_user_not_found": "{emote_warn} Could not find the specified user",
-  "global_channel_not_found": "{emote_warn} Could not find the specified channel",
+  "global_user_not_found": "{emote_fail} Could not find the specified user. Cannot convert `{arg_provided}` to `{arg_expected}`\n{emote_wrench} **Correct usage:** {usage}",
+  "global_channel_not_found": "{emote_fail} Could not find the specified channel. Cannot convert `{arg_provided}` to `{arg_expected}`\n{emote_wrench} **Correct usage:** {usage}",
   "global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
-  "global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
-  "global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
-  "global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`has been {action} by **{moderator_tag}** `({moderator_id})` until **{until}** for **{reason}** `[#{infractionId}]`",
+  "global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+  "global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
+  "global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` until **{until}** for **{reason}** `[#{infractionId}]`",
+  "global_logging_command": "`[{timestamp}]` {emote_wrench} **{moderator_tag}** `({moderator_id})` has has executed `{command}` in <#{channel_id}>.",
   "global_no_reason": "No reason given",
   "global_loading": "{emote_loading} Loading...",
-  "global_not_in_voice": "{emote_warn} User is not connected to a Voice Channel!",
+  "global_not_in_voice": "{emote_fail} User is not connected to a Voice Channel!",
   "global_unknown_error": "{emote_warn} An unknown error has occurred, please try again later or if you are still experiencing this issue contact the developers",
 
-  "global_cannot_action_self": "{emote_warn} You cannot perform this action on yourself!",
-  "global_cannot_action_owner": "{emote_warn} You cannot perform this action on the server owner!",
-  "global_cannot_action_role_equal": "{emote_warn} You cannot perform this action on **{user_tag}** as you do not have a higher role than them!",
-  "global_cannot_action_role_equal_bot": "{emote_warn} You cannot perform this action on **{user_tag}** as I do not have a higher role than them!",
-  "global_cannot_action_role_higher": "{emote_warn} You cannot perform this action on **{user_tag}** as they have a higher role than you!",
-  "global_cannot_action_role_higher_bot": "{emote_warn} You cannot perform this action on **{user_tag}** as they have a higher role than me!",
-  "global_cannot_action_bot_self": "{emote_warn} You cannot perform this action on the bot!",
+  "global_cannot_action_self": "{emote_fail} You cannot perform this action on yourself!",
+  "global_cannot_action_owner": "{emote_fail} You cannot perform this action on the server owner!",
+  "global_cannot_action_role_equal": "{emote_fail} You cannot perform this action on **{user_tag}** as you do not have a higher role than them!",
+  "global_cannot_action_role_equal_bot": "{emote_fail} You cannot perform this action on **{user_tag}** as I do not have a higher role than them!",
+  "global_cannot_action_role_higher": "{emote_fail} You cannot perform this action on **{user_tag}** as they have a higher role than you!",
+  "global_cannot_action_role_higher_bot": "{emote_fail} You cannot perform this action on **{user_tag}** as they have a higher role than me!",
+  "global_cannot_action_bot_self": "{emote_fail} You cannot perform this action on the bot!",
 
   "premium_message": "This is a premium command, become a Patron and get access to it <https://www.patreon.com/bulbbot>",
 
@@ -50,13 +51,13 @@
   "event_member_update_role_remove_audit": "{emote_warn} The **{role}** role has been removed from **{user_tag}** `({user_id})` by **{moderator_tag}** `({moderator_id})`",
 
   "config_language_success": "{emote_success} Successfully changed server the language to `{language}`",
-  "config_language_invalid_args": "{emote_warn} Invalid language `{language}` provided!\n{emote_wrench} Select a valid language from {languages}",
+  "config_language_invalid_args": "{emote_fail} Invalid language `{language}` provided!\n{emote_wrench} Select a valid language from {languages}",
 
   "config_timezone_success": "{emote_success} Successfully changed server the timezone to `{zone}`",
 
   "config_logging_success": "{emote_success} Successfully started logging {part} in {channel}",
-  "config_logging_invalid_channel": "{emote_warn} Cannot resolve `{channel_name}` as a valid channel!",
-  "config_logging_unable_to_send_messages": "{emote_warn} Cannot post messages in that channel",
+  "config_logging_invalid_channel": "{emote_fail} Cannot resolve `{channel_name}` as a valid channel!",
+  "config_logging_unable_to_send_messages": "{emote_fail} Cannot post messages in that channel",
 
   "config_mute_success": "{emote_success} Successfully updated the muted role",
   "config_mute_missing_args": "{emote_warn} Missing required argument `role`",
@@ -173,22 +174,22 @@
   "serverinfo_emotes_none": "No emotes",
 
   "ban_success": "{emote_success} **{target_tag}** `({target_id})` has been banned for **{reason}** `[#{infractionId}]`",
-  "ban_fail": "{emote_warn} Unable to ban **{target_tag}** `({target_id})`",
-  "already_banned": "{emote_warn} **{target_tag}** `({target_id})` is already banned with the reason `{reason}`",
+  "ban_fail": "{emote_fail} Unable to ban **{target_tag}** `({target_id})`",
+  "already_banned": "{emote_warn} **{target_tag}** `({target_id})` has already banned banned for `{reason}`",
 
-  "not_banned": "{emote_warn} **{target_tag}** `({target_id})` is not already banned",
-  "unban_success": "{emote_success} **{target_tag}** `({target_id})` has been unbanned for **{reason}** `[#{infractionId}]`",
+  "not_banned": "{emote_warn} **{target_tag}** `({target_id})` is not yet banned from the server",
+  "unban_success": "{emote_success} Successfully unbanned **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
 
   "kick_success": "{emote_success} **{target_tag}** `({target_id})` has been kicked for **{reason}** `[#{infractionId}]`",
-  "kick_fail": "{emote_warn} Unable to kick **{target_tag}** `({target_id})`",
+  "kick_fail": "{emote_fail} Unable to kick **{target_tag}** `({target_id})`",
 
-  "purge_too_many": "{emote_warn} Can only purge a max of 99 messages at a time",
-  "purge_too_few": "{emote_warn} You cannot purge less than 1 message :confused: why would you even do that",
+  "purge_too_many": "{emote_fail} Can only purge a max of 99 messages at a time",
+  "purge_too_few": "{emote_fail} You cannot purge less than 1 message :confused: why would you even do that",
   "purge_success": "{emote_success} Successfully purged **{count}** messages",
 
-  "verification_non_integer": "{emote_warn} Level needs to be an integer",
-  "verification_community_zero": "{emote_warn} Verification level cannot be set to `0` for community servers!",
-  "verification_level_error": "{emote_warn} Verification level cannot be greater than `4` or less than `0`",
+  "verification_non_integer": "{emote_fail} Level needs to be an integer",
+  "verification_community_zero": "{emote_fail} Verification level cannot be set to `0` for community servers!",
+  "verification_level_error": "{emote_fail} Verification level cannot be greater than `4` or less than `0`",
   "verification_level_success": "{emote_success} Server verification level changed to `{level}`",
 
   "ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
@@ -199,7 +200,7 @@
 
   "privacy_policy": "📜 View the privacy policy of the bot **[here](https://www.notion.so/Bulbbot-Privacy-Policy-cc22832e352145759d335132a956a252)**",
 
-  "github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**",
+  "github_source_code": "{emote_github} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TestersQTs/Bulbbot)**",
 
   "invite_desc": "**Invite the bot to your server**\n{bot_invite}\n\n**Join the support server**\n{support_guild}",
 
@@ -219,33 +220,34 @@
 
   "softban_success": "{emote_success} **{target_tag}** `({target_id})` has been soft-banned for **{reason}** `[#{infractionId}]`",
 
-  "deafen_already_deaf": "{emote_warn} User is already deafened!",
+  "deafen_already_deaf": "{emote_fail} User is already deafened!",
   "deafen_success": "{emote_success} **{target_tag}** `({target_id})` has been deafened for **{reason}** `[#{infractionId}]`",
 
-  "undeafen_not_deaf": "{emote_warn} User is not deafened!",
+  "undeafen_not_deaf": "{emote_fail} User is not deafened!",
   "undeafen_success": "{emote_success} **{target_tag}** `({target_id})` has been undeafened for **{reason}** `[#{infractionId}]`",
 
   "voicekick_success": "{emote_success} **{target_tag}** `({target_id})` has been voice-kicked for **{reason}** `[#{infractionId}]`",
 
-  "slowmode_invalid_0s": "{emote_warn} Slowmode duration cannot be lower than **0 seconds**!",
-  "slowmode_invalid_6h": "{emote_warn} Slowmode duration cannot be higher than **6 hours**!",
+  "slowmode_invalid_0s": "{emote_fail} Slowmode duration cannot be lower than **0 seconds**!",
+  "slowmode_invalid_6h": "{emote_fail} Slowmode duration cannot be higher than **6 hours**!",
 
   "slowmode_success_remove": "{emote_success} Successfully removed slowmode from {channel}",
   "slowmode_success": "{emote_success} Successfully set slowmode in {channel} to **{slowmode}**",
+  "slowmode_missing_perms": "{emote_fail} The bot is missing permissions to manage {channel}",
 
-  "tempban_invalid_0s": "{emote_warn} Duration cannot be lower than **0 seconds**!",
-  "tempban_invalid_1y": "{emote_warn} Duration cannot be higher than **1 year**!",
+  "tempban_invalid_0s": "{emote_fail} Duration cannot be lower than **0 seconds**!",
+  "tempban_invalid_1y": "{emote_fail} Duration cannot be higher than **1 year**!",
 
-  "lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
+  "lockdown_not_boolean": "{emote_fail} Argument `lock` value must be a Boolean! (`true` or `false`)",
   "lockdown_locked": "{emote_success} Successfully locked down channel {channel}",
   "lockdown_unlocked": "{emote_success} Successfully unlocked channel {channel}",
 
   "mute_muterole_not_found": "{emote_warn} This server does not have a mute role configured!\n{emote_wrench} **Tip:** You can configure the mute role using the `!configure mute_role` command",
-  "mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+  "mute_success": "{emote_success} **{target_tag}** `({target_id})` has been muted for **{reason}** until **{until}** `[#{infractionId}]`",
   "mute_not_muted": "{emote_warn} The specified user is not currently muted!",
   "mute_already_muted": "{emote_warn} The specified user is already muted!",
 
-  "warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` has been warned for **{reason}** `[#{infractionId}]`",
+  "warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` has been warned for **{reason}**`[#{infractionId}]`",
 
   "unmute_success": "{emote_success} **{target_tag}** `({target_id})` has been unmuted for **{reason}** `[#{infractionId}]`",
 
@@ -264,10 +266,10 @@
   "infraction_update_success": "{emote_success} Infraction **#{infractionId}** has been updated!",
   "infraction_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
 
-  "invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
+  "invalid_snowflake": "{emote_fail} `{snowflake}` is an invalid snowflake",
   "snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n",
 
-  "commands_help": "You can find all the commands BulbBot offers at our [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
+  "commands_help": "You can find all the commands Bulbbot offers at our [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
 
   "action_warn": "warned",
   "action_mute": "muted",

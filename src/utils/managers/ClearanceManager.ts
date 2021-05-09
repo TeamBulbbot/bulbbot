@@ -114,7 +114,7 @@ export default class {
 	}
 
 	async getUserClearance(message: Message): Promise<number> {
-		if (message.guild?.ownerID === message.author.id) return 100;
+		if (message.guild?.ownerID === message.member?.user.id) return 100;
 		if (message.member?.hasPermission("ADMINISTRATOR")) return 75;
 
 		const response: object[] = await sequelize.query(
