@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { Unban } = require("../../utils/moderation/actions");
+const { UnmuteManual } = require("../../utils/moderation/actions");
 const { UserMentionAndId, NonDigits } = require("../../utils/Regex");
 
 module.exports = class extends Command {

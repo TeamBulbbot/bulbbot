@@ -1,5 +1,5 @@
 const Command = require("../../structures/Command");
-const { Ban, ForceBan, Mute } = require("../../utils/moderation/actions");
+const { Mute } = require("../../utils/moderation/actions");
 const { UserMentionAndId, NonDigits } = require("../../utils/Regex");
 const parse = require("parse-duration");
 
@@ -58,7 +58,7 @@ module.exports = class extends Command {
 			if (target.roles.cache.find(role => role.id === muteRole))
 				return message.channel.send(await this.client.bulbutils.translate("mute_already_muted", message.guild.id));
 			
-			const infId = await Mute(
+			const muteInfId = await Mute(
 				this.client,
 				message.guild,
 				target,
@@ -77,16 +77,16 @@ module.exports = class extends Command {
 				Date.now() + duration,
 			)
 
-			fullList += `**${target.tag}** \`\`(${target.id})\`\` \`\`[#${infId}]\`\` `;
+			fullList += `**${target.tag}** \`\`(${target.id})\`\` \`\`[#${muteInfId}]\`\` `;
 		
 			let tempmuteId = await TempmuteCreate(message.guild.id, target.user.tag, target.user.id, reason, Date.now() + duration);
 
 			const client = this.client;
 			setTimeout(async function () {
-				if ((await getActive(infId)) === "false") return;
-				await setActive(infId, "false");
+				if ((await getActive(muteInfId)) === "false") return;
+				await setActive(muteInfId, "false");
 	
-				infId = await Unmute(
+				unmuteInfId = await Unmute(
 					client,
 					message.guild,
 					target.user,
