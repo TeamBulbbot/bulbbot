@@ -1,7 +1,8 @@
 import Command from "../../structures/Command";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import {Guild, GuildMember, Message, Snowflake} from "discord.js";
+import {NonDigits} from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import {BanType} from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -59,9 +60,7 @@ export default class extends Command {
 		infID = await infractionsManager.ban(
 			this.client,
 			<Guild>message.guild,
-			false,
-			true,
-			false,
+			BanType.CLEAN,
 			target.user,
 			<GuildMember>message.member,
 			await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {

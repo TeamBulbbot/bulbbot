@@ -1,5 +1,5 @@
-import Event from "../structures/Event";
-import { game, status, type } from "../structures/Config";
+import Event from "../../structures/Event";
+import { game, status, type } from "../../structures/Config";
 import { PresenceData } from "discord.js";
 
 export default class extends Event {

@@ -43,17 +43,6 @@ export default class extends Command {
 		}
 		if (await this.client.bulbutils.resolveUserHandle(message, this.client.bulbutils.checkUser(message, target), target.user)) return;
 
-		//Re-checks if the target is actionable
-		if (!target.kickable) {
-			await message.channel.send(
-				await this.client.bulbutils.translate("kick_fail", message.guild?.id, {
-					target_tag: target.user.tag,
-					target_id: target.user.id,
-				}),
-			);
-			return;
-		}
-
 		//Executes the action
 		infID = await infractionsManager.kick(
 			this.client,

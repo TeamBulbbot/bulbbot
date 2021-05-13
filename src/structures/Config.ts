@@ -13,7 +13,7 @@ export const lib: string = "Discord.JS";
 
 // Configs
 export const prefix: string = "!";
-export const embedColor: string = "#7289DA";
+export const embedColor: string = "#5865F2";
 export const massCommandSleep: number = 850;
 
 // Client

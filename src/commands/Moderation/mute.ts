@@ -6,6 +6,7 @@ import parse from "parse-duration";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import moment from "moment";
+import { MuteType } from "../../utils/types/MuteType";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -95,6 +96,7 @@ export default class extends Command {
 			infID = await infractionsManager.unmute(
 				client,
 				<Guild>message.guild,
+				MuteType.AUTO,
 				target,
 				<User>client.user,
 				await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {

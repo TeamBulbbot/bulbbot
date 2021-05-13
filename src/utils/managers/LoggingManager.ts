@@ -8,15 +8,7 @@ import "moment-timezone";
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class {
-	async sendModAction(
-		client: BulbBotClient,
-		guildID: Snowflake,
-		action: string,
-		target: User,
-		moderator: User,
-		log: string,
-		infID: number,
-	): Promise<void> {
+	async sendModAction(client: BulbBotClient, guildID: Snowflake, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guildID);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guildID)];
 
@@ -63,16 +55,7 @@ export default class {
 		);
 	}
 
-	async sendModActionTemp(
-		client: BulbBotClient,
-		guild: Guild,
-		action: string,
-		target: User,
-		moderator: User,
-		log: string,
-		infID: number,
-		until: MomentInput,
-	): Promise<void> {
+	async sendModActionTemp(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
@@ -96,13 +79,7 @@ export default class {
 		);
 	}
 
-	async sendCommandLog(
-		client: BulbBotClient,
-		guild: Guild,
-		moderator: User,
-		channelID: Snowflake,
-		command: string
-	): Promise<void> {
+	async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
@@ -116,9 +93,59 @@ export default class {
 				moderator_tag: moderator.tag,
 				moderator_id: moderator.id,
 				channel_id: channelID,
-				command: command
+				command: command,
 			}),
 		);
+	}
+
+	public async sendEventLog(client: BulbBotClient, guild: Guild, part: string, log: string): Promise<void> {
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+
+		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
+
+		if (logChannel === null) return;
+		await (<TextChannel>client.channels.cache.get(logChannel)).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+	}
+
+	public async sendServerEventLog(client: BulbBotClient, guild: Guild, log: string): Promise<void> {
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+
+		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
+		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		if (!modChannel) return;
+		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+	}
+
+	private getPart(dbGuild: object, part: string) {
+		if (dbGuild === null) return null;
+		switch (part.toLowerCase()) {
+			case "message":
+				part = dbGuild["message"];
+				break;
+			case "role":
+				part = dbGuild["role"];
+				break;
+			case "member":
+				part = dbGuild["member"];
+				break;
+			case "channel":
+				part = dbGuild["channel"];
+				break;
+			case "joinleave":
+				part = dbGuild["joinLeave"];
+				break;
+			case "automod":
+				part = dbGuild["automod"];
+				break;
+			default:
+				part = "";
+				break;
+		}
+
+		return part;
 	}
 
 	private betterActions(action: string): string {

@@ -2,6 +2,7 @@ import Command from "../../structures/Command";
 import { Collection, Guild, GuildMember, Message, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -71,9 +72,7 @@ export default class extends Command {
 			infID = await infractionsManager.ban(
 				this.client,
 				<Guild>message.guild,
-				true,
-				false,
-				false,
+				BanType.FORCE,
 				<User>target,
 				<GuildMember>message.member,
 				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
@@ -92,9 +91,7 @@ export default class extends Command {
 			infID = await infractionsManager.ban(
 				this.client,
 				<Guild>message.guild,
-				false,
-				false,
-				false,
+				BanType.NORMAL,
 				target,
 				<GuildMember>message.member,
 				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {

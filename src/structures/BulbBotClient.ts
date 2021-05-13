@@ -13,7 +13,7 @@ export default class extends Client {
 	public events: Collection<string, Event>;
 	public defaultPerms;
 	private readonly utils;
-	public bulbutils: BulbBotUtils;
+	public readonly bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
 
 	constructor(options: any) {
@@ -33,7 +33,7 @@ export default class extends Client {
 		this.bulbutils = new BulbBotUtils(this);
 	}
 
-	validate(options: any): void {
+	private validate(options: any): void {
 		if (typeof options !== "object") throw new ClientException("Options must be type of Object!");
 
 		if (!options.token) throw new ClientException("Client cannot log in without token!");
@@ -46,7 +46,7 @@ export default class extends Client {
 		this.defaultPerms = new Permissions(options.defaultPerms).freeze();
 	}
 
-	async login(token = this.token): Promise<any> {
+	public async login(token = this.token): Promise<any> {
 		await this.utils.loadEvents();
 		await this.utils.loadCommands();
 		await super.login(<string>token);

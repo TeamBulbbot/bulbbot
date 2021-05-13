@@ -1,5 +1,6 @@
 {
   "global_executed_by": "Executed by {user_name}#{user_discriminator}",
+  "global_execution_cancel": "{emote_fail} Command execution cancelled",
   "global_missing_permission": "{emote_lock} Missing permission(s)",
   "global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission.\n{missing}",
   "global_user_not_found": "{emote_fail} Could not find the specified user. Cannot convert `{arg_provided}` to `{arg_expected}`\n{emote_wrench} **Correct usage:** {usage}",
@@ -8,11 +9,13 @@
   "global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
   "global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
   "global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` until **{until}** for **{reason}** `[#{infractionId}]`",
-  "global_logging_command": "`[{timestamp}]` {emote_wrench} **{moderator_tag}** `({moderator_id})` has has executed `{command}` in <#{channel_id}>.",
+  "global_logging_command": "`[{timestamp}]` {emote_wrench} **{moderator_tag}** `({moderator_id})` has executed `{command}` in <#{channel_id}>.",
   "global_no_reason": "No reason given",
   "global_loading": "{emote_loading} Loading...",
   "global_not_in_voice": "{emote_fail} User is not connected to a Voice Channel!",
   "global_unknown_error": "{emote_warn} An unknown error has occurred, please try again later or if you are still experiencing this issue contact the developers",
+  "global_server_event": "{emote_wrench} **{moderator_tag}** `({moderator_id})` has updated the server settings. {part}",
+  "global_channel_event": "{emote_wrench} **{moderator_tag}** `({moderator_id})` has updated <#{channel_id}>. {part}",
 
   "global_cannot_action_self": "{emote_fail} You cannot perform this action on yourself!",
   "global_cannot_action_owner": "{emote_fail} You cannot perform this action on the server owner!",
@@ -41,8 +44,8 @@
   "event_channel_update_nsfw_enabled": "<#{channel_id}> nsfw was `enabled`\n",
   "event_channel_update_nsfw_disabled": "<#{channel_id}> nsfw was `disabled`\n",
 
-  "event_member_joined": "{emote_join} **New member:** **{user_tag}** `({user_id})` - **Account created:** {user_age}",
-  "event_member_left": "{emote_leave} **Member left:** **{user_tag}** `({user_id})`",
+  "event_member_joined": "{emote_join} **{user_tag}** `({user_id})` has joined the server.\n**Account created:** {user_age}",
+  "event_member_left": "{emote_leave} **{user_tag}** `({user_id})` has left the server.",
 
   "event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` has changed their nickname from `{nick_old}` to `{nick_new}`",
   "event_member_update_role_add": "{emote_warn} The **{role}** role has been added to **{user_tag}** `({user_id})`",
@@ -191,6 +194,7 @@
   "verification_community_zero": "{emote_fail} Verification level cannot be set to `0` for community servers!",
   "verification_level_error": "{emote_fail} Verification level cannot be greater than `4` or less than `0`",
   "verification_level_success": "{emote_success} Server verification level changed to `{level}`",
+  "verification_log": "Changed `verification_level` to **{level}**",
 
   "ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 
@@ -234,6 +238,7 @@
   "slowmode_success_remove": "{emote_success} Successfully removed slowmode from {channel}",
   "slowmode_success": "{emote_success} Successfully set slowmode in {channel} to **{slowmode}**",
   "slowmode_missing_perms": "{emote_fail} The bot is missing permissions to manage {channel}",
+  "slowmode_log": "Updated `rate_limit_per_user` from **{before}** to **{after}**",
 
   "tempban_invalid_0s": "{emote_fail} Duration cannot be lower than **0 seconds**!",
   "tempban_invalid_1y": "{emote_fail} Duration cannot be higher than **1 year**!",
@@ -246,12 +251,15 @@
   "mute_success": "{emote_success} **{target_tag}** `({target_id})` has been muted for **{reason}** until **{until}** `[#{infractionId}]`",
   "mute_not_muted": "{emote_warn} The specified user is not currently muted!",
   "mute_already_muted": "{emote_warn} The specified user is already muted!",
+  "mute_confirm": "{emote_warn} **{user_tag}** `({user_id})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
 
   "warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` has been warned for **{reason}**`[#{infractionId}]`",
 
   "unmute_success": "{emote_success} **{target_tag}** `({target_id})` has been unmuted for **{reason}** `[#{infractionId}]`",
+  "unmute_success_special": "{emote_success} **{target_tag}** `({target_id})` has been unmuted for **{reason}** ",
 
-  "infraction_not_found": "{emote_warn} Infraction **#{infractionId}** could not be found!",
+  "infraction_not_found": "{emote_fail} Infraction **#{infractionId}** could not be found!",
+  "infraction_delete_confirm": "{emote_warn} Are you sure you want to delete infraction **#{infractionId}**? This action __**cannot**__ be undone.\n**Offender:** {user_tag} `({user_id})`\n**Moderator:** {moderator_tag} `({moderator_id})`\n**Reason:** {reason}",
   "infraction_delete_success": "{emote_success} Infraction **#{infractionId}** successfully deleted!",
   "infraction_info_inf_id": "**Infraction ID:** {infractionId}\n",
   "infraction_info_target": "**Target:** {target_tag} `({target_id})`\n",

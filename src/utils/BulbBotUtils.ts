@@ -1,4 +1,4 @@
-import { GuildChannel, GuildMember, Message, Snowflake, User } from "discord.js";
+import { GuildChannel, GuildMember, Message, MessageEmbed, Snowflake, User } from "discord.js";
 import * as enUS from "../languages/en-US.json";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
@@ -347,6 +347,39 @@ export default class {
 		return region;
 	}
 
+	public async embedPage(message, pages: MessageEmbed[], emojiList: string[] = ['⏪', '⏩'], timeout: number = 120000) {
+		if (!message && !message.channel) throw new Error('Channel is inaccessible.');
+		if (!pages) throw new Error('Pages are not given.');
+		if (emojiList.length !== 2) throw new Error('Need two emojis.');
+		let page = 0;
+		const curPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
+		for (const emoji of emojiList) await curPage.react(emoji);
+		const reactionCollector = curPage.createReactionCollector(
+			(reaction, user) => user.id === message.author.id,
+			{ time: timeout }
+		);
+		reactionCollector.on('collect', reaction => {
+			reaction.users.remove(message.author);
+			switch (reaction.emoji.id) {
+				case emojiList[0].replace(/\D/g, ""):
+					page = page > 0 ? --page : pages.length - 1;
+					break;
+				case emojiList[1].replace(/\D/g, ""):
+					page = page + 1 < pages.length ? ++page : 0;
+					break;
+				default:
+					break;
+			}
+			curPage.edit(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
+		});
+		reactionCollector.on('end', () => {
+			if (!curPage.deleted) {
+				curPage.reactions.removeAll()
+			}
+		});
+		return curPage;
+	}
+
 	formatDays(start: Date) {
 		const end: string = moment.utc().format("YYYY-MM-DD");
 		const date: Moment = moment(moment.utc(start).format("YYYY-MM-DD"));
@@ -392,6 +425,41 @@ export default class {
 		return user;
 	}
 
+	prettify(action: string): string {
+		let finalString = "";
+		switch (action) {
+			case "Ban":
+				finalString = `${Emotes.actions.BAN} Ban`;
+				break;
+			case "Forceban":
+				finalString = `${Emotes.actions.BAN} Forceban`;
+				break;
+			case "Kick":
+				finalString = `${Emotes.actions.KICK} Kick`;
+				break;
+			case "Mute":
+				finalString = `${Emotes.actions.MUTE} Mute`;
+				break;
+			case "Warn":
+				finalString = `${Emotes.actions.WARN} Warn`;
+				break;
+			case "Unmute":
+				finalString = `${Emotes.actions.UNBAN} Unmute`;
+				break;
+			case "Unban":
+				finalString = `${Emotes.actions.UNBAN} Unban`;
+				break;
+			case "true":
+				finalString = `${Emotes.status.ONLINE} True`;
+				break;
+			case "false":
+				finalString = `${Emotes.other.INF2} False`;
+				break;
+		}
+
+		return finalString;
+	}
+
 	checkUser(message: Message, user: GuildMember): UserHandle {
 		if (user.id === message.author.id) return UserHandle.CANNOT_ACTION_SELF;
 
@@ -401,13 +469,11 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (message.member?.roles && user.roles.highest.rawPosition >= message.member?.roles.highest.rawPosition)
-			return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (message.member?.roles && user.roles.highest.rawPosition >= message.member?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
 		if (message.guild?.me && message.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (message.guild?.me && user.roles.highest.rawPosition >= message.guild?.me.roles.highest.rawPosition)
-			return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (message.guild?.me && user.roles.highest.rawPosition >= message.guild?.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}

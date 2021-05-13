@@ -21,7 +21,13 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]): Promise<void | Message> {
-		await message.channel.send("Big yeet");
+	public async run(message: Message, args: string[]): Promise<void | Message> {
+		await message.channel.send(
+			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
+				arg: args[0].toLowerCase(),
+				arg_expected: "action:string",
+				usage: "all",
+			}),
+		);
 	}
 }

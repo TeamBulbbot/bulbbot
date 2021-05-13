@@ -1,12 +1,12 @@
-import Event from "../structures/Event";
+import Event from "../../structures/Event";
 import { Message, User } from "discord.js";
-import Command from "../structures/Command";
-import DMUtils from "../utils/DMUtils";
-import DatabaseManager from "../utils/managers/DatabaseManager";
-import ClearanceManager from "../utils/managers/ClearanceManager";
-import * as Config from "../structures/Config";
-import LoggingManager from "../utils/managers/LoggingManager";
-import {SubCommand} from "../structures/SubCommand";
+import Command from "../../structures/Command";
+import DMUtils from "../../utils/DMUtils";
+import DatabaseManager from "../../utils/managers/DatabaseManager";
+import ClearanceManager from "../../utils/managers/ClearanceManager";
+import * as Config from "../../structures/Config";
+import LoggingManager from "../../utils/managers/LoggingManager";
+import { SubCommand } from "../../structures/SubCommand";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -20,7 +20,7 @@ export default class extends Event {
 		});
 	}
 
-	async run(message: Message): Promise<any> {
+	public async run(message: Message): Promise<any> {
 		if (message.channel.type === "dm") return DMUtils(this.client, message);
 		if (!message.guild || message.author.bot) return;
 
@@ -134,8 +134,31 @@ export default class extends Event {
 		if (command.subCommands) {
 			for (const subCommand of command.subCommands) {
 				// @ts-ignore
-				sCmd = new subCommand(this.client, args[0]);
-				if (args[0] === sCmd.name || sCmd.aliases.includes(args[0])) return await sCmd.run(message, args);
+				sCmd = new subCommand(this.client, command, args[0]);
+				if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0])) {
+					if (sCmd.maxArgs < args.length - 1 && sCmd.maxArgs !== -1) {
+						return message.channel.send(
+							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild.id, {
+								arg: args[sCmd.maxArgs + 1],
+								arg_expected: sCmd.maxArgs,
+								arg_provided: args.length -1,
+								usage: sCmd.usage.replace("!", prefix),
+							}),
+						);
+					}
+					if (sCmd.minArgs > args.length - 1) {
+						return message.channel.send(
+							await this.client.bulbutils.translate("event_message_args_missing", message.guild.id, {
+								arg: sCmd.argList[args.length - 1],
+								arg_expected: sCmd.minArgs,
+								arg_provided: args.length - 1,
+								usage: sCmd.usage.replace("!", prefix),
+							}),
+						);
+					}
+
+					return await sCmd.run(message, command, args);
+				}
 			}
 		}
 
