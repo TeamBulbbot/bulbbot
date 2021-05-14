@@ -196,6 +196,15 @@
   "verification_level_success": "{emote_success} Server verification level changed to `{level}`",
   "verification_log": "Changed `verification_level` to **{level}**",
 
+  "change_nick_success": "{emote_success} Nickname of **{target_tag}** `({target_id})` has been changed from `{nick_old}` to `{nick_new}` for **{reason}** `[#{infractionId}]`",
+  "remove_nick_success": "{emote_success} Nickname removed from **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+  "change_nick_mod_action_log": "{emote_success} Nickname of **{target_tag}** `({user_id})` has been {action} from `{nick_old}` to `{nick_new}` by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+  "remove_nick_mod_action_log": "{emote_success} Nickname {action} from **{target_tag}** `({user_id})` by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+  "change_nick_fail": "{emote_warn} Unable to change nickname of **{target_tag}** `({target_id})`",
+  "already_no_nickname": "{emote_warn} **{target_tag}** `({target_id})` does not have a nickname to remove",
+  "already_has_nickname": "{emote_warn} **{target_tag}** `({target_id})` is already nicknamed `{nick_new}`",
+  "nickname_too_long": "{emote_warn} Nickname has too many characters (`{nick_length}`). Nicknames are limited to 32 characters",
+
   "ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
 
   "uptime_uptime": "The current uptime is **{uptime}**",
@@ -292,5 +301,7 @@
   "action_unban_auto": "automatically unbanned",
   "action_deafen": "deafened",
   "action_undeafen": "undeafened",
-  "action_kick_voice": "voice-kicked"
+  "action_kick_voice": "voice-kicked",
+  "action_change_nick": "changed",
+  "action_remove_nick": "removed"
 }

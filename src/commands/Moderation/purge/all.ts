@@ -1,8 +1,12 @@
 import { SubCommand } from "../../../structures/SubCommand";
-import { Collection, Message, TextChannel } from "discord.js";
+import { Collection, Guild, Message, TextChannel } from "discord.js";
 import Command from "../../../structures/Command";
 import moment from "moment";
 import * as fs from "fs";
+import LoggingManager from "../../../utils/managers/LoggingManager";
+import BulbBotClient from "../../../structures/BulbBotClient";
+
+const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends SubCommand {
 	constructor(...args) {
@@ -22,7 +26,7 @@ export default class extends SubCommand {
 		if (Number(amount) > 200) return await message.channel.send(await this.client.bulbutils.translate("purge_too_many", message.guild?.id));
 		if (Number(amount) < 2 || isNaN(amount)) return await message.channel.send(await this.client.bulbutils.translate("purge_too_few", message.guild?.id));
 		let deleteMsg: number[] = [];
-		let a = 0;
+		let a: number = 0;
 
 		for (let i = 1; i <= amount; i++) {
 			if (i % 100 === 0) {
@@ -50,10 +54,11 @@ export default class extends SubCommand {
 			await (<TextChannel>message.channel).bulkDelete(msgs);
 		}
 
+		const client: BulbBotClient = this.client
 		fs.writeFile(`./files/purge/${message.guild?.id}.txt`, delMsgs, async function (err) {
 			if (err) console.error(err);
 
-			//await SendModActionFile(this.client, message.guild, "Purge", amount, `./src/files/purge/${message.guild?.id}.txt`, message.channel, message.author);
+			await loggingManager.sendModActionFile(client, <Guild>message.guild, "Purge", amount, `./files/purge/${message.guild?.id}.txt`, message.channel, message.author);
 		});
 
 		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: amount }));

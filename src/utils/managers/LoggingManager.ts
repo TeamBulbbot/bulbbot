@@ -8,7 +8,7 @@ import "moment-timezone";
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class {
-	async sendModAction(client: BulbBotClient, guildID: Snowflake, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
+	public async sendModAction(client: BulbBotClient, guildID: Snowflake, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guildID);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guildID)];
 
@@ -32,7 +32,7 @@ export default class {
 		);
 	}
 
-	async sendAutoUnban(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
+	public async sendAutoUnban(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
@@ -55,7 +55,25 @@ export default class {
 		);
 	}
 
-	async sendModActionTemp(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
+	public async sendModActionFile(client: BulbBotClient, guild: Guild, action, amount, file, channel, moderator) {
+		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+		if (dbGuild["modAction"] === null) return;
+
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		await modChannel.send(
+			`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${
+				moderator.id
+			})\` has removed **${amount}** messages in <#${channel.id}>`,
+			{
+				files: [file],
+			},
+		);
+	}
+
+	public async sendModActionTemp(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
@@ -79,7 +97,7 @@ export default class {
 		);
 	}
 
-	async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
+	public async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
@@ -116,6 +134,18 @@ export default class {
 		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		if (!modChannel) return;
+		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+	}
+
+	public async sendModActionPreformatted(client: BulbBotClient, guild: Guild, log: string) {
+		const dbGuild: object = <object>await databaseManager.getLoggingConfig(guild.id);
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+
+		if (dbGuild["modAction"] === null) return;
+
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
+		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 

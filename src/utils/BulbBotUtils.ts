@@ -347,18 +347,19 @@ export default class {
 		return region;
 	}
 
-	public async embedPage(message, pages: MessageEmbed[], emojiList: string[] = ['⏪', '⏩'], timeout: number = 120000) {
-		if (!message && !message.channel) throw new Error('Channel is inaccessible.');
-		if (!pages) throw new Error('Pages are not given.');
-		if (emojiList.length !== 2) throw new Error('Need two emojis.');
+	public async sleep(ms: number) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	public async embedPage(message, pages: MessageEmbed[], emojiList: string[] = ["⏪", "⏩"], timeout: number = 120000) {
+		if (!message && !message.channel) throw new Error("Channel is inaccessible.");
+		if (!pages) throw new Error("Pages are not given.");
+		if (emojiList.length !== 2) throw new Error("Need two emojis.");
 		let page = 0;
 		const curPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
 		for (const emoji of emojiList) await curPage.react(emoji);
-		const reactionCollector = curPage.createReactionCollector(
-			(reaction, user) => user.id === message.author.id,
-			{ time: timeout }
-		);
-		reactionCollector.on('collect', reaction => {
+		const reactionCollector = curPage.createReactionCollector((reaction, user) => user.id === message.author.id, { time: timeout });
+		reactionCollector.on("collect", reaction => {
 			reaction.users.remove(message.author);
 			switch (reaction.emoji.id) {
 				case emojiList[0].replace(/\D/g, ""):
@@ -372,9 +373,9 @@ export default class {
 			}
 			curPage.edit(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
 		});
-		reactionCollector.on('end', () => {
+		reactionCollector.on("end", () => {
 			if (!curPage.deleted) {
-				curPage.reactions.removeAll()
+				curPage.reactions.removeAll();
 			}
 		});
 		return curPage;

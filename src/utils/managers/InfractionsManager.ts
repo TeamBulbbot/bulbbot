@@ -209,4 +209,46 @@ export default class {
 
 		return infID;
 	}
+
+	public async deafen(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
+		await target.voice.setDeaf(true, reason);
+		await this.createInfraction(guild.id, "Deafen", true, reason, target.user, moderator.user);
+		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Deafen");
+		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("action_deafen", guild.id), target.user, moderator.user, reason, infID);
+
+		return infID;
+	}
+
+	public async undeafen(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
+		await target.voice.setDeaf(false, reason);
+		await this.createInfraction(guild.id, "Undeafen", true, reason, target.user, moderator.user);
+		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Undeafen");
+		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("action_undeafen", guild.id), target.user, moderator.user, reason, infID);
+
+		return infID;
+	}
+
+	public async nickname(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, nickOld: string, nickNew: string) {
+		await target.setNickname(nickNew, reason);
+		await this.createInfraction(guild.id, "Nickname", true, reason, target.user, moderator.user);
+		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Nickname");
+		await loggingManager.sendModActionPreformatted(
+			client,
+			guild,
+			await client.bulbutils.translate(nickNew ? "change_nick_mod_action_log" : "remove_nick_mod_action_log", guild.id, {
+				action: await client.bulbutils.translate(nickNew ? "action_change_nick" : "action_remove_nick", guild.id, { client: client }),
+				target_tag: target.user.tag,
+				user_id: target.user.id,
+				nick_old: nickOld,
+				nick_new: nickNew,
+				moderator_tag: moderator.user.tag,
+				moderator_id: moderator.user.id,
+				reason: reason,
+				infractionId: infID,
+				client: client,
+			}),
+		);
+
+		return infID;
+	}
 }
