@@ -2,9 +2,10 @@
 	"name": "bulbbot",
 	"version": "0.0.1",
 	"description": "A discord moderation bot written in Discord.JS",
-	"main": "src/index.js",
+	"main": "src/index.ts",
 	"scripts": {
-		"start": "node src/index.js",
+		"watch": "tsc -w",
+		"start": "node build/index.js",
 		"dev": "nodemon",
 		"pm2-start": "pm2 start src/index.js --watch --output ./logs/log.log --error ./logs/error.log --time --name bulbbot",
 		"db-sync": "node src/utils/database/sync.js"
@@ -26,6 +27,7 @@
 		"discord.js-pagination": "^1.0.3",
 		"dotenv": "^8.2.0",
 		"emoji-unicode": "^2.0.1",
+		"install": "^0.13.0",
 		"js-yaml": "^4.1.0",
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.33",
@@ -41,6 +43,7 @@
 	"devDependencies": {
 		"@messageformat/core": "^3.0.0-beta.3",
 		"prettier": "^2.2.1",
-		"sequelize-cli": "^6.2.0"
+		"sequelize-cli": "^6.2.0",
+		"typescript": "^4.2.4"
 	}
 }
