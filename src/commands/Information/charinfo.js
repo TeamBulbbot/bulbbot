@@ -52,7 +52,7 @@ module.exports = class extends Command {
 		for (let i = 0; i < chars.length; i++) {
 			categories.forEach(cat => {
 				const Unicode = require(`unicode/category/${cat}`);
-				const charCode = Unicode[chars[i].charCodeAt(0)];
+				const charCode = Unicode[chars[i].codePointAt(0)];
 				if (charCode !== undefined) return (text += `${chars[i]} - ${charCode.value} | ${charCode.name}\n`);
 			});
 		}
