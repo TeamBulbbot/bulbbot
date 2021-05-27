@@ -31,6 +31,11 @@ export default class extends Command {
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id);
 		let fullList: string = "";
 
+		if (targets!!.length <= 1) {
+			await message.channel.send(await this.client.bulbutils.translate("multiwarn_targets_too_few", message.guild?.id))
+			return await this.client.commands.get("warn")!.run(message, args);
+		}
+
 		for (let i = 0; i < targets!!.length; i++) {
 			if (targets!![i] === undefined) continue;
 

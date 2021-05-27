@@ -357,7 +357,10 @@ export default class {
 		if (emojiList.length !== 2) throw new Error("Need two emojis.");
 		let page = 0;
 		const curPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
-		for (const emoji of emojiList) await curPage.react(emoji);
+		for (const emoji of emojiList) {
+			await curPage.react(emoji);
+			await this.client.bulbutils.sleep(250);
+		}
 		const reactionCollector = curPage.createReactionCollector((reaction, user) => user.id === message.author.id, { time: timeout });
 		reactionCollector.on("collect", reaction => {
 			reaction.users.remove(message.author);

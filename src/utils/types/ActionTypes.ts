@@ -10,5 +10,5 @@ export enum ActionTypes {
     AUTOMATICALLY_UNMUTED,
     AUTOMATICALLY_UNBANNED,
     TEMP_BANNED,
-    TRASH
+    TRASH,
 }

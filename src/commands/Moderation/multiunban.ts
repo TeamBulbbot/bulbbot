@@ -34,6 +34,11 @@ export default class extends Command {
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id);
 		let fullList: string = "";
 
+		if (targets!!.length <= 1) {
+			await message.channel.send(await this.client.bulbutils.translate("multiunban_targets_too_few", message.guild?.id))
+			return await this.client.commands.get("unban")!.run(message, args);
+		}
+
 		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild?.id)).then(msg => {
 			msg.delete({ timeout: (args.length - 0.5) * massCommandSleep });
 		});

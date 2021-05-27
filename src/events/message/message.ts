@@ -67,7 +67,7 @@ export default class extends Event {
 			}
 		}
 
-		this.client.userClearace = clearance;
+		this.client.userClearance = clearance;
 
 		if (command.clearance > clearance && !commandOverride) {
 			return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {

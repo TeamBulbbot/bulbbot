@@ -89,7 +89,7 @@ export default class {
 
 	async setPrefix(guildId: Snowflake, prefix: string): Promise<void> {
 		await sequelize.query(
-			'UPDATE "guildConfigurations" SET prefix = $Prefix WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID',
+			'UPDATE "guildConfigurations" SET prefix = $Prefix WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)',
 			{
 				bind: { Prefix: prefix, GuildID: guildId },
 				type: QueryTypes.UPDATE,
@@ -131,7 +131,7 @@ export default class {
 		return response[0]["muteRole"];
 	}
 
-	async setMuteRole(guildID: Snowflake, muteRoleID: Snowflake): Promise<void> {
+	async setMuteRole(guildID: Snowflake, muteRoleID: Snowflake | null): Promise<void> {
 		await sequelize.query(
 			'UPDATE "guildConfigurations" SET "muteRole" = $MuteRole WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)',
 			{
@@ -153,7 +153,7 @@ export default class {
 		return response[0]["muteRole"];
 	}
 
-	async setAutoRole(guildID: Snowflake, autoRoleID: Snowflake): Promise<void> {
+	async setAutoRole(guildID: Snowflake, autoRoleID: Snowflake | null): Promise<void> {
 		await sequelize.query(
 			'UPDATE "guildConfigurations" SET "autorole" = $AutoRole WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)',
 			{

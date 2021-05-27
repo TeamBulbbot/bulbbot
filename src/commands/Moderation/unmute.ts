@@ -77,10 +77,11 @@ export default class extends Command {
 						user_id: target.user.id,
 					}),
 				)
-				.then(msg => {
+				.then(async msg => {
 					confirmMsg = msg;
-					msg.react(Emotes.other.SUCCESS);
-					msg.react(Emotes.other.FAIL);
+					await msg.react(Emotes.other.SUCCESS);
+					await this.client.bulbutils.sleep(250);
+					await msg.react(Emotes.other.FAIL);
 
 					const filter = (reaction, user) => {
 						return user.id === message.author.id;

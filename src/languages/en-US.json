@@ -5,6 +5,7 @@
   "global_missing_permission_bot": "The bot is missing crucial permission to perform this command! Please check the bots permission.\n{missing}",
   "global_user_not_found": "{emote_fail} Could not find the specified user. Cannot convert `{arg_provided}` to `{arg_expected}`\n{emote_wrench} **Correct usage:** {usage}",
   "global_channel_not_found": "{emote_fail} Could not find the specified channel. Cannot convert `{arg_provided}` to `{arg_expected}`\n{emote_wrench} **Correct usage:** {usage}",
+  "global_role_not_found": "{emote_fail} Could not find the specified role. Cannot convert `{arg_provided}` to `{arg_expected}`\n{emote_wrench} **Correct usage:** {usage}",
   "global_mod_action_log": "{action} by: {moderator_tag} ({moderator_id}) | Target: {target_tag} ({target_id}) | Reason: {reason}",
   "global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
   "global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})` has been {action} by **{moderator_tag}** `({moderator_id})` after their temporary punishment expired `[#{infractionId}]`",
@@ -29,7 +30,7 @@
 
   "event_message_args_unexpected": "{emote_warn} Unexpected argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
   "event_message_args_missing": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct usage:** {usage}",
-  "event_message_args_unexpected_list": "{emote_warn} Cannot parse `{arg}` as `{arg_expected}`.\n{emote_wrench} **Correct arguments:** {usage}",
+  "event_message_args_unexpected_list": "{emote_fail} Cannot parse `{arg}` as `{arg_expected}`.\n{emote_wrench} **Correct arguments:** {usage}",
   "event_message_args_missing_list": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct arguments:** {usage}",
   "event_message_edit": "{emote_edit} Message from **{target_tag}** `{target_id}` was updated in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**B:** {before}\n**A:** {after}",
   "event_message_delete": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-${after_id}`\n**C:** {content} \n**A:** {attachment}\n**E:** {embed}",
@@ -58,11 +59,12 @@
 
   "config_timezone_success": "{emote_success} Successfully changed server the timezone to `{zone}`",
 
-  "config_logging_success": "{emote_success} Successfully started logging {part} in {channel}",
+  "config_logging_success": "{emote_success} Successfully started logging `{part}` in {channel}",
+  "config_logging_remove": "{emote_success} Successfully removed logging for `{part}` from {channel}",
   "config_logging_invalid_channel": "{emote_fail} Cannot resolve `{channel_name}` as a valid channel!",
   "config_logging_unable_to_send_messages": "{emote_fail} Cannot post messages in that channel",
 
-  "config_mute_success": "{emote_success} Successfully updated the muted role",
+  "config_mute_success": "{emote_success} Successfully updated the mute role",
   "config_mute_missing_args": "{emote_warn} Missing required argument `role`",
   "config_mute_invalid_role": "{emote_warn} Not a valid role",
   "config_mute_unable_to_manage": "{emote_warn} Unable to manage that role, move my role higher than that role for it to work",
@@ -84,6 +86,7 @@
   "override_create_invalid_role": "{emote_warn} Not a valid role",
   "override_create_invalid_command": "{emote_warn} `{command}` is not a valid command",
   "override_create_success": "{emote_success} Successfully created an override with the clearance level of `{clearance}`",
+  "override_already_exists": "{emote_fail} A command override with that name already exists!",
 
   "override_disable_missing_command": "{emote_warn} Missing command",
   "override_disable_invalid_command": "{emote_warn} `{command}` is not a valid command",
@@ -220,16 +223,19 @@
   "inviteinfo_error": "{emote_warn} Unable to find a server with that invite",
 
   "multiban_success": "{emote_success} {full_list} have been banned for **{reason}**",
+  "multiban_targets_too_few": "{emote_warn} Selected less than 2 targets. Executing normal ban instead.",
 
   "multiunban_success": "{emote_success} {full_list} have been unbanned for **{reason}**",
+  "multiunban_targets_too_few": "{emote_warn} Selected less than 2 targets. Executing normal unban instead.",
 
   "multikick_success": "{emote_success} {full_list} have been kicked for **{reason}**",
+  "multikick_targets_too_few": "{emote_warn} Selected less than 2 targets. Executing normal kick instead.",
 
   "multimute_success": "{emote_success} {full_list} have been muted for **{reason}**",
+  "multimute_targets_too_few": "{emote_warn} Selected less than 2 targets. Executing normal mute instead.",
 
   "multiwarn_success": "{emote_success} {full_list} have been warned for **{reason}**",
-
-  "multivoicekick_success": "{emote_success} {full_list} have been voice-kicked for **{reason}**",
+  "multiwarn_targets_too_few": "{emote_warn} Selected less than 2 targets. Executing normal warn instead.",
 
   "softban_success": "{emote_success} **{target_tag}** `({target_id})` has been soft-banned for **{reason}** `[#{infractionId}]`",
 
