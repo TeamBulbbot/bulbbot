@@ -223,6 +223,7 @@ module.exports = class BulbBotUtils {
 
 		const staff = 1 << 0;
 		const partner = 1 << 1;
+		const certifiedMod = 1 << 18;
 		const hypesquad_events = 1 << 2;
 		const bughunter_green = 1 << 3;
 		const hypesquad_bravery = 1 << 6;
@@ -234,6 +235,7 @@ module.exports = class BulbBotUtils {
 
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
+		if ((bitfield & certifiedMod) === certifiedMod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.flags.HOUSE_BRILLIANCE);
