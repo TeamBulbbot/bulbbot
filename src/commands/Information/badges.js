@@ -15,6 +15,7 @@ module.exports = class extends Command {
 	async run(message, _args) {
 		let staff = 0;
 		let partner = 0;
+		let certifiedMod = 0;
 		let hypesquad_events = 0;
 		let hypesquad_bravery = 0;
 		let hypesquad_brilliance = 0;
@@ -30,6 +31,9 @@ module.exports = class extends Command {
 				switch (badges[i]) {
 					case "STAFF":
 						staff++;
+						break;
+					case "CERTIFIED_MODERATOR":
+						certifiedMod++;
 						break;
 					case "PARTNERED_SERVER_OWNER":
 						partner++;
@@ -68,6 +72,7 @@ module.exports = class extends Command {
 			`Badges on **${message.guild.name}** from **${message.guild.memberCount}** members\n`,
 			`${Emotes.flags.DISCORD_EMPLOYEE} Discord Staff: **${staff}**`,
 			`${Emotes.flags.PARTNERED_SERVER_OWNER} Partner Server Owner: **${partner}**`,
+			`${Emotes.flags.CERTIFIED_MODERATOR} Certified Moderator: **${certifiedMod}**`,
 			`${Emotes.flags.HYPESQUAD_EVENTS} HypeSquad Events: **${hypesquad_events}**`,
 			`${Emotes.flags.HOUSE_BRAVERY} HypeSquad Bravery: **${hypesquad_bravery}**`,
 			`${Emotes.flags.HOUSE_BRILLIANCE} HypeSquad Brilliance: **${hypesquad_brilliance}**`,
@@ -98,6 +103,7 @@ function Badge(bitfield) {
 	let badges = [];
 	const staff = 1 << 0;
 	const partner = 1 << 1;
+	const certifiedMod = 1 << 18;
 	const hypesquad_events = 1 << 2;
 	const bughunter_green = 1 << 3;
 	const hypesquad_bravery = 1 << 6;
@@ -109,6 +115,7 @@ function Badge(bitfield) {
 
 	if ((bitfield & staff) === staff) badges.push("STAFF");
 	if ((bitfield & partner) === partner) badges.push("PARTNERED_SERVER_OWNER");
+	if ((bitfield & certifiedMod) === certifiedMod) badges.push("CERTIFIED_MODERATOR");
 	if ((bitfield & hypesquad_events) === hypesquad_events) badges.push("HYPESQUAD_EVENTS");
 	if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push("HOUSE_BRAVERY");
 	if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push("HOUSE_BRILLIANCE");
