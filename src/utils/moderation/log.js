@@ -176,17 +176,15 @@ function GetPart(dbGuild, part) {
 
 function BetterActions(action) {
 	switch (action.toLowerCase()) {
-		case "softbanned":
-			action = `${Emotes.actions.BAN}`;
-			break;
 		case "banned":
+		case "manually banned":
+		case "softbanned":
+		case "temp-banned":
+		case "force-banned":
 			action = `${Emotes.actions.BAN}`;
 			break;
 		case "unbanned":
 			action = `${Emotes.actions.UNBAN}`;
-			break;
-		case "force-banned":
-			action = `${Emotes.actions.BAN}`;
 			break;
 		case "kicked":
 			action = `${Emotes.actions.KICK}`;
@@ -205,9 +203,6 @@ function BetterActions(action) {
 			break;
 		case "automatically unbanned":
 			action = `${Emotes.actions.UNBAN}`;
-			break;
-		case "temp-banned":
-			action = `${Emotes.actions.BAN}`;
 			break;
 		case "trash":
 			action = `${Emotes.other.TRASH}`;
