@@ -22,7 +22,7 @@ client:
   game: "the light shine"       # what the game activity should be
   type: "WATCHING"              # COMPETING (5), WATCHING(3), LISTENING (2), STREAMING (1), PLAYING (0)
   status: "online"              # online, idle, dnd, invisible
-  fetchAllUsers: false          # if the bot should fetch all the user on start
+  fetchAllUsers: true          # if the bot should fetch all the user on start
   disableMentions: "everyone"   # disable certain mentions
 
 # server
