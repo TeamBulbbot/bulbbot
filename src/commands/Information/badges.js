@@ -71,15 +71,15 @@ module.exports = class extends Command {
 		const desc = [
 			`Badges on **${message.guild.name}** from **${message.guild.memberCount}** members\n`,
 			`${Emotes.flags.DISCORD_EMPLOYEE} Discord Staff: **${staff}**`,
-			`${Emotes.flags.PARTNERED_SERVER_OWNER} Partner Server Owner: **${partner}**`,
-			`${Emotes.flags.CERTIFIED_MODERATOR} Certified Moderator: **${certifiedMod}**`,
+			`${Emotes.flags.PARTNERED_SERVER_OWNER} Partnered Server Owner: **${partner}**`,
+			`${Emotes.flags.CERTIFIED_MODERATOR} Discord Certified Moderator: **${certifiedMod}**`,
 			`${Emotes.flags.HYPESQUAD_EVENTS} HypeSquad Events: **${hypesquad_events}**`,
 			`${Emotes.flags.HOUSE_BRAVERY} HypeSquad Bravery: **${hypesquad_bravery}**`,
 			`${Emotes.flags.HOUSE_BRILLIANCE} HypeSquad Brilliance: **${hypesquad_brilliance}**`,
 			`${Emotes.flags.HOUSE_BALANCE} HypeSquad Balance: **${hypesquad_balance}**`,
 			`${Emotes.flags.BUGHUNTER_LEVEL_1} Discord Bug Hunter: **${bughunter_green}**`,
 			`${Emotes.flags.BUGHUNTER_LEVEL_2} Discord Bug Hunter Gold: **${bughunter_gold}**`,
-			`${Emotes.flags.EARLY_VERIFIED_DEVELOPER} Early Verfied Bot Developer: **${botdeveloper}**`,
+			`${Emotes.flags.EARLY_VERIFIED_DEVELOPER} Early Verified Bot Developer: **${botdeveloper}**`,
 			`${Emotes.flags.EARLY_SUPPORTER} Early Supporter: **${earlysupport}**`,
 		];
 
