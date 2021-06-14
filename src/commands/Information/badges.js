@@ -13,6 +13,8 @@ module.exports = class extends Command {
 	}
 
 	async run(message, _args) {
+		await message.guild.members.fetch();
+
 		let staff = 0;
 		let partner = 0;
 		let certifiedMod = 0;
