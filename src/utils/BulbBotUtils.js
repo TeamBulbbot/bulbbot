@@ -490,6 +490,8 @@ module.exports = class BulbBotUtils {
 	 * CANNOT_ACTION_USER_ROLE_HIGHER_BOT 7
 	 */
 	async CheckUser(message, user) {
+		if (message === undefined || user === undefined) return 0;
+
 		if (user.id === message.author.id) return 1;
 		if (message.guild.owner.id === user.id) return 2;
 		if (message.member.roles.highest.id === user.roles.highest.id) return 3;
