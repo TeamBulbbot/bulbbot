@@ -491,7 +491,7 @@ module.exports = class BulbBotUtils {
 	 */
 	async CheckUser(message, user) {
 		if (user.id === message.author.id) return 1;
-		if (message.guild.ownerID === user.id) return 2;
+		//if (message.guild.ownerID === user.id) return 2;
 		if (message.member.roles.highest.id === user.roles.highest.id) return 3;
 		if (user.id === this.client.user.id) return 4;
 		if (user.roles.highest.rawPosition >= message.member.roles.highest.rawPosition) return 5;
