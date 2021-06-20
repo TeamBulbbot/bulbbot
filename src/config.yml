@@ -12,8 +12,11 @@ lib: Discord.JS                 # lib used for the bot
 
 # configs
 prefix: "!"                     # default prefix
-embedColor: "#7289DA"           # default embed color
+embedColor: "#5865F2"           # default embed color
 massCommandSleep: 850       
+
+# bot invite link
+botInvite: "https://bulbbot.mrphilip.xyz/invite"
 
 # client
 client:
@@ -31,7 +34,7 @@ server:
   prometheusPort: 7070          # port for prometheus
 
 # support
-supportInvite: "https://discord.gg/cacUmbQ" # support guild invite link
+supportInvite: "https://bulbbot.mrphilip.xyz/discord" # support guild invite link
 
 # logs
 botDM: "822864336028565534"       # channel id for bot dms 

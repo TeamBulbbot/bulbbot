@@ -13,15 +13,12 @@ module.exports = class extends Command {
 	}
 
 	async run(message, args) {
-		const botInvite = `https://discord.com/oauth2/authorize?client_id=${global.config.client.id}&scope=bot&permissions=1573252311`;
-		const guildInvite = global.config.supportInvite;
-
 		const embed = new Discord.MessageEmbed()
 			.setColor(global.config.embedColor)
 			.setDescription(
 				await this.client.bulbutils.translate("invite_desc", message.guild.id, {
-					bot_invite: botInvite,
-					support_guild: guildInvite,
+					bot_invite: global.config.botInvite,
+					support_guild: global.config.supportInvite,
 				}),
 			)
 			.setFooter(
