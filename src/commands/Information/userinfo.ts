@@ -58,7 +58,7 @@ export default class extends Command {
 			description += await this.client.bulbutils.translate("userinfo_embed_profile", message.guild?.id, { user_id: user.id });
 			description += await this.client.bulbutils.translate("userinfo_embed_avatar", message.guild?.id, { user_avatar: user.avatarUrl });
 			description += await this.client.bulbutils.translate("userinfo_embed_bot", message.guild?.id, { user_bot: user.bot });
-			description += await this.client.bulbutils.translate("userinfo_embed_created", message.guild?.id, { user_age: user.createdAt });
+			description += await this.client.bulbutils.translate("userinfo_embed_created", message.guild?.id, { user_age: user.createdTimestamp });
 
 			if (user.premiumSinceTimestamp !== undefined && user.premiumSinceTimestamp && user.premiumSinceTimestamp > 0)
 				description += await this.client.bulbutils.translate("userinfo_embed_premium", message.guild?.id, {

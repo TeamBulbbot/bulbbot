@@ -36,9 +36,9 @@ export default class {
 		response = response.replace(/({user_discriminator})/g, key.user_discriminator);
 		response = response.replace(/({user_avatar})/g, key.user_avatar);
 		response = response.replace(/({user_bot})/g, key.user_bot);
-		response = response.replace(/({user_age})/g, this.formatDays(key.user_age));
-		response = response.replace(/({user_premium})/g, this.formatDays(key.user_premium));
-		response = response.replace(/({user_joined})/g, this.formatDays(key.user_joined));
+		response = response.replace(/({user_age})/g, `<t:${Math.floor(key.user_age / 1000)}:F> (<t:${Math.floor(key.user_age / 1000)}:R>)`);
+		response = response.replace(/({user_premium})/g, `<t:${Math.floor(key.user_premium / 1000)}:F> (<t:${Math.floor(key.user_premium / 1000)}:R>)`);
+		response = response.replace(/({user_joined})/g, `<t:${Math.floor(key.user_joined / 1000)}:F> (<t:${Math.floor(key.user_joined / 1000)}:R>)`);
 		response = response.replace(/({user_roles})/g, key.user_roles);
 		response = response.replace(/({user_infractions})/g, key.user_infractions);
 		if (key.user_infractions !== undefined) {
@@ -60,6 +60,8 @@ export default class {
 		response = response.replace(/({languages})/g, key.languages);
 		response = response.replace(/({clearance})/g, key.clearance);
 		response = response.replace(/({command})/g, key.command);
+		response = response.replace(/({message})/g, key.message);
+		response = response.replace(/({words})/g, key.words);
 
 		response = response.replace(/({infractionId})/g, key.infractionId);
 
@@ -69,7 +71,7 @@ export default class {
 			response = response.replace(/({guild_features})/g, this.guildFeatures(key.guild.features));
 			response = response.replace(/({guild_region})/g, this.guildRegion(key.guild.region));
 			response = response.replace(/({guild_verification})/g, key.guild.verificationLevel);
-			response = response.replace(/({guild_age})/g, this.formatDays(key.guild.createdTimestamp));
+			response = response.replace(/({guild_age})/g, `<t:${Math.floor(key.guild.createdTimestamp / 1000)}:F> (<t:${Math.floor(key.guild.createdTimestamp / 1000)}:R>)`);
 			response = response.replace(/({guild_members})/g, key.guild.memberCount);
 
 			response = response.replace(/({guild_max})/g, key.guild.maximumMembers);
@@ -97,6 +99,8 @@ export default class {
 
 		response = response.replace(/({user_tag})/g, key.user_tag);
 
+		response = response.replace(/({amount})/g, key.amount);
+		response = response.replace(/({limit})/g, key.limit);
 		response = response.replace(/({before})/g, key.before);
 		response = response.replace(/({after})/g, key.after);
 		response = response.replace(/({after_channel_id})/g, key.after_channel_id);
@@ -410,6 +414,7 @@ export default class {
 				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
 				joinedTimestamp: userObject.joinedTimestamp,
 				createdAt: userObject.user.createdAt,
+				createdTimestamp: userObject.user.createdTimestamp,
 			};
 		} else if (userObject instanceof User) {
 			user = {
@@ -421,6 +426,7 @@ export default class {
 				avatarUrl: userObject.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.bot,
 				createdAt: userObject.createdAt,
+				createdTimestamp: userObject.createdTimestamp,
 				nickname: null,
 			};
 		}

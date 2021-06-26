@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv"
 import applyExtra from "./applyExtra";
 dotenv.config();
 
-export const sequelize: Sequelize = new Sequelize(<string> process.env.DB_NAME, <string> process.env.DB_USER, process.env.DB_PASSWORD, {
+export const sequelize: Sequelize = new Sequelize(<string> process.env.DB_NAME, <string> process.env.DB_USER, <string>process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     dialect: "postgres",
     logging: false,

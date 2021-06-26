@@ -100,9 +100,9 @@ export default class {
 	public async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
-		if (dbGuild["modAction"] === null) return;
+		if (dbGuild["other"] === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["other"]);
 		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
@@ -144,6 +144,18 @@ export default class {
 		if (dbGuild["modAction"] === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
+		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+
+		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+	}
+
+	public async sendAutoModLog(client: BulbBotClient, guild: Guild, log: string) {
+		const dbGuild: object = <object>await databaseManager.getLoggingConfig(guild.id);
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+
+		if (dbGuild["automod"] === null) return;
+
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["automod"]);
 		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);

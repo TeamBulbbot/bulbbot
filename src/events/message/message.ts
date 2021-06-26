@@ -7,6 +7,7 @@ import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../structures/Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import { SubCommand } from "../../structures/SubCommand";
+import AutoMod from "../../utils/AutoMod"
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -39,7 +40,7 @@ export default class extends Event {
 		const clearance: number = await clearanceManager.getUserClearance(message);
 
 		if (clearance < 25) {
-			//AM
+			await AutoMod(this.client, message)
 		}
 
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;

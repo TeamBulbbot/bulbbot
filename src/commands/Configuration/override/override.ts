@@ -35,6 +35,10 @@ export default class extends SubCommand {
 			case "enable":
 				await require("./enable").default(this.client, message, args);
 				break;
+			case "delete":
+			case "remove":
+				await require("./remove").default(this.client, message, args);
+				break;
 			default:
 				return await message.channel.send(
 					await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {

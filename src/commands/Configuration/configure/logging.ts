@@ -3,6 +3,7 @@ import { GuildChannel, GuildMember, Message, Snowflake, TextChannel } from "disc
 import Command from "../../../structures/Command";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
+import * as Emotes from "../../../emotes.json";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -23,6 +24,7 @@ export default class extends SubCommand {
 		const part: string = args[1];
 		const original: TextChannel = <TextChannel>message.guild?.channels.cache.get((await databaseManager.getLoggingConfig(<Snowflake>message.guild?.id))["modAction"]);
 		let channel: string | null = args[2];
+		let confirmMsg: Message;
 
 		if (channel === "remove") channel = null;
 		else {
@@ -72,15 +74,60 @@ export default class extends SubCommand {
 				break;
 			case "joinleave":
 			case "join_leave":
-				await databaseManager.setModAction(<Snowflake>message.guild?.id, channel);
+				await databaseManager.setJoinLeave(<Snowflake>message.guild?.id, channel);
+				break;
+			case "other":
+				await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
+				break;
+			case "all":
+				const msg = await message.channel.send(
+					await this.client.bulbutils.translate("config_logging_all_confirm", message.guild?.id, {
+						channel_id: channel,
+					}),
+				)
+
+				confirmMsg = msg;
+				await msg.react(Emotes.other.SUCCESS);
+				await this.client.bulbutils.sleep(250);
+				await msg.react(Emotes.other.FAIL);
+
+				const filter = (reaction, user) => {
+					return user.id === message.author.id;
+				};
+
+				let collected;
+				try {
+					collected = await msg.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] })
+				} catch (err) {
+					await confirmMsg.delete();
+					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id));
+					return;
+				}
+
+				const reaction = collected.first();
+
+				if (reaction?.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
+					await databaseManager.setModAction(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setAutoMod(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setMessage(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setRole(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setMember(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setChannel(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setJoinLeave(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
+					await msg.delete();
+				} else {
+					await msg.delete();
+					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id));
+					return;
+				}
 				break;
 			default:
 				return await message.channel.send(
 					await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 						arg: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						usage:
-							"`prefix`, `language`, `mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `join_leave`",
+						usage: "`prefix`, `language`, `mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `join_leave`, `other`, `all`",
 					}),
 				);
 		}

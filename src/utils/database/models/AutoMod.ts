@@ -40,6 +40,10 @@ export default function (sequelize: Sequelize): void {
             punishmentMentions: {
                 type: DataTypes.STRING,
             },
+          timeoutMentions: {
+            type: DataTypes.INTEGER,
+            defaultValue: 15,
+          },
             limitMessages: {
                 type: DataTypes.INTEGER,
                 defaultValue: 0,
@@ -47,6 +51,10 @@ export default function (sequelize: Sequelize): void {
             punishmentMessages: {
                 type: DataTypes.STRING,
             },
+          timeoutMessages: {
+            type: DataTypes.INTEGER,
+            defaultValue: 10,
+          },
         },
         {
             timestamps: false,
