@@ -252,8 +252,8 @@ module.exports = class BulbBotUtils {
 		let features = [];
 
 		guildFeatures.forEach(feature => {
-			let f;
-			let desc;
+			let f = "";
+			let desc = "";
 
 			if (feature === "ANIMATED_ICON") {
 				f = Emotes.features.ANIMATED_ICON;
@@ -315,6 +315,21 @@ module.exports = class BulbBotUtils {
 			} else if (feature === "VIP_REGIONS") {
 				f = Emotes.features.VIP_REGIONS;
 				desc = "Adds the ability to create voice channels with 384kbps max bitrate";
+			} else if (feature === "PRIVATE_THREADS") {
+				f = Emotes.features.PRIVATE_THREADS;
+				desc = "Grants the ability to create private threads";
+			} else if (feature === "SEVEN_DAY_THREAD_ARCHIVE") {
+				f = Emotes.features.SEVEN_DAY_THREAD_ARCHIVE;
+				desc = "Threads will archive in 7 days";
+			} else if (feature === "THREADS_ENABLED") {
+				f = Emotes.features.THREADS_ENABLED;
+				desc = "Grants the ability to create threads";
+			} else if (feature === "THREE_DAY_THREAD_ARCHIVE") {
+				f = Emotes.features.THREE_DAY_THREAD_ARCHIVE;
+				desc = "Threads will archive in 3 days";
+			} else if (feature === "HUB") {
+				f = Emotes.features.HUB;
+				desc = "Makes the server a school hub server";
 			}
 
 			if (features.length <= 10) f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
