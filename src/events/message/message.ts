@@ -7,7 +7,7 @@ import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../structures/Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import { SubCommand } from "../../structures/SubCommand";
-import AutoMod from "../../utils/AutoMod"
+import AutoMod from "../../utils/AutoMod";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -29,9 +29,7 @@ export default class extends Event {
 		const { prefix, premiumGuild } = await databaseManager.getConfig(message.guild.id);
 
 		if (prefix === undefined && message.content.startsWith(Config.prefix))
-			return message.channel.send(
-				"Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild",
-			);
+			return message.channel.send("Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
 
 		this.client.prefix = prefix;
 
@@ -40,7 +38,7 @@ export default class extends Event {
 		const clearance: number = await clearanceManager.getUserClearance(message);
 
 		if (clearance < 25) {
-			await AutoMod(this.client, message)
+			await AutoMod(this.client, message);
 		}
 
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;
@@ -80,12 +78,10 @@ export default class extends Event {
 		if (userPermCheck && !(clearance < command.clearance)) {
 			// @ts-ignore
 			if (missing?.length) {
-				return message.channel
-					.send(await this.client.bulbutils.translate("global_missing_permission_bot", message.guild.id, { missing }))
-					.then(msg => {
-						message.delete({ timeout: 5000 });
-						msg.delete({ timeout: 5000 });
-					});
+				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission_bot", message.guild.id, { missing })).then(msg => {
+					message.delete({ timeout: 5000 });
+					msg.delete({ timeout: 5000 });
+				});
 			}
 		}
 
@@ -142,7 +138,7 @@ export default class extends Event {
 							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild.id, {
 								arg: args[sCmd.maxArgs + 1],
 								arg_expected: sCmd.maxArgs,
-								arg_provided: args.length -1,
+								arg_provided: args.length - 1,
 								usage: sCmd.usage.replace("!", prefix),
 							}),
 						);
