@@ -13,8 +13,6 @@ module.exports = class DatabaseManager {
 		});
 		const logging = await sequelize.models.guildLogging.create({});
 
-		const starboard = await sequelize.models.starboard.create({});
-
 		const automod = await sequelize.models.automod.create({});
 
 		await sequelize.models.guild.create({
@@ -22,7 +20,6 @@ module.exports = class DatabaseManager {
 			guildId: guild.id,
 			guildConfigurationId: config.id,
 			guildLoggingId: logging.id,
-			starboardId: starboard.id,
 			automodId: automod.id,
 		});
 	}
@@ -41,7 +38,6 @@ module.exports = class DatabaseManager {
 				{ model: sequelize.models.automod },
 				{ model: sequelize.models.guildLogging },
 				{ model: sequelize.models.infraction },
-				{ model: sequelize.models.starboard },
 			],
 		});
 
@@ -61,7 +57,6 @@ module.exports = class DatabaseManager {
 		await dbGuild.infractions.forEach(inf => {
 			inf.destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Infraction table for: ${guildID}: `, err));
 		});
-		await dbGuild["starboard"].destroy().catch(err => console.log(`[DB - DeleteGuild] Unable to delete the Starboard table for: ${guildID}: `, err));
 	}
 
 	/**

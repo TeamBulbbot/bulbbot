@@ -27,11 +27,9 @@ const models = [
 	require("./models/GuildModerationRoles"),
 	require("./models/GuildOverrideCommands"),
 	require("./models/Infraction"),
-	require("./models/Starboard"),
-	require("./models/StarboardPost"),
 	require("./models/Tempban"),
 	require("./models/AutoMod"),
-	require("./models/Tempmute")
+	require("./models/Tempmute"),
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);
