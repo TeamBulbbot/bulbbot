@@ -275,7 +275,7 @@ module.exports = class BulbBotUtils {
 				desc = "Enabled Sever Discovery before the Discovery Checklist was launched";
 			} else if (feature === "FORCE_RELAY") {
 				f = Emotes.features.FORCE_RELAY;
-				desc = "Shard the guild connections to different nodes that relay information between each other.";
+				desc = "Shard the guild connections to different nodes that relay information between each other";
 			} else if (feature === "INVITE_SPLASH") {
 				f = Emotes.features.INVITE_SPLASH;
 				desc = "Adds the ability to set a background image that will display on the invite links";
@@ -299,7 +299,7 @@ module.exports = class BulbBotUtils {
 				desc = "Enables lurking in the guild";
 			} else if (feature === "RELAY_ENABLED" || feature === "RELAY_DISABLED") {
 				f = Emotes.features.RELAY_ENABLED;
-				desc = "Shard the guild connections to different nodes that relay information between each other.";
+				desc = "Shard the guild connections to different nodes that relay information between each other";
 			} else if (feature === "VANITY_URL") {
 				f = Emotes.features.VANITY_URL;
 				desc = "Adds the ability to set a custom invite link (discord.gg/CUSTOM_VANITY)";
