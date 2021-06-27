@@ -332,9 +332,7 @@ module.exports = class BulbBotUtils {
 				desc = "Makes the server a school hub server";
 			}
 
-			if (features.length <= 10) f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
-			else f += `\`${feature}\``;
-
+			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
 			features.push(f);
 		});
 
