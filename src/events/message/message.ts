@@ -22,6 +22,9 @@ export default class extends Event {
 	}
 
 	public async run(message: Message): Promise<any> {
+		// checks if the user/guilds is in the blacklist
+		if (this.client.blacklist.get(message.author.id) !== undefined || this.client.blacklist.get(message.guild!.id)) return;
+
 		if (message.channel.type === "dm") return DMUtils(this.client, message);
 		if (!message.guild || message.author.bot) return;
 

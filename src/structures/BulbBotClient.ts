@@ -15,6 +15,7 @@ export default class extends Client {
 	private readonly utils;
 	public readonly bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
+	public blacklist: Collection<string, Object>;
 
 	constructor(options: any) {
 		super({
@@ -31,6 +32,8 @@ export default class extends Client {
 
 		this.utils = new Util(this);
 		this.bulbutils = new BulbBotUtils(this);
+
+		this.blacklist = new Collection();
 	}
 
 	private validate(options: any): void {
@@ -49,6 +52,7 @@ export default class extends Client {
 	public async login(token = this.token): Promise<any> {
 		await this.utils.loadEvents();
 		await this.utils.loadCommands();
+		await this.utils.loadBlacklist();
 		await super.login(<string>token);
 	}
 }

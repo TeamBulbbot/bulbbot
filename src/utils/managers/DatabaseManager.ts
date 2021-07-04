@@ -2,6 +2,7 @@ import { sequelize } from "../database/connection";
 import * as Config from "../../Config";
 import { Guild, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
+import moment from "moment";
 
 export default class {
 	async createGuild(guild: Guild) {
@@ -234,5 +235,43 @@ export default class {
 		});
 
 		return response[0];
+	}
+
+	async getAllBlacklisted(): Promise<object> {
+		const response: object = await sequelize.query("SELECT * FROM blacklists", {});
+		return response[0];
+	}
+
+	async infoBlacklist(snowflakeId: Snowflake): Promise<object> {
+		const response: void = await sequelize.query('SELECT * FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
+			bind: { snowflakeId },
+			type: QueryTypes.DELETE,
+		});
+		return response[0];
+	}
+
+	async addBlacklist(isGuild: boolean, name: String, snowflakeId: Snowflake, reason: String, developerId: Snowflake): Promise<void> {
+		await sequelize.query(
+			'INSERT INTO blacklists ("isGuild", name, "snowflakeId", reason, "developerId", "createdAt", "updatedAt") VALUES ($isGuild, $name, $snowflakeId, $reason, $developerId, $createdAt, $updatedAt)',
+			{
+				bind: {
+					isGuild,
+					name,
+					snowflakeId,
+					reason,
+					developerId,
+					createdAt: moment().format(),
+					updatedAt: moment().format(),
+				},
+				type: QueryTypes.INSERT,
+			},
+		);
+	}
+
+	async removeBlacklist(snowflakeId: Snowflake): Promise<void> {
+		await sequelize.query('DELETE FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
+			bind: { snowflakeId },
+			type: QueryTypes.DELETE,
+		});
 	}
 }

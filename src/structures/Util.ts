@@ -6,6 +6,9 @@ import Event from "./Event";
 import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
 import Command from "./Command";
+import DatabaseManager from "../utils/managers/DatabaseManager";
+
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 const globAsync = promisify(glob);
 
@@ -25,8 +28,8 @@ export default class {
 	}
 
 	async loadCommands(): Promise<void> {
-		console.log("[CLIENT] Started registering commands...");
-		return globAsync(`${this.directory}commands/*/*.js`).then(commands => {
+		console.log("[CLIENT - COMMANDS] Started registering commands...");
+		return globAsync(`${this.directory}commands/*/*.js`).then((commands: any) => {
 			for (const commandFile of commands) {
 				delete require.cache[commandFile];
 				let { name } = path.parse(commandFile);
@@ -43,13 +46,13 @@ export default class {
 					}
 				}
 			}
-			console.log("[CLIENT] Successfully registered all commands");
+			console.log("[CLIENT - COMMANDS] Successfully registered all commands");
 		});
 	}
 
 	async loadEvents(): Promise<void> {
-		console.log("[CLIENT] Started registering events...");
-		return globAsync(`${this.directory}events/**/*.js`).then(events => {
+		console.log("[CLIENT - EVENTS] Started registering events...");
+		return globAsync(`${this.directory}events/**/*.js`).then((events: any) => {
 			for (const eventFile of events) {
 				delete require.cache[eventFile];
 				const { name } = path.parse(eventFile);
@@ -64,7 +67,21 @@ export default class {
 					await event.run(...args);
 				});
 			}
-			console.log("[CLIENT] Successfully registered all events");
+			console.log("[CLIENT - EVENTS] Successfully registered all events");
 		});
+	}
+
+	async loadBlacklist(): Promise<void> {
+		console.log("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
+		const blacklistedUsers: any = await databaseManager.getAllBlacklisted();
+		for (let i = 0; i < blacklistedUsers.length; i++) {
+			const blacklist = blacklistedUsers[i];
+			this.client.blacklist.set(blacklist.snowflakeId, {
+				type: blacklist.isGuild ? "guild" : "user",
+				id: blacklist.snowflakeId,
+			});
+		}
+
+		console.log(`[CLIENT - BLACKLIST] Successfully blacklisted ${this.client.blacklist.size} users and guilds`);
 	}
 }
