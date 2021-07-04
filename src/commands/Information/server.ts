@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import { Emoji, Guild, GuildMember, Message, MessageEmbed, Role } from "discord.js";
-import { embedColor } from "../../structures/Config";
+import { embedColor } from "../../Config";
 
 export default class extends Command {
 	constructor(...args) {
@@ -71,17 +71,13 @@ export default class extends Command {
 			.addField(await this.client.bulbutils.translate("serverinfo_booster_stats", guild.id, {}), boosterStats, true)
 			.addField(
 				await this.client.bulbutils.translate("serverinfo_roles", guild.id, { guild_amount_roles: amountOfRoles }),
-				`${guildRoles.join(" ")} ${
-					rolesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_roles_too_many", guild.id, { guild_roles_left: rolesLeft }) : ""
-				}`,
+				`${guildRoles.join(" ")} ${rolesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_roles_too_many", guild.id, { guild_roles_left: rolesLeft }) : ""}`,
 				true,
 			)
 			.addField(
 				await this.client.bulbutils.translate("serverinfo_emotes", guild.id, { guild_amount_emotes: amountOfEmotes }),
 				amountOfEmotes !== 0
-					? `${guildEmotes.join(" ")} ${
-							emotesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_emotes_too_many", guild.id, { guild_emotes_left: emotesLeft }) : ""
-					  }`
+					? `${guildEmotes.join(" ")} ${emotesLeft !== 0 ? await this.client.bulbutils.translate("serverinfo_emotes_too_many", guild.id, { guild_emotes_left: emotesLeft }) : ""}`
 					: await this.client.bulbutils.translate("serverinfo_emotes_none", guild.id, {}),
 				true,
 			)

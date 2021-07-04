@@ -188,6 +188,7 @@ export default class {
 
 		const staff: number = 1 << 0;
 		const partner: number = 1 << 1;
+		const certifiedMod = 1 << 18;
 		const hypesquad_events: number = 1 << 2;
 		const bughunter_green: number = 1 << 3;
 		const hypesquad_bravery: number = 1 << 6;
@@ -199,6 +200,7 @@ export default class {
 
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
+		if ((bitfield & certifiedMod) === certifiedMod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.flags.HOUSE_BRILLIANCE);
@@ -238,7 +240,7 @@ export default class {
 				desc = "Enabled Sever Discovery before the Discovery Checklist was launched";
 			} else if (feature === "FORCE_RELAY") {
 				f = Emotes.features.FORCE_RELAY;
-				desc = "Shard the guild connections to different nodes that relay information between each other.";
+				desc = "Shard the guild connections to different nodes that relay information between each other";
 			} else if (feature === "INVITE_SPLASH") {
 				f = Emotes.features.INVITE_SPLASH;
 				desc = "Adds the ability to set a background image that will display on the invite links";
@@ -262,7 +264,7 @@ export default class {
 				desc = "Enables lurking in the guild";
 			} else if (feature === "RELAY_ENABLED" || feature === "RELAY_DISABLED") {
 				f = Emotes.features.RELAY_ENABLED;
-				desc = "Shard the guild connections to different nodes that relay information between each other.";
+				desc = "Shard the guild connections to different nodes that relay information between each other";
 			} else if (feature === "VANITY_URL") {
 				f = Emotes.features.VANITY_URL;
 				desc = "Adds the ability to set a custom invite link (discord.gg/CUSTOM_VANITY)";
@@ -278,11 +280,24 @@ export default class {
 			} else if (feature === "VIP_REGIONS") {
 				f = Emotes.features.VIP_REGIONS;
 				desc = "Adds the ability to create voice channels with 384kbps max bitrate";
+			} else if (feature === "PRIVATE_THREADS") {
+				f = Emotes.features.PRIVATE_THREADS;
+				desc = "Grants the ability to create private threads";
+			} else if (feature === "SEVEN_DAY_THREAD_ARCHIVE") {
+				f = Emotes.features.SEVEN_DAY_THREAD_ARCHIVE;
+				desc = "Threads will archive in 7 days";
+			} else if (feature === "THREADS_ENABLED") {
+				f = Emotes.features.THREADS_ENABLED;
+				desc = "Grants the ability to create threads";
+			} else if (feature === "THREE_DAY_THREAD_ARCHIVE") {
+				f = Emotes.features.THREE_DAY_THREAD_ARCHIVE;
+				desc = "Threads will archive in 3 days";
+			} else if (feature === "HUB") {
+				f = Emotes.features.HUB;
+				desc = "Makes the server a school hub server";
 			}
 
-			if (features.length <= 10) f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
-			else f += `\`${feature}\``;
-
+			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
 			features.push(f);
 		});
 

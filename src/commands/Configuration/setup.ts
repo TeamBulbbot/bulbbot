@@ -13,6 +13,6 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		await message.channel.send("Welcome to Bulbbot setup. Choose your server prefix.");
+		await message.channel.send("Welcome to **Bulbbot setup**. Choose your server prefix.");
 	}
 }

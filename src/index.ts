@@ -1,4 +1,4 @@
-import * as Config from "./structures/Config";
+import * as Config from "./Config";
 import BulbBotClient from "./structures/BulbBotClient";
 import * as env from "dotenv";
 import { sequelize } from "./utils/database/connection";

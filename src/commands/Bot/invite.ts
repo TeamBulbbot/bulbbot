@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
-import {Message, MessageEmbed} from "discord.js";
-import * as Config from "../../structures/Config";
+import { Message, MessageEmbed } from "discord.js";
+import * as Config from "../../Config";
 
 export default class extends Command {
 	constructor(...args) {
@@ -15,13 +15,11 @@ export default class extends Command {
 	}
 
 	async run(message: Message): Promise<void> {
-		const botInvite: string = `https://discord.com/oauth2/authorize?client_id=${Config.id}&scope=bot&permissions=1573252311`;
-
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(Config.embedColor)
 			.setDescription(
 				await this.client.bulbutils.translate("invite_desc", message.guild?.id, {
-					bot_invite: botInvite,
+					bot_invite: Config.botInvite,
 					support_guild: Config.supportInvite,
 				}),
 			)

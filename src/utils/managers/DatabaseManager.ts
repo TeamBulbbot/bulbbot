@@ -1,5 +1,5 @@
 import { sequelize } from "../database/connection";
-import * as Config from "../../structures/Config";
+import * as Config from "../../Config";
 import { Guild, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 

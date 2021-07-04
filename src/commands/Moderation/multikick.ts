@@ -1,7 +1,7 @@
 import Command from "../../structures/Command";
 import { GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
-import { massCommandSleep } from "../../structures/Config";
+import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();

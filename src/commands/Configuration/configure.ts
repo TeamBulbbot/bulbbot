@@ -8,7 +8,7 @@ import autorole from "./configure/autorole";
 import override from "./override/override";
 
 export default class extends Command {
-	constructor(...args) {
+	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
 			description: "Configure the bot in your server",

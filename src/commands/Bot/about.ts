@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
-import { embedColor } from "../../structures/Config";
+import { embedColor } from "../../Config";
 import * as shell from "shelljs";
 
 export default class extends Command {

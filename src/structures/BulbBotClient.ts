@@ -4,7 +4,7 @@ import Event from "./Event";
 import Util from "./Util";
 import Command from "./Command";
 import BulbBotUtils from "../utils/BulbBotUtils";
-import * as Config from "../structures/Config";
+import * as Config from "../Config";
 
 export default class extends Client {
 	public prefix: string = Config.prefix;

@@ -5,7 +5,7 @@ import { NonDigits, ReasonImage } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import moment from "moment";
 import * as Emotes from "../../../emotes.json";
-import { embedColor } from "../../../structures/Config";
+import { embedColor } from "../../../Config";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 

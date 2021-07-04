@@ -1,13 +1,8 @@
 import { Snowflake } from "discord.js";
 
 export const name: string = "Bulbbot";
-export const developers: string[] = [
-    "190160914765316096",
-    "439396770695479297"
-];
-export const subDevelopers: string[] = [
-    "193160566334947340"
-];
+export const developers: string[] = ["190160914765316096", "439396770695479297"];
+export const subDevelopers: string[] = ["193160566334947340"];
 export const version: string = "1.0.0";
 export const lib: string = "Discord.JS";
 
@@ -25,6 +20,7 @@ export const status: string = "online";
 export const fetchAllUsers: boolean = false;
 export const disableMentions: string = "everyone";
 export const supportInvite: string = "https://bulbbot.mrphilip.xyz/discord";
+export const botInvite: string = "https://bulbbot.mrphilip.xyz/invite";
 
 // Server
 export const prometheusHost: string = "localhost";

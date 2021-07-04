@@ -1,10 +1,10 @@
 import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
-import { embedColor } from "../../structures/Config";
+import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 
 export default class extends Command {
-	constructor(...args) {
+	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
 			description: "Returns the amount of badges in the server",
@@ -14,17 +14,20 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
-		let staff: number = 0;
-		let partner: number = 0;
-		let hypesquad_events: number = 0;
-		let hypesquad_bravery: number = 0;
-		let hypesquad_brilliance: number = 0;
-		let hypesquad_balance: number = 0;
-		let bughunter_green: number = 0;
-		let bughunter_gold: number = 0;
-		let earlysupport: number = 0;
-		let botdeveloper: number = 0;
+	public async run(message: Message, _: string[]): Promise<void | Message> {
+		await message.guild?.fetch();
+
+		let staff = 0;
+		let partner = 0;
+		let certifiedMod = 0;
+		let hypesquad_events = 0;
+		let hypesquad_bravery = 0;
+		let hypesquad_brilliance = 0;
+		let hypesquad_balance = 0;
+		let bughunter_green = 0;
+		let bughunter_gold = 0;
+		let earlysupport = 0;
+		let botdeveloper = 0;
 
 		message.guild?.members.cache.array().forEach(member => {
 			const badges = this.badge(<number>member.user.flags?.bitfield);
@@ -32,6 +35,9 @@ export default class extends Command {
 				switch (badges[i]) {
 					case "STAFF":
 						staff++;
+						break;
+					case "CERTIFIED_MODERATOR":
+						certifiedMod++;
 						break;
 					case "PARTNERED_SERVER_OWNER":
 						partner++;
@@ -69,7 +75,8 @@ export default class extends Command {
 		const desc = [
 			`Badges in **${message.guild?.name}** from **${message.guild?.memberCount}** members\n`,
 			`${Emotes.flags.DISCORD_EMPLOYEE} Discord Staff: **${staff}**`,
-			`${Emotes.flags.PARTNERED_SERVER_OWNER} Partner Server Owner: **${partner}**`,
+			`${Emotes.flags.PARTNERED_SERVER_OWNER} Partnered Server Owner: **${partner}**`,
+			`${Emotes.flags.CERTIFIED_MODERATOR} Discord Certified Moderator: **${certifiedMod}**`,
 			`${Emotes.flags.HYPESQUAD_EVENTS} HypeSquad Events: **${hypesquad_events}**`,
 			`${Emotes.flags.HOUSE_BRAVERY} HypeSquad Bravery: **${hypesquad_bravery}**`,
 			`${Emotes.flags.HOUSE_BRILLIANCE} HypeSquad Brilliance: **${hypesquad_brilliance}**`,
@@ -86,7 +93,7 @@ export default class extends Command {
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user_name: message.author.username,
-					user_discriminator: message.author.id,
+					user_discriminator: message.author.discriminator,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),
 			)
@@ -95,10 +102,11 @@ export default class extends Command {
 		return message.channel.send(embed);
 	}
 
-	private badge(bitfield) {
+	private badge(bitfield: number) {
 		let badges: string[] = [];
 		const staff: number = 1 << 0;
 		const partner: number = 1 << 1;
+		const certifiedMod = 1 << 18;
 		const hypesquad_events: number = 1 << 2;
 		const bughunter_green: number = 1 << 3;
 		const hypesquad_bravery: number = 1 << 6;
@@ -110,6 +118,7 @@ export default class extends Command {
 
 		if ((bitfield & staff) === staff) badges.push("STAFF");
 		if ((bitfield & partner) === partner) badges.push("PARTNERED_SERVER_OWNER");
+		if ((bitfield & certifiedMod) === certifiedMod) badges.push("CERTIFIED_MODERATOR");
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push("HYPESQUAD_EVENTS");
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push("HOUSE_BRAVERY");
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push("HOUSE_BRILLIANCE");

@@ -6,7 +6,7 @@ import DatabaseManager from "../../../utils/managers/DatabaseManager";
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends SubCommand {
-	constructor(...args) {
+	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
 			name: "timezone",

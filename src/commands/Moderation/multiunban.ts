@@ -1,7 +1,7 @@
 import Command from "../../structures/Command";
 import { Guild, GuildMember, Message } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
-import { massCommandSleep } from "../../structures/Config";
+import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -14,10 +14,7 @@ export default class extends Command {
 			category: "Moderation",
 			aliases: ["munban"],
 			usage: "!multiunban <user> <user2>... [reason]",
-			examples: [
-				"multiunban 123456789012345678 123456789012345678 nice user",
-				"multiunban @Wumpus#0000 @Nelly##0000 nice user",
-			],
+			examples: ["multiunban 123456789012345678 123456789012345678 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,
@@ -35,7 +32,7 @@ export default class extends Command {
 		let fullList: string = "";
 
 		if (targets!!.length <= 1) {
-			await message.channel.send(await this.client.bulbutils.translate("multiunban_targets_too_few", message.guild?.id))
+			await message.channel.send(await this.client.bulbutils.translate("multiunban_targets_too_few", message.guild?.id));
 			return await this.client.commands.get("unban")!.run(message, args);
 		}
 

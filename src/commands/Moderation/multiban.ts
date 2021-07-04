@@ -1,7 +1,7 @@
 import Command from "../../structures/Command";
 import { Guild, GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
-import { massCommandSleep } from "../../structures/Config";
+import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
 
@@ -15,10 +15,7 @@ export default class extends Command {
 			category: "Moderation",
 			aliases: ["mban"],
 			usage: "!multiban <user> <user2>.... [reason]",
-			examples: [
-				"multiban 123456789012345678 123456789012345678 rude user",
-				"multiban @Wumpus00000 @Nelly##0000 rude user"
-			],
+			examples: ["multiban 123456789012345678 123456789012345678 rude user", "multiban @Wumpus00000 @Nelly##0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,
@@ -36,7 +33,7 @@ export default class extends Command {
 		let fullList: string = "";
 
 		if (targets!!.length <= 1) {
-			await message.channel.send(await this.client.bulbutils.translate("multiban_targets_too_few", message.guild?.id))
+			await message.channel.send(await this.client.bulbutils.translate("multiban_targets_too_few", message.guild?.id));
 			return await this.client.commands.get("ban")!.run(message, args);
 		}
 

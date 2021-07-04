@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, Snowflake } from "discord.js";
 import ClearanceManager from "../../../utils/managers/ClearanceManager";
 import * as Emotes from "../../../emotes.json";
-import { embedColor } from "../../../structures/Config";
+import { embedColor } from "../../../Config";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();

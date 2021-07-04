@@ -4,7 +4,7 @@ import Command from "../../structures/Command";
 import DMUtils from "../../utils/DMUtils";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
-import * as Config from "../../structures/Config";
+import * as Config from "../../Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import { SubCommand } from "../../structures/SubCommand";
 import AutoMod from "../../utils/AutoMod";

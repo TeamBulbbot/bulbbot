@@ -1,6 +1,6 @@
 import BulbBotClient from "../structures/BulbBotClient";
 import { Message, MessageEmbed, TextChannel } from "discord.js";
-import { botDM, embedColor } from "../structures/Config";
+import { botDM, embedColor } from "../Config";
 
 export default async function (client: BulbBotClient, message: Message) {
 	const embed: MessageEmbed = new MessageEmbed()

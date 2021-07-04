@@ -3,12 +3,12 @@ import { Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 
 export default class extends Command {
-	constructor(...args) {
+	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
-			description: "Returns the privacy policy for the bot",
+			description: "Return a list of all available commands to Bulbbot",
 			category: "Bot",
-			usage: "!privacypolicy",
+			usage: "!commands",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}
@@ -16,7 +16,7 @@ export default class extends Command {
 	async run(message: Message): Promise<void> {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setDescription(await this.client.bulbutils.translate("privacy_policy", message.guild?.id, {}))
+			.setDescription(await this.client.bulbutils.translate("commands_help", message.guild?.id, {}))
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user_name: message.author.username,

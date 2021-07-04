@@ -2,7 +2,7 @@ import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
-import { embedColor } from "../../structures/Config";
+import { embedColor } from "../../Config";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -53,8 +53,7 @@ export default class extends Command {
 			if (user.flags !== null) description += this.client.bulbutils.badges(user.flags.bitfield) + "\n";
 			description += await this.client.bulbutils.translate("userinfo_embed_id", message.guild?.id, { user_id: user.id });
 			description += await this.client.bulbutils.translate("userinfo_embed_username", message.guild?.id, { user_name: user.username });
-			if (user.nickname !== null && user.nickname)
-				description += await this.client.bulbutils.translate("userinfo_embed_nickname", message.guild?.id, { user_nickname: user.nickname });
+			if (user.nickname !== null && user.nickname) description += await this.client.bulbutils.translate("userinfo_embed_nickname", message.guild?.id, { user_nickname: user.nickname });
 			description += await this.client.bulbutils.translate("userinfo_embed_profile", message.guild?.id, { user_id: user.id });
 			description += await this.client.bulbutils.translate("userinfo_embed_avatar", message.guild?.id, { user_avatar: user.avatarUrl });
 			description += await this.client.bulbutils.translate("userinfo_embed_bot", message.guild?.id, { user_bot: user.bot });

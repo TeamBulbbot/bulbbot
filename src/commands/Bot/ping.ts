@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
-import * as Config from "../../structures/Config";
-import { ColorResolvable, Message, MessageEmbed} from "discord.js";
+import * as Config from "../../Config";
+import { ColorResolvable, Message, MessageEmbed } from "discord.js";
 
 export default class extends Command {
 	constructor(...args: any) {
