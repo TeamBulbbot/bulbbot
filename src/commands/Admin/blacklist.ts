@@ -45,7 +45,7 @@ export default class extends Command {
 			case "remove":
 				await databaseManager.removeBlacklist(args[2]);
 				this.client.blacklist.delete(args[2]);
-				await message.channel.send(args.join(" "));
+				await message.channel.send(`Successfully removed the block from **${args[2]}**`);
 				break;
 
 			case "info":
