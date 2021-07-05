@@ -5,14 +5,9 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 
 export default class {
-	async createGuild(guild: Guild) {
-		const config = await sequelize.models.guildConfiguration.create({
-			prefix: Config.prefix,
-		});
+	async createGuild(guild: Guild): Promise<void> {
+		const config = await sequelize.models.guildConfiguration.create({ prefix: Config.prefix });
 		const logging = await sequelize.models.guildLogging.create({});
-
-		const starboard = await sequelize.models.starboard.create({});
-
 		const automod = await sequelize.models.automod.create({});
 
 		await sequelize.models.guild.create({
@@ -20,7 +15,6 @@ export default class {
 			guildId: guild.id,
 			guildConfigurationId: config["id"],
 			guildLoggingId: logging["id"],
-			starboardId: starboard["id"],
 			automodId: automod["id"],
 		});
 	}

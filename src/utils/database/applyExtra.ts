@@ -1,31 +1,17 @@
 import { Sequelize } from "sequelize";
 
 export default function (sequelize: Sequelize) {
-    const {
-        guild,
-        guildConfiguration,
-        guildLogging,
-        guildModerationRoles,
-        guildOverrideCommands,
-        infraction,
-        //starboard,
-        //starboardPost,
-        tempban,
-        automod,
-        tempmute
-    } = sequelize.models;
+	const { guild, guildConfiguration, guildLogging, guildModerationRoles, guildOverrideCommands, infraction, tempban, automod, tempmute } = sequelize.models;
 
-    guild.belongsTo(guildConfiguration, {});
-    guild.belongsTo(guildLogging, {});
-    //guild.belongsTo(starboard, {});
-    guild.belongsTo(automod, {})
+	guild.belongsTo(guildConfiguration, {});
+	guild.belongsTo(guildLogging, {});
 
-    //starboard.hasMany(starboardPost, {});
+	guild.belongsTo(automod, {});
 
-    guild.hasMany(infraction, {});
-    guild.hasMany(guildModerationRoles, {});
-    guild.hasMany(guildOverrideCommands, {});
+	guild.hasMany(infraction, {});
+	guild.hasMany(guildModerationRoles, {});
+	guild.hasMany(guildOverrideCommands, {});
 
-    guild.hasMany(tempban, {});
-    guild.hasMany(tempmute, {});
+	guild.hasMany(tempban, {});
+	guild.hasMany(tempmute, {});
 }
