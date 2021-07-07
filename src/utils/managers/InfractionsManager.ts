@@ -10,7 +10,7 @@ import { MuteType } from "../types/MuteType";
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class {
-	private async createInfraction(guildID: Snowflake, action: string, active: boolean | number, reason: string, target: User, moderator: User): Promise<void> {
+	async createInfraction(guildID: Snowflake, action: string, active: boolean | number, reason: string, target: User, moderator: User): Promise<void> {
 		await sequelize.query(
 			'INSERT INTO infractions (action, active, reason, target, "targetId", moderator, "moderatorId", "createdAt", "updatedAt", "guildId") VALUES ($InfAction, $Active, $Reason, $Target, $TargetID, $Moderator, $ModeratorID, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID))',
 			{
@@ -117,7 +117,7 @@ export default class {
 		return response[response.length - 1];
 	}
 
-	private async getLatestInfraction(guildID: Snowflake, moderatorID: Snowflake, targetID: Snowflake, action: string): Promise<number> {
+	async getLatestInfraction(guildID: Snowflake, moderatorID: Snowflake, targetID: Snowflake, action: string): Promise<number> {
 		const response: object = await sequelize.query(
 			'SELECT id FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID AND "moderatorId" = $ModeratorID AND action = $Action ORDER BY id DESC LIMIT 1',
 			{

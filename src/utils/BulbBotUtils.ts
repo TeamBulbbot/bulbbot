@@ -100,6 +100,7 @@ export default class {
 		response = response.replace(/({user_tag})/g, key.user_tag);
 
 		response = response.replace(/({amount})/g, key.amount);
+		response = response.replace(/({changes})/g, key.changes);
 		response = response.replace(/({limit})/g, key.limit);
 		response = response.replace(/({before})/g, key.before);
 		response = response.replace(/({after})/g, key.after);
