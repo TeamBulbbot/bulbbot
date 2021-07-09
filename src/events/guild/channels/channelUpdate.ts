@@ -19,7 +19,7 @@ export default class extends Event {
 		const first: GuildAuditLogsEntry = <GuildAuditLogsEntry>logs.entries.first();
 
 		const { executor, changes, createdTimestamp } = first;
-		if (createdTimestamp + 5000 < Date.now()) return;
+		if (createdTimestamp + 3000 < Date.now()) return;
 		if (!changes) return;
 
 		let log: string = "";

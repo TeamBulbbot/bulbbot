@@ -35,7 +35,7 @@ export default class extends Event {
 
 		let { executor, reason, target, createdTimestamp } = kickLog
 		target = <User>target;
-		if (createdTimestamp + 5000 < Date.now()) return;
+		if (createdTimestamp + 3000 < Date.now()) return;
 		if (target.id !== member.user.id) return;
 
 		if (executor.id === this.client.user.id) return;
