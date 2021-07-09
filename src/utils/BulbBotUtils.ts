@@ -99,6 +99,10 @@ export default class {
 
 		response = response.replace(/({user_tag})/g, key.user_tag);
 
+		response = response.replace(/({expire_time})/g, key.expire_time);
+		response = response.replace(/({max_uses})/g, key.max_uses);
+		response = response.replace(/({code})/g, key.code);
+
 		response = response.replace(/({amount})/g, key.amount);
 		response = response.replace(/({changes})/g, key.changes);
 		response = response.replace(/({limit})/g, key.limit);
