@@ -6,7 +6,7 @@ export interface AutoModConfiguration {
 	inviteWhitelist: string[];
 	punishmentInvites: string;
 	wordBlacklist: string[];
-	wordBlacklistToken?: string[];
+	wordBlacklistToken: string[];
 	punishmentWords: string;
 	limitMentions: number;
 	punishmentMentions: string;

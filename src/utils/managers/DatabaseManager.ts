@@ -57,7 +57,7 @@ export default class {
 	}
 
 	async getAutoModConfig(guildID: Snowflake): Promise<AutoModConfiguration> {
-		const response: object = await sequelize.query('SELECT * FROM automods WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: AutoModConfiguration[] = await sequelize.query('SELECT * FROM automods WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});

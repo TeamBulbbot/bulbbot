@@ -6,6 +6,7 @@ import prefix from "./configure/prefix";
 import logging from "./configure/logging";
 import autorole from "./configure/autorole";
 import override from "./override/override";
+import automod from "./configure/automod";
 
 export default class extends Command {
 	constructor(...args: any) {
@@ -13,7 +14,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Configure the bot in your server",
 			category: "Configuration",
-			subCommands: [muterole, timezone, prefix, logging, autorole, override],
+			subCommands: [muterole, timezone, prefix, logging, autorole, override, automod],
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "!configure <part>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>", "configure mute_role <role>"],

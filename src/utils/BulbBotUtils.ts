@@ -124,6 +124,7 @@ export default class {
 
 		response = response.replace(/({slowmode})/g, key.slowmode);
 
+		response = response.replace(/({guild_name})/g, key.guild_name);
 		response = response.replace(/({guild_amount_roles})/g, key.guild_amount_roles);
 		response = response.replace(/({guild_amount_emotes})/g, key.guild_amount_emotes);
 		response = response.replace(/({guild_roles_left})/g, key.guild_roles_left);

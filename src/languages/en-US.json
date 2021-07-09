@@ -141,6 +141,16 @@
   "automod_disabled": "{emote_success} Disabled the automod",
   "automod_disabled_feature": "{emote_success} Disabled `{part}`",
 
+  "automod_settings_header": "AutoMod settings for {guild_name}",
+  "automod_settings_enabled": "**Enabled:** {part}\n\n",
+  "automod_settings_websites": "**Websites:** {part}\n**Blacklisted websites:** {item}\n\n",
+  "automod_settings_invites": "**Invites:** {part}\n**Whitelisted invites:** {item}\n\n",
+  "automod_settings_words": "**Words:** {part}\n**Blacklisted words:** {item}\n**Token words:** {count}\n\n",
+  "automod_settings_mentions": "**Mentions:** {part}\n**Limit:** {amount}\n**Timeout:** {limit}s\n\n",
+  "automod_settings_messages": "**Messages:** {part}\n**Limit:** {amount}\n**Timeout:** {limit}s\n\n",
+  "automod_settings_ignored": "**Immune roles:** {role}\n**Immune channels:** {channel_id}\n**Immune users:** {target_tag}",
+  "automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
+
   "automod_violation_max_messages_reason": "Violated `MAX_MESSAGES` check in #{channel_name} ({amount}/{limit}s)",
   "automod_violation_max_messages_log": "{emote_warn} **{target_tag}** `({target_id})` has violated the `MAX_MESSAGES` check in <#{channel_id}>. Messages ({amount}/{limit}s)",
   "automod_violation_max_mentions_reason": "Violated `MAX_MESASGES` check in #{channel_name} ({amount}/{limit}s)",
