@@ -18,6 +18,11 @@ export default async function (client: BulbBotClient, message: Message): Promise
 	if (dbGuild["ignoreUsers"].includes(message.author.id)) return;
 	if (dbGuild["ignoreChannels"].includes(message.channel.id)) return;
 
+	if (!message.member?.roles.cache.values()) return;
+	for (const role of message.member?.roles.cache.values()) {
+		if (dbGuild["ignoreRoles"].includes(role.id)) return;
+	}
+
 	let shouldDelete: boolean = false;
 
 	if (hasWebsite(message, dbGuild)) {
