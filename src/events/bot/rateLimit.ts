@@ -10,6 +10,6 @@ export default class extends Event {
 	}
 
 	public async run(ratelimit: RateLimitData): Promise<void> {
-		console.info("[CLIENT RATELIMIT]: ", ratelimit);
+		console.info("[CLIENT - RATELIMIT]: ", ratelimit);
 	}
 }

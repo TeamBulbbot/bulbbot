@@ -1,7 +1,7 @@
-import Event from "../../structures/Event";
+import Event from "../../../structures/Event";
 import { GuildAuditLogs, GuildAuditLogsEntry, GuildMember, User, Util } from "discord.js";
-import LoggingManager from "../../utils/managers/LoggingManager";
-import InfractionsManager from "../../utils/managers/InfractionsManager";
+import LoggingManager from "../../../utils/managers/LoggingManager";
+import InfractionsManager from "../../../utils/managers/InfractionsManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();

@@ -13,6 +13,8 @@ export default class extends Event {
 	}
 
 	public async run(newRole: Role): Promise<void> {
+		if (!newRole.guild.me?.hasPermission("VIEW_AUDIT_LOG")) return;
+
 		const logs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
 		const first: GuildAuditLogsEntry = <GuildAuditLogsEntry>logs.entries.first();
 

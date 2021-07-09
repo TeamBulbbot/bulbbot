@@ -451,6 +451,11 @@ export default class {
 		return user;
 	}
 
+	formatSmall(start: number) {
+		const string = moment(new Date(start)).fromNow();
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
 	prettify(action: string): string {
 		let finalString = "";
 		switch (action) {

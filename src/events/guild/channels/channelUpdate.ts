@@ -13,6 +13,8 @@ export default class extends Event {
 	}
 
 	public async run(newChannel: TextChannel): Promise<void> {
+		if (!newChannel.guild.me?.hasPermission("VIEW_AUDIT_LOG")) return;
+
 		const logs = await newChannel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_UPDATE" });
 		const first: GuildAuditLogsEntry = <GuildAuditLogsEntry>logs.entries.first();
 

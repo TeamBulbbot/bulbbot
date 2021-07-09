@@ -64,9 +64,7 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${
-				moderator.id
-			})\` has removed **${amount}** messages in <#${channel.id}>`,
+			`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
 			{
 				files: [file],
 			},
@@ -116,7 +114,7 @@ export default class {
 		);
 	}
 
-	public async sendEventLog(client: BulbBotClient, guild: Guild, part: string, log: string): Promise<void> {
+	public async sendEventLog(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "joinleave" | "automod", log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);

@@ -1,6 +1,6 @@
-import Event from "../../structures/Event";
+import Event from "../../../structures/Event";
 import { GuildMember, Util } from "discord.js";
-import LoggingManager from "../../utils/managers/LoggingManager";
+import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
