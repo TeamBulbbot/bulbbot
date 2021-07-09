@@ -33,7 +33,8 @@
   "event_message_args_unexpected_list": "{emote_fail} Cannot parse `{arg}` as `{arg_expected}`.\n{emote_wrench} **Correct arguments:** {usage}",
   "event_message_args_missing_list": "{emote_warn} Missing argument `{arg}`. Expected `{arg_expected}` got `{arg_provided}`\n{emote_wrench} **Correct arguments:** {usage}",
   "event_message_edit": "{emote_edit} Message from **{target_tag}** `{target_id}` was updated in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**B:** {before}\n**A:** {after}",
-  "event_message_delete": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-${after_id}`\n**C:** {content} \n**A:** {attachment}\n**E:** {embed}",
+  "event_message_delete": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n{content} \n{attachment}\n{embed}",
+  "event_message_delete_special": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`",
 
   "event_change": "`{part}` from `{before}` to `{after}`",
   "event_server_update": "{emote_wrench} **{moderator_tag}** `({moderator_id})` has changed the server settings. Changed {changes}",

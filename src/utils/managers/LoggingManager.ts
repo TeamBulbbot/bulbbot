@@ -124,6 +124,18 @@ export default class {
 		await (<TextChannel>client.channels.cache.get(logChannel)).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
+	public async sendEventLogFile(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "joinleave" | "automod", log: string, file: string): Promise<void> {
+		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
+
+		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
+
+		if (logChannel === null) return;
+		await (<TextChannel>client.channels.cache.get(logChannel)).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`, {
+			files: [file],
+		});
+	}
+
 	public async sendServerEventLog(client: BulbBotClient, guild: Guild, log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
