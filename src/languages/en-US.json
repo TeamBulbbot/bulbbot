@@ -144,7 +144,7 @@
   "automod_violation_max_messages_reason": "Violated `MAX_MESSAGES` check in #{channel_name} ({amount}/{limit}s)",
   "automod_violation_max_messages_log": "{emote_warn} **{target_tag}** `({target_id})` has violated the `MAX_MESSAGES` check in <#{channel_id}>. Messages ({amount}/{limit}s)",
   "automod_violation_max_mentions_reason": "Violated `MAX_MESASGES` check in #{channel_name} ({amount}/{limit}s)",
-  "automod_violation_max_mentions_log": "{emote_warn} **{target_tag}** `({target_id})` has violated the `MAX_MENTIONS` check in <#{{channel_id}>. Mentions ({amount}/{limit}s)",
+  "automod_violation_max_mentions_log": "{emote_warn} **{target_tag}** `({target_id})` has violated the `MAX_MENTIONS` check in <#{channel_id}>. Mentions ({amount}/{limit}s)",
   "automod_violation_words_reason": "Violated `FORBIDDEN_WORDS` check in #{channel_name}",
   "automod_violation_words_log": "{emote_warn} **{target_tag}** `({target_id})` has violated the `FORBIDDEN_WORDS` check in <#{channel_id}> | Punishment: **{punishment}**\n**Blacklisted words:** `{words}`\n```{message}```",
   "automod_violation_invites_reason": "Violated `DISCORD_INVITE` check in #{channel_name}",

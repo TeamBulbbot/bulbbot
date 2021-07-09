@@ -15,6 +15,8 @@ export default async function (client: BulbBotClient, message: Message): Promise
 
 	if (!dbGuild["enabled"]) return;
 	if (message.member?.hasPermission("MANAGE_MESSAGES")) return;
+	if (dbGuild["ignoreUsers"].includes(message.author.id)) return;
+	if (dbGuild["ignoreChannels"].includes(message.channel.id)) return;
 
 	let shouldDelete: boolean = false;
 
