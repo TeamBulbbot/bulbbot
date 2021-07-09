@@ -3,6 +3,7 @@ import * as Config from "../../Config";
 import { Guild, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
+import { AutoModConfiguration } from "../types/AutoModConfiguration";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -55,7 +56,7 @@ export default class {
 		return response[0];
 	}
 
-	async getAutoModConfig(guildID: Snowflake): Promise<object> {
+	async getAutoModConfig(guildID: Snowflake): Promise<AutoModConfiguration> {
 		const response: object = await sequelize.query('SELECT * FROM automods WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
@@ -79,6 +80,9 @@ export default class {
 		});
 	}
 
+	/**
+	 * @deprecated
+	 */
 	async getPrefix(guildId: Snowflake) {
 		const response: object = await sequelize.query('SELECT "prefix" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuilID)', {
 			bind: { GuildID: guildId },

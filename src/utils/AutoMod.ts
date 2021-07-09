@@ -5,22 +5,23 @@ import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
 import AutoModManager from "./managers/AutoModManager";
 import LoggingManager from "./managers/LoggingManager";
+import { AutoModConfiguration } from "./types/AutoModConfiguration";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const automodManager: AutoModManager = new AutoModManager();
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default async function (client: BulbBotClient, message: Message): Promise<void> {
-	const dbGuild: object = await databaseManager.getAutoModConfig(<Snowflake>message.guild?.id);
+	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(<Snowflake>message.guild?.id);
 
-	if (!dbGuild["enabled"]) return;
+	if (!dbGuild.enabled) return;
 	if (message.member?.hasPermission("MANAGE_MESSAGES")) return;
-	if (dbGuild["ignoreUsers"].includes(message.author.id)) return;
-	if (dbGuild["ignoreChannels"].includes(message.channel.id)) return;
+	if (dbGuild.ignoreUsers.includes(message.author.id)) return;
+	if (dbGuild.ignoreChannels.includes(message.channel.id)) return;
 
 	if (!message.member?.roles.cache.values()) return;
 	for (const role of message.member?.roles.cache.values()) {
-		if (dbGuild["ignoreRoles"].includes(role.id)) return;
+		if (dbGuild.ignoreRoles.includes(role.id)) return;
 	}
 
 	let shouldDelete: boolean = false;
@@ -29,7 +30,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		let punishment: string = await automodManager.resolveAction(
 			client,
 			message,
-			dbGuild["punishmentInvites"],
+			dbGuild.punishmentWebsite,
 			await client.bulbutils.translate("automod_violation_website_reason", message.guild?.id, {
 				channel_name: (<TextChannel>message.channel).name,
 			}),
@@ -53,7 +54,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		let punishment: string = await automodManager.resolveAction(
 			client,
 			message,
-			dbGuild["punishmentInvites"],
+			dbGuild.punishmentInvites,
 			await client.bulbutils.translate("automod_violation_invites_reason", message.guild?.id, {
 				channel_name: (<TextChannel>message.channel).name,
 			}),
@@ -77,7 +78,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		let punishment: string = await automodManager.resolveAction(
 			client,
 			message,
-			dbGuild["punishmentWords"],
+			dbGuild.punishmentWords,
 			await client.bulbutils.translate("automod_violation_words_reason", message.guild?.id, {
 				channel_name: (<TextChannel>message.channel).name,
 			}),
@@ -100,24 +101,24 @@ export default async function (client: BulbBotClient, message: Message): Promise
 
 	const mentionCount: number = await hasMentions(client, message, dbGuild);
 	if (mentionCount) {
-		const mentionsLimit = dbGuild["limitMentions"];
+		const mentionsLimit = dbGuild.limitMentions;
 		if (mentionsLimit) shouldDelete = mentionCount >= mentionsLimit;
 	}
 
-	await set(client, message, <Snowflake>message.guild?.id, "messages", message.author.id, 1, dbGuild["timeoutMessages"]);
+	await set(client, message, <Snowflake>message.guild?.id, "messages", message.author.id, 1, dbGuild.timeoutMessages);
 	if (shouldDelete) await message.delete({ reason: "AutoMod check violation detected" });
 }
 
-function hasSwearWords(message: Message, guild: object): string | boolean {
-	if (!guild["punishmentWords"]) return false;
-	const wordBlacklist: string[] = guild["wordBlacklist"];
+function hasSwearWords(message: Message, guild: AutoModConfiguration): string | boolean {
+	if (!guild.punishmentWords) return false;
+	const wordBlacklist: string[] = guild.wordBlacklist;
 
 	for (const word of wordBlacklist) {
 		const regex: RegExp = new RegExp(`(?:^|\\s)${word}(?:$|\\s)`, "i");
 		if (regex.test(message.content)) return word;
 	}
 
-	const wordBlacklistToken: string[] = guild["wordBlacklistToken"];
+	const wordBlacklistToken: string[] = <string[]>guild.wordBlacklistToken;
 
 	for (const token of wordBlacklistToken) {
 		const regex: RegExp = new RegExp(`(?:^|\\s)${token}(?:$|\\s)`, "i");
@@ -127,9 +128,9 @@ function hasSwearWords(message: Message, guild: object): string | boolean {
 	return false;
 }
 
-function hasWebsite(message: Message, guild: object): boolean {
-	if (!guild["punishmentWebsite"]) return false;
-	const blocked_websites: string[] = guild["websiteWhitelist"];
+function hasWebsite(message: Message, guild: AutoModConfiguration): boolean {
+	if (!guild.punishmentWebsite) return false;
+	const blocked_websites: string[] = guild.websiteWhitelist;
 	if (!blocked_websites) return false;
 
 	let match;
@@ -140,9 +141,9 @@ function hasWebsite(message: Message, guild: object): boolean {
 	return false;
 }
 
-function hasInvite(message: Message, guild: object): boolean {
-	if (!guild["punishmentInvites"]) return false;
-	const allowed_invites: string[] = guild["inviteWhitelist"];
+function hasInvite(message: Message, guild: AutoModConfiguration): boolean {
+	if (!guild.punishmentInvites) return false;
+	const allowed_invites: string[] = guild.inviteWhitelist;
 	if (!allowed_invites) return AutoMod_INVITE.test(message.content);
 
 	let match;
@@ -153,11 +154,11 @@ function hasInvite(message: Message, guild: object): boolean {
 	return false;
 }
 
-async function hasMentions(client: BulbBotClient, message: Message, guild: object): Promise<number> {
+async function hasMentions(client: BulbBotClient, message: Message, guild: AutoModConfiguration): Promise<number> {
 	const mentions = message.content.match(new RegExp(UserMention, "g"));
 
 	if (mentions) {
-		await set(client, message, <Snowflake>message.guild?.id, "mentions", message.author.id, mentions.length, guild["timeoutMentions"]);
+		await set(client, message, <Snowflake>message.guild?.id, "mentions", message.author.id, mentions.length, guild.timeoutMentions);
 		return mentions.length;
 	}
 

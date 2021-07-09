@@ -18,19 +18,19 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 
 	const dbGuild = await databaseManager.getAutoModConfig(guild);
 
-	const messageLimit = dbGuild["limitMessages"];
-	const mentionsLimit = dbGuild["limitMentions"];
+	const messageLimit = dbGuild.limitMessages;
+	const mentionsLimit = dbGuild.limitMentions;
 
 	if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
 		if (!(message.channel instanceof DMChannel)) {
 			await automodManager.resolveAction(
 				client,
 				message,
-				dbGuild["punishmentMessages"],
+				dbGuild.punishmentMessages,
 				await client.bulbutils.translate("automod_violation_max_messages_reason", message.guild?.id, {
 					channel_name: message.channel.name,
 					amount: cache[guild]["messages"][user]["count"],
-					limit: dbGuild["timeoutMessages"],
+					limit: dbGuild.timeoutMessages,
 				}),
 			);
 		}
@@ -52,11 +52,11 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 			await automodManager.resolveAction(
 				client,
 				message,
-				dbGuild["punishmentMentions"],
+				dbGuild.punishmentMentions,
 				await client.bulbutils.translate("automod_violation_max_mentions_reason", message.guild?.id, {
 					channel_name: message.channel.name,
 					amount: cache[guild]["mentions"][user]["count"],
-					limit: dbGuild["timeoutMentions"],
+					limit: dbGuild.timeoutMentions,
 				}),
 			);
 		}
