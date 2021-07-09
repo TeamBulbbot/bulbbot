@@ -1,4 +1,4 @@
-import { Client, Collection, Permissions } from "discord.js";
+import { Client, Collection, Permissions, Intents } from "discord.js";
 import ClientException from "./exceptions/ClientException";
 import Event from "./Event";
 import Util from "./Util";
@@ -20,8 +20,15 @@ export default class extends Client {
 	constructor(options: any) {
 		super({
 			// @ts-ignore
-			disableMentions: Config.disableMentions,
-			fetchAllMembers: Config.fetchAllUsers,
+			ws: { large_threshold: 50, intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES"]) },
+			presence: { status: "online", activity: { name: "the light shine", type: "WATCHING" } },
+			http: { version: 9 },
+			messageCacheMaxSize: -1,
+			messageCacheLifetime: 0,
+			messageSweepInterval: 0,
+			fetchAllMembers: false,
+			disableMentions: "everyone",
+			restTimeOffset: 500,
 		});
 		this.validate(options);
 
