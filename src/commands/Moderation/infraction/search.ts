@@ -33,7 +33,7 @@ export default class extends SubCommand {
 			return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
 		}
 
-		let infs: object[] = <object[]>await infractionManager.getAllUserInfractions(<string>message.guild?.id, user.id);
+		let infs: Record<string, any> = <Record<string, any>>await infractionManager.getAllUserInfractions(<string>message.guild?.id, user.id);
 
 		for (let i = 0; i < 50; i++) {
 			if (infs?.[i] === undefined) continue;

@@ -15,7 +15,7 @@ export default class extends Client {
 	private readonly utils;
 	public readonly bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
-	public blacklist: Collection<string, Object>;
+	public blacklist: Collection<string, Record<string, any>>;
 
 	constructor(options: any) {
 		super({

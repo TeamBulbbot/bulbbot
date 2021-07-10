@@ -36,7 +36,7 @@ export default class extends Command {
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
 		if (!target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translate("mute_not_muted", message.guild?.id));
 
-		const latestMute: object = <object>await infractionsManager.getLatestMute(<Snowflake>message.guild?.id, target.user.id);
+		const latestMute: Record<string, any> = <Record<string, any>>await infractionsManager.getLatestMute(<Snowflake>message.guild?.id, target.user.id);
 		let confirmMsg: Message;
 
 		if (latestMute) {
@@ -58,7 +58,7 @@ export default class extends Command {
 				muteRole,
 			);
 
-			const latestMute: object = <object>await infractionsManager.getLatestMute(<Snowflake>message.guild?.id, target.user.id);
+			const latestMute: Record<string, any> = <Record<string, any>>await infractionsManager.getLatestMute(<Snowflake>message.guild?.id, target.user.id);
 			await infractionsManager.setActive(<Snowflake>message.guild?.id, latestMute["id"], false);
 
 			await message.channel.send(

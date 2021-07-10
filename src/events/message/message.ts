@@ -55,7 +55,7 @@ export default class extends Event {
 		if (!command) return;
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
-		const commandOverride: object = <object>await clearanceManager.getCommandOverride(message.guild.id, command.name);
+		const commandOverride: Record<string, any> = <Record<string, any>>await clearanceManager.getCommandOverride(message.guild.id, command.name);
 		const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
 		const missing = message.guild.me?.permissionsIn(message.channel).has(userPermCheck);
 

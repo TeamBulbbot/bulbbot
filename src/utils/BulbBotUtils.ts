@@ -552,7 +552,7 @@ export default class {
 		}
 	}
 
-	public readonly timezones: object = {
+	public readonly timezones: Record<string, string> = {
 		ANAT: "Asia/Anadyr",
 		AEDT: "Australia/Melbourne",
 		AEST: "Australia/Brisbane",

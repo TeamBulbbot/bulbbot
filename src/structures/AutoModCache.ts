@@ -84,6 +84,6 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 	}, timeout);
 }
 
-export function getAll(): Object {
+export function getAll(): Record<string, any> {
 	return cache;
 }

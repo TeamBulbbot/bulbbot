@@ -4,13 +4,13 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 
 export default class {
-	async getClearanceList(guildID: Snowflake): Promise<object> {
-		const data: object = await sequelize.query('SELECT * FROM "guildOverrideCommands" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+	async getClearanceList(guildID: Snowflake): Promise<Record<string, any>> {
+		const data: Record<string, any> = await sequelize.query('SELECT * FROM "guildOverrideCommands" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
 
-		const response: object = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -56,8 +56,8 @@ export default class {
 		);
 	}
 
-	async getCommandOverride(guildID: Snowflake, name: string): Promise<object | undefined> {
-		const response: object = await sequelize.query('SELECT * FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+	async getCommandOverride(guildID: Snowflake, name: string): Promise<Record<string, any> | undefined> {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { CommandName: name, GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -82,8 +82,8 @@ export default class {
 		);
 	}
 
-	async getRoleOverride(guildID: Snowflake, roleID: Snowflake): Promise<object | undefined> {
-		const response: object = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "roleId" = $RoleID AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+	async getRoleOverride(guildID: Snowflake, roleID: Snowflake): Promise<Record<string, any> | undefined> {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "roleId" = $RoleID AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { RoleID: roleID, GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -109,14 +109,14 @@ export default class {
 		if (message.guild?.ownerID === message.member?.user.id) return 100;
 		if (message.member?.hasPermission("ADMINISTRATOR")) return 75;
 
-		const response: object[] = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: message.guild?.id },
 			type: QueryTypes.SELECT,
 		});
 
 		let clearance: number = 0;
 		response.forEach(entry => {
-			if (entry["clearanceLevel"] > clearance && message.member?.roles.cache.find(r => r.id === entry["roleId"])) clearance = entry["clearanceLevel"];
+			if (entry.clearanceLevel > clearance && message.member?.roles.cache.find(r => r.id === entry.roleId)) clearance = entry.clearanceLevel;
 		});
 
 		return clearance;

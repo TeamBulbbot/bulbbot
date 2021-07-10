@@ -34,7 +34,7 @@ export default class extends SubCommand {
 			return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
 		}
 
-		const infs: object[] = <object[]>await infractionsManager.getModeratorInfractions(<Snowflake>message.guild?.id, user.id);
+		const infs: Record<string, any> = <Record<string, any>>await infractionsManager.getModeratorInfractions(<Snowflake>message.guild?.id, user.id);
 		for (let i = 0; i < 50; i++) {
 			if (infs[i] === undefined) continue;
 

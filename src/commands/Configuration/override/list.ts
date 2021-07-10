@@ -7,7 +7,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default async function (client: BulbBotClient, message: Message, args: string[]): Promise<void | Message> {
-	const data: object = await clearanceManager.getClearanceList(<Snowflake>message.guild?.id);
+	const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>message.guild?.id);
 
 	let roles: string = "";
 	let commands: string = "";

@@ -49,7 +49,7 @@ export default class extends Command {
 				break;
 
 			case "info":
-				const info: object = await databaseManager.infoBlacklist(args[2]);
+				const info: Record<string, any> = await databaseManager.infoBlacklist(args[2]);
 				if (info !== undefined) await message.channel.send(`\`\`\`json\n${JSON.stringify(info, null, 2)}\n\`\`\``);
 				else await message.channel.send("User or guild is not blacklisted");
 

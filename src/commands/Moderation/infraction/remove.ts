@@ -32,7 +32,7 @@ export default class extends SubCommand {
 			);
 		}
 
-		const inf: object = <object>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID);
+		const inf: Record<string, any> = <Record<string, any>>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID);
 		let confirmMsg: Message;
 
 		await message.channel

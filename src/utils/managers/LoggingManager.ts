@@ -9,7 +9,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class {
 	public async sendModAction(client: BulbBotClient, guildID: Snowflake, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
-		const dbGuild: object = await databaseManager.getLoggingConfig(guildID);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guildID);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guildID)];
 
 		if (dbGuild["modAction"] === null) return;
@@ -33,7 +33,7 @@ export default class {
 	}
 
 	public async sendAutoUnban(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
 
@@ -56,7 +56,7 @@ export default class {
 	}
 
 	public async sendModActionFile(client: BulbBotClient, guild: Guild, action, amount, file, channel, moderator) {
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
 
@@ -72,7 +72,7 @@ export default class {
 	}
 
 	public async sendModActionTemp(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["modAction"] === null) return;
 
@@ -96,7 +96,7 @@ export default class {
 	}
 
 	public async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild["other"] === null) return;
 
@@ -117,7 +117,7 @@ export default class {
 	public async sendEventLog(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "joinleave" | "automod", log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
 
 		if (logChannel === null) return;
@@ -127,7 +127,7 @@ export default class {
 	public async sendEventLogFile(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "joinleave" | "automod", log: string, file: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
 
 		if (logChannel === null) return;
@@ -139,7 +139,7 @@ export default class {
 	public async sendServerEventLog(client: BulbBotClient, guild: Guild, log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
-		const dbGuild: object = await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = await databaseManager.getLoggingConfig(guild.id);
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild["modAction"]);
 		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
@@ -148,7 +148,7 @@ export default class {
 	}
 
 	public async sendModActionPreformatted(client: BulbBotClient, guild: Guild, log: string) {
-		const dbGuild: object = <object>await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = <Record<string, any>>await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		if (dbGuild["modAction"] === null) return;
@@ -160,7 +160,7 @@ export default class {
 	}
 
 	public async sendAutoModLog(client: BulbBotClient, guild: Guild, log: string) {
-		const dbGuild: object = <object>await databaseManager.getLoggingConfig(guild.id);
+		const dbGuild: Record<string, any> = <Record<string, any>>await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		if (dbGuild["automod"] === null) return;
@@ -171,7 +171,7 @@ export default class {
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
-	private getPart(dbGuild: object, part: string) {
+	private getPart(dbGuild: Record<string, any>, part: string) {
 		if (dbGuild === null) return null;
 		switch (part.toLowerCase()) {
 			case "message":

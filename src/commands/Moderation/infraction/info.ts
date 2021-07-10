@@ -23,7 +23,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
-		const inf: object = <object>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, "")));
+		const inf: Record<string, any> = <Record<string, any>>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, "")));
 
 		if (!inf) {
 			return message.channel.send(

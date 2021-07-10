@@ -47,8 +47,8 @@ export default class {
 		});
 	}
 
-	async getConfig(guildID: Snowflake): Promise<object> {
-		const response: object = await sequelize.query('SELECT * FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+	async getConfig(guildID: Snowflake): Promise<Record<string, any>> {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -84,7 +84,7 @@ export default class {
 	 * @deprecated
 	 */
 	async getPrefix(guildId: Snowflake) {
-		const response: object = await sequelize.query('SELECT "prefix" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuilID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT "prefix" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuilID)', {
 			bind: { GuildID: guildId },
 			type: QueryTypes.SELECT,
 		});
@@ -100,7 +100,7 @@ export default class {
 	}
 
 	async getPremium(guildID: Snowflake): Promise<boolean> {
-		const response: object = await sequelize.query('SELECT "premiumGuild" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT "premiumGuild" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -116,7 +116,7 @@ export default class {
 	}
 
 	async getMuteRole(guildID: Snowflake): Promise<Snowflake | null> {
-		const response = await sequelize.query('SELECT "muteRole" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT "muteRole" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -132,7 +132,7 @@ export default class {
 	}
 
 	async getAutoRole(guildID: Snowflake): Promise<Snowflake | null> {
-		const response = await sequelize.query('SELECT "autorole" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT "autorole" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -155,7 +155,7 @@ export default class {
 	}
 
 	async getTimezone(guildID: Snowflake): Promise<string> {
-		const response: object = await sequelize.query('SELECT timezone FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+		const response: Record<string, any> = await sequelize.query('SELECT timezone FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -226,8 +226,8 @@ export default class {
 		});
 	}
 
-	async getLoggingConfig(guildID: Snowflake): Promise<object> {
-		const response: object[] = await sequelize.query('SELECT * FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
+	async getLoggingConfig(guildID: Snowflake): Promise<Record<string, any>> {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
@@ -235,15 +235,15 @@ export default class {
 		return response[0];
 	}
 
-	async getAllBlacklisted(): Promise<object> {
-		const response: object = await sequelize.query("SELECT * FROM blacklists", {});
+	async getAllBlacklisted(): Promise<Record<string, any>> {
+		const response: Record<string, any> = await sequelize.query("SELECT * FROM blacklists", {});
 		return response[0];
 	}
 
-	async infoBlacklist(snowflakeId: Snowflake): Promise<object> {
-		const response: void = await sequelize.query('SELECT * FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
+	async infoBlacklist(snowflakeId: Snowflake): Promise<Record<string, any>> {
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
 			bind: { snowflakeId },
-			type: QueryTypes.DELETE,
+			type: QueryTypes.SELECT,
 		});
 		return response[0];
 	}
