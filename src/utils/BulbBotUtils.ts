@@ -467,11 +467,17 @@ export default class {
 			case "Ban":
 				finalString = `${Emotes.actions.BAN} Ban`;
 				break;
-			case "Forceban":
-				finalString = `${Emotes.actions.BAN} Forceban`;
+			case "Manual Ban":
+				finalString = `${Emotes.actions.BAN} Manual Ban`;
+				break;
+			case "Force-ban":
+				finalString = `${Emotes.actions.BAN} Force-ban`;
 				break;
 			case "Kick":
 				finalString = `${Emotes.actions.KICK} Kick`;
+				break;
+			case "Manual Kick":
+				finalString = `${Emotes.actions.BAN} Manual Kick`;
 				break;
 			case "Mute":
 				finalString = `${Emotes.actions.MUTE} Mute`;
@@ -490,6 +496,9 @@ export default class {
 				break;
 			case "false":
 				finalString = `${Emotes.other.INF2} False`;
+				break;
+			case "Nickname":
+				finalString = `${Emotes.other.EDIT} Nickname`;
 				break;
 		}
 
