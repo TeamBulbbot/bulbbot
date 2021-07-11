@@ -206,38 +206,31 @@ export default class {
 	private betterActions(action: string): string {
 		switch (action) {
 			case "soft-banned":
-				action = `${Emotes.actions.BAN}`;
-				break;
 			case "banned":
-				action = `${Emotes.actions.BAN}`;
-				break;
-			case "unbanned":
-				action = `${Emotes.actions.UNBAN}`;
-				break;
 			case "force-banned":
-				action = `${Emotes.actions.BAN}`;
-				break;
-			case "kicked":
-				action = `${Emotes.actions.KICK}`;
-				break;
-			case "muted":
-				action = `${Emotes.actions.MUTE}`;
-				break;
-			case "warned":
-				action = `${Emotes.actions.WARN}`;
-				break;
-			case "unmuted":
-				action = `${Emotes.actions.UNBAN}`;
-				break;
-			case "automatically unmuted":
-				action = `${Emotes.actions.UNBAN}`;
-				break;
-			case "automatically unbanned":
-				action = `${Emotes.actions.UNBAN}`;
-				break;
 			case "temp-banned":
 				action = `${Emotes.actions.BAN}`;
 				break;
+
+			case "kicked":
+				action = `${Emotes.actions.KICK}`;
+				break;
+
+			case "muted":
+				action = `${Emotes.actions.MUTE}`;
+				break;
+
+			case "warned":
+				action = `${Emotes.actions.WARN}`;
+				break;
+
+			case "unbanned":
+			case "unmuted":
+			case "automatically unmuted":
+			case "automatically unbanned":
+				action = `${Emotes.actions.UNBAN}`;
+				break;
+
 			case "trash":
 				action = `${Emotes.other.TRASH}`;
 				break;
