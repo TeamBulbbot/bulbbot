@@ -1,0 +1,45 @@
+{
+  "global_executed_by": "Executed by {{user.tag}}",
+  "global_execution_cancel": "{{emote_fail}} Command execution cancelled",
+  "global_missing_permissions": "{{emote_lock}} Missing permission(s)",
+  "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bots permissions.\n{{missing}}",
+  "global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n**Correct usage:** {{usage}}",
+  "global_not_found_types": {
+    "user": "user",
+    "role": "role",
+    "channel": "channel"
+  },
+  "global_mod_action_log": "{{action}} by: {{moderator.tag}} ({{moderator.id}}) | Target: {{target.tag}} ({{target.id}} | Reason: {{reason}})",
+  "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` after their temporary punishment expired.`[#{{infractionID}}]`",
+  "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} until {{until}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infractionID}}]`",
+  "global_logging_command": "`[{{timestamp}}]` {{emote_wrench}} **{{user.tag}}** `({{user.id}})` has executed `{{command}}` in {{channel}}.",
+  "global_no_reason": "No reason given",
+  "global_loading": "{{emote_loading}} Loading...",
+  "global_not_in_voice": "{{emote_fail}} User **{{target.tag}}** `({{target.id}})` is currently not connected to any Voice Channels!",
+  "global_error": {
+    "unknown": "{{emote_warn}} An unknown error has occurred, please try again later or if the issue persists contact the developers at {{discord_invite}}"
+  },
+
+  "global_cannot_action_self": "{{emote_warn}} You cannot perform this action on yourself!",
+  "global_cannot_action_owner": "{{emote_warn}} You cannot perform this action on the server owner!",
+  "global_cannot_action_role_equal": "{{emote_warn}} You cannot perform this action on **{{target.tag}}** `({{target.id}})` as you do not have a higher role than them!",
+  "global_cannot_action_role_equal_bot": "{{emote_warn}} I cannot perform this action on **{{target.tag}}** `({{target.id}})` as I don't have a higher role than them!",
+  "global_cannot_action_bot_self": "{{emote_warn}} You cannot perform this action on the bot!",
+
+  "global_premium_only": "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
+
+  "event_message_args_unexpected": "{{emote_warn}} Unexpected argument {{argument}}. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n**Correct usage:** {{usage}}",
+  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**Correct usage:** {{usage}}",
+  "event_message_args_missing_list": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**Correct arguments:** {{argument_list}}",
+  "event_message_edit": "{{emote_edit}} Message from **{{user.tag}}** `({{user.id}})` has been updated in {{channel}}\n`ID (channel-message): {{channel_id}}-{{message_id}}`\n**B:** {{before}}\n**A:** {{after}}",
+  "event_message_delete": "{{emote_trash}} Message from **{{user.tag}}** `({{user.id}})` has been deleted in {{channel}}.\n`ID (channel-message): {{channel_id}}-{{message_id}}`\n{{content}}\n{{attachment}}\n{{embed}}",
+
+  "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
+  "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
+  "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role_name}}** Role. Changed {{changes}}",
+  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated {{channel}}. Changed {{changes}}",
+
+  "event_invite_create": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has created a new invite `{{invite_code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
+  "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite_code}}`"
+}
