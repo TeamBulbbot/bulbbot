@@ -72,6 +72,10 @@ export default class extends SubCommand {
 			case "channel_logs":
 				await databaseManager.setChannel(<Snowflake>message.guild?.id, channel);
 				break;
+			case "invitelogs":
+			case "invite_logs":
+				await databaseManager.setInvite(<Snowflake>message.guild?.id, channel);
+				break;
 			case "joinleave":
 			case "join_leave":
 				await databaseManager.setJoinLeave(<Snowflake>message.guild?.id, channel);
@@ -84,7 +88,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("config_logging_all_confirm", message.guild?.id, {
 						channel_id: channel,
 					}),
-				)
+				);
 
 				confirmMsg = msg;
 				await msg.react(Emotes.other.SUCCESS);
@@ -97,7 +101,7 @@ export default class extends SubCommand {
 
 				let collected;
 				try {
-					collected = await msg.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] })
+					collected = await msg.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] });
 				} catch (err) {
 					await confirmMsg.delete();
 					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id));
@@ -113,6 +117,7 @@ export default class extends SubCommand {
 					await databaseManager.setRole(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setMember(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setChannel(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setInvite(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setJoinLeave(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
 					await msg.delete();
@@ -127,7 +132,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 						arg: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						usage: "`prefix`, `language`, `mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `join_leave`, `other`, `all`",
+						usage: "`prefix`, `language`, `mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),
 				);
 		}

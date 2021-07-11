@@ -115,7 +115,7 @@ export default class {
 		);
 	}
 
-	public async sendEventLog(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "joinleave" | "automod", log: string): Promise<void> {
+	public async sendEventLog(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "invite" | "joinleave" | "automod", log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
@@ -125,7 +125,7 @@ export default class {
 		await (<TextChannel>client.channels.cache.get(logChannel)).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
-	public async sendEventLogFile(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "joinleave" | "automod", log: string, file: string): Promise<void> {
+	public async sendEventLogFile(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "invite" | "joinleave" | "automod", log: string, file: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
@@ -185,6 +185,9 @@ export default class {
 				break;
 			case "channel":
 				part = dbGuild.channel;
+				break;
+			case "invite":
+				part = dbGuild.invite;
 				break;
 			case "joinleave":
 				part = dbGuild.joinLeave;

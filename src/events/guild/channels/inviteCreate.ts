@@ -23,7 +23,6 @@ export default class extends Event {
 			user_tag: invite.inviter?.tag,
 		});
 
-		// the thign is idk which db thing this is tied to to and kluk is sleeping so no one I can ask :(
-		await loggingManager.sendServerEventLog(this.client, invite.guild, log);
+		await loggingManager.sendEventLog(this.client, invite.guild, "invite", log);
 	}
 }

@@ -213,6 +213,13 @@ export default class {
 		});
 	}
 
+	async setInvite(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
+		await sequelize.query('UPDATE "guildLoggings" SET invite = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { ChannelID: channelID, GuildID: guildID },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
 	async setJoinLeave(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
 		await sequelize.query('UPDATE "guildLoggings" SET "joinLeave" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { ChannelID: channelID, GuildID: guildID },

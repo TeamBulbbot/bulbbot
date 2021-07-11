@@ -6,6 +6,7 @@ export interface LoggingConfiguration {
 	role: string;
 	member: string;
 	channel: string;
+	invite: string;
 	joinLeave: string;
 	createdAt: string;
 	updatedAt: string;
