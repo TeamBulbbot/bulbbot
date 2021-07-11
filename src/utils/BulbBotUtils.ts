@@ -5,12 +5,18 @@ import moment, { Duration, Moment } from "moment";
 import MessageFormat from "@messageformat/core";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
+import i18next, { TOptions } from "i18next";
+import { translatorEmojis, translatorConfig } from "../Config";
 
 export default class {
 	private readonly client: BulbBotClient;
 
 	constructor(client: BulbBotClient) {
 		this.client = client;
+	}
+
+	public async translateNew(string: string, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
+		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 
 	public async translate(string: string, guildID: Snowflake = "742094927403679816", key: any = {}): Promise<string> {
