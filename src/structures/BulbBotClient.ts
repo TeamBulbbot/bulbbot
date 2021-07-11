@@ -20,7 +20,7 @@ export default class extends Client {
 	constructor(options: any) {
 		super({
 			// @ts-ignore
-			ws: { large_threshold: 50, intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES"]) },
+			ws: { large_threshold: 50, intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]) },
 			presence: { status: "online", activity: { name: "the light shine", type: "WATCHING" } },
 			http: { version: 9 },
 			messageCacheMaxSize: -1,
