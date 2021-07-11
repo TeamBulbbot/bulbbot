@@ -4,6 +4,7 @@ import { Guild, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
 import { AutoModConfiguration } from "../types/AutoModConfiguration";
+import { LoggingConfiguration } from "../types/LoggingConfiguration";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -226,8 +227,8 @@ export default class {
 		});
 	}
 
-	async getLoggingConfig(guildID: Snowflake): Promise<Record<string, any>> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
+	async getLoggingConfig(guildID: Snowflake): Promise<LoggingConfiguration> {
+		const response: LoggingConfiguration[] = await sequelize.query('SELECT * FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
