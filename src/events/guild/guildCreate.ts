@@ -15,6 +15,8 @@ export default class extends Event {
 	}
 
 	public async run(guild: Guild): Promise<void> {
+		this.client.log.info(`[GUILD] Joined a new guild ${guild.name} (${guild.id})`);
+
 		await databaseManager.createGuild(guild);
 		this.client.channels.cache
 			.get(invite)

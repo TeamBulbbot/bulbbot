@@ -9,8 +9,8 @@ export default class extends Event {
 	}
 
 	async run() {
-		this.client.log.info(`[CLIENT] ${this.client.user.username} successfully logged and ready`);
-		this.client.log.info(`[CLIENT] Listening to ${this.client.events.size} event(s)`);
-		this.client.log.info(`[CLIENT] Listening to ${this.client.commands.size} command(s)`);
+		this.client.log.client(`[CLIENT] ${this.client.user.username} successfully logged and ready`);
+		this.client.log.client(`[CLIENT] Listening to ${this.client.events.size} event(s)`);
+		this.client.log.client(`[CLIENT] Listening to ${this.client.commands.size} command(s)`);
 	}
 }

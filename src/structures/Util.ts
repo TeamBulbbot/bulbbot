@@ -28,7 +28,7 @@ export default class {
 	}
 
 	async loadCommands(): Promise<void> {
-		this.client.log.info("[CLIENT - COMMANDS] Started registering commands...");
+		this.client.log.client("[CLIENT - COMMANDS] Started registering commands...");
 		return globAsync(`${this.directory}commands/*/*.js`).then((commands: any) => {
 			for (const commandFile of commands) {
 				delete require.cache[commandFile];
@@ -46,12 +46,12 @@ export default class {
 					}
 				}
 			}
-			this.client.log.info("[CLIENT - COMMANDS] Successfully registered all commands");
+			this.client.log.client("[CLIENT - COMMANDS] Successfully registered all commands");
 		});
 	}
 
 	async loadEvents(): Promise<void> {
-		this.client.log.info("[CLIENT - EVENTS] Started registering events...");
+		this.client.log.client("[CLIENT - EVENTS] Started registering events...");
 		return globAsync(`${this.directory}events/**/*.js`).then((events: any) => {
 			for (const eventFile of events) {
 				delete require.cache[eventFile];
@@ -67,12 +67,12 @@ export default class {
 					await event.run(...args);
 				});
 			}
-			this.client.log.info("[CLIENT - EVENTS] Successfully registered all events");
+			this.client.log.client("[CLIENT - EVENTS] Successfully registered all events");
 		});
 	}
 
 	async loadBlacklist(): Promise<void> {
-		this.client.log.info("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
+		this.client.log.client("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
 		const blacklistedUsers: any = await databaseManager.getAllBlacklisted();
 		for (let i = 0; i < blacklistedUsers.length; i++) {
 			const blacklist = blacklistedUsers[i];
@@ -82,6 +82,6 @@ export default class {
 			});
 		}
 
-		this.client.log.info(`[CLIENT - BLACKLIST] Successfully blacklisted ${this.client.blacklist.size} users and guilds`);
+		this.client.log.client(`[CLIENT - BLACKLIST] Successfully blacklisted ${this.client.blacklist.size} users and guilds`);
 	}
 }

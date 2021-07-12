@@ -15,6 +15,8 @@ export default class extends Event {
 	}
 
 	public async run(guild: Guild): Promise<void> {
+		this.client.log.info(`[GUILD] Left a guild ${guild.name} (${guild.id})`);
+
 		await databaseManager.deleteGuild(guild.id);
 		this.client.channels.cache
 			.get(invite)

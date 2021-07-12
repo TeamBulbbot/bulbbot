@@ -28,8 +28,8 @@ sequelize
 	.authenticate()
 	.then(() => client.log.database("[DATABASE] Connecting..."))
 	.catch((err: Error) => client.log.error("[DATABASE] Connection error: ", err))
-	.finally(() => client.log.info("[DATABASE] Database connected successfully"));
+	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
 
 client.login().catch(err => {
-	client.log.error(err);
+	client.log.error("[CLIENT] Login error: ", err);
 });
