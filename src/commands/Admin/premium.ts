@@ -32,10 +32,12 @@ export default class extends Command {
 
 		switch (args[0].toLowerCase()) {
 			case "enable":
+				this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) enabled premium on ${guild.name} (${guild.id})`);
 				await databaseManager.setPremium(guild.id, true);
 				await message.channel.send(`${Emotes.other.SUCCESS} Enabled premium for guild \`${guild.id}\``);
 				break;
 			case "disable":
+				this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) disabled premium on ${guild.name} (${guild.id})`);
 				await databaseManager.setPremium(guild.id, false);
 				await message.channel.send(`${Emotes.other.SUCCESS} Disabled premium for guild \`${guild.id}\``);
 				break;

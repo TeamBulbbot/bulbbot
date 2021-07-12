@@ -34,6 +34,7 @@ export default class extends Command {
 
 				if (!args[3]) args[3] = "No reason";
 
+				this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) blacklisted ${args[2]} (type: ${args[1]})`);
 				await databaseManager.addBlacklist(args[1] === "guild" ? true : false, name, args[2], args.slice(3).join(" "), message.author.id);
 				this.client.blacklist.set(args[2], {
 					type: args[1],
@@ -43,6 +44,7 @@ export default class extends Command {
 				await message.channel.send(`Successfully blocked **${name}** \`(${args[2]})\` from using the bot with the reason \`\`\`${args.slice(3).join(" ")}\`\`\` `);
 				break;
 			case "remove":
+				this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) removed the blacklist on ${args[2]} (type: ${args[1]})`);
 				await databaseManager.removeBlacklist(args[2]);
 				this.client.blacklist.delete(args[2]);
 				await message.channel.send(`Successfully removed the block from **${args[2]}**`);

@@ -30,6 +30,7 @@ export default class extends Command {
 
 			if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
 			if (evaled.includes(process.env.TOKEN)) evaled = evaled.replace(process.env.TOKEN, "Y0U.TH0UGHT.1_W0ULD.L34V3_MY_D1SC0RD_T0K3N_H3R3");
+			this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) ran eval with the code: ${code}`);
 
 			if (evaled.length > 2000) {
 				fs.writeFile(`./src/files/eval/${message.guild?.id}.txt`, await clean(evaled), function (err) {
@@ -43,7 +44,7 @@ export default class extends Command {
 				return fs.unlinkSync(`./src/files/eval/${message.guild?.id}.txt`);
 			}
 
-			await message.channel.send(await clean(evaled), { code: "js" });
+			await message.channel.send({ code: "js" });
 		} catch (err) {
 			await message.channel.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``);
 		}
