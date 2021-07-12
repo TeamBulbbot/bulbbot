@@ -3,16 +3,38 @@
   "global_execution_cancel": "{{emote_fail}} Command execution cancelled",
   "global_missing_permissions": "{{emote_lock}} Missing permission(s)",
   "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bots permissions.\n{{missing}}",
+  "global_cannot_convert": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n**Correct usage:** {{usage}}",
   "global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n**Correct usage:** {{usage}}",
   "global_not_found_types": {
     "user": "user",
     "role": "role",
-    "channel": "channel"
+    "channel": "channel",
+    "lang": "language"
   },
+
   "global_mod_action_log": "{{action}} by: {{moderator.tag}} ({{moderator.id}}) | Target: {{target.tag}} ({{target.id}} | Reason: {{reason}})",
   "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
   "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` after their temporary punishment expired.`[#{{infractionID}}]`",
   "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} until {{until}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infractionID}}]`",
+  "mod_action_types": {
+    "warn": "warned",
+    "mute": "muted",
+    "unmute": "unmuted",
+    "auto_unmute": "automatically unmuted",
+    "kick": "kicked",
+    "ban": "banned",
+    "force_ban": "force-banned",
+    "soft_ban": "soft-banned",
+    "temp_ban": "temp-banned",
+    "unban": "unbanned",
+    "auto_unban": "automatically unbanned",
+    "deafen": "deafened",
+    "undeafen": "undeafened",
+    "voice_kick": "voice-kicked",
+    "nick_change": "changed",
+    "nick_remove": "removed"
+  },
+
   "global_logging_command": "`[{{timestamp}}]` {{emote_wrench}} **{{user.tag}}** `({{user.id}})` has executed `{{command}}` in {{channel}}.",
   "global_no_reason": "No reason given",
   "global_loading": "{{emote_loading}} Loading...",
@@ -41,5 +63,33 @@
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated {{channel}}. Changed {{changes}}",
 
   "event_invite_create": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has created a new invite `{{invite_code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
-  "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite_code}}`"
+  "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite_code}}`",
+
+  "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** {{account_age}}",
+  "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** {{account_joined_timestamp}}",
+
+  "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
+  "event_member_update_role_add": "{{emote_warn}} The **{{role}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
+  "event_member_update_role_add_moderator": "{{emote_warn}} The **{{role}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+  "event_member_update_role_remove": "{{emote_warn}} The **{{role}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
+  "event_member_update_role_remove_moderator": "{{emote_warn}} The **{{role}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+
+  "config_language_success": "{{emote_success}} Successfully changed the server language to `{{language}}`",
+  "config_timezone_success": "{{emote_success}} Successfully changed the server timezone to `{{timezone}}`",
+
+  "config_logging_success": "{{emote_success}} Successfully started logging `{{logging_type}}` in {{channel}}",
+  "config_logging_remove": "{{emote_success}} Successfully removed logging for `{{logging_type}}` from {{channel}}",
+  "config_logging_unable_to_send_messages": "{{emote_fail}} The bot is missing crucial permissions to send messages in {{channel}}",
+  "config_logging_all_confirm": "{{emote_warn}} Are you sure you want to add all logging types to {{channel}}? This will begin to log all loggable actions in the selected channel.",
+
+  "config_mute_success": "{{emote_success}} Successfully updated the mute role to {{role}}",
+  "config_mute_unable_to_manage": "{{emote_fail}} The bot is unable to manage the selected role. Move the bot's role higher than the selected role.",
+
+  "config_prefix_success": "{{emote_success}} Successfully changed the server prefix to `{{prefix}}`",
+  "config_prefix_too_long": "{{emote_fail}} The selected prefix is too long. Please make the prefix shorter than 255 characters.",
+
+  "config_autorole_success": "{{emote_success}} Successfully changed the autorole to {{role}}",
+  "config_autorole_disable": "{{emote_success}} Successfully disabled the autorole",
+
+  "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**"
 }
