@@ -26,10 +26,10 @@ i18next.init({
 
 sequelize
 	.authenticate()
-	.then(() => console.log("[DATABASE] Connecting..."))
-	.catch((err: Error) => console.log("[DATABASE] Connection error: ", err))
-	.finally(() => console.log("[DATABASE] Database connected successfully"));
+	.then(() => client.log.database("[DATABASE] Connecting..."))
+	.catch((err: Error) => client.log.error("[DATABASE] Connection error: ", err))
+	.finally(() => client.log.info("[DATABASE] Database connected successfully"));
 
 client.login().catch(err => {
-	console.error(err);
+	client.log.error(err);
 });

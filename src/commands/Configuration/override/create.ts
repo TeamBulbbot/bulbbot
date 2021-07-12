@@ -16,7 +16,7 @@ export default async function (client: BulbBotClient, message: Message, args: st
 	if (isNaN(clearance)) return message.channel.send(await client.bulbutils.translate("override_create_non_number", message.guild?.id, { clearance: args[4] }));
 	if (clearance <= 0) return message.channel.send(await client.bulbutils.translate("override_create_less_than_0", message.guild?.id));
 	if (clearance >= 100) return message.channel.send(await client.bulbutils.translate("override_create_more_than_100", message.guild?.id));
-	console.log([clearance, client.userClearance]);
+
 	if (clearance > client.userClearance) return message.channel.send(await client.bulbutils.translate("override_create_higher_than_yourself", message.guild?.id));
 
 	if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, name)) !== undefined)

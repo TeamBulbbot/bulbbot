@@ -5,6 +5,7 @@ import Util from "./Util";
 import Command from "./Command";
 import BulbBotUtils from "../utils/BulbBotUtils";
 import * as Config from "../Config";
+import { logger } from "../utils/logging";
 
 export default class extends Client {
 	public prefix: string = Config.prefix;
@@ -16,6 +17,7 @@ export default class extends Client {
 	public readonly bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
 	public blacklist: Collection<string, Record<string, any>>;
+	public log: any;
 
 	constructor(options: any) {
 		super({
@@ -41,6 +43,8 @@ export default class extends Client {
 		this.bulbutils = new BulbBotUtils(this);
 
 		this.blacklist = new Collection();
+
+		this.log = logger;
 	}
 
 	private validate(options: any): void {
