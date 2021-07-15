@@ -5,7 +5,7 @@ import Util from "./Util";
 import Command from "./Command";
 import BulbBotUtils from "../utils/BulbBotUtils";
 import * as Config from "../Config";
-import { logger } from "../utils/logging";
+import { logger } from "../utils/Logger";
 
 export default class extends Client {
 	public prefix: string = Config.prefix;
