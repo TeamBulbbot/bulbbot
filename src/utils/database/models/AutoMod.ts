@@ -42,7 +42,7 @@ export default function (sequelize: Sequelize): void {
 			},
 			timeoutMentions: {
 				type: DataTypes.INTEGER,
-				defaultValue: 15,
+				defaultValue: 15000,
 			},
 			limitMessages: {
 				type: DataTypes.INTEGER,
@@ -53,7 +53,7 @@ export default function (sequelize: Sequelize): void {
 			},
 			timeoutMessages: {
 				type: DataTypes.INTEGER,
-				defaultValue: 10,
+				defaultValue: 10000,
 			},
 			ignoreChannels: {
 				type: DataTypes.ARRAY(DataTypes.STRING),
