@@ -7,7 +7,7 @@ import * as Emotes from "../../../emotes.json";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default async function (client: BulbBotClient, message: Message): Promise<Message | void> {
+export default async function (client: BulbBotClient, message: Message): Promise<void> {
 	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(<Snowflake>message.guild?.id);
 
 	let roles: string = "";

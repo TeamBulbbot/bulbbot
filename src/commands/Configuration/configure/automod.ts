@@ -22,6 +22,8 @@ export default class extends SubCommand {
 			case "settings":
 				await require("../automod/settings").default(this.client, message);
 				break;
+			case "enable":
+				await require("../automod/enable").default(this.client, message)
 		}
 	}
 }

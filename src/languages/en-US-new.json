@@ -109,5 +109,7 @@
 
   "override_remove_success": "{{emote_success}} Successfully removed the selected override.",
 
+  "automod_enabled": "{{emote_success}} Successfully enabled AutoMod in the server.",
+
   "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**"
 }

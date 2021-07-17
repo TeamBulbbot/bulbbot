@@ -243,6 +243,13 @@ export default class {
 		return response[0];
 	}
 
+	async enableAutomod(guildID: Snowflake, enabled: boolean): Promise<void> {
+		await sequelize.query('UPDATE automods SET enabled = $Enabled WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID, Enabled: enabled },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
 	async getAllBlacklisted(): Promise<Record<string, any>> {
 		const response: Record<string, any> = await sequelize.query("SELECT * FROM blacklists", {});
 		return response[0];
