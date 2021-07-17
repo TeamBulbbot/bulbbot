@@ -14,12 +14,9 @@ export default async function (client: BulbBotClient, message: Message): Promise
 	let channels: string = "";
 	let users: string = "";
 
-	if (dbGuild.ignoreRoles.length) dbGuild.ignoreRoles.forEach(role => (roles += `<@&${role}> `));
-	else roles = "None";
-	if (dbGuild.ignoreChannels.length) dbGuild.ignoreChannels.forEach(channel => (channels += `<#${channel}> `));
-	else roles = "None";
-	if (dbGuild.ignoreUsers.length) dbGuild.ignoreUsers.forEach(user => (users += `<@${user}> `));
-	else roles = "None";
+	dbGuild.ignoreRoles.length ? dbGuild.ignoreRoles.forEach(role => (roles += `<@&${role}> `)) : (roles = "None");
+	dbGuild.ignoreChannels.length ? dbGuild.ignoreChannels.forEach(channel => (channels += `<#${channel}> `)) : (channels = "None");
+	dbGuild.ignoreUsers.length ? dbGuild.ignoreUsers.forEach(user => (users += `<@${user}> `)) : (users = "None");
 
 	let description: string = "";
 
@@ -29,18 +26,18 @@ export default async function (client: BulbBotClient, message: Message): Promise
 
 	description += await client.bulbutils.translate("automod_settings_websites", message.guild?.id, {
 		part: dbGuild.punishmentWebsite !== null ? `\`${dbGuild.punishmentWebsite}\`` : Emotes.other.SWITCHOFF,
-		item: dbGuild.websiteWhitelist !== null ? dbGuild.websiteWhitelist.join(" ") : "None",
+		item: dbGuild.websiteWhitelist.length ? dbGuild.websiteWhitelist.join(" ") : "None",
 	});
 
 	description += await client.bulbutils.translate("automod_settings_invites", message.guild?.id, {
 		part: dbGuild.punishmentInvites !== null ? `\`${dbGuild.punishmentInvites}\`` : Emotes.other.SWITCHOFF,
-		item: dbGuild.inviteWhitelist !== null ? dbGuild.inviteWhitelist.join(" ") : "None",
+		item: dbGuild.inviteWhitelist.length ? dbGuild.inviteWhitelist.join(" ") : "None",
 	});
 
 	description += await client.bulbutils.translate("automod_settings_words", message.guild?.id, {
 		part: dbGuild.punishmentWords !== null ? `\`${dbGuild.punishmentWords}\`` : Emotes.other.SWITCHOFF,
-		item: dbGuild.wordBlacklist !== null ? dbGuild.wordBlacklist.join(" ") : "None",
-		count: dbGuild.wordBlacklistToken !== null ? dbGuild.wordBlacklistToken.join(" ") : "None",
+		item: dbGuild.wordBlacklist.length ? dbGuild.wordBlacklist.join(" ") : "None",
+		count: dbGuild.wordBlacklistToken.length ? dbGuild.wordBlacklistToken.join(" ") : "None",
 	});
 
 	description += await client.bulbutils.translate("automod_settings_mentions", message.guild?.id, {
