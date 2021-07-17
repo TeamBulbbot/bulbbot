@@ -109,7 +109,40 @@
 
   "override_remove_success": "{{emote_success}} Successfully removed the selected override.",
 
+  "automod_less_than_zero": "{{emote_warn}} {{limit}} cannot be less than `0`",
+
+  "automod_not_in_database": "{{emote_warn}} Item {{item}} has not yet been added to the AutoMod database.",
+  "automod_already_in_database": "{{emote_warn}} Item {{item}} is already in the AutoMod database.",
+  "automod_add_success": "{{emote_success}} Successfully added item `{{item}}` to `{{category}}`.",
+  "automod_remove_success": "{{emote_success}} Successfully removed item `{{item}}` from `{{category}}`",
+
+  "automod_updated_limit": "{{emote_success}} Successfully updated the limit for `{{category}}` with a new limit of `{{limit}}`",
+  "automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",
+
   "automod_enabled": "{{emote_success}} Successfully enabled AutoMod in the server.",
+  "automod_disabled": "{{emote_success}} Successfully disabled AutoMod in the server.",
+  "automod_disabled_part": "{{emote_success}} Successfully disabled AutoMod category `{{category}}`",
+
+  "automod_settings_header": "AutoMod settings for {{guild.name}}",
+  "automod_settings_enabled": "**Enabled:** {{enabled}}\n\n",
+  "automod_settings_websites": "**Websites:** {{enabled}}\n**Blacklisted websites:** {{websites_blacklist}}\n\n",
+  "automod_settings_invites": "**Invites:** {{enabled}}\n**Whitelisted invites:** {{invites_blacklist}}\n\n",
+  "automod_settings_words": "**Words:** {{enabled}}\n**Blacklisted words:** {{word_blacklist}}\n**Token words:** {{word_token_blacklist}}\n\n",
+  "automod_settings_mentions": "**Mentions:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s\n\n",
+  "automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s\n\n",
+  "automod_settings_ignored": "**Immune roles:** {{roles}}\n**Immune channels:** {{channels}}\n**Immune users:** {{users}}",
+  "automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
+
+  "automod_violation_max_messages_reason": "Violated `MAX_MESSAGES` check in #{{channel.name}} ({amount}/{limit}s)",
+  "automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `MAX_MESSAGES` check in {{channel}}. Messages ({{amount}}/{{limit}}s)",
+  "automod_violation_max_mentions_reason": "Violated `MAX_MESASGES` check in #{{channel.name}} ({{amount}}/{{limit}}s)",
+  "automod_violation_max_mentions_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `MAX_MENTIONS` check in {{channel}}. Mentions ({{amount}}/{{limit}}s)",
+  "automod_violation_words_reason": "Violated `FORBIDDEN_WORDS` check in #{{channel.name}}",
+  "automod_violation_words_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WORDS` check in {{channel}} | Punishment: **{{punishment}}**\n**Blacklisted words:** `{{words}}`\n```{{message}}```",
+  "automod_violation_invites_reason": "Violated `DISCORD_INVITE` check in #{{channel.name}}",
+  "automod_violation_invites_log": "{{emote_warn}} **{target_tag}** `({{target.id}})` has violated the `DISCORD_INVITE` check in {{channel}} | Punishment: **{{punishment}}**\n```{{message}}```",
+  "automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
+  "automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in {{channel}} | Punishment: **{{punishment}}**\n```{{message}}```",
 
   "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**"
 }
