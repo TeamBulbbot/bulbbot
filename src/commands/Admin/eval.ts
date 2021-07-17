@@ -33,15 +33,15 @@ export default class extends Command {
 			this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) ran eval with the code: ${code}`);
 
 			if (evaled.length > 2000) {
-				fs.writeFile(`./src/files/eval/${message.guild?.id}.txt`, await clean(evaled), function (err) {
+				fs.writeFile(`./files/eval/${message.guild?.id}.txt`, await clean(evaled), function (err) {
 					if (err) console.error(err);
 				});
 
 				await message.channel.send("The evaled code is more than 2000 characters so I am giving you a file instead, have fun 🙂", {
-					files: [`./src/files/eval/${message.guild?.id}.txt`],
+					files: [`./files/eval/${message.guild?.id}.txt`],
 				});
 
-				return fs.unlinkSync(`./src/files/eval/${message.guild?.id}.txt`);
+				return fs.unlinkSync(`./files/eval/${message.guild?.id}.txt`);
 			}
 
 			await message.channel.send({ code: "js" });
