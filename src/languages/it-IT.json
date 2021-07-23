@@ -1,0 +1,298 @@
+{
+	"global_executed_by": "Eseguito da {user_name}#{user_discriminator}",
+	"global_missing_permission": ":lock: Permessi insufficienti",
+	"global_missing_permission_bot": "Il bot è sprovvisto di permessi cruciali per eseguire questo comando! Per favore controlla i permessi del bot.\n{missing}",
+	"global_user_not_found": "{emote_warn} Non è stato possibile trovare l'utente specificato",
+	"global_channel_not_found": "{emote_warn} Non è stato possibile trovare il canale specificato",
+	"global_mod_action_log": "{action} da: {moderator_tag} ({moderator_id}) | Utente: {target_tag} ({target_id}) | Motivo: {reason}",
+	"global_logging_mod": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`è stato {action} da **{moderator_tag}** `({moderator_id})` per **{reason}** `[#{infractionId}]`",
+	"global_logging_unban_auto": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`è stato {action} da **{moderator_tag}** `({moderator_id})` poichè la sua sanzione temporanea è scaduta `[#{infractionId}]`",
+	"global_logging_mod_temp": "`[{timestamp}]` {emoji} **{target_tag}** `({user_id})`è stato {action} da **{moderator_tag}** `({moderator_id})` fino a **{until}** per **{reason}** `[#{infractionId}]`",
+	"global_no_reason": "Nessun motivo specificato",
+	"global_loading": "{emote_loading} Caricamento...",
+	"global_not_in_voice": "{emote_warn} L'utente non è connesso a nessun Canale Vocale!",
+	"global_unknown_error": "{emote_warn} Un errore sconosciuto Si è verificato un errore sconosciuto, per favore prova di nuovo più tardi o se riscontri ancora questo problema contatta gli sviluppatori",
+
+	"global_cannot_action_self": "{emote_warn} Non puoi eseguire questa azione su te stesso!",
+	"global_cannot_action_owner": "{emote_warn} Non puoi eseguire questa azione sul proprietario del server!",
+	"global_cannot_action_role_equal": "{emote_warn} Non puoi eseguire questa azione su **{user_tag}** siccome non hai un ruolo più alto del suo!",
+	"global_cannot_action_role_equal_bot": "{emote_warn} Non puoi eseguire questa azione su **{user_tag}** siccome io non ho un ruolo più alto del suo!",
+	"global_cannot_action_role_higher": "{emote_warn} Non puoi eseguire questa azione su **{user_tag}** siccome lui ha un ruolo più alto del tuo!",
+	"global_cannot_action_role_higher_bot": "{emote_warn} Non puoi eseguire questa azione su **{user_tag}** siccome lui ha un ruolo più alto del mio!",
+	"global_cannot_action_bot_self": "{emote_warn} Non puoi eseguire questa azione sul bot!",
+
+	"premium_message": "Questo è un comando premium, diventa un Patron e richiedine l'accesso <https://www.patreon.com/bulbbot>",
+
+	"event_message_args_unexpected": "{emote_warn} Argomento inaspettato `{arg}`. Previsto `{arg_expected}` ricevuto `{arg_provided}`\n{emote_wrench} **Uso corretto:** {usage}",
+	"event_message_args_missing": "{emote_warn} Argomento mancante `{arg}`. Previsto `{arg_expected}` ricevuto `{arg_provided}`\n{emote_wrench} **Uso corretto:** {usage}",
+	"event_message_args_unexpected_list": "{emote_warn} Non è stato possibile analizzare `{arg}` come `{arg_expected}`.\n{emote_wrench} **Argomenti corretti:** {usage}",
+	"event_message_args_missing_list": "{emote_warn} Argomento mancante `{arg}`. Previsto `{arg_expected}` ricevuto `{arg_provided}`\n{emote_wrench} **Argomenti corretti:** {usage}",
+	"event_message_edit": "{emote_edit} Un messaggio da **{target_tag}** `{target_id}` è stato modificato in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}` | {time}\n**B:** {before}\n**A:** {after}",
+	"event_message_delete": "{emote_trash} Un messaggio da **{target_tag}** `{target_id}` è stato eliminato in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}` | {time}\n{content} \n{attachment}\n{embed}",
+
+	"event_channel_create": "**Canale creato:** <#{channel_id}> `({channel_type})`",
+	"event_channel_delete": "**Canale eliminato:** #{channel_name} `({channel_id})` `({channel_type})`",
+	"event_channel_update_topic_added": "<#{channel_id}> l'argomento del canale è stato aggiunto `{channel_topic}`\n",
+	"event_channel_update_topic_removed": "<#{channel_id}> l'argomento del canale è stato rimosso\n",
+	"event_channel_update_topic_updated": "<#{channel_id}> l'argomento del canale è stato cambiato da `{oldchannel_topic}` a `{newchannel_topic}`\n",
+	"event_channel_update_name": "<#{channel_id}> il nome è stato cambiato da `#{oldchannel_name}` a `#{newchannel_name}`\n",
+	"event_channel_update_type": "<#{channel_id}> il tipo è stato cambiato da `{oldchannel_type}` a `{newchannel_type}`\n",
+	"event_channel_update_nsfw_enabled": "<#{channel_id}> il filtro NSFW è stato `abilitato`\n",
+	"event_channel_update_nsfw_disabled": "<#{channel_id}> il filtro NSFW `disabilitato`\n",
+
+	"event_member_joined": "{emote_join} **Nuovo membro:** **{user_tag}** `({user_id})`\n**Account creato:** {user_age}",
+	"event_member_left": "{emote_leave} **Membro uscito:** **{user_tag}** `({user_id})`\n**Entrato nel server:** {user_joined}",
+
+	"event_member_update_nickname": "{emote_warn} **{user_tag}** `({user_id})` ha cambiato il proprio soprannome da `{nick_old}` a `{nick_new}`",
+	"event_member_update_role_add": "{emote_warn} Il ruolo **{role}** è stato aggiunto a **{user_tag}** `({user_id})`",
+	"event_member_update_role_remove": "{emote_warn} Il ruolo **{role}** è stato rimosso da **{user_tag}** `({user_id})`",
+	"event_member_update_role_add_audit": "{emote_warn} Il ruolo **{role}** è stato aggiunto a **{user_tag}** `({user_id})` da **{moderator_tag}** `({moderator_id})`",
+	"event_member_update_role_remove_audit": "{emote_warn} Il ruolo **{role}** è stato rimosso da **{user_tag}** `({user_id})` da **{moderator_tag}** `({moderator_id})`",
+
+	"config_language_success": "{emote_success} La lingua del server è stata correttamente impostata su `{language}`",
+	"config_language_invalid_args": "{emote_warn} Lingua non valida `{language}` provvista!\n{emote_wrench} Scegli una lingua valida tra {languages}",
+
+	"config_timezone_success": "{emote_success} Il fuso orario del server è stato correttamente cambiato in `{zone}`",
+
+	"config_logging_success": "{emote_success} Ho iniziato a loggare {part} in {channel}",
+	"config_logging_invalid_channel": "{emote_warn} Non è stato possibile risolvere `{channel_name}` come un canale valido!",
+	"config_logging_unable_to_send_messages": "{emote_warn} Non posso mandare messaggi in quel canale",
+
+	"config_mute_success": "{emote_success} Il ruolo per i membri mutati è stato cambiato correttamente",
+	"config_mute_missing_args": "{emote_warn} Argomento richiesto mancante `ruolo`",
+	"config_mute_invalid_role": "{emote_warn} Non è un ruolo valido",
+	"config_mute_unable_to_manage": "{emote_warn} Non mi è possibile gestire quel ruolo, sposta il mio ruolo sopra di esso per far sì che funzioni",
+
+	"config_prefix_success": "{emote_success} Il prefisso è stato cambiato correttamente in `{prefix}`",
+	"config_prefix_missing_args": "{emote_warn} Argomento richiesto mancante `prefisso`",
+	"config_prefix_too_long": "{emote_warn} Questo prefisso è troppo lungo, per favore fallo più corto di 255 caratteri",
+
+	"config_autorole_success": "{emote_success} Autorole cambiato correttamente",
+	"config_autorole_disable": "{emote_success} Autorole disattivato correttamente",
+
+	"override_create_invalid_part": "{emote_warn} Argomento richiesto mancante `part`, può essere sia `ruolo` che `comando`",
+	"override_create_missing_name": "{emote_warn} Argomento richiesto mancante `nome del ruolo/comando`",
+	"override_create_missing_clearance": "{emote_warn} Argomento richiesto mancante `autorizzazione`",
+	"override_create_non_number": "{emote_warn} `{clearance}` non è un tipo di autorizzazione valido",
+	"override_create_less_than_0": "{emote_warn} Il livello di autorizzazione non può essere minore o uguale a 0",
+	"override_create_more_than_100": "{emote_warn} Il livello di autorizzazione non può essere maggiore o uguale a 100",
+	"override_create_higher_than_yourself": "{emote_warn} Non puoi creare un Override con un livello di autorizzazione più alto del tuo",
+	"override_create_invalid_role": "{emote_warn} Non è un ruolo valido",
+	"override_create_invalid_command": "{emote_warn} `{command}` non è un comando valido",
+	"override_create_success": "{emote_success} Successfully created an override with the autorizzazione level of `{clearance}`",
+
+	"override_disable_missing_command": "{emote_warn} Missing command",
+	"override_disable_invalid_command": "{emote_warn} `{command}` is not a valid command",
+	"override_disable_success": "{emote_success} Successfully disabled command `{command}`",
+
+	"override_enable_missing_command": "{emote_warn} Missing command",
+	"override_enable_invalid_command": "{emote_warn} `{command}` is not a valid command",
+	"override_enable_success": "{emote_success} Successfully enabled command `{command}`",
+
+	"override_edit_invalid_part": "{emote_warn} Missing required argument `part`, can be either `role` or `command`",
+	"override_edit_missing_name": "{emote_warn} Missing required argument `role/command name`",
+	"override_edit_missing_clearance": "{emote_warn} Missing required argument `clearance`",
+	"override_edit_non_number": "{emote_warn} `{clearance}` is not valid clearance type",
+	"override_edit_less_than_0": "{emote_warn} The clearance level can't be less than or equal to 0",
+	"override_edit_more_than_100": "{emote_warn} The clearance level can't be more than or equal to 100",
+	"override_edit_higher_than_yourself": "{emote_warn} You cannot create an override with a higher clearance level than your clearance level",
+	"override_edit_invalid_role": "{emote_warn} Not a valid role",
+	"override_edit_invalid_command": "{emote_warn} `{command}` is not a valid command",
+	"override_edit_non_existent_override_command": "{emote_warn} No override was found for that command, you need to create an override to be able to edit it",
+	"override_edit_non_existent_override_role": "{emote_warn} No override was found for that role, you need to create an override to be able to edit it",
+	"override_edit_success": "{emote_success} Successfully updated the override with a new clearance level of `{clearance}`",
+
+	"override_remove_invalid_part": "{emote_warn} Missing required argument `part`, can be either `role` or `command`",
+	"override_remove_missing_name": "{emote_warn} Missing required argument `role/command name`",
+	"override_remove_non_existent_override_command": "{emote_warn} No command override was found with that name",
+	"override_remove_non_existent_override_role": "{emote_warn} No role override was found with that id/mention",
+	"override_remove_success": "{emote_success} Successfully removed the command",
+
+	"automod_missing_limit": "{emote_warn} Missing required argument `limit`, can be any value higher `0`",
+	"automod_missing_item_add": "{emote_warn} Missing required argument `item` that should be added to the automod",
+	"automod_missing_item_remove": "{emote_warn} Missing required argument `item` that should be removed from the automod",
+	"automod_missing_punishment": "{emote_warn} Missing required argument `punishment`, can be either `LOG`, `WARN`, `KICK` or `BAN`",
+
+	"automod_non_number": "{emote_warn} `{limit}` is not a valid number",
+	"automod_less_than_zero": "{emote_warn} `{limit}` cannot be less than 0",
+
+	"automod_not_already_in_database": "{emote_warn} Item `{item}` is not already in the automod",
+	"automod_already_in_database": "{emote_warn} Item `{item}` is already in the automod",
+	"automod_added_to_the_database": "{emote_success} Added `{item}` to `{part}` in the automod",
+	"automod_removed_from_the_database": "{emote_success} Removed `{item}` from `{part}` in the automod",
+
+	"automod_updated_limit": "{emote_success} Updated the limit on `{part}` with a limit of `{limit}`",
+	"automod_updated_punishment": "{emote_success} Updated the punishment on `{part}` with a new punishment of `{punishment}`",
+
+	"automod_enabled": "{emote_success} Enabled the automod",
+	"automod_disabled": "{emote_success} Disabled the automod",
+	"automod_disabled_feature": "{emote_success} Disabled `{part}`",
+
+	"help_command_not_found": "Unable to find any commands with that name",
+
+	"jumbo_invalid_emoji": "{emote_warn} Invalid emoji, please use a valid emoji",
+	"jumbo_too_many": "{emote_warn} Too many emoji, the bot currently only supports a max of 10 emojis at a time",
+
+	"userinfo_embed_id": "**ID:** {user_id}\n",
+	"userinfo_embed_username": "**Username:** {user_name}\n",
+	"userinfo_embed_nickname": "**Nickname:** {user_nickname}\n",
+	"userinfo_embed_profile": "**Profile:** <@{user_id}> [`Profile`](https://discord.com/users/{user_id})\n",
+	"userinfo_embed_avatar": "**Avatar URL:** [Link]({user_avatar})\n",
+	"userinfo_embed_bot": "**Bot:** {user_bot}\n",
+	"userinfo_embed_created": "**Account Creation:** {user_age}\n",
+	"userinfo_embed_joined": "**Joined Server:** {user_joined}\n",
+	"userinfo_embed_premium": "**Boosting since:** {user_premium}\n",
+	"userinfo_embed_roles": "**Roles:** {user_roles}\n",
+	"userinfo_embed_infractions": "\n**Infractions:** {emote_inf} **{user_infractions}** {infractions, plural, =0 {infractions} one {infraction} other {infractions}} on this server",
+
+	"serverinfo_embed_owner": "{emote_owner} **Owner:** <@{guild_owner_name}> `{guild_owner_id}`\n",
+	"serverinfo_embed_features": "**Features:**\n{guild_features}\n",
+	"serverinfo_embed_region": "**Region:** {guild_region}\n",
+	"serverinfo_embed_verification": "**Verification level:** {guild_verification}\n",
+	"serverinfo_embed_created": "**Created at:** {guild_age}",
+
+	"serverinfo_server_stats": "**Server stats**",
+	"serverinfo_channel_stats": "**Channel stats**",
+	"serverinfo_booster_stats": "**Booster stats**",
+	"serverinfo_server_stats_total": "Total: **{guild_members}**/{guild_max}\n",
+	"serverinfo_server_stats_online": "{emote_online}: **{guild_online}**\n",
+	"serverinfo_server_stats_idle": "{emote_idle}: **{guild_idle}**\n",
+	"serverinfo_server_stats_dnd": "{emote_dnd}: **{guild_dnd}**\n",
+	"serverinfo_server_stats_offline": "{emote_offline}: **{guild_offline}**\n",
+	"serverinfo_channel_stats_voice": "Voice Channels: **{guild_voice}**\n",
+	"serverinfo_channel_stats_text": "Text Channels: **{guild_text}**\n",
+	"serverinfo_channel_stats_category": "Category: **{guild_category}**\n",
+	"serverinfo_booster_tier": "Booster Tier: **{guild_booster_tier}**\n",
+	"serverinfo_booster_boosters": "Boosters: **{guild_booster_boosters}**\n",
+	"serverinfo_booster_tier_1": "Emote slots: **100**\nAudio quality: **128** kbps\n",
+	"serverinfo_booster_tier_2": "Emote slots: **150**\nAudio quality: **256** kbps\nUpload limit: **50 MB**\n",
+	"serverinfo_booster_tier_3": "Emote slots: **250**\nAudio quality: **384** kbps\nUpload limit: **100 MB**\n",
+	"serverinfo_roles": "Roles ({guild_amount_roles})",
+	"serverinfo_emotes": "Emotes ({guild_amount_emotes})",
+	"serverinfo_roles_too_many": " and **{guild_roles_left}** more",
+	"serverinfo_emotes_too_many": " and **{guild_emotes_left}** more",
+	"serverinfo_emotes_none": "No emotes",
+
+	"ban_success": "{emote_success} **{target_tag}** `({target_id})` has been banned for **{reason}** `[#{infractionId}]`",
+	"ban_fail": "{emote_warn} Unable to ban **{target_tag}** `({target_id})`",
+	"already_banned": "{emote_warn} **{target_tag}** `({target_id})` is already banned with the reason `{reason}`",
+
+	"not_banned": "{emote_warn} **{target_tag}** `({target_id})` is not already banned",
+	"unban_success": "{emote_success} **{target_tag}** `({target_id})` has been unbanned for **{reason}** `[#{infractionId}]`",
+
+	"kick_success": "{emote_success} **{target_tag}** `({target_id})` has been kicked for **{reason}** `[#{infractionId}]`",
+	"kick_fail": "{emote_warn} Unable to kick **{target_tag}** `({target_id})`",
+
+	"purge_too_many": "{emote_warn} Can only purge a max of 99 messages at a time",
+	"purge_too_few": "{emote_warn} You cannot purge less than 1 message :confused: why would you even do that",
+	"purge_success": "{emote_success} Successfully purged **{count}** messages",
+
+	"verification_non_integer": "{emote_warn} Level needs to be an integer",
+	"verification_community_zero": "{emote_warn} Verification level cannot be set to `0` for community servers!",
+	"verification_level_error": "{emote_warn} Verification level cannot be greater than `4` or less than `0`",
+	"verification_level_success": "{emote_success} Server verification level changed to `{level}`",
+
+	"ping_latency": "Bot latency is **{latency_bot}ms**\nWebSocket latency is **{latency_ws}ms**",
+
+	"uptime_uptime": "The current uptime is **{uptime}**",
+
+	"license_license": "📜 This bot is licensed under the MIT license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+	"privacy_policy": "📜 View the privacy policy of the bot **[here](https://www.notion.so/Privacy-Policy-ec11190decf54b518459712f19d30867)**",
+
+	"github_source_code": "{emote_github} This bot is fully open source and you can find all of the source code **[here](https://github.com/TestersQTs/Bulbbot)**",
+
+	"invite_desc": "**Invite the bot to your server**\n{bot_invite}\n\n**Join the support server**\n{support_guild}",
+
+	"inviteinfo_error": "{emote_warn} Unable to find a server with that invite",
+
+	"multiban_success": "{emote_success} {full_list} have been banned for **{reason}**",
+
+	"multiunban_success": "{emote_success} {full_list} have been unbanned for **{reason}**",
+
+	"multikick_success": "{emote_success} {full_list} have been kicked for **{reason}**",
+
+	"multimute_success": "{emote_success} {full_list} have been muted for **{reason}**",
+
+	"multiwarn_success": "{emote_success} {full_list} have been warned for **{reason}**",
+
+	"multivoicekick_success": "{emote_success} {full_list} have been voice-kicked for **{reason}**",
+
+	"softban_success": "{emote_success} **{target_tag}** `({target_id})` has been soft-banned for **{reason}** `[#{infractionId}]`",
+
+	"deafen_already_deaf": "{emote_warn} User is already deafened!",
+	"deafen_success": "{emote_success} **{target_tag}** `({target_id})` has been deafened for **{reason}** `[#{infractionId}]`",
+
+	"undeafen_not_deaf": "{emote_warn} User is not deafened!",
+	"undeafen_success": "{emote_success} **{target_tag}** `({target_id})` has been undeafened for **{reason}** `[#{infractionId}]`",
+
+	"voicekick_success": "{emote_success} **{target_tag}** `({target_id})` has been voice-kicked for **{reason}** `[#{infractionId}]`",
+
+	"slowmode_invalid_0s": "{emote_warn} Slowmode duration cannot be lower than **0 seconds**!",
+	"slowmode_invalid_6h": "{emote_warn} Slowmode duration cannot be higher than **6 hours**!",
+
+	"slowmode_success_remove": "{emote_success} Successfully removed slowmode from {channel}",
+	"slowmode_success": "{emote_success} Successfully set slowmode in {channel} to **{slowmode}**",
+
+	"tempban_invalid_0s": "{emote_warn} Duration cannot be lower than **0 seconds**!",
+	"tempban_invalid_1y": "{emote_warn} Duration cannot be higher than **1 year**!",
+
+	"lockdown_not_boolean": "{emote_warn} Argument `lock` value must be a Boolean! (`true` or `false`)",
+	"lockdown_locked": "{emote_success} Successfully locked down channel {channel}",
+	"lockdown_unlocked": "{emote_success} Successfully unlocked channel {channel}",
+
+	"mute_muterole_not_found": "{emote_warn} This server does not have a mute role configured!\n{emote_wrench} **Tip:** You can configure the mute role using the `!configure mute_role` command",
+	"mute_success": "{emote_success} Muted **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"mute_not_muted": "{emote_warn} The specified user is not currently muted!",
+	"mute_already_muted": "{emote_warn} The specified user is already muted!",
+
+	"change_nick_success": "{emote_success} Nickname of **{target_tag}** `({target_id})` has been changed from `{nick_old}` to `{nick_new}` for **{reason}** `[#{infractionId}]`",
+	"remove_nick_success": "{emote_success} Nickname removed from **{target_tag}** `({target_id})` for **{reason}** `[#{infractionId}]`",
+	"change_nick_mod_action_log": "{emote_success} Nickname of **{target_tag}** `({user_id})` has been {action} from `{nick_old}` to `{nick_new}` by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+	"remove_nick_mod_action_log": "{emote_success} Nickname {action} from **{target_tag}** `({user_id})` by **{moderator_tag}** `({moderator_id})` for **{reason}** `[#{infractionId}]`",
+	"change_nick_fail": "{emote_warn} Unable to change nickname of **{target_tag}** `({target_id})`",
+	"already_no_nickname": "{emote_warn} **{target_tag}** `({target_id})` does not have a nickname to remove",
+	"already_has_nickname": "{emote_warn} **{target_tag}** `({target_id})` is already nicknamed `{nick_new}`",
+	"nickname_too_long": "{emote_warn} Nickname has too many characters (`{nick_length}`). Nicknames are limited to 32 characters",
+
+	"warn_success": "{emote_success} **{user_name}#{user_discriminator}** `({user_id})` has been warned for **{reason}** `[#{infractionId}]`",
+
+	"unmute_success": "{emote_success} **{target_tag}** `({target_id})` has been unmuted for **{reason}** `[#{infractionId}]`",
+
+	"infraction_not_found": "{emote_warn} Un'infrazione con ID **#{infractionId}** non è stata trovata!",
+	"infraction_delete_success": "{emote_success} Infrazione **#{infractionId}** eliminata correttamente!",
+	"infraction_info_inf_id": "**ID Infrazione:** {infractionId}\n",
+	"infraction_info_target": "**Utente:** {target_tag} `({target_id})`\n",
+	"infraction_info_moderator": "**Moderatore:** {moderator_tag} `({moderator_id})`\n",
+	"infraction_info_created": "**Creazione:** {timestamp}\n",
+	"infraction_info_active": "**Attivo:** {emoji}",
+	"infraction_info_expires": "**Scadenza:** {timestamp}",
+	"infraction_info_reason": "\n\n**Motivo:** {reason}",
+	"infraction_search_not_found": "{emote_warn} Questo utente non ha infrazioni!",
+	"infraction_list_not_found": "{emote_warn} This server does not seem to have any infractions!",
+	"infraction_claim_success": "{emote_success} You have claimed responsibility over infraction **#{infractionId}**",
+	"infraction_update_success": "{emote_success} Infraction **#{infractionId}** has been updated!",
+	"infraction_invalid_arguments": "{emote_warn} Missing required argument `action`, can be one of the following `delete|remove`, `info`, `list|all`, `msearch|modsearch`, `osearch|offendersearch`, `search`, `claim`, `update`",
+
+	"invalid_snowflake": "{emote_warn} `{snowflake}` is an invalid snowflake",
+	"snowflake_info": "I don't know if this snowflake belongs to anyone or anything\n\n",
+
+	"commands_help": "Puoi trovare tutti i comandi che BulbBot offre nel nostro [Sito](https://docs.bulbbot.mrphilip.xyz/command-list) e nella pagina [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)",
+
+	"action_warn": "avvisato",
+	"action_mute": "mutato",
+	"action_unmute": "smutato",
+	"action_unmute_auto": "smutato automaticamente",
+	"action_kick": "cacciato",
+	"action_ban": "bannato",
+	"action_ban_temp": "bannato temporaneamente",
+	"action_ban_force": "bannato forzatamente",
+	"action_ban_soft": "soft-bannato",
+	"action_unban": "sbannato",
+	"action_unban_auto": "sbannato automaticamente",
+	"action_deafen": "silenziato l'audio",
+	"action_undeafen": "riattivato l'audio",
+	"action_kick_voice": "cacciato dalla vocale",
+	"action_change_nick": "cambiato",
+	"action_remove_nick": "rimosso"
+}
