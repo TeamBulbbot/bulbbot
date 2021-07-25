@@ -295,7 +295,7 @@
   dependencies:
     moo "^0.5.1"
 
-"@messageformat/runtime@^3.0.0", "@messageformat/runtime@^3.0.0-beta.2":
+"@messageformat/runtime@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@messageformat/runtime/-/runtime-3.0.0.tgz#1ab31ccd667c2128c0c024d8068c8d83d2b70252"
   integrity sha512-boV0oH8jnJM/qoynQKnIbnKK5M7JPpKM0y9QUB9nQMMt16qSlgi5FfUo8usgoq6wEYqxDmIqtUfBewcj2VP+yQ==
