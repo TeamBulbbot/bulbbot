@@ -330,6 +330,9 @@ module.exports = class BulbBotUtils {
 			} else if (feature === "HUB") {
 				f = Emotes.features.HUB;
 				desc = "Makes the server a school hub server";
+			} else if (feature === "MORE_STICKERS") {
+				f = Emotes.features.MORE_STICKERS;
+				desc = "Makes it possible to have 60 stickers in your server";
 			}
 
 			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
