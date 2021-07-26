@@ -63,7 +63,7 @@ export default class extends Command {
 			desc += "\n**Invite Channel**\n" + inviteChannel;
 		}
 
-		let embed = new MessageEmbed()
+		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setTitle(guild.description !== null ? `${guild.description}` : "")
 			.setAuthor(`${guild.name} (${guild.id})`, guild.iconURL({ dynamic: true })!)
