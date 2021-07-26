@@ -25,7 +25,7 @@ export default class extends Client {
 			ws: { large_threshold: 50, intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]) },
 			presence: { status: "online", activity: { name: "the light shine", type: "WATCHING" } },
 			http: { version: 9 },
-			messageCacheMaxSize: -1,
+			messageCacheMaxSize: 1_000,
 			messageCacheLifetime: 0,
 			messageSweepInterval: 0,
 			fetchAllMembers: false,
