@@ -112,8 +112,8 @@ export default class {
 		response = response.replace(/({amount})/g, key.amount);
 		response = response.replace(/({changes})/g, key.changes);
 		response = response.replace(/({limit})/g, key.limit);
-		response = response.replace(/({before})/g, key.before);
-		response = response.replace(/({after})/g, key.after);
+		response = response.replace(/({beforeContent})/g, key.beforeContent);
+		response = response.replace(/({afterContent})/g, key.afterContent);
 		response = response.replace(/({after_channel_id})/g, key.after_channel_id);
 		response = response.replace(/({after_id})/g, key.after_id);
 
