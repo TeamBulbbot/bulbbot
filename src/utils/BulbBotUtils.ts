@@ -134,6 +134,10 @@ export default class {
 
 		response = response.replace(/({slowmode})/g, key.slowmode);
 
+		response = response.replace(/({large})/g, key.large);
+		response = response.replace(/({verification_level})/g, key.verification_level);
+		response = response.replace(/({channel_nsfw})/g, key.channel_nsfw);
+
 		response = response.replace(/({guild_name})/g, key.guild_name);
 		response = response.replace(/({guild_amount_roles})/g, key.guild_amount_roles);
 		response = response.replace(/({guild_amount_emotes})/g, key.guild_amount_emotes);
@@ -225,7 +229,7 @@ export default class {
 		return badges.map(i => `${i}`).join(" ");
 	}
 
-	private guildFeatures(guildFeatures) {
+	public guildFeatures(guildFeatures: any[]) {
 		let features: string[] = [];
 
 		guildFeatures.forEach(feature => {
@@ -307,6 +311,9 @@ export default class {
 			} else if (feature === "HUB") {
 				f = Emotes.features.HUB;
 				desc = "Makes the server a school hub server";
+			} else if (feature === "MORE_STICKERS") {
+				f = Emotes.features.MORE_STICKERS;
+				desc = "Makes it possible to have 60 stickers in your server";
 			}
 
 			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;

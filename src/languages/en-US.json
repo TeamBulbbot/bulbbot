@@ -252,6 +252,15 @@
 	"invite_desc": "**Invite the bot to your server**\n{bot_invite}\n\n**Join the support server**\n{support_guild}",
 
 	"inviteinfo_error": "{emote_warn} Unable to find a server with that invite",
+	"inviteinfo_verification_level": "Verification Level: `{verification_level}`\n",
+	"inviteinfo_large": "Large: `{large}`\n",
+	"inviteinfo_code": "Code: `{code}`\n",
+	"inviteinfo_inviter_id": "ID: `{user_id}`\n",
+	"inviteinfo_inviter_tag": "Tag: `{user_tag}`\n",
+	"inviteinfo_inviter_avatar": "Avatar: [`Link (4096)`]({user_avatar})\n",
+	"inviteinfo_channel_id": "ID: `{channel_id}`\n",
+	"inviteinfo_channel_name": "Name: `{channel_name}`\n",
+	"inviteinfo_channel_nsfw": "NSFW: `{channel_nsfw}`\n",
 
 	"multiban_success": "{emote_success} {full_list} have been banned for **{reason}**",
 	"multiban_targets_too_few": "{emote_warn} Selected less than 2 targets. Executing normal ban instead.",
