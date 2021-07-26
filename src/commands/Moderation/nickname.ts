@@ -24,6 +24,7 @@ export default class extends Command {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const argString: string = args.slice(1).join(" ");
+		UserMentionAndID.lastIndex = 0;
 		const match: RegExpMatchArray = <RegExpMatchArray>UserMentionAndID.exec(args[0]);
 		if (!match) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
 		const targetID: Snowflake = match[1] ?? match[2];
@@ -33,7 +34,7 @@ export default class extends Command {
 		const reason: string =
 			args
 				.slice(1 + nickname.split(" ").length)
-				?.join(" ")
+				.join(" ")
 				.trim() || (await this.client.bulbutils.translate("global_no_reason", message.guild?.id));
 		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
 		if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;

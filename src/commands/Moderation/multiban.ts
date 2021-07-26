@@ -26,13 +26,13 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		const targets: RegExpMatchArray = args.slice(0).join(" ").match(UserMentionAndID) ?? [];
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id);
 		let fullList: string = "";
 
-		if (targets!!.length <= 1) {
+		if (targets.length <= 1) {
 			await message.channel.send(await this.client.bulbutils.translate("multiban_targets_too_few", message.guild?.id));
 			return await this.client.commands.get("ban")!.run(message, args);
 		}

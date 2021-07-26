@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message, User } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../structures/Command";
 import DMUtils from "../../utils/DMUtils";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
@@ -23,7 +23,7 @@ export default class extends Event {
 
 	public async run(message: Message): Promise<any> {
 		// checks if the user/guilds is in the blacklist
-		if (this.client.blacklist.get(message.author.id) !== undefined || this.client.blacklist.get(message.guild!.id)) return;
+		if (this.client.blacklist.get(message.author.id) !== undefined || this.client.blacklist.get(message.guild?.id)) return;
 
 		if (message.channel.type === "dm") return DMUtils(this.client, message);
 		if (!message.guild || message.author.bot) return;
@@ -55,7 +55,7 @@ export default class extends Event {
 		if (!command) return;
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
-		const commandOverride: Record<string, any> = <Record<string, any>>await clearanceManager.getCommandOverride(message.guild.id, command.name);
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild.id, command.name);
 		const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
 		const missing = message.guild.me?.permissionsIn(message.channel).has(userPermCheck);
 
@@ -128,7 +128,7 @@ export default class extends Event {
 
 		let used: string = `${prefix}${command.name}`;
 		args.forEach(arg => (used += ` ${arg}`));
-		await loggingManager.sendCommandLog(this.client, message.guild, <User>message.member?.user, message.channel.id, used);
+		await loggingManager.sendCommandLog(this.client, message.guild, message.author, message.channel.id, used);
 
 		let sCmd: SubCommand;
 		if (command.subCommands) {
