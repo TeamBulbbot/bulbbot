@@ -14,7 +14,7 @@ export default class extends Event {
 	}
 
 	public async run(message: Message): Promise<void> {
-		if (message.author.id === this.client.user.id) return;
+		if (message.author.id === this.client.user!.id) return;
 		if (!message.guild) return;
 
 		const msg: string = await this.client.bulbutils.translate("event_message_delete", message.guild.id, {

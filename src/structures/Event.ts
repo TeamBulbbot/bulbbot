@@ -2,7 +2,7 @@ import BulbBotClient from "./BulbBotClient";
 import EventException from "./exceptions/EventException";
 
 export default class {
-    public readonly client: BulbBotClient | any;
+    public readonly client: BulbBotClient;
     public readonly name: string;
     public readonly type: string;
     public readonly emitter: any;

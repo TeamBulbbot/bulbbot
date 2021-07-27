@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Guild } from "discord.js";
+import { Guild, TextChannel } from "discord.js";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { invite } from "../../Config";
 import * as Emotes from "../../emotes.json";
@@ -18,8 +18,8 @@ export default class extends Event {
 		this.client.log.info(`[GUILD] Left a guild ${guild.name} (${guild.id})`);
 
 		await databaseManager.deleteGuild(guild.id);
-		this.client.channels.cache
-			.get(invite)
-			.send(`${Emotes.other.LEAVE} Left guild: **${guild.name}** \`(${guild.id})\` owned by <@${guild.ownerID}> \`(${guild.ownerID})\`\nMembers: **${guild.memberCount}**`);
+		(<TextChannel|undefined>this.client.channels.cache
+			.get(invite))
+			?.send(`${Emotes.other.LEAVE} Left guild: **${guild.name}** \`(${guild.id})\` owned by <@${guild.ownerID}> \`(${guild.ownerID})\`\nMembers: **${guild.memberCount}**`);
 	}
 }

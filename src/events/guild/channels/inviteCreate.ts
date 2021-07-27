@@ -17,7 +17,7 @@ export default class extends Event {
 
 		const log: string = await this.client.bulbutils.translate("event_invite_create", invite.guild.id, {
 			code: invite.code,
-			expire_time: invite.maxAge === 0 ? "never" : `<t:${Math.round(+new Date() / 1000) + invite.maxAge!}:R>`,
+			expire_time: invite.maxAge === 0 ? "never" : `<t:${Math.round(Date.now() / 1000) + invite.maxAge!}:R>`,
 			max_uses: invite.maxUses === 0 ? "unlimited" : invite.maxUses,
 			user_id: invite.inviter?.id,
 			user_tag: invite.inviter?.tag,

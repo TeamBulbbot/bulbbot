@@ -39,8 +39,8 @@ export default class extends Event {
 		if (createdTimestamp + 3000 < Date.now()) return;
 		if (target.id !== member.user.id) return;
 
-		if (executor.id === this.client.user.id) return;
-		if (reason === null) reason = <string>await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});
+		if (executor.id === this.client.user!.id) return;
+		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});
 
 		await infractionsManager.createInfraction(member.guild.id, "Manual Kick", true, reason, member.user, executor);
 		const infID: number = await infractionsManager.getLatestInfraction(member.guild.id, executor.id, target.id, "Manual Kick")

@@ -14,7 +14,7 @@ export default class extends Event {
 	}
 
 	public async run(oldMessage: Message, newMessage: Message): Promise<void> {
-		if (newMessage.author.id === this.client.user.id) return;
+		if (newMessage.author.id === this.client.user!.id) return;
 		if (oldMessage.content === newMessage.content) return;
 		if (!newMessage.guild) return;
 

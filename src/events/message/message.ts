@@ -22,11 +22,14 @@ export default class extends Event {
 	}
 
 	public async run(message: Message): Promise<any> {
-		// checks if the user/guilds is in the blacklist
-		if (this.client.blacklist.get(message.author.id) !== undefined || this.client.blacklist.get(message.guild?.id)) return;
+		// checks if the user is in the blacklist
+		if (this.client.blacklist.get(message.author.id) !== undefined) return;
 
 		if (message.channel.type === "dm") return DMUtils(this.client, message);
 		if (!message.guild || message.author.bot) return;
+
+		// checks if the guild is in the blacklist
+		if (this.client.blacklist.get(message.guild.id)) return;
 
 		// @ts-ignore
 		const { prefix, premiumGuild } = await databaseManager.getConfig(message.guild.id);
@@ -36,7 +39,7 @@ export default class extends Event {
 
 		this.client.prefix = prefix;
 
-		const mentionRegex: RegExp = RegExp(`^<@!?${this.client.user.id}>`);
+		const mentionRegex: RegExp = RegExp(`^<@!?${this.client.user!.id}>`);
 
 		const clearance: number = await clearanceManager.getUserClearance(message);
 
@@ -50,7 +53,7 @@ export default class extends Event {
 		if (message.content.match(mentionRegex)) message.content = `!${message.content.replace(mentionRegex, "").trim()}`;
 
 		const [cmd, ...args] = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
-		const command: Command = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
+		const command: Command | undefined = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase())!);
 
 		if (!command) return;
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
