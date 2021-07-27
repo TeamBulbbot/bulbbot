@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import * as env from "dotenv";
 import applyExtra from "./applyExtra";
-env.config({ path: `${__dirname}/../../.env` });
+env.config({ path: `${__dirname}/../../../src/.env` });
 
 export const sequelize: Sequelize = new Sequelize(<string>process.env.DB_NAME, <string>process.env.DB_USER, <string>process.env.DB_PASSWORD, {
 	host: process.env.DB_HOST,

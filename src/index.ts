@@ -2,7 +2,7 @@ import * as Config from "./Config";
 import BulbBotClient from "./structures/BulbBotClient";
 import * as env from "dotenv";
 import { sequelize } from "./utils/database/connection";
-env.config({ path: `${__dirname}/.env` });
+env.config({ path: `${__dirname}/../src/.env` });
 
 import i18next from "i18next";
 import * as enUS from "./languages/en-US-new.json";
