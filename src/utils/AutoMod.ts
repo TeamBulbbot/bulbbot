@@ -101,10 +101,10 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		shouldDelete = true;
 	}
 
-	const mentions: RegExpMatchArray | null = hasMentions(message, dbGuild);
-	if (mentions) {
-		if (dbGuild.punishmentMentions) await set(client, message, message.guild.id, "mentions", message.author.id, mentions.length, dbGuild.timeoutMentions);
-		if (dbGuild.limitMentions) shouldDelete = mentions.length >= dbGuild.limitMentions;
+	const mentionCount: number = hasMentions(message, dbGuild);
+	if (mentionCount) {
+		if (dbGuild.punishmentMentions) await set(client, message, message.guild.id, "mentions", message.author.id, mentionCount, dbGuild.timeoutMentions);
+		if (dbGuild.limitMentions) shouldDelete = mentionCount >= dbGuild.limitMentions;
 	}
 
 	await set(client, message, message.guild.id, "messages", message.author.id, 1, dbGuild.timeoutMessages);
@@ -158,7 +158,7 @@ function hasInvite(message: Message, guild: AutoModConfiguration): boolean {
 	return false;
 }
 
-function hasMentions(message: Message, guild: AutoModConfiguration): RegExpMatchArray | null {
-	if (!(guild.punishmentMentions || guild.limitMentions)) return null;
-	return message.content.match(UserMention);
+function hasMentions(message: Message, guild: AutoModConfiguration): number {
+	if (!(guild.punishmentMentions || guild.limitMentions)) return 0;
+	return message.content.match(UserMention)?.length ?? 0;
 }
