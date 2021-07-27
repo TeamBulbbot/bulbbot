@@ -1,4 +1,4 @@
-import { Client, Collection, Permissions, Intents } from "discord.js";
+import { Client, Collection, Permissions, Intents, BitField, PermissionString } from "discord.js";
 import ClientException from "./exceptions/ClientException";
 import Event from "./Event";
 import Util from "./Util";
@@ -12,8 +12,8 @@ export default class extends Client {
 	public commands: Collection<string, Command>;
 	public aliases: Collection<string, string>;
 	public events: Collection<string, Event>;
-	public defaultPerms;
-	private readonly utils;
+	public defaultPerms!: Readonly<BitField<PermissionString>>;
+	private readonly utils: Util;
 	public readonly bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
 	public blacklist: Collection<string, Record<string, any>>;

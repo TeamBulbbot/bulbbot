@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message } from "discord.js";
+import { BitField, GuildMember, Message, PermissionString } from "discord.js";
 import Command from "../../structures/Command";
 import DMUtils from "../../utils/DMUtils";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
@@ -31,15 +31,20 @@ export default class extends Event {
 		// checks if the guild is in the blacklist
 		if (this.client.blacklist.get(message.guild.id)) return;
 
-		// @ts-ignore
-		const { prefix, premiumGuild } = await databaseManager.getConfig(message.guild.id);
+		const mentionRegex: RegExp = RegExp(`^<@!?${this.client.user!.id}>`);
+		let guildCfg = await databaseManager.getConfig(message.guild.id);
 
-		if (prefix === undefined && message.content.startsWith(Config.prefix))
-			return message.channel.send("Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
+		if ((guildCfg === undefined || guildCfg.prefix === undefined) && (message.content.startsWith(Config.prefix) || mentionRegex.test(message.content))) {
+			await databaseManager.deleteGuild(message.guild.id);
+			await databaseManager.createGuild(message.guild);
+			if (!(guildCfg = await databaseManager.getConfig(message.guild.id)))
+				return message.channel.send("Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
+		}
+
+		const prefix = guildCfg.prefix;
+		const premiumGuild = guildCfg.premiumGuild;
 
 		this.client.prefix = prefix;
-
-		const mentionRegex: RegExp = RegExp(`^<@!?${this.client.user!.id}>`);
 
 		const clearance: number = await clearanceManager.getUserClearance(message);
 
@@ -58,10 +63,10 @@ export default class extends Event {
 		if (!command) return;
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild.id, command.name);
-		const userPermCheck = command.userPerms ? this.client.defaultPerms.add(command.userPerms) : this.client.defaultPerms;
-		const missing = message.guild.me?.permissionsIn(message.channel).has(userPermCheck);
+		if(!message.guild.me) await message.guild.members.fetch(this.client.user!.id);
+		if(!message.guild.me) return; // Shouldn't be possible to return here. Narrows the type
 
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild.id, command.name);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return;
 			if (commandOverride["clearanceLevel"] > clearance) {
@@ -73,7 +78,6 @@ export default class extends Event {
 		}
 
 		this.client.userClearance = clearance;
-
 		if (command.clearance > clearance && !commandOverride) {
 			return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 				message.delete({ timeout: 5000 });
@@ -81,25 +85,28 @@ export default class extends Event {
 			});
 		}
 
-		if (userPermCheck && !(clearance < command.clearance)) {
-			// @ts-ignore
-			if (missing?.length) {
-				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission_bot", message.guild.id, { missing })).then(msg => {
+		const userPermCheck: BitField<PermissionString> = command.userPerms;
+		if (userPermCheck && (command.clearance <= clearance)) {
+			const userMember: GuildMember = message.member!;
+			const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(message.channel).has(userPermCheck)); // !x || !y === !(x && y)
+
+			if (missing) {
+				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
 					message.delete({ timeout: 5000 });
 					msg.delete({ timeout: 5000 });
 				});
 			}
 		}
 
-		const clientPermCheck = command.clientPerms;
+		const clientPermCheck: BitField<PermissionString> = command.clientPerms ? this.client.defaultPerms.add(command.clientPerms) : this.client.defaultPerms;;
 		if (clientPermCheck) {
-			let missing = !message.guild.me?.hasPermission(clientPermCheck);
-			//if (!missing) missing = !message.guild.me.permissionsIn(message.channel).has(clientPermCheck);
+			let missing: PermissionString[] = message.guild.me.permissions.missing(clientPermCheck);
+			if (!missing.length) missing = message.guild.me.permissionsIn(message.channel).missing(clientPermCheck);
 
-			if (missing)
+			if (missing.length)
 				return message.channel.send(
 					await this.client.bulbutils.translate("global_missing_permission_bot", message.guild.id, {
-						missing: clientPermCheck.toArray().map(perm => `\`${perm}\` `),
+						missing: missing.map(perm => `\`${perm}\``).join(", "),
 					}),
 				);
 		}

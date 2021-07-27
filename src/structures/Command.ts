@@ -1,5 +1,5 @@
 import BulbBotClient from "./BulbBotClient";
-import { Message } from "discord.js";
+import { BitField, Message, PermissionString } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import { Permissions } from "discord.js";
 import { SubCommand } from "./SubCommand";
@@ -13,8 +13,8 @@ export default class {
 	public readonly category: string;
 	public readonly usage: string;
 	public readonly examples: string[];
-	public readonly userPerms: any;
-	public readonly clientPerms: any;
+	public readonly userPerms: Readonly<BitField<PermissionString>>;
+	public readonly clientPerms: Readonly<BitField<PermissionString>>;
 	public readonly clearance: number;
 	public readonly subDevOnly: boolean;
 	public readonly devOnly: boolean;
