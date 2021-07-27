@@ -65,7 +65,6 @@ export default class {
 		response = response.replace(/({language})/g, key.language);
 		response = response.replace(/({languages})/g, key.languages);
 		response = response.replace(/({clearance})/g, key.clearance);
-		response = response.replace(/({command})/g, key.command);
 		response = response.replace(/({message})/g, key.message);
 		response = response.replace(/({words})/g, key.words);
 
@@ -111,7 +110,6 @@ export default class {
 
 		response = response.replace(/({amount})/g, key.amount);
 		response = response.replace(/({changes})/g, key.changes);
-		response = response.replace(/({limit})/g, key.limit);
 		response = response.replace(/({beforeContent})/g, key.beforeContent);
 		response = response.replace(/({afterContent})/g, key.afterContent);
 		response = response.replace(/({after_channel_id})/g, key.after_channel_id);
@@ -158,7 +156,6 @@ export default class {
 		response = response.replace(/({count})/g, key.count);
 
 		response = response.replace(/({item})/g, key.item);
-		response = response.replace(/({part})/g, key.part);
 		response = response.replace(/({punishment})/g, key.punishment);
 		response = response.replace(/({limit})/g, key.limit);
 
