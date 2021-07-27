@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Role, User, Util } from "discord.js";
+import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, User, Util } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 // import InfractionsManager from "../../../utils/managers/InfractionsManager";
 // import DatabaseManager from "../../../utils/managers/DatabaseManager";
@@ -56,8 +56,8 @@ export default class extends Event {
 			case "newrole":
 			case "removedrole":
 				const diff = newMember.roles.cache.difference(oldMember.roles.cache);
-				if (!diff.size) return;
-				const role: Role = <Role>diff.first();
+				const role = diff.first();
+				if (!role) return;
 
 				if (auditLog) {
 					const translateKey: string = (change === "newrole") ? "event_member_update_role_add_audit"

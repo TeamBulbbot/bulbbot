@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { GuildAuditLogsEntry, TextChannel } from "discord.js";
+import { GuildAuditLogs, TextChannel } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
@@ -15,25 +15,24 @@ export default class extends Event {
 	public async run(newChannel: TextChannel): Promise<void> {
 		if (!newChannel.guild.me?.hasPermission("VIEW_AUDIT_LOG")) return;
 
-		const logs = await newChannel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_UPDATE" });
-		const first: GuildAuditLogsEntry = <GuildAuditLogsEntry>logs.entries.first();
+		const logs: GuildAuditLogs = await newChannel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_UPDATE" });
+		const first  = logs.entries.first();
+		if (!first) return;
 
 		const { executor, changes, createdTimestamp } = first;
 		if (createdTimestamp + 3000 < Date.now()) return;
 		if (!changes) return;
 
-		let log: string = "";
+		const log: string[] = [];
 
 		for (const change of changes) {
-			log +=
+			log.push
 				(await this.client.bulbutils.translate("event_change", newChannel.guild.id, {
 					part: change.key,
 					before: change.old ? change.old : null,
 					after: change.new ? change.new : null,
-				})) + ", ";
+				}));
 		}
-
-		log = log.replace(/, +$/, "");
 
 		await loggingManager.sendServerEventLog(
 			this.client,
@@ -42,7 +41,7 @@ export default class extends Event {
 				moderator_tag: executor.tag,
 				moderator_id: executor.id,
 				channel_id: newChannel.id,
-				changes: log,
+				changes: log.join(", "),
 			}),
 		);
 	}
