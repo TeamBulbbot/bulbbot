@@ -30,7 +30,7 @@ export default class extends Command {
 		const targetID: Snowflake = match[1] ?? match[2];
 		const target: GuildMember = <GuildMember>message.guild?.member(targetID);
 		const nickmatch: RegExpMatchArray = <RegExpMatchArray>QuoteMarked.exec(argString);
-		const nickname: string = (nickmatch ? nickmatch[1] : args[1]).trim() ?? "";
+		const nickname: string = (nickmatch ? nickmatch[1] : args[1])?.trim() ?? "";
 		const reason: string =
 			args
 				.slice(1 + nickname.split(" ").length)
