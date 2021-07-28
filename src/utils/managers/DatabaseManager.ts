@@ -8,6 +8,16 @@ import { LoggingConfiguration } from "../types/LoggingConfiguration";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
+		// if guild is already in db ignore
+		if (
+			(
+				await sequelize.query('SELECT id FROM "guilds" WHERE "guildId" = $GuildID', {
+					bind: { GuildID: guild.id },
+					type: QueryTypes.SELECT,
+				})
+			).length > 0
+		)
+			return;
 		const config = await sequelize.models.guildConfiguration.create({ prefix: Config.prefix });
 		const logging = await sequelize.models.guildLogging.create({});
 		const automod = await sequelize.models.automod.create({});
