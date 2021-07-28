@@ -16,7 +16,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod", guildID, {
@@ -39,7 +39,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_unban_auto", guild.id, {
@@ -78,7 +78,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_temp", guild.id, {
@@ -102,7 +102,7 @@ export default class {
 		if (dbGuild.other === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.other);
-		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_command", guild.id, {
@@ -142,9 +142,8 @@ export default class {
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
-		if (!modChannel) return;
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
@@ -155,7 +154,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
