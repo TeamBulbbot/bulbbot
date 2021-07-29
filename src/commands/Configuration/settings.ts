@@ -8,7 +8,7 @@ const databaseManager = new DatabaseManager();
 
 export default class extends Command {
 	constructor(...args) {
-        // @ts-ignore
+		// @ts-ignore
 		super(...args, {
 			description: "Get the settings for the guild",
 			category: "Configuration",
@@ -22,7 +22,7 @@ export default class extends Command {
 
 	async run(message: Message) {
 		const guildConfig = await databaseManager.getConfig(message.guild!.id);
-        const loggingConfig = await databaseManager.getLoggingConfig(message.guild!.id);
+		const loggingConfig = await databaseManager.getLoggingConfig(message.guild!.id);
 
 		const configs = `
 		**Configuration **
@@ -44,7 +44,7 @@ export default class extends Command {
 		Channel logs: ${loggingConfig.channel !== null ? `<#${loggingConfig.channel}>` : Emotes.other.SWITCHOFF}
 		Join leave logs: ${loggingConfig.joinLeave !== null ? `<#${loggingConfig.joinLeave}>` : Emotes.other.SWITCHOFF} `;
 
-        const memberObj = await this.client.bulbutils.userObject(true, message.member!);
+		const memberObj = await this.client.bulbutils.userObject(true, message.member!);
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
