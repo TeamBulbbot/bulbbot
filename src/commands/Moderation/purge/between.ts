@@ -44,11 +44,19 @@ export default class extends SubCommand {
 
 		await (<TextChannel>message.channel).bulkDelete(messages);
 
-		fs.writeFile(`./files/purge/${message.guild?.id}.txt`, delMsgs, function (err) {
+		fs.writeFile(`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);
 		});
 
-		await loggingManager.sendModActionFile(this.client, <Guild>message.guild, "Purge", messages.length, `./files/purge/${message.guild?.id}.txt`, message.channel, message.author);
+		await loggingManager.sendModActionFile(
+			this.client,
+			<Guild>message.guild,
+			"Purge",
+			messages.length,
+			`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`,
+			message.channel,
+			message.author,
+		);
 
 		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: messages.length }));
 	}

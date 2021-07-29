@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["amount:int"],
-			usage: "!purge all <number>"
+			usage: "!purge all <number>",
 		});
 	}
 
@@ -54,11 +54,11 @@ export default class extends SubCommand {
 			await (<TextChannel>message.channel).bulkDelete(msgs);
 		}
 
-		const client: BulbBotClient = this.client
-		fs.writeFile(`./files/purge/${message.guild?.id}.txt`, delMsgs, async function (err) {
+		const client: BulbBotClient = this.client;
+		fs.writeFile(`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, delMsgs, async function (err) {
 			if (err) console.error(err);
 
-			await loggingManager.sendModActionFile(client, <Guild>message.guild, "Purge", amount, `./files/purge/${message.guild?.id}.txt`, message.channel, message.author);
+			await loggingManager.sendModActionFile(client, <Guild>message.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, message.channel, message.author);
 		});
 
 		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: amount }));
