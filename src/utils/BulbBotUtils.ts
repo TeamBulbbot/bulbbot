@@ -599,4 +599,9 @@ export default class {
 		AoE: "Pacific/Wallis",
 		UTC: "UTC",
 	};
+
+	// Supported languages
+	public readonly languages: Record<string, string> = {
+		"en-US": "en-US",
+	};
 }
