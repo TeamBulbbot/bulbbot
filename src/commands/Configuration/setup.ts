@@ -31,54 +31,77 @@ export default class extends Command {
 		const amEnabled: boolean = amc.enabled;
 		const lgEnabled: boolean = lgc && !!(lgc.automod || lgc.channel || lgc.invite || lgc.joinLeave || lgc.joinLeave || lgc.member || lgc.message || lgc.modAction || lgc.other || lgc.role);
 
+		// TODO remove this ts-ignore later
+		// @ts-ignore
+		let result: string | null;
+
 		// Need translation. All the prompts can be static, so maybe return them as an object? like bulbbutils.translateGroup("setupPrompts"); or something
 		await message.channel.send("Welcome to **Bulbbot Setup**.");
-		this.client.bulbutils.sleep(1500);
+		await this.client.bulbutils.sleep(1500);
 
 
 		// TODO: Language should be prompted first. A GTranslate-friendly prompt for the default may be a good idea
 		// This language then be used for translation of all remaining prompts
-		if(!this.prompt(message, ConfigPart.language, `Select language. (${dbguild.language})`, guildSetup)) return;
-
+		if((result = await this.prompt(message, ConfigPart.language, `Select language. (\`${dbguild.language}\`)`, guildSetup)) === null) return;
+		if(result === guildSetup.prefix)
+			guildSetup.language = dbguild.language;
+		// Access guildSetup.language for translation lang
 
 		// Explain what parenthesis at end of prompts mean, how to use
 		// This is after language to benefit from translation
 		await message.channel.send(`The answer in parenthesis at the end of prompts will be used if you respond to a prompt with your prefix (currently \`${dbguild.prefix}\`)`);
 
-		// TODO remove this ts-ignore later
-		// @ts-ignore
-		let result: string | null;
-
 		if((result = await this.prompt(message, ConfigPart.prefix,   `Please choose your server prefix. (\`${dbguild.prefix}\`)`, guildSetup,)) === null) return;
 		this.client.prefix = guildSetup.prefix!;
 
 		if((result = await this.prompt(message, ConfigPart.timezone, `What is your timezone? (\`${dbguild.timezone}\`)`, guildSetup,)) === null) return;
+		if(result === guildSetup.prefix)
+			guildSetup.timezone = dbguild.timezone;
 
 		if((result = await this.prompt(message, ConfigPart.muterole, `Choose a role to use for muting members. (\`${dbguild.muteRole || "Create one for me"}\`)`, guildSetup,)) === null) return;
+		if(result === guildSetup.prefix)
+			guildSetup.muterole = dbguild.muteRole || "Create one for me";
+		if(!dbguild.muterole && result.toLowerCase() === "remove")
+			guildSetup.muterole = dbguild.muterole;
+		else if(result.toLowerCase() === "disable")
+			guildSetup.muterole = null;
+		else if(result.toLowerCase() !== "create one for me")
+			guildSetup.muterole = result.replace(NonDigits, "");
 
 		if((result = await this.prompt(message, ConfigPart.automod,  !amEnabled ? `Would you like to enable Bulbbot Automod? (\`Yes\`)` : `Review Automod configuration? (\`No\`)`, guildSetup,)) === null) return;
+		if(result === guildSetup.prefix)
+			guildSetup.automod = amEnabled ? "n" : "y";
 		/* TODO
 			If "yes", delegate to automod guided setup, then proceed
 			If "no", proceed
 		*/
 
 		if((result = await this.prompt(message, ConfigPart.logging,  !lgEnabled ? `Would you like to set up logging? (\`Yes\`)` : `Review logging configuration? (\`No\`)`, guildSetup,)) === null) return;
+		if(result === guildSetup.prefix)
+			guildSetup.logging = lgEnabled ? "n" : "y";
 		/* TODO
 			If "yes", delegate to automod guided setup, then proceed
 			If "no", proceed
 		*/
 
 		if((result = await this.prompt(message, ConfigPart.autorole, `Would you like to set an auto-role to be added when new members join the server? (\`${dbguild.autorole || "Disable"}\`)`, guildSetup,)) === null) return;
-
+		if(result === guildSetup.prefix)
+			guildSetup.autorole = dbguild.autorole || "Disable";
+		if(!dbguild.autorole && result.toLowerCase() === "disable")
+			guildSetup.autorole = dbguild.autorole;
+		else if(result.toLowerCase() === "disable")
+			guildSetup.autorole = null;
 
 		// Maybe need a copy of this in this.timedout() too
 		if(guildSetup.language === dbguild.language) delete guildSetup.language;
 		if(guildSetup.prefix === dbguild.prefix) delete guildSetup.prefix;
 		if(guildSetup.timezone === dbguild.timezone) delete guildSetup.timezone;
 		if(guildSetup.muterole === dbguild.muterole) delete guildSetup.muterole;
-		if(guildSetup.automod === "no") delete guildSetup.automod;
-		if(guildSetup.logging === "no") delete guildSetup.logging;
+		if(guildSetup.automod === "n") delete guildSetup.automod;
+		if(guildSetup.logging === "n") delete guildSetup.logging;
 		if(guildSetup.autorole === dbguild.autorole) delete guildSetup.autorole;
+
+		await this.applySetup(message, guildSetup);
 	}
 
 	public async prompt(message: Message, part: ConfigPart, text: string, guildSetup: GuildSetup, maxtime: number = 180000): Promise<string | null> {
@@ -114,8 +137,13 @@ export default class extends Command {
 			await databaseManager.setTimezone(message.guild!.id, guildSetup.timezone);
 
 
-		if(guildSetup.muterole)
-			databaseManager.setMuteRole(message.guild!.id, guildSetup.muterole);
+		if(guildSetup.muterole !== undefined) {
+			if(guildSetup.muterole?.toLowerCase() === "create one for me") {
+
+			} else {
+				await databaseManager.setMuteRole(message.guild!.id, guildSetup.muterole);
+			}
+		}
 
 
 		if(guildSetup.automod) {
@@ -130,8 +158,13 @@ export default class extends Command {
 			// same as automod
 		}
 
-		if(guildSetup.autorole)
-			databaseManager.setAutoRole(message.guild!.id, guildSetup.autorole);
+		if(guildSetup.autorole !== undefined) {
+			if(guildSetup.autorole?.toLowerCase() === "disable") {
+
+			} else {
+				databaseManager.setAutoRole(message.guild!.id, guildSetup.autorole);
+			}
+		}
 
 	}
 
