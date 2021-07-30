@@ -26,7 +26,7 @@ export default class extends Command {
 		try {
 			invite = await this.client.fetchInvite(code);
 		} catch (error) {
-			message.channel.send(await this.client.bulbutils.translate("inviteinfo_error", message.guild!.id));
+			await message.channel.send(await this.client.bulbutils.translate("inviteinfo_error", message.guild!.id));
 			return;
 		}
 

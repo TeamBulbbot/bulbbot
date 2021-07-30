@@ -2,7 +2,7 @@ export default interface GuildSetup {
 	language?: string,
 	prefix?: string,
 	timezone?: string,
-	muterole?: string,
+	muterole?: string | null,
 	automod?: string,
 	automod_settings?: {
 
@@ -11,5 +11,5 @@ export default interface GuildSetup {
 	logging_settings?: {
 
 	}
-	autorole?: string,
+	autorole?: string | null,
 }

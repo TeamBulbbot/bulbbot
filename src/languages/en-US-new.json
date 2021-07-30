@@ -10,7 +10,8 @@
     "role": "role",
     "channel": "channel",
     "lang": "language",
-    "cmd": "command"
+    "cmd": "command",
+    "emoji": "emoji"
   },
 
   "global_mod_action_log": "{{action}} by: {{moderator.tag}} ({{moderator.id}}) | Target: {{target.tag}} ({{target.id}} | Reason: {{reason}})",
@@ -143,6 +144,49 @@
   "automod_violation_invites_log": "{{emote_warn}} **{target_tag}** `({{target.id}})` has violated the `DISCORD_INVITE` check in {{channel}} | Punishment: **{{punishment}}**\n```{{message}}```",
   "automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
   "automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in {{channel}} | Punishment: **{{punishment}}**\n```{{message}}```",
+
+  "jumbo_too_many": "{{emote_warn}} Too many emojis provided. The bot currently only supports a max of 10 emojis at a time.",
+
+  "userinfo_embed_id": "**ID:** {{user.id}}\n",
+  "userinfo_embed_username": "**Username:** {{user.username}}\n",
+  "userinfo_embed_nickname": "**Nickname:** {{user.nickname}}\n",
+  "userinfo_embed_profile": "**Profile:** <@{{user.id}}> [`Profile`](https://discord.com/users/{{user.id}})\n",
+  "userinfo_embed_avatar": "**Avatar URL:** [Link]({{user.avatarUrl}})\n",
+  "userinfo_embed_bot": "**Bot:** {{user.bot}}\n",
+  "userinfo_embed_created": "**Account Creation:** {{user.createdTimestamp}}\n",
+  "userinfo_embed_joined": "**Joined Server:** {{user.joinedTimestamp}}\n",
+  "userinfo_embed_premium": "**Boosting since:** {{user.premiumSinceTimestamp}}\n",
+  "userinfo_embed_roles": "**Roles:** {{user_roles}}\n",
+  "userinfo_embed_infractions": "",
+
+  "serverinfo_embed_owner": "{{emote_owner}} **Owner:** <@{{guild.owner.user.id}}> `{{guild.owner.user.id}}`\n",
+  "serverinfo_embed_features": "**Features:**\n{{guild_features}}\n",
+  "serverinfo_embed_region": "**Region:** {{guild.region}}\n",
+  "serverinfo_embed_verification": "**Verification level:** {{guild.verificationLevel}}\n",
+  "serverinfo_embed_created": "**Created at:** {{guild.createdTimestamp}}",
+
+  "serverinfo_server_stats": "**Server stats**",
+  "serverinfo_channel_stats": "**Channel stats**",
+  "serverinfo_booster_stats": "**Booster stats**",
+  "serverinfo_server_stats_total": "Total: **{{guild.memberCount}}**/{{guild.maximumMembers}}\n",
+  "serverinfo_channel_stats_voice": "Voice Channels: **{{guild_voice}}**\n",
+  "serverinfo_channel_stats_text": "Text Channels: **{{guild_text}}**\n",
+  "serverinfo_channel_stats_category": "Category: **{{guild_category}}**\n",
+  "serverinfo_booster_tier": "Booster Tier: **{{guild.premiumTier}}**\n",
+  "serverinfo_booster_boosters": "Boosters: **{{guild.premiumSubscriptionCount}}**\n",
+  "serverinfo_booster_tier_1": "Emote slots: **100**\nAudio quality: **128** kbps\n",
+  "serverinfo_booster_tier_2": "Emote slots: **150**\nAudio quality: **256** kbps\nUpload limit: **50 MB**\n",
+  "serverinfo_booster_tier_3": "Emote slots: **250**\nAudio quality: **384** kbps\nUpload limit: **100 MB**\n",
+  "serverinfo_roles": "Roles ({{guild_amount_roles}})",
+  "serverinfo_emotes": "Emotes ({{guild_amount_emotes}})",
+  "serverinfo_roles_too_many": " and **{{guild_roles_left}}** more",
+  "serverinfo_emotes_too_many": " and **{{guild_emotes_left}}** more",
+  "serverinfo_emotes_none": "No emotes",
+
+  "action_success": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} for **{{reason}}** `[#{{infraction_id}}]`",
+
+  "already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
+  "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
 
   "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**"
 }
