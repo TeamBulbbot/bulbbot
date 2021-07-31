@@ -2,7 +2,7 @@ import BulbBotClient from "./BulbBotClient";
 import { BitField, Message, PermissionString } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import { Permissions } from "discord.js";
-import { SubCommand } from "./SubCommand";
+import SubCommand from "./SubCommand";
 
 export default class {
 	public readonly client: BulbBotClient;

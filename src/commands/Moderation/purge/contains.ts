@@ -1,4 +1,4 @@
-import { SubCommand } from "../../../structures/SubCommand";
+import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
 import Command from "../../../structures/Command";
 import moment from "moment";

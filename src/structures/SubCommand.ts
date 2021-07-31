@@ -3,7 +3,7 @@ import { Message } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import Command from "./Command";
 
-export class SubCommand {
+export default class SubCommand {
 	public readonly client: BulbBotClient;
 	public readonly parent: Command;
 	public readonly name: string;
@@ -16,6 +16,7 @@ export class SubCommand {
 	public readonly usage: string;
 
 	constructor(client: BulbBotClient, parent: Command, name: string, options: any) {
+		if(typeof name === "object" && options === undefined) options = name;
 		this.client = client;
 		this.parent = parent;
 		this.name = options.name || name;

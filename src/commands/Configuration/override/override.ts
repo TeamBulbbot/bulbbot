@@ -1,4 +1,4 @@
-import { SubCommand } from "../../../structures/SubCommand";
+import SubCommand from "../../../structures/SubCommand";
 import { Message } from "discord.js";
 import Command from "../../../structures/Command";
 

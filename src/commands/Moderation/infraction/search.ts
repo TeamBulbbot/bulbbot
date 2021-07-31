@@ -1,4 +1,4 @@
-import { SubCommand } from "../../../structures/SubCommand";
+import SubCommand from "../../../structures/SubCommand";
 import { Message, MessageEmbed, Snowflake, User } from "discord.js";
 import Command from "../../../structures/Command";
 import { NonDigits, ReasonImage } from "../../../utils/Regex";
