@@ -60,8 +60,8 @@ export default class extends Event {
 				if (!role) return;
 
 				if (auditLog) {
-					const translateKey: string = (change === "newrole") ? "event_member_update_role_add_audit"
-																		: "event_member_update_role_remove_audit";
+					const translateKey = (change === "newrole") ? "event_member_update_role_add_audit"
+																: "event_member_update_role_remove_audit";
 					executor = auditLog.executor;
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user_tag: newMember.user.tag,
@@ -71,8 +71,8 @@ export default class extends Event {
 						moderator_id: executor.id,
 					});
 				} else {
-					const translateKey: string = (change === "newrole") ? "event_member_update_role_add"
-																		: "event_member_update_role_remove";
+					const translateKey = (change === "newrole") ? "event_member_update_role_add"
+																: "event_member_update_role_remove";
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user_tag: newMember.user.tag,
 						user_id: newMember.user.id,
