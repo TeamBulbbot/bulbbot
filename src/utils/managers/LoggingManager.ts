@@ -4,7 +4,7 @@ import DatabaseManager from "./DatabaseManager";
 import * as Emotes from "../../emotes.json";
 import moment, { MomentInput } from "moment";
 import "moment-timezone";
-import { LoggingConfiguration } from "../types/LoggingConfiguration";
+import LoggingConfiguration from "../types/LoggingConfiguration";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 

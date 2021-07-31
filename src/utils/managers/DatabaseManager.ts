@@ -3,8 +3,8 @@ import * as Config from "../../Config";
 import { Guild, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
-import { AutoModConfiguration } from "../types/AutoModConfiguration";
-import { LoggingConfiguration } from "../types/LoggingConfiguration";
+import AutoModConfiguration from "../types/AutoModConfiguration";
+import LoggingConfiguration from "../types/LoggingConfiguration";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {

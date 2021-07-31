@@ -5,14 +5,14 @@ import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
 import AutoModManager from "./managers/AutoModManager";
 import LoggingManager from "./managers/LoggingManager";
-import { AutoModConfiguration } from "./types/AutoModConfiguration";
+import AutoModConfiguration from "./types/AutoModConfiguration";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const automodManager: AutoModManager = new AutoModManager();
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default async function (client: BulbBotClient, message: Message): Promise<void> {
-	if(!message.guild?.available) return;
+	if (!message.guild?.available) return;
 	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(message.guild.id);
 
 	if (!dbGuild.enabled) return;

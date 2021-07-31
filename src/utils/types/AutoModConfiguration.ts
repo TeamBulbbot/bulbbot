@@ -1,4 +1,4 @@
-export interface AutoModConfiguration {
+export default interface AutoModConfiguration {
 	id: number;
 	enabled: boolean;
 	websiteWhitelist: string[];
