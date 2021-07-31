@@ -36,7 +36,7 @@
 	"event_message_delete_special": "{emote_trash} Message from **{target_tag}** `{target_id}` was deleted in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`",
 	"event_message_update": "{emote_edit} Message from **{target_tag}** `{target_id}` was updated in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`\n**B:** {beforeContent}\n**A:** {afterContent}",
 	"event_message_update_special": "{emote_edit} Message from **{target_tag}** `{target_id}`  was updated in <#{channel_id}>\n`ID (channel-message): {after_channel_id}-{after_id}`",
-	
+
 
 	"event_change": "`{part}` from `{before}` to `{after}`",
 	"event_server_update": "{emote_wrench} **{moderator_tag}** `({moderator_id})` has changed the server settings. Changed {changes}",
@@ -147,12 +147,12 @@
 	"automod_disabled_feature": "{emote_success} Disabled `{part}`",
 
 	"automod_settings_header": "AutoMod settings for {guild_name}",
-	"automod_settings_enabled": "**Enabled:** {part}\n\n",
-	"automod_settings_websites": "**Websites:** {part}\n**Blacklisted websites:** {item}\n\n",
-	"automod_settings_invites": "**Invites:** {part}\n**Whitelisted invites:** {item}\n\n",
-	"automod_settings_words": "**Words:** {part}\n**Blacklisted words:** {item}\n**Token words:** {count}\n\n",
-	"automod_settings_mentions": "**Mentions:** {part}\n**Limit:** {amount}\n**Timeout:** {limit}s\n\n",
-	"automod_settings_messages": "**Messages:** {part}\n**Limit:** {amount}\n**Timeout:** {limit}s\n\n",
+	"automod_settings_enabled": "**Enabled:** {part}",
+	"automod_settings_websites": "**Websites:** {part}\n**Blacklisted websites:** {item}",
+	"automod_settings_invites": "**Invites:** {part}\n**Whitelisted invites:** {item}",
+	"automod_settings_words": "**Words:** {part}\n**Blacklisted words:** {item}\n**Token words:** {count}",
+	"automod_settings_mentions": "**Mentions:** {part}\n**Limit:** {amount}\n**Timeout:** {limit}s",
+	"automod_settings_messages": "**Messages:** {part}\n**Limit:** {amount}\n**Timeout:** {limit}s",
 	"automod_settings_ignored": "**Immune roles:** {role}\n**Immune channels:** {channel_id}\n**Immune users:** {target_tag}",
 	"automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
 
