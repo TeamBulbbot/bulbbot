@@ -1,4 +1,4 @@
-import { SubCommand } from "../../../structures/SubCommand";
+import SubCommand from "../../../structures/SubCommand";
 import { Message, Snowflake, User } from "discord.js";
 import Command from "../../../structures/Command";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";

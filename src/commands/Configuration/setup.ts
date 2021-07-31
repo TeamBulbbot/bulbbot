@@ -74,7 +74,7 @@ export default class extends Command {
 			If "no", proceed
 		*/
 		if(guildSetup.automod === "yes")
-		{
+		{// @ts-ignore
 			let amSetup = new automod(this.client, this);
 		}
 
