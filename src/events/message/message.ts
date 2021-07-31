@@ -6,7 +6,7 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
-import { SubCommand } from "../../structures/SubCommand";
+import SubCommand from "../../structures/SubCommand";
 import AutoMod from "../../utils/AutoMod";
 
 const databaseManager: DatabaseManager = new DatabaseManager();

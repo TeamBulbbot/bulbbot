@@ -1,4 +1,4 @@
-import { SubCommand } from "../../../structures/SubCommand";
+import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, GuildMember, Message, Snowflake, TextChannel } from "discord.js";
 import Command from "../../../structures/Command";
 import { NonDigits } from "../../../utils/Regex";
