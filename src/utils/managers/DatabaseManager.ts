@@ -5,6 +5,10 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 import { AutoModConfiguration } from "../types/AutoModConfiguration";
 import { LoggingConfiguration } from "../types/LoggingConfiguration";
+import AutoModPart, { AutoModListPart } from "../types/AutoModPart";
+import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
+
+
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -257,6 +261,57 @@ export default class {
 		await sequelize.query('UPDATE automods SET enabled = $Enabled WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID, Enabled: enabled },
 			type: QueryTypes.UPDATE,
+		});
+	}
+
+	// Append/Remove Abstractions
+	private async automodListOperation(guildID: Snowflake, part: AutoModListPart, operation: AutoModListOperation): Promise<AutoModListOperationResult> {
+		const db: AutoModConfiguration = await this.getAutoModConfig(guildID);
+		const dbkey: string = (function(part) {
+			switch(part) {
+				case AutoModPart.word: return "wordBlacklist";
+				case AutoModPart.token: return "wordBlacklistToken";
+				case AutoModPart.website: return "websiteWhitelist";
+				case AutoModPart.invite: return "inviteWhitelist";
+			}
+		})(part);
+		const result: AutoModListOperationResult = await operation(db[dbkey]);
+		await sequelize.query(`UPDATE automods SET "${dbkey}" = $ListContent WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
+			bind: { GuildID: guildID, ListContent: result.list },
+			type: QueryTypes.UPDATE,
+		});
+		return result;
+	}
+
+	public async automodAppend(guildID: Snowflake, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
+		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
+			const dbSet: Set<string> = new Set(dblist);
+			const itemSet: Set<string> = new Set(items);
+			const duplicateSet: Set<string> = new Set();
+			const addedSet: Set<string> = new Set();
+			for(const item of itemSet) {
+				if (dbSet.has(item)) duplicateSet.add(item);
+				else dbSet.add(item), addedSet.add(item);
+			}
+			return {list: [...dbSet], added: [...addedSet], removed: [], other: [...duplicateSet]};
+		});
+	}
+
+	public async automodRemove(guildID, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
+		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
+			const notPresent: string[] = [];
+			const removed: string[] = [];
+			for(const item of items) {
+				if(!dblist.includes(item)) notPresent.push(item);
+				else removed.push(item);
+			}
+			if(items.length === 1) {
+				dblist.splice(dblist.findIndex(i => i === items[0]), 1);
+			} else {
+				dblist.sort((a, b) => +items.includes(b) - +items.includes(a));
+				dblist = dblist.slice(dblist.findIndex(i => !items.includes(i)));
+			}
+			return {list: dblist, added: [], removed: removed, other: notPresent};
 		});
 	}
 

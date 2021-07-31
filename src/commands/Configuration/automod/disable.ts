@@ -9,14 +9,14 @@ export default class extends SubCommand {
 	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
-			name: "enable",
+			name: "disable",
 			clearance: 75,
-			usage: "!automod enable",
+			usage: "!automod disable",
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void> {
-		await databaseManager.enableAutomod(message.guild!.id, true);
-		await message.channel.send(await this.client.bulbutils.translateNew("automod_enabled", message.guild?.id, {}));
+	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+		await databaseManager.enableAutomod(message.guild!.id, false);
+		await message.channel.send(await this.client.bulbutils.translateNew("automod_disabled", message.guild?.id, {}));
 	}
 }
