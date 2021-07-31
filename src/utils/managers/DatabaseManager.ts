@@ -76,17 +76,18 @@ export default class {
 		return response[0];
 	}
 
-	/**
-	 * @deprecated
-	 */
-	async getFullGuildConfig(guildId: Snowflake) {
+	async getFullGuildConfig(guildID: Snowflake) {
 		return await sequelize.models.guild.findOne({
-			where: { guildId },
+			where: { guildId: guildID },
 			include: [
 				{ model: sequelize.models.guildConfiguration },
 				{ model: sequelize.models.guildLogging },
-				//	{ model: sequelize.models.guildOverrideCommands },
-				//	{ model: sequelize.models.guildModerationRoles },
+				{ model: sequelize.models.guildOverrideCommands },
+				{ model: sequelize.models.guildModerationRoles },
+				{ model: sequelize.models.automod },
+				{ model: sequelize.models.infraction },
+				{ model: sequelize.models.tempban },
+				{ model: sequelize.models.tempmute },
 			],
 		});
 	}
