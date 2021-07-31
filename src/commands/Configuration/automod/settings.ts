@@ -12,10 +12,10 @@ export default class extends SubCommand {
 	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
-			name: "enable",
+			name: "settings",
 			clearance: 75,
 			maxArgs: 0,
-			usage: "!automod enable",
+			usage: "!automod settings",
 		});
 	}
 
