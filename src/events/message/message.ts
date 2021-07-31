@@ -63,8 +63,8 @@ export default class extends Event {
 		if (!command) return;
 		if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
-		if(!message.guild.me) await message.guild.members.fetch(this.client.user!.id);
-		if(!message.guild.me) return; // Shouldn't be possible to return here. Narrows the type
+		if (!message.guild.me) await message.guild.members.fetch(this.client.user!.id);
+		if (!message.guild.me) return; // Shouldn't be possible to return here. Narrows the type
 
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild.id, command.name);
 		if (commandOverride !== undefined) {
@@ -86,7 +86,7 @@ export default class extends Event {
 		}
 
 		const userPermCheck: BitField<PermissionString> = command.userPerms;
-		if (userPermCheck && (command.clearance <= clearance)) {
+		if (userPermCheck && command.clearance <= clearance) {
 			const userMember: GuildMember = message.member!;
 			const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(message.channel).has(userPermCheck)); // !x || !y === !(x && y)
 
@@ -98,7 +98,7 @@ export default class extends Event {
 			}
 		}
 
-		const clientPermCheck: BitField<PermissionString> = command.clientPerms ? this.client.defaultPerms.add(command.clientPerms) : this.client.defaultPerms;;
+		const clientPermCheck: BitField<PermissionString> = command.clientPerms ? this.client.defaultPerms.add(command.clientPerms) : this.client.defaultPerms;
 		if (clientPermCheck) {
 			let missing: PermissionString[] = message.guild.me.permissions.missing(clientPermCheck);
 			if (!missing.length) missing = message.guild.me.permissionsIn(message.channel).missing(clientPermCheck);
@@ -138,7 +138,7 @@ export default class extends Event {
 
 		let used: string = `${prefix}${command.name}`;
 		args.forEach(arg => (used += ` ${arg}`));
-		await loggingManager.sendCommandLog(this.client, message.guild, message.author, message.channel.id, used);
+		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, message.guild, message.author, message.channel.id, used);
 
 		let sCmd: SubCommand;
 		if (command.subCommands) {
