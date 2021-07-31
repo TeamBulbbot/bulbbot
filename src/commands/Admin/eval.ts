@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import { Message } from "discord.js";
-import * as fs from "fs";
+import { writeFile } from "fs";
 
 export default class extends Command {
 	constructor(...args) {
@@ -33,7 +33,7 @@ export default class extends Command {
 			this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) ran eval with the code: ${code}`);
 
 			if (evaled.length > 2000) {
-				fs.writeFile(`${__dirname}/../../../files/EVAL-${message.guild?.id}.js`, await clean(evaled), function (err) {
+				writeFile(`${__dirname}/../../../files/EVAL-${message.guild?.id}.js`, await clean(evaled), function (err) {
 					if (err) console.error(err);
 				});
 
