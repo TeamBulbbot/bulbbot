@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["query:string", "amount:int"],
-			usage: "!purge user <query> <amount>"
+			usage: "!purge user <query> <amount>",
 		});
 	}
 
@@ -36,9 +36,9 @@ export default class extends SubCommand {
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		let delMsgs: string = `Message purge in #${(<TextChannel>message.channel).name} (${message.channel.id}) by ${message.author.tag} (${
-			message.author.id
-		}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
+		let delMsgs: string = `Message purge in #${(<TextChannel>message.channel).name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format(
+			"MMMM Do YYYY, h:mm:ss a",
+		)} \n`;
 
 		let messagesToPurge: Snowflake[] = [];
 		amount = 0;
@@ -60,11 +60,11 @@ export default class extends SubCommand {
 
 		await (<TextChannel>message.channel).bulkDelete(messagesToPurge);
 
-		fs.writeFile(`./files/purge/${message.guild?.id}.txt`, delMsgs, function (err) {
+		fs.writeFile(`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);
 		});
 
-		await loggingManager.sendModActionFile(this.client, <Guild>message.guild, "Purge", amount, `./files/purge/${message.guild?.id}.txt`, message.channel, message.author);
+		await loggingManager.sendModActionFile(this.client, <Guild>message.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, message.channel, message.author);
 
 		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: amount }));
 	}

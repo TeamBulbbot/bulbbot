@@ -30,7 +30,7 @@ export default class extends Event {
 		});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`./files/events/MESSAGE-DELETE-${message.guild.id}.txt`, message.content);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`, message.content);
 			await loggingManager.sendEventLogFile(
 				this.client,
 				message.guild,
@@ -43,7 +43,7 @@ export default class extends Event {
 					after_id: message.id,
 					time: `[${this.client.bulbutils.formatSmall(message.createdTimestamp)}]`,
 				}),
-				`./files/events/MESSAGE-DELETE-${message.guild.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, message.guild, "message", msg);
 	}

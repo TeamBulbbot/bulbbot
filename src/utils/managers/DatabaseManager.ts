@@ -3,12 +3,10 @@ import * as Config from "../../Config";
 import { Guild, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
-import { AutoModConfiguration } from "../types/AutoModConfiguration";
-import { LoggingConfiguration } from "../types/LoggingConfiguration";
+import AutoModConfiguration from "../types/AutoModConfiguration";
+import LoggingConfiguration from "../types/LoggingConfiguration";
 import AutoModPart, { AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
-
-
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -80,17 +78,18 @@ export default class {
 		return response[0];
 	}
 
-	/**
-	 * @deprecated
-	 */
-	async getFullGuildConfig(guildId: Snowflake) {
+	async getFullGuildConfig(guildID: Snowflake) {
 		return await sequelize.models.guild.findOne({
-			where: { guildId },
+			where: { guildId: guildID },
 			include: [
 				{ model: sequelize.models.guildConfiguration },
 				{ model: sequelize.models.guildLogging },
-				//	{ model: sequelize.models.guildOverrideCommands },
-				//	{ model: sequelize.models.guildModerationRoles },
+				{ model: sequelize.models.guildOverrideCommands },
+				{ model: sequelize.models.guildModerationRoles },
+				{ model: sequelize.models.automod },
+				{ model: sequelize.models.infraction },
+				{ model: sequelize.models.tempban },
+				{ model: sequelize.models.tempmute },
 			],
 		});
 	}

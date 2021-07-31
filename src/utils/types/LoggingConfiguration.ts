@@ -1,4 +1,4 @@
-export interface LoggingConfiguration {
+export default interface LoggingConfiguration {
 	id: number;
 	modAction: string;
 	automod: string;
