@@ -1,5 +1,5 @@
 import Command from "../../structures/Command";
-import { Invite, Message, MessageEmbed, TextChannel } from "discord.js";
+import { Invite, Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 
@@ -26,7 +26,7 @@ export default class extends Command {
 		try {
 			invite = await this.client.fetchInvite(code);
 		} catch (error) {
-			await message.channel.send(await this.client.bulbutils.translate("inviteinfo_error", message.guild!.id));
+			await message.channel.send(await this.client.bulbutils.translateNew("inviteinfo_error", message.guild!.id, {}));
 			return;
 		}
 
@@ -37,28 +37,28 @@ export default class extends Command {
 		let inviteInfo: string = "";
 
 		desc += `${this.client.bulbutils.guildFeatures(guild.features)}\n\n`;
-		desc += await this.client.bulbutils.translate("inviteinfo_verification_level", guild.id, { verification_level: guild.verificationLevel });
-		desc += await this.client.bulbutils.translate("inviteinfo_large", guild.id, { large: guild.large });
+		desc += await this.client.bulbutils.translateNew("inviteinfo_verification_level", guild.id, { guild });
+		desc += await this.client.bulbutils.translateNew("inviteinfo_large", guild.id, { guild });
 
-		inviteInfo += await this.client.bulbutils.translate("inviteinfo_code", guild.id, { code: invite.code });
+		inviteInfo += await this.client.bulbutils.translateNew("inviteinfo_code", guild.id, { invite });
 		inviteInfo += `${Emotes.status.ONLINE}: \`${invite.presenceCount}\`\n`;
 		inviteInfo += `${Emotes.status.OFFLINE}: \`${invite.memberCount}\`\n\n`;
 
 		if (invite.inviter) {
 			let inviter = "";
 
-			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_id", guild.id, { user_id: invite.inviter.id });
-			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_tag", guild.id, { user_tag: invite.inviter.tag });
-			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_avatar", guild.id, { user_avatar: invite.inviter.avatarURL({ dynamic: true, size: 4096 }) });
+			inviter += await this.client.bulbutils.translateNew("inviteinfo_inviter_id", guild.id, { invite });
+			inviter += await this.client.bulbutils.translateNew("inviteinfo_inviter_tag", guild.id, { invite });
+			inviter += await this.client.bulbutils.translateNew("inviteinfo_inviter_avatar", guild.id, { user_avatar: invite.inviter.avatarURL({ dynamic: true, size: 4096 }) });
 
 			desc += "\n**Inviter**\n" + inviter;
 		}
 		if (invite.channel) {
 			let inviteChannel = "";
 
-			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_id", guild.id, { channel_id: invite.channel.id });
-			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_name", guild.id, { channel_name: invite.channel.name });
-			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_nsfw", guild.id, { channel_nsfw: (<TextChannel>invite.channel).nsfw });
+			inviteChannel += await this.client.bulbutils.translateNew("inviteinfo_channel_id", guild.id, { invite });
+			inviteChannel += await this.client.bulbutils.translateNew("inviteinfo_channel_name", guild.id, { invite });
+			inviteChannel += await this.client.bulbutils.translateNew("inviteinfo_channel_nsfw", guild.id, { invite });
 
 			desc += "\n**Invite Channel**\n" + inviteChannel;
 		}
@@ -72,14 +72,13 @@ export default class extends Command {
 			.setThumbnail(guild.iconURL({ dynamic: true, size: 4096 })!)
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
-					user_name: await this.client.bulbutils.userObject(true, message.member).username,
-					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
+				await this.client.bulbutils.translateNew("global_executed_by", message.guild.id, {
+					user: message.author,
 				}),
 				await this.client.bulbutils.userObject(true, message.member).avatarUrl,
 			)
 			.setTimestamp();
 
-		message.channel.send(embed);
+		await message.channel.send(embed);
 	}
 }
