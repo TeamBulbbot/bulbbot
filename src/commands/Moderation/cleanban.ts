@@ -75,7 +75,7 @@ export default class extends Command {
 		await message.channel.send(
 			await this.client.bulbutils.translateNew("action_success", message.guild?.id, {
 				action: await this.client.bulbutils.translateNew("mod_action_types.ban", message.guild?.id, {}),
-				target,
+				target: target.user,
 				reason,
 				infraction_id: infID,
 			}),
