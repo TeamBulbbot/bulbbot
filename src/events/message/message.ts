@@ -55,7 +55,7 @@ export default class extends Event {
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;
 		if (message.content.match(mentionRegex) && message.content.replace(mentionRegex, "").trim().length === 0)
 			return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
-		if (message.content.match(mentionRegex)) message.content = `!${message.content.replace(mentionRegex, "").trim()}`;
+		if (message.content.match(mentionRegex)) message.content = `${this.client.prefix}${message.content.replace(mentionRegex, "").trim()}`;
 
 		const [cmd, ...args] = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
 		const command: Command | undefined = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase())!);
