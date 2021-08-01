@@ -1,5 +1,5 @@
 const sequelize = require("./connection");
-import { QueryTypes } from "sequelize";
+const Sequelize = require("sequelize");
 
 module.exports = class DatabaseManager {
 	/**
@@ -13,7 +13,7 @@ module.exports = class DatabaseManager {
 			(
 				await sequelize.query('SELECT id FROM "guilds" WHERE "guildId" = $GuildID', {
 					bind: { GuildID: guild.id },
-					type: QueryTypes.SELECT,
+					type: Sequelize.QueryTypes.SELECT,
 				})
 			).length > 0
 		)
