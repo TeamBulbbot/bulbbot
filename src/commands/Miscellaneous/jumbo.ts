@@ -23,7 +23,7 @@ export default class extends Command {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		try {
-			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many", message.guild?.id));
+			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translateNew("jumbo_too_many", message.guild?.id, {}));
 
 			const size: number = 250;
 			const imgPath: any = [];
@@ -58,21 +58,15 @@ export default class extends Command {
 
 				try {
 					await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
-						return await sharp(res.data, { density: 2400 })
-							.png()
-							.resize(size, size)
-							.toFile(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
+						return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
 					});
 				} catch (error) {
-					if (CustomEmote.test(<string><unknown>emote)) throw error;
+					if (CustomEmote.test(<string>(<unknown>emote))) throw error;
 
 					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ").join("-").split("-fe0f").join("")}.svg`;
 
 					await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
-						return await sharp(res.data, { density: 2400 })
-							.png()
-							.resize(size, size)
-							.toFile(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
+						return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
 					});
 				}
 
@@ -86,10 +80,7 @@ export default class extends Command {
 				});
 			}
 
-			await sharp(`files/jumbo/${message.author.id}-${message.guild?.id}.png`)
-				.composite(imgPath)
-				.png()
-				.toFile(`files/jumbo/final-${message.author.id}-${message.guild?.id}.png`);
+			await sharp(`files/jumbo/${message.author.id}-${message.guild?.id}.png`).composite(imgPath).png().toFile(`files/jumbo/final-${message.author.id}-${message.guild?.id}.png`);
 
 			await message.channel.send({
 				files: [`files/jumbo/final-${message.author.id}-${message.guild?.id}.png`],
@@ -105,7 +96,7 @@ export default class extends Command {
 				}
 			}
 		} catch (error) {
-			return message.channel.send(await this.client.bulbutils.translate("jumbo_invalid_emoji", message.guild?.id));
+			return message.channel.send(await this.client.bulbutils.translateNew("jumbo_invalid", message.guild?.id, {}));
 		}
 	}
 }
