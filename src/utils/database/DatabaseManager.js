@@ -1,4 +1,5 @@
 const sequelize = require("./connection");
+import { QueryTypes } from "sequelize";
 
 module.exports = class DatabaseManager {
 	/**
