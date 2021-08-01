@@ -11,7 +11,10 @@
     "channel": "channel",
     "lang": "language",
     "cmd": "command",
-    "emoji": "emoji"
+    "emoji": "emoji",
+    "int": "integer",
+    "bool": "boolean",
+    "snowflake": "snowflake"
   },
 
   "global_mod_action_log": "{{action}} by: {{moderator.tag}} ({{moderator.id}}) | Target: {{target.tag}} ({{target.id}} | Reason: {{reason}})",
@@ -184,9 +187,83 @@
   "serverinfo_emotes_none": "No emotes",
 
   "action_success": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} for **{{reason}}** `[#{{infraction_id}}]`",
+  "action_multi_success": "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
 
   "already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
   "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
 
-  "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**"
+  "purge_too_many": "{{emote_fail}} Can only purge a max of 99 messages at a time",
+  "purge_too_few": "{{emote_fail}} You cannot purge less than 2 messages",
+  "purge_success": "{{emote_success}} Successfully purged **{{count}}** messages",
+
+  "verification_community_zero": "{{emote_fail}} Verification level cannot be set to `0` for community servers!",
+  "verification_level_error": "{{emote_fail}} Verification level cannot be greater than `4` or less than `0`",
+  "verification_level_success": "{{emote_success}} Server verification level changed to `{{level}}`",
+
+  "change_nick_success": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
+  "remove_nick_success": "{{emote_success}} Nickname removed from **{{target.tag}}** `({{target.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "change_nick_mod_action_log": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "remove_nick_mod_action_log": "{{emote_success}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "change_nick_fail": "{{emote_warn}} Unable to change nickname of **{{target.tag}}** `({{target.id}})`",
+  "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` does not have a nickname to remove",
+  "already_has_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already nicknamed `{{nickname}}`",
+  "nickname_too_long": "{{emote_warn}} Nickname has too many characters (`{{length}}`). Nicknames are limited to 32 characters",
+
+  "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**",
+
+  "uptime_uptime": "The current uptime is **{{uptime}}**",
+
+  "license_license": "📜 This bot is licensed under the MIT license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+
+  "privacy_policy": "📜 View the privacy policy of the bot **[here](https://bulbbot.mrphilip.xyz/privacy-policy)**",
+
+  "github_source_code": "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TestersQTs/Bulbbot)**",
+
+  "invite_desc": "**Invite the bot to your server**\n{{bot_invite}}\n\n**Join the support server**\n{{support_guild}}",
+
+  "inviteinfo_error": "{{emote_warn}} Unable to find a server with that invite",
+  "inviteinfo_verification_level": "Verification Level: `{guild.verificationLevel}`\n",
+  "inviteinfo_large": "Large: `{guild.large}`\n",
+  "inviteinfo_code": "Code: `{invite.code}`\n",
+  "inviteinfo_inviter_id": "ID: `{invite.inviter.id}`\n",
+  "inviteinfo_inviter_tag": "Tag: `{invite.inviter.tag}`\n",
+  "inviteinfo_inviter_avatar": "Avatar: [`Link (4096)`]({{user_avatar}})\n",
+  "inviteinfo_channel_id": "ID: `{invite.channel.id}`\n",
+  "inviteinfo_channel_name": "Name: `{invite.channel.name}`\n",
+  "inviteinfo_channel_nsfw": "NSFW: `{invite.channel.nsfw}`\n",
+
+  "deafen_already_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is already deafened!",
+  "undeafen_not_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not deafened!",
+
+  "slowmode_success_remove": "{{emote_success}} Successfully removed slowmode from {{channel}}",
+  "slowmode_success": "{{emote_success}} Successfully set slowmode in {{channel}} to **{{slowmode}}**",
+  "slowmode_missing_perms": "{{emote_fail}} The bot is missing permissions to manage {{channel}}",
+
+  "duration_invalid_0s": "{{emote_fail}} Duration cannot be lower than **0 seconds**!",
+  "duration_invalid_1y": "{{emote_fail}} Duration cannot be higher than **1 year**!",
+
+  "lockdown_locked": "{{emote_success}} Successfully locked down channel {{channel}}",
+  "lockdown_unlocked": "{{emote_success}} Successfully unlocked channel {{channel}}",
+
+  "mute_muterole_not_found": "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
+  "mute_not_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
+  "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already muted!",
+  "mute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
+
+  "infraction_not_found": "{{emote_fail}} Infraction **#{{infraction_id}}** could not be found!",
+  "infraction_delete_confirm": "{{emote_warn}} Are you sure you want to delete infraction **#{{infraction_id}}**? This action __**cannot**__ be undone.\n**Offender:** {{target.tag}} `({{target.id}})`\n**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n**Reason:** {{reason}}",
+  "infraction_delete_success": "{{emote_success}} Infraction **#{{infraction_id}}** has been successfully deleted!",
+  "infraction_info_inf_id": "**Infraction ID:** {{infraction_id}}\n",
+  "infraction_info_target": "**Target:** {{target.tag}} `({{target.id}})`\n",
+  "infraction_info_moderator": "**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n",
+  "infraction_info_created": "**Created:** {{created}}\n",
+  "infraction_info_active": "**Active:** {{active}}",
+  "infraction_info_expires": "**Expires:** {{expires}}",
+  "infraction_info_reason": "\n\n**Reason:** {{reason}}",
+  "infraction_search_not_found": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has no infractions!",
+  "infraction_list_not_found": "{{emote_warn}} This server does not seem to have any infractions!",
+  "infraction_claim_success": "{{emote_success}} You have claimed responsibility over infraction **#{infraction_id}**",
+  "infraction_update_success": "{{emote_success}} Infraction **#{infraction_id}** has been updated!",
+
+  "commands_help": "You can find all the commands Bulbbot offers at our [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)"
 }
