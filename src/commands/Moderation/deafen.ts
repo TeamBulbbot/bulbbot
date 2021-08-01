@@ -28,34 +28,40 @@ export default class extends Command {
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id);
-		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
+		if (!reason) reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
+		if (!target)
+			return message.channel.send(
+				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
+					arg_provided: args[0],
+					arg_expected: "member:Member",
+					usage: this.usage,
+				}),
+			);
 		if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;
-		if (!target.voice.channel) return message.channel.send(await this.client.bulbutils.translate("global_not_in_voice", message.guild?.id));
-		if (target.voice.serverDeaf) return message.channel.send(await this.client.bulbutils.translate("deafen_already_deaf", message.guild?.id));
+		if (!target.voice.channel) return message.channel.send(await this.client.bulbutils.translateNew("global_not_in_voice", message.guild?.id, { target: target.user }));
+		if (target.voice.serverDeaf) return message.channel.send(await this.client.bulbutils.translateNew("deafen_already_deaf", message.guild?.id, { target: target.user }));
 
 		infID = await infractionsManager.deafen(
 			this.client,
 			<Guild>message.guild,
 			target,
 			<GuildMember>message.member,
-			await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-				action: "Deafened",
-				moderator_tag: message.author.tag,
-				moderator_id: message.author.id,
-				target_tag: target.user.tag,
-				target_id: target.user.id,
+			await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
+				action: await this.client.bulbutils.translateNew("mod_action_types.deafen", message.guild?.id, {}),
+				moderator: message.author,
+				target: target.user,
 				reason,
 			}),
 			reason,
 		);
 
-		return message.channel.send(
-			await this.client.bulbutils.translate("deafen_success", message.guild?.id, {
-				target_tag: target.user.tag,
-				target_id: target.user.id,
+		await message.channel.send(
+			await this.client.bulbutils.translateNew("action_success", message.guild?.id, {
+				action: await this.client.bulbutils.translateNew("mod_action_types.deafen", message.guild?.id, {}),
+				target: target.user,
 				reason,
-				infractionId: infID,
+				infraction_id: infID,
 			}),
 		);
 	}
