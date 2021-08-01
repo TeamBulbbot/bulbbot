@@ -16,11 +16,10 @@ export default class extends Command {
 	async run(message: Message): Promise<void> {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setDescription(await this.client.bulbutils.translate("commands_help", message.guild?.id, {}))
+			.setDescription(await this.client.bulbutils.translateNew("commands_help", message.guild?.id, {}))
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user_name: message.author.username,
-					user_discriminator: message.author.discriminator,
+				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+					user: message.author,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),
 			)

@@ -265,5 +265,5 @@
   "infraction_claim_success": "{{emote_success}} You have claimed responsibility over infraction **#{infraction_id}**",
   "infraction_update_success": "{{emote_success}} Infraction **#{infraction_id}** has been updated!",
 
-  "commands_help": "You can find all the commands Bulbbot offers at our [GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)"
+  "commands_help": "You can find all the commands Bulbbot offers at our **[GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**"
 }
