@@ -94,8 +94,8 @@ export default class {
 			);
 
 			response = response.replace(/({guild_voice})/g, key.guild.channels.cache.filter((ch: GuildChannel) => ch.type === "voice").size);
-			response = response.replace(/({guild_text})/g, key.guild.channels.cache.filter((ch: GuildChannel) => ch.type === "category").size);
-			response = response.replace(/({guild_category})/g, key.guild.channels.cache.filter((ch: GuildChannel) => ch.type === "text").size);
+			response = response.replace(/({guild_text})/g, key.guild.channels.cache.filter((ch: GuildChannel) => ch.type === "text").size);
+			response = response.replace(/({guild_category})/g, key.guild.channels.cache.filter((ch: GuildChannel) => ch.type === "category").size);
 
 			response = response.replace(/({guild_booster_tier})/g, key.guild.premiumTier);
 			response = response.replace(/({guild_booster_boosters})/g, key.guild.premiumSubscriptionCount);
@@ -339,7 +339,7 @@ export default class {
 		return uptime;
 	}
 
-	private guildRegion(region: string) {
+	guildRegion(region: string) {
 		region = region.charAt(0).toUpperCase() + region.slice(1);
 		switch (region) {
 			case "Brazil":
