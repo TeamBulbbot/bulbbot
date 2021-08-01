@@ -7,7 +7,7 @@ import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
 import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig } from "../Config";
-import { TranslateNewString, TranslateString } from "./types/TranslateString";
+import { TranslateString } from "./types/TranslateString";
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -16,7 +16,7 @@ export default class {
 		this.client = client;
 	}
 
-	public async translateNew(string: TranslateNewString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
+	public async translateNew(string: string, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 

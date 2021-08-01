@@ -2,6 +2,7 @@ import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import * as Emotes from "../../emotes.json";
 import { embedColor } from "../../Config";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -36,12 +37,14 @@ export default class extends Command {
 				isGuildMember = false;
 			} catch (error) {
 				await message.channel.send(
-					await this.client.bulbutils.translate("global_user_not_found", message.guild?.id, {
+					await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+						type: await this.client.bulbutils.translateNew("global_not_found_types.user", message.guild?.id, {}),
 						arg_expected: "user:User",
 						arg_provided: args[0],
 						usage: this.usage,
 					}),
 				);
+				return;
 			}
 		}
 
@@ -51,30 +54,37 @@ export default class extends Command {
 
 		if (user !== undefined && user) {
 			if (user.flags !== null) description += this.client.bulbutils.badges(user.flags.bitfield) + "\n";
-			description += await this.client.bulbutils.translate("userinfo_embed_id", message.guild?.id, { user_id: user.id });
-			description += await this.client.bulbutils.translate("userinfo_embed_username", message.guild?.id, { user_name: user.username });
-			if (user.nickname !== null && user.nickname) description += await this.client.bulbutils.translate("userinfo_embed_nickname", message.guild?.id, { user_nickname: user.nickname });
-			description += await this.client.bulbutils.translate("userinfo_embed_profile", message.guild?.id, { user_id: user.id });
-			description += await this.client.bulbutils.translate("userinfo_embed_avatar", message.guild?.id, { user_avatar: user.avatarUrl });
-			description += await this.client.bulbutils.translate("userinfo_embed_bot", message.guild?.id, { user_bot: user.bot });
-			description += await this.client.bulbutils.translate("userinfo_embed_created", message.guild?.id, { user_age: user.createdTimestamp });
+			description += await this.client.bulbutils.translateNew("userinfo_embed_id", message.guild?.id, { user });
+			description += await this.client.bulbutils.translateNew("userinfo_embed_username", message.guild?.id, { user });
+			if (user.nickname !== null && user.nickname) description += await this.client.bulbutils.translateNew("userinfo_embed_nickname", message.guild?.id, { user });
+			description += await this.client.bulbutils.translateNew("userinfo_embed_profile", message.guild?.id, { user });
+			description += await this.client.bulbutils.translateNew("userinfo_embed_avatar", message.guild?.id, { user });
+			description += await this.client.bulbutils.translateNew("userinfo_embed_bot", message.guild?.id, { user });
+			description += await this.client.bulbutils.translateNew("userinfo_embed_created", message.guild?.id, { user_age: Math.floor(user.createdTimestamp / 1000) });
 
 			if (user.premiumSinceTimestamp !== undefined && user.premiumSinceTimestamp && user.premiumSinceTimestamp > 0)
-				description += await this.client.bulbutils.translate("userinfo_embed_premium", message.guild?.id, {
-					user_premium: user.premiumSinceTimestamp,
+				description += await this.client.bulbutils.translateNew("userinfo_embed_premium", message.guild?.id, {
+					user_premium: Math.floor(user.premiumSinceTimestamp / 1000),
 				});
 
 			if (user.joinedTimestamp !== undefined && user.joinedTimestamp)
-				description += await this.client.bulbutils.translate("userinfo_embed_joined", message.guild?.id, { user_joined: user.joinedTimestamp });
+				description += await this.client.bulbutils.translateNew("userinfo_embed_joined", message.guild?.id, { user_joined: Math.floor(user.joinedTimestamp / 1000) });
 
 			if (user.roles !== undefined && user.roles)
-				description += await this.client.bulbutils.translate("userinfo_embed_roles", message.guild?.id, {
+				description += await this.client.bulbutils.translateNew("userinfo_embed_roles", message.guild?.id, {
 					user_roles: user.roles.cache.map(r => `${r}`).join(", "),
 				});
 
 			const infs = await infractionsManager.getOffenderInfractions(<string>message.guild?.id, user.id);
-			// @ts-ignore
-			description += await this.client.bulbutils.translate("userinfo_embed_infractions", message.guild?.id, { user_infractions: infs.length });
+			if (infs) {
+				let inf_emoji;
+
+				if (infs.length <= 1) inf_emoji = Emotes.status.ONLINE;
+				else if (infs.length === 2) inf_emoji = Emotes.other.INF1;
+				else inf_emoji = Emotes.other.INF2;
+
+				description += await this.client.bulbutils.translateNew("userinfo_embed_infractions", message.guild?.id, { emote_inf: inf_emoji, user_infractions: infs.length });
+			}
 
 			let color;
 			if (user.roles === undefined || user.roles?.highest.name === "@everyone") color = embedColor;
@@ -86,9 +96,8 @@ export default class extends Command {
 				.setAuthor(`${user.username}#${user.discriminator}`, user.avatarUrl)
 				.setDescription(description)
 				.setFooter(
-					await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-						user_name: message.author.username,
-						user_discriminator: message.author.discriminator,
+					await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+						user: message.author,
 					}),
 					<string>message.author.avatarURL({ dynamic: true }),
 				)
