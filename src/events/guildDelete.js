@@ -10,7 +10,7 @@ module.exports = class extends Event {
 	async run(guild) {
 		if (!guild) return;
 
-		await DatabaseManager.deleteGuild(guild.id);
+		// await DatabaseManager.deleteGuild(guild.id);
 
 		this.client.channels.cache
 			.get(global.config.invite)

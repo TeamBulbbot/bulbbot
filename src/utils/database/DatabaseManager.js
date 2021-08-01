@@ -8,6 +8,16 @@ module.exports = class DatabaseManager {
 	 * @returns {Promise<void>}
 	 */
 	async createGuild(guild) {
+		if (
+			(
+				await sequelize.query('SELECT id FROM "guilds" WHERE "guildId" = $GuildID', {
+					bind: { GuildID: guild.id },
+					type: QueryTypes.SELECT,
+				})
+			).length > 0
+		)
+			return;
+
 		const config = await sequelize.models.guildConfiguration.create({
 			prefix: global.config.prefix,
 		});
