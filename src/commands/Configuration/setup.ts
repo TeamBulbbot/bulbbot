@@ -12,6 +12,12 @@ import GuildSetup from "../../utils/types/GuildSetup";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
+/** @internal */
+interface PromptOptions {
+	defaultText?: string;
+	maxtime?: number;
+}
+
 export default class extends Command {
 	constructor(...args: any) {
 		// @ts-ignore
@@ -55,31 +61,39 @@ export default class extends Command {
 		// This is after language to benefit from translation
 		//await message.channel.send(`The answer in parenthesis at the end of prompts will be used if you respond to a prompt with your prefix (currently \`${dbguild.prefix}\`)`);
 
-		if (
-			(result = await this.prompt(
+		if ((result = await this.prompt(
 				message,
 				ConfigPart.prefix,
 				`The answer in parenthesis at the end of prompts will be used if you respond to a prompt with your prefix (currently \`${dbguild.prefix}\`)\n\nPlease choose your server prefix.`,
 				dbguild.prefix,
 				guildSetup,
-			)) === null
-		)
+			)) === null)
 			return;
 		this.client.prefix = guildSetup.prefix!;
 
-		if ((result = await this.prompt(message, ConfigPart.timezone, `What is your timezone?`, dbguild.timezone, guildSetup)) === null) return;
+		if ((result = await this.prompt(
+				message,
+				ConfigPart.timezone,
+				`What is your timezone?`,
+				dbguild.timezone,
+				guildSetup
+			)) === null)
+			return;
 		guildSetup.timezone = result.toUpperCase();
 
 		const muteroleCandidate: string = message.guild?.roles.cache.find(role => role.name === "Muted")?.id || dbguild.muterole || "Create one for me";
-		if ((result = await this.prompt(message, ConfigPart.muterole, `Choose a role to use for muting members.`, muteroleCandidate, guildSetup)) === null) return;
+		if ((result = await this.prompt(message, ConfigPart.muterole, `Choose a role to use for muting members.`, muteroleCandidate, guildSetup, {defaultText: NonDigits.test(muteroleCandidate) ? muteroleCandidate : `<@&${muteroleCandidate}>`})) === null) return;
 		if (!dbguild.muterole && result.toLowerCase() === "remove") guildSetup.muterole = dbguild.muterole;
 		else if (result.toLowerCase() === "disable") guildSetup.muterole = null;
 		else if (result.toLowerCase() !== "create one for me") guildSetup.muterole = result.replace(NonDigits, "");
 
-		if (
-			(result = await this.prompt(message, ConfigPart.automod, !amEnabled ? `Would you like to enable Bulbbot Automod?` : `Review Automod configuration?`, !amEnabled ? "Yes" : "No", guildSetup)) ===
-			null
-		)
+		if ((result = await this.prompt(
+				message,
+				ConfigPart.automod,
+				!amEnabled ? `Would you like to enable Bulbbot Automod?` : `Review Automod configuration?`,
+				!amEnabled ? "Yes" : "No",
+				guildSetup)
+			) === null)
 			return;
 		/* TODO
 			If "yes", delegate to automod guided setup, then proceed
@@ -87,7 +101,7 @@ export default class extends Command {
 		*/
 		if (guildSetup.automod === "yes") {
 			// @ts-ignore
-			let amSetup = new automod(this.client, this);
+			//let amSetup = new automod(this.client, this);
 		}
 
 		if ((result = await this.prompt(message, ConfigPart.logging, !lgEnabled ? `Would you like to set up logging?` : `Review logging configuration?`, !lgEnabled ? "Yes" : "No", guildSetup)) === null)
@@ -97,9 +111,8 @@ export default class extends Command {
 			If "no", proceed
 		*/
 
-		if (
-			(result = await this.prompt(message, ConfigPart.autorole, `Would you like to set an auto-role to be added when new members join the server?`, dbguild.autorole || "Disable", guildSetup)) === null
-		)
+		const autoroleCandidate = dbguild.autorole || "Disable";
+		if ((result = await this.prompt(message, ConfigPart.autorole, `Would you like to set an auto-role to be added when new members join the server?`, autoroleCandidate, guildSetup, {defaultText: NonDigits.test(autoroleCandidate) ? autoroleCandidate : `<@&${autoroleCandidate}>`})) === null)
 			return;
 		if (!dbguild.autorole && result.toLowerCase() === "disable") guildSetup.autorole = dbguild.autorole;
 		else if (result.toLowerCase() === "disable") guildSetup.autorole = null;
@@ -108,18 +121,18 @@ export default class extends Command {
 		await this.applySetup(message, guildSetup);
 	}
 
-	public async prompt(message: Message, part: ConfigPart, text: string, defaultOption: string, guildSetup: GuildSetup, maxtime: number = 180000): Promise<string | null> {
+	public async prompt(message: Message, part: ConfigPart, text: string, defaultOption: string, guildSetup: GuildSetup, options: PromptOptions = {}): Promise<string | null> {
+		let maxtime = options.maxtime ?? 180000;
 		if (maxtime < 1000) maxtime *= 60000; // Permit maxtime in minutes
 		const partName: string = Object.getOwnPropertyNames(ConfigPart).find(n => ConfigPart[n] === part)!;
-		// TODO: disable mention pings from this message
-		// TODO: this needs to use role mentions instead of inline code when appropriate
-		await message.channel.send(`${text} (\`${defaultOption}\`)`);
+		const defaultText = options.defaultText ?? `\`${defaultOption}\``;
+		await message.channel.send(`${text} (${defaultText})`, {allowedMentions: {parse: []}});
 		const response = (await message.channel.awaitMessages(this.filter(part, message.author), { max: 1, time: maxtime })).first();
 		if (!response) {
 			await this.timedout(part, message, guildSetup);
 			return null;
 		}
-		if (response.content === this.client.prefix) guildSetup[partName] = defaultOption;
+		if (response.content === guildSetup.prefix) guildSetup[partName] = defaultOption;
 		else guildSetup[partName] = response.content;
 
 		// Should each prompt send a success/confirmation message? e.g. "Prefix set to `bulb!`"
@@ -172,6 +185,7 @@ export default class extends Command {
 			// TODO
 			// take care of this in automod guided and noop here,
 			// or do all changes here to make future batching easier?
+
 		}
 
 		if (guildSetup.logging) {
