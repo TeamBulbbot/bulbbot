@@ -5,7 +5,7 @@ import * as Config from "../../Config";
 
 export default class extends Command {
 	constructor(...args) {
-        // @ts-ignore
+		// @ts-ignore
 		super(...args, {
 			description: "Gets information about a given snowflake",
 			category: "Miscellaneous",
@@ -21,7 +21,13 @@ export default class extends Command {
 	async run(message: Message, args: string[]) {
 		const snowflake: string = args[0].replace(NonDigits, "");
 		if (+snowflake <= SnowflakeUtil.EPOCH)
-			return message.channel.send(await this.client.bulbutils.translate("invalid_snowflake", message.guild?.id, { snowflake }));
+			return message.channel.send(
+				await this.client.bulbutils.translateNew("global_cannot_convert", message.guild?.id, {
+					arg_provided: args[0],
+					arg_expected: "snowflake:Snowflake",
+					usage: this.usage,
+				}),
+			);
 		const deconstruct: DeconstructedSnowflake = SnowflakeUtil.deconstruct(snowflake);
 
 		let desc = `**❄️ [Snowflake](https://discord.com/developers/docs/reference#snowflakes) information**\n\n`;
@@ -34,14 +40,13 @@ export default class extends Command {
 			.setColor(Config.embedColor)
 			.setDescription(desc)
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user_name: message.author.username,
-					user_discriminator: message.author.discriminator,
+				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+					user: message.author,
 				}),
-				await this.client.bulbutils.userObject(false, message.author).avatarUrl,
+				<string>message.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 
 		return message.channel.send(embed);
 	}
-};
+}
