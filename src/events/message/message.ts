@@ -145,7 +145,7 @@ export default class extends Event {
 			for (const subCommand of command.subCommands) {
 				// @ts-ignore
 				sCmd = new subCommand(this.client, command, args[0]);
-				if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0])) {
+				if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0].toLowerCase())) {
 					if (sCmd.maxArgs < args.length - 1 && sCmd.maxArgs !== -1) {
 						return message.channel.send(
 							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild.id, {

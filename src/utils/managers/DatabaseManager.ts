@@ -5,8 +5,9 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 import AutoModConfiguration from "../types/AutoModConfiguration";
 import LoggingConfiguration from "../types/LoggingConfiguration";
-import AutoModPart, { AutoModListPart } from "../types/AutoModPart";
+import AutoModPart, { AutoModListPart, AutoModAntiSpamPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
+import PunishmentType from "../types/PunishmentType";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -296,7 +297,7 @@ export default class {
 		});
 	}
 
-	public async automodRemove(guildID, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
+	public async automodRemove(guildID: Snowflake, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
 		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
 			const notPresent: string[] = [];
 			const removed: string[] = [];
@@ -311,6 +312,37 @@ export default class {
 				dblist = dblist.slice(dblist.findIndex(i => !items.includes(i)));
 			}
 			return {list: dblist, added: [], removed: removed, other: notPresent};
+		});
+	}
+
+	public async automodSetLimit(guildID: Snowflake, part: AutoModAntiSpamPart, limit: number): Promise<void> {
+		const dbkey: string = (function(part) {
+			switch(part) {
+				case AutoModPart.message: return "limitMessages";
+				case AutoModPart.mention: return "limitMentions";
+			}
+		})(part);
+		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Limit WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
+			bind: { GuildID: guildID, Limit: limit },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
+	public async automodSetPunishment(guildID: Snowflake, part: AutoModPart, punishment: PunishmentType | null): Promise<void> {
+		const dbkey: string = (function(part) {
+			switch(part) {
+				case AutoModPart.message: return "punishmentMessages";
+				case AutoModPart.mention: return "punishmentMentions";
+				case AutoModPart.website: return "punishmentWebsite";
+				case AutoModPart.invite: return "punishmentInvites";
+				case AutoModPart.word: return "punishmentWords";
+				case AutoModPart.token: return "punishmentWords";
+			}
+		})(part);
+		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find(n => PunishmentType[n] === punishment) ?? null;
+		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Punishment WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
+			bind: { GuildID: guildID, Punishment: punishmentkey },
+			type: QueryTypes.UPDATE,
 		});
 	}
 

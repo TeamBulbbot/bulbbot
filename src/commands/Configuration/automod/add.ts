@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: -1,
-			usage: "!automod add <item>",
+			usage: "!automod add <item> [items...]",
 		});
 	}
 
@@ -41,12 +41,10 @@ export default class extends SubCommand {
 				arg_expected: "part:string",
 				usage: "`website`, `invites`, `words` or `words_token`",
 			}),
-			);
+		);
 		const partString = partexec[1] ?? partexec[2];
 
-		// if (!items.length) return message.channel.send(await this.client.bulbutils.translate("automod_missing_item_add", message.guild!.id));
-
-		if (!items.length) return message.channel.send(await this.client.bulbutils.translate("global_unknown_error", message.guild!.id));
+		if (!items.length) return message.channel.send(await this.client.bulbutils.translate("global_unknown_error", message.guild!.id)); // more specific error message help wanted
 
 		const part: AutoModListPart = AutoModPart[partString];
 		const result = await databaseManager.automodAppend(message.guild!.id, part, items);

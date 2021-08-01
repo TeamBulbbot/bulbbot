@@ -14,7 +14,8 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: -1,
-			usage: "!automod remove",
+			argList: ["item:string"],
+			usage: "!automod remove <item> [items...]",
 		});
 	}
 
@@ -40,7 +41,7 @@ export default class extends SubCommand {
 				arg_expected: "part:string",
 				usage: "`website`, `invites`, `words` or `words_token`",
 			}),
-			);
+		);
 		const partString = partexec[1] ?? partexec[2];
 
 		if (!items.length) return message.channel.send(await this.client.bulbutils.translate("automod_missing_item_remove", message.guild!.id));
