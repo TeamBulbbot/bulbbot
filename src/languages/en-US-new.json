@@ -189,7 +189,8 @@
   "serverinfo_emotes_none": "No emotes",
 
   "action_success": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} for **{{reason}}** `[#{{infraction_id}}]`",
-  "action_multi_success": "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
+  "action_success_multi": "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
+  "action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} until {{until}} for **{{reason}}** `[#{{infraction_id}}]`",
 
   "already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
   "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
