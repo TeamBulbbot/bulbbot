@@ -1,5 +1,4 @@
-import translation from "../../languages/en-US.json";
-import translationNew from "../../languages/en-US-new.json";
+import translation from "../../languages/en-US-new.json";
 
 // https://stackoverflow.com/a/58436959
 type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -11,5 +10,5 @@ type Join<K, P> = K extends string | number ?
 type Leaves<T, D extends number = 10> = [D] extends [never] ? never : T extends object ?
     { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T] : "";
 
-export type TranslateString = keyof typeof translation;
-export type TranslateNewString = Leaves<typeof translationNew, 4>;
+type TranslateString = Leaves<typeof translation, 4>;
+export default TranslateString;

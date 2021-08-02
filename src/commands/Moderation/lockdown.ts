@@ -43,11 +43,11 @@ export default class extends Command {
 		}
 
 		if (args[1] === "true") {
-			await message.channel.send(await this.client.bulbutils.translateNew("lockdown", message.guild?.id, { context: "locked", channel }));
+			await message.channel.send(await this.client.bulbutils.translateNew("lockdown_locked", message.guild?.id, { channel }));
 			return channel?.updateOverwrite(<Role>message.guild?.roles.everyone, { SEND_MESSAGES: false });
 		} else {
 			await channel?.updateOverwrite(<Role>message.guild?.roles.everyone, { SEND_MESSAGES: null });
-			return await message.channel.send(await this.client.bulbutils.translateNew("lockdown_unlocked", message.guild?.id, { context: "unlocked", channel }));
+			return await message.channel.send(await this.client.bulbutils.translateNew("lockdown_unlocked", message.guild?.id, { channel }));
 		}
 	}
 }
