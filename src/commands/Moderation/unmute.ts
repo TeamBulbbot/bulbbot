@@ -31,10 +31,18 @@ export default class extends Command {
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id);
-		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found", message.guild?.id));
-		if (!target) return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
-		if (!target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translate("mute_not_muted", message.guild?.id));
+		if (!reason) reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
+		if (!muteRole) return message.channel.send(await this.client.bulbutils.translateNew("mute_muterole_not_found", message.guild?.id, {}));
+		if (!target)
+			return message.channel.send(
+				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
+					arg_provided: args[0],
+					arg_expected: "member:Member",
+					usage: this.usage,
+				}),
+			);
+		if (!target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translateNew("mute_not_muted", message.guild?.id, { target: target.user }));
 
 		const latestMute: Record<string, any> = <Record<string, any>>await infractionsManager.getLatestMute(<Snowflake>message.guild?.id, target.user.id);
 		let confirmMsg: Message;
@@ -46,12 +54,10 @@ export default class extends Command {
 				MuteType.MANUAL,
 				target,
 				message.author,
-				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-					action: "Unmuted",
-					moderator_tag: message.author.tag,
-					moderator_id: message.author.id,
-					target_tag: target.user.tag,
-					target_id: target.user.id,
+				await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
+					action: await this.client.bulbutils.translateNew("mod_action_types.unmute", message.guild?.id, {}),
+					moderator: message.author,
+					target: target.user,
 					reason: reason,
 				}),
 				reason,
@@ -62,19 +68,18 @@ export default class extends Command {
 			await infractionsManager.setActive(<Snowflake>message.guild?.id, latestMute["id"], false);
 
 			await message.channel.send(
-				await this.client.bulbutils.translate("unmute_success", message.guild?.id, {
-					target_tag: target.user.tag,
-					target_id: target.user.id,
+				await this.client.bulbutils.translateNew("action_success", message.guild?.id, {
+					action: await this.client.bulbutils.translateNew("mod_action_types.unmute", message.guild?.id, {}),
+					target,
 					reason,
-					infractionId: infID,
+					infraction_id: infID,
 				}),
 			);
 		} else {
 			await message.channel
 				.send(
-					await this.client.bulbutils.translate("mute_confirm", message.guild?.id, {
-						user_tag: target.user.tag,
-						user_id: target.user.id,
+					await this.client.bulbutils.translateNew("unmute_confirm", message.guild?.id, {
+						target: target.user,
 					}),
 				)
 				.then(async msg => {
@@ -96,20 +101,19 @@ export default class extends Command {
 								await msg.delete();
 								await target.roles.remove(muteRole);
 								await message.channel.send(
-									await this.client.bulbutils.translate("unmute_success_special", message.guild?.id, {
-										target_tag: target.user.tag,
-										target_id: target.user.id,
+									await this.client.bulbutils.translateNew("unmute_special", message.guild?.id, {
+										target: target.user,
 										reason,
 									}),
 								);
 							} else {
 								await msg.delete();
-								await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id));
+								await message.channel.send(await this.client.bulbutils.translateNew("global_execution_cancel", message.guild?.id, {}));
 							}
 						})
 						.catch(async () => {
 							await confirmMsg.delete();
-							await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id));
+							await message.channel.send(await this.client.bulbutils.translateNew("global_execution_cancel", message.guild?.id, {}));
 						});
 				});
 		}

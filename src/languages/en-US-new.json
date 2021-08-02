@@ -250,7 +250,8 @@
   "mute_muterole_not_found": "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
   "mute_not_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
   "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already muted!",
-  "mute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
+  "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
+  "unmute_special": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been unmuted for **{{reason}}** ",
 
   "infraction_not_found": "{{emote_fail}} Infraction **#{{infraction_id}}** could not be found!",
   "infraction_delete_confirm": "{{emote_warn}} Are you sure you want to delete infraction **#{{infraction_id}}**? This action __**cannot**__ be undone.\n**Offender:** {{target.tag}} `({{target.id}})`\n**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n**Reason:** {{reason}}",
