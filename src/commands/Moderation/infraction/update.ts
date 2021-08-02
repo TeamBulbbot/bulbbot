@@ -22,14 +22,14 @@ export default class extends SubCommand {
 	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
 		if (!(await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, ""))))) {
 			return message.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", message.guild?.id, {
-					infractionId: args[1],
+				await this.client.bulbutils.translateNew("infraction_not_found", message.guild?.id, {
+					infraction_id: args[1],
 				}),
 			);
 		}
 
 		const reason = args.slice(2).join(" ");
 		await infractionsManager.updateReason(<Snowflake>message.guild?.id, Number(args[1]), reason);
-		return message.channel.send(await this.client.bulbutils.translate("infraction_update_success", message.guild?.id, { infractionId: args[1] }));
+		return message.channel.send(await this.client.bulbutils.translateNew("infraction_update_success", message.guild?.id, { infraction_id: args[1] }));
 	}
 }
