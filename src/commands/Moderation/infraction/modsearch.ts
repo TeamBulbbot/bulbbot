@@ -6,6 +6,7 @@ import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import * as Emotes from "../../../emotes.json";
 import moment from "moment";
 import { embedColor } from "../../../Config";
+import { Infraction } from "../../../utils/types/Infraction";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -34,45 +35,45 @@ export default class extends SubCommand {
 			return message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
 		}
 
-		const infs: Record<string, any> = <Record<string, any>>await infractionsManager.getModeratorInfractions(<Snowflake>message.guild?.id, user.id);
+		const infs: Infraction[] = <Infraction[]>await infractionsManager.getModeratorInfractions(<Snowflake>message.guild?.id, user.id);
 		for (let i = 0; i < 50; i++) {
 			if (infs[i] === undefined) continue;
 
 			let description = "";
-			description += await this.client.bulbutils.translate("infraction_info_inf_id", message.guild?.id, { infractionId: infs[i]["id"] });
+			description += await this.client.bulbutils.translate("infraction_info_inf_id", message.guild?.id, { infractionId: infs[i].id });
 			description += await this.client.bulbutils.translate("infraction_info_target", message.guild?.id, {
-				target_tag: infs[i]["target"],
-				target_id: infs[i]["targetId"],
+				target_tag: infs[i].target,
+				target_id: infs[i].targetId,
 			});
 			description += await this.client.bulbutils.translate("infraction_info_moderator", message.guild?.id, {
-				moderator_tag: infs[i]["moderator"],
-				moderator_id: infs[i]["moderatorId"],
+				moderator_tag: infs[i].moderator,
+				moderator_id: infs[i].moderatorId,
 			});
 			description += await this.client.bulbutils.translate("infraction_info_created", message.guild?.id, {
-				timestamp: moment(Date.parse(infs[i]["createdAt"])).format("MMM Do YYYY, h:mm:ss a"),
+				timestamp: moment(Date.parse(infs[i].createdAt)).format("MMM Do YYYY, h:mm:ss a"),
 			});
 
-			if (infs[i]["active"] !== "false" && infs[i]["active"] !== "true") {
+			if (infs[i].active !== "false" && infs[i].active !== "true") {
 				description += await this.client.bulbutils.translate("infraction_info_expires", message.guild?.id, {
-					timestamp: `${Emotes.status.ONLINE} ${moment(parseInt(infs[i]["active"])).format("MMM Do YYYY, h:mm:ss a")}`,
+					timestamp: `${Emotes.status.ONLINE} ${moment(parseInt(infs[i].active)).format("MMM Do YYYY, h:mm:ss a")}`,
 				});
 			} else {
 				description += await this.client.bulbutils.translate("infraction_info_active", message.guild?.id, {
-					emoji: this.client.bulbutils.prettify(infs[i]["active"]),
+					emoji: this.client.bulbutils.prettify(infs[i].active),
 				});
 			}
 
 			description += await this.client.bulbutils.translate("infraction_info_reason", message.guild?.id, {
-				reason: infs[i]["reason"],
+				reason: infs[i].reason,
 			});
 
-			const image = infs[i]["reason"].match(ReasonImage);
+			const image = infs[i].reason.match(ReasonImage);
 
 			const embed: MessageEmbed = new MessageEmbed()
-				.setTitle(this.client.bulbutils.prettify(infs[i]["action"]))
+				.setTitle(this.client.bulbutils.prettify(infs[i].action))
 				.setDescription(description)
 				.setColor(embedColor)
-				.setImage(image ? image[0] : null)
+				.setImage(<string>(image ? image[0] : null))
 				.setTimestamp();
 
 			pages.push(embed);

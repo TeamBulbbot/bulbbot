@@ -6,6 +6,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import LoggingManager from "./LoggingManager";
 import { BanType } from "../types/BanType";
 import { MuteType } from "../types/MuteType";
+import { Infraction } from "../types/Infraction";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -38,37 +39,37 @@ export default class {
 		});
 	}
 
-	public async getInfraction(guildID: Snowflake, infractionID: number): Promise<Record<string, any> | undefined> {
+	public async getInfraction(guildID: Snowflake, infractionID: number): Promise<Infraction | undefined> {
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND id = $InfID', {
 			bind: { GuildID: guildID, InfID: infractionID },
 			type: QueryTypes.SELECT,
 		});
 
-		return response[0];
+		return response[0] as Infraction;
 	}
 
-	public async getAllInfractions(guildID: Snowflake): Promise<Record<string, any> | undefined> {
+	public async getAllInfractions(guildID: Snowflake): Promise<Infraction[] | undefined> {
 		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) LIMIT 50', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});
 	}
 
-	public async getOffenderInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Record<string, any> | undefined> {
+	public async getOffenderInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Infraction[] | undefined> {
 		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID LIMIT 50', {
 			bind: { GuildID: guildID, TargetID: targetID },
 			type: QueryTypes.SELECT,
 		});
 	}
 
-	public async getModeratorInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Record<string, any> | undefined> {
+	public async getModeratorInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Infraction[] | undefined> {
 		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "moderatorId" = $ModeratorID LIMIT 50', {
 			bind: { GuildID: guildID, ModeratorID: targetID },
 			type: QueryTypes.SELECT,
 		});
 	}
 
-	public async getAllUserInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Record<string, any> | undefined> {
+	public async getAllUserInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Infraction[] | undefined> {
 		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID OR "moderatorId" = $ModeratorID LIMIT 50', {
 			bind: { GuildID: guildID, TargetID: targetID, ModeratorID: targetID },
 			type: QueryTypes.SELECT,
@@ -105,7 +106,7 @@ export default class {
 		});
 	}
 
-	public async getLatestMute(guildID: Snowflake, targetID: Snowflake): Promise<Record<string, any> | undefined> {
+	public async getLatestMute(guildID: Snowflake, targetID: Snowflake): Promise<Infraction | undefined> {
 		const response: Record<string, any> = await sequelize.query(
 			'SELECT * FROM infractions WHERE action = \'Mute\' AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID AND "active" != \'false\'',
 			{
