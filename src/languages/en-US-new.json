@@ -266,8 +266,8 @@
   "infraction_info_reason": "\n\n**Reason:** {{reason}}",
   "infraction_search_not_found": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has no infractions!",
   "infraction_list_not_found": "{{emote_warn}} This server does not seem to have any infractions!",
-  "infraction_claim_success": "{{emote_success}} You have claimed responsibility over infraction **#{infraction_id}**",
-  "infraction_update_success": "{{emote_success}} Infraction **#{infraction_id}** has been updated!",
+  "infraction_claim_success": "{{emote_success}} You have claimed responsibility over infraction **#{{infraction_id}}**",
+  "infraction_update_success": "{{emote_success}} Infraction **#{{infraction_id}}** has been updated!",
 
   "commands_help": "You can find all the commands Bulbbot offers at our **[GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**"
 }
