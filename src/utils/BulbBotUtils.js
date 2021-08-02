@@ -37,9 +37,9 @@ module.exports = class BulbBotUtils {
 			response = JSON.parse(JSON.stringify(lang))[string].toString();
 		} catch (err) {
 			if (!this.client && key.client) this.client = key.client;
-			this.client.channels.cache
+			/*this.client.channels.cache
 				.get(global.config.translation)
-				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db["guildConfiguration"].language}\``);
+				.send(`${Emotes.actions.WARN} Untranslated string \`${string}\` found in \`${db["guildConfiguration"].language}\``);*/
 
 			lang = require(`./../languages/en-US.json`);
 			try {
