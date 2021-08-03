@@ -28,23 +28,28 @@ export default class extends Command {
 		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
 		if (targets === null)
 			return message.channel.send(
-				await this.client.bulbutils.translate("global_user_not_found", message.guild?.id, {
+				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
-					usage: "!multikick <member1> <member2>... [reason]",
+					usage: this.usage,
 				}),
 			);
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
-		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id);
+		if (reason === "") reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
 		let fullList: string = "";
 
 		if (targets!!.length <= 1) {
-			await message.channel.send(await this.client.bulbutils.translate("multikick_targets_too_few", message.guild?.id));
+			await message.channel.send(
+				await this.client.bulbutils.translateNew("action_multi_less_than_2", message.guild?.id, {
+					action: await this.client.bulbutils.translateNew("action_multi_types.kick", message.guild?.id, {}),
+				}),
+			);
 			return await this.client.commands.get("kick")!.run(message, args);
 		}
 
-		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild?.id)).then(msg => {
+		message.channel.send(await this.client.bulbutils.translateNew("global_loading", message.guild?.id, {})).then(msg => {
 			msg.delete({ timeout: (args.length - 0.5) * massCommandSleep });
 		});
 
@@ -57,7 +62,14 @@ export default class extends Command {
 			let infID: number;
 
 			if (!target) {
-				await message.channel.send(await this.client.bulbutils.translate("global_user_not_found", message.guild?.id));
+				await message.channel.send(
+					await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+						type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
+						arg_provided: t,
+						arg_expected: "member:Member",
+						usage: this.usage,
+					}),
+				);
 				continue;
 			}
 			if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;
@@ -67,12 +79,10 @@ export default class extends Command {
 				<Snowflake>message.guild?.id,
 				target,
 				<GuildMember>message.member,
-				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-					action: "Kicked",
-					moderator_tag: message.author.tag,
-					moderator_id: message.author.id,
-					target_tag: target.user.tag,
-					target_id: target.user.id,
+				await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
+					action: await this.client.bulbutils.translateNew("mod_action_types.kick", message.guild?.id, {}),
+					moderator: message.author,
+					target: target.user,
 					reason,
 				}),
 				reason,
@@ -82,7 +92,8 @@ export default class extends Command {
 		}
 
 		return message.channel.send(
-			await this.client.bulbutils.translate("multikick_success", message.guild?.id, {
+			await this.client.bulbutils.translateNew("action_success_multi", message.guild?.id, {
+				action: await this.client.bulbutils.translateNew("mod_action_types.kick", message.guild?.id, {}),
 				full_list: fullList,
 				reason,
 			}),
