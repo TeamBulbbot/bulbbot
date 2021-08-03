@@ -90,7 +90,8 @@ export default class extends Event {
 		if (!message.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		let currCommand: Command;
 		let i: number;
-		for(i = -1; i < args.length;) {
+		for(i = 0;; ++i) {
+			const commandArgs = args.slice(i);
 			currCommand = command;
 			if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
@@ -151,40 +152,37 @@ export default class extends Event {
 			if (command.subDevOnly) if (!isSubDev) return;
 			if (command.devOnly) if (!isDev) return;
 
-			if (command.maxArgs < args.length && command.maxArgs !== -1) {
+			if (command.maxArgs < commandArgs.length && command.maxArgs !== -1) {
 				return message.channel.send(
-					await this.client.bulbutils.translate("event_message_args_unexpected", message.guild.id, {
-						arg: args[command.maxArgs],
+					await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild.id, {
+						argument: commandArgs[command.maxArgs],
 						arg_expected: command.maxArgs,
-						arg_provided: args.length,
-						usage: command.usage.replace("!", this.client.prefix),
+						arg_provided: commandArgs.length,
+						usage: `${this.client.prefix}${command.usage}`,
 					}),
 				);
 			}
 
-			if (command.minArgs > args.length) {
+			if (command.minArgs > commandArgs.length) {
 				return message.channel.send(
-					await this.client.bulbutils.translate("event_message_args_missing", message.guild.id, {
-						arg: command.argList[args.length],
+					await this.client.bulbutils.translateNew("event_message_args_missing", message.guild.id, {
+						argument: command.argList[commandArgs.length],
 						arg_expected: command.minArgs,
-						arg_provided: args.length,
-						usage: command.usage.replace("!", this.client.prefix),
+						usage: `\`${this.client.prefix}${command.usage}\``,
 					}),
 				);
 			}
 
 			if(!command.subCommands.length) break;
-			++i;
-			const subResolved = await this.resolveSubcommand(command, args.slice(i));
-			if(subResolved instanceof Message) return subResolved;
-			command = subResolved;
+			if(i >= args.length) break;
+			command = await this.resolveSubcommand(command, commandArgs);
 			if(command === currCommand) break;
 		}
 		options.args = args.slice(i);
 		return command;
 	}
 
-	private async resolveSubcommand(command: Command, args: string[]): Promise<Command | Message> {
+	private async resolveSubcommand(command: Command, args: string[]): Promise<Command> {
 		let sCmd: SubCommand;
 		for (const subCommand of command.subCommands) {
 			// @ts-ignore

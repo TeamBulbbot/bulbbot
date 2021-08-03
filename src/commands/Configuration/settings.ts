@@ -13,7 +13,7 @@ export default class extends Command {
 			description: "Get the settings for the guild",
 			category: "Configuration",
 			aliases: ["overrides"],
-			usage: "!settings",
+			usage: "settings",
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["EMBED_LINKS"],

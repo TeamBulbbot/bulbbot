@@ -13,7 +13,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
-			usage: "!admin db-info <guildID>",
+			usage: "admin db-info <guildID>",
 		});
 	}
 
@@ -21,9 +21,9 @@ export default class extends SubCommand {
 		let guild: Guild;
 
 		try {
-			guild = await this.client.guilds.fetch(args[1]);
+			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			message.channel.send(`Unable to find a guild with the ID of \`${args[1]}\``);
+			message.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 

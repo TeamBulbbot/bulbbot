@@ -29,7 +29,7 @@ export default class extends Command {
 			subCommands: [
 				/*automod, logging*/
 			],
-			usage: "!setup",
+			usage: "setup [part]",
 			clearance: 75,
 			maxArgs: 1,
 		});
@@ -254,7 +254,7 @@ export default class extends Command {
 								await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 									arg: message.content,
 									arg_expected: "language:string",
-									usage: "!configure language <language>",
+									usage: "configure language <language>",
 								}),
 							);
 							return false;
@@ -284,7 +284,7 @@ export default class extends Command {
 								await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 									arg: message.content,
 									arg_expected: "timezone:string",
-									usage: "!configure timezone <timezone>",
+									usage: "configure timezone <timezone>",
 								}),
 							);
 							return false;
@@ -305,7 +305,7 @@ export default class extends Command {
 									await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
 										arg_provided: role,
 										arg_expected: "role:Role",
-										usage: "!configure mute_role <role>",
+										usage: "configure mute_role <role>",
 									}),
 								);
 								return false;

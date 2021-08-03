@@ -13,7 +13,7 @@ export default class extends Command {
 			description: "Kicks multiple people from a guild",
 			category: "Moderation",
 			aliases: ["mkick"],
-			usage: "!multikick <member> <member2>.... [reason]",
+			usage: "multikick <member> <member2>.... [reason]",
 			examples: ["multikick 123456789012345678 123456789012345678 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,

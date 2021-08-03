@@ -16,17 +16,17 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["infraction:int"],
-			usage: "!inf delete <infraction>",
+			usage: "inf delete <infraction>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const infID: number = Number(args[1]);
+		const infID: number = Number(args[0]);
 
 		if (isNaN(infID) || (await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID)) === undefined) {
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("infraction_not_found", message.guild?.id, {
-					infraction_id: args[1],
+					infraction_id: args[0],
 				}),
 			);
 		}

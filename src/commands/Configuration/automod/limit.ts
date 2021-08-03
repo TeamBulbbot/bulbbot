@@ -14,14 +14,13 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["part:string", "limit:number"],
-			usage: "!automod limit <part> <limit>",
+			usage: "automod limit <part> <limit>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		console.log(args)
-		const partArg = args[1];
-		const limit = Number(args[2]);
+		const partArg = args[0];
+		const limit = Number(args[1]);
 
 		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)

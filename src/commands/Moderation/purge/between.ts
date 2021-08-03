@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["message1:Snowflake", "message2:Snowflake"],
-			usage: "!purge user <message1> <message2>",
+			usage: "purge between <message1> <message2>",
 		});
 	}
 
@@ -29,7 +29,7 @@ export default class extends SubCommand {
 
 		let counting: boolean = false;
 		for (let msg of allMessages) {
-			if (msg.id === args[1]) {
+			if (msg.id === args[0]) {
 				counting = true;
 			}
 
@@ -38,7 +38,7 @@ export default class extends SubCommand {
 				delMsgs += `${moment(msg.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${msg.author.tag} (${msg.author.id}) | ${msg.id} | ${msg.content} |\n`;
 			}
 
-			if (msg.id === args[2]) counting = false;
+			if (msg.id === args[1]) counting = false;
 		}
 
 		await (<TextChannel>message.channel).bulkDelete(messages);

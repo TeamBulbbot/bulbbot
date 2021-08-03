@@ -14,21 +14,21 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: -1,
 			argList: ["infraction:int", "reason:string"],
-			usage: "!inf update <infraction> <reason>",
+			usage: "inf update <infraction> <reason>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		if (!(await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, ""))))) {
+		if (!(await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[0].replace(NonDigits, ""))))) {
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("infraction_not_found", message.guild?.id, {
-					infraction_id: args[1],
+					infraction_id: args[0],
 				}),
 			);
 		}
 
-		const reason = args.slice(2).join(" ");
-		await infractionsManager.updateReason(<Snowflake>message.guild?.id, Number(args[1]), reason);
-		return message.channel.send(await this.client.bulbutils.translateNew("infraction_update_success", message.guild?.id, { infraction_id: args[1] }));
+		const reason = args.slice(1).join(" ");
+		await infractionsManager.updateReason(<Snowflake>message.guild?.id, Number(args[0]), reason);
+		return message.channel.send(await this.client.bulbutils.translateNew("infraction_update_success", message.guild?.id, { infraction_id: args[0] }));
 	}
 }

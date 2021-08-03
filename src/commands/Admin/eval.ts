@@ -9,7 +9,7 @@ export default class extends Command {
 			description: "Evaluates the provided JavaScript code",
 			category: "Admin",
 			aliases: ["ev"],
-			usage: "!eval <code>",
+			usage: "eval <code>",
 			examples: ["eval message.channel.send('hi')"],
 			minArgs: 1,
 			maxArgs: -1,

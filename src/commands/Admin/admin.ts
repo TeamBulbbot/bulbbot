@@ -15,7 +15,7 @@ export default class extends Command {
 			description: "Admin commands",
 			category: "Admin",
 			subCommands: [clearfiles, leave, join, dbAdd, dbInfo, dbReset, dbYeet],
-			usage: "!admin <action>",
+			usage: "admin <action>",
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["action:string"],
@@ -23,12 +23,21 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]): Promise<void> {
-		await message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-				arg: args[0].toLowerCase(),
+	async run(message: Message, args: string[]): Promise<void | Message> {
+		if(!args.length)
+			return await message.channel.send(
+				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
+					argument: "action",
+					arg_expected: "action:string",
+					usage: "`clearfiles`, `db-add`, `db-info`, `db-reset`, `db-yeet`, `join`, `leave`",
+				}),
+			);
+
+		return await message.channel.send(
+			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+				argument: args[0].toLowerCase(),
 				arg_expected: "action:string",
-				usage: "clearfiles",
+				usage: "`clearfiles`, `db-add`, `db-info`, `db-reset`, `db-yeet`, `join`, `leave`",
 			}),
 		);
 	}

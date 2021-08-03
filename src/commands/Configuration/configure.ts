@@ -16,7 +16,7 @@ export default class extends Command {
 			category: "Configuration",
 			subCommands: [muterole, timezone, prefix, logging, autorole, override, automod],
 			aliases: ["cfg", "conf", "config", "setting"],
-			usage: "!configure <part>",
+			usage: "configure <part>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>", "configure mute_role <role>"],
 			argList: ["setting:string"],
 			minArgs: 1,
@@ -27,10 +27,18 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		await message.channel.send(
+		if(!args.length)
+			return await message.channel.send(
+				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
+					argument: "setting",
+					arg_expected: "setting:string",
+					usage: "mute_role, prefix, auto_role, timezone, logging, override",
+				}),
+			);
+		return await message.channel.send(
 			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
 				argument: args[0].toLowerCase(),
-				arg_expected: "action:string",
+				arg_expected: "setting:string",
 				argument_list: "mute_role, prefix, auto_role, timezone, logging, override",
 			}),
 		);

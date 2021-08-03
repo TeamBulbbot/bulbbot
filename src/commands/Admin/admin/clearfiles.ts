@@ -8,7 +8,7 @@ export default class extends SubCommand {
 		// @ts-ignore
 		super(...args, {
 			name: "clearfiles",
-			usage: "!admin clearfiles",
+			usage: "admin clearfiles",
 		});
 	}
 

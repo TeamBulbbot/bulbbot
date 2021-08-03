@@ -15,25 +15,25 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["role:Role"],
-			usage: "!configure auto_role <role>",
+			usage: "configure auto_role <role>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let role: Role | null = null;
-		role = <Role>message.guild?.roles.cache.get(args[1].replace(NonDigits, ""));
+		role = <Role>message.guild?.roles.cache.get(args[0].replace(NonDigits, ""));
 
-		if (role === undefined && args[1] !== "disable")
+		if (role === undefined && args[0] !== "disable")
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translateNew("global_not_found_types.role", message.guild?.id, {}),
-					arg_provided: args[1],
+					arg_provided: args[0],
 					arg_expected: "role:Role",
 					usage: this.usage,
 				}),
 			);
 
-		if (args[1] !== "disable") {
+		if (args[0] !== "disable") {
 			if (message.guild?.me?.roles.highest && message.guild?.me.roles.highest.rawPosition < role!!.rawPosition)
 				return message.channel.send(await this.client.bulbutils.translateNew("config_mute_unable_to_manage", message.guild.id, {}));
 		}

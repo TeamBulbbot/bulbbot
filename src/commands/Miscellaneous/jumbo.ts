@@ -12,7 +12,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Sends a bigger version of the given emote(s)",
 			category: "Miscellaneous",
-			usage: "!jumbo <emote>",
+			usage: "jumbo <emote>",
 			examples: ["jumbo 🍰"],
 			argList: ["emote:Emote"],
 			minArgs: 1,

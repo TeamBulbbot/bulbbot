@@ -18,7 +18,7 @@ export default class extends Command {
 			description: "Mutes the selected user",
 			category: "Moderation",
 			aliases: ["tempmute"],
-			usage: "!mute <member> <duration> [reason]",
+			usage: "mute <member> <duration> [reason]",
 			examples: ["mute 123456789012345678 5m", "mute 123456789012345678 1h rude user", "mute @Wumpus#0000 24h rude user"],
 			argList: ["member:Member", "duration:Duration"],
 			minArgs: 2,

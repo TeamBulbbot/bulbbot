@@ -11,7 +11,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Kicks a user from the guild",
 			category: "Moderation",
-			usage: "!kick <member> [reason]",
+			usage: "kick <member> [reason]",
 			examples: ["kick 123456789012345678", "kick 123456789012345678 rude user", "kick @Wumpus#0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,

@@ -9,7 +9,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Changes the server verification level",
 			category: "Moderation",
-			usage: "!verification <level>",
+			usage: "verification <level>",
 			examples: ["verification 2"],
 			argList: ["level:int"],
 			minArgs: 1,

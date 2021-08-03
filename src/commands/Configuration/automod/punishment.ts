@@ -16,13 +16,13 @@ export default class extends SubCommand {
 			minArgs: 2, // perhaps `!automod punishment <part>` could return the current setting
 			maxArgs: 2,
 			argList: ["part:string", "punishment:string"],
-			usage: "!automod punishment <part> <punishment>",
+			usage: "automod punishment <part> <punishment>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const partArg = args[1];
-		const itemArg = args[2];
+		const partArg = args[0];
+		const itemArg = args[1];
 
 		const partexec = /^(message|mention|website|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)

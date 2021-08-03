@@ -11,7 +11,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Control the premium config of the bot",
 			category: "Admin",
-			usage: "!premium <action> <guild>",
+			usage: "premium <action> <guild>",
 			examples: ["premium enable 742094927403679816", "premium disable 742094927403679816"],
 			minArgs: 2,
 			maxArgs: 2,

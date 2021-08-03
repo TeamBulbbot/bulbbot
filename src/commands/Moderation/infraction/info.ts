@@ -18,17 +18,17 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["user:User"],
-			usage: "!inf info <user>",
+			usage: "inf info <user>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, "")));
+		const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[0].replace(NonDigits, "")));
 
 		if (!inf) {
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("infraction_not_found", message.guild?.id, {
-					infraction_id: args[1].replace(NonDigits, ""),
+					infraction_id: args[0].replace(NonDigits, ""),
 				}),
 			);
 		}
@@ -38,7 +38,7 @@ export default class extends SubCommand {
 		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
 
 		let description: string = "";
-		description += await this.client.bulbutils.translateNew("infraction_info_inf_id", message.guild?.id, { infraction_id: args[1] });
+		description += await this.client.bulbutils.translateNew("infraction_info_inf_id", message.guild?.id, { infraction_id: args[0] });
 		description += await this.client.bulbutils.translateNew("infraction_info_target", message.guild?.id, { target });
 		description += await this.client.bulbutils.translateNew("infraction_info_moderator", message.guild?.id, { moderator });
 		description += await this.client.bulbutils.translateNew("infraction_info_created", message.guild?.id, {

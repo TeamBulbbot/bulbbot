@@ -6,9 +6,9 @@ import ClearanceManager from "../../../utils/managers/ClearanceManager";
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default async function (client: BulbBotClient, message: Message, args: string[]): Promise<void | Message> {
-	const part = args[2];
-	const name = args[3];
-	let clearance = Number(args[4]);
+	const part = args[1];
+	const name = args[2];
+	let clearance = Number(args[3]);
 
 	if (!["role", "command"].includes(part))
 		return message.channel.send(await client.bulbutils.translate("override_edit_invalid_part", message.guild?.id));

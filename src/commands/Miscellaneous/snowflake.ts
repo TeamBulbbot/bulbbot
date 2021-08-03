@@ -9,7 +9,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Gets information about a given snowflake",
 			category: "Miscellaneous",
-			usage: "!snowflake <snowflake>",
+			usage: "snowflake <snowflake>",
 			examples: ["snowflake 190160914765316096"],
 			argList: ["snowflake:integer"],
 			minArgs: 1,

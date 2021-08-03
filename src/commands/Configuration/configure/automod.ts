@@ -18,7 +18,7 @@ export default class extends SubCommand {
 			category: "Configuration",
 			subCommands: [enable, settings, add, disable, remove, punishment, limit],
 			aliases: ["am"],
-			usage: "!configure automod <action>",
+			usage: "configure automod <action>",
 			examples: ["configure automod enable", "configure automod edit", "configure automod punishment"],
 			argList: ["action:string"],
 			minArgs: 1,
@@ -30,9 +30,18 @@ export default class extends SubCommand {
 	}
 
 	public async run(message: Message, args: string[]): Promise<Message | void> {
-		await message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-				arg: args[0].toLowerCase(),
+		if(!args.length)
+			return await message.channel.send(
+				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
+					argument: "action",
+					arg_expected: "action:string",
+					usage: "`enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
+				}),
+			);
+
+		return await message.channel.send(
+			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+				argument: args[0].toLowerCase(),
 				arg_expected: "action:string",
 				usage: "`enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
 			}),

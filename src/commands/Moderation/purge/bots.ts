@@ -15,12 +15,12 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["amount:int"],
-			usage: "!purge bots <number>",
+			usage: "purge bots <number>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[1]);
+		let amount: number = Number(args[0]);
 		if (amount > 100) return message.channel.send(await this.client.bulbutils.translateNew("purge_too_many", message.guild?.id, {}));
 		if (amount <= 1 || isNaN(amount)) return message.channel.send(await this.client.bulbutils.translateNew("purge_too_few", message.guild?.id, {}));
 

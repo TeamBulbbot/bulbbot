@@ -8,7 +8,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Returns the privacy policy for the bot",
 			category: "Bot",
-			usage: "!privacypolicy",
+			usage: "privacypolicy",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}

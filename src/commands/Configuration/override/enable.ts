@@ -11,7 +11,7 @@ export default async function (client: BulbBotClient, message: Message, args: st
 			await client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 				arg: args[2],
 				arg_expected: "command:string",
-				usage: "!configure override enable <command>",
+				usage: "configure override enable <command>",
 			}),
 		);
 	const cTemp = client.commands.get(command.toLowerCase()) || client.commands.get(<string>client.aliases.get(command.toLowerCase()));
@@ -20,7 +20,7 @@ export default async function (client: BulbBotClient, message: Message, args: st
 			await client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 				arg: args[2],
 				arg_expected: "command:string",
-				usage: "!configure override disable <command>",
+				usage: "configure override disable <command>",
 			}),
 		);
 

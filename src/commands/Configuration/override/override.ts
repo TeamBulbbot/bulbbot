@@ -10,12 +10,12 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["role:Role"],
-			usage: "!configure override <action...>",
+			usage: "configure override <action...>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const action: string = args[1];
+		const action: string = args[0];
 
 		switch (action) {
 			case "create":

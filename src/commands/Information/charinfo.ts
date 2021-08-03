@@ -7,7 +7,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Returns information about the characters provided",
 			category: "Information",
-			usage: "!charinfo <characters>",
+			usage: "charinfo <characters>",
 			examples: ["charinfo 🍰"],
 			argList: ["characters:string"],
 			minArgs: 1,

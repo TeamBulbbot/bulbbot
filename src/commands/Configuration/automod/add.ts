@@ -12,22 +12,22 @@ export default class extends SubCommand {
 		super(...args, {
 			name: "add",
 			clearance: 75,
-			minArgs: 1,
+			minArgs: 2,
 			maxArgs: -1,
-			usage: "!automod add <item> [items...]",
+			usage: "configure automod add <item> [items...]",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const partArg: string = args[1];
-		const items: string[] = args.slice(2);
+		const partArg: string = args[0];
+		const items: string[] = args.slice(1);
 
 		if (!partArg)
 			return message.channel.send(
 				await this.client.bulbutils.translate("event_message_args_missing_list", message.guild!.id, {
 					arg: "part:string",
-					arg_expected: 1,
-					arg_provided: 1,
+					arg_expected: 2,
+					arg_provided: 0,
 					usage: "`website`, `invites`, `words` or `words_token`",
 				}),
 			);

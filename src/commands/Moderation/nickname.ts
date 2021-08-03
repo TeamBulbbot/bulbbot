@@ -12,7 +12,7 @@ export default class extends Command {
 			description: "Nicknames a user from the current server",
 			category: "Moderation",
 			aliases: ["nick"],
-			usage: "!nickname <member> [nickname] [reason]",
+			usage: "nickname <member> [nickname] [reason]",
 			argList: ["member:Member"],
 			examples: ["!nickname @Wumpus#0000 QT"],
 			minArgs: 1,

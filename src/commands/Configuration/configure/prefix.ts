@@ -13,12 +13,12 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["prefix:string"],
-			usage: "!configure prefix <prefix>",
+			usage: "configure prefix <prefix>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const prefix = args[1];
+		const prefix = args[0];
 
 		if (prefix.length > 255) return message.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", message.guild?.id));
 

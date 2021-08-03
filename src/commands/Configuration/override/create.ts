@@ -6,14 +6,14 @@ import ClearanceManager from "../../../utils/managers/ClearanceManager";
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default async function (client: BulbBotClient, message: Message, args: string[]): Promise<void | Message> {
-	const part: string = args[2];
-	const name: string = args[3];
-	let clearance: number = Number(args[4]);
+	const part: string = args[1];
+	const name: string = args[2];
+	let clearance: number = Number(args[3]);
 
 	if (!["role", "command"].includes(part)) return message.channel.send(await client.bulbutils.translate("override_create_invalid_part", message.guild?.id));
 	if (!name) return message.channel.send(await client.bulbutils.translate("override_create_missing_name", message.guild?.id));
 	if (!clearance) return message.channel.send(await client.bulbutils.translate("override_create_missing_clearance", message.guild?.id));
-	if (isNaN(clearance)) return message.channel.send(await client.bulbutils.translate("override_create_non_number", message.guild?.id, { clearance: args[4] }));
+	if (isNaN(clearance)) return message.channel.send(await client.bulbutils.translate("override_create_non_number", message.guild?.id, { clearance: args[3] }));
 	if (clearance <= 0) return message.channel.send(await client.bulbutils.translate("override_create_less_than_0", message.guild?.id));
 	if (clearance >= 100) return message.channel.send(await client.bulbutils.translate("override_create_more_than_100", message.guild?.id));
 

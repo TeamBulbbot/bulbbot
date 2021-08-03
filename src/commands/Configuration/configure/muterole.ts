@@ -15,12 +15,12 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["role:Role"],
-			usage: "!configure mute_role <role>",
+			usage: "configure mute_role <role>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		let role: string = args[1];
+		let role: string = args[0];
 
 		if (role === "remove") await databaseManager.setMuteRole(<Snowflake>message.guild?.id, null);
 		else {
@@ -30,17 +30,17 @@ export default class extends SubCommand {
 			if (rTemp === undefined)
 				return message.channel.send(
 					await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
-						arg_provided: args[1],
+						arg_provided: args[0],
 						arg_expected: "role:Role",
-						usage: "!configure mute_role <role>",
+						usage: "configure mute_role <role>",
 					}),
 				);
 			if (message.guild?.me?.roles.highest && message.guild?.me?.roles.highest.rawPosition < rTemp.rawPosition)
 				return message.channel.send(
 					await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
-						arg_provided: args[1],
+						arg_provided: args[0],
 						arg_expected: "role:Role",
-						usage: "!configure mute_role <role>",
+						usage: "configure mute_role <role>",
 					}),
 				);
 

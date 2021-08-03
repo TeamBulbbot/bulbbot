@@ -10,7 +10,7 @@ export default class extends SubCommand {
 		super(...args, {
 			name: "enable",
 			clearance: 75,
-			usage: "!automod enable",
+			usage: "automod enable",
 		});
 	}
 

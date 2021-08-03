@@ -10,7 +10,7 @@ export default class extends Command {
 			description: "Returns some useful info about a guild from the invite link",
 			category: "Information",
 			aliases: ["inv"],
-			usage: "!inviteinfo <invitecode>",
+			usage: "inviteinfo <invitecode>",
 			examples: ["inviteinfo cacUmbQ", "inviteinfo https://discord.gg/cacUmbQ"],
 			argList: ["invitecode:string"],
 			minArgs: 1,

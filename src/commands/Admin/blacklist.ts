@@ -10,7 +10,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Blacklists a user/guild from using the bot",
 			category: "Admin",
-			usage: "!blacklist <action> <type> <snowflake> [reason]",
+			usage: "blacklist <action> <type> <snowflake> [reason]",
 			examples: ["blacklist add guild 742094927403679816 spamming commnads"],
 			minArgs: 3,
 			maxArgs: -1,

@@ -8,7 +8,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Returns the license file for the Github repo for the bot",
 			category: "Bot",
-			usage: "!license",
+			usage: "license",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}

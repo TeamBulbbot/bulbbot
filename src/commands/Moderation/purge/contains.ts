@@ -15,12 +15,12 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["query:string", "amount:int"],
-			usage: "!purge user <query> <amount>",
+			usage: "purge contains <query> <amount>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[2]);
+		let amount: number = Number(args[1]);
 		if (amount > 100) return message.channel.send(await this.client.bulbutils.translateNew("purge_too_many", message.guild?.id, {}));
 		if (amount <= 1 || isNaN(amount)) return message.channel.send(await this.client.bulbutils.translateNew("purge_too_few", message.guild?.id, {}));
 
@@ -47,7 +47,7 @@ export default class extends SubCommand {
 				limit: deleteMsg[i],
 			});
 
-			const regex: RegExp = new RegExp(`(?:^|\\W)${args[1]}(?:$|\\W)`, "gi");
+			const regex: RegExp = new RegExp(`(?:^|\\W)${args[0]}(?:$|\\W)`, "gi");
 			msgs.map(async m => {
 				if (m.content.match(regex)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;

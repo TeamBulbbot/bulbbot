@@ -14,13 +14,13 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["item:string"],
-			usage: "!automod remove <item> [items...]",
+			usage: "automod remove <item> [items...]",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const partArg: string = args[1];
-		const items: string[] = args.slice(2);
+		const partArg: string = args[0];
+		const items: string[] = args.slice(1);
 
 		if (!partArg)
 			return message.channel.send(

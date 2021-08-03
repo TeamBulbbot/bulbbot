@@ -8,7 +8,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Upload the bot logs to the current channel ",
 			category: "Admin",
-			usage: "!logs <daysAgo>",
+			usage: "logs <daysAgo>",
 			examples: ["logs 0", "logs 5"],
 			minArgs: 1,
 			maxArgs: -1,

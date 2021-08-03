@@ -14,19 +14,19 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["timezone:string"],
-			usage: "!configure timezone <zone>",
+			usage: "configure timezone <zone>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const timezone: string = args[1].toUpperCase();
+		const timezone: string = args[0].toUpperCase();
 
 		if (!this.client.bulbutils.timezones[timezone])
 			return message.channel.send(
 				await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 					arg: timezone,
 					arg_expected: "timezone:string",
-					usage: "!configure timezone <timezone>",
+					usage: "configure timezone <timezone>",
 				}),
 			);
 

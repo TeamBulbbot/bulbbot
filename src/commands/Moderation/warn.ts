@@ -11,7 +11,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Warns the selected guild member",
 			category: "Moderation",
-			usage: "!warn <member> [reason]",
+			usage: "warn <member> [reason]",
 			examples: ["warn 123456789012345678", "warn 123456789012345678 rude user", "warn @Wumpus#0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,

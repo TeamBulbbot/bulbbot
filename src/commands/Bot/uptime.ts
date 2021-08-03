@@ -6,7 +6,9 @@ import * as Config from "../../Config";
 export default class extends Command {
 	constructor(...args: any) {
 		// @ts-ignore
-		super(...args, {});
+		super(...args, {
+			usage: "uptime"
+		});
 	}
 
 	async run(message: Message): Promise<void> {

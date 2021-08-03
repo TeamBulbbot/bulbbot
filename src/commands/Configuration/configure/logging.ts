@@ -15,14 +15,14 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["part:string", "channel:Channel"],
-			usage: "!configure logging <part> <channel>",
+			usage: "configure logging <part> <channel>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const part: string = args[1];
+		const part: string = args[0];
 		const original: TextChannel = <TextChannel>message.guild?.channels.cache.get((await databaseManager.getLoggingConfig(<Snowflake>message.guild?.id))["modAction"]);
-		let channel: string | null = args[2];
+		let channel: string | null = args[1];
 		let confirmMsg: Message;
 
 		if (channel === "remove") channel = null;
@@ -34,7 +34,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translateNew("global_not_found_types.channel", message.guild?.id, {}),
 						arg_expected: "channel:Channel",
-						arg_provided: args[2],
+						arg_provided: args[1],
 						usage: this.usage,
 					}),
 				);
@@ -126,7 +126,7 @@ export default class extends SubCommand {
 			default:
 				return await message.channel.send(
 					await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
-						argument: args[1].toLowerCase(),
+						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
 						argument_list: "`mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),

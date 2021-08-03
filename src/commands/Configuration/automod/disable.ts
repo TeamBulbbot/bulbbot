@@ -12,12 +12,12 @@ export default class extends SubCommand {
 			name: "disable",
 			clearance: 75,
 			maxArgs: 1,
-			usage: "!automod disable [part]",
+			usage: "configure automod disable [part]",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const partArg = args[1];
+		const partArg = args[0];
 		if(!partArg) {
 			await databaseManager.enableAutomod(message.guild!.id, false);
 			await message.channel.send(await this.client.bulbutils.translateNew("automod_disabled", message.guild?.id, {}));
@@ -25,8 +25,8 @@ export default class extends SubCommand {
 			const partexec = /^(message|mention|website|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
 			if (!partexec)
 			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild!.id, {
-					arg: partArg,
+				await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild!.id, {
+					argument: partArg,
 					arg_expected: "part:string",
 					usage: "`website`, `invites`, `words`, `word_tokens`, `mentions` or `messages`",
 				}),

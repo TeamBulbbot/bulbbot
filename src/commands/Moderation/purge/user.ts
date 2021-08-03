@@ -16,19 +16,19 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["member:Member", "amount:int"],
-			usage: "!purge user <member> <amount>",
+			usage: "purge user <member> <amount>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[2]);
-		const user: GuildMember = <GuildMember>message.guild?.member(args[1].replace(NonDigits, ""));
+		let amount: number = Number(args[1]);
+		const user: GuildMember = <GuildMember>message.guild?.member(args[0].replace(NonDigits, ""));
 		if (!user)
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
-					arg_provided: args[2],
+					arg_provided: args[1],
 					usage: this.usage,
 				}),
 			);

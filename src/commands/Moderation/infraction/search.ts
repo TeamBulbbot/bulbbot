@@ -18,13 +18,13 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["user:User"],
-			usage: "!inf search <user>",
+			usage: "inf search <user>",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let pages: MessageEmbed[] = [];
-		const targetID: Snowflake = args[1].replace(NonDigits, "");
+		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let user: User;
 
 		try {
@@ -33,7 +33,7 @@ export default class extends SubCommand {
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translateNew("global_not_found_types.user", message.guild?.id, {}),
-					arg_provided: args[1],
+					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
 				}),
