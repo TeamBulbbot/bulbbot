@@ -44,7 +44,7 @@ export default class extends Command {
 		const banList = await message.guild?.fetchBans();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 
-		if (!bannedUser) return message.channel.send(await this.client.bulbutils.translate("not_banned", message.guild?.id, { target }));
+		if (!bannedUser) return message.channel.send(await this.client.bulbutils.translateNew("not_banned", message.guild?.id, { target }));
 
 		if (!reason) reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
 
