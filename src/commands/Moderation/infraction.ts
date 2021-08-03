@@ -28,11 +28,10 @@ export default class extends Command {
 
 	async run(message: Message, args: string[]): Promise<void | Message> {
 		await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
 				argument: args[0].toLowerCase(),
-				arg_provided: args[0].toLowerCase(),
 				arg_expected: "action:string",
-				usage: this.client.prefix + this.usage,
+				argument_list: "claim, info, modsearch, offendersearch, remove, search, update"
 			}),
 		);
 	}
