@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { GuildChannel, GuildMember, Message, Snowflake, TextChannel } from "discord.js";
-import Command from "../../../structures/Command";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import * as Emotes from "../../../emotes.json";
@@ -20,7 +19,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const part: string = args[1];
 		const original: TextChannel = <TextChannel>message.guild?.channels.cache.get((await databaseManager.getLoggingConfig(<Snowflake>message.guild?.id))["modAction"]);
 		let channel: string | null = args[2];

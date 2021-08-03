@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Guild, Message, User } from "discord.js";
-import Command from "../../../structures/Command";
 import * as Emotes from "../../../emotes.json";
 import { NonDigits } from "../../../utils/Regex";
 
@@ -16,7 +15,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, _: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let guild: Guild;
 
 		try {

@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import SubCommand from "../../../structures/SubCommand";
-import Command from "../../../structures/Command";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -15,7 +14,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		await databaseManager.enableAutomod(message.guild!.id, true);
 		await message.channel.send(await this.client.bulbutils.translateNew("automod_enabled", message.guild?.id, {}));
 	}

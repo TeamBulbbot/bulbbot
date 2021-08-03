@@ -1,5 +1,6 @@
-//import automod from "./setup/automod";
-//import logging from "./setup/logging";
+import automod from "./setup/automod";
+// @ts-ignore
+import logging from "./setup/logging";
 
 import Command from "../../structures/Command";
 import { CollectorFilter, Message, User } from "discord.js";
@@ -9,11 +10,12 @@ import AutoModConfiguration from "../../utils/types/AutoModConfiguration";
 import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
 import ConfigPart from "../../utils/types/ConfigPart";
 import GuildSetup from "../../utils/types/GuildSetup";
+import AutoModSetup from "../../utils/types/AutoModSetup";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 /** @internal */
-interface PromptOptions {
+export interface PromptOptions {
 	defaultText?: string;
 	maxtime?: number;
 }
@@ -100,8 +102,9 @@ export default class extends Command {
 			If "no", proceed
 		*/
 		if (guildSetup.automod === "yes") {
-			// @ts-ignore
-			//let amSetup = new automod(this.client, this);
+			const amSetup = new automod(this.client, this);
+			guildSetup.automod_settings = <AutoModSetup> await amSetup.run(message, [guildSetup.prefix!]);
+			if(guildSetup.automod_settings === null) return;
 		}
 
 		if ((result = await this.prompt(message, ConfigPart.logging, !lgEnabled ? `Would you like to set up logging?` : `Review logging configuration?`, !lgEnabled ? "Yes" : "No", guildSetup)) === null)

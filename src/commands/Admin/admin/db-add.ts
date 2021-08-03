@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Guild, Message } from "discord.js";
-import Command from "../../../structures/Command";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -17,7 +16,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, _: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let guild: Guild;
 
 		try {

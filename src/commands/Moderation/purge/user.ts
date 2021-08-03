@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, GuildMember, Message, Snowflake, TextChannel } from "discord.js";
-import Command from "../../../structures/Command";
 import { NonDigits } from "../../../utils/Regex";
 import moment from "moment";
 import * as fs from "fs";
@@ -21,7 +20,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[2]);
 		const user: GuildMember = <GuildMember>message.guild?.member(args[1].replace(NonDigits, ""));
 		if (!user)

@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
-import Command from "../../../structures/Command";
 import moment from "moment";
 import * as fs from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
@@ -20,7 +19,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[2]);
 		if (amount > 100) return message.channel.send(await this.client.bulbutils.translateNew("purge_too_many", message.guild?.id, {}));
 		if (amount <= 1 || isNaN(amount)) return message.channel.send(await this.client.bulbutils.translateNew("purge_too_few", message.guild?.id, {}));

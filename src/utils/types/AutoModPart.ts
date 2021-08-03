@@ -2,6 +2,8 @@ enum AutoModPart {
 	word, token,
 	website, invite,
 	mention, message,
+	limit, timeout,
+	punishment,
 }
 export default AutoModPart;
 

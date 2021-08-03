@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import SubCommand from "../../../structures/SubCommand";
-import Command from "../../../structures/Command";
 import AutoModPart, { AutoModAntiSpamPart } from "../../../utils/types/AutoModPart";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -19,7 +18,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		console.log(args)
 		const partArg = args[1];
 		const limit = Number(args[2]);

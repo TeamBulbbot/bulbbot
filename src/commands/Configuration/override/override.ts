@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message } from "discord.js";
-import Command from "../../../structures/Command";
 
 export default class extends SubCommand {
 	constructor(...args) {
@@ -15,7 +14,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const action: string = args[1];
 
 		switch (action) {

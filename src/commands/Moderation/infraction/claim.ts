@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, Snowflake, User } from "discord.js";
-import Command from "../../../structures/Command";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import { NonDigits } from "../../../utils/Regex";
 
@@ -19,7 +18,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		if ((await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, "")))) === undefined) {
 			return message.channel.send(
 				await this.client.bulbutils.translateNew("infraction_not_found", message.guild?.id, {

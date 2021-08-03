@@ -1,5 +1,5 @@
-import AutoModConfiguration from "./AutoModConfiguration";
-import LoggingConfiguration from "./LoggingConfiguration";
+import AutoModSetup from "./AutoModSetup";
+import LoggingSetup from "./LoggingSetup";
 
 export default interface GuildSetup {
 	language?: string;
@@ -7,8 +7,8 @@ export default interface GuildSetup {
 	timezone?: string;
 	muterole?: string | null;
 	automod?: string;
-	automod_settings?: AutoModConfiguration;
+	automod_settings?: AutoModSetup;
 	logging?: string;
-	logging_settings?: LoggingConfiguration;
+	logging_settings?: LoggingSetup;
 	autorole?: string | null;
 }

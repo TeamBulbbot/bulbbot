@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, MessageEmbed, Snowflake } from "discord.js";
-import Command from "../../../structures/Command";
 import { NonDigits, ReasonImage } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import moment from "moment";
@@ -23,7 +22,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, Number(args[1].replace(NonDigits, "")));
 
 		if (!inf) {

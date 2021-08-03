@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
-import Command from "../../../structures/Command";
 import moment from "moment";
 import * as fs from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
@@ -20,7 +19,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const msgs: Collection<string, Message> = await message.channel.messages.fetch({ limit: 100 });
 		const allMessages: Message[] = msgs.map(m => m).reverse();
 		const messages: Snowflake[] = [];

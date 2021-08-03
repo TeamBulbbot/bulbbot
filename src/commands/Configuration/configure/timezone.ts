@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, Snowflake } from "discord.js";
-import Command from "../../../structures/Command";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -19,7 +18,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const timezone: string = args[1].toUpperCase();
 
 		if (!this.client.bulbutils.timezones[timezone])

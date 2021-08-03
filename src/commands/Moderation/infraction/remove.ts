@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, Snowflake } from "discord.js";
-import Command from "../../../structures/Command";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import * as Emotes from "../../../emotes.json";
 import { NonDigits } from "../../../utils/Regex";
@@ -21,7 +20,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const infID: number = Number(args[1]);
 
 		if (isNaN(infID) || (await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID)) === undefined) {

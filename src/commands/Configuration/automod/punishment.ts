@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import SubCommand from "../../../structures/SubCommand";
-import Command from "../../../structures/Command";
 import AutoModPart from "../../../utils/types/AutoModPart";
 import PunishmentType from "../../../utils/types/PunishmentType";
 
@@ -21,7 +20,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const partArg = args[1];
 		const itemArg = args[2];
 

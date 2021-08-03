@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, MessageEmbed, Snowflake, User } from "discord.js";
-import Command from "../../../structures/Command";
 import { NonDigits, ReasonImage } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import * as Emotes from "../../../emotes.json";
@@ -24,7 +23,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let pages: MessageEmbed[] = [];
 
 		const targetID: Snowflake = args[1].replace(NonDigits, "");

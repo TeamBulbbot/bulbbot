@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import SubCommand from "../../../structures/SubCommand";
-import Command from "../../../structures/Command";
 import AutoModPart, { AutoModListPart } from "../../../utils/types/AutoModPart";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -19,7 +18,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const partArg: string = args[1];
 		const items: string[] = args.slice(2);
 

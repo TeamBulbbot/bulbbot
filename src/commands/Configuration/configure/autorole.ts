@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, Role, Snowflake } from "discord.js";
-import Command from "../../../structures/Command";
 import { NonDigits } from "../../../utils/Regex";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
@@ -20,7 +19,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let role: Role | null = null;
 		role = <Role>message.guild?.roles.cache.get(args[1].replace(NonDigits, ""));
 

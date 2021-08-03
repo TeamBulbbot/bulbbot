@@ -1,6 +1,5 @@
 import SubCommand from "../../../structures/SubCommand";
 import { Message, Role, Snowflake } from "discord.js";
-import Command from "../../../structures/Command";
 import { NonDigits } from "../../../utils/Regex";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
@@ -20,7 +19,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, parent: Command, args: string[]): Promise<void | Message> {
+	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let role: string = args[1];
 
 		if (role === "remove") await databaseManager.setMuteRole(<Snowflake>message.guild?.id, null);

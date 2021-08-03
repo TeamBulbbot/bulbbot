@@ -337,8 +337,10 @@ export default class {
 				case AutoModPart.invite: return "punishmentInvites";
 				case AutoModPart.word: return "punishmentWords";
 				case AutoModPart.token: return "punishmentWords";
+				default: return "";
 			}
 		})(part);
+		if(!dbkey) return;
 		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find(n => PunishmentType[n] === punishment) ?? null;
 		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Punishment WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
 			bind: { GuildID: guildID, Punishment: punishmentkey },
