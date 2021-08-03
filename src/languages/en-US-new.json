@@ -94,7 +94,7 @@
   "config_prefix_success": "{{emote_success}} Successfully changed the server prefix to `{{prefix}}`",
   "config_prefix_too_long": "{{emote_fail}} The selected prefix is too long. Please make the prefix shorter than 255 characters.",
 
-  "config_autorole_success": "{{emote_success}} Successfully changed the autorole to {{role}}",
+  "config_autorole_success": "{{emote_success}} Successfully changed the autorole to **{{role}}**",
   "config_autorole_disable": "{{emote_success}} Successfully disabled the autorole",
 
   "override_clearance_less_than_0": "{{emote_warn}} Clearance level cannot be less than or equal to **0**",
