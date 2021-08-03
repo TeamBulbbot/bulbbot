@@ -57,9 +57,9 @@
 
   "global_premium_only": "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
 
-  "event_message_args_unexpected": "{{emote_warn}} Unexpected argument {{argument}}. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n**Correct usage:** {{usage}}",
-  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**Correct usage:** {{usage}}",
-  "event_message_args_missing_list": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**Correct arguments:** {{argument_list}}",
+  "event_message_args_unexpected": "{{emote_warn}} Unexpected argument {{argument}}. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
+  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**{{emote_wrench}} Correct usage:** {{usage}}",
+  "event_message_args_missing_list": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Message from **{{user.tag}}** `({{user.id}})` has been updated in {{channel}}\n`ID (channel-message): {{channel_id}}-{{message_id}}`\n**B:** {{before}}\n**A:** {{after}}",
   "event_message_delete": "{{emote_trash}} Message from **{{user.tag}}** `({{user.id}})` has been deleted in {{channel}}.\n`ID (channel-message): {{channel_id}}-{{message_id}}`\n{{content}}\n{{attachment}}\n{{embed}}",
 
