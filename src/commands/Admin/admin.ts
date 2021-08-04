@@ -7,12 +7,13 @@ import dbAdd from "./admin/db-add";
 import dbInfo from "./admin/db-info";
 import dbReset from "./admin/db-reset";
 import dbYeet from "./admin/db-yeet";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 // consider refactor such that a single subcommand "db" with subcommands "add", "info", "reset", "yeet", would take care of the current "db-" commands
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Admin commands",
 			category: "Admin",
 			subCommands: [clearfiles, leave, join, dbAdd, dbInfo, dbReset, dbYeet],

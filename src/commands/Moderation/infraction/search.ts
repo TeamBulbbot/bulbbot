@@ -1,3 +1,4 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Message, MessageEmbed, Snowflake, User } from "discord.js";
 import { NonDigits, ReasonImage } from "../../../utils/Regex";
@@ -6,13 +7,13 @@ import moment from "moment";
 import * as Emotes from "../../../emotes.json";
 import { embedColor } from "../../../Config";
 import { Infraction } from "../../../utils/types/Infraction";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
 export default class extends SubCommand {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "search",
 			clearance: 50,
 			minArgs: 1,

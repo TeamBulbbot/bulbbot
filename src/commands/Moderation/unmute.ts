@@ -5,14 +5,15 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
 import { MuteType } from "../../utils/types/MuteType";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Unutes the selected user",
 			category: "Moderation",
 			usage: "<member> [reason]",

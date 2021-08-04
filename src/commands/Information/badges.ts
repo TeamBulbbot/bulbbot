@@ -2,11 +2,12 @@ import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns the amount of badges in the server",
 			category: "Bot",
 			clientPerms: ["EMBED_LINKS"],

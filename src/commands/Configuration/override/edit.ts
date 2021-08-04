@@ -1,14 +1,15 @@
 import { NonDigits } from "../../../utils/Regex";
 import { Message, Snowflake } from "discord.js";
 import ClearanceManager from "../../../utils/managers/ClearanceManager";
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "edit",
 			minArgs: 3,
 			maxArgs: 3,

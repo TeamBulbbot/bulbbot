@@ -1,11 +1,12 @@
 import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns the privacy policy for the bot",
 			category: "Bot",
 			clientPerms: ["EMBED_LINKS"],

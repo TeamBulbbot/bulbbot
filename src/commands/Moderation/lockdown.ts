@@ -1,11 +1,12 @@
 import Command from "../../structures/Command";
 import { Channel, Message, Role } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Locks/unlocks a selected channel",
 			category: "Moderation",
 			usage: "<channel> <true|false>",

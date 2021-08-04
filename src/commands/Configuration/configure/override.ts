@@ -1,5 +1,7 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Message } from "discord.js";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 import create from "../override/create";
 import disable from "../override/disable";
@@ -9,9 +11,8 @@ import list from "../override/list";
 import remove from "../override/remove";
 
 export default class extends SubCommand {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "override",
 			subCommands: [create, disable, edit, enable, list, remove],
 			clearance: 75,

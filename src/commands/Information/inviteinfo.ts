@@ -2,11 +2,12 @@ import Command from "../../structures/Command";
 import { Invite, Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns some useful info about a guild from the invite link",
 			category: "Information",
 			aliases: ["inv"],

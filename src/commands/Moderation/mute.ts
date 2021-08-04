@@ -12,9 +12,9 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Mutes the selected user",
 			category: "Moderation",
 			aliases: ["tempmute"],

@@ -1,13 +1,14 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Guild, Message } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "db-yeet",
 			minArgs: 1,
 			maxArgs: 1,

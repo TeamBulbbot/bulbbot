@@ -1,11 +1,12 @@
 import Command from "../../structures/Command";
 import * as Config from "../../Config";
 import { ColorResolvable, Message, MessageEmbed } from "discord.js";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Return the Websocket and API latency",
 			category: "Bot",
 			clientPerms: ["EMBED_LINKS"],

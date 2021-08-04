@@ -4,13 +4,14 @@ import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Bans or forcebans multiple people from a guild",
 			category: "Moderation",
 			aliases: ["mban"],

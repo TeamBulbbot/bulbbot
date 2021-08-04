@@ -1,10 +1,11 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Guild, Message } from "discord.js";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "join",
 			minArgs: 1,
 			maxArgs: 1,

@@ -2,13 +2,14 @@ import Command from "../../structures/Command";
 import { GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Warns multiple selected users",
 			category: "Moderation",
 			aliases: ["mwarn"],

@@ -1,14 +1,16 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { Message } from "discord.js";
 import LoggingSetup from "../../../utils/types/LoggingSetup";
+import BulbBotClient from "../../../structures/BulbBotClient";
+
 // @ts-ignore
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends SubCommand {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "logging",
 			clearance: 75,
 		});

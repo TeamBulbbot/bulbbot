@@ -5,6 +5,7 @@ import logging from "./setup/logging";
 import Command from "../../structures/Command";
 import { CollectorFilter, Message, User } from "discord.js";
 import { NonDigits, RoleMention } from "../../utils/Regex";
+import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import AutoModConfiguration from "../../utils/types/AutoModConfiguration";
 import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
@@ -18,12 +19,12 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 export interface PromptOptions {
 	defaultText?: string;
 	maxtime?: number;
-}
+};
 
 export default class extends Command {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Configures the bot in your guild",
 			category: "Configuration",
 			subCommands: [

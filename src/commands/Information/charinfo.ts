@@ -1,10 +1,11 @@
 import Command from "../../structures/Command";
 import { Message } from "discord.js";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns information about the characters provided",
 			category: "Information",
 			usage: "<characters>",

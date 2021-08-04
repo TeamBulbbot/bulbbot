@@ -158,7 +158,7 @@ export default class extends Event {
 						argument: commandArgs[command.maxArgs],
 						arg_expected: command.maxArgs,
 						arg_provided: commandArgs.length,
-						usage: `${this.client.prefix}${command.usage}`,
+						usage: `\`${this.client.prefix}${command.usage}\``,
 					}),
 				);
 			}
@@ -185,7 +185,6 @@ export default class extends Event {
 	private async resolveSubcommand(command: Command, args: string[]): Promise<Command> {
 		let sCmd: SubCommand;
 		for (const subCommand of command.subCommands) {
-			// @ts-ignore
 			sCmd = new subCommand(this.client, command);
 			if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0].toLowerCase()))
 				return sCmd;

@@ -3,13 +3,14 @@ import { Guild, Message, Snowflake, TextChannel } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import parse from "parse-duration";
 import LoggingManager from "../../utils/managers/LoggingManager";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Sets a slowmode to the selected channel",
 			category: "Moderation",
 			usage: "[channel] <duration>",

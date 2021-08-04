@@ -1,16 +1,17 @@
 import { Message, MessageEmbed } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import AutoModConfiguration from "../../../utils/types/AutoModConfiguration";
 import { embedColor } from "../../../Config";
 import Emotes from "../../../emotes.json";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "settings",
 			clearance: 75,
 			maxArgs: 0,

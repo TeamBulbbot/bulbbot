@@ -2,13 +2,14 @@ import Command from "../../structures/Command";
 import { Guild, Message } from "discord.js";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import * as Emotes from "../../emotes.json";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Control the premium config of the bot",
 			category: "Admin",
 			usage: "<action> <guild>",

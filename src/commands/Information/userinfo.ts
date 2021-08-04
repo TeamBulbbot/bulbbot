@@ -4,14 +4,15 @@ import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
 import { embedColor } from "../../Config";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 // @ts-nocheck
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns some useful info about a user",
 			category: "Information",
 			aliases: ["whois", "info", "user"],

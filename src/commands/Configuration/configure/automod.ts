@@ -1,5 +1,7 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Message } from "discord.js";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 import enable from "../automod/enable";
 import settings from "../automod/settings";
@@ -10,9 +12,8 @@ import punishment from "../automod/punishment";
 import limit from "../automod/limit";
 
 export default class extends SubCommand {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "automod",
 			description: "Configure the automod in your server",
 			category: "Configuration",

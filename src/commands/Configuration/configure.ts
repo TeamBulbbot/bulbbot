@@ -7,11 +7,12 @@ import logging from "./configure/logging";
 import autorole from "./configure/autorole";
 import override from "./configure/override";
 import automod from "./configure/automod";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Configure the bot in your server",
 			category: "Configuration",
 			subCommands: [muterole, timezone, prefix, logging, autorole, override, automod],

@@ -3,13 +3,14 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { Message, MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const databaseManager = new DatabaseManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Get the settings for the guild",
 			category: "Configuration",
 			aliases: ["overrides"],

@@ -1,11 +1,12 @@
 import Command from "../../structures/Command";
 import { Message, MessageEmbed } from "discord.js";
 import * as Config from "../../Config";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns the invite link for the bot and the support guild",
 			category: "Bot",
 			aliases: ["support"],

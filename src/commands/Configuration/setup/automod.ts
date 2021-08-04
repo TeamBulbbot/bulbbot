@@ -1,3 +1,4 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { CollectorFilter, Message, User } from "discord.js";
@@ -6,13 +7,14 @@ import AutoModPart from "../../../utils/types/AutoModPart";
 import Setup, { PromptOptions } from "../setup";
 import AutoModConfiguration from "../../../utils/types/AutoModConfiguration";
 import { NonDigits } from "../../../utils/Regex";
-// @ts-ignore
+// @ts-ignoreimport CommandOptions from "../../utils/types/CommandOptions";
+import BulbBotClient from "../../structures/BulbBotClient";
+
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "automod",
 			clearance: 75,
 			maxArgs: 0,

@@ -1,3 +1,4 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, Message, TextChannel } from "discord.js";
 import moment from "moment";
@@ -8,9 +9,8 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends SubCommand {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "all",
 			clearance: 50,
 			minArgs: 1,

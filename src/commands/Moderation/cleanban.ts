@@ -3,13 +3,14 @@ import {Guild, GuildMember, Message, Snowflake} from "discord.js";
 import {NonDigits} from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import {BanType} from "../../utils/types/BanType";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Bans a user and removes all their messages from the guild",
 			category: "Moderation",
 			usage: "<member> [reason]",

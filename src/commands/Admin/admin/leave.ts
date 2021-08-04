@@ -1,12 +1,13 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Guild, Message, User } from "discord.js";
 import * as Emotes from "../../../emotes.json";
 import { NonDigits } from "../../../utils/Regex";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "leave",
 			minArgs: 1,
 			maxArgs: 1,

@@ -5,11 +5,12 @@ import { CustomEmote, GetEverythingAfterColon } from "../../utils/Regex";
 import axios from "axios";
 import sharp from "sharp";
 import emojiUnicode from "emoji-unicode";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Sends a bigger version of the given emote(s)",
 			category: "Miscellaneous",
 			usage: "<emote>",

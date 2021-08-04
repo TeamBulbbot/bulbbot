@@ -1,14 +1,15 @@
 import Command from "../../structures/Command";
 import { Message } from "discord.js";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 // should probably refactor to subcommands
 export default class extends Command {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Blacklists a user/guild from using the bot",
 			category: "Admin",
 			usage: "<action> <type> <snowflake> [reason]",

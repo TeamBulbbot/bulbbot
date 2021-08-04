@@ -7,11 +7,12 @@ import update from "./infraction/update";
 import modsearch from "./infraction/modsearch";
 import offendersearch from "./infraction/offendersearch";
 import remove from "./infraction/remove";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Infraction Desc",
 			category: "Moderation",
 			subCommands: [search, info, claim, update, modsearch, offendersearch, remove],

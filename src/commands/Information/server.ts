@@ -1,11 +1,12 @@
 import Command from "../../structures/Command";
 import { Emoji, Guild, GuildChannel, Message, MessageEmbed, Role } from "discord.js";
 import { embedColor } from "../../Config";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Returns some useful information about the current Guild",
 			category: "Information",
 			aliases: ["server"],

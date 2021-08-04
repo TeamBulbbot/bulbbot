@@ -1,12 +1,13 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Message } from "discord.js";
 import { readdirSync, unlinkSync } from "fs";
 import { join } from "path";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 export default class extends SubCommand {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "clearfiles",
 		});
 	}

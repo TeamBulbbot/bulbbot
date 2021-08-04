@@ -2,11 +2,12 @@ import { SnowflakeUtil, DeconstructedSnowflake, Message, MessageEmbed } from "di
 import Command from "../../structures/Command";
 import { NonDigits } from "../../utils/Regex";
 import * as Config from "../../Config";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Gets information about a given snowflake",
 			category: "Miscellaneous",
 			usage: "<snowflake>",

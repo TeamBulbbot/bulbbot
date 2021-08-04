@@ -2,13 +2,14 @@ import BulbBotClient from "./BulbBotClient";
 import { BitField, Message, PermissionString } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import { Permissions } from "discord.js";
-import SubCommand from "./SubCommand";
+import { SubCommandClass } from "./SubCommand";
+import CommandOptions from "../utils/types/CommandOptions";
 
-export default class {
+export default class Command {
 	public readonly client: BulbBotClient;
 	public readonly name: string;
 	public readonly aliases: string[];
-	public readonly subCommands: SubCommand[];
+	public readonly subCommands: SubCommandClass[];
 	public readonly description: string;
 	public readonly category: string;
 	public readonly _usage: string;
@@ -28,12 +29,12 @@ export default class {
 	}
 
 	get usage() {
-		return `${this.qualifiedName} ${this._usage}`;
+		return `${this.qualifiedName} ${this._usage}`.trim();
 	}
 
-	constructor(client: BulbBotClient, name: string, options: any) {
+	constructor(client: BulbBotClient, options: CommandOptions) {
 		this.client = client;
-		this.name = options.name || name;
+		this.name = options.name;
 		this.aliases = options.aliases || [];
 		this.subCommands = options.subCommands || [];
 		this.description = options.description || "No description provided";
@@ -52,6 +53,6 @@ export default class {
 	}
 
 	public async run(message: Message, args: string[]): Promise<any> {
-		throw new CommandException(`Command ${this.name} doesn't provide a run method!`);
+		throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
 	}
 }

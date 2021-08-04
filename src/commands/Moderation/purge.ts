@@ -8,11 +8,12 @@ import emojis from "./purge/emojis";
 import user from "./purge/user";
 import contains from "./purge/contains";
 import between from "./purge/between";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Purges messages from a chat",
 			category: "Moderation",
 			aliases: ["clear", "clean"],

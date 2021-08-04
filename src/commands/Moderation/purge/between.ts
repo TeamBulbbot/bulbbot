@@ -1,15 +1,16 @@
+import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
 import moment from "moment";
 import * as fs from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends SubCommand {
-	constructor(...args) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, parent: Command) {
+		super(client, parent, {
 			name: "between",
 			clearance: 50,
 			minArgs: 2,

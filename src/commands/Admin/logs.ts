@@ -1,11 +1,12 @@
 import Command from "../../structures/Command";
 import { Message } from "discord.js";
 import fs from "fs";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
-	constructor(...args: any) {
-		// @ts-ignore
-		super(...args, {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			description: "Upload the bot logs to the current channel ",
 			category: "Admin",
 			usage: "<daysAgo>",
