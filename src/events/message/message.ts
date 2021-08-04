@@ -109,7 +109,7 @@ export default class extends Event {
 		return command;
 	}
 
-	private async resolveSubcommand(command: Command, args: string[]): Promise<Command> {
+	public async resolveSubcommand(command: Command, args: string[]): Promise<Command> {
 		let sCmd: SubCommand;
 		for (const subCommand of command.subCommands) {
 			sCmd = new subCommand(this.client, command);
