@@ -1,6 +1,5 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 import create from "../override/create";
@@ -19,17 +18,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["action:string"],
-			usage: "<action...>",
+			usage: "<action>",
 		});
-	}
-
-	public async run(message: Message, args: string[]): Promise<void | Message> {
-		return await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
-				argument: args[0].toLowerCase(),
-				arg_expected: "action:string",
-				usage: "`create`, `edit`, `delete`, `list`, `enable`, `disable`",
-			}),
-		);
 	}
 }

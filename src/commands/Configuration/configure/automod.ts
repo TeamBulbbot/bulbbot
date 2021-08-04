@@ -1,6 +1,5 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 import enable from "../automod/enable";
@@ -28,24 +27,5 @@ export default class extends SubCommand {
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["EMBED_LINKS"],
 		});
-	}
-
-	public async run(message: Message, args: string[]): Promise<Message | void> {
-		if(!args.length)
-			return await message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
-					argument: "action",
-					arg_expected: "action:string",
-					usage: "`enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
-				}),
-			);
-
-		return await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
-				argument: args[0].toLowerCase(),
-				arg_expected: "action:string",
-				usage: "`enable`, `disable`, `add`, `remove`, `limit`, `punishment`, `settings`",
-			}),
-		);
 	}
 }

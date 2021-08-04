@@ -18,6 +18,7 @@ export default class SubCommand extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<any> {
-		throw new CommandException(`SubCommand \`${this.qualifiedName}\` doesn't provide a run method!`);
+		if(!args.length || !this.subCommands.length) throw new CommandException(`SubCommand \`${this.qualifiedName}\` doesn't provide a run method!`);
+		return super.run(message, args);
 	}
 }

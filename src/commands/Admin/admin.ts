@@ -1,5 +1,4 @@
 import Command from "../../structures/Command";
-import { Message } from "discord.js";
 import clearfiles from "./admin/clearfiles";
 import leave from "./admin/leave";
 import join from "./admin/join";
@@ -23,24 +22,5 @@ export default class extends Command {
 			argList: ["action:string"],
 			devOnly: true,
 		});
-	}
-
-	async run(message: Message, args: string[]): Promise<void | Message> {
-		if(!args.length)
-			return await message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
-					argument: "action",
-					arg_expected: "action:string",
-					usage: "`clearfiles`, `db-add`, `db-info`, `db-reset`, `db-yeet`, `join`, `leave`",
-				}),
-			);
-
-		return await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
-				argument: args[0].toLowerCase(),
-				arg_expected: "action:string",
-				usage: "`clearfiles`, `db-add`, `db-info`, `db-reset`, `db-yeet`, `join`, `leave`",
-			}),
-		);
 	}
 }

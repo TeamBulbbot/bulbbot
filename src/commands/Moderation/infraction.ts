@@ -1,5 +1,4 @@
 import Command from "../../structures/Command";
-import { Message } from "discord.js";
 import search from "./infraction/search";
 import info from "./infraction/info";
 import claim from "./infraction/claim";
@@ -25,24 +24,5 @@ export default class extends Command {
 			argList: ["action:string"],
 			clientPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"],
 		});
-	}
-
-	async run(message: Message, args: string[]): Promise<void | Message> {
-		if(!args.length)
-			return await message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
-					argument: "action",
-					arg_expected: "action:string",
-					usage: "`claim`, `info`, `modsearch`, `offendersearch`, `remove`, `search`, `update`",
-				}),
-			);
-
-		return await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
-				argument: args[0].toLowerCase(),
-				arg_expected: "action:string",
-				argument_list: "`claim`, `info`, `modsearch`, `offendersearch`, `remove`, `search`, `update`",
-			}),
-		);
 	}
 }

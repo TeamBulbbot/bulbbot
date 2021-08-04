@@ -53,6 +53,13 @@ export default class Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<any> {
-		throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
+		if(!args.length || !this.subCommands.length) throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
+		return await message.channel.send(
+			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
+				argument: args[args.length - 1].toLowerCase(),
+				arg_expected: this.argList[args.length - 1],
+				argument_list: this.subCommands.map(sc => `\`${(new sc(this.client, this)).name}\``).join(", "),
+			}),
+		);
 	}
 }

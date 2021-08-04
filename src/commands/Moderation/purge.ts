@@ -1,5 +1,4 @@
 import Command from "../../structures/Command";
-import { Message } from "discord.js";
 import all from "./purge/all";
 import embeds from "./purge/embeds";
 import images from "./purge/images";
@@ -20,22 +19,12 @@ export default class extends Command {
 			subCommands: [all, embeds, images, bots, emojis, user, contains, between],
 			usage: "<type> [argument] <amount>",
 			examples: ["purge bots 30"],
-			argList: ["action:string"],
+			argList: ["type:string"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
 			userPerms: ["MANAGE_MESSAGES"],
 			clientPerms: ["MANAGE_MESSAGES", "ATTACH_FILES"],
 		});
-	}
-
-	public async run(message: Message, args: string[]): Promise<void | Message> {
-		await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
-				argument: args[0].toLowerCase(),
-				arg_expected: "action:string",
-				argument_list: "`all`, `embeds`, `images`, `bots`, `emojis`, `user`, `contains`, `between`",
-			}),
-		);
 	}
 }
