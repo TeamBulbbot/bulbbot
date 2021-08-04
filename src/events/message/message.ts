@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { BitField, GuildMember, Message, PermissionString } from "discord.js";
+import { Message } from "discord.js";
 import Command from "../../structures/Command";
 import DMUtils from "../../utils/DMUtils";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
@@ -84,7 +84,7 @@ export default class extends Event {
 	}
 
 	public async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
-		const {message, baseCommand, args, clearance, premiumGuild, isDev, isSubDev} = options;
+		const {message, baseCommand, args} = options;
 		let command = baseCommand;
 		if (!message.guild?.me) await message.guild?.members.fetch(this.client.user!.id);
 		if (!message.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
@@ -93,84 +93,11 @@ export default class extends Event {
 		for(i = 0;; ++i) {
 			const commandArgs = args.slice(i);
 			currCommand = command;
-			if (command.premium && !premiumGuild) return message.channel.send(await this.client.bulbutils.translate("premium_message", message.guild.id));
 
-			const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild.id, command.name);
-			if (commandOverride !== undefined) {
-				if (!commandOverride["enabled"]) return;
-				if (commandOverride["clearanceLevel"] > clearance) {
-					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
-						setImmediate(_=>{
-							message.delete({ timeout: 5000 });
-							msg.delete({ timeout: 5000 });
-						});
-						return msg;
-					});
-				}
-			}
-
-			this.client.userClearance = clearance;
-			if (command.clearance > clearance && !commandOverride) {
-				return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
-					setImmediate(_=>{
-						message.delete({ timeout: 5000 });
-						msg.delete({ timeout: 5000 });
-					});
-					return msg;
-				});
-			}
-
-			const userPermCheck: BitField<PermissionString> = command.userPerms;
-			if (userPermCheck && command.clearance <= clearance) {
-				const userMember: GuildMember = message.member!;
-				const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(message.channel).has(userPermCheck)); // !x || !y === !(x && y)
-
-				if (missing) {
-					return message.channel.send(await this.client.bulbutils.translate("global_missing_permission", message.guild.id)).then(msg => {
-						setImmediate(_=>{
-							message.delete({ timeout: 5000 });
-							msg.delete({ timeout: 5000 });
-						});
-						return msg;
-					});
-				}
-			}
-
-			const clientPermCheck: BitField<PermissionString> = command.clientPerms ? this.client.defaultPerms.add(command.clientPerms) : this.client.defaultPerms;
-			if (clientPermCheck) {
-				let missing: PermissionString[] = message.guild.me.permissions.missing(clientPermCheck);
-				if (!missing.length) missing = message.guild.me.permissionsIn(message.channel).missing(clientPermCheck);
-
-				if (missing.length)
-					return message.channel.send(
-						await this.client.bulbutils.translate("global_missing_permission_bot", message.guild.id, {
-							missing: missing.map(perm => `\`${perm}\``).join(", "),
-						}),
-					);
-			}
-
-			if (command.subDevOnly) if (!isSubDev) return;
-			if (command.devOnly) if (!isDev) return;
-
-			if (command.maxArgs < commandArgs.length && command.maxArgs !== -1) {
-				return message.channel.send(
-					await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild.id, {
-						argument: commandArgs[command.maxArgs],
-						arg_expected: command.maxArgs,
-						arg_provided: commandArgs.length,
-						usage: `\`${this.client.prefix}${command.usage}\``,
-					}),
-				);
-			}
-
-			if (command.minArgs > commandArgs.length) {
-				return message.channel.send(
-					await this.client.bulbutils.translateNew("event_message_args_missing", message.guild.id, {
-						argument: command.argList[commandArgs.length],
-						arg_expected: command.minArgs,
-						usage: `\`${this.client.prefix}${command.usage}\``,
-					}),
-				);
+			const invalidReason = await command.validate(message, commandArgs, options);
+			if(invalidReason !== undefined) {
+				if(!invalidReason) return;
+				return message.channel.send(invalidReason);
 			}
 
 			if(!command.subCommands.length) break;

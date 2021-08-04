@@ -1,9 +1,13 @@
 import BulbBotClient from "./BulbBotClient";
-import { BitField, Message, PermissionString } from "discord.js";
+import { BitField, GuildMember, Message, PermissionString } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import { Permissions } from "discord.js";
 import { SubCommandClass } from "./SubCommand";
+import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
+import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
+
+const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default class Command {
 	public readonly client: BulbBotClient;
@@ -61,5 +65,66 @@ export default class Command {
 				argument_list: this.subCommands.map(sc => `\`${(new sc(this.client, this)).name}\``).join(", "),
 			}),
 		);
+	}
+
+	public async validate(message: Message, args: string[], options: ResolveCommandOptions): Promise<string | undefined> {
+		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("premium_message", message.guild?.id);
+
+			const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.name);
+			if (commandOverride !== undefined) {
+				if (!commandOverride["enabled"]) return;
+				if (commandOverride["clearanceLevel"] > options.clearance) {
+					return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
+				}
+			}
+
+			this.client.userClearance = options.clearance;
+			if (this.clearance > options.clearance && !commandOverride) {
+				return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
+			}
+
+			const userPermCheck: BitField<PermissionString> = this.userPerms;
+			if (userPermCheck && this.clearance <= options.clearance) {
+				const userMember: GuildMember = message.member!;
+				const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(message.channel).has(userPermCheck)); // !x || !y === !(x && y)
+
+				if (missing) {
+					return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
+				}
+			}
+
+			const clientPermCheck: BitField<PermissionString> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
+			if (clientPermCheck) {
+				let missing: PermissionString[] = message.guild?.me?.permissions.missing(clientPermCheck)!;
+				if(!missing) return "";
+				if (!missing.length) missing = message.guild!.me!.permissionsIn(message.channel).missing(clientPermCheck);
+
+				if (missing.length)
+					return await this.client.bulbutils.translate("global_missing_permission_bot", message.guild?.id, {
+						missing: missing.map(perm => `\`${perm}\``).join(", "),
+					});
+			}
+
+			if (this.subDevOnly) if (!options.isSubDev) return "";
+			if (this.devOnly) if (!options.isDev) return "";
+
+			if (this.maxArgs < args.length && this.maxArgs !== -1) {
+				return await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+					argument: args[this.maxArgs],
+					arg_expected: this.maxArgs,
+					arg_provided: args.length,
+					usage: `\`${this.client.prefix}${this.usage}\``,
+				});
+			}
+
+			if (this.minArgs > args.length) {
+				return await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
+					argument: this.argList[args.length],
+					arg_expected: this.minArgs,
+					usage: `\`${this.client.prefix}${this.usage}\``,
+				});
+			}
+
+			return;
 	}
 }
