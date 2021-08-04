@@ -1,35 +1,46 @@
-import BulbBotClient from "../../../structures/BulbBotClient";
-import { Message, Snowflake } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
+import { Message, Snowflake } from "discord.js";
 import ClearanceManager from "../../../utils/managers/ClearanceManager";
+import SubCommand from "../../../structures/SubCommand";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
-export default async function (client: BulbBotClient, message: Message, args: string[]): Promise<void | Message> {
-	const part = args[1];
-	const name = args[2];
-
-	if (!["role", "command"].includes(part)) return message.channel.send(await client.bulbutils.translate("override_create_invalid_part", message.guild?.id));
-	if (!name) return message.channel.send(await client.bulbutils.translate("override_create_missing_name", message.guild?.id));
-
-	switch (part) {
-		case "role":
-			if (!(await clearanceManager.getRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""))))
-				return message.channel.send(await client.bulbutils.translate("override_remove_non_existent_override_role", message.guild?.id));
-
-			await clearanceManager.deleteRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""));
-			break;
-
-		case "command":
-			const cTemp = client.commands.get(name.toLowerCase()) || client.commands.get(<string>client.aliases.get(name.toLowerCase()));
-			if (!cTemp || !(await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, cTemp.name)))
-				return message.channel.send(await client.bulbutils.translate("override_remove_non_existent_override_command", message.guild?.id));
-
-			await clearanceManager.deleteCommandOverride(<Snowflake>message.guild?.id, cTemp.name);
-			break;
-		default:
-			break;
+export default class extends SubCommand {
+	constructor(...args: any) {
+		// @ts-ignore
+		super(...args, {
+			name: "delete",
+			aliases: ["remove", "rm"],
+			minArgs: 2,
+			maxArgs: 2,
+			argList: ["part:string", "name:string"],
+			usage: "configure override delete <part> <name>",
+		});
 	}
 
-	await message.channel.send(await client.bulbutils.translate("override_remove_success", message.guild?.id));
+	async run( message: Message, args: string[]): Promise<void | Message> {
+		const part = args[0];
+		const name = args[1];
+
+		switch (part) {
+			case "role":
+				if (!(await clearanceManager.getRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""))))
+					return message.channel.send(await this.client.bulbutils.translate("override_remove_non_existent_override_role", message.guild?.id));
+
+				await clearanceManager.deleteRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""));
+				break;
+
+			case "command":
+				const cTemp = this.client.commands.get(name.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(name.toLowerCase()));
+				if (!cTemp || !(await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, cTemp.name)))
+					return message.channel.send(await this.client.bulbutils.translate("override_remove_non_existent_override_command", message.guild?.id));
+
+				await clearanceManager.deleteCommandOverride(<Snowflake>message.guild?.id, cTemp.name);
+				break;
+			default:
+				return message.channel.send(await this.client.bulbutils.translate("override_create_invalid_part", message.guild?.id));
+		}
+
+		await message.channel.send(await this.client.bulbutils.translate("override_remove_success", message.guild?.id));
+	}
 }

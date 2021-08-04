@@ -1,40 +1,53 @@
-import { Message, MessageEmbed, Snowflake } from "discord.js";
-import ClearanceManager from "../../../utils/managers/ClearanceManager";
 import * as Emotes from "../../../emotes.json";
 import { embedColor } from "../../../Config";
-import BulbBotClient from "../../../structures/BulbBotClient";
+import { Message, MessageEmbed, Snowflake } from "discord.js";
+import ClearanceManager from "../../../utils/managers/ClearanceManager";
+import SubCommand from "../../../structures/SubCommand";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
-export default async function (client: BulbBotClient, message: Message, args: string[]): Promise<void | Message> {
-	const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>message.guild?.id);
-
-	let roles: string = "";
-	let commands: string = "";
-
-	if (data[0] !== undefined) {
-		data[0].forEach(command => {
-			commands += `\`${command.commandName}\` → \`${command.clearanceLevel}\`  ${command.enabled !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}\n`;
+export default class extends SubCommand {
+	constructor(...args: any) {
+		// @ts-ignore
+		super(...args, {
+			name: "list",
+			maxArgs: 0,
+			argList: ["command:string"],
+			usage: "configure override list",
 		});
 	}
 
-	if (data[1] !== undefined) {
-		data[1].forEach(role => {
-			roles += `<@&${role.roleId}> \`(${role.roleId})\` → \`${role.clearanceLevel}\` \n`;
-		});
+	async run( message: Message): Promise<void | Message> {
+		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>message.guild?.id);
+
+		let roles: string[] = [];
+		let commands: string[] = [];
+
+		if (data[0] !== undefined) {
+			data[0].forEach(command => {
+				commands.push(`\`${command.commandName}\` → \`${command.clearanceLevel}\`  ${command.enabled !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`);
+			});
+		}
+
+		if (data[1] !== undefined) {
+			data[1].forEach(role => {
+				roles.push(`<@&${role.roleId}> \`(${role.roleId})\` → \`${role.clearanceLevel}\``);
+			});
+		}
+
+		// needs translation
+		const embed: MessageEmbed = new MessageEmbed()
+			.setColor(embedColor)
+			.setAuthor(`Overrides for ${message.guild?.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
+			.setDescription([...commands, ...roles].join("\n") || "*None*")
+			.setFooter(
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
+					user_name: message.author.username,
+					user_discriminator: message.author.discriminator,
+				}),
+				message.author.avatarURL({ dynamic: true }) ?? undefined,
+			);
+
+		await message.channel.send(embed);
 	}
-
-	const embed: MessageEmbed = new MessageEmbed()
-		.setColor(embedColor)
-		.setAuthor(`Overrides for ${message.guild?.name}`, <string>message.guild?.iconURL({ dynamic: true }))
-		.setDescription(commands + roles)
-		.setFooter(
-			await client.bulbutils.translate("global_executed_by", message.guild?.id, {
-				user_name: message.author.username,
-				user_discriminator: message.author.discriminator,
-			}),
-			<string>message.author.avatarURL({ dynamic: true }),
-		);
-
-	await message.channel.send(embed);
 }

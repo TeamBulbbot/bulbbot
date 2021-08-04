@@ -6,12 +6,8 @@ import Command from "./Command";
 export default class SubCommand extends Command {
 	public readonly parent: Command;
 
-	constructor(client: BulbBotClient, parent: Command, name: string, options: any) {
-		if(typeof name === "object" && options === undefined) {
-			options = name;
-			name = options.name;
-		}
-		super(client, name, options);
+	constructor(client: BulbBotClient, parent: Command, options: any) {
+		super(client, options.name, options);
 		this.parent = parent;
 	}
 

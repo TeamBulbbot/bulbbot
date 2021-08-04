@@ -186,7 +186,7 @@ export default class extends Event {
 		let sCmd: SubCommand;
 		for (const subCommand of command.subCommands) {
 			// @ts-ignore
-			sCmd = new subCommand(this.client, command, args[0]);
+			sCmd = new subCommand(this.client, command);
 			if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0].toLowerCase()))
 				return sCmd;
 		}

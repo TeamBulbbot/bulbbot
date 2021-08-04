@@ -5,7 +5,7 @@ import timezone from "./configure/timezone";
 import prefix from "./configure/prefix";
 import logging from "./configure/logging";
 import autorole from "./configure/autorole";
-import override from "./override/override";
+import override from "./configure/override";
 import automod from "./configure/automod";
 
 export default class extends Command {
@@ -27,19 +27,11 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		if(!args.length)
-			return await message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
-					argument: "setting",
-					arg_expected: "setting:string",
-					usage: "mute_role, prefix, auto_role, timezone, logging, override",
-				}),
-			);
 		return await message.channel.send(
 			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
 				argument: args[0].toLowerCase(),
 				arg_expected: "setting:string",
-				argument_list: "mute_role, prefix, auto_role, timezone, logging, override",
+				argument_list: "`mute_role`, `prefix`, `auto_role`, `timezone`, `logging`, `override`",
 			}),
 		);
 	}
