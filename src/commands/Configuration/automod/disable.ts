@@ -12,7 +12,7 @@ export default class extends SubCommand {
 			name: "disable",
 			clearance: 75,
 			maxArgs: 1,
-			usage: "configure automod disable [part]",
+			usage: "[part]",
 		});
 	}
 

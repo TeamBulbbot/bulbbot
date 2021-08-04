@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["member:Member", "amount:int"],
-			usage: "purge user <member> <amount>",
+			usage: "<member> <amount>",
 		});
 	}
 

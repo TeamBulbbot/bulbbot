@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["role:Role"],
-			usage: "configure mute_role <role>",
+			usage: "<role>",
 		});
 	}
 
@@ -32,7 +32,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
 						arg_provided: args[0],
 						arg_expected: "role:Role",
-						usage: "configure mute_role <role>",
+						usage: this.usage,
 					}),
 				);
 			if (message.guild?.me?.roles.highest && message.guild?.me?.roles.highest.rawPosition < rTemp.rawPosition)
@@ -40,7 +40,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
 						arg_provided: args[0],
 						arg_expected: "role:Role",
-						usage: "configure mute_role <role>",
+						usage: this.usage,
 					}),
 				);
 

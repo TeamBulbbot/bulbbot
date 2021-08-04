@@ -9,7 +9,6 @@ export default class extends Command {
 			description: "Returns the invite link for the bot and the support guild",
 			category: "Bot",
 			aliases: ["support"],
-			usage: "invite",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}

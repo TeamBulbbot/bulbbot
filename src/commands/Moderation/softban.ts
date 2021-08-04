@@ -13,7 +13,7 @@ export default class extends Command {
 			description: "Bans and unbans a user from the guild",
 			category: "Moderation",
 			aliases: ["cleankick"],
-			usage: "softban <member> [reason]",
+			usage: "<member> [reason]",
 			examples: ["softban 123456789012345678", "softban 123456789012345678 rude user", "softban @Wumpus#0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,

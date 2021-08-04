@@ -11,7 +11,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Undeafens a member from a Voice Channel they're connected to",
 			category: "Moderation",
-			usage: "undeafen <user> [reason]",
+			usage: "<user> [reason]",
 			examples: ["undeafen 123456789012345678", "undeafen 123456789012345678 nice user", "undeafen @Wumpus#0000 nice user"],
 			argList: ["member:Member"],
 			minArgs: 1,

@@ -12,7 +12,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Bans a user and removes all their messages from the guild",
 			category: "Moderation",
-			usage: "cleanban <member> [reason]",
+			usage: "<member> [reason]",
 			examples: ["cleanban 123456789012345678", "softban 123456789012345678 rude user", "softban @Wumpus#0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,

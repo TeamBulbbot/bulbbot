@@ -8,6 +8,7 @@ import dbInfo from "./admin/db-info";
 import dbReset from "./admin/db-reset";
 import dbYeet from "./admin/db-yeet";
 
+// consider refactor such that a single subcommand "db" with subcommands "add", "info", "reset", "yeet", would take care of the current "db-" commands
 export default class extends Command {
 	constructor(...args) {
 		// @ts-ignore
@@ -15,7 +16,7 @@ export default class extends Command {
 			description: "Admin commands",
 			category: "Admin",
 			subCommands: [clearfiles, leave, join, dbAdd, dbInfo, dbReset, dbYeet],
-			usage: "admin <action>",
+			usage: "<action>",
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["action:string"],

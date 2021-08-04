@@ -11,7 +11,7 @@ export default class {
 	public readonly subCommands: SubCommand[];
 	public readonly description: string;
 	public readonly category: string;
-	public readonly usage: string;
+	public readonly _usage: string;
 	public readonly examples: string[];
 	public readonly userPerms: Readonly<BitField<PermissionString>>;
 	public readonly clientPerms: Readonly<BitField<PermissionString>>;
@@ -23,6 +23,14 @@ export default class {
 	public readonly minArgs: number;
 	public readonly argList: string[];
 
+	get qualifiedName() {
+		return this.name;
+	}
+
+	get usage() {
+		return `${this.qualifiedName} ${this._usage}`;
+	}
+
 	constructor(client: BulbBotClient, name: string, options: any) {
 		this.client = client;
 		this.name = options.name || name;
@@ -30,7 +38,7 @@ export default class {
 		this.subCommands = options.subCommands || [];
 		this.description = options.description || "No description provided";
 		this.category = options.category || "Miscellaneous";
-		this.usage = options.usage || "No usage provided";
+		this._usage = options.usage || "";
 		this.examples = options.examples || [];
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();

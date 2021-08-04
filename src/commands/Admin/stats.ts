@@ -10,7 +10,6 @@ export default class extends Command {
 			description: "Returns some stats that is useful to the developers",
 			category: "Admin",
 			aliases: ["analytics"],
-			usage: "stats",
 			devOnly: true,
 		});
 	}

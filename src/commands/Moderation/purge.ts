@@ -17,7 +17,7 @@ export default class extends Command {
 			category: "Moderation",
 			aliases: ["clear", "clean"],
 			subCommands: [all, embeds, images, bots, emojis, user, contains, between],
-			usage: "purge <type> [argument] <amount>",
+			usage: "<type> [argument] <amount>",
 			examples: ["purge bots 30"],
 			argList: ["action:string"],
 			minArgs: 1,
@@ -29,19 +29,11 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		if(!args.length)
-			return await message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
-					argument: "setting",
-					arg_expected: "setting:string",
-					usage: "all, embeds, images, bots, emojis, user, contains, between",
-				}),
-			);
 		await message.channel.send(
 			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
 				argument: args[0].toLowerCase(),
 				arg_expected: "action:string",
-				argument_list: "all, embeds, images, bots, emojis, user, contains, between",
+				argument_list: "`all`, `embeds`, `images`, `bots`, `emojis`, `user`, `contains`, `between`",
 			}),
 		);
 	}

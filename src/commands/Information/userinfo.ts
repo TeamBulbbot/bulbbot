@@ -15,7 +15,7 @@ export default class extends Command {
 			description: "Returns some useful info about a user",
 			category: "Information",
 			aliases: ["whois", "info", "user"],
-			usage: "userinfo [user]",
+			usage: "[user]",
 			examples: ["userinfo", "userinfo 190160914765316096", "userinfo @mrphilip#0001"],
 			clearance: 50,
 			maxArgs: 1,

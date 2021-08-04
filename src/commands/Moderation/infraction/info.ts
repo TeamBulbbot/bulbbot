@@ -18,7 +18,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["user:User"],
-			usage: "inf info <user>",
+			usage: "<user>",
 		});
 	}
 

@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: -1,
 			argList: ["infraction:int", "reason:string"],
-			usage: "inf update <infraction> <reason>",
+			usage: "<infraction> <reason>",
 		});
 	}
 

@@ -11,7 +11,6 @@ export default class extends SubCommand {
 		super(...args, {
 			name: "logging",
 			clearance: 75,
-			usage: "setup logging",
 		});
 	}
 

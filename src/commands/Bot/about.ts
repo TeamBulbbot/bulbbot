@@ -10,7 +10,6 @@ export default class extends Command {
 			description: "Returns some useful information about the bot",
 			category: "Bot",
 			aliases: ["bot"],
-			usage: "about",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}

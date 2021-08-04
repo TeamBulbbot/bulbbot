@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			minArgs: 2, // perhaps `!automod punishment <part>` could return the current setting
 			maxArgs: 2,
 			argList: ["part:string", "punishment:string"],
-			usage: "automod punishment <part> <punishment>",
+			usage: "<part> <punishment>",
 		});
 	}
 

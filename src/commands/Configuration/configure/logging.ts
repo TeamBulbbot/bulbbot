@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["part:string", "channel:Channel"],
-			usage: "configure logging <part> <channel>",
+			usage: "<part> <channel>",
 		});
 	}
 

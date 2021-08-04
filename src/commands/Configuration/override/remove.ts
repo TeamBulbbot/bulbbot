@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["part:string", "name:string"],
-			usage: "configure override delete <part> <name>",
+			usage: "<part> <name>",
 		});
 	}
 

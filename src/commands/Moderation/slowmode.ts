@@ -12,7 +12,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Sets a slowmode to the selected channel",
 			category: "Moderation",
-			usage: "slowmode [channel] <duration>",
+			usage: "[channel] <duration>",
 			examples: ["slowmode 60m", "slowmode 123456789012345678 30m", "slowmode #general 0s"],
 			argList: ["duration:Duration"],
 			minArgs: 1,

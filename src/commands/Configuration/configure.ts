@@ -16,7 +16,7 @@ export default class extends Command {
 			category: "Configuration",
 			subCommands: [muterole, timezone, prefix, logging, autorole, override, automod],
 			aliases: ["cfg", "conf", "config", "setting"],
-			usage: "configure <part>",
+			usage: "<part>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>", "configure mute_role <role>"],
 			argList: ["setting:string"],
 			minArgs: 1,

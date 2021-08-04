@@ -18,7 +18,7 @@ export default class extends SubCommand {
 			category: "Configuration",
 			subCommands: [enable, settings, add, disable, remove, punishment, limit],
 			aliases: ["am"],
-			usage: "configure automod <action>",
+			usage: "<action>",
 			examples: ["configure automod enable", "configure automod edit", "configure automod punishment"],
 			argList: ["action:string"],
 			minArgs: 1,

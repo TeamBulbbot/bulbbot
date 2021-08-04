@@ -16,7 +16,6 @@ export default class extends SubCommand {
 			name: "automod",
 			clearance: 75,
 			maxArgs: 0,
-			usage: "setup automod",
 		});
 	}
 

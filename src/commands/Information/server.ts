@@ -9,9 +9,8 @@ export default class extends Command {
 			description: "Returns some useful information about the current Guild",
 			category: "Information",
 			aliases: ["server"],
-			usage: "serverinfo",
-			userPerms: ["MANAGE_GUILD"],
 			clearance: 50,
+			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 		});
 	}

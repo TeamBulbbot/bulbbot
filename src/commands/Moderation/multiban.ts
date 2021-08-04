@@ -14,7 +14,7 @@ export default class extends Command {
 			description: "Bans or forcebans multiple people from a guild",
 			category: "Moderation",
 			aliases: ["mban"],
-			usage: "multiban <user> <user2>.... [reason]",
+			usage: "<user> <user2>.... [reason]",
 			examples: ["multiban 123456789012345678 123456789012345678 rude user", "multiban @Wumpus00000 @Nelly##0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,

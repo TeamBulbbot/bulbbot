@@ -8,7 +8,6 @@ export default class extends Command {
 		super(...args, {
 			description: "Return a list of all available commands to Bulbbot",
 			category: "Bot",
-			usage: "commands",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}

@@ -9,7 +9,6 @@ export default class extends Command {
 			description: "Return a link to the github repository",
 			category: "Bot",
 			aliases: ["code", "sourcecode"],
-			usage: "github",
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}

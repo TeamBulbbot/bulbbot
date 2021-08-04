@@ -14,7 +14,8 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 2,
 			maxArgs: -1,
-			usage: "configure automod add <item> [items...]",
+			usage: "<part> <item> [items...]",
+			argList: ["part:string", "item:string"],
 		});
 	}
 
@@ -22,21 +23,11 @@ export default class extends SubCommand {
 		const partArg: string = args[0];
 		const items: string[] = args.slice(1);
 
-		if (!partArg)
-			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_missing_list", message.guild!.id, {
-					arg: "part:string",
-					arg_expected: 2,
-					arg_provided: 0,
-					usage: "`website`, `invites`, `words` or `words_token`",
-				}),
-			);
-
 		const partexec = /^(website|invite|word)s?$|^(?:words?_?)?(token)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 		return message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild!.id, {
-				arg: partArg,
+			await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild!.id, {
+				argument: partArg,
 				arg_expected: "part:string",
 				usage: "`website`, `invites`, `words` or `words_token`",
 			}),

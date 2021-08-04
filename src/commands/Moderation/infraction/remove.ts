@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["infraction:int"],
-			usage: "inf delete <infraction>",
+			usage: "<infraction>",
 		});
 	}
 

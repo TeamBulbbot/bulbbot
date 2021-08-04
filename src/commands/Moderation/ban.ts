@@ -13,7 +13,7 @@ export default class extends Command {
 			description: "Bans or forcebans a user from the guild",
 			category: "Moderation",
 			aliases: ["terminate", "yeet"],
-			usage: "ban <user> [reason]",
+			usage: "<user> [reason]",
 			examples: ["ban 123456789012345678", "ban 123456789012345678 rude user", "ban @Wumpus#0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,

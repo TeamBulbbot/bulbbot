@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["timezone:string"],
-			usage: "configure timezone <zone>",
+			usage: "<zone>",
 		});
 	}
 
@@ -26,7 +26,7 @@ export default class extends SubCommand {
 				await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
 					arg: timezone,
 					arg_expected: "timezone:string",
-					usage: "configure timezone <timezone>",
+					usage: this.usage,
 				}),
 			);
 

@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["amount:int"],
-			usage: "purge bots <number>",
+			usage: "<number>",
 		});
 	}
 

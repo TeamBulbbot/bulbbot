@@ -13,7 +13,6 @@ export default class extends SubCommand {
 			name: "list",
 			maxArgs: 0,
 			argList: ["command:string"],
-			usage: "configure override list",
 		});
 	}
 

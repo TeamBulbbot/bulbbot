@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["part:string", "limit:number"],
-			usage: "automod limit <part> <limit>",
+			usage: "<part> <limit>",
 		});
 	}
 

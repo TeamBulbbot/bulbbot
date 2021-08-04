@@ -29,7 +29,7 @@ export default class extends Command {
 			subCommands: [
 				/*automod, logging*/
 			],
-			usage: "setup [part]",
+			usage: "[part]",
 			clearance: 75,
 			maxArgs: 1,
 		});

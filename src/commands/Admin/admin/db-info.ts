@@ -13,7 +13,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
-			usage: "admin db-info <guildID>",
+			usage: "<guildID>",
 		});
 	}
 

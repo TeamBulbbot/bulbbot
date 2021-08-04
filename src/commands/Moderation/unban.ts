@@ -12,7 +12,7 @@ export default class extends Command {
 			description: "Unban a user from the guild",
 			category: "Moderation",
 			aliases: ["pardon"],
-			usage: "unban <user> [reason]",
+			usage: "<user> [reason]",
 			examples: ["unban 123456789012345678", "unban 123456789012345678 nice user", "unban @Wumpus#0000 nice user"],
 			argList: ["user:User"],
 			minArgs: 1,

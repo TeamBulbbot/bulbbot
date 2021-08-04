@@ -15,7 +15,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Unutes the selected user",
 			category: "Moderation",
-			usage: "unmute <member> [reason]",
+			usage: "<member> [reason]",
 			examples: ["unmute 123456789012345678", "unmute 123456789012345678 nice user", "unmute @Wumpus#0000 nice user"],
 			argList: ["member:Member"],
 			minArgs: 1,

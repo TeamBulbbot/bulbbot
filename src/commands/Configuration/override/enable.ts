@@ -12,7 +12,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["command:string"],
-			usage: "configure override enable <command>",
+			usage: "<command>",
 		});
 	}
 
@@ -21,10 +21,10 @@ export default class extends SubCommand {
 		const cTemp = this.client.commands.get(command.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(command.toLowerCase()));
 		if (!cTemp)
 			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-					arg: args[0],
-					arg_expected: "command:string",
-					usage: "configure override disable <command>",
+				await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+					argument: args[0],
+					arg_expected: this.argList[0],
+					usage: this.usage,
 				}),
 			);
 

@@ -8,7 +8,7 @@ export default class extends Command {
 		super(...args, {
 			description: "Locks/unlocks a selected channel",
 			category: "Moderation",
-			usage: "lockdown <channel> <true|false>",
+			usage: "<channel> <true|false>",
 			examples: ["lockdown 743855098073186435 true", "lockdown #general false"],
 			argList: ["channel:Channel", "lock:boolean"],
 			minArgs: 2,

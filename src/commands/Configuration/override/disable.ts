@@ -12,7 +12,7 @@ export default class extends SubCommand {
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["command:string"],
-			usage: "configure override disable <command>",
+			usage: "<command>",
 		});
 	}
 

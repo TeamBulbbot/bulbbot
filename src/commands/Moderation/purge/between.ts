@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["message1:Snowflake", "message2:Snowflake"],
-			usage: "purge between <message1> <message2>",
+			usage: "<message1> <message2>",
 		});
 	}
 

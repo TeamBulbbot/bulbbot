@@ -13,7 +13,7 @@ export default class extends SubCommand {
 			minArgs: 3,
 			maxArgs: 3,
 			argList: ["part:string", "name:string", "clearance:number"],
-			usage: "configure override edit <part> <name> <clearance>",
+			usage: "<part> <name> <clearance>",
 		});
 	}
 

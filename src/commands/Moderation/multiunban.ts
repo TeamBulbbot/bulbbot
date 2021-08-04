@@ -13,7 +13,7 @@ export default class extends Command {
 			description: "Unbans multiple people from a guild",
 			category: "Moderation",
 			aliases: ["munban"],
-			usage: "multiunban <user> <user2>... [reason]",
+			usage: "<user> <user2>... [reason]",
 			examples: ["multiunban 123456789012345678 123456789012345678 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
 			argList: ["user:User"],
 			minArgs: 1,

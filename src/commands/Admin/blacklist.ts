@@ -4,13 +4,14 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
+// should probably refactor to subcommands
 export default class extends Command {
 	constructor(...args: any) {
 		// @ts-ignore
 		super(...args, {
 			description: "Blacklists a user/guild from using the bot",
 			category: "Admin",
-			usage: "blacklist <action> <type> <snowflake> [reason]",
+			usage: "<action> <type> <snowflake> [reason]",
 			examples: ["blacklist add guild 742094927403679816 spamming commnads"],
 			minArgs: 3,
 			maxArgs: -1,

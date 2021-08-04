@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["query:string", "amount:int"],
-			usage: "purge contains <query> <amount>",
+			usage: "<query> <amount>",
 		});
 	}
 

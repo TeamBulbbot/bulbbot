@@ -12,7 +12,7 @@ export default class extends Command {
 			description: "Warns multiple selected users",
 			category: "Moderation",
 			aliases: ["mwarn"],
-			usage: "multiwarn <member> <member2>... [reason]",
+			usage: "<member> <member2>... [reason]",
 			examples: ["multiwarn 123456789012345678 123456789012345678 rude user", "multiwarn @Wumpus#0000 @Nelly##0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,
