@@ -24,14 +24,14 @@ export default class extends SubCommand {
 
 		if (!this.client.bulbutils.timezones[timezone])
 			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-					arg: timezone,
+				await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
+					argument: timezone,
 					arg_expected: "timezone:string",
-					usage: this.usage,
+					argument_list: "",
 				}),
 			);
 
 		await databaseManager.setTimezone(<Snowflake>message.guild?.id, timezone);
-		await message.channel.send(await this.client.bulbutils.translate("config_timezone_success", message.guild?.id, { zone: timezone }));
+		await message.channel.send(await this.client.bulbutils.translateNew("config_timezone_success", message.guild?.id, { timezone }));
 	}
 }
