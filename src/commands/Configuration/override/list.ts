@@ -17,7 +17,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	async run( message: Message): Promise<void | Message> {
+	async run(message: Message): Promise<void | Message> {
 		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>message.guild?.id);
 
 		let roles: string[] = [];
@@ -41,9 +41,8 @@ export default class extends SubCommand {
 			.setAuthor(`Overrides for ${message.guild?.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription([...commands, ...roles].join("\n") || "*None*")
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user_name: message.author.username,
-					user_discriminator: message.author.discriminator,
+				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+					user: message.author,
 				}),
 				message.author.avatarURL({ dynamic: true }) ?? undefined,
 			);
