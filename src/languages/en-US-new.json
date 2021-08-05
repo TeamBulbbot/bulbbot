@@ -101,8 +101,8 @@
   "override_clearance_more_than_100": "{{emote_warn}} Clearance level cannot be higher than **100**",
   "override_clearance_higher_than_self": "{{emote_warn}} You cannot create an override with clearance level higher than your clearance level.",
 
-  "override_nonexistent_command": "{{emote_fail}} No command override with the name of `{{name}}` was found! You need to create an override first in order to edit it.",
-  "override_nonexistent_role": "{{emote_fail}} No role override for the {{role}} Role was found. You need to create an override first in order to edit it.",
+  "override_nonexistent_command": "{{emote_fail}} No command override with the name of `{{command}}` was found! You need to create an override first in order to edit it.",
+  "override_nonexistent_role": "{{emote_fail}} No role override for the `{{role}}` Role was found. You need to create an override first in order to edit it.",
 
   "override_create_success": "{{emote_success}} Successfully crated an override with clearance level of `{{clearance}}`",
   "override_already_exists": "{{emote_fail}} An override with that name already exists!\n{{emote_wrench}} **Tip:** If you're trying to edit an override use `!configure override edit <part> <name> <clearance>`",
