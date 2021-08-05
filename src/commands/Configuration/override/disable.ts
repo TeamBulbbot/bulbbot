@@ -17,15 +17,16 @@ export default class extends SubCommand {
 		});
 	}
 
-	async run( message: Message, args: string[]): Promise<void | Message> {
+	async run(message: Message, args: string[]): Promise<void | Message> {
 		const command: string = args[0];
 		const cTemp = this.client.commands.get(command.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(command.toLowerCase()));
-		if (cTemp === undefined)
+		if (cTemp === undefined || cTemp.name === undefined)
 			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-					arg: args[0],
+				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translateNew("global_not_found_types.cmd", message.guild?.id, {}),
+					arg_provided: args[0],
 					arg_expected: "command:string",
-					usage: this.client.prefix + "configure override disable <command>",
+					usage: this.usage,
 				}),
 			);
 
@@ -35,7 +36,6 @@ export default class extends SubCommand {
 			await clearanceManager.createCommandOverride(<Snowflake>message.guild?.id, cTemp.name, false, cTemp.clearance);
 		}
 
-
-		await message.channel.send(await this.client.bulbutils.translate("override_disable_success", message.guild?.id, { command }));
+		await message.channel.send(await this.client.bulbutils.translateNew("override_disable_success", message.guild?.id, { command }));
 	}
 }

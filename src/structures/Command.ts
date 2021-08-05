@@ -72,7 +72,7 @@ export default class Command {
 
 			const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.name);
 			if (commandOverride !== undefined) {
-				if (!commandOverride["enabled"]) return;
+				if (!commandOverride["enabled"]) return "";
 				if (commandOverride["clearanceLevel"] > options.clearance) {
 					return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
 				}
