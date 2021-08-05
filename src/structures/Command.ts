@@ -61,7 +61,7 @@ export default class Command {
 		return await message.channel.send(
 			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
 				argument: args[args.length - 1].toLowerCase(),
-				arg_expected: this.argList[args.length - 1],
+				arg_expected: this.argList[0],
 				argument_list: this.subCommands.map(sc => `\`${(new sc(this.client, this)).name}\``).join(", "),
 			}),
 		);

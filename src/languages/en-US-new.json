@@ -104,8 +104,8 @@
   "override_nonexistent_command": "{{emote_fail}} No command override with the name of `{{name}}` was found! You need to create an override first in order to edit it.",
   "override_nonexistent_role": "{{emote_fail}} No role override for the {{role}} Role was found. You need to create an override first in order to edit it.",
 
-  "override_crate_success": "{{emote_success}} Successfully crated an override with clearance level of `{{clearance}}`",
-  "override_already_exists": "{{emote_fail}} An override with that name already exists!",
+  "override_create_success": "{{emote_success}} Successfully crated an override with clearance level of `{{clearance}}`",
+  "override_already_exists": "{{emote_fail}} An override with that name already exists!\n{{emote_wrench}} **Tip:** If you're trying to edit an override use `!configure override edit <part> <name> <clearance>`",
 
   "override_disable_success": "{{emote_success}} Successfully disabled command `{{command}}`",
   "override_enable_success": "{{emote_success}} Successfully enabled command `{{command}}`",
