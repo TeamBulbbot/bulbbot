@@ -34,12 +34,15 @@ export default class extends SubCommand {
 		);
 		const partString = partexec[1] ?? partexec[2];
 
-		if (!items.length) return message.channel.send(await this.client.bulbutils.translate("global_unknown_error", message.guild!.id)); // more specific error message help wanted
+		if (!items.length) return message.channel.send(await this.client.bulbutils.translateNew("global_error.automod_items_length_undefined", message.guild!.id, {}));
 
 		const part: AutoModListPart = AutoModPart[partString];
 		const result = await databaseManager.automodAppend(message.guild!.id, part, items);
 
-		if (!result.added.length) return message.channel.send(await this.client.bulbutils.translate("automod_already_in_database", message.guild!.id, { item: items.join("`, `") }));
-		message.channel.send(await this.client.bulbutils.translate("automod_added_to_the_database", message.guild!.id, { part: partArg, item: result.added.join("`, `") }));
+		if (!result.added.length) return message.channel.send(await this.client.bulbutils.translateNew("automod_already_in_database", message.guild!.id, { item: items.join("`, `") }));
+		await message.channel.send(await this.client.bulbutils.translateNew("automod_add_success", message.guild!.id, {
+			category: partArg,
+			item: result.added.join("`, `")
+		}));
 	}
 }
