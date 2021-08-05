@@ -30,24 +30,19 @@ export default class extends SubCommand {
 			const rTemp: Role = <Role>message.guild?.roles.cache.get(role);
 			if (rTemp === undefined)
 				return message.channel.send(
-					await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
+					await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+						type: await this.client.bulbutils.translateNew("global_not_found_types.role", message.guild?.id, {}),
 						arg_provided: args[0],
 						arg_expected: "role:Role",
 						usage: this.usage,
 					}),
 				);
 			if (message.guild?.me?.roles.highest && message.guild?.me?.roles.highest.rawPosition < rTemp.rawPosition)
-				return message.channel.send(
-					await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
-						arg_provided: args[0],
-						arg_expected: "role:Role",
-						usage: this.usage,
-					}),
-				);
+				return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild?.id, {}));
 
 			await databaseManager.setMuteRole(<Snowflake>message.guild?.id, rTemp.id);
 		}
 
-		await message.channel.send(await this.client.bulbutils.translate("config_mute_success", message.guild?.id));
+		await message.channel.send(await this.client.bulbutils.translateNew("config_mute_success", message.guild?.id, {}));
 	}
 }
