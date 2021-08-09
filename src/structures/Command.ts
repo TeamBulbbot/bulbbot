@@ -68,19 +68,19 @@ export default class Command {
 	}
 
 	public async validate(message: Message, args: string[], options: ResolveCommandOptions): Promise<string | undefined> {
-		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("premium_message", message.guild?.id);
+		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translateNew("global_premium_only", message.guild?.id, {});
 
 			const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.name);
 			if (commandOverride !== undefined) {
 				if (!commandOverride["enabled"]) return "";
 				if (commandOverride["clearanceLevel"] > options.clearance) {
-					return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
+					return await this.client.bulbutils.translateNew("global_missing_permissions", message.guild?.id, {});
 				}
 			}
 
 			this.client.userClearance = options.clearance;
 			if (this.clearance > options.clearance && !commandOverride) {
-				return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
+				return await this.client.bulbutils.translateNew("global_missing_permissions", message.guild?.id, {});
 			}
 
 			const userPermCheck: BitField<PermissionString> = this.userPerms;
@@ -89,7 +89,7 @@ export default class Command {
 				const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(message.channel).has(userPermCheck)); // !x || !y === !(x && y)
 
 				if (missing) {
-					return await this.client.bulbutils.translate("global_missing_permission", message.guild?.id);
+					return await this.client.bulbutils.translateNew("global_missing_permissions", message.guild?.id, {});
 				}
 			}
 
@@ -100,8 +100,8 @@ export default class Command {
 				if (!missing.length) missing = message.guild!.me!.permissionsIn(message.channel).missing(clientPermCheck);
 
 				if (missing.length)
-					return await this.client.bulbutils.translate("global_missing_permission_bot", message.guild?.id, {
-						missing: missing.map(perm => `\`${perm}\``).join(", "),
+					return await this.client.bulbutils.translateNew("global_missing_permissions_bot", message.guild?.id, {
+						permissions: missing.map(perm => `\`${perm}\``).join(", "),
 					});
 			}
 
