@@ -522,6 +522,14 @@ export default class {
 	}
 
 	checkUser(message: Message, user: GuildMember): UserHandle {
+		if (
+			message.author.id === message.guild?.ownerID &&
+			message.guild?.me &&
+			message.guild?.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < message.guild?.me.roles.highest.rawPosition
+		)
+			return UserHandle.SUCCESS;
+
 		if (user.id === message.author.id) return UserHandle.CANNOT_ACTION_SELF;
 
 		if (message.guild?.owner?.id === user.id) return UserHandle.CANNOT_ACTION_OWNER;
@@ -542,31 +550,31 @@ export default class {
 	async resolveUserHandle(message: Message, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
-				await message.channel.send(await this.translate("global_cannot_action_self", message.guild?.id, {}));
+				await message.channel.send(await this.translateNew("global_cannot_action_self", message.guild?.id, {}));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_OWNER:
-				await message.channel.send(await this.translate("global_cannot_action_owner", message.guild?.id, {}));
+				await message.channel.send(await this.translateNew("global_cannot_action_owner", message.guild?.id, {}));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_ROLE_EQUAL:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild?.id, { user_tag: user.tag }));
+				await message.channel.send(await this.translateNew("global_cannot_action_role_equal", message.guild?.id, { taregt: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_BOT_SELF:
-				await message.channel.send(await this.translate("global_cannot_action_bot_self", message.guild?.id, {}));
+				await message.channel.send(await this.translateNew("global_cannot_action_bot_self", message.guild?.id, {}));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_ROLE_HIGHER:
-				await message.channel.send(await this.translate("global_cannot_action_role_higher", message.guild?.id, { user_tag: user.tag }));
+				await message.channel.send(await this.translateNew("global_cannot_action_role_equal", message.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal_bot", message.guild?.id, { user_tag: user.tag }));
+				await message.channel.send(await this.translateNew("global_cannot_action_role_equal_bot", message.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT:
-				await message.channel.send(await this.translate("global_cannot_action_role_higher_bot", message.guild?.id, { user_tag: user.tag }));
+				await message.channel.send(await this.translateNew("global_cannot_action_role_equal_bot", message.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.SUCCESS:
