@@ -19,14 +19,12 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translate("global_logging_mod", guildID, {
+			await client.bulbutils.translateNew("global_logging_mod", guildID, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa zz"),
-				target_tag: target.tag,
-				user_id: target.id,
-				moderator_tag: moderator.tag,
-				moderator_id: moderator.id,
+				target,
+				moderator,
 				reason: log,
-				infractionId: infID,
+				infraction_id: infID,
 				action: action,
 				emoji: this.betterActions(action),
 			}),
@@ -42,14 +40,12 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translate("global_logging_unban_auto", guild.id, {
+			await client.bulbutils.translateNew("global_logging_mod_unban_auto", guild.id, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
-				target_tag: target.tag,
-				user_id: target.id,
-				moderator_tag: moderator.tag,
-				moderator_id: moderator.id,
+				target,
+				moderator,
 				reason: log,
-				infractionId: infID,
+				infraction_id: infID,
 				action: action,
 				emoji: this.betterActions(action),
 			}),
@@ -81,14 +77,12 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translate("global_logging_mod_temp", guild.id, {
+			await client.bulbutils.translateNew("global_logging_mod_temp", guild.id, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
-				target_tag: target.tag,
-				user_id: target.id,
-				moderator_tag: moderator.tag,
-				moderator_id: moderator.id,
+				target,
+				moderator,
 				reason: log,
-				infractionId: infID,
+				infraction_id: infID,
 				action: action,
 				until: moment(until).tz(zone).format("MMM Do YYYY, h:mm:ssa z"),
 				emoji: this.betterActions(action),
@@ -105,11 +99,10 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translate("global_logging_command", guild.id, {
+			await client.bulbutils.translateNew("global_logging_command", guild.id, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
-				moderator_tag: moderator.tag,
-				moderator_id: moderator.id,
-				channel_id: channelID,
+				user: moderator,
+				channel: channelID,
 				command: command,
 			}),
 		);
