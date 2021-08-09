@@ -11,7 +11,7 @@ export default class extends Command {
 			description: "Returns some stats that is useful to the developers",
 			category: "Admin",
 			aliases: ["analytics"],
-			devOnly: true,
+			subDevOnly: true,
 		});
 	}
 
@@ -26,13 +26,7 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
-					user_name: await this.client.bulbutils.userObject(true, message.member).username,
-					user_discriminator: await this.client.bulbutils.userObject(true, message.member).discriminator,
-				}),
-				await this.client.bulbutils.userObject(true, message.member).avatarUrl,
-			)
+			.setFooter(await this.client.bulbutils.translateNew("global_executed_by", message.guild.id, { user: message.author }), <string>message.author.avatarURL({ dynamic: true }))
 			.setDescription(desc)
 			.addField("Shard Data", `Recommended Shards: \`${await Util.fetchRecommendedShards(this.client.token!, 500)}\`\n${shardData.join("")}`, true)
 			.addField(
@@ -45,7 +39,7 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		message.channel.send(embed);
+		await message.channel.send(embed);
 	}
 }
 
