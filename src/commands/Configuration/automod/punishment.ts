@@ -28,10 +28,10 @@ export default class extends SubCommand {
 		const partexec = /^(message|mention|website|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 		return message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild!.id, {
-				arg: partArg,
+			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild!.id, {
+				argument: args[0],
 				arg_expected: "part:string",
-				usage: "`website`, `invites`, `words`, `word_tokens`, `mentions` or `messages`",
+				argument_list: "`website`, `invites`, `words`, `word_tokens`, `mentions` or `messages`",
 			}),
 		);
 		const partString = partexec[1];
@@ -39,10 +39,10 @@ export default class extends SubCommand {
 		const itemexec = /^(NONE|LOG|WARN|KICK|BAN)$/.exec(itemArg.toUpperCase());
 		if (!itemexec)
 		return message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild!.id, {
-				arg: partArg,
+			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild!.id, {
+				argument: itemArg,
 				arg_expected: "punishment:string",
-				usage: "`LOG`, `WARN`, `KICK` or `BAN`", // include none ? or leave as undocumented QoL
+				argument_list: "`LOG`, `WARN`, `KICK` or `BAN`", // include none ? or leave as undocumented QoL
 			}),
 		);
 		const itemString = itemexec[1];
@@ -51,6 +51,9 @@ export default class extends SubCommand {
 		const item: PunishmentType | null = itemString !== "NONE" ? PunishmentType[itemString] : null;
 		await databaseManager.automodSetPunishment(message.guild!.id, part, item);
 
-		message.channel.send(await this.client.bulbutils.translate("automod_updated_punishment", message.guild!.id, { part: partArg, punishment: itemArg }));
+		await message.channel.send(await this.client.bulbutils.translateNew("automod_updated_punishment", message.guild!.id, {
+			category: partArg,
+			punishment: itemArg
+		}));
 	}
 }
