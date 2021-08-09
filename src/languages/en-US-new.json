@@ -72,7 +72,7 @@
   "event_channel_create": "{{emote_wrench}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
   "event_channel_delete": "{{emote_wrench}} The **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) channel has been deleted.",
 
-  "event_invite_create": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has created a new invite `{{invite_code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
+  "event_invite_create": "{{emote_warn}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
   "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite_code}}`",
 
   "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** {{account_age}}",
