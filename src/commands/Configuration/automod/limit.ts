@@ -25,20 +25,32 @@ export default class extends SubCommand {
 
 		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
-		return message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild!.id, {
-				arg: partArg,
-				arg_expected: "part:string",
-				usage: "`website`, `invites`, `words` or `words_token`",
-			}),
-		);
+			return message.channel.send(
+				await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild!.id, {
+					argument: args[0],
+					arg_expected: "part:string",
+					argument_list: "`messages` or `mentions`",
+				}),
+			);
 		const partString = partexec[1];
 
-		if (isNaN(limit)) return message.channel.send(await this.client.bulbutils.translate("automod_non_number", message.guild!.id, { limit }));
+		if (isNaN(limit))
+			return message.channel.send(
+				await this.client.bulbutils.translateNew("global_cannot_convert", message.guild!.id, {
+					arg_provided: args[1],
+					arg_expected: "limit:int",
+					usage: this.usage,
+				}),
+			);
 
 		const part: AutoModAntiSpamPart = AutoModPart[partString];
-		await databaseManager.automodSetLimit(message.guild!.id, part, limit >= 0 ? limit : 0);
+		await databaseManager.automodSetLimit(message.guild!.id, part, limit);
 
-		message.channel.send(await this.client.bulbutils.translate("automod_updated_limit", message.guild!.id, { part: partArg, limit }));
+		await message.channel.send(
+			await this.client.bulbutils.translateNew("automod_updated_limit", message.guild!.id, {
+				category: partArg,
+				limit,
+			}),
+		);
 	}
 }
