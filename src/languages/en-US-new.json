@@ -130,12 +130,12 @@
   "automod_disabled_part": "{{emote_success}} Successfully disabled AutoMod category `{{category}}`",
 
   "automod_settings_header": "AutoMod settings for {{guild.name}}",
-  "automod_settings_enabled": "**Enabled:** {{enabled}}\n\n",
-  "automod_settings_websites": "**Websites:** {{enabled}}\n**Blacklisted websites:** {{websites_blacklist}}\n\n",
-  "automod_settings_invites": "**Invites:** {{enabled}}\n**Whitelisted invites:** {{invites_blacklist}}\n\n",
-  "automod_settings_words": "**Words:** {{enabled}}\n**Blacklisted words:** {{word_blacklist}}\n**Token words:** {{word_token_blacklist}}\n\n",
-  "automod_settings_mentions": "**Mentions:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s\n\n",
-  "automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s\n\n",
+  "automod_settings_enabled": "**Enabled:** {{enabled}}",
+  "automod_settings_websites": "**Websites:** {{enabled}}\n**Blacklisted websites:** {{websites_blacklist}}",
+  "automod_settings_invites": "**Invites:** {{enabled}}\n**Whitelisted invites:** {{invites_blacklist}}",
+  "automod_settings_words": "**Words:** {{enabled}}\n**Blacklisted words:** {{word_blacklist}}\n**Token words:** {{word_token_blacklist}}",
+  "automod_settings_mentions": "**Mentions:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
+  "automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
   "automod_settings_ignored": "**Immune roles:** {{roles}}\n**Immune channels:** {{channels}}\n**Immune users:** {{users}}",
   "automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
 
