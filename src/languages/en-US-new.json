@@ -140,9 +140,9 @@
   "automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
 
   "automod_violation_max_messages_reason": "Violated `MAX_MESSAGES` check in #{{channel.name}} ({amount}/{limit}s)",
-  "automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `MAX_MESSAGES` check in {{channel}}. Messages ({{amount}}/{{limit}}s)",
+  "automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `MAX_MESSAGES` check in <#{{channel.id}}>. Messages ({{amount}}/{{limit}}s)",
   "automod_violation_max_mentions_reason": "Violated `MAX_MESASGES` check in #{{channel.name}} ({{amount}}/{{limit}}s)",
-  "automod_violation_max_mentions_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `MAX_MENTIONS` check in {{channel}}. Mentions ({{amount}}/{{limit}}s)",
+  "automod_violation_max_mentions_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `MAX_MENTIONS` check in <#{{channel.id}}>. Mentions ({{amount}}/{{limit}}s)",
   "automod_violation_words_reason": "Violated `FORBIDDEN_WORDS` check in #{{channel.name}}",
   "automod_violation_words_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WORDS` check in {{channel}} | Punishment: **{{punishment}}**\n**Blacklisted words:** `{{words}}`\n```{{message}}```",
   "automod_violation_invites_reason": "Violated `DISCORD_INVITE` check in #{{channel.name}}",
