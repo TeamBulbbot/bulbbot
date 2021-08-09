@@ -26,7 +26,7 @@ export default class extends Event {
 		logTarget = <User>logTarget;
 		if (executor.id === this.client.user!.id) return;
 		if (target.id !== logTarget.id) return;
-		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", guild.id, {});
+		if (reason === null) reason = await this.client.bulbutils.translateNew("global_no_reason", guild.id, {});
 
 		await infractionsManager.createInfraction(guild.id, "Manual Unban", true, reason, target, executor);
 		const infID: number = await infractionsManager.getLatestInfraction(guild.id, executor.id, target.id, "Manual Unban")
