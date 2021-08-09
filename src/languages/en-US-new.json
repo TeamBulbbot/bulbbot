@@ -66,7 +66,7 @@
 
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
-  "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role_name}}** Role. Changed {{changes}}",
+  "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** Role. Changed {{changes}}",
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated <#{{channel.id}}>. Changed {{changes}}",
 
   "event_channel_create": "{{emote_wrench}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
