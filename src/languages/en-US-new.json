@@ -67,7 +67,7 @@
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role_name}}** Role. Changed {{changes}}",
-  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated {{channel}}. Changed {{changes}}",
+  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated <#{{channel.id}}>. Changed {{changes}}",
 
   "event_invite_create": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has created a new invite `{{invite_code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
   "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite_code}}`",
