@@ -69,7 +69,8 @@
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role_name}}** Role. Changed {{changes}}",
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated <#{{channel.id}}>. Changed {{changes}}",
 
-  "event_channel_create": "{{emote_wrench}} A new channel has been created <#{{channel.id}}> `{{channel.type}}`",
+  "event_channel_create": "{{emote_wrench}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
+  "event_channel_delete": "{{emote_wrench}} The **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) channel has been deleted.",
 
   "event_invite_create": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has created a new invite `{{invite_code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
   "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite_code}}`",
