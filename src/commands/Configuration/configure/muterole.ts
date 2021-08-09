@@ -38,7 +38,7 @@ export default class extends SubCommand {
 					}),
 				);
 			if (message.guild?.me?.roles.highest && message.guild?.me?.roles.highest.rawPosition < rTemp.rawPosition)
-				return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild?.id, {}));
+				return message.channel.send(await this.client.bulbutils.translateNew("config_mute_unable_to_manage", message.guild?.id, {}));
 
 			await databaseManager.setMuteRole(<Snowflake>message.guild?.id, rTemp.id);
 		}

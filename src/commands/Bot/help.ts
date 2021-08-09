@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
-import MessageEvent from "../../events/message/message"
+import MessageEvent from "../../events/message/message";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -22,18 +22,25 @@ export default class extends Command {
 		let command: Command = this.client.commands.get(args[0].toLowerCase()) || this.client.commands.get(this.client.aliases.get(args[0].toLowerCase())!)!;
 
 		if (command === undefined || command.devOnly || command.subDevOnly)
-			return message.channel.send(await this.client.bulbutils.translate("help_command_not_found", message.guild!.id));
+			return message.channel.send(
+				await this.client.bulbutils.translateNew("global_not_found", message.guild!.id, {
+					type: await this.client.bulbutils.translateNew("global_not_found_types.cmd", message.guild?.id, {}),
+					arg_expected: "command:string",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 		else {
 			let currCommand = command;
 			let i: number;
-			for(i = 1;; ++i) {
+			for (i = 1; ; ++i) {
 				const commandArgs = args.slice(i);
 				currCommand = command;
 
-				if(!command.subCommands.length) break;
-				if(i >= args.length) break;
+				if (!command.subCommands.length) break;
+				if (i >= args.length) break;
 				command = await (<MessageEvent>this.client.events.get("message")).resolveSubcommand(command, commandArgs);
-				if(command === currCommand) break;
+				if (command === currCommand) break;
 			}
 
 			let msg = `**${this.client.prefix}${command.qualifiedName}** ${command.aliases.length !== 0 ? `(${command.aliases.map(alias => `**${alias}**`).join(", ")})` : ""}\n`;
@@ -48,4 +55,4 @@ export default class extends Command {
 			return message.channel.send(msg);
 		}
 	}
-};
+}
