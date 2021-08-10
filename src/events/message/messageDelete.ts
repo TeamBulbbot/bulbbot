@@ -17,13 +17,10 @@ export default class extends Event {
 		if (message.author.id === this.client.user!.id) return;
 		if (!message.guild) return;
 
-		const msg: string = await this.client.bulbutils.translate("event_message_delete", message.guild.id, {
-			target_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
-			target_id: message.author.id,
-			channel_id: message.channel.id,
-			after_channel_id: message.channel.id,
-			after_id: message.id,
-			time: `[${this.client.bulbutils.formatSmall(message.createdTimestamp)}]`,
+		const msg: string = await this.client.bulbutils.translateNew("event_message_delete", message.guild.id, {
+			user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
+			user: message.author,
+			message,
 			content: message.content ? `**C:** ${Util.cleanContent(message.content, message)}` : "",
 			attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}` : "",
 			embed: message.embeds.length !== 0 ? "**E:** [Embed]" : "",
@@ -35,13 +32,10 @@ export default class extends Event {
 				this.client,
 				message.guild,
 				"message",
-				await this.client.bulbutils.translate("event_message_delete_special", message.guild.id, {
-					target_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
-					target_id: message.author.id,
-					channel_id: message.channel.id,
-					after_channel_id: message.channel.id,
-					after_id: message.id,
-					time: `[${this.client.bulbutils.formatSmall(message.createdTimestamp)}]`,
+				await this.client.bulbutils.translateNew("event_message_delete_special", message.guild.id, {
+					user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
+					user: message.author,
+					message,
 				}),
 				`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`,
 			);
