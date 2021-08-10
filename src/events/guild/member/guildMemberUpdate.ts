@@ -32,10 +32,17 @@ export default class extends Event {
 		else if (oldMember.nickname !== newMember.nickname) change = "nickname";
 		else return;
 
-
 		if (newMember.guild.me?.hasPermission("VIEW_AUDIT_LOG")) {
 			try {
-				audit = (await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" }));
+				switch(change) {
+					case "newrole":
+					case "removedrole":
+						audit = (await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" }));
+						break;
+					default:
+						audit = (await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" }));
+						break;
+				}
 				auditLog = audit.entries.first();
 			} catch (e) {
 				if(!(e instanceof DiscordAPIError)) throw e;
@@ -60,7 +67,7 @@ export default class extends Event {
 
 				if (auditLog) {
 					const translateKey = (change === "newrole") ? "event_member_update_role_add_moderator"
-																: "event_member_update_role_remove_moderator";
+					                                            : "event_member_update_role_remove_moderator";
 					executor = auditLog.executor;
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
@@ -69,10 +76,11 @@ export default class extends Event {
 					});
 				} else {
 					const translateKey = (change === "newrole") ? "event_member_update_role_add"
-																: "event_member_update_role_remove";
+					                                            : "event_member_update_role_remove";
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
+						// executor,
 					});
 				}
 				break;
