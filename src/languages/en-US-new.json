@@ -71,20 +71,20 @@
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** Role. Changed {{changes}}",
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated <#{{channel.id}}>. Changed {{changes}}",
 
-  "event_channel_create": "{{emote_wrench}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
-  "event_channel_delete": "{{emote_wrench}} The **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) channel has been deleted.",
+  "event_channel_create": "{{emote_add}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
+  "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) channel has been deleted.",
 
-  "event_invite_create": "{{emote_warn}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
-  "event_invite_delete": "{{emote_warn}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite.code}}`",
+  "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
+  "event_invite_delete": "{{emote_remove}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite.code}}`",
 
   "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** <t:{{user_age}}:R>",
   "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>",
 
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
-  "event_member_update_role_add": "{{emote_warn}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
-  "event_member_update_role_add_moderator": "{{emote_warn}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
-  "event_member_update_role_remove": "{{emote_warn}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
-  "event_member_update_role_remove_moderator": "{{emote_warn}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+  "event_member_update_role_add": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
+  "event_member_update_role_add_moderator": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+  "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
+  "event_member_update_role_remove_moderator": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
 
   "config_language_success": "{{emote_success}} Successfully changed the server language to `{{language}}`",
   "config_timezone_success": "{{emote_success}} Successfully changed the server timezone to `{{timezone}}`",

@@ -51,6 +51,8 @@ export const translatorEmojis: Record<string, string> = {
 	"emote_success": Emotes.other.SUCCESS,
 	"emote_trash": Emotes.other.TRASH,
 	"emote_edit": Emotes.other.EDIT,
+	"emote_add": Emotes.other.ADD,
+	"emote_remove": Emotes.other.REMOVE,
 
 	"emote_ban": Emotes.actions.BAN,
 	"emote_kick": Emotes.actions.KICK,
