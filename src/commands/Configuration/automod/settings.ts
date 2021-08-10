@@ -32,27 +32,27 @@ export default class extends SubCommand {
 		const description: string[] = [];
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_enabled", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_enabled", message.guild?.id, {
 				enabled: dbGuild.enabled ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 			}),
 		);
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_websites", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_websites", message.guild?.id, {
 				enabled: dbGuild.punishmentWebsite !== null ? `\`${dbGuild.punishmentWebsite}\`` : Emotes.other.SWITCHOFF,
 				websites_blacklist: dbGuild.websiteWhitelist.length ? dbGuild.websiteWhitelist.join(" ") : "None",
 			}),
 		);
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_invites", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_invites", message.guild?.id, {
 				enabled: dbGuild.punishmentInvites !== null ? `\`${dbGuild.punishmentInvites}\`` : Emotes.other.SWITCHOFF,
 				invites_blacklist: dbGuild.inviteWhitelist.length ? dbGuild.inviteWhitelist.join(" ") : "None",
 			}),
 		);
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_words", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_words", message.guild?.id, {
 				enabled: dbGuild.punishmentWords !== null ? `\`${dbGuild.punishmentWords}\`` : Emotes.other.SWITCHOFF,
 				word_blacklist: dbGuild.wordBlacklist.length ? dbGuild.wordBlacklist.join(" ") : "None",
 				word_token_blacklist: dbGuild.wordBlacklistToken.length ? dbGuild.wordBlacklistToken.join(" ") : "None",
@@ -60,7 +60,7 @@ export default class extends SubCommand {
 		);
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_mentions", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_mentions", message.guild?.id, {
 				enabled: dbGuild.punishmentMentions ? `\`${dbGuild.punishmentMentions}\`` : Emotes.other.SWITCHOFF,
 				limit: dbGuild.limitMentions,
 				timeout: dbGuild.timeoutMentions / 1000,
@@ -68,7 +68,7 @@ export default class extends SubCommand {
 		);
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_messages", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_messages", message.guild?.id, {
 				enabled: dbGuild.punishmentMessages ? `\`${dbGuild.punishmentMessages}\`` : Emotes.other.SWITCHOFF,
 				limit: dbGuild.limitMessages,
 				timeout: dbGuild.timeoutMessages / 1000,
@@ -76,7 +76,7 @@ export default class extends SubCommand {
 		);
 
 		description.push(
-			await this.client.bulbutils.translateNew("automod_settings_ignored", message.guild?.id, {
+			await this.client.bulbutils.translate("automod_settings_ignored", message.guild?.id, {
 				roles: roles.join(" "),
 				channels: channels.join(" "),
 				users: users.join(" "),
@@ -85,9 +85,9 @@ export default class extends SubCommand {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setAuthor(await this.client.bulbutils.translateNew("automod_settings_header", message.guild?.id, { guild: message.guild }), message.guild!.iconURL({ dynamic: true }) ?? undefined)
+			.setAuthor(await this.client.bulbutils.translate("automod_settings_header", message.guild?.id, { guild: message.guild }), message.guild!.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription(description.join("\n\n"))
-			.setFooter(await this.client.bulbutils.translateNew("automod_settings_footer", message.guild?.id, {}), "https://cdn.discordapp.com/emojis/833770837575860305.png?v=1");
+			.setFooter(await this.client.bulbutils.translate("automod_settings_footer", message.guild?.id, {}), "https://cdn.discordapp.com/emojis/833770837575860305.png?v=1");
 
 		await message.channel.send(embed);
 	}

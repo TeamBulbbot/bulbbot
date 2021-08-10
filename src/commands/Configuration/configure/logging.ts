@@ -32,8 +32,8 @@ export default class extends SubCommand {
 			const cTemp: GuildChannel = <GuildChannel>message.guild?.channels.cache.get(channel);
 			if (cTemp === undefined) {
 				return message.channel.send(
-					await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-						type: await this.client.bulbutils.translateNew("global_not_found_types.channel", message.guild?.id, {}),
+					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+						type: await this.client.bulbutils.translate("global_not_found_types.channel", message.guild?.id, {}),
 						arg_expected: "channel:Channel",
 						arg_provided: args[1],
 						usage: this.usage,
@@ -42,7 +42,7 @@ export default class extends SubCommand {
 			}
 
 			if (!cTemp.permissionsFor(<GuildMember>message.guild?.me)?.has(["SEND_MESSAGES", "VIEW_CHANNEL"])) {
-				return await message.channel.send(await this.client.bulbutils.translateNew("config_logging_unable_to_send_messages", message.guild?.id, { channel: cTemp }));
+				return await message.channel.send(await this.client.bulbutils.translate("config_logging_unable_to_send_messages", message.guild?.id, { channel: cTemp }));
 			}
 		}
 
@@ -85,7 +85,7 @@ export default class extends SubCommand {
 				await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
 				break;
 			case "all":
-				const msg = await message.channel.send(await this.client.bulbutils.translateNew("config_logging_all_confirm", message.guild?.id, { channel }));
+				const msg = await message.channel.send(await this.client.bulbutils.translate("config_logging_all_confirm", message.guild?.id, { channel }));
 
 				confirmMsg = msg;
 				await msg.react(Emotes.other.SUCCESS);
@@ -101,7 +101,7 @@ export default class extends SubCommand {
 					collected = await msg.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] });
 				} catch (err) {
 					await confirmMsg.delete();
-					await message.channel.send(await this.client.bulbutils.translateNew("global_execution_cancel", message.guild?.id, {}));
+					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 					return;
 				}
 
@@ -120,13 +120,13 @@ export default class extends SubCommand {
 					await msg.delete();
 				} else {
 					await msg.delete();
-					await message.channel.send(await this.client.bulbutils.translateNew("global_execution_cancel", message.guild?.id, {}));
+					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 					return;
 				}
 				break;
 			default:
 				return await message.channel.send(
-					await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
+					await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
 						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
 						argument_list: "`mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
@@ -136,14 +136,14 @@ export default class extends SubCommand {
 
 		if (channel === null) {
 			return await message.channel.send(
-				await this.client.bulbutils.translateNew("config_logging_remove", message.guild?.id, {
+				await this.client.bulbutils.translate("config_logging_remove", message.guild?.id, {
 					logging_type: part,
 					channel: original,
 				}),
 			);
 		} else {
 			return await message.channel.send(
-				await this.client.bulbutils.translateNew("config_logging_success", message.guild?.id, {
+				await this.client.bulbutils.translate("config_logging_success", message.guild?.id, {
 					logging_type: part,
 					channel: message.guild?.channels.cache.get(channel),
 				}),

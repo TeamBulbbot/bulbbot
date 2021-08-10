@@ -16,6 +16,6 @@ export default class extends SubCommand {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		await databaseManager.enableAutomod(message.guild!.id, true);
-		await message.channel.send(await this.client.bulbutils.translateNew("automod_enabled", message.guild?.id, {}));
+		await message.channel.send(await this.client.bulbutils.translate("automod_enabled", message.guild?.id, {}));
 	}
 }

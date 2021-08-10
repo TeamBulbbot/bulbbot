@@ -27,7 +27,7 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 				client,
 				message,
 				dbGuild.punishmentMessages,
-				await client.bulbutils.translateNew("automod_violation_max_messages_reason", message.guild?.id, {
+				await client.bulbutils.translate("automod_violation_max_messages_reason", message.guild?.id, {
 					channel: message.channel,
 					amount: cache[guild]["messages"][user]["count"],
 					limit: dbGuild.timeoutMessages,
@@ -37,7 +37,7 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 		await loggingManager.sendAutoModLog(
 			client,
 			<Guild>message.guild,
-			await client.bulbutils.translateNew("automod_violation_max_messages_log", message.guild?.id, {
+			await client.bulbutils.translate("automod_violation_max_messages_log", message.guild?.id, {
 				target: message.author,
 				channel: message.channel,
 				amount: cache[guild]["messages"][user]["count"],
@@ -52,7 +52,7 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 				client,
 				message,
 				dbGuild.punishmentMentions,
-				await client.bulbutils.translateNew("automod_violation_max_mentions_reason", message.guild?.id, {
+				await client.bulbutils.translate("automod_violation_max_mentions_reason", message.guild?.id, {
 					channel: message.channel,
 					amount: cache[guild]["mentions"][user]["count"],
 					limit: dbGuild.timeoutMentions,
@@ -62,7 +62,7 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 		await loggingManager.sendAutoModLog(
 			client,
 			<Guild>message.guild,
-			await client.bulbutils.translateNew("automod_violation_max_mentions_log", message.guild?.id, {
+			await client.bulbutils.translate("automod_violation_max_mentions_log", message.guild?.id, {
 				target: message.author,
 				channel: message.channel,
 				amount: cache[guild]["mentions"][user]["count"],

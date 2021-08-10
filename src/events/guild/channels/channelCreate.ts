@@ -14,6 +14,6 @@ export default class extends Event {
 		if (!channel) return;
 		if (!(channel instanceof GuildChannel)) return;
 
-		await loggingManager.sendEventLog(this.client, channel.guild, "channel", await this.client.bulbutils.translateNew("event_channel_create", channel.guild.id, { channel }));
+		await loggingManager.sendEventLog(this.client, channel.guild, "channel", await this.client.bulbutils.translate("event_channel_create", channel.guild.id, { channel }));
 	}
 }

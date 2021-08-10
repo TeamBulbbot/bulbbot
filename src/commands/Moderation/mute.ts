@@ -38,8 +38,8 @@ export default class extends Command {
 
 		if (!target)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -47,19 +47,19 @@ export default class extends Command {
 			);
 		if (await this.client.bulbutils.resolveUserHandle(message, this.client.bulbutils.checkUser(message, target), target.user)) return;
 
-		if (!reason) reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
-		if (!muteRole) return message.channel.send(await this.client.bulbutils.translateNew("mute_muterole_not_found", message.guild?.id, {}));
-		if (target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translateNew("mute_already_muted", message.guild?.id, { target: target.user }));
-		if ((duration && duration <= <number>parse("0s")) || duration === null) return message.channel.send(await this.client.bulbutils.translateNew("duration_invalid_0s", message.guild?.id, {}));
-		if (duration > <number>parse("1y")) return message.channel.send(await this.client.bulbutils.translateNew("duration_invalid_1y", message.guild?.id, {}));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
+		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found", message.guild?.id, {}));
+		if (target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translate("mute_already_muted", message.guild?.id, { target: target.user }));
+		if ((duration && duration <= <number>parse("0s")) || duration === null) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", message.guild?.id, {}));
+		if (duration > <number>parse("1y")) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", message.guild?.id, {}));
 
 		infID = await infractionsManager.mute(
 			this.client,
 			<Guild>message.guild,
 			target,
 			<GuildMember>message.member,
-			await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-				action: await this.client.bulbutils.translateNew("mod_action_types.mute", message.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.mute", message.guild?.id, {}),
 				moderator: message.author,
 				target: target.user,
 				reason,
@@ -74,9 +74,9 @@ export default class extends Command {
 
 		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>message.guild?.id)];
 		await message.channel.send(
-			await this.client.bulbutils.translateNew("action_success", message.guild?.id, {
+			await this.client.bulbutils.translate("action_success", message.guild?.id, {
 				context: "temp",
-				action: await this.client.bulbutils.translateNew("mod_action_types.temp_ban", message.guild?.id, {}),
+				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", message.guild?.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,
@@ -97,8 +97,8 @@ export default class extends Command {
 				MuteType.AUTO,
 				target,
 				<User>client.user,
-				await client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-					action: await client.bulbutils.translateNew("mod_action_types.unmute", message.guild?.id, {}),
+				await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+					action: await client.bulbutils.translate("mod_action_types.unmute", message.guild?.id, {}),
 					moderator: client.user,
 					target: target.user,
 					reason: "Automatic unmute",

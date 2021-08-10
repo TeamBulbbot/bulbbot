@@ -24,7 +24,7 @@ export default class extends SubCommand {
 
 		if (!this.client.bulbutils.timezones[timezone])
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
+				await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
 					argument: timezone,
 					arg_expected: "timezone:string",
 					argument_list: "",
@@ -32,6 +32,6 @@ export default class extends SubCommand {
 			);
 
 		await databaseManager.setTimezone(<Snowflake>message.guild?.id, timezone);
-		await message.channel.send(await this.client.bulbutils.translateNew("config_timezone_success", message.guild?.id, { timezone }));
+		await message.channel.send(await this.client.bulbutils.translate("config_timezone_success", message.guild?.id, { timezone }));
 	}
 }

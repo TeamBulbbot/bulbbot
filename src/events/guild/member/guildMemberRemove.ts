@@ -22,7 +22,7 @@ export default class extends Event {
 			member.guild,
 			"joinleave",
 			Util.removeMentions(
-				await this.client.bulbutils.translateNew("event_member_leave", member.guild.id, {
+				await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
 					user: member.user,
 					user_joined: Math.floor(member.joinedTimestamp / 1000),
 				}),
@@ -41,7 +41,7 @@ export default class extends Event {
 		if (target.id !== member.user.id) return;
 
 		if (executor.id === this.client.user!.id) return;
-		if (reason === null) reason = await this.client.bulbutils.translateNew("global_no_reason", member.guild.id, {});
+		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});
 
 		await infractionsManager.createInfraction(member.guild.id, "Manual Kick", true, reason, member.user, executor);
 		const infID: number = await infractionsManager.getLatestInfraction(member.guild.id, executor.id, target.id, "Manual Kick")

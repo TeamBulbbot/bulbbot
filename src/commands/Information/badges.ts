@@ -91,7 +91,7 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setDescription(desc.join("\n"))
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),

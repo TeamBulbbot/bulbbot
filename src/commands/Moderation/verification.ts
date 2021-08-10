@@ -24,17 +24,17 @@ export default class extends Command {
 		const level: number = parseInt(args[0].replace(NonDigits, ""));
 		if (!level && level !== 0)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_cannot_convert", message.guild?.id, {
+				await this.client.bulbutils.translate("global_cannot_convert", message.guild?.id, {
 					arg_provided: args[0],
 					arg_expected: "verification:int",
 					usage: this.usage,
 				}),
 			);
-		if (message.guild?.features.includes("COMMUNITY") && level === 0) return message.channel.send(await this.client.bulbutils.translateNew("verification_community_zero", message.guild.id, {}));
+		if (message.guild?.features.includes("COMMUNITY") && level === 0) return message.channel.send(await this.client.bulbutils.translate("verification_community_zero", message.guild.id, {}));
 
-		if (level > 4 || level < 0) return message.channel.send(await this.client.bulbutils.translateNew("verification_level_error", message.guild?.id, {}));
+		if (level > 4 || level < 0) return message.channel.send(await this.client.bulbutils.translate("verification_level_error", message.guild?.id, {}));
 
 		await message.guild?.setVerificationLevel(level);
-		await message.channel.send(await this.client.bulbutils.translateNew("verification_level_success", message.guild?.id, { level }));
+		await message.channel.send(await this.client.bulbutils.translate("verification_level_success", message.guild?.id, { level }));
 	}
 }

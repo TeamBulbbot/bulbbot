@@ -31,8 +31,8 @@ export default class extends Command {
 			target = await this.client.users.fetch(targetID);
 		} catch (error) {
 			return await message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.user", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
@@ -45,17 +45,17 @@ export default class extends Command {
 		const banList = await message.guild?.fetchBans();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 
-		if (!bannedUser) return message.channel.send(await this.client.bulbutils.translateNew("not_banned", message.guild?.id, { target }));
+		if (!bannedUser) return message.channel.send(await this.client.bulbutils.translate("not_banned", message.guild?.id, { target }));
 
-		if (!reason) reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
 
 		infID = await infractionsManager.unban(
 			this.client,
 			<Guild>message.guild,
 			target,
 			<GuildMember>message.member,
-			await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-				action: await this.client.bulbutils.translateNew("mod_action_types.unban", message.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", message.guild?.id, {}),
 				moderator: message.author,
 				target,
 				reason,
@@ -64,8 +64,8 @@ export default class extends Command {
 		);
 
 		await message.channel.send(
-			await this.client.bulbutils.translateNew("action_success", message.guild?.id, {
-				action: await this.client.bulbutils.translateNew("mod_action_types.unban", message.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", message.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", message.guild?.id, {}),
 				target,
 				reason,
 				infraction_id: infID,

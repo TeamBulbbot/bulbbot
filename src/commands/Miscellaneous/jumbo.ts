@@ -24,7 +24,7 @@ export default class extends Command {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		try {
-			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translateNew("jumbo_too_many", message.guild?.id, {}));
+			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many", message.guild?.id, {}));
 
 			const size: number = 250;
 			const imgPath: any = [];
@@ -97,7 +97,7 @@ export default class extends Command {
 				}
 			}
 		} catch (error) {
-			return message.channel.send(await this.client.bulbutils.translateNew("jumbo_invalid", message.guild?.id, {}));
+			return message.channel.send(await this.client.bulbutils.translate("jumbo_invalid", message.guild?.id, {}));
 		}
 	}
 }

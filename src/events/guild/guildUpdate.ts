@@ -27,7 +27,7 @@ export default class extends Event {
 
 		for (const change of changes) {
 			log.push
-				(await this.client.bulbutils.translateNew("event_change", newGuild.id, {
+				(await this.client.bulbutils.translate("event_change", newGuild.id, {
 					part: change.key,
 					before: change.old || "none",
 					after: change.new || "none",
@@ -37,7 +37,7 @@ export default class extends Event {
 		await loggingManager.sendServerEventLog(
 			this.client,
 			newGuild,
-			await this.client.bulbutils.translateNew("event_update_server", newGuild.id, {
+			await this.client.bulbutils.translate("event_update_server", newGuild.id, {
 				moderator: executor,
 				changes: log.join(", "),
 			}),

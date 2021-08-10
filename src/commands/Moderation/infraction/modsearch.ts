@@ -33,8 +33,8 @@ export default class extends SubCommand {
 			user = await this.client.users.fetch(targetID);
 		} catch (err) {
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.user", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 					arg_expected: "user:User",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -50,24 +50,24 @@ export default class extends SubCommand {
 			const moderator: Record<string, string> = { tag: infs[i].moderator, id: infs[i].moderatorId };
 
 			let description = "";
-			description += await this.client.bulbutils.translateNew("infraction_info_inf_id", message.guild?.id, { infraction_id: infs[i].id });
-			description += await this.client.bulbutils.translateNew("infraction_info_target", message.guild?.id, { target });
-			description += await this.client.bulbutils.translateNew("infraction_info_moderator", message.guild?.id, { moderator });
-			description += await this.client.bulbutils.translateNew("infraction_info_created", message.guild?.id, {
+			description += await this.client.bulbutils.translate("infraction_info_inf_id", message.guild?.id, { infraction_id: infs[i].id });
+			description += await this.client.bulbutils.translate("infraction_info_target", message.guild?.id, { target });
+			description += await this.client.bulbutils.translate("infraction_info_moderator", message.guild?.id, { moderator });
+			description += await this.client.bulbutils.translate("infraction_info_created", message.guild?.id, {
 				created: moment(Date.parse(infs[i].createdAt)).format("MMM Do YYYY, h:mm:ss a"),
 			});
 
 			if (infs[i].active !== "false" && infs[i].active !== "true") {
-				description += await this.client.bulbutils.translateNew("infraction_info_expires", message.guild?.id, {
+				description += await this.client.bulbutils.translate("infraction_info_expires", message.guild?.id, {
 					expires: `${Emotes.status.ONLINE} ${moment(parseInt(infs[i].active)).format("MMM Do YYYY, h:mm:ss a")}`,
 				});
 			} else {
-				description += await this.client.bulbutils.translateNew("infraction_info_active", message.guild?.id, {
+				description += await this.client.bulbutils.translate("infraction_info_active", message.guild?.id, {
 					active: this.client.bulbutils.prettify(infs[i].active),
 				});
 			}
 
-			description += await this.client.bulbutils.translateNew("infraction_info_reason", message.guild?.id, {
+			description += await this.client.bulbutils.translate("infraction_info_reason", message.guild?.id, {
 				reason: infs[i].reason,
 			});
 
@@ -83,7 +83,7 @@ export default class extends SubCommand {
 			pages.push(embed);
 		}
 
-		if (pages.length === 0) return message.channel.send(await this.client.bulbutils.translateNew("infraction_search_not_found", message.guild?.id, { target: user }));
+		if (pages.length === 0) return message.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", message.guild?.id, { target: user }));
 
 		await this.client.bulbutils.embedPage(message, pages, [Emotes.other.LEFT, Emotes.other.RIGHT], 120000);
 	}

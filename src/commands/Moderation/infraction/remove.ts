@@ -26,7 +26,7 @@ export default class extends SubCommand {
 
 		if (isNaN(infID) || (await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID)) === undefined) {
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("infraction_not_found", message.guild?.id, {
+				await this.client.bulbutils.translate("infraction_not_found", message.guild?.id, {
 					infraction_id: args[0],
 				}),
 			);
@@ -40,7 +40,7 @@ export default class extends SubCommand {
 
 		await message.channel
 			.send(
-				await this.client.bulbutils.translateNew("infraction_delete_confirm", message.guild?.id, {
+				await this.client.bulbutils.translate("infraction_delete_confirm", message.guild?.id, {
 					infraction_id: inf["id"],
 					moderator,
 					target,
@@ -65,18 +65,18 @@ export default class extends SubCommand {
 							await infractionsManager.deleteInfraction(<Snowflake>message.guild?.id, infID);
 							await msg.delete();
 							return await message.channel.send(
-								await this.client.bulbutils.translateNew("infraction_delete_success", message.guild?.id, {
+								await this.client.bulbutils.translate("infraction_delete_success", message.guild?.id, {
 									infraction_id: infID,
 								}),
 							);
 						} else {
 							await msg.delete();
-							return await message.channel.send(await this.client.bulbutils.translateNew("global_execution_cancel", message.guild?.id, {}));
+							return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 						}
 					})
 					.catch(async () => {
 						await confirmMsg.delete();
-						return await message.channel.send(await this.client.bulbutils.translateNew("global_execution_cancel", message.guild?.id, {}));
+						return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 					});
 			});
 	}

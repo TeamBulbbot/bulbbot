@@ -22,8 +22,8 @@ export default class extends SubCommand {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[0]);
-		if (Number(amount) > 200) return await message.channel.send(await this.client.bulbutils.translateNew("purge_too_many", message.guild?.id, {}));
-		if (Number(amount) < 2 || isNaN(amount)) return await message.channel.send(await this.client.bulbutils.translateNew("purge_too_few", message.guild?.id, {}));
+		if (Number(amount) > 200) return await message.channel.send(await this.client.bulbutils.translate("purge_too_many", message.guild?.id, {}));
+		if (Number(amount) < 2 || isNaN(amount)) return await message.channel.send(await this.client.bulbutils.translate("purge_too_few", message.guild?.id, {}));
 		let deleteMsg: number[] = [];
 		let a: number = 0;
 
@@ -60,6 +60,6 @@ export default class extends SubCommand {
 			await loggingManager.sendModActionFile(client, <Guild>message.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, message.channel, message.author);
 		});
 
-		await message.channel.send(await this.client.bulbutils.translateNew("purge_success", message.guild?.id, { count: amount }));
+		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: amount }));
 	}
 }

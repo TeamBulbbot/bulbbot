@@ -22,7 +22,7 @@ export default class extends Event {
 		const { executor, createdTimestamp } = first;
 		if (createdTimestamp + 3000 < Date.now()) return;
 
-		const log: string = await this.client.bulbutils.translateNew("event_invite_delete", invite.guild.id, {
+		const log: string = await this.client.bulbutils.translate("event_invite_delete", invite.guild.id, {
 			invite,
 			moderator: executor
 		});

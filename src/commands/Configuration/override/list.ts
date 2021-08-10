@@ -41,7 +41,7 @@ export default class extends SubCommand {
 			.setAuthor(`Overrides for ${message.guild?.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription([...commands, ...roles].join("\n") || "*None*")
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				message.author.avatarURL({ dynamic: true }) ?? undefined,

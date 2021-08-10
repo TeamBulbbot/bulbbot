@@ -19,7 +19,7 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translateNew("global_logging_mod", guildID, {
+			await client.bulbutils.translate("global_logging_mod", guildID, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa zz"),
 				target,
 				moderator,
@@ -40,7 +40,7 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translateNew("global_logging_mod_unban_auto", guild.id, {
+			await client.bulbutils.translate("global_logging_mod_unban_auto", guild.id, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				target,
 				moderator,
@@ -77,7 +77,7 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translateNew("global_logging_mod_temp", guild.id, {
+			await client.bulbutils.translate("global_logging_mod_temp", guild.id, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				target,
 				moderator,
@@ -99,7 +99,7 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
 		await modChannel.send(
-			await client.bulbutils.translateNew("global_logging_command", guild.id, {
+			await client.bulbutils.translate("global_logging_command", guild.id, {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				user: moderator,
 				channel: channelID,

@@ -24,8 +24,8 @@ export default class {
 					<Snowflake>message.guild?.id,
 					<GuildMember>target,
 					<GuildMember>message.guild?.me,
-					await client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-						action: await client.bulbutils.translateNew("mod_action_types.warn", message.guild?.id, {}),
+					await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.warn", message.guild?.id, {}),
 						moderator: client.user,
 						target: target.user,
 						reason,
@@ -40,8 +40,8 @@ export default class {
 					BanType.SOFT,
 					<User>target.user,
 					<GuildMember>message.guild?.me,
-					await client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-						action: await client.bulbutils.translateNew("mod_action_types.kick", message.guild?.id, {}),
+					await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.kick", message.guild?.id, {}),
 						moderator: client.user,
 						target: target.user,
 						reason,
@@ -56,8 +56,8 @@ export default class {
 					BanType.CLEAN,
 					<User>target.user,
 					<GuildMember>message.guild?.me,
-					await client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-						action: await client.bulbutils.translateNew("mod_action_types.ban", message.guild?.id, {}),
+					await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
 						moderator: client.user,
 						target: target.user,
 						reason,

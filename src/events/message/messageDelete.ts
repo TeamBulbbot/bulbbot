@@ -17,7 +17,7 @@ export default class extends Event {
 		if (message.author.id === this.client.user!.id) return;
 		if (!message.guild) return;
 
-		const msg: string = await this.client.bulbutils.translateNew("event_message_delete", message.guild.id, {
+		const msg: string = await this.client.bulbutils.translate("event_message_delete", message.guild.id, {
 			user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 			user: message.author,
 			message,
@@ -32,7 +32,7 @@ export default class extends Event {
 				this.client,
 				message.guild,
 				"message",
-				await this.client.bulbutils.translateNew("event_message_delete_special", message.guild.id, {
+				await this.client.bulbutils.translate("event_message_delete_special", message.guild.id, {
 					user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 					user: message.author,
 					message,

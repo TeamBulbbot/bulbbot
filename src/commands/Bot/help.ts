@@ -23,8 +23,8 @@ export default class extends Command {
 
 		if (command === undefined || command.devOnly || command.subDevOnly)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild!.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.cmd", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild!.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.cmd", message.guild?.id, {}),
 					arg_expected: "command:string",
 					arg_provided: args[0],
 					usage: this.usage,

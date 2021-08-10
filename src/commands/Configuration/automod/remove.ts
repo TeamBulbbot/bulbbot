@@ -26,7 +26,7 @@ export default class extends SubCommand {
 		const partexec = /^(website|invite|word)s?$|^(?:words?_?)?(token)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 		return message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild!.id, {
+			await this.client.bulbutils.translate("event_message_args_missing_list", message.guild!.id, {
 				argument: partArg,
 				arg_expected: "part:string",
 				argument_list: "`website`, `invites`, `words` or `words_token`",
@@ -34,14 +34,14 @@ export default class extends SubCommand {
 		);
 		const partString = partexec[1] ?? partexec[2];
 
-		if (!items.length) return message.channel.send(await this.client.bulbutils.translateNew("global_error.automod_items_length_undefined", message.guild!.id, {}));
+		if (!items.length) return message.channel.send(await this.client.bulbutils.translate("global_error.automod_items_length_undefined", message.guild!.id, {}));
 
 		const part: AutoModListPart = AutoModPart[partString];
 		const result = await databaseManager.automodRemove(message.guild!.id, part, items);
 
-		if (!result.removed.length) return message.channel.send(await this.client.bulbutils.translateNew("automod_not_in_database", message.guild!.id, { item: items.join("`, `") }));
+		if (!result.removed.length) return message.channel.send(await this.client.bulbutils.translate("automod_not_in_database", message.guild!.id, { item: items.join("`, `") }));
 
-		await message.channel.send(await this.client.bulbutils.translateNew("automod_remove_success", message.guild!.id, {
+		await message.channel.send(await this.client.bulbutils.translate("automod_remove_success", message.guild!.id, {
 			category: partArg,
 			item: result.removed.join("`, `")
 		}));

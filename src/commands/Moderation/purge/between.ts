@@ -58,6 +58,6 @@ export default class extends SubCommand {
 			message.author,
 		);
 
-		await message.channel.send(await this.client.bulbutils.translateNew("purge_success", message.guild?.id, { count: messages.length }));
+		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: messages.length }));
 	}
 }

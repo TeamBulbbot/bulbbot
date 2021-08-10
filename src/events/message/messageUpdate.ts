@@ -18,7 +18,7 @@ export default class extends Event {
 		if (oldMessage.content === newMessage.content) return;
 		if (!newMessage.guild) return;
 
-		const msg: string = await this.client.bulbutils.translateNew("event_message_edit", newMessage.guild.id, {
+		const msg: string = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
 			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 			user: newMessage.author,
 			message: newMessage,
@@ -32,7 +32,7 @@ export default class extends Event {
 				this.client,
 				newMessage.guild,
 				"message",
-				await this.client.bulbutils.translateNew("event_message_edit_special", newMessage.guild.id, {
+				await this.client.bulbutils.translate("event_message_edit_special", newMessage.guild.id, {
 					user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 					user: newMessage.author,
 					message: newMessage,

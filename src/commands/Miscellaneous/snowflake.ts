@@ -23,7 +23,7 @@ export default class extends Command {
 		const snowflake: string = args[0].replace(NonDigits, "");
 		if (+snowflake <= SnowflakeUtil.EPOCH)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_cannot_convert", message.guild?.id, {
+				await this.client.bulbutils.translate("global_cannot_convert", message.guild?.id, {
 					arg_provided: args[0],
 					arg_expected: "snowflake:Snowflake",
 					usage: this.usage,
@@ -41,7 +41,7 @@ export default class extends Command {
 			.setColor(Config.embedColor)
 			.setDescription(desc)
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),

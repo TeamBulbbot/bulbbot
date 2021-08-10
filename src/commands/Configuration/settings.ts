@@ -50,7 +50,7 @@ export default class extends Command {
 			.setColor(Config.embedColor)
 			.setAuthor(`Settings for ${message.guild!.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription(configs + loggingModule)
-			.setFooter(await this.client.bulbutils.translateNew("global_executed_by", message.guild!.id, { user: message.author }), memberObj.avatarUrl)
+			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild!.id, { user: message.author }), memberObj.avatarUrl)
 			.setTimestamp();
 
 		return message.channel.send(embed);

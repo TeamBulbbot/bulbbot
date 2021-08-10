@@ -18,13 +18,13 @@ export default class extends Command {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(Config.embedColor)
 			.setDescription(
-				await this.client.bulbutils.translateNew("invite_desc", message.guild?.id, {
+				await this.client.bulbutils.translate("invite_desc", message.guild?.id, {
 					bot_invite: Config.botInvite,
 					support_guild: Config.supportInvite,
 				}),
 			)
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),

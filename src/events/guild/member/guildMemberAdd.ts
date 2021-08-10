@@ -18,7 +18,7 @@ export default class extends Event {
 			member.guild,
 			"joinleave",
 			Util.removeMentions(
-				await this.client.bulbutils.translateNew("event_member_joined", member.guild.id, {
+				await this.client.bulbutils.translate("event_member_joined", member.guild.id, {
 					user: member.user,
 					user_age: Math.floor(member.user.createdTimestamp / 1000),
 				}),

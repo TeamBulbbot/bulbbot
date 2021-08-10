@@ -27,8 +27,8 @@ export default class extends Command {
 			user = await this.client.users.fetch(id);
 		} catch (error) {
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.user", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
@@ -63,7 +63,7 @@ export default class extends Command {
 			.setDescription(desc)
 			.setImage(user.avatar !== null ? user.avatarURL({ dynamic: true, size: 4096 }) : avatar)
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				await this.client.bulbutils.userObject(false, message.author).avatarUrl,

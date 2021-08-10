@@ -1,4 +1,4 @@
-import translation from "../../languages/en-US-new.json";
+import translation from "../../languages/en-US.json";
 
 // https://stackoverflow.com/a/58436959
 type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,

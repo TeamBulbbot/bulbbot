@@ -32,7 +32,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 			client,
 			message,
 			dbGuild.punishmentWebsite,
-			await client.bulbutils.translateNew("automod_violation_website_reason", message.guild.id, {
+			await client.bulbutils.translate("automod_violation_website_reason", message.guild.id, {
 				channel: <TextChannel>message.channel,
 			}),
 		);
@@ -40,7 +40,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		await loggingManager.sendAutoModLog(
 			client,
 			message.guild,
-			await client.bulbutils.translateNew("automod_violation_website_log", message.guild.id, {
+			await client.bulbutils.translate("automod_violation_website_log", message.guild.id, {
 				target: message.author,
 				channel: message.channel,
 				punishment,
@@ -55,7 +55,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 			client,
 			message,
 			dbGuild.punishmentInvites,
-			await client.bulbutils.translateNew("automod_violation_invites_reason", message.guild.id, {
+			await client.bulbutils.translate("automod_violation_invites_reason", message.guild.id, {
 				channel: <TextChannel>message.channel,
 			}),
 		);
@@ -63,7 +63,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		await loggingManager.sendAutoModLog(
 			client,
 			message.guild,
-			await client.bulbutils.translateNew("automod_violation_invites_log", message.guild.id, {
+			await client.bulbutils.translate("automod_violation_invites_log", message.guild.id, {
 				target: message.author,
 				channel: message.channel,
 				punishment,
@@ -79,7 +79,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 			client,
 			message,
 			dbGuild.punishmentWords,
-			await client.bulbutils.translateNew("automod_violation_words_reason", message.guild.id, {
+			await client.bulbutils.translate("automod_violation_words_reason", message.guild.id, {
 				channel: <TextChannel>message.channel,
 			}),
 		);
@@ -87,7 +87,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 		await loggingManager.sendAutoModLog(
 			client,
 			message.guild,
-			await client.bulbutils.translateNew("automod_violation_words_log", message.guild.id, {
+			await client.bulbutils.translate("automod_violation_words_log", message.guild.id, {
 				target: message.author,
 				channel: message.channel,
 				punishment,

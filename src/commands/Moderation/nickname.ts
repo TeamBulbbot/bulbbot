@@ -29,8 +29,8 @@ export default class extends Command {
 		const match: RegExpMatchArray = <RegExpMatchArray>UserMentionAndID.exec(args[0]);
 		if (!match)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -44,11 +44,11 @@ export default class extends Command {
 			args
 				.slice(1 + nickname.split(" ").length)
 				.join(" ")
-				.trim() || (await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {}));
+				.trim() || (await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {}));
 		if (!target)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translateNew("global_not_found_types.member", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -56,9 +56,9 @@ export default class extends Command {
 			);
 		if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;
 
-		if (nickname.length > 32) return message.channel.send(await this.client.bulbutils.translateNew("nickname_too_long", message.guild?.id, { length: nickname.length.toString() }));
-		if (!nickname && !target.nickname) return message.channel.send(await this.client.bulbutils.translateNew("already_no_nickname", message.guild?.id, { target: target.user }));
-		if (nickname === target.nickname) return message.channel.send(await this.client.bulbutils.translateNew("already_has_nickname", message.guild?.id, { target: target.user, nickname: target.nickname }));
+		if (nickname.length > 32) return message.channel.send(await this.client.bulbutils.translate("nickname_too_long", message.guild?.id, { length: nickname.length.toString() }));
+		if (!nickname && !target.nickname) return message.channel.send(await this.client.bulbutils.translate("already_no_nickname", message.guild?.id, { target: target.user }));
+		if (nickname === target.nickname) return message.channel.send(await this.client.bulbutils.translate("already_has_nickname", message.guild?.id, { target: target.user, nickname: target.nickname }));
 
 		const nickOld: string = target.nickname || target.user.username;
 		let infID: number;
@@ -68,7 +68,7 @@ export default class extends Command {
 				<Guild>message.guild,
 				target,
 				<GuildMember>message.member,
-				await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
+				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
 					action: nickname ? "Nickname changed" : "Nickname removed",
 					moderator: message.author,
 					target: target.user,
@@ -80,11 +80,11 @@ export default class extends Command {
 			);
 		} catch (e) {
 			console.error(e.stack);
-			return message.channel.send(await this.client.bulbutils.translateNew("change_nick_fail", message.guild?.id, { target: target.user }));
+			return message.channel.send(await this.client.bulbutils.translate("change_nick_fail", message.guild?.id, { target: target.user }));
 		}
 
 		return message.channel.send(
-			await this.client.bulbutils.translateNew(nickname ? "change_nick_success" : "remove_nick_success", message.guild?.id, {
+			await this.client.bulbutils.translate(nickname ? "change_nick_success" : "remove_nick_success", message.guild?.id, {
 				target: target.user,
 				nick_old: nickOld,
 				nick_new: nickname,

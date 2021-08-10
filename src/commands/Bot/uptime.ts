@@ -26,9 +26,9 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setDescription(await this.client.bulbutils.translateNew("uptime_uptime", message.guild?.id, { uptime }))
+			.setDescription(await this.client.bulbutils.translate("uptime_uptime", message.guild?.id, { uptime }))
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				<string>message.author.avatarURL(),

@@ -27,7 +27,7 @@ export default class extends Command {
 		desc += `**Last Commit:**\n**Hash:** \`${commitHash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;
 		desc +=
-			(await this.client.bulbutils.translateNew("uptime_uptime", message.guild?.id, {
+			(await this.client.bulbutils.translate("uptime_uptime", message.guild?.id, {
 				uptime: this.client.bulbutils.getUptime(this.client.uptime),
 			})) + "\n\n";
 		desc += `**Supporters**\n`;
@@ -39,7 +39,7 @@ export default class extends Command {
 			.addField("Support", `[Link](https://bulbbot.mrphilip.xyz/discord)`, true)
 			.addField("Patreon", `[Link](https://bulbbot.mrphilip.xyz/patreon)`, true)
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),

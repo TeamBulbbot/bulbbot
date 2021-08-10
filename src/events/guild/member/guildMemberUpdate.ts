@@ -45,7 +45,7 @@ export default class extends Event {
 		{
 			case "nickname":
 				if (auditLog?.changes && auditLog.changes[0].key === "nick") executor = auditLog.executor;
-				message = await this.client.bulbutils.translateNew("event_member_update_nickname", newMember.guild.id, {
+				message = await this.client.bulbutils.translate("event_member_update_nickname", newMember.guild.id, {
 					user: newMember.user,
 					before: oldMember.nickname ?? oldMember.user.username,
 					after: newMember.nickname ?? newMember.user.username,
@@ -62,7 +62,7 @@ export default class extends Event {
 					const translateKey = (change === "newrole") ? "event_member_update_role_add_moderator"
 																: "event_member_update_role_remove_moderator";
 					executor = auditLog.executor;
-					message = await this.client.bulbutils.translateNew(translateKey, newMember.guild.id, {
+					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
 						moderator: executor,
@@ -70,7 +70,7 @@ export default class extends Event {
 				} else {
 					const translateKey = (change === "newrole") ? "event_member_update_role_add"
 																: "event_member_update_role_remove";
-					message = await this.client.bulbutils.translateNew(translateKey, newMember.guild.id, {
+					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
 					});

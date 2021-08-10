@@ -44,21 +44,21 @@ export default class extends Command {
 		//If the user is already banned return with a message
 		if (bannedUser) {
 			await message.channel.send(
-				await this.client.bulbutils.translateNew("already_banned", message.guild?.id, {
+				await this.client.bulbutils.translate("already_banned", message.guild?.id, {
 					target: bannedUser.user,
 					reason: bannedUser.reason.split("Reason: ").pop(),
 				}),
 			);
 			return;
 		}
-		if (!reason) reason = await this.client.bulbutils.translateNew("global_no_reason", message.guild?.id, {});
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
 		if (!target) {
 			try {
 				target = await this.client.users.fetch(targetID);
 			} catch (error) {
 				await message.channel.send(
-					await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
-						type: await this.client.bulbutils.translateNew("global_not_found_types.user", message.guild?.id, {}),
+					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+						type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 						arg_expected: "user:User",
 						arg_provided: args[0],
 						usage: this.usage,
@@ -76,8 +76,8 @@ export default class extends Command {
 				BanType.FORCE,
 				<User>target,
 				<GuildMember>message.member,
-				await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-					action: await this.client.bulbutils.translateNew("mod_action_types.force_ban", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.force_ban", message.guild?.id, {}),
 					moderator: message.author,
 					target,
 					reason,
@@ -93,8 +93,8 @@ export default class extends Command {
 				BanType.NORMAL,
 				target,
 				<GuildMember>message.member,
-				await this.client.bulbutils.translateNew("global_mod_action_log", message.guild?.id, {
-					action: await this.client.bulbutils.translateNew("mod_action_types.ban", message.guild?.id, {}),
+				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
 					moderator: message.author,
 					target,
 					reason,
@@ -105,8 +105,8 @@ export default class extends Command {
 
 		//Sends the response message
 		await message.channel.send(
-			await this.client.bulbutils.translateNew("action_success", message.guild?.id, {
-				action: await this.client.bulbutils.translateNew("mod_action_types.ban", message.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", message.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
 				target,
 				reason,
 				infraction_id: infID,

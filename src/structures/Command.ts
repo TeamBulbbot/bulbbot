@@ -59,7 +59,7 @@ export default class Command {
 	public async run(message: Message, args: string[]): Promise<any> {
 		if(!args.length || !this.subCommands.length) throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
 		return await message.channel.send(
-			await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild?.id, {
+			await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
 				argument: args[args.length - 1].toLowerCase(),
 				arg_expected: this.argList[0],
 				argument_list: this.subCommands.map(sc => `\`${(new sc(this.client, this)).name}\``).join(", "),
@@ -68,19 +68,19 @@ export default class Command {
 	}
 
 	public async validate(message: Message, args: string[], options: ResolveCommandOptions): Promise<string | undefined> {
-		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translateNew("global_premium_only", message.guild?.id, {});
+		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", message.guild?.id, {});
 
 			const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.name);
 			if (commandOverride !== undefined) {
 				if (!commandOverride["enabled"]) return "";
 				if (commandOverride["clearanceLevel"] > options.clearance) {
-					return await this.client.bulbutils.translateNew("global_missing_permissions", message.guild?.id, {});
+					return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
 				}
 			}
 
 			this.client.userClearance = options.clearance;
 			if (this.clearance > options.clearance && !commandOverride) {
-				return await this.client.bulbutils.translateNew("global_missing_permissions", message.guild?.id, {});
+				return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
 			}
 
 			const userPermCheck: BitField<PermissionString> = this.userPerms;
@@ -89,7 +89,7 @@ export default class Command {
 				const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(message.channel).has(userPermCheck)); // !x || !y === !(x && y)
 
 				if (missing) {
-					return await this.client.bulbutils.translateNew("global_missing_permissions", message.guild?.id, {});
+					return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
 				}
 			}
 
@@ -100,7 +100,7 @@ export default class Command {
 				if (!missing.length) missing = message.guild!.me!.permissionsIn(message.channel).missing(clientPermCheck);
 
 				if (missing.length)
-					return await this.client.bulbutils.translateNew("global_missing_permissions_bot", message.guild?.id, {
+					return await this.client.bulbutils.translate("global_missing_permissions_bot", message.guild?.id, {
 						permissions: missing.map(perm => `\`${perm}\``).join(", "),
 					});
 			}
@@ -109,7 +109,7 @@ export default class Command {
 			if (this.devOnly) if (!options.isDev) return "";
 
 			if (this.maxArgs < args.length && this.maxArgs !== -1) {
-				return await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+				return await this.client.bulbutils.translate("event_message_args_unexpected", message.guild?.id, {
 					argument: args[this.maxArgs],
 					arg_expected: this.maxArgs,
 					arg_provided: args.length,
@@ -118,7 +118,7 @@ export default class Command {
 			}
 
 			if (this.minArgs > args.length) {
-				return await this.client.bulbutils.translateNew("event_message_args_missing", message.guild?.id, {
+				return await this.client.bulbutils.translate("event_message_args_missing", message.guild?.id, {
 					argument: this.argList[args.length],
 					arg_expected: this.minArgs,
 					usage: `\`${this.client.prefix}${this.usage}\``,

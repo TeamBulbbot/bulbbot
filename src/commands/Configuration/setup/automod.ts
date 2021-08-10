@@ -167,7 +167,7 @@ export default class extends SubCommand {
 					const itemexec = /^(LOG|WARN|KICK|BAN)$/.exec(message.content.toUpperCase());
 					if (!itemexec) {
 						await message.channel.send(
-							await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild!.id, {
+							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild!.id, {
 								argument: "punishment",
 								arg_expected: "punishment:string",
 								arg_provided: message.content,

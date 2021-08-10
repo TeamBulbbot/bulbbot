@@ -21,10 +21,10 @@ export default class extends SubCommand {
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const prefix = args[0];
 
-		if (prefix.length > 255) return message.channel.send(await this.client.bulbutils.translateNew("config_prefix_too_long", message.guild?.id, {}));
+		if (prefix.length > 255) return message.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", message.guild?.id, {}));
 
 		await databaseManager.setPrefix(<Snowflake>message.guild?.id, prefix);
 
-		await message.channel.send(await this.client.bulbutils.translateNew("config_prefix_success", message.guild?.id, { prefix }));
+		await message.channel.send(await this.client.bulbutils.translate("config_prefix_success", message.guild?.id, { prefix }));
 	}
 }

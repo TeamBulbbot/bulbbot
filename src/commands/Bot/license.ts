@@ -16,9 +16,9 @@ export default class extends Command {
 	async run(message: Message): Promise<void> {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setDescription(await this.client.bulbutils.translateNew("license_license", message.guild?.id, {}))
+			.setDescription(await this.client.bulbutils.translate("license_license", message.guild?.id, {}))
 			.setFooter(
-				await this.client.bulbutils.translateNew("global_executed_by", message.guild?.id, {
+				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
 				}),
 				<string>message.author.avatarURL({ dynamic: true }),

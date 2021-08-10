@@ -5,7 +5,7 @@ import { sequelize } from "./utils/database/connection";
 env.config({ path: `${__dirname}/../src/.env` });
 
 import i18next from "i18next";
-import * as enUS from "./languages/en-US-new.json";
+import * as enUS from "./languages/en-US.json";
 
 const config = {
 	token: process.env.TOKEN,

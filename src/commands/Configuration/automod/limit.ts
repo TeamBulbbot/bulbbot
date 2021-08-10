@@ -26,7 +26,7 @@ export default class extends SubCommand {
 		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("event_message_args_missing_list", message.guild!.id, {
+				await this.client.bulbutils.translate("event_message_args_missing_list", message.guild!.id, {
 					argument: args[0],
 					arg_expected: "part:string",
 					argument_list: "`messages` or `mentions`",
@@ -36,7 +36,7 @@ export default class extends SubCommand {
 
 		if (isNaN(limit))
 			return message.channel.send(
-				await this.client.bulbutils.translateNew("global_cannot_convert", message.guild!.id, {
+				await this.client.bulbutils.translate("global_cannot_convert", message.guild!.id, {
 					arg_provided: args[1],
 					arg_expected: "limit:int",
 					usage: this.usage,
@@ -47,7 +47,7 @@ export default class extends SubCommand {
 		await databaseManager.automodSetLimit(message.guild!.id, part, limit);
 
 		await message.channel.send(
-			await this.client.bulbutils.translateNew("automod_updated_limit", message.guild!.id, {
+			await this.client.bulbutils.translate("automod_updated_limit", message.guild!.id, {
 				category: partArg,
 				limit,
 			}),
