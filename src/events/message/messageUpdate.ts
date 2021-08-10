@@ -18,15 +18,12 @@ export default class extends Event {
 		if (oldMessage.content === newMessage.content) return;
 		if (!newMessage.guild) return;
 
-		const msg: string = await this.client.bulbutils.translate("event_message_update", newMessage.guild.id, {
-			target_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
-			target_id: newMessage.author.id,
-			channel_id: newMessage.channel.id,
-			after_channel_id: newMessage.channel.id,
-			after_id: newMessage.id,
-			time: `[${this.client.bulbutils.formatSmall(newMessage.createdTimestamp)}]`,
-			beforeContent: Util.cleanContent(oldMessage.content, oldMessage),
-			afterContent: Util.cleanContent(newMessage.content, newMessage),
+		const msg: string = await this.client.bulbutils.translateNew("event_message_edit", newMessage.guild.id, {
+			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
+			user: newMessage.author,
+			message: newMessage,
+			before: Util.cleanContent(oldMessage.content, oldMessage),
+			after: Util.cleanContent(newMessage.content, newMessage),
 		});
 
 		if (msg.length >= 1850) {
@@ -35,13 +32,10 @@ export default class extends Event {
 				this.client,
 				newMessage.guild,
 				"message",
-				await this.client.bulbutils.translate("event_message_update_special", newMessage.guild.id, {
-					target_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
-					target_id: newMessage.author.id,
-					channel_id: newMessage.channel.id,
-					after_channel_id: newMessage.channel.id,
-					after_id: newMessage.id,
-					time: `[${this.client.bulbutils.formatSmall(newMessage.createdTimestamp)}]`,
+				await this.client.bulbutils.translateNew("event_message_edit_special", newMessage.guild.id, {
+					user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
+					user: newMessage.author,
+					message: newMessage,
 				}),
 				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`,
 			);
