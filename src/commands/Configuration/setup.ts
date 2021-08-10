@@ -252,9 +252,10 @@ export default class extends Command {
 					async (message: Message): Promise<boolean> => {
 						if (!this.client.bulbutils.languages[message.content]) {
 							await message.channel.send(
-								await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-									arg: message.content,
+								await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+									argument: message.content,
 									arg_expected: "language:string",
+									arg_provided: message.content,
 									usage: "configure language <language>",
 								}),
 							);
@@ -269,7 +270,7 @@ export default class extends Command {
 					user,
 					async (message: Message): Promise<boolean> => {
 						if (message.content.length > 255) {
-							await message.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", message.guild?.id));
+							await message.channel.send(await this.client.bulbutils.translateNew("config_prefix_too_long", message.guild?.id, {}));
 							return false;
 						}
 
@@ -282,9 +283,10 @@ export default class extends Command {
 					async (message: Message): Promise<boolean> => {
 						if (!this.client.bulbutils.timezones[message.content.toUpperCase()]) {
 							await message.channel.send(
-								await this.client.bulbutils.translate("event_message_args_unexpected_list", message.guild?.id, {
-									arg: message.content,
+								await this.client.bulbutils.translateNew("event_message_args_unexpected", message.guild?.id, {
+									argument: message.content,
 									arg_expected: "timezone:string",
+									arg_provided: message.content,
 									usage: "configure timezone <timezone>",
 								}),
 							);
@@ -303,7 +305,8 @@ export default class extends Command {
 							const rTemp = message.guild?.roles.cache.get(role);
 							if (rTemp === undefined || (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < rTemp.rawPosition)) {
 								await message.channel.send(
-									await this.client.bulbutils.translate("global_role_not_found", message.guild?.id, {
+									await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+										type: await this.client.bulbutils.translateNew("global_not_found_types.role", message.guild?.id, {}),
 										arg_provided: role,
 										arg_expected: "role:Role",
 										usage: "configure mute_role <role>",
@@ -349,11 +352,16 @@ export default class extends Command {
 							default:
 								const role = message.guild?.roles.cache.get(RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content);
 								if (role === undefined) {
-									await message.channel.send(await this.client.bulbutils.translate("config_mute_invalid_role", message.guild?.id));
+									await message.channel.send(await this.client.bulbutils.translateNew("global_not_found", message.guild?.id, {
+										type: await this.client.bulbutils.translateNew("global_not_found_types.role", message.guild?.id, {}),
+										arg_expected: "role:Role",
+										arg_provided: message.content,
+										usage: "configure auto_role <role>"
+									}));
 									return false;
 								}
 								if (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < role.rawPosition) {
-									await message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id));
+									await message.channel.send(await this.client.bulbutils.translateNew("config_mute_unable_to_manage", message.guild.id, {}));
 									return false;
 								}
 								return true;
