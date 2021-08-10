@@ -81,10 +81,10 @@
   "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>",
 
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
-  "event_member_update_role_add": "{{emote_warn}} The **{{role}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
-  "event_member_update_role_add_moderator": "{{emote_warn}} The **{{role}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
-  "event_member_update_role_remove": "{{emote_warn}} The **{{role}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
-  "event_member_update_role_remove_moderator": "{{emote_warn}} The **{{role}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+  "event_member_update_role_add": "{{emote_warn}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
+  "event_member_update_role_add_moderator": "{{emote_warn}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+  "event_member_update_role_remove": "{{emote_warn}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
+  "event_member_update_role_remove_moderator": "{{emote_warn}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
 
   "config_language_success": "{{emote_success}} Successfully changed the server language to `{{language}}`",
   "config_timezone_success": "{{emote_success}} Successfully changed the server timezone to `{{timezone}}`",

@@ -27,8 +27,8 @@ export default class extends Event {
 		let auditLog: GuildAuditLogsEntry | undefined;
 		let executor: User;
 
-		if (oldMember.roles.cache.size > newMember.roles.cache.size) change = "newrole";
-		else if (oldMember.roles.cache.size < newMember.roles.cache.size) change = "removedrole";
+		if (oldMember.roles.cache.size < newMember.roles.cache.size) change = "newrole";
+		else if (oldMember.roles.cache.size > newMember.roles.cache.size) change = "removedrole";
 		else if (oldMember.nickname !== newMember.nickname) change = "nickname";
 		else return;
 
@@ -45,11 +45,10 @@ export default class extends Event {
 		{
 			case "nickname":
 				if (auditLog?.changes && auditLog.changes[0].key === "nick") executor = auditLog.executor;
-				message = await this.client.bulbutils.translate("event_member_update_nickname", newMember.guild.id, {
-					user_tag: newMember.user.tag,
-					user_id: newMember.user.id,
-					nick_old: oldMember.nickname ?? oldMember.user.username,
-					nick_new: newMember.nickname ?? newMember.user.username,
+				message = await this.client.bulbutils.translateNew("event_member_update_nickname", newMember.guild.id, {
+					user: newMember.user,
+					before: oldMember.nickname ?? oldMember.user.username,
+					after: newMember.nickname ?? newMember.user.username,
 					// executor?
 				});
 				break;
@@ -60,23 +59,20 @@ export default class extends Event {
 				if (!role) return;
 
 				if (auditLog) {
-					const translateKey = (change === "newrole") ? "event_member_update_role_add_audit"
-																: "event_member_update_role_remove_audit";
+					const translateKey = (change === "newrole") ? "event_member_update_role_add_moderator"
+																: "event_member_update_role_remove_moderator";
 					executor = auditLog.executor;
-					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
-						user_tag: newMember.user.tag,
-						user_id: newMember.user.id,
-						role: role.name,
-						moderator_tag: executor.tag,
-						moderator_id: executor.id,
+					message = await this.client.bulbutils.translateNew(translateKey, newMember.guild.id, {
+						user: newMember.user,
+						role,
+						moderator: executor,
 					});
 				} else {
 					const translateKey = (change === "newrole") ? "event_member_update_role_add"
 																: "event_member_update_role_remove";
-					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
-						user_tag: newMember.user.tag,
-						user_id: newMember.user.id,
-						role: role.name,
+					message = await this.client.bulbutils.translateNew(translateKey, newMember.guild.id, {
+						user: newMember.user,
+						role,
 					});
 				}
 				break;
