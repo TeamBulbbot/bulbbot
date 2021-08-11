@@ -237,13 +237,13 @@ export default class extends Command {
 
 	// note from philip, Idk what the CollectorFilter wants :shrug:
 	/** @internal */
-	public _filter(user: User, f: CollectorFilter): CollectorFilter {
+	public _filter(user: User, f: CollectorFilter<any>): CollectorFilter<any> {
 		// Only accept messages from the command issuer
 		// Replying with just-the-prefix means "use default"/"don't change". The default/current for each setting is in parenthesis after the prompt
 		return async (message: Message): Promise<boolean> => message.author.id === user.id && (message.content === this.client.prefix || (await f(message)));
 	}
 
-	private filter(part: ConfigPart, user: User): CollectorFilter {
+	private filter(part: ConfigPart, user: User): CollectorFilter<any> {
 		switch (part) {
 			case ConfigPart.language:
 				return this._filter(user, async (message: Message): Promise<boolean> => {
