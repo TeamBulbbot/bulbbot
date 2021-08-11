@@ -42,7 +42,7 @@ export default class extends Command {
 		}
 
 		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild?.id, {})).then(msg => {
-			msg.delete({ timeout: (args.length - 0.5) * massCommandSleep });
+			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
 		for (let i = 0; i < targets.length; i++) {

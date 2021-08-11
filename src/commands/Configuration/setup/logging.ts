@@ -17,12 +17,11 @@ export default class extends SubCommand {
 	}
 
 	public async run(message: Message, args: string[]): Promise<null | LoggingSetup> {
-		if(!args.length) {
+		if (!args.length) {
 			await message.channel.send("Welcome to **Bulbbot Logging Setup**.");
 			await this.client.bulbutils.sleep(1000);
 		}
 
 		return null;
 	}
-
 }

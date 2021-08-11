@@ -46,6 +46,6 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		await message.channel.send(embed);
+		await message.channel.send({ embeds: [embed] });
 	}
 }

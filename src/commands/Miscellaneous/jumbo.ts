@@ -23,6 +23,9 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
+		// TODO in the future, cache the images and emojis to avoid less pings pog right?
+		const PATH = `${__dirname}/../../../files`;
+
 		try {
 			if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many", message.guild?.id, {}));
 
@@ -40,7 +43,7 @@ export default class extends Command {
 				},
 			})
 				.png()
-				.toFile(`files/jumbo/${message.author.id}-${message.guild?.id}.png`);
+				.toFile(`${PATH}/${message.author.id}-${message.guild?.id}.png`);
 
 			for (let i = 0; i < args.length; i++) {
 				let emote: RegExpMatchArray | string = args[i];
@@ -59,7 +62,7 @@ export default class extends Command {
 
 				try {
 					await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
-						return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
+						return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${PATH}/${i}-${message.author.id}-${message.guild?.id}.png`);
 					});
 				} catch (error) {
 					if (CustomEmote.test(<string>(<unknown>emote))) throw error;
@@ -67,12 +70,12 @@ export default class extends Command {
 					url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/13.0.1/svg/${emojiUnicode(args[i]).split(" ").join("-").split("-fe0f").join("")}.svg`;
 
 					await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
-						return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
+						return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${PATH}/${i}-${message.author.id}-${message.guild?.id}.png`);
 					});
 				}
 
 				imgPath.push({
-					input: `files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`,
+					input: `${PATH}/${i}-${message.author.id}-${message.guild?.id}.png`,
 					gravity: "southeast",
 					top: 0,
 					left: size * i,
@@ -81,17 +84,17 @@ export default class extends Command {
 				});
 			}
 
-			await sharp(`files/jumbo/${message.author.id}-${message.guild?.id}.png`).composite(imgPath).png().toFile(`files/jumbo/final-${message.author.id}-${message.guild?.id}.png`);
+			await sharp(`${PATH}/${message.author.id}-${message.guild?.id}.png`).composite(imgPath).png().toFile(`${PATH}/final-${message.author.id}-${message.guild?.id}.png`);
 
 			await message.channel.send({
-				files: [`files/jumbo/final-${message.author.id}-${message.guild?.id}.png`],
+				files: [`${PATH}/final-${message.author.id}-${message.guild?.id}.png`],
 			});
 
-			fs.unlinkSync(`files/jumbo/${message.author.id}-${message.guild?.id}.png`);
-			fs.unlinkSync(`files/jumbo/final-${message.author.id}-${message.guild?.id}.png`);
+			fs.unlinkSync(`${PATH}//${message.author.id}-${message.guild?.id}.png`);
+			fs.unlinkSync(`${PATH}/final-${message.author.id}-${message.guild?.id}.png`);
 			for (let i = 0; i < args.length; i++) {
 				try {
-					fs.unlinkSync(`files/jumbo/${i}-${message.author.id}-${message.guild?.id}.png`);
+					fs.unlinkSync(`${PATH}/${i}-${message.author.id}-${message.guild?.id}.png`);
 				} catch (error) {
 					continue;
 				}

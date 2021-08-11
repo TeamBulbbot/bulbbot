@@ -29,7 +29,7 @@ export default class extends Command {
 		let earlysupport = 0;
 		let botdeveloper = 0;
 
-		message.guild?.members.cache.array().forEach(member => {
+		message.guild?.members.cache.forEach(member => {
 			const badges = this.badge(<number>member.user.flags?.bitfield);
 			for (let i = 0; i < badges.length; i++) {
 				switch (badges[i]) {
@@ -98,7 +98,7 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 
 	private badge(bitfield: number) {

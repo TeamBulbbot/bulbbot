@@ -267,12 +267,16 @@ export default class {
 	// Append/Remove Abstractions
 	private async automodListOperation(guildID: Snowflake, part: AutoModListPart, operation: AutoModListOperation): Promise<AutoModListOperationResult> {
 		const db: AutoModConfiguration = await this.getAutoModConfig(guildID);
-		const dbkey: string = (function(part) {
-			switch(part) {
-				case AutoModPart.word: return "wordBlacklist";
-				case AutoModPart.token: return "wordBlacklistToken";
-				case AutoModPart.website: return "websiteWhitelist";
-				case AutoModPart.invite: return "inviteWhitelist";
+		const dbkey: string = (function (part) {
+			switch (part) {
+				case AutoModPart.word:
+					return "wordBlacklist";
+				case AutoModPart.token:
+					return "wordBlacklistToken";
+				case AutoModPart.website:
+					return "websiteWhitelist";
+				case AutoModPart.invite:
+					return "inviteWhitelist";
 			}
 		})(part);
 		const result: AutoModListOperationResult = await operation(db[dbkey]);
@@ -289,11 +293,11 @@ export default class {
 			const itemSet: Set<string> = new Set(items);
 			const duplicateSet: Set<string> = new Set();
 			const addedSet: Set<string> = new Set();
-			for(const item of itemSet) {
+			for (const item of itemSet) {
 				if (dbSet.has(item)) duplicateSet.add(item);
 				else dbSet.add(item), addedSet.add(item);
 			}
-			return {list: [...dbSet], added: [...addedSet], removed: [], other: [...duplicateSet]};
+			return { list: [...dbSet], added: [...addedSet], removed: [], other: [...duplicateSet] };
 		});
 	}
 
@@ -301,25 +305,30 @@ export default class {
 		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
 			const notPresent: string[] = [];
 			const removed: string[] = [];
-			for(const item of items) {
-				if(!dblist.includes(item)) notPresent.push(item);
+			for (const item of items) {
+				if (!dblist.includes(item)) notPresent.push(item);
 				else removed.push(item);
 			}
-			if(items.length === 1) {
-				dblist.splice(dblist.findIndex(i => i === items[0]), 1);
+			if (items.length === 1) {
+				dblist.splice(
+					dblist.findIndex(i => i === items[0]),
+					1,
+				);
 			} else {
 				dblist.sort((a, b) => +items.includes(b) - +items.includes(a));
 				dblist = dblist.slice(dblist.findIndex(i => !items.includes(i)));
 			}
-			return {list: dblist, added: [], removed: removed, other: notPresent};
+			return { list: dblist, added: [], removed: removed, other: notPresent };
 		});
 	}
 
 	public async automodSetLimit(guildID: Snowflake, part: AutoModAntiSpamPart, limit: number): Promise<void> {
-		const dbkey: string = (function(part) {
-			switch(part) {
-				case AutoModPart.message: return "limitMessages";
-				case AutoModPart.mention: return "limitMentions";
+		const dbkey: string = (function (part) {
+			switch (part) {
+				case AutoModPart.message:
+					return "limitMessages";
+				case AutoModPart.mention:
+					return "limitMentions";
 			}
 		})(part);
 		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Limit WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
@@ -329,18 +338,25 @@ export default class {
 	}
 
 	public async automodSetPunishment(guildID: Snowflake, part: AutoModPart, punishment: PunishmentType | null): Promise<void> {
-		const dbkey: string = (function(part) {
-			switch(part) {
-				case AutoModPart.message: return "punishmentMessages";
-				case AutoModPart.mention: return "punishmentMentions";
-				case AutoModPart.website: return "punishmentWebsite";
-				case AutoModPart.invite: return "punishmentInvites";
-				case AutoModPart.word: return "punishmentWords";
-				case AutoModPart.token: return "punishmentWords";
-				default: return "";
+		const dbkey: string = (function (part) {
+			switch (part) {
+				case AutoModPart.message:
+					return "punishmentMessages";
+				case AutoModPart.mention:
+					return "punishmentMentions";
+				case AutoModPart.website:
+					return "punishmentWebsite";
+				case AutoModPart.invite:
+					return "punishmentInvites";
+				case AutoModPart.word:
+					return "punishmentWords";
+				case AutoModPart.token:
+					return "punishmentWords";
+				default:
+					return "";
 			}
 		})(part);
-		if(!dbkey) return;
+		if (!dbkey) return;
 		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find(n => PunishmentType[n] === punishment) ?? null;
 		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Punishment WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
 			bind: { GuildID: guildID, Punishment: punishmentkey },

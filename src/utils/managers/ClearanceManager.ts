@@ -1,4 +1,4 @@
-import { Message, Snowflake } from "discord.js";
+import { Message, Permissions, Snowflake } from "discord.js";
 import { sequelize } from "../database/connection";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
@@ -57,10 +57,13 @@ export default class {
 	}
 
 	async getCommandOverride(guildID: Snowflake, name: string): Promise<Record<string, any> | undefined> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { CommandName: name, GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
+		const response: Record<string, any> = await sequelize.query(
+			'SELECT * FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)',
+			{
+				bind: { CommandName: name, GuildID: guildID },
+				type: QueryTypes.SELECT,
+			},
+		);
 
 		return response[0];
 	}
@@ -106,8 +109,8 @@ export default class {
 	}
 
 	async getUserClearance(message: Message): Promise<number> {
-		if (message.guild?.ownerID === message.member?.user.id) return 100;
-		if (message.member?.hasPermission("ADMINISTRATOR")) return 75;
+		if (message.guild?.ownerId === message.member?.user.id) return 100;
+		if (message.member?.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return 75;
 
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: message.guild?.id },

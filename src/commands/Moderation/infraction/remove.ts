@@ -57,7 +57,7 @@ export default class extends SubCommand {
 				};
 
 				msg
-					.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] })
+					.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] })
 					.then(async collected => {
 						const reaction = collected.first();
 

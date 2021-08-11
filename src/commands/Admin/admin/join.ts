@@ -1,6 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { Guild, Message } from "discord.js";
+import { Guild, GuildChannel, Message, TextChannel } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 export default class extends SubCommand {
@@ -24,7 +24,12 @@ export default class extends SubCommand {
 			return;
 		}
 
-		const invite = await guild.channels.cache.first()?.createInvite({
+		// @ts-ignore
+		let channel: TextChannel = guild.channels.cache.map((c: GuildChannel) => {
+			if (c.type === "GUILD_TEXT") return c;
+		});
+
+		const invite = await channel[0].createInvite({
 			maxAge: 0,
 			maxUses: 1,
 			reason: `[Developer] ${message.author.tag} created this invite to the first channel`,

@@ -12,4 +12,4 @@ export const ReasonImage: RegExp = /((?:https?:\/\/)[a-z0-9]+(?:[-.][a-z0-9]+)*\
 export const QuoteMarked: RegExp = /"(.*?)"/;
 
 export const AutoMod_INVITE: RegExp = /(?:https?:\/\/)?(?:www\.)?discord(?:\.gg|\.me|(?:app)?)?\/(invite\/)?(?!(partners|verification|download))([A-z0-9-_]+)/gi; ///(?:https?:\/\/)?(?:www\.)?discord(?:\.gg|\.me|(?:app)?\.com\/invite)\/([A-Za-z0-9-]+)/g;
-export const AutoMod_WEBSITE: RegExp = /(?:https:\/\/)?(www\.)?((?:[A-z0-9]+\.){1,128}[A-z0-9]{2,64})/gi ///(?:https?:\/\/)?(}(?:[A-Za-z0-9]+\.){1,128}(?:[A-Za-z0-9]{2,63})(?:\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;%=-]*)?)/g;
+export const AutoMod_WEBSITE: RegExp = /(?:https:\/\/)?(www\.)?((?:[A-z0-9]+\.){1,128}[A-z0-9]{2,64})/gi; ///(?:https?:\/\/)?(}(?:[A-Za-z0-9]+\.){1,128}(?:[A-Za-z0-9]{2,63})(?:\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;%=-]*)?)/g;

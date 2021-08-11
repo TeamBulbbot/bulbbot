@@ -1,5 +1,5 @@
 import BulbBotClient from "../structures/BulbBotClient";
-import { Message, TextChannel } from "discord.js";
+import { Message, Permissions, TextChannel } from "discord.js";
 import DatabaseManager from "./managers/DatabaseManager";
 import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
@@ -16,7 +16,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(message.guild.id);
 
 	if (!dbGuild.enabled) return;
-	if (message.member?.hasPermission("MANAGE_MESSAGES")) return;
+	if (message.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(message.author.id)) return;
 	if (dbGuild.ignoreChannels.includes(message.channel.id)) return;
 
@@ -105,7 +105,7 @@ export default async function (client: BulbBotClient, message: Message): Promise
 	}
 
 	await set(client, message, message.guild.id, "messages", message.author.id, 1, dbGuild.timeoutMessages);
-	if (shouldDelete) await message.delete({ reason: "AutoMod check violation detected" });
+	if (shouldDelete) await message.delete();
 }
 
 function hasSwearWords(message: Message, guild: AutoModConfiguration): string {

@@ -37,7 +37,7 @@ export default class extends Command {
 				}),
 			);
 		const targetID: Snowflake = match[1] ?? match[2];
-		const target: GuildMember = <GuildMember>message.guild?.member(targetID);
+		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
 		const nickmatch: RegExpMatchArray = <RegExpMatchArray>QuoteMarked.exec(argString);
 		const nickname: string = (nickmatch ? nickmatch[1] : args[1])?.trim() ?? "";
 		const reason: string =
@@ -78,7 +78,7 @@ export default class extends Command {
 				nickOld,
 				nickname,
 			);
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e.stack);
 			return message.channel.send(await this.client.bulbutils.translate("change_nick_fail", message.guild?.id, { target: target.user }));
 		}

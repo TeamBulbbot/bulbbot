@@ -42,7 +42,7 @@ export default class extends Command {
 			if (targets!![i] === undefined) continue;
 
 			const t: string = targets!![i].replace(NonDigits, "");
-			const target: GuildMember = <GuildMember>await message.guild?.member(t);
+			const target: GuildMember = <GuildMember>await message.guild?.members.cache.get(t);
 			let infID: number;
 
 			if (!target) {

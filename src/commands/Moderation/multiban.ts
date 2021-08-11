@@ -43,7 +43,7 @@ export default class extends Command {
 		}
 
 		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild?.id, {})).then(msg => {
-			msg.delete({ timeout: (args.length - 0.5) * massCommandSleep });
+			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
 		for (let i = 0; i < targets.length; i++) {
@@ -52,7 +52,7 @@ export default class extends Command {
 
 			const t: Snowflake = targets[i].replace(NonDigits, "");
 			let infID: number;
-			let target: any = await message.guild?.member(t);
+			let target: any = await message.guild?.members.cache.get(t);
 			const notInGuild: boolean = !target;
 
 			if (!notInGuild) {

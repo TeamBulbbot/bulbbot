@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
-import MessageEvent from "../../events/message/message";
+import MessageEvent from "../../events/message/messageCreate";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {

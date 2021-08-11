@@ -23,7 +23,7 @@ export default class extends SubCommand {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[1]);
-		const user: GuildMember = <GuildMember>message.guild?.member(args[0].replace(NonDigits, ""));
+		const user: GuildMember = <GuildMember>message.guild?.members.cache.get(args[0].replace(NonDigits, ""));
 		if (!user)
 			return message.channel.send(
 				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {

@@ -6,7 +6,7 @@ import * as fs from "fs";
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -21,7 +21,7 @@ export default class extends Event {
 			user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 			user: message.author,
 			message,
-			content: message.content ? `**C:** ${Util.cleanContent(message.content, message)}` : "",
+			content: message.content ? `**C:** ${Util.cleanContent(message.content, message.channel)}` : "",
 			attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}` : "",
 			embed: message.embeds.length !== 0 ? "**E:** [Embed]" : "",
 		});

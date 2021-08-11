@@ -6,7 +6,7 @@ import * as fs from "fs";
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -22,8 +22,8 @@ export default class extends Event {
 			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 			user: newMessage.author,
 			message: newMessage,
-			before: Util.cleanContent(oldMessage.content, oldMessage),
-			after: Util.cleanContent(newMessage.content, newMessage),
+			before: Util.cleanContent(oldMessage.content, oldMessage.channel),
+			after: Util.cleanContent(newMessage.content, newMessage.channel),
 		});
 
 		if (msg.length >= 1850) {

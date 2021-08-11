@@ -27,7 +27,7 @@ export default class extends Command {
 
 	async run(message: Message, args: string[]): Promise<void> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>message.guild?.member(targetID);
+		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
@@ -44,7 +44,7 @@ export default class extends Command {
 		}
 		if (await this.client.bulbutils.resolveUserHandle(message, this.client.bulbutils.checkUser(message, target), target.user)) return;
 
-		const banList = await message.guild?.fetchBans();
+		const banList = await message.guild?.bans.fetch();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
@@ -53,7 +53,7 @@ export default class extends Command {
 			await message.channel.send(
 				await this.client.bulbutils.translate("already_banned", message.guild?.id, {
 					target: bannedUser.user,
-					reason: bannedUser.reason.split("Reason: ").pop(),
+					reason: bannedUser.reason!.split("Reason: ").pop(),
 				}),
 			);
 			return;

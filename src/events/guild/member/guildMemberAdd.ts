@@ -5,7 +5,7 @@ import LoggingManager from "../../../utils/managers/LoggingManager";
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,

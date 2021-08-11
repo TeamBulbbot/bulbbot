@@ -7,7 +7,7 @@ import * as Emotes from "../../emotes.json";
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -18,8 +18,8 @@ export default class extends Event {
 		this.client.log.info(`[GUILD] Joined a new guild ${guild.name} (${guild.id})`);
 
 		await databaseManager.createGuild(guild);
-		(<TextChannel|undefined>this.client.channels.cache
-			.get(invite))
-			?.send(`${Emotes.other.JOIN} Joined new guild: **${guild.name}** \`(${guild.id})\` owned by <@${guild.ownerID}> \`(${guild.ownerID})\`\nMembers: **${guild.memberCount}**`);
+		(<TextChannel | undefined>this.client.channels.cache.get(invite))?.send(
+			`${Emotes.other.JOIN} Joined new guild: **${guild.name}** \`(${guild.id})\` owned by <@${guild.ownerId}> \`(${guild.ownerId})\`\nMembers: **${guild.memberCount}**`,
+		);
 	}
 }

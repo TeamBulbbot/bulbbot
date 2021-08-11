@@ -60,12 +60,10 @@ export default class {
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
-		await modChannel.send(
-			`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
-			{
-				files: [file],
-			},
-		);
+		await modChannel.send({
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
+			files: [file],
+		});
 	}
 
 	public async sendModActionTemp(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
@@ -125,7 +123,8 @@ export default class {
 		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
 
 		if (logChannel === null) return;
-		await (<TextChannel>client.channels.cache.get(logChannel)).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`, {
+		await (<TextChannel>client.channels.cache.get(logChannel)).send({
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
 			files: [file],
 		});
 	}

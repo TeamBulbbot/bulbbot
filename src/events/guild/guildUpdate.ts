@@ -1,11 +1,11 @@
 import Event from "../../structures/Event";
-import { Guild, GuildAuditLogs } from "discord.js";
+import { Guild, GuildAuditLogs, Permissions } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -13,7 +13,7 @@ export default class extends Event {
 	}
 
 	public async run(newGuild: Guild): Promise<void> {
-		if (!newGuild.me?.hasPermission("VIEW_AUDIT_LOG")) return;
+		if (!newGuild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
 		const logs: GuildAuditLogs = await newGuild.fetchAuditLogs({ limit: 1, type: "GUILD_UPDATE" });
 		const first = logs.entries.first();
@@ -26,12 +26,13 @@ export default class extends Event {
 		const log: string[] = [];
 
 		for (const change of changes) {
-			log.push
-				(await this.client.bulbutils.translate("event_change", newGuild.id, {
+			log.push(
+				await this.client.bulbutils.translate("event_change", newGuild.id, {
 					part: change.key,
 					before: change.old || "none",
 					after: change.new || "none",
-				}));
+				}),
+			);
 		}
 
 		await loggingManager.sendServerEventLog(

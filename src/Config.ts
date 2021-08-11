@@ -1,4 +1,4 @@
-import { Snowflake } from "discord.js";
+import { Snowflake, ColorResolvable } from "discord.js";
 import * as Emotes from "./emotes.json";
 
 export const name: string = "Bulbbot";
@@ -9,7 +9,7 @@ export const lib: string = "Discord.JS";
 
 // Configs
 export const prefix: string = "!";
-export const embedColor: string = "#5865F2";
+export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
 
 // Client
@@ -35,33 +35,33 @@ export const debug: Snowflake = "822864498251005952";
 export const translation: Snowflake = "820689105854660699";
 
 export const translatorEmojis: Record<string, string> = {
-	"emote_warn": Emotes.actions.WARN,
-	"emote_lock": Emotes.other.LOCK,
-	"emote_fail": Emotes.other.FAIL,
-	"emote_wrench": Emotes.actions.WRENCH,
-	"emote_github": Emotes.other.GITHUB,
-	"emote_owner": Emotes.other.GUILD_OWNER,
-	"emote_online": Emotes.status.ONLINE,
-	"emote_idle": Emotes.status.IDLE,
-	"emote_dnd": Emotes.status.DND,
-	"emote_offline": Emotes.status.OFFLINE,
-	"emote_loading": Emotes.other.LOADING,
-	"emote_join": Emotes.other.JOIN,
-	"emote_leave": Emotes.other.LEAVE,
-	"emote_success": Emotes.other.SUCCESS,
-	"emote_trash": Emotes.other.TRASH,
-	"emote_edit": Emotes.other.EDIT,
-	"emote_add": Emotes.other.ADD,
-	"emote_remove": Emotes.other.REMOVE,
+	emote_warn: Emotes.actions.WARN,
+	emote_lock: Emotes.other.LOCK,
+	emote_fail: Emotes.other.FAIL,
+	emote_wrench: Emotes.actions.WRENCH,
+	emote_github: Emotes.other.GITHUB,
+	emote_owner: Emotes.other.GUILD_OWNER,
+	emote_online: Emotes.status.ONLINE,
+	emote_idle: Emotes.status.IDLE,
+	emote_dnd: Emotes.status.DND,
+	emote_offline: Emotes.status.OFFLINE,
+	emote_loading: Emotes.other.LOADING,
+	emote_join: Emotes.other.JOIN,
+	emote_leave: Emotes.other.LEAVE,
+	emote_success: Emotes.other.SUCCESS,
+	emote_trash: Emotes.other.TRASH,
+	emote_edit: Emotes.other.EDIT,
+	emote_add: Emotes.other.ADD,
+	emote_remove: Emotes.other.REMOVE,
 
-	"emote_ban": Emotes.actions.BAN,
-	"emote_kick": Emotes.actions.KICK,
-	"emote_unban": Emotes.actions.UNBAN,
-	"emote_mute": Emotes.actions.MUTE,
-}
+	emote_ban: Emotes.actions.BAN,
+	emote_kick: Emotes.actions.KICK,
+	emote_unban: Emotes.actions.UNBAN,
+	emote_mute: Emotes.actions.MUTE,
+};
 
 export const translatorConfig: Record<string, any> = {
 	interpolation: {
-		escapeValue: false
-	}
-}
+		escapeValue: false,
+	},
+};

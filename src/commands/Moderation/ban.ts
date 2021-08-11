@@ -28,7 +28,7 @@ export default class extends Command {
 	async run(message: Message, args: string[]): Promise<void> {
 		//Variable declarations
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: any = message.guild?.member(targetID);
+		let target: any = message.guild?.members.cache.get(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let notInGuild: boolean = !target;
 		let infID: number;
@@ -38,7 +38,8 @@ export default class extends Command {
 		}
 
 		//Fetches the ban list
-		const banList: Collection<string, { user: User; reason: string }> | undefined = await message.guild?.fetchBans();
+		//@ts-ignore
+		const banList: Collection<string, { user: User; reason: string }> | undefined = await message.guild?.bans.fetch();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 
 		//If the user is already banned return with a message

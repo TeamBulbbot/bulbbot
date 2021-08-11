@@ -24,7 +24,8 @@ export default class extends Command {
 		this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) got the logs for ${dayBefore.toLocaleDateString()}`);
 
 		if (fs.existsSync(`${__dirname}/../../../logs/${dayBefore.toLocaleDateString()}-combined.log`)) {
-			message.channel.send(`Showing the logs for **${dayBefore.toLocaleDateString()}**.\n1: Combined, 2: Error, 3: Info, 4: Warn, 5: Client, 6: Database`, {
+			message.channel.send({
+				content: `Showing the logs for **${dayBefore.toLocaleDateString()}**.\n1: Combined, 2: Error, 3: Info, 4: Warn, 5: Client, 6: Database`,
 				files: [
 					`${__dirname}/../../../logs/${dayBefore.toLocaleDateString()}-combined.log`,
 					`${__dirname}/../../../logs/error/${dayBefore.toLocaleDateString()}-error.log`,

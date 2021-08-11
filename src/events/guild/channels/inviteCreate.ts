@@ -1,11 +1,11 @@
 import Event from "../../../structures/Event";
-import { Invite } from "discord.js";
+import { Invite, Guild } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -21,6 +21,6 @@ export default class extends Event {
 			max_uses: invite.maxUses === 0 ? "unlimited" : invite.maxUses,
 		});
 
-		await loggingManager.sendEventLog(this.client, invite.guild, "invite", log);
+		await loggingManager.sendEventLog(this.client, <Guild>invite.guild, "invite", log);
 	}
 }

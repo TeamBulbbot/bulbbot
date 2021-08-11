@@ -53,6 +53,6 @@ export default class extends Command {
 			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild!.id, { user: message.author }), memberObj.avatarUrl)
 			.setTimestamp();
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

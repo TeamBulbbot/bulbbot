@@ -15,7 +15,7 @@ const clearanceManager: ClearanceManager = new ClearanceManager();
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args: any) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -26,7 +26,7 @@ export default class extends Event {
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(message.author.id) !== undefined) return;
 
-		if (message.channel.type === "dm") return DMUtils(this.client, message);
+		if (message.channel.type === "DM") return DMUtils(this.client, message);
 		if (!message.guild || message.author.bot) return;
 
 		// checks if the guild is in the blacklist
@@ -72,8 +72,8 @@ export default class extends Event {
 		};
 
 		const resolved = await this.resolveCommand(options);
-		if(!resolved) return;
-		if(resolved instanceof Message) return resolved;
+		if (!resolved) return;
+		if (resolved instanceof Message) return resolved;
 		command = resolved;
 
 		let used: string = `${prefix}${command.name}`;
@@ -84,26 +84,26 @@ export default class extends Event {
 	}
 
 	public async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
-		const {message, baseCommand, args} = options;
+		const { message, baseCommand, args } = options;
 		let command = baseCommand;
 		if (!message.guild?.me) await message.guild?.members.fetch(this.client.user!.id);
 		if (!message.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		let currCommand: Command;
 		let i: number;
-		for(i = 0;; ++i) {
+		for (i = 0; ; ++i) {
 			const commandArgs = args.slice(i);
 			currCommand = command;
 
 			const invalidReason = await command.validate(message, commandArgs, options);
-			if(invalidReason !== undefined) {
-				if(!invalidReason) return;
+			if (invalidReason !== undefined) {
+				if (!invalidReason) return;
 				return message.channel.send(invalidReason);
 			}
 
-			if(!command.subCommands.length) break;
-			if(i >= args.length) break;
+			if (!command.subCommands.length) break;
+			if (i >= args.length) break;
 			command = await this.resolveSubcommand(command, commandArgs);
-			if(command === currCommand) break;
+			if (command === currCommand) break;
 		}
 		options.args = args.slice(i);
 		return command;
@@ -113,8 +113,7 @@ export default class extends Event {
 		let sCmd: SubCommand;
 		for (const subCommand of command.subCommands) {
 			sCmd = new subCommand(this.client, command);
-			if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0].toLowerCase()))
-				return sCmd;
+			if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0].toLowerCase())) return sCmd;
 		}
 
 		return command;

@@ -51,7 +51,7 @@ export default class extends Command {
 		}
 
 		message.channel.send(await this.client.bulbutils.translate("global_loading", message.guild?.id, {})).then(msg => {
-			msg.delete({ timeout: (args.length - 0.5) * massCommandSleep });
+			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
 		for (let i = 0; i < targets.length; i++) {
@@ -59,7 +59,7 @@ export default class extends Command {
 			await this.client.bulbutils.sleep(massCommandSleep);
 
 			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember = <GuildMember>await message.guild?.member(t);
+			const target: GuildMember = <GuildMember>await message.guild?.members.cache.get(t);
 			let infID: number;
 
 			if (!target) {

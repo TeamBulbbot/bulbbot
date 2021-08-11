@@ -14,5 +14,5 @@ export default async function (client: BulbBotClient, message: Message) {
 		.setImage(message.attachments.first()?.proxyURL ?? "")
 		.setTimestamp();
 
-	await channel.send(embed);
+	await channel.send({ embeds: [embed] });
 }

@@ -34,22 +34,16 @@ export default class extends SubCommand {
 			return [Emotes.other.SUCCESS.replace(NonDigits, ""), Emotes.other.FAIL.replace(NonDigits, "")].includes(reaction.emoji.id) && user.id === message.author.id;
 		};
 
-		(await msg)
-			.awaitReactions(filter, {
-				max: 1,
-				time: 60000,
-				errors: ["time"],
-			})
-			.then(async (collected: any) => {
-				const reaction = collected.first();
-				if (reaction.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
-					guild.leave();
-					(await msg).reactions.removeAll();
-					return message.channel.send("Sir yes sir, bot yeeted");
-				} else {
-					(await msg).reactions.removeAll();
-					return message.channel.send("Operation canceled");
-				}
-			});
+		(await msg).awaitReactions({ filter, max: 1, time: 60000, errors: ["time"] }).then(async (collected: any) => {
+			const reaction = collected.first();
+			if (reaction.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
+				guild.leave();
+				(await msg).reactions.removeAll();
+				return message.channel.send("Sir yes sir, bot yeeted");
+			} else {
+				(await msg).reactions.removeAll();
+				return message.channel.send("Operation canceled");
+			}
+		});
 	}
 }

@@ -39,7 +39,6 @@ export default class extends Command {
 
 		desc += `${this.client.bulbutils.guildFeatures(guild.features)}\n\n`;
 		desc += await this.client.bulbutils.translate("inviteinfo_verification_level", guild.id, { guild });
-		desc += await this.client.bulbutils.translate("inviteinfo_large", guild.id, { guild });
 
 		inviteInfo += await this.client.bulbutils.translate("inviteinfo_code", guild.id, { invite });
 		inviteInfo += `${Emotes.status.ONLINE}: \`${invite.presenceCount}\`\n`;
@@ -80,6 +79,6 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		await message.channel.send(embed);
+		await message.channel.send({ embeds: [embed] });
 	}
 }

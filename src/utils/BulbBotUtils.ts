@@ -345,7 +345,7 @@ export default class {
 
 	checkUser(message: Message, user: GuildMember): UserHandle {
 		if (
-			message.author.id === message.guild?.ownerID &&
+			message.author.id === message.guild?.ownerId &&
 			message.guild?.me &&
 			message.guild?.me.roles.highest.id !== user.roles.highest.id &&
 			user.roles.highest.rawPosition < message.guild?.me.roles.highest.rawPosition
@@ -354,7 +354,7 @@ export default class {
 
 		if (user.id === message.author.id) return UserHandle.CANNOT_ACTION_SELF;
 
-		if (message.guild?.owner?.id === user.id) return UserHandle.CANNOT_ACTION_OWNER;
+		if (message.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
 
 		if (message.member?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
 

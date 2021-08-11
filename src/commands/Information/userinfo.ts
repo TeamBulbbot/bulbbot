@@ -29,7 +29,7 @@ export default class extends Command {
 		if (args[0] === undefined) target = message.author.id;
 		else target = args[0].replace(NonDigits, "");
 
-		let user: any = message.guild?.member(target);
+		let user: any = message.guild?.members.cache.get(target);
 		let isGuildMember = true;
 
 		if (!user) {
@@ -104,7 +104,7 @@ export default class extends Command {
 				)
 				.setTimestamp();
 
-			await message.channel.send(embed);
+			await message.channel.send({ embeds: [embed] });
 		}
 	}
 }

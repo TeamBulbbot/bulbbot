@@ -47,6 +47,6 @@ export default class extends SubCommand {
 				message.author.avatarURL({ dynamic: true }) ?? undefined,
 			);
 
-		await message.channel.send(embed);
+		await message.channel.send({ embeds: [embed] });
 	}
 }

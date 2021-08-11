@@ -1,6 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { GuildChannel, GuildMember, Message, Snowflake, TextChannel } from "discord.js";
+import { GuildChannel, GuildMember, Message, Snowflake, TextChannel, User } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import * as Emotes from "../../../emotes.json";
@@ -92,13 +92,13 @@ export default class extends SubCommand {
 				await this.client.bulbutils.sleep(250);
 				await msg.react(Emotes.other.FAIL);
 
-				const filter = (reaction, user) => {
+				const filter = (_, user: User) => {
 					return user.id === message.author.id;
 				};
 
 				let collected;
 				try {
-					collected = await msg.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] });
+					collected = await msg.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] });
 				} catch (err) {
 					await confirmMsg.delete();
 					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));

@@ -38,15 +38,16 @@ export default class extends Command {
 					if (err) console.error(err);
 				});
 
-				await message.channel.send("The evaled code is more than 2000 characters so I am giving you a file instead, have fun 🙂", {
+				await message.channel.send({
+					content: "The evaled code is more than 2000 characters so I am giving you a file instead, have fun 🙂",
 					files: [`${__dirname}/../../../files/EVAL-${message.guild?.id}.js`],
 				});
 
 				return;
 			}
 
-			await message.channel.send({ code: "js" });
-		} catch (err) {
+			await message.channel.send(`\`\`\`js\n${evaled}\n\`\`\``);
+		} catch (err: any) {
 			await message.channel.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``);
 		}
 	}

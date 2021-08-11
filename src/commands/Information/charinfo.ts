@@ -63,6 +63,6 @@ export default class extends Command {
 		if (text === "") text = "Unable to find any data about the given character(s)";
 		else if (text.length >= 1000) text = text.substring(0, 1000) + "...";
 
-		return message.channel.send(text, { code: "" });
+		return message.channel.send(`\`\`\`${text}\`\`\``);
 	}
 }

@@ -9,16 +9,16 @@ export default class SubCommand extends Command {
 	public readonly parent: Command;
 
 	get qualifiedName() {
-		return `${this.parent.qualifiedName} ${this.name}`
+		return `${this.parent.qualifiedName} ${this.name}`;
 	}
 
-	constructor(client: BulbBotClient, parent: Command, options: CommandOptions = {name: "missing name"}) {
+	constructor(client: BulbBotClient, parent: Command, options: CommandOptions = { name: "missing name" }) {
 		super(client, options);
 		this.parent = parent;
 	}
 
 	public async run(message: Message, args: string[]): Promise<any> {
-		if(!args.length || !this.subCommands.length) throw new CommandException(`SubCommand \`${this.qualifiedName}\` doesn't provide a run method!`);
+		if (!args.length || !this.subCommands.length) throw new CommandException(`SubCommand \`${this.qualifiedName}\` doesn't provide a run method!`);
 		return super.run(message, args);
 	}
 }

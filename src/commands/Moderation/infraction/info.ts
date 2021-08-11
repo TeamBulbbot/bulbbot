@@ -66,12 +66,9 @@ export default class extends SubCommand {
 			.setColor(embedColor)
 			.setImage(<string>(image ? image[0] : null))
 			.setThumbnail(user.avatarUrl)
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, { user: message.author }),
-				<string>message.author.avatarURL(),
-			)
+			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild?.id, { user: message.author }), <string>message.author.avatarURL())
 			.setTimestamp();
 
-		await message.channel.send(embed);
+		await message.channel.send({ embeds: [embed] });
 	}
 }

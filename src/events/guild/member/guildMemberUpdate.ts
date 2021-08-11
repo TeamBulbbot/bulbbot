@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, User, Util } from "discord.js";
+import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, User, Util, Permissions } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 // import InfractionsManager from "../../../utils/managers/InfractionsManager";
 // import DatabaseManager from "../../../utils/managers/DatabaseManager";
@@ -9,7 +9,7 @@ const loggingManager: LoggingManager = new LoggingManager();
 // const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -23,7 +23,7 @@ export default class extends Event {
 
 		let change: "newrole" | "removedrole" | "nickname";
 		let message: string;
-		let audit: GuildAuditLogs
+		let audit: GuildAuditLogs;
 		let auditLog: GuildAuditLogsEntry | undefined;
 		let executor: User;
 
@@ -32,26 +32,25 @@ export default class extends Event {
 		else if (oldMember.nickname !== newMember.nickname) change = "nickname";
 		else return;
 
-		if (newMember.guild.me?.hasPermission("VIEW_AUDIT_LOG")) {
+		if (newMember.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
 			try {
-				switch(change) {
+				switch (change) {
 					case "newrole":
 					case "removedrole":
-						audit = (await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" }));
+						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
 						break;
 					default:
-						audit = (await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" }));
+						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 						break;
 				}
 				auditLog = audit.entries.first();
 			} catch (e) {
-				if(!(e instanceof DiscordAPIError)) throw e;
+				if (!(e instanceof DiscordAPIError)) throw e;
 			}
 		}
-		switch(change)
-		{
+		switch (change) {
 			case "nickname":
-				if (auditLog?.changes && auditLog.changes[0].key === "nick") executor = auditLog.executor;
+				if (auditLog?.changes && auditLog.changes[0].key === "nick") executor = <User>auditLog.executor;
 				message = await this.client.bulbutils.translate("event_member_update_nickname", newMember.guild.id, {
 					user: newMember.user,
 					before: oldMember.nickname ?? oldMember.user.username,
@@ -66,17 +65,15 @@ export default class extends Event {
 				if (!role) return;
 
 				if (auditLog) {
-					const translateKey = (change === "newrole") ? "event_member_update_role_add_moderator"
-					                                            : "event_member_update_role_remove_moderator";
-					executor = auditLog.executor;
+					const translateKey = change === "newrole" ? "event_member_update_role_add_moderator" : "event_member_update_role_remove_moderator";
+					executor = <User>auditLog.executor;
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
 						moderator: executor,
 					});
 				} else {
-					const translateKey = (change === "newrole") ? "event_member_update_role_add"
-					                                            : "event_member_update_role_remove";
+					const translateKey = change === "newrole" ? "event_member_update_role_add" : "event_member_update_role_remove";
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
@@ -86,10 +83,6 @@ export default class extends Event {
 				break;
 		}
 
-		await loggingManager.sendServerEventLog(
-			this.client,
-			newMember.guild,
-			Util.removeMentions(message)
-		);
+		await loggingManager.sendServerEventLog(this.client, newMember.guild, Util.removeMentions(message));
 	}
 }

@@ -48,6 +48,6 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		return message.channel.send(embed);
+		return message.channel.send({ embeds: [embed] });
 	}
 }

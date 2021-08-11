@@ -1,8 +1,9 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed, Util } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
+import axios from "axios";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -24,22 +25,24 @@ export default class extends Command {
 			this.client.guilds.cache.map(g => g.members.cache.filter(m => !m.user.bot).size).reduce((a, b) => a + b),
 		)}\``;
 
+		const gatewayBotRaw = await axios.get("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
+		const lolNotPrivateEnoughtDiscordJS = gatewayBotRaw.data.session_start_limit;
+
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild.id, { user: message.author }), <string>message.author.avatarURL({ dynamic: true }))
 			.setDescription(desc)
-			.addField("Shard Data", `Recommended Shards: \`${await Util.fetchRecommendedShards(this.client.token!, 500)}\`\n${shardData.join("")}`, true)
+			.addField("Shard Data", `${shardData.join("")}`, true)
 			.addField(
-				"Session Limit", // @ts-ignore
-				`Total: \`${this.client.ws.sessionStartLimit?.total}\`\nRemaining: \`${this.client.ws.sessionStartLimit?.remaining}\`\nReset @: <t:${Math.floor(
-					// @ts-ignore
-					Math.floor(Date.now() / 1000) + this.client.ws.sessionStartLimit?.reset_after / 1000,
+				"Session Limit",
+				`Total: \`${lolNotPrivateEnoughtDiscordJS.total}\`\nRemaining: \`${lolNotPrivateEnoughtDiscordJS.remaining}\`\nReset @: <t:${Math.floor(
+					Math.floor(Date.now() / 1000) + lolNotPrivateEnoughtDiscordJS.reset_after / 1000,
 				)}>`,
 				true,
 			)
 			.setTimestamp();
 
-		await message.channel.send(embed);
+		await message.channel.send({ embeds: [embed] });
 	}
 }
 

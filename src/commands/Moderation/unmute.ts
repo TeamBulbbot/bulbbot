@@ -27,7 +27,7 @@ export default class extends Command {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>message.guild?.member(targetID);
+		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
 		const muteRole: Snowflake = <Snowflake>await databaseManager.getMuteRole(<Snowflake>message.guild?.id);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
@@ -94,7 +94,7 @@ export default class extends Command {
 					};
 
 					msg
-						.awaitReactions(filter, { max: 1, time: 30000, errors: ["time"] })
+						.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] })
 						.then(async collected => {
 							const reaction = collected.first();
 

@@ -89,6 +89,6 @@ export default class extends SubCommand {
 			.setDescription(description.join("\n\n"))
 			.setFooter(await this.client.bulbutils.translate("automod_settings_footer", message.guild?.id, {}), "https://cdn.discordapp.com/emojis/833770837575860305.png?v=1");
 
-		await message.channel.send(embed);
+		await message.channel.send({ embeds: [embed] });
 	}
 }

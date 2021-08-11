@@ -12,7 +12,7 @@ export default class extends Client {
 	public commands: Collection<string, Command>;
 	public aliases: Collection<string, string>;
 	public events: Collection<string, Event>;
-	public defaultPerms!: Readonly<BitField<PermissionString>>;
+	public defaultPerms!: Readonly<BitField<PermissionString, bigint>>;
 	private readonly utils: Util;
 	public readonly bulbutils: BulbBotUtils;
 	public userClearance: number = 0;
@@ -22,14 +22,11 @@ export default class extends Client {
 	constructor(options: any) {
 		super({
 			// @ts-ignore
-			ws: { large_threshold: 50, intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]) },
-			presence: { status: "online", activity: { name: "the light shine", type: "WATCHING" } },
+			intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]),
+			presence: { status: "online" },
 			http: { version: 9 },
-			messageCacheMaxSize: 1_000,
 			messageCacheLifetime: 0,
 			messageSweepInterval: 0,
-			fetchAllMembers: false,
-			disableMentions: "everyone",
 			restTimeOffset: 500,
 		});
 		this.validate(options);

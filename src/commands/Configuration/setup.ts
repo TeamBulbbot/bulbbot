@@ -19,7 +19,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 export interface PromptOptions {
 	defaultText?: string;
 	maxtime?: number;
-};
+}
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -64,39 +64,36 @@ export default class extends Command {
 		// This is after language to benefit from translation
 		//await message.channel.send(`The answer in parenthesis at the end of prompts will be used if you respond to a prompt with your prefix (currently \`${dbguild.prefix}\`)`);
 
-		if ((result = await this.prompt(
+		if (
+			(result = await this.prompt(
 				message,
 				ConfigPart.prefix,
 				`The answer in parenthesis at the end of prompts will be used if you respond to a prompt with your prefix (currently \`${dbguild.prefix}\`)\n\nPlease choose your server prefix.`,
 				dbguild.prefix,
 				guildSetup,
-			)) === null)
+			)) === null
+		)
 			return;
 		this.client.prefix = guildSetup.prefix!;
 
-		if ((result = await this.prompt(
-				message,
-				ConfigPart.timezone,
-				`What is your timezone?`,
-				dbguild.timezone,
-				guildSetup
-			)) === null)
-			return;
+		if ((result = await this.prompt(message, ConfigPart.timezone, `What is your timezone?`, dbguild.timezone, guildSetup)) === null) return;
 		guildSetup.timezone = result.toUpperCase();
 
 		const muteroleCandidate: string = message.guild?.roles.cache.find(role => role.name === "Muted")?.id || dbguild.muterole || "Create one for me";
-		if ((result = await this.prompt(message, ConfigPart.muterole, `Choose a role to use for muting members.`, muteroleCandidate, guildSetup, {defaultText: NonDigits.test(muteroleCandidate) ? muteroleCandidate : `<@&${muteroleCandidate}>`})) === null) return;
+		if (
+			(result = await this.prompt(message, ConfigPart.muterole, `Choose a role to use for muting members.`, muteroleCandidate, guildSetup, {
+				defaultText: NonDigits.test(muteroleCandidate) ? muteroleCandidate : `<@&${muteroleCandidate}>`,
+			})) === null
+		)
+			return;
 		if (!dbguild.muterole && result.toLowerCase() === "remove") guildSetup.muterole = dbguild.muterole;
 		else if (result.toLowerCase() === "disable") guildSetup.muterole = null;
 		else if (result.toLowerCase() !== "create one for me") guildSetup.muterole = result.replace(NonDigits, "");
 
-		if ((result = await this.prompt(
-				message,
-				ConfigPart.automod,
-				!amEnabled ? `Would you like to enable Bulbbot Automod?` : `Review Automod configuration?`,
-				!amEnabled ? "Yes" : "No",
-				guildSetup)
-			) === null)
+		if (
+			(result = await this.prompt(message, ConfigPart.automod, !amEnabled ? `Would you like to enable Bulbbot Automod?` : `Review Automod configuration?`, !amEnabled ? "Yes" : "No", guildSetup)) ===
+			null
+		)
 			return;
 		/* TODO
 			If "yes", delegate to automod guided setup, then proceed
@@ -104,8 +101,8 @@ export default class extends Command {
 		*/
 		if (guildSetup.automod === "yes") {
 			const amSetup = new automod(this.client, this);
-			guildSetup.automod_settings = <AutoModSetup> await amSetup.run(message, [guildSetup.prefix!]);
-			if(guildSetup.automod_settings === null) return;
+			guildSetup.automod_settings = <AutoModSetup>await amSetup.run(message, [guildSetup.prefix!]);
+			if (guildSetup.automod_settings === null) return;
 		}
 
 		if ((result = await this.prompt(message, ConfigPart.logging, !lgEnabled ? `Would you like to set up logging?` : `Review logging configuration?`, !lgEnabled ? "Yes" : "No", guildSetup)) === null)
@@ -116,7 +113,11 @@ export default class extends Command {
 		*/
 
 		const autoroleCandidate = dbguild.autorole || "Disable";
-		if ((result = await this.prompt(message, ConfigPart.autorole, `Would you like to set an auto-role to be added when new members join the server?`, autoroleCandidate, guildSetup, {defaultText: NonDigits.test(autoroleCandidate) ? autoroleCandidate : `<@&${autoroleCandidate}>`})) === null)
+		if (
+			(result = await this.prompt(message, ConfigPart.autorole, `Would you like to set an auto-role to be added when new members join the server?`, autoroleCandidate, guildSetup, {
+				defaultText: NonDigits.test(autoroleCandidate) ? autoroleCandidate : `<@&${autoroleCandidate}>`,
+			})) === null
+		)
 			return;
 		if (!dbguild.autorole && result.toLowerCase() === "disable") guildSetup.autorole = dbguild.autorole;
 		else if (result.toLowerCase() === "disable") guildSetup.autorole = null;
@@ -130,8 +131,8 @@ export default class extends Command {
 		if (maxtime < 1000) maxtime *= 60000; // Permit maxtime in minutes
 		const partName: string = Object.getOwnPropertyNames(ConfigPart).find(n => ConfigPart[n] === part)!;
 		const defaultText = options.defaultText ?? `\`${defaultOption}\``;
-		await message.channel.send(`${text} (${defaultText})`, {allowedMentions: {parse: []}});
-		const response = (await message.channel.awaitMessages(this.filter(part, message.author), { max: 1, time: maxtime })).first();
+		await message.channel.send({ content: `${text} (${defaultText})`, allowedMentions: { parse: [] } });
+		const response = (await message.channel.awaitMessages({ filter: this.filter(part, message.author), max: 1, time: maxtime })).first();
 		if (!response) {
 			await this.timedout(part, message, guildSetup);
 			return null;
@@ -173,11 +174,9 @@ export default class extends Command {
 			if (guildSetup.muterole?.toLowerCase() === "create one for me") {
 				guildSetup.muterole = await message
 					.guild!.roles.create({
-						data: {
-							name: "Muted", // op: Localization
-							permissions: 0,
-							color: 0x808080, // Grayish?
-						},
+						name: "Muted", // op: Localization
+						permissions: undefined,
+						color: 0x808080, // Grayish?
 					})
 					.then(r => r.id)
 					.catch(_ => null);
@@ -189,7 +188,6 @@ export default class extends Command {
 			// TODO
 			// take care of this in automod guided and noop here,
 			// or do all changes here to make future batching easier?
-
 		}
 
 		if (guildSetup.logging) {
@@ -237,6 +235,7 @@ export default class extends Command {
 		await this.applySetup(message, partialSetup);
 	}
 
+	// note from philip, Idk what the CollectorFilter wants :shrug:
 	/** @internal */
 	public _filter(user: User, f: CollectorFilter): CollectorFilter {
 		// Only accept messages from the command issuer
@@ -247,127 +246,111 @@ export default class extends Command {
 	private filter(part: ConfigPart, user: User): CollectorFilter {
 		switch (part) {
 			case ConfigPart.language:
-				return this._filter(
-					user,
-					async (message: Message): Promise<boolean> => {
-						if (!this.client.bulbutils.languages[message.content]) {
-							await message.channel.send(
-								await this.client.bulbutils.translate("event_message_args_unexpected", message.guild?.id, {
-									argument: message.content,
-									arg_expected: "language:string",
-									arg_provided: message.content,
-									usage: "configure language <language>",
-								}),
-							);
-							return false;
-						}
+				return this._filter(user, async (message: Message): Promise<boolean> => {
+					if (!this.client.bulbutils.languages[message.content]) {
+						await message.channel.send(
+							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild?.id, {
+								argument: message.content,
+								arg_expected: "language:string",
+								arg_provided: message.content,
+								usage: "configure language <language>",
+							}),
+						);
+						return false;
+					}
 
-						return true;
-					},
-				);
+					return true;
+				});
 			case ConfigPart.prefix:
-				return this._filter(
-					user,
-					async (message: Message): Promise<boolean> => {
-						if (message.content.length > 255) {
-							await message.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", message.guild?.id, {}));
-							return false;
-						}
+				return this._filter(user, async (message: Message): Promise<boolean> => {
+					if (message.content.length > 255) {
+						await message.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", message.guild?.id, {}));
+						return false;
+					}
 
-						return true;
-					},
-				);
+					return true;
+				});
 			case ConfigPart.timezone:
-				return this._filter(
-					user,
-					async (message: Message): Promise<boolean> => {
-						if (!this.client.bulbutils.timezones[message.content.toUpperCase()]) {
+				return this._filter(user, async (message: Message): Promise<boolean> => {
+					if (!this.client.bulbutils.timezones[message.content.toUpperCase()]) {
+						await message.channel.send(
+							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild?.id, {
+								argument: message.content,
+								arg_expected: "timezone:string",
+								arg_provided: message.content,
+								usage: "configure timezone <timezone>",
+							}),
+						);
+						return false;
+					}
+
+					return true;
+				});
+			case ConfigPart.muterole:
+				return this._filter(user, async (message: Message): Promise<boolean> => {
+					if (message.content.toLowerCase() !== "remove" && message.content.toLowerCase() !== "create one for me") {
+						const role: string = RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content;
+						const rTemp = message.guild?.roles.cache.get(role);
+						if (rTemp === undefined || (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < rTemp.rawPosition)) {
 							await message.channel.send(
-								await this.client.bulbutils.translate("event_message_args_unexpected", message.guild?.id, {
-									argument: message.content,
-									arg_expected: "timezone:string",
-									arg_provided: message.content,
-									usage: "configure timezone <timezone>",
+								await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+									type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
+									arg_provided: role,
+									arg_expected: "role:Role",
+									usage: "configure mute_role <role>",
 								}),
 							);
 							return false;
 						}
+					}
 
-						return true;
-					},
-				);
-			case ConfigPart.muterole:
-				return this._filter(
-					user,
-					async (message: Message): Promise<boolean> => {
-						if (message.content.toLowerCase() !== "remove" && message.content.toLowerCase() !== "create one for me") {
-							const role: string = RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content;
-							const rTemp = message.guild?.roles.cache.get(role);
-							if (rTemp === undefined || (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < rTemp.rawPosition)) {
+					return true;
+				});
+			case ConfigPart.automod:
+			case ConfigPart.logging:
+				return this._filter(user, async (message: Message): Promise<boolean> => {
+					switch (message.content.toLowerCase()) {
+						case "enable": // Opportunity for localization here
+						case "yes":
+						case "y":
+							message.content = "yes";
+							return true;
+						case "disable":
+						case "no":
+						case "n":
+							message.content = "no";
+							return true;
+					}
+
+					return false;
+				});
+			case ConfigPart.autorole:
+				return this._filter(user, async (message: Message): Promise<boolean> => {
+					switch (message.content.toLowerCase()) {
+						case "disable":
+						case "no":
+						case "n":
+							return true;
+						default:
+							const role = message.guild?.roles.cache.get(RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content);
+							if (role === undefined) {
 								await message.channel.send(
 									await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 										type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
-										arg_provided: role,
 										arg_expected: "role:Role",
-										usage: "configure mute_role <role>",
+										arg_provided: message.content,
+										usage: "configure auto_role <role>",
 									}),
 								);
 								return false;
 							}
-						}
-
-						return true;
-					},
-				);
-			case ConfigPart.automod:
-			case ConfigPart.logging:
-				return this._filter(
-					user,
-					async (message: Message): Promise<boolean> => {
-						switch (message.content.toLowerCase()) {
-							case "enable": // Opportunity for localization here
-							case "yes":
-							case "y":
-								message.content = "yes";
-								return true;
-							case "disable":
-							case "no":
-							case "n":
-								message.content = "no";
-								return true;
-						}
-
-						return false;
-					},
-				);
-			case ConfigPart.autorole:
-				return this._filter(
-					user,
-					async (message: Message): Promise<boolean> => {
-						switch (message.content.toLowerCase()) {
-							case "disable":
-							case "no":
-							case "n":
-								return true;
-							default:
-								const role = message.guild?.roles.cache.get(RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content);
-								if (role === undefined) {
-									await message.channel.send(await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-										type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
-										arg_expected: "role:Role",
-										arg_provided: message.content,
-										usage: "configure auto_role <role>"
-									}));
-									return false;
-								}
-								if (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < role.rawPosition) {
-									await message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id, {}));
-									return false;
-								}
-								return true;
-						}
-					},
-				);
+							if (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < role.rawPosition) {
+								await message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id, {}));
+								return false;
+							}
+							return true;
+					}
+				});
 			default:
 				throw Error(); // Avoid garbled output and bad DB writes if something ain't right
 		}

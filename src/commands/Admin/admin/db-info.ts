@@ -34,7 +34,8 @@ export default class extends SubCommand {
 			if (err) console.error(err);
 		});
 
-		await message.channel.send(`Entire database configuration for ${guild.name}`, {
+		await message.channel.send({
+			content: `Entire database configuration for ${guild.name}`,
 			files: [`${__dirname}/../../../../files/DB-INFO-${message.guild?.id}.json`],
 		});
 	}

@@ -172,7 +172,7 @@ export default class {
 			return infID;
 		} else {
 			await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
-			await guild.member(target.id)?.ban({ reason: reasonLog });
+			await guild.members.cache.get(target.id)?.ban({ reason: reasonLog });
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Ban");
 			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 

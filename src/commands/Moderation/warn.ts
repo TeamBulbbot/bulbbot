@@ -25,7 +25,7 @@ export default class extends Command {
 	async run(message: Message, args: string[]): Promise<void> {
 		//Variable declarations
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>message.guild?.member(targetID);
+		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 

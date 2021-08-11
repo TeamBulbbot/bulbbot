@@ -1,11 +1,11 @@
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, TextChannel } from "discord.js";
+import { GuildAuditLogs, TextChannel, Permissions } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
-	constructor(...args) {
+	constructor(...args: any[]) {
 		// @ts-ignore
 		super(...args, {
 			on: true,
@@ -13,10 +13,10 @@ export default class extends Event {
 	}
 
 	public async run(newChannel: TextChannel): Promise<void> {
-		if (!newChannel.guild.me?.hasPermission("VIEW_AUDIT_LOG")) return;
+		if (!newChannel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
 		const logs: GuildAuditLogs = await newChannel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_UPDATE" });
-		const first  = logs.entries.first();
+		const first = logs.entries.first();
 		if (!first) return;
 
 		const { executor, changes, createdTimestamp } = first;
@@ -26,12 +26,13 @@ export default class extends Event {
 		const log: string[] = [];
 
 		for (const change of changes) {
-			log.push
-				(await this.client.bulbutils.translate("event_change", newChannel.guild.id, {
+			log.push(
+				await this.client.bulbutils.translate("event_change", newChannel.guild.id, {
 					part: change.key,
 					before: change.old ? change.old : "none",
 					after: change.new ? change.new : "none",
-				}));
+				}),
+			);
 		}
 
 		await loggingManager.sendServerEventLog(

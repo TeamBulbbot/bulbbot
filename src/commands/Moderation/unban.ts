@@ -42,7 +42,7 @@ export default class extends Command {
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
-		const banList = await message.guild?.fetchBans();
+		const banList = await message.guild?.bans.fetch();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 
 		if (!bannedUser) return message.channel.send(await this.client.bulbutils.translate("not_banned", message.guild?.id, { target }));
