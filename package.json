@@ -25,7 +25,7 @@
 		"@sentry/node": "^6.11.0",
 		"@sentry/tracing": "^6.11.0",
 		"axios": "^0.21.1",
-		"discord.js": "^13.0.1",
+		"discord.js": "^13.1.0",
 		"discord.js-pagination": "^1.0.3",
 		"dotenv": "^10.0.0",
 		"emoji-unicode": "^2.0.1",
