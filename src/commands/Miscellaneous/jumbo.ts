@@ -24,7 +24,6 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		// TODO in the future, cache the images and emojis to avoid less pings pog right?
 		const PATH: string = `${__dirname}/../../../files`;
 		const TWEMOJI_VERSION: string = "13.1.0";
 
