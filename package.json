@@ -49,6 +49,7 @@
 	"devDependencies": {
 		"@messageformat/core": "^3.0.0",
 		"@types/glob": "^7.1.4",
+		"@types/sharp": "^0.28.5",
 		"prettier": "^2.3.2",
 		"sequelize-cli": "^6.2.0",
 		"typescript": "^4.3.5"
