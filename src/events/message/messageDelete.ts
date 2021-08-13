@@ -21,9 +21,11 @@ export default class extends Event {
 			user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 			user: message.author,
 			message,
-			content: message.content ? `**C:** ${Util.cleanContent(message.content, message.channel)}` : "",
-			attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}` : "",
-			embed: message.embeds.length !== 0 ? "**E:** [Embed]" : "",
+			content: message.content ? `**C:** ${Util.cleanContent(message.content, message.channel)}\n` : "",
+			reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
+			sticker: message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "",
+			attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}\n` : "",
+			embed: message.embeds.length !== 0 ? `**E:** \`\`\`json\n${JSON.stringify(message.embeds[0], null, 2)}\n\`\`\`\n` : "",
 		});
 
 		if (msg.length >= 1850) {
