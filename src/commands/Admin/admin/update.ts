@@ -26,8 +26,6 @@ export default class extends SubCommand {
 		const path: string = join(__dirname, "/../../../../");
 		cd(path);
 
-		console.log(path);
-
 		const resp: ShellString = exec(`git pull`);
 
 		//if (resp.stderr) return message.channel.send(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
