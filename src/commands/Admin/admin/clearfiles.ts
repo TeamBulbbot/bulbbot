@@ -17,7 +17,8 @@ export default class extends SubCommand {
 		const path: string = `${__dirname}/../../../../files`;
 		const files: string[] = readdirSync(path);
 		for (const file of files) {
-			if (!file.endsWith(".txt") && !file.endsWith(".js") && !file.endsWith(".json")) continue;
+			if (file.endsWith(".gitignore")) continue;
+
 			count++;
 			unlinkSync(join(path, file));
 		}
