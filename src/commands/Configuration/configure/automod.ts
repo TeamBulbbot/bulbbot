@@ -2,13 +2,13 @@ import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
-import enable from "../automod/enable";
-import settings from "../automod/settings";
-import add from "../automod/add";
-import disable from "../automod/disable";
-import remove from "../automod/remove";
-import punishment from "../automod/punishment";
-import limit from "../automod/limit";
+import enable from "./automod/enable";
+import settings from "./automod/settings";
+import add from "./automod/add";
+import disable from "./automod/disable";
+import remove from "./automod/remove";
+import punishment from "./automod/punishment";
+import limit from "./automod/limit";
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {

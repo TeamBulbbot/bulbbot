@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import BulbBotClient from "../../../structures/BulbBotClient";
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import Command from "../../../../structures/Command";
+import SubCommand from "../../../../structures/SubCommand";
+import BulbBotClient from "../../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 

@@ -1,9 +1,9 @@
-import { NonDigits } from "../../../utils/Regex";
+import { NonDigits } from "../../../../utils/Regex";
 import { Message, Snowflake } from "discord.js";
-import ClearanceManager from "../../../utils/managers/ClearanceManager";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import BulbBotClient from "../../../structures/BulbBotClient";
+import ClearanceManager from "../../../../utils/managers/ClearanceManager";
+import Command from "../../../../structures/Command";
+import SubCommand from "../../../../structures/SubCommand";
+import BulbBotClient from "../../../../structures/BulbBotClient";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 

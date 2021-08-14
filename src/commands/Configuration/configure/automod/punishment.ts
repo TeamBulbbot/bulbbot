@@ -1,10 +1,10 @@
 import { Message } from "discord.js";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import AutoModPart from "../../../utils/types/AutoModPart";
-import PunishmentType from "../../../utils/types/PunishmentType";
-import BulbBotClient from "../../../structures/BulbBotClient";
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import Command from "../../../../structures/Command";
+import SubCommand from "../../../../structures/SubCommand";
+import AutoModPart from "../../../../utils/types/AutoModPart";
+import PunishmentType from "../../../../utils/types/PunishmentType";
+import BulbBotClient from "../../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
