@@ -20,6 +20,9 @@ export default function (sequelize: Sequelize): void {
 		channel: {
 			type: DataTypes.STRING,
 		},
+		thread: {
+			type: DataTypes.STRING,
+		},
 		invite: {
 			type: DataTypes.STRING,
 		},

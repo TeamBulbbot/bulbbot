@@ -73,6 +73,10 @@ export default class extends SubCommand {
 			case "channel_logs":
 				await databaseManager.setChannel(<Snowflake>message.guild?.id, channel);
 				break;
+			case "threadlogs":
+			case "thread_logs":
+				await databaseManager.setThread(<Snowflake>message.guild?.id, channel);
+				break;
 			case "invitelogs":
 			case "invite_logs":
 				await databaseManager.setInvite(<Snowflake>message.guild?.id, channel);
@@ -114,6 +118,7 @@ export default class extends SubCommand {
 					await databaseManager.setRole(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setMember(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setChannel(<Snowflake>message.guild?.id, channel);
+					await databaseManager.setThread(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setInvite(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setJoinLeave(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
@@ -129,7 +134,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
 						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						argument_list: "`mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
+						argument_list: "`mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),
 				);
 		}

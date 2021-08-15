@@ -91,7 +91,7 @@ export default class {
 	public async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
-		if (dbGuild.other === null) return;
+		if (!dbGuild || dbGuild.other === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.other);
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
@@ -106,17 +106,26 @@ export default class {
 		);
 	}
 
-	public async sendEventLog(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "invite" | "joinleave" | "automod", log: string): Promise<void> {
+	public async sendEventLog(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinleave" | "automod", log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
 
 		if (logChannel === null) return;
-		await (<TextChannel>client.channels.cache.get(logChannel)).send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+		await (<TextChannel>client.channels.cache.get(logChannel)).send({
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
+			allowedMentions: { parse: [] },
+		});
 	}
 
-	public async sendEventLogFile(client: BulbBotClient, guild: Guild, part: "message" | "member" | "role" | "channel" | "invite" | "joinleave" | "automod", log: string, file: string): Promise<void> {
+	public async sendEventLogFile(
+		client: BulbBotClient,
+		guild: Guild,
+		part: "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinleave" | "automod",
+		log: string,
+		file: string,
+	): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
@@ -176,6 +185,9 @@ export default class {
 				break;
 			case "channel":
 				part = dbGuild.channel;
+				break;
+			case "thread":
+				part = dbGuild.thread;
 				break;
 			case "invite":
 				part = dbGuild.invite;
