@@ -1,4 +1,4 @@
-import { Snowflake, ColorResolvable } from "discord.js";
+import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData } from "discord.js";
 import * as Emotes from "./emotes.json";
 
 export const name: string = "Bulbbot";
@@ -13,13 +13,11 @@ export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
 
 // Client
-export const tag: string = "Bulbbot#9083";
-export const id: Snowflake = "755149065137815623";
-export const game: string = "Kluk suffer in TypeScript";
-export const type: string = "WATCHING";
-export const status: string = "online";
-export const fetchAllUsers: boolean = false;
-export const disableMentions: string = "everyone";
+export const tag: string = "Bulbbot#1439";
+export const id: Snowflake = "868821693571932191";
+export const activityName: string = "the light shine";
+export const type: ActivityType = "WATCHING";
+export const status: PresenceStatusData = "online";
 export const supportInvite: string = "https://bulbbot.mrphilip.xyz/discord";
 export const botInvite: string = "https://bulbbot.mrphilip.xyz/invite";
 

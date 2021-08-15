@@ -23,7 +23,6 @@ export default class extends Client {
 		super({
 			// @ts-ignore
 			intents: new Intents(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]),
-			presence: { status: "online" },
 			http: { version: 9 },
 			messageCacheLifetime: 0,
 			messageSweepInterval: 0,

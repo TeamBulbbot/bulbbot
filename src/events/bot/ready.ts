@@ -1,4 +1,5 @@
 import Event from "../../structures/Event";
+import { activityName, type, status } from "../../Config";
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -9,6 +10,14 @@ export default class extends Event {
 	}
 
 	async run() {
+		this.client.user?.setActivity({
+			name: activityName,
+			type,
+			url: "https://bulbbot.mrphilip.xyz/",
+		});
+
+		this.client.user?.setStatus(status);
+
 		this.client.log.client(`[CLIENT] ${this.client.user!.username} successfully logged and ready`);
 		this.client.log.client(`[CLIENT] Listening to ${this.client.events.size} event(s)`);
 		this.client.log.client(`[CLIENT] Listening to ${this.client.commands.size} command(s)`);
