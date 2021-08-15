@@ -29,6 +29,7 @@ export default class extends SubCommand {
 				await this.client.bulbutils.translate("event_message_args_unexpected", message.guild!.id, {
 					argument: partArg,
 					arg_expected: "part:string",
+					arg_provided: partArg,
 					usage: "`website`, `invites`, `words` or `words_token`",
 				}),
 			);
