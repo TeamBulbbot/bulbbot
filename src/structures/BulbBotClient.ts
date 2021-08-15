@@ -18,6 +18,7 @@ export default class extends Client {
 	public userClearance: number = 0;
 	public blacklist: Collection<string, Record<string, any>>;
 	public log: any;
+	public about: any;
 
 	constructor(options: any) {
 		super({
@@ -40,6 +41,8 @@ export default class extends Client {
 
 		this.blacklist = new Collection();
 
+		this.about = {};
+
 		this.log = logger;
 	}
 
@@ -60,6 +63,8 @@ export default class extends Client {
 		await this.utils.loadEvents();
 		await this.utils.loadCommands();
 		await this.utils.loadBlacklist();
+		await this.utils.loadAbout();
+
 		await super.login(<string>token);
 	}
 }

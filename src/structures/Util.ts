@@ -1,4 +1,5 @@
 import * as path from "path";
+import { exec, cd } from "shelljs";
 import BulbBotClient from "./BulbBotClient";
 import { promisify } from "util";
 import glob from "glob";
@@ -83,5 +84,17 @@ export default class {
 		}
 
 		this.client.log.client(`[CLIENT - BLACKLIST] Successfully blacklisted ${this.client.blacklist.size} users and guilds`);
+	}
+
+	async loadAbout(): Promise<void> {
+		cd(`${__dirname}/../../`);
+
+		this.client.about = {
+			buildId: exec(`git rev-list --all --count`, { silent: true }).stdout,
+			build: {
+				hash: exec(`git rev-parse --short HEAD`, { silent: true }).stdout,
+				time: exec(`git log -1 --format=%cd`, { silent: true }).stdout,
+			},
+		};
 	}
 }

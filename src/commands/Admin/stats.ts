@@ -52,9 +52,9 @@ function numberWithCommas(x: any): string {
 
 function selectEmoji(ping: number): string {
 	let emoji: string = "";
-	if (ping >= 0 && ping <= 150) emoji = Emotes.other.Good;
-	else if (ping > 150 && ping <= 300) emoji = Emotes.other.Medium;
-	else emoji = Emotes.other.Bad;
+	if (ping >= 0 && ping <= 150) emoji = Emotes.other.GOOD;
+	else if (ping > 150 && ping <= 300) emoji = Emotes.other.MEDIUM;
+	else emoji = Emotes.other.BAD;
 
 	return emoji;
 }

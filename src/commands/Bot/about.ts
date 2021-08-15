@@ -1,8 +1,9 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
 import { embedColor } from "../../Config";
-import * as shell from "shelljs";
 import BulbBotClient from "../../structures/BulbBotClient";
+import * as Emotes from "../../emotes.json";
+import { NonDigits } from "../../utils/Regex";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -16,15 +17,20 @@ export default class extends Command {
 	}
 
 	async run(message: Message): Promise<void> {
-		shell.cd(`${__dirname}/../../../`);
-		const commitHash: string = shell.exec(`git rev-parse --short HEAD`, { silent: true }).stdout;
-		const commitTime: string = shell.exec(`git log -1 --format=%cd`, { silent: true }).stdout;
-		const realCommitTime: string = this.client.bulbutils.formatDays(new Date(commitTime.slice(0, -7)));
+		const realCommitTime: string = this.client.bulbutils.formatDays(new Date(this.client.about.build.time.slice(0, -7)));
 		const latency: number = Math.floor(new Date().getTime() - message.createdTimestamp);
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
+		const row = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Invite").setStyle("LINK").setEmoji(Emotes.other.DISCORD.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/invite"),
+			new MessageButton().setLabel("Support").setStyle("LINK").setEmoji(Emotes.other.SUPPORT.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/discord"),
+			new MessageButton().setLabel("Patreon").setStyle("LINK").setEmoji(Emotes.other.PATREON.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/patreon"),
+			new MessageButton().setLabel("Source Code").setStyle("LINK").setEmoji(Emotes.other.GITHUB.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/github"),
+		]);
+
 		let desc: string = `**__Bulbbot Information__**\n`;
-		desc += `**Last Commit:**\n**Hash:** \`${commitHash}\`**Time:** ${realCommitTime}\n\n`;
+		desc += `**Version:** ${this.client.about.buildId}\n`;
+		desc += `**Last Commit:**\n**Hash:** \`${this.client.about.build.hash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;
 		desc +=
 			(await this.client.bulbutils.translate("uptime_uptime", message.guild?.id, {
@@ -35,9 +41,6 @@ export default class extends Command {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
 			.setDescription(desc)
-			.addField("Invite", `[Link](https://bulbbot.mrphilip.xyz/invite)`, true)
-			.addField("Support", `[Link](https://bulbbot.mrphilip.xyz/discord)`, true)
-			.addField("Patreon", `[Link](https://bulbbot.mrphilip.xyz/patreon)`, true)
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,
@@ -46,6 +49,6 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await message.channel.send({ embeds: [embed], components: [row] });
 	}
 }
