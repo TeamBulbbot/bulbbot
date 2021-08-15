@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			aliases: ["r"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["command:Command|SubCommand"],
+			argList: ["command:Command"],
 			usage: "<command>",
 		});
 	}
@@ -32,10 +32,8 @@ export default class extends SubCommand {
 		}
 		command.aliases.forEach(alias => this.client.aliases.delete(alias));
 
-		// we can do better than this
 		const cmdPath: string = `${command.category}\\${command.qualifiedName.replace(/ /g, "\\")}`;
-		const commandFile: string = `${process.cwd()}/build/commands/${cmdPath}.js`;//.replace(/\//g, "\\");
-		console.log(commandFile);
+		const commandFile: string = `${process.cwd()}/build/commands/${cmdPath}.js`;
 		delete require.cache[require.resolve(commandFile)];
 		let { name } = path.parse(commandFile);
 		let File = require(commandFile);

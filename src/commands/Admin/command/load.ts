@@ -19,7 +19,7 @@ export default class extends SubCommand {
 			aliases: ["l"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["command:Command|SubCommand"],
+			argList: ["command:Command"],
 			usage: "<command>",
 		});
 	}
@@ -44,7 +44,6 @@ export default class extends SubCommand {
 		return await globAsync(dirPath).then((commands: any) => {
 			mainLoop:
 			for (const commandFile of commands) {
-				console.log(commandFile);
 				if(args.length > 1) {
 					let currCommand: Command | SubCommand = command!;
 					const cmdChain: string[] = new RegExp(`${process.cwd().replace(/\\/g, "/")}/build/commands/(.+)/${cmdFile}\.js`).exec(commandFile)![1].split("/").reverse();

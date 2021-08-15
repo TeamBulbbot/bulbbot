@@ -21,7 +21,7 @@ export default class extends SubCommand {
 
 		if(!command) return;
 		if(command instanceof SubCommand) {
-			Command.resolve(this.client, command.parent.qualifiedName.split(" "))!.subCommands.splice(command.parent.subCommands.findIndex(sc => sc === command), 1);
+			command.parent.subCommands.splice(command.parent.subCommands.findIndex(sc => sc === command), 1);
 		} else {
 			this.client.commands.delete(command.name);
 		}
