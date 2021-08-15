@@ -12,6 +12,9 @@ export const prefix: string = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
 
+// pm2 configs
+export const pm2Name: string = "bulbbot";
+
 // Client
 export const tag: string = "Bulbbot#1439";
 export const id: Snowflake = "868821693571932191";
