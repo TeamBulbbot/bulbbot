@@ -85,6 +85,7 @@ export default class extends SubCommand {
 					}
 					command = loadedCommand;
 				}
+				this.client.log.client(`[CLIENT - COMMANDS] Loaded command "${command.qualifiedName}"`);
 				return message.channel.send(`Loaded command \`${command.qualifiedName}\``);
 			}
 			return message.channel.send(`Cannot load command \`${args.join(" ")}\``);

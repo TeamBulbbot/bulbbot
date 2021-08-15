@@ -52,7 +52,7 @@ export default class extends SubCommand {
 				}
 			}
 		}
-		//return message.channel.send(`Cannot load command \`${args.join(" ")}\``)
+		this.client.log.client(`[CLIENT - COMMANDS] Reloaded command "${loadedCommand.qualifiedName}"`);
 		return message.channel.send(`Reloaded command \`${loadedCommand.qualifiedName}\``)
 	}
 }
