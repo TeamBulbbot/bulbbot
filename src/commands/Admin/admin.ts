@@ -1,12 +1,10 @@
+import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
 import clearfiles from "./admin/clearfiles";
-import leave from "./admin/leave";
+import database from "./admin/database";
 import join from "./admin/join";
-import dbAdd from "./admin/db-add";
-import dbInfo from "./admin/db-info";
-import dbReset from "./admin/db-reset";
-import dbYeet from "./admin/db-yeet";
-import BulbBotClient from "../../structures/BulbBotClient";
+import leave from "./admin/leave";
+import restart from "./admin/restart";
 import update from "./admin/update";
 
 // consider refactor such that a single subcommand "db" with subcommands "add", "info", "reset", "yeet", would take care of the current "db-" commands
@@ -17,7 +15,7 @@ export default class extends Command {
 			name,
 			description: "Admin commands",
 			category: "Admin",
-			subCommands: [clearfiles, leave, join, dbAdd, dbInfo, dbReset, dbYeet, update],
+			subCommands: [clearfiles, leave, join, database, update, restart],
 			usage: "<action>",
 			minArgs: 1,
 			maxArgs: -1,
