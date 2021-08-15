@@ -14,7 +14,7 @@ export default class extends Command {
 	}
 
 	async run(message: Message): Promise<void> {
-		const latency: number = Math.floor(new Date().getTime() - message.createdTimestamp);
+		const latency: number = Math.floor(Date.now() - message.createdTimestamp);
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const embed: MessageEmbed = new MessageEmbed()
