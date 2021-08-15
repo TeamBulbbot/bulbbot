@@ -7,8 +7,6 @@ import leave from "./admin/leave";
 import restart from "./admin/restart";
 import update from "./admin/update";
 
-// consider refactor such that a single subcommand "db" with subcommands "add", "info", "reset", "yeet", would take care of the current "db-" commands
-// +1 // philip
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
