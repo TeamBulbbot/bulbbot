@@ -14,7 +14,7 @@ export default class {
 		this.emitter = (typeof options.emitter === "string" ? this.client[options.emitter] : options.emitter) || this.client;
 	}
 
-	public async run(...args: any) {
+	public async run(..._: any) {
 		throw new EventException(`Event ${this.name} doesn't contain a run method!`);
 	}
 }
