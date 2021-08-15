@@ -2,7 +2,7 @@ import BulbBotClient from "./BulbBotClient";
 import { BitField, GuildMember, Message, PermissionString, GuildChannelResolvable } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import { Permissions } from "discord.js";
-import { SubCommandClass } from "./SubCommand";
+import SubCommand from "./SubCommand";
 import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
@@ -13,7 +13,7 @@ export default class Command {
 	public readonly client: BulbBotClient;
 	public readonly name: string;
 	public readonly aliases: string[];
-	public readonly subCommands: SubCommandClass[];
+	public readonly subCommands: SubCommand[];
 	public readonly description: string;
 	public readonly category: string;
 	public readonly _usage: string;
@@ -40,7 +40,6 @@ export default class Command {
 		this.client = client;
 		this.name = options.name;
 		this.aliases = options.aliases || [];
-		this.subCommands = options.subCommands || [];
 		this.description = options.description || "No description provided";
 		this.category = options.category || "Miscellaneous";
 		this._usage = options.usage || "";
@@ -54,6 +53,7 @@ export default class Command {
 		this.maxArgs = options.maxArgs || 0;
 		this.minArgs = options.minArgs || 0;
 		this.argList = options.argList || [];
+		this.subCommands = options.subCommands?.map(sc => new sc(this.client, this)) || [];
 	}
 
 	public async run(message: Message, args: string[]): Promise<any> {
@@ -62,7 +62,7 @@ export default class Command {
 			await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
 				argument: args[args.length - 1].toLowerCase(),
 				arg_expected: this.argList[0],
-				argument_list: this.subCommands.map(sc => `\`${new sc(this.client, this).name}\``).join(", "),
+				argument_list: this.subCommands.map(sc => `\`${sc.name}\``).join(", "),
 			}),
 		);
 	}
@@ -126,5 +126,28 @@ export default class Command {
 		}
 
 		return;
+	}
+
+	public resolveSubcommand(commandPath: string[]): Command {
+		for (const subCommand of this.subCommands) {
+			if (commandPath[0].toLowerCase() === subCommand.name || subCommand.aliases.includes(commandPath[0].toLowerCase())) return subCommand;
+		}
+
+		return this;
+	}
+
+	static resolve(client: BulbBotClient, commandPath: string[]): undefined | Command {
+		if(!commandPath.length) return;
+		const cmd: string = commandPath[0];
+		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase())!);
+		if (!command) return;
+
+		for(let i = 1; i < commandPath.length; ++i) {
+			let currCommand = command;
+			command = command!.resolveSubcommand(commandPath.slice(i));
+			if(command === currCommand) break;
+		}
+
+		return command;
 	}
 }

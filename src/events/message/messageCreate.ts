@@ -6,7 +6,6 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
-import SubCommand from "../../structures/SubCommand";
 import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "src/utils/types/ResolveCommandOptions";
 
@@ -56,15 +55,15 @@ export default class extends Event {
 			return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
 		if (message.content.match(mentionRegex)) message.content = `${this.client.prefix}${message.content.replace(mentionRegex, "").trim()}`;
 
-		const [cmd, ...args] = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
-		let command: Command | undefined = this.client.commands.get(cmd.toLowerCase()) || this.client.commands.get(this.client.aliases.get(cmd.toLowerCase())!);
+		const args = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
+		let command: Command | undefined = Command.resolve(this.client, args);
 
 		if (!command) return;
 
 		const options: ResolveCommandOptions = {
 			message,
 			baseCommand: command,
-			args,
+			args: args.slice(command.qualifiedName.split(" ").length),
 			clearance,
 			premiumGuild,
 			isDev: Config.developers.includes(message.author.id),
@@ -83,39 +82,16 @@ export default class extends Event {
 		await command.run(message, options.args);
 	}
 
-	public async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
+	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
 		const { message, baseCommand, args } = options;
 		let command = baseCommand;
 		if (!message.guild?.me) await message.guild?.members.fetch(this.client.user!.id);
 		if (!message.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
-		let currCommand: Command;
-		let i: number;
-		for (i = 0; ; ++i) {
-			const commandArgs = args.slice(i);
-			currCommand = command;
-
-			const invalidReason = await command.validate(message, commandArgs, options);
-			if (invalidReason !== undefined) {
-				if (!invalidReason) return;
-				return message.channel.send(invalidReason);
-			}
-
-			if (!command.subCommands.length) break;
-			if (i >= args.length) break;
-			command = await this.resolveSubcommand(command, commandArgs);
-			if (command === currCommand) break;
+		const invalidReason = await command.validate(message, args, options);
+		if (invalidReason !== undefined) {
+			if (!invalidReason) return;
+			return message.channel.send(invalidReason);
 		}
-		options.args = args.slice(i);
-		return command;
-	}
-
-	public async resolveSubcommand(command: Command, args: string[]): Promise<Command> {
-		let sCmd: SubCommand;
-		for (const subCommand of command.subCommands) {
-			sCmd = new subCommand(this.client, command);
-			if (args[0].toLowerCase() === sCmd.name || sCmd.aliases.includes(args[0].toLowerCase())) return sCmd;
-		}
-
 		return command;
 	}
 }

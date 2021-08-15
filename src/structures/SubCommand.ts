@@ -13,7 +13,24 @@ export default class SubCommand extends Command {
 	}
 
 	constructor(client: BulbBotClient, parent: Command, options: CommandOptions = { name: "missing name" }) {
-		super(client, options);
+		super(client, { // inherit some metadata if none provided
+			name: options.name,
+			aliases: options.aliases,
+			usage: options.usage,
+			argList: options.argList,
+			examples: options.examples,
+			minArgs: options.minArgs,
+			maxArgs: options.maxArgs,
+			subCommands: options.subCommands,
+			category: options.category || parent.category,
+			clearance: options.clearance || parent.clearance,
+			userPerms: options.userPerms || parent.userPerms,
+			clientPerms: options.clientPerms || parent.clientPerms,
+			devOnly: options.devOnly || parent.devOnly,
+			subDevOnly: options.subDevOnly || parent.subDevOnly,
+			premium: options.premium || parent.premium,
+			description: options.description || parent.description,
+		});
 		this.parent = parent;
 	}
 

@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
-import MessageEvent from "../../events/message/messageCreate";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -39,7 +38,7 @@ export default class extends Command {
 
 				if (!command.subCommands.length) break;
 				if (i >= args.length) break;
-				command = await (<MessageEvent>this.client.events.get("message")).resolveSubcommand(command, commandArgs);
+				command = command.resolveSubcommand(commandArgs);
 				if (command === currCommand) break;
 			}
 
