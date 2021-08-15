@@ -28,6 +28,7 @@ const models: any[] = [
 	require("./models/Tempban").default,
 	require("./models/Tempmute").default,
 	require("./models/Blacklist").default,
+	require("./models/Remind").default,
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);

@@ -5,6 +5,7 @@ import { botDM, embedColor } from "../Config";
 export default async function (client: BulbBotClient, message: Message) {
 	const channel: TextChannel | undefined = <TextChannel | undefined>client.channels.cache.get(botDM);
 	if (!channel) return;
+	if (message.author.id === client.user?.id) return;
 
 	const embed: MessageEmbed = new MessageEmbed()
 		.setColor(embedColor)
