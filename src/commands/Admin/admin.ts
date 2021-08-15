@@ -4,6 +4,7 @@ import clearfiles from "./admin/clearfiles";
 import database from "./admin/database";
 import join from "./admin/join";
 import leave from "./admin/leave";
+import premium from "./admin/premium";
 import restart from "./admin/restart";
 import update from "./admin/update";
 
@@ -13,7 +14,7 @@ export default class extends Command {
 			name,
 			description: "Admin commands",
 			category: "Admin",
-			subCommands: [clearfiles, leave, join, database, update, restart],
+			subCommands: [clearfiles, leave, join, database, update, restart, premium],
 			usage: "<action>",
 			minArgs: 1,
 			maxArgs: -1,
