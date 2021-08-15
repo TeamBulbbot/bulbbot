@@ -27,9 +27,20 @@ i18next.init({
 sequelize
 	.authenticate()
 	.then(() => client.log.database("[DATABASE] Connecting..."))
-	.catch((err: Error) => client.log.error("[DATABASE] Connection error: ", err))
+	.catch((err: Error) => client.log.error(`[DATABASE] Connection error: ${err.name} | ${err.message} | ${err.stack}`))
 	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
 
-client.login().catch(err => {
-	client.log.error("[CLIENT] Login error: ", err);
+client.login().catch((err: Error) => {
+	client.log.error(`[CLIENT] Login error: ${err.name} | ${err.message} | ${err.stack}`);
 });
+
+process.on("exit", () => {
+	client.log.info("Proccess was killed, terminating the client and database connection");
+
+	client.destroy();
+	sequelize.close();
+
+	client.log.info("Closed everything <3");
+});
+
+process.on("unhandledRejection", (err: Error) => client.log.error(`[PROGRAM] Unhandled Rejection: ${err.name} | ${err.message} | ${err.stack}`));
