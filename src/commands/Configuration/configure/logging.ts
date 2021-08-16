@@ -3,7 +3,6 @@ import SubCommand from "../../../structures/SubCommand";
 import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, Snowflake, TextChannel } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
-import * as Emotes from "../../../emotes.json";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -90,8 +89,8 @@ export default class extends SubCommand {
 				break;
 			case "all":
 				const row = new MessageActionRow().addComponents([
-					new MessageButton().setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setLabel("Confirm").setCustomId("confirm"),
-					new MessageButton().setStyle("DANGER").setEmoji(Emotes.other.FAIL).setLabel("Cancel").setCustomId("cancel"),
+					new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
+					new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 				]);
 
 				confirmMsg = await message.channel.send({ content: await this.client.bulbutils.translate("config_logging_all_confirm", message.guild?.id, { channel }), components: [row] });

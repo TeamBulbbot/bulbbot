@@ -4,7 +4,6 @@ import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
 import BulbBotClient from "../../structures/BulbBotClient";
-import * as Emotes from "../../emotes.json";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -73,8 +72,8 @@ export default class extends Command {
 		//If the user is not in the guild force ban
 		if (notInGuild) {
 			const row = new MessageActionRow().addComponents([
-				new MessageButton().setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setLabel("Confirm").setCustomId("confirm"),
-				new MessageButton().setStyle("DANGER").setEmoji(Emotes.other.FAIL).setLabel("Cancel").setCustomId("cancel"),
+				new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
+				new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 			]);
 
 			const confirmMsg = await message.channel.send({

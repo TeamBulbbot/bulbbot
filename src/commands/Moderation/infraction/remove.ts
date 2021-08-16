@@ -2,7 +2,6 @@ import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import * as Emotes from "../../../emotes.json";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import { Infraction } from "../../../utils/types/Infraction";
 
@@ -39,8 +38,8 @@ export default class extends SubCommand {
 		let confirmMsg: Message;
 
 		const row = new MessageActionRow().addComponents([
-			new MessageButton().setLabel("Confirm").setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setCustomId("confirm"),
-			new MessageButton().setLabel("Cancel").setStyle("DANGER").setEmoji(Emotes.other.FAIL).setCustomId("cancel"),
+			new MessageButton().setLabel("Confirm").setStyle("SUCCESS").setCustomId("confirm"),
+			new MessageButton().setLabel("Cancel").setStyle("DANGER").setCustomId("cancel"),
 		]);
 
 		confirmMsg = await message.channel.send({

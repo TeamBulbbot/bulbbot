@@ -3,7 +3,6 @@ import { ButtonInteraction, Guild, GuildMember, Message, MessageActionRow, Messa
 import { NonDigits } from "../../utils/Regex";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
-import * as Emotes from "../../emotes.json";
 import { MuteType } from "../../utils/types/MuteType";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -79,8 +78,8 @@ export default class extends Command {
 			);
 		} else {
 			const row = new MessageActionRow().addComponents([
-				new MessageButton().setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setLabel("Confirm").setCustomId("confirm"),
-				new MessageButton().setStyle("DANGER").setEmoji(Emotes.other.FAIL).setLabel("Cancel").setCustomId("cancel"),
+				new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
+				new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 			]);
 
 			confirmMsg = await message.channel.send({
