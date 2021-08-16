@@ -27,7 +27,7 @@ export default class extends Command {
 
 	async run(message: Message, args: string[]): Promise<void> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
+		const target: GuildMember = <GuildMember>message.guild!.members.resolve(args[0]) || <GuildMember> await message.guild!.members.fetch(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
@@ -79,7 +79,7 @@ export default class extends Command {
 				action: await this.client.bulbutils.translate("mod_action_types.soft_ban", message.guild?.id, {}),
 				target: target.user,
 				reason,
-				infractionId: infID,
+				infraction_id: infID,
 			}),
 		);
 	}
