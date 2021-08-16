@@ -70,7 +70,7 @@ export default class Command {
 	public async validate(message: Message, args: string[], options: ResolveCommandOptions): Promise<string | undefined> {
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", message.guild?.id, {});
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.name);
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return "";
 			if (commandOverride["clearanceLevel"] > options.clearance) {
