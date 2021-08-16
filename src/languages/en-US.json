@@ -19,7 +19,7 @@
   },
 
   "global_mod_action_log": "{{action}} by: {{moderator.tag}} ({{moderator.id}}) | Target: {{target.tag}} ({{target.id}}) | Reason: {{reason}}",
-  "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
   "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` after their temporary punishment expired.`[#{{infractionID}}]`",
   "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} until {{until}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infractionID}}]`",
   "mod_action_types": {
@@ -213,6 +213,7 @@
 
   "already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
   "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
+  "ban_force_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently in the server. Do you want me to force-ban them anyway?",
 
   "purge_too_many": "{{emote_fail}} Can only purge a max of 99 messages at a time",
   "purge_too_few": "{{emote_fail}} You cannot purge less than 2 messages",
