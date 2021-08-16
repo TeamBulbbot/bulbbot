@@ -1,5 +1,5 @@
 import Command from "../../structures/Command";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
+import { ButtonInteraction, Guild, GuildMember, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -26,6 +26,7 @@ export default class extends Command {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
+		await message.guild?.members.fetch();
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
 		const muteRole: Snowflake = <Snowflake>await databaseManager.getMuteRole(<Snowflake>message.guild?.id);
@@ -77,45 +78,39 @@ export default class extends Command {
 				}),
 			);
 		} else {
-			await message.channel
-				.send(
-					await this.client.bulbutils.translate("unmute_confirm", message.guild?.id, {
-						target: target.user,
-					}),
-				)
-				.then(async msg => {
-					confirmMsg = msg;
-					await msg.react(Emotes.other.SUCCESS);
-					await this.client.bulbutils.sleep(250);
-					await msg.react(Emotes.other.FAIL);
+			const row = new MessageActionRow().addComponents([
+				new MessageButton().setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setLabel("Confirm").setCustomId("confirm"),
+				new MessageButton().setStyle("DANGER").setEmoji(Emotes.other.FAIL).setLabel("Cancel").setCustomId("cancel"),
+			]);
 
-					const filter = (reaction, user) => {
-						return user.id === message.author.id;
-					};
+			confirmMsg = await message.channel.send({
+				content: await this.client.bulbutils.translate("unmute_confirm", message.guild?.id, {
+					target: target.user,
+				}),
+				components: [row],
+			});
 
-					msg
-						.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] })
-						.then(async collected => {
-							const reaction = collected.first();
-
-							if (reaction?.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
-								await msg.delete();
-								await target.roles.remove(muteRole);
-								await message.channel.send(
-									await this.client.bulbutils.translate("unmute_special", message.guild?.id, {
-										target: target.user,
-										reason,
-									}),
-								);
-							} else {
-								await msg.delete();
-								await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
-							}
-						})
-						.catch(async () => {
-							await confirmMsg.delete();
-							await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
-						});
+			const filter = (i: ButtonInteraction) => i.user.id === message.author.id;
+			await confirmMsg
+				.awaitMessageComponent({ filter, time: 15000 })
+				.then(async (interaction: ButtonInteraction) => {
+					if (interaction.customId === "confirm") {
+						await confirmMsg.delete();
+						await target.roles.remove(muteRole);
+						await message.channel.send(
+							await this.client.bulbutils.translate("unmute_special", message.guild?.id, {
+								target: target.user,
+								reason,
+							}),
+						);
+					} else {
+						await confirmMsg.delete();
+						await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
+					}
+				})
+				.catch(async _ => {
+					await confirmMsg.delete();
+					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 				});
 		}
 	}

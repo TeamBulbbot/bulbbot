@@ -464,6 +464,13 @@
   "resolved" "https://registry.npmjs.org/@types/node/-/node-16.6.1.tgz"
   "version" "16.6.1"
 
+"@types/sharp@^0.28.5":
+  "integrity" "sha512-+RYU1NdKeDtTMau6HBbcVUCWjMiDydW4nRIGnOviwRxZxjJy0LqRdx0+YdxBKHcSlUWIYhD1XtiGQsUtInsjBQ=="
+  "resolved" "https://registry.npmjs.org/@types/sharp/-/sharp-0.28.5.tgz"
+  "version" "0.28.5"
+  dependencies:
+    "@types/node" "*"
+
 "@types/ws@^7.4.7":
   "integrity" "sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww=="
   "resolved" "https://registry.npmjs.org/@types/ws/-/ws-7.4.7.tgz"
