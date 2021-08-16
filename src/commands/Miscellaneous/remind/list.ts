@@ -5,7 +5,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import { embedColor } from "../../../Config";
 
-const { listReminders }: ReminderManager = new ReminderManager();
+const { listUserReminders }: ReminderManager = new ReminderManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -15,18 +15,18 @@ export default class extends SubCommand {
 	}
 
 	public async run(message: Message): Promise<void | Message> {
-		const reminders: any = await listReminders(message.author.id);
+		const reminders: any = await listUserReminders(message.author.id);
 		let desc: string = "";
 
 		for (let i = 0; i < reminders.length; i++) {
 			const reminder = reminders[i];
-			desc += `\`[#${reminder.id}]\` ${reminder.reason} expires <t:${reminder.expireTime}:R>\n`;
+			desc += `\`[#${reminder.id}]\` ${reminder.reason} **expires** <t:${reminder.expireTime}:R>\n`;
 		}
 
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
-			.setDescription(desc)
-			.setAuthor("Only showing the top 10 closest reminders")
+			.setDescription(desc.length > 0 ? desc : await this.client.bulbutils.translate("remind_list_none", message.guild?.id, {}))
+			.setAuthor(reminders.length === 10 ? await this.client.bulbutils.translate("remind_list_top10", message.guild?.id, {}) : "")
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
 					user: message.author,

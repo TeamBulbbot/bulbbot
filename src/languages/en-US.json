@@ -241,6 +241,16 @@
 
   "invite_desc": "**Invite the bot to your server**\n{{bot_invite}}\n\n**Join the support server**\n{{support_guild}}",
 
+  "remind_list_none": "You have not set any reminders",
+  "remind_list_top10": "Only showing the top 10 closets reminders",
+  "remind_remove_unable_to_find": "{{emote_fail}} Unable to find a reminder with the ID of `{{reminderId}}`",
+  "remind_remove_removed": "{{emote_success}} Successfully removed the reminder with the ID of `{{reminderId}}`",
+  "remind_set_how_to_get_reminded": "How would you like to get reminded?",
+  "remind_set_dm": "Send reminder in DM",
+  "remind_set_channel": "Send reminder in channel",
+  "remind_set_select_dm": "Will notify you in your dms **<t:{{duration}}:R>**",
+  "remind_set_select_channel": "Will notify you in this chanenl **<t:{{duration}}:R>**",
+
   "inviteinfo_error": "{{emote_warn}} Unable to find a server with that invite",
   "inviteinfo_verification_level": "Verification Level: `{{guild.verificationLevel}}`\n",
   "inviteinfo_large": "Large: `{{guild.large}}`\n",

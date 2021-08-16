@@ -43,12 +43,18 @@ export default class {
 	}
 
 	public async deleteUserReminder(id: number, userId: Snowflake): Promise<boolean> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "id" = $Id AND "userId" = $UserId', {
-			bind: { Id: id, UserId: userId },
-			type: QueryTypes.SELECT,
-		});
+		let response: Record<string, any>;
 
-		// somewhere here with some validation idk too tired to think
+		try {
+			response = await sequelize.query('SELECT * FROM reminds WHERE "id" = $Id AND "userId" = $UserId', {
+				bind: { Id: id, UserId: userId },
+				type: QueryTypes.SELECT,
+			});
+		} catch (_) {
+			response = [];
+		}
+
+		if (response.length === 0) return false;
 
 		await sequelize.query('DELETE FROM reminds WHERE "id" = $Id AND "userId" = $UserId', {
 			bind: {
@@ -69,7 +75,7 @@ export default class {
 			type: QueryTypes.DELETE,
 		});
 	}
-	public async listReminders(userId: Snowflake): Promise<any> {
+	public async listUserReminders(userId: Snowflake): Promise<any> {
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "userId" = $UserId LIMIT 10', {
 			bind: {
 				UserId: userId,
@@ -78,5 +84,13 @@ export default class {
 		});
 
 		return response;
+	}
+
+	public async getAllReminders(): Promise<any> {
+		const reminders: Record<string, any> = await sequelize.query("SELECT * FROM reminds", {
+			type: QueryTypes.SELECT,
+		});
+
+		return reminders;
 	}
 }

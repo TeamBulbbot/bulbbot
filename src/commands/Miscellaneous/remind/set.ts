@@ -28,19 +28,33 @@ export default class extends SubCommand {
 		if (duration > <number>parse("1y")) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", message.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
-			new MessageButton().setCustomId("dm").setLabel("Send reminder in DM").setStyle("PRIMARY"),
-			new MessageButton().setCustomId("channel").setLabel("Send reminder in channel").setStyle("SUCCESS"),
+			new MessageButton()
+				.setCustomId("dm")
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", message.guild?.id, {}))
+				.setStyle("PRIMARY"),
+			new MessageButton()
+				.setCustomId("channel")
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", message.guild?.id, {}))
+				.setStyle("SUCCESS"),
 		]);
 
 		const row2 = new MessageActionRow().addComponents([
-			new MessageButton().setCustomId("dm").setLabel("Send reminder in DM").setStyle("PRIMARY").setDisabled(true),
-			new MessageButton().setCustomId("channel").setLabel("Send reminder in channel").setStyle("SUCCESS").setDisabled(true),
+			new MessageButton()
+				.setCustomId("dm")
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", message.guild?.id, {}))
+				.setStyle("PRIMARY")
+				.setDisabled(true),
+			new MessageButton()
+				.setCustomId("channel")
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", message.guild?.id, {}))
+				.setStyle("SUCCESS")
+				.setDisabled(true),
 		]);
 
 		duration = Math.floor(Date.now() / 1000) + duration / 1000;
 
 		const msg: Message = await message.reply({
-			content: `How would you like to get reminded?`,
+			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", message.guild?.id, {}),
 			components: [row],
 		});
 
@@ -50,20 +64,17 @@ export default class extends SubCommand {
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (interaction.customId === "dm") {
 				createReminder(reason, duration, message.author.id, "", "");
-				interaction.reply(`Aight roger that will remind you in dms **<t:${duration}:R>**`);
+				interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", message.guild?.id, { duration }));
 			} else {
 				createReminder(reason, duration, message.author.id, message.channel.id, message.id);
-				interaction.reply(`Aight roger that will remind you here **<t:${duration}:R>**`);
+				interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", message.guild?.id, { duration }));
 			}
 
 			msg.edit({ components: [row2] });
 			let reminder: any = await getLatestReminder(message.author.id);
 
 			setTimeout(async () => {
-				if (!(await getReminder(reminder.id))) {
-					deleteReminder(reminder.id);
-					return;
-				}
+				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
 
 				if (reminder.channelId !== "") {
 					// @ts-ignore
@@ -79,7 +90,10 @@ export default class extends SubCommand {
 					});
 				} else {
 					const user: User = await this.client.users.fetch(reminder.userId);
-					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``);
+
+					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch(_ => {
+						this.client.log.info(`[REMIND - DM] Unable to dm ${user.tag} (${user.id}) with the reminder of ${reminder.reason}`);
+					});
 				}
 
 				deleteReminder(reminder.id);

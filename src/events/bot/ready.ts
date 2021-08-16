@@ -1,5 +1,8 @@
 import Event from "../../structures/Event";
 import { activityName, type, status } from "../../Config";
+import Restoration from "../../utils/Restoration";
+
+const { loadReminders }: Restoration = new Restoration();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -17,6 +20,8 @@ export default class extends Event {
 		});
 
 		this.client.user?.setStatus(status);
+
+		await loadReminders(this.client);
 
 		this.client.log.client(`[CLIENT] ${this.client.user!.username} successfully logged and ready`);
 		this.client.log.client(`[CLIENT] Listening to ${this.client.events.size} event(s)`);
