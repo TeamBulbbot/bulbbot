@@ -20,8 +20,8 @@
 
   "global_mod_action_log": "{{action}} by: {{moderator.tag}} ({{moderator.id}}) | Target: {{target.tag}} ({{target.id}}) | Reason: {{reason}}",
   "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by {{moderator.tag}} `({{moderator.id}})` after their temporary punishment expired.`[#{{infractionID}}]`",
-  "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} until {{until}} by {{moderator.tag}} `({{moderator.id}})` for **{{reason}}** `[#{{infractionID}}]`",
+  "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} by **{{moderator.tag}}** `({{moderator.id}})` after their temporary punishment expired.`[#{{infractionID}}]`",
+  "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` has been {{action}} until **{{until}}** by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infractionID}}]`",
   "mod_action_types": {
     "warn": "warned",
     "mute": "muted",
@@ -200,7 +200,7 @@
   "serverinfo_emotes_none": "No emotes",
 
   "action_success": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} for **{{reason}}** `[#{{infraction_id}}]`",
-  "action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} until {{until}} for **{{reason}}** `[#{{infraction_id}}]`",
+  "action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} until **{{until}}** for **{{reason}}** `[#{{infraction_id}}]`",
 
   "action_success_multi": "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
   "action_multi_less_than_2": "{{emote_warn}} Selected less than 2 targets. Executing normal {{action}} instead",

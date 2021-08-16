@@ -3,6 +3,7 @@ import { Guild, GuildMember, Message, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -52,6 +53,7 @@ export default class extends Command {
 		infID = await infractionsManager.unban(
 			this.client,
 			<Guild>message.guild,
+			BanType.MANUAL,
 			target,
 			<GuildMember>message.member,
 			await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {

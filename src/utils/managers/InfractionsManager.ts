@@ -180,6 +180,15 @@ export default class {
 		}
 	}
 
+	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput): Promise<number> {
+		await target.ban({ reason: reasonLog });
+		await this.createInfraction(guild.id, "Tempban", <number>until, reason, target.user, moderator.user);
+		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Tempban");
+		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.temp_ban", guild.id, {}), target.user, moderator.user, reason, infID, until);
+
+		return infID;
+	}
+
 	public async mute(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, muteRole: Snowflake, until: MomentInput) {
 		await target.roles.add(<Snowflake>muteRole);
 		await this.createInfraction(guild.id, "Mute", <number>until, reason, target.user, moderator.user);
@@ -202,11 +211,16 @@ export default class {
 		return infID;
 	}
 
-	public async unban(client: BulbBotClient, guild: Guild, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
+	public async unban(client: BulbBotClient, guild: Guild, type: BanType, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
 		await guild.members.unban(target, reasonLog);
 		await this.createInfraction(guild.id, "Unban", true, reason, target, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Unban");
-		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("action_multi_types.unban", guild.id, {}), target, moderator.user, reason, infID);
+
+		if (type === BanType.MANUAL) {
+			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.unban", guild.id, {}), target, moderator.user, reason, infID);
+		} else if (type === BanType.TEMP) {
+			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.auto_unban", guild.id, {}), target, moderator.user, reason, infID);
+		}
 
 		return infID;
 	}

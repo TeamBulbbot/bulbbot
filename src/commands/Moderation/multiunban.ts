@@ -4,6 +4,7 @@ import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -17,7 +18,7 @@ export default class extends Command {
 			usage: "<user> <user2>... [reason]",
 			examples: ["multiunban 123456789012345678 123456789012345678 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
 			argList: ["user:User"],
-			minArgs: 1,
+			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,
 			userPerms: ["BAN_MEMBERS"],
@@ -67,6 +68,7 @@ export default class extends Command {
 			infID = await infractionsManager.unban(
 				this.client,
 				<Guild>message.guild,
+				BanType.MANUAL,
 				target,
 				<GuildMember>message.member,
 				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
