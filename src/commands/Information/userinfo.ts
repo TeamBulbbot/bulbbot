@@ -1,5 +1,5 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
@@ -50,6 +50,26 @@ export default class extends Command {
 		}
 
 		user = this.client.bulbutils.userObject(isGuildMember, user);
+
+		const row = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn"),
+			new MessageButton().setLabel("Mute").setStyle("SECONDARY").setEmoji(Emotes.actions.MUTE).setCustomId("mute").setDisabled(true),
+			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick"),
+			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban"),
+		]);
+
+		const rowDisabled = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn").setDisabled(true),
+			new MessageButton().setLabel("Mute").setStyle("SECONDARY").setEmoji(Emotes.actions.MUTE).setCustomId("mute").setDisabled(true),
+			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick").setDisabled(true),
+			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
+		]);
+
+		let components;
+
+		if (!isGuildMember) components = [];
+		else if (!args[0]) components = [];
+		else components = [row];
 
 		let description: string = "";
 
@@ -104,7 +124,84 @@ export default class extends Command {
 				)
 				.setTimestamp();
 
-			await message.channel.send({ embeds: [embed] });
+			const msg = await message.channel.send({ embeds: [embed], components });
+
+			const filter = (i: any) => i.user.id === message.author.id;
+			const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
+
+			collector.on("collect", async (interaction: ButtonInteraction) => {
+				if (interaction.customId === "warn") {
+					msg.edit({ components: [rowDisabled] });
+					await interaction.reply({
+						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", message.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.warn", message.guild?.id, {}),
+							target: user,
+						}),
+					});
+
+					const filter = m => m.content && m.author.id === message.author.id;
+					const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
+
+					collector?.on("collect", async m => {
+						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
+
+						await this.client.commands.get("warn")?.run(message, cArgs);
+						await m.delete();
+					});
+
+					collector?.on("end", async () => {
+						await interaction.deleteReply();
+					});
+				}
+
+				if (interaction.customId === "kick") {
+					msg.edit({ components: [rowDisabled] });
+					await interaction.reply({
+						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", message.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.kick", message.guild?.id, {}),
+							target: user,
+						}),
+					});
+
+					const filter = m => m.content && m.author.id === message.author.id;
+					const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
+
+					collector?.on("collect", async m => {
+						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
+
+						await this.client.commands.get("kick")?.run(message, cArgs);
+						await m.delete();
+					});
+
+					collector?.on("end", async () => {
+						await interaction.deleteReply();
+					});
+				}
+
+				if (interaction.customId === "ban") {
+					msg.edit({ components: [rowDisabled] });
+					await interaction.reply({
+						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", message.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
+							target: user,
+						}),
+					});
+
+					const filter = m => m.content && m.author.id === message.author.id;
+					const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
+
+					collector?.on("collect", async m => {
+						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
+
+						await this.client.commands.get("ban")?.run(message, cArgs);
+						await m.delete();
+					});
+
+					collector?.on("end", async () => {
+						await interaction.deleteReply();
+					});
+				}
+			});
 		}
 	}
 }

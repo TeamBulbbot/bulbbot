@@ -173,6 +173,8 @@
   "userinfo_embed_roles": "**Roles:** {{user_roles}}\n",
   "userinfo_embed_infractions": "\n**Infractions:** {{emote_inf}} **{{user_infractions}}** infraction(s) in this server",
 
+  "userinfo_interaction_confirm": "{{emote_warn}} For what reason should **{{target.tag}}** `({{target.id}})` be {{action}}?",
+
   "serverinfo_embed_owner": "{{emote_owner}} **Owner:** <@{{guild.ownerId}}> `{{guild.ownerId}}`\n",
   "serverinfo_embed_features": "**Features:**\n{{guild_features}}\n",
   "serverinfo_embed_region": "**Region:** {{guild_region}}\n",

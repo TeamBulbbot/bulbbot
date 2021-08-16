@@ -260,6 +260,7 @@ export default class {
 
 		if (isGuildMember && userObject instanceof GuildMember) {
 			user = {
+				tag: userObject.user.tag,
 				id: userObject.user.id,
 				flags: userObject.user.flags,
 				username: userObject.user.username,
@@ -277,6 +278,7 @@ export default class {
 			};
 		} else if (userObject instanceof User) {
 			user = {
+				tag: userObject.tag,
 				id: userObject.id,
 				flags: userObject.flags,
 				username: userObject.username,
