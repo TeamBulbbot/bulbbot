@@ -1,6 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { GuildChannel, GuildMember, Message, Snowflake, TextChannel, User } from "discord.js";
+import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, Snowflake, TextChannel } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import * as Emotes from "../../../emotes.json";
@@ -89,29 +89,24 @@ export default class extends SubCommand {
 				await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
 				break;
 			case "all":
-				const msg = await message.channel.send(await this.client.bulbutils.translate("config_logging_all_confirm", message.guild?.id, { channel }));
+				const row = new MessageActionRow().addComponents([
+					new MessageButton().setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setLabel("Confirm").setCustomId("confirm"),
+					new MessageButton().setStyle("DANGER").setEmoji(Emotes.other.FAIL).setLabel("Cancel").setCustomId("cancel"),
+				]);
 
-				confirmMsg = msg;
-				await msg.react(Emotes.other.SUCCESS);
-				await this.client.bulbutils.sleep(250);
-				await msg.react(Emotes.other.FAIL);
+				confirmMsg = await message.channel.send({ content: await this.client.bulbutils.translate("config_logging_all_confirm", message.guild?.id, { channel }), components: [row] });
 
-				const filter = (_, user: User) => {
-					return user.id === message.author.id;
-				};
+				const filter = (i: ButtonInteraction) => i.user.id === message.author.id;
+				let interaction: ButtonInteraction;
 
-				let collected;
 				try {
-					collected = await msg.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] });
-				} catch (err) {
+					interaction = await confirmMsg.awaitMessageComponent({ filter, time: 15000 });
+				} catch (_) {
 					await confirmMsg.delete();
-					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
-					return;
+					return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 				}
 
-				const reaction = collected.first();
-
-				if (reaction?.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
+				if (interaction.customId === "confirm") {
 					await databaseManager.setModAction(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setAutoMod(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setMessage(<Snowflake>message.guild?.id, channel);
@@ -122,9 +117,9 @@ export default class extends SubCommand {
 					await databaseManager.setInvite(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setJoinLeave(<Snowflake>message.guild?.id, channel);
 					await databaseManager.setOther(<Snowflake>message.guild?.id, channel);
-					await msg.delete();
+					await confirmMsg.delete();
 				} else {
-					await msg.delete();
+					await confirmMsg.delete();
 					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 					return;
 				}
