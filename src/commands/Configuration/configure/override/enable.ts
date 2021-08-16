@@ -11,16 +11,15 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "enable",
 			minArgs: 1,
-			maxArgs: 1,
+			maxArgs: -1,
 			argList: ["command:string"],
 			usage: "<command>",
 		});
 	}
 
 	async run(message: Message, args: string[]): Promise<void | Message> {
-		const command = args[0];
-		const cTemp = this.client.commands.get(command.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(command.toLowerCase()));
-		if (!cTemp || cTemp.name === undefined)
+		const command = Command.resolve(this.client, args);
+		if (!command || command.name === undefined)
 			return message.channel.send(
 				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.cmd", message.guild?.id, {}),
@@ -30,12 +29,12 @@ export default class extends SubCommand {
 				}),
 			);
 
-		if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, cTemp.name)) !== undefined) {
-			await clearanceManager.setEnabled(<Snowflake>message.guild?.id, cTemp.name, true);
+		if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName)) !== undefined) {
+			await clearanceManager.setEnabled(<Snowflake>message.guild?.id, command.qualifiedName, true);
 		} else {
-			return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_command", message.guild?.id, { command }));
+			return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_command", message.guild?.id, { command: command.qualifiedName }));
 		}
 
-		await message.channel.send(await this.client.bulbutils.translate("override_enable_success", message.guild?.id, { command }));
+		await message.channel.send(await this.client.bulbutils.translate("override_enable_success", message.guild?.id, { command: args.join(" ") }));
 	}
 }

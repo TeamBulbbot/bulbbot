@@ -136,7 +136,8 @@ export default class Command {
 		return this;
 	}
 
-	static resolve(client: BulbBotClient, commandPath: string[]): undefined | Command {
+	static resolve(client: BulbBotClient, commandPath: string | string[]): undefined | Command {
+		if(typeof commandPath === "string") commandPath = commandPath.split(" ");
 		if(!commandPath.length) return;
 		const cmd: string = commandPath[0];
 		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase())!);
