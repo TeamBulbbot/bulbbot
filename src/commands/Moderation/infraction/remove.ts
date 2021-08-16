@@ -1,10 +1,10 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { Message, Snowflake } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import * as Emotes from "../../../emotes.json";
-import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { Infraction } from "../../../utils/types/Infraction";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -32,52 +32,47 @@ export default class extends SubCommand {
 			);
 		}
 
-		const inf: Record<string, any> = <Record<string, any>>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID);
+		const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>message.guild?.id, infID);
 		const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
 		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
 
 		let confirmMsg: Message;
 
-		await message.channel
-			.send(
-				await this.client.bulbutils.translate("infraction_delete_confirm", message.guild?.id, {
-					infraction_id: inf["id"],
-					moderator,
-					target,
-					reason: inf["reason"],
-				}),
-			)
-			.then(msg => {
-				confirmMsg = msg;
-				msg.react(Emotes.other.SUCCESS);
-				msg.react(Emotes.other.FAIL);
+		const row = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Confirm").setStyle("SUCCESS").setEmoji(Emotes.other.SUCCESS).setCustomId("confirm"),
+			new MessageButton().setLabel("Cancel").setStyle("DANGER").setEmoji(Emotes.other.FAIL).setCustomId("cancel"),
+		]);
 
-				const filter = (reaction, user) => {
-					return user.id === message.author.id;
-				};
+		confirmMsg = await message.channel.send({
+			content: await this.client.bulbutils.translate("infraction_delete_confirm", message.guild?.id, {
+				infraction_id: inf.id,
+				moderator,
+				target,
+				reason: inf["reason"],
+			}),
+			components: [row],
+		});
 
-				msg
-					.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] })
-					.then(async collected => {
-						const reaction = collected.first();
-
-						if (reaction?.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
-							await infractionsManager.deleteInfraction(<Snowflake>message.guild?.id, infID);
-							await msg.delete();
-							return await message.channel.send(
-								await this.client.bulbutils.translate("infraction_delete_success", message.guild?.id, {
-									infraction_id: infID,
-								}),
-							);
-						} else {
-							await msg.delete();
-							return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
-						}
-					})
-					.catch(async () => {
-						await confirmMsg.delete();
-						return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
-					});
+		const filter = (i: ButtonInteraction) => i.user.id === message.author.id;
+		await confirmMsg
+			.awaitMessageComponent({ filter, time: 15000 })
+			.then(async (interaction: ButtonInteraction) => {
+				if (interaction.customId === "confirm") {
+					await infractionsManager.deleteInfraction(<Snowflake>message.guild?.id, infID);
+					await confirmMsg.delete();
+					await message.channel.send(
+						await this.client.bulbutils.translate("infraction_delete_success", message.guild?.id, {
+							infraction_id: infID,
+						}),
+					);
+				} else {
+					await confirmMsg.delete();
+					await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
+				}
+			})
+			.catch(async _ => {
+				await confirmMsg.delete();
+				await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
 			});
 	}
 }
