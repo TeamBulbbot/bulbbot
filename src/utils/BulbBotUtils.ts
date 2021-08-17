@@ -446,4 +446,31 @@ export default class {
 	public readonly languages: Record<string, string> = {
 		"en-US": "en-US",
 	};
+
+	public formatAction(action: string): string {
+		switch (action) {
+			case "Ban":
+				return Emotes.actions.BAN;
+			case "Manual Ban":
+				return Emotes.actions.BAN;
+			case "Force-ban":
+				return Emotes.actions.BAN;
+			case "Kick":
+				return Emotes.actions.KICK;
+			case "Manual Kick":
+				return Emotes.actions.KICK;
+			case "Mute":
+				return Emotes.actions.MUTE;
+			case "Warn":
+				return Emotes.actions.WARN;
+			case "Unmute":
+				return Emotes.actions.UNBAN;
+			case "Unban":
+				return Emotes.actions.UNBAN;
+			case "Nickname":
+				return Emotes.other.EDIT;
+		}
+
+		return Emotes.actions.WARN;
+	}
 }

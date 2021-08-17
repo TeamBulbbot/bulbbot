@@ -56,21 +56,21 @@ export default class {
 	}
 
 	public async getOffenderInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Infraction[] | undefined> {
-		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID LIMIT 50', {
+		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID LIMIT 25', {
 			bind: { GuildID: guildID, TargetID: targetID },
 			type: QueryTypes.SELECT,
 		});
 	}
 
 	public async getModeratorInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Infraction[] | undefined> {
-		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "moderatorId" = $ModeratorID LIMIT 50', {
+		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "moderatorId" = $ModeratorID LIMIT 25', {
 			bind: { GuildID: guildID, ModeratorID: targetID },
 			type: QueryTypes.SELECT,
 		});
 	}
 
 	public async getAllUserInfractions(guildID: Snowflake, targetID: Snowflake): Promise<Infraction[] | undefined> {
-		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID OR "moderatorId" = $ModeratorID LIMIT 50', {
+		return await sequelize.query('SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID OR "moderatorId" = $ModeratorID LIMIT 25', {
 			bind: { GuildID: guildID, TargetID: targetID, ModeratorID: targetID },
 			type: QueryTypes.SELECT,
 		});

@@ -1,11 +1,8 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { Message, MessageEmbed, Snowflake, User } from "discord.js";
-import { NonDigits, ReasonImage } from "../../../utils/Regex";
+import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
+import { NonDigits} from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import * as Emotes from "../../../emotes.json";
-import moment from "moment";
-import { embedColor } from "../../../Config";
 import { Infraction } from "../../../utils/types/Infraction";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
@@ -25,8 +22,6 @@ export default class extends SubCommand {
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
-		let pages: MessageEmbed[] = [];
-
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let user: User;
 		try {
@@ -42,49 +37,34 @@ export default class extends SubCommand {
 			);
 		}
 
+		let options: any[] = [];
 		const infs: Infraction[] = <Infraction[]>await infractionsManager.getOffenderInfractions(<Snowflake>message.guild?.id, user.id);
-		for (let i = 0; i < 50; i++) {
+
+		if (!infs.length) return await message.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", message.guild?.id, { target: user }));
+
+		for (let i = 0; i < 25; i++) {
 			if (infs[i] === undefined) continue;
 
-			const target: Record<string, string> = { tag: infs[i].target, id: infs[i].targetId };
-			const moderator: Record<string, string> = { tag: infs[i].moderator, id: infs[i].moderatorId };
-
-			let description = "";
-			description += await this.client.bulbutils.translate("infraction_info_inf_id", message.guild?.id, { infraction_id: infs[i].id });
-			description += await this.client.bulbutils.translate("infraction_info_target", message.guild?.id, { target });
-			description += await this.client.bulbutils.translate("infraction_info_moderator", message.guild?.id, { moderator });
-			description += await this.client.bulbutils.translate("infraction_info_created", message.guild?.id, {
-				created: moment(Date.parse(infs[i].createdAt)).format("MMM Do YYYY, h:mm:ss a"),
+			options.push({
+				label: `${infs[i].action} (#${infs[i].id})`,
+				description: await this.client.bulbutils.translate("infraction_interaction_description", message.guild?.id, {}),
+				value: `inf_${infs[i].id}`,
+				emoji: this.client.bulbutils.formatAction(infs[i].action),
 			});
-
-			if (infs[i].active !== "false" && infs[i].active !== "true") {
-				description += await this.client.bulbutils.translate("infraction_info_expires", message.guild?.id, {
-					expires: `${Emotes.status.ONLINE} ${moment(parseInt(infs[i].active)).format("MMM Do YYYY, h:mm:ss a")}`,
-				});
-			} else {
-				description += await this.client.bulbutils.translate("infraction_info_active", message.guild?.id, {
-					active: this.client.bulbutils.prettify(infs[i].active),
-				});
-			}
-
-			description += await this.client.bulbutils.translate("infraction_info_reason", message.guild?.id, {
-				reason: infs[i].reason,
-			});
-
-			const image = infs[i].reason.match(ReasonImage);
-
-			const embed: MessageEmbed = new MessageEmbed()
-				.setTitle(this.client.bulbutils.prettify(infs[i].action))
-				.setDescription(description)
-				.setColor(embedColor)
-				.setImage(<string>(image ? image[0] : null))
-				.setTimestamp();
-
-			pages.push(embed);
 		}
 
-		if (pages.length === 0) return message.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", message.guild?.id, { target: user }));
+		const row = new MessageActionRow().addComponents(
+			new MessageSelectMenu()
+				.setPlaceholder(await this.client.bulbutils.translate("infraction_interaction_placeholder", message.guild?.id, {}))
+				.setCustomId("infraction")
+				.addOptions(options),
+		);
 
-		await this.client.bulbutils.embedPage(message, pages, 120000);
+		return await message.channel.send({
+			content: await this.client.bulbutils.translate("infraction_interaction_reply", message.guild?.id, {
+				target: user,
+			}),
+			components: [row],
+		});
 	}
 }
