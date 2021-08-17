@@ -89,6 +89,8 @@
   "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_remove_moderator": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
 
+  "config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
+
   "config_language_success": "{{emote_success}} Successfully changed the server language to `{{language}}`",
   "config_timezone_success": "{{emote_success}} Successfully changed the server timezone to `{{timezone}}`",
 

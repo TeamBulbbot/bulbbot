@@ -5,7 +5,7 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 import AutoModConfiguration from "../types/AutoModConfiguration";
 import LoggingConfiguration from "../types/LoggingConfiguration";
-import AutoModPart, { AutoModListPart, AutoModAntiSpamPart } from "../types/AutoModPart";
+import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
 import PunishmentType from "../types/PunishmentType";
 
@@ -95,18 +95,6 @@ export default class {
 		});
 	}
 
-	/**
-	 * @deprecated
-	 */
-	async getPrefix(guildId: Snowflake) {
-		const response: Record<string, any> = await sequelize.query('SELECT "prefix" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuilID)', {
-			bind: { GuildID: guildId },
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0]["prefix"];
-	}
-
 	async setPrefix(guildId: Snowflake, prefix: string): Promise<void> {
 		await sequelize.query('UPDATE "guildConfigurations" SET prefix = $Prefix WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { Prefix: prefix, GuildID: guildId },
@@ -114,13 +102,11 @@ export default class {
 		});
 	}
 
-	async getPremium(guildID: Snowflake): Promise<boolean> {
-		const response: Record<string, any> = await sequelize.query('SELECT "premiumGuild" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
+	async setActionsOnInfo(guildID: Snowflake, enabled: boolean): Promise<void> {
+		await sequelize.query('UPDATE "guildConfigurations" SET "actionsOnInfo" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID, Enabled: enabled },
+			type: QueryTypes.UPDATE,
 		});
-
-		return response[0]["premiumGuild"];
 	}
 
 	async setPremium(guildID: Snowflake, premium: boolean): Promise<void> {
@@ -144,15 +130,6 @@ export default class {
 			bind: { MuteRole: muteRoleID, GuildID: guildID },
 			type: QueryTypes.UPDATE,
 		});
-	}
-
-	async getAutoRole(guildID: Snowflake): Promise<Snowflake | null> {
-		const response: Record<string, any> = await sequelize.query('SELECT "autorole" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0]["muteRole"];
 	}
 
 	async setAutoRole(guildID: Snowflake, autoRoleID: Snowflake | null): Promise<void> {

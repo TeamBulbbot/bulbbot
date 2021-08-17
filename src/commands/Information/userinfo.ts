@@ -1,12 +1,14 @@
 import Command from "../../structures/Command";
-import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
+import DatabaseManager from "../../utils/managers/DatabaseManager";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 // @ts-nocheck
 export default class extends Command {
@@ -25,6 +27,7 @@ export default class extends Command {
 	}
 
 	async run(message: Message, args: string[]): Promise<void> {
+		await message.guild?.members.fetch();
 		let target: string;
 		if (args[0] === undefined) target = message.author.id;
 		else target = args[0].replace(NonDigits, "");
@@ -53,21 +56,20 @@ export default class extends Command {
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn"),
-			new MessageButton().setLabel("Mute").setStyle("SECONDARY").setEmoji(Emotes.actions.MUTE).setCustomId("mute").setDisabled(true),
 			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick"),
 			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban"),
 		]);
 
 		const rowDisabled = new MessageActionRow().addComponents([
 			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn").setDisabled(true),
-			new MessageButton().setLabel("Mute").setStyle("SECONDARY").setEmoji(Emotes.actions.MUTE).setCustomId("mute").setDisabled(true),
 			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick").setDisabled(true),
 			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
 		]);
 
 		let components;
 
-		if (!isGuildMember) components = [];
+		if ((await databaseManager.getConfig(<Snowflake>message.guild?.id)).actionsOnInfo !== true) components = []
+		else if (!isGuildMember) components = [];
 		else if (!args[0]) components = [];
 		else components = [row];
 

@@ -27,6 +27,10 @@ export default function (sequelize: Sequelize): void {
         },
         autorole: {
             type: DataTypes.STRING
+        },
+        actionsOnInfo: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     });
 }
