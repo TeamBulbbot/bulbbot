@@ -70,7 +70,7 @@ export default class Command {
 	public async validate(message: Message, args: string[], options: ResolveCommandOptions): Promise<string | undefined> {
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", message.guild?.id, {});
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.name);
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return "";
 			if (commandOverride["clearanceLevel"] > options.clearance) {
@@ -136,7 +136,8 @@ export default class Command {
 		return this;
 	}
 
-	static resolve(client: BulbBotClient, commandPath: string[]): undefined | Command {
+	static resolve(client: BulbBotClient, commandPath: string | string[]): undefined | Command {
+		if(typeof commandPath === "string") commandPath = commandPath.split(" ");
 		if(!commandPath.length) return;
 		const cmd: string = commandPath[0];
 		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase())!);

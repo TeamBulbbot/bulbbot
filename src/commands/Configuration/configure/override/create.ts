@@ -12,7 +12,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "create",
 			minArgs: 3,
-			maxArgs: 3,
+			maxArgs: -1,
 			argList: ["part:string", "name:string", "clearance:number"],
 			usage: "<part> <name> <clearance>",
 		});
@@ -20,8 +20,8 @@ export default class extends SubCommand {
 
 	async run(message: Message, args: string[]): Promise<void | Message> {
 		const part: string = args[0];
-		const name: string = args[1];
-		let clearance: number = Number(args[2]);
+		const name: string[] = args.slice(1, -1);
+		let clearance: number = Number(args.at(-1));
 
 		if (isNaN(clearance))
 			return message.channel.send(
@@ -36,12 +36,11 @@ export default class extends SubCommand {
 
 		if (clearance > this.client.userClearance) return message.channel.send(await this.client.bulbutils.translate("override_clearance_higher_than_self", message.guild?.id, {}));
 
-		if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, name)) !== undefined)
-			return await message.channel.send(await this.client.bulbutils.translate("override_already_exists", message.guild?.id, {}));
-
 		switch (part) {
 			case "role":
-				const rTemp = message.guild?.roles.cache.get(name.replace(NonDigits, ""));
+				if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, name[0])) !== undefined)
+				return await message.channel.send(await this.client.bulbutils.translate("override_already_exists", message.guild?.id, {}));
+				const rTemp = message.guild?.roles.cache.get(name[0].replace(NonDigits, ""));
 				if (rTemp === undefined)
 					return message.channel.send(
 						await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
@@ -52,11 +51,12 @@ export default class extends SubCommand {
 						}),
 					);
 
-				await clearanceManager.createRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""), clearance);
+				await clearanceManager.createRoleOverride(<Snowflake>message.guild?.id, name[0].replace(NonDigits, ""), clearance);
 				break;
 
 			case "command":
-				const command = this.client.commands.get(name.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(name.toLowerCase()));
+				const command = Command.resolve(this.client, name);
+
 				if (command === undefined || command.name === undefined)
 					return message.channel.send(
 						await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
@@ -67,7 +67,10 @@ export default class extends SubCommand {
 						}),
 					);
 
-				await clearanceManager.createCommandOverride(<Snowflake>message.guild?.id, command.name, true, clearance);
+				if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName)) !== undefined)
+				return await message.channel.send(await this.client.bulbutils.translate("override_already_exists", message.guild?.id, {}));
+
+				await clearanceManager.createCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName, true, clearance);
 				break;
 			default:
 				return message.channel.send(

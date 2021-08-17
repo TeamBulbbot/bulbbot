@@ -13,7 +13,7 @@ export default class extends SubCommand {
 			name: "delete",
 			aliases: ["remove", "rm"],
 			minArgs: 2,
-			maxArgs: 2,
+			maxArgs: -1,
 			argList: ["part:string", "name:string"],
 			usage: "<part> <name>",
 		});
@@ -21,23 +21,27 @@ export default class extends SubCommand {
 
 	async run(message: Message, args: string[]): Promise<void | Message> {
 		const part = args[0];
-		const name = args[1];
 
 		switch (part) {
 			case "role":
+			{
+				const name = args[1];
 				if (!(await clearanceManager.getRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""))))
 					return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", message.guild?.id, { role: name }));
 
 				await clearanceManager.deleteRoleOverride(<Snowflake>message.guild?.id, name.replace(NonDigits, ""));
 				break;
-
+			}
 			case "command":
-				const cTemp = this.client.commands.get(name.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(name.toLowerCase()));
-				if (!cTemp || cTemp.name === undefined || !(await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, cTemp.name)))
-					return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_command", message.guild?.id, { command: name }));
+			{
+				const name = args.slice(1);
+				const command = Command.resolve(this.client, name);
+				if (!command || command.name === undefined || !(await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName)))
+					return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_command", message.guild?.id, { command: name.join(" ") }));
 
-				await clearanceManager.deleteCommandOverride(<Snowflake>message.guild?.id, cTemp.name);
+				await clearanceManager.deleteCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName);
 				break;
+			}
 			default:
 				return message.channel.send(
 					await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {

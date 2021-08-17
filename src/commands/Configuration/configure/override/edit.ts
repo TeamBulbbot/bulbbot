@@ -12,7 +12,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "edit",
 			minArgs: 3,
-			maxArgs: 3,
+			maxArgs: -1,
 			argList: ["part:string", "name:string", "clearance:number"],
 			usage: "<part> <name> <clearance>",
 		});
@@ -20,8 +20,7 @@ export default class extends SubCommand {
 
 	async run(message: Message, args: string[]): Promise<void | Message> {
 		const part = args[0];
-		const name = args[1];
-		let clearance = Number(args[2]);
+		let clearance = Number(args.at(-1));
 
 		if (isNaN(clearance))
 			return message.channel.send(
@@ -38,6 +37,8 @@ export default class extends SubCommand {
 
 		switch (part) {
 			case "role":
+			{
+				const name = args[1];
 				const roleID = name.replace(NonDigits, "");
 				const rTemp = message.guild?.roles.cache.get(roleID);
 				if (rTemp === undefined)
@@ -54,28 +55,32 @@ export default class extends SubCommand {
 					return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", message.guild?.id, { role: rTemp.name }));
 				await clearanceManager.editRoleOverride(<Snowflake>message.guild?.id, roleID, clearance);
 				break;
+			}
 
 			case "command":
-				const command = this.client.commands.get(name.toLowerCase()) || this.client.commands.get(<string>this.client.aliases.get(name.toLowerCase()));
+			{
+				const name = args.slice(1, -1);
+				const command = Command.resolve(this.client, name);
 				if (command === undefined)
 					return message.channel.send(
 						await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.cmd", message.guild?.id, {}),
 							arg_expected: "command:string",
-							arg_provided: args[1],
+							arg_provided: name.join(" "),
 							usage: this.usage,
 						}),
 					);
 
-				if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, name)) === undefined)
+				if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName)) === undefined)
 					return message.channel.send(
 						await this.client.bulbutils.translate("override_nonexistent_command", message.guild?.id, {
-							command: name,
+							command: command.qualifiedName,
 						}),
 					);
-				await clearanceManager.editCommandOverride(<Snowflake>message.guild?.id, command.name, clearance);
+				await clearanceManager.editCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName, clearance);
 
 				break;
+			}
 			default:
 				return message.channel.send(
 					await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {

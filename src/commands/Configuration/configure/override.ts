@@ -7,7 +7,7 @@ import disable from "./override/disable";
 import edit from "./override/edit";
 import enable from "./override/enable";
 import list from "./override/list";
-import remove from "./override/remove";
+import remove from "./override/delete";
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
