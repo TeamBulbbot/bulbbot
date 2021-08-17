@@ -85,6 +85,6 @@ export default class extends SubCommand {
 
 		if (pages.length === 0) return await message.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", message.guild?.id, { target: user }));
 
-		await this.client.bulbutils.embedPage(message, pages, [Emotes.other.LEFT, Emotes.other.RIGHT], 120000);
+		await this.client.bulbutils.embedPage(message, pages, 120000);
 	}
 }

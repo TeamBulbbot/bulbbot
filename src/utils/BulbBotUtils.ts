@@ -1,4 +1,4 @@
-import { GuildMember, Message, MessageEmbed, Snowflake, User } from "discord.js";
+import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
@@ -214,34 +214,38 @@ export default class {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
-	public async embedPage(message, pages: MessageEmbed[], emojiList: string[] = ["⏪", "⏩"], timeout: number = 120000) {
-		if (!message && !message.channel) throw new Error("Channel is inaccessible.");
+	public async embedPage(message: Message, pages: MessageEmbed[], timeout: number = 120000) {
 		if (!pages) throw new Error("Pages are not given.");
-		if (emojiList.length !== 2) throw new Error("Need two emojis.");
+
+		const row = new MessageActionRow().addComponents([
+			new MessageButton()
+				.setStyle("SECONDARY")
+				.setEmoji(Emotes.other.LEFT)
+				.setCustomId("prev_page")
+				.setDisabled(pages.length <= 2),
+			new MessageButton()
+				.setStyle("SECONDARY")
+				.setEmoji(Emotes.other.RIGHT)
+				.setCustomId("next_page")
+				.setDisabled(pages.length <= 2),
+		]);
+
 		let page = 0;
-		const curPage = await message.channel.send(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
-		for (const emoji of emojiList) {
-			await curPage.react(emoji);
-			await this.client.bulbutils.sleep(250);
-		}
-		const reactionCollector = curPage.createReactionCollector((reaction, user) => user.id === message.author.id, { time: timeout });
-		reactionCollector.on("collect", reaction => {
-			reaction.users.remove(message.author);
-			switch (reaction.emoji.id) {
-				case emojiList[0].replace(/\D/g, ""):
-					page = page > 0 ? --page : pages.length - 1;
-					break;
-				case emojiList[1].replace(/\D/g, ""):
-					page = page + 1 < pages.length ? ++page : 0;
-					break;
-				default:
-					break;
+		const curPage = await message.channel.send({ components: [row], embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)] });
+		const filter = (i: ButtonInteraction) => i.user.id === message.author.id;
+		const collector = curPage.createMessageComponentCollector({ filter, time: timeout });
+		collector.on("collect", interaction => {
+			if (interaction.customId === "prev_page") {
+				page = page > 0 ? --page : pages.length - 1;
+			} else {
+				page = page + 1 < pages.length ? ++page : 0;
 			}
-			curPage.edit(pages[page].setFooter(`Page ${page + 1} / ${pages.length}`));
+
+			interaction.update({ embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)] });
 		});
-		reactionCollector.on("end", () => {
+		collector.on("end", () => {
 			if (!curPage.deleted) {
-				curPage.reactions.removeAll();
+				curPage.edit({ components: [] });
 			}
 		});
 		return curPage;
