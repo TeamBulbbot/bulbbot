@@ -26,7 +26,6 @@ export default class extends Event {
 			reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
 			sticker: message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "",
 			attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}\n` : "",
-			embed: message.embeds.length !== 0 ? `**E:** \`\`\`json\n${JSON.stringify(message.embeds[0], null, 2)}\n\`\`\`\n` : "",
 		});
 
 		if (msg.length >= 1850) {
@@ -42,6 +41,6 @@ export default class extends Event {
 				}),
 				`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`,
 			);
-		} else await loggingManager.sendEventLog(this.client, message.guild, "message", msg);
+		} else await loggingManager.sendEventLog(this.client, message.guild, "message", msg, message.embeds.length !== 0 ? message.embeds : null);
 	}
 }
