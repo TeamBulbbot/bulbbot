@@ -5,7 +5,7 @@ import moment from "moment";
 
 export default class {
 	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake): Promise<void> {
-		sequelize.query(
+		await sequelize.query(
 			'INSERT INTO reminds (reason, "expireTime", "userId", "channelId", "messageId", "createdAt", "updatedAt" ) VALUES ($Reason, $ExpireTime, $UserId, $ChannelId, $MessageId, $CreatedAt, $UpdatedAt)',
 			{
 				bind: {
