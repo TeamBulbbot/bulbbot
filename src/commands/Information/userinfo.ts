@@ -147,7 +147,15 @@ export default class extends Command {
 					collector?.on("collect", async m => {
 						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
 
-						await this.client.commands.get("warn")?.run(message, cArgs);
+						const command = Command.resolve(this.client, "warn")!;
+						const reason = await command.validate(message, cArgs);
+						if(reason !== undefined) {
+							if(reason) {
+								await message.channel.send(reason);
+							}
+						} else {
+							await command.run(message, cArgs);
+						}
 						await m.delete();
 					});
 
@@ -171,7 +179,15 @@ export default class extends Command {
 					collector?.on("collect", async m => {
 						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
 
-						await this.client.commands.get("kick")?.run(message, cArgs);
+						const command = Command.resolve(this.client, "kick")!;
+						const reason = await command.validate(message, cArgs);
+						if(reason !== undefined) {
+							if(reason) {
+								await message.channel.send(reason);
+							}
+						} else {
+							await command.run(message, cArgs);
+						}
 						await m.delete();
 					});
 
@@ -195,7 +211,15 @@ export default class extends Command {
 					collector?.on("collect", async m => {
 						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
 
-						await this.client.commands.get("ban")?.run(message, cArgs);
+						const command = Command.resolve(this.client, "ban")!;
+						const reason = await command.validate(message, cArgs);
+						if(reason !== undefined) {
+							if(reason) {
+								await message.channel.send(reason);
+							}
+						} else {
+							await command.run(message, cArgs);
+						}
 						await m.delete();
 					});
 

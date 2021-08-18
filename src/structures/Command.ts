@@ -67,7 +67,10 @@ export default class Command {
 		);
 	}
 
-	public async validate(message: Message, args: string[], options: ResolveCommandOptions): Promise<string | undefined> {
+	public async validate(message: Message, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
+		if(options === undefined) {
+			options = new ResolveCommandOptions(this, message, args);
+		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", message.guild?.id, {});
 
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.qualifiedName);
