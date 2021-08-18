@@ -22,7 +22,7 @@ export default class extends SubCommand {
 
 		const resp: ShellString = exec(`git pull`);
 
-		if (resp.stderr) return message.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
+		//if (resp.stderr) return message.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
 		message.reply(`Successfully pulled the latest code\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 		await exec(`tsc --project tsconfig.json`);
 		message.reply("Successfully built TypeScript files");
