@@ -261,6 +261,12 @@ export default class {
 					return "websiteWhitelist";
 				case AutoModPart.invite:
 					return "inviteWhitelist";
+				case AutoModPart.ignore_channel:
+					return "ignoreChannels";
+				case AutoModPart.ignore_role:
+					return "ignoreRoles";
+				case AutoModPart.ignore_user:
+					return "ignoreUsers";
 			}
 		})(part);
 		const result: AutoModListOperationResult = await operation(db[dbkey]);
