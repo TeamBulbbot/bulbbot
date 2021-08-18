@@ -11,8 +11,7 @@ export default class extends Event {
 
 	public async run(ratelimit: RateLimitData): Promise<void> {
 		this.client.log.warn(
-			"[CLIENT - RATELIMIT]: ",
-			`GLOBAL: ${ratelimit.global} | Timeout: ${ratelimit.timeout} | Limit: ${ratelimit.limit} | Method: ${ratelimit.method} | Path: ${ratelimit.path} | Route: ${ratelimit.route}`,
+			`[CLIENT - RATELIMIT]: GLOBAL: ${ratelimit.global} | Timeout: ${ratelimit.timeout} | Limit: ${ratelimit.limit} | Method: ${ratelimit.method} | Path: ${ratelimit.path} | Route: ${ratelimit.route}`,
 		);
 	}
 }
