@@ -14,15 +14,17 @@ export default class extends SubCommand {
 			name: "search",
 			clearance: 50,
 			minArgs: 1,
-			maxArgs: 1,
-			argList: ["user:User"],
-			usage: "<user>",
+			maxArgs: 2,
+			argList: ["user:User", "page:number"],
+			usage: "<user> [page]",
 		});
 	}
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let user: User;
+		let page: number = Number(args[1]);
+		if (!page) page = 0;
 
 		try {
 			user = await this.client.users.fetch(targetID);
@@ -38,7 +40,7 @@ export default class extends SubCommand {
 		}
 
 		let options: any[] = [];
-		const infs: Infraction[] = <Infraction[]>await infractionManager.getAllUserInfractions(<string>message.guild?.id, user.id);
+		const infs: Infraction[] = <Infraction[]>await infractionManager.getAllUserInfractions(<string>message.guild?.id, user.id, page);
 
 		if (!infs.length) return await message.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", message.guild?.id, { target: user }));
 
