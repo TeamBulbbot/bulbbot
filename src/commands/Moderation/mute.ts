@@ -7,6 +7,9 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import moment from "moment";
 import { MuteType } from "../../utils/types/MuteType";
+import MuteManger from "../../utils/managers/MuteManger";
+
+const { createMute, deleteMute, getLatestMute }: MuteManger = new MuteManger();
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -70,7 +73,8 @@ export default class extends Command {
 			Date.now() + <number>parse(args[1]),
 		);
 
-		//let tempmuteID = await TempmuteCreate(message.guild?.id, target.user.tag, target.user.id, reason, Date.now() + <number>parse(args[1]));
+		await createMute(target, reason, Date.now() + <number>parse(args[1]), message.guild!.id);
+		const mute: any = await getLatestMute(target, message.guild!.id);
 
 		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>message.guild?.id)];
 		await message.channel.send(
@@ -106,7 +110,7 @@ export default class extends Command {
 				muteRole,
 			);
 
-			//TempmuteDelete(tempmuteId);
+			await deleteMute(mute.id);
 		}, duration);
 	}
 }
