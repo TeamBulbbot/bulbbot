@@ -25,7 +25,7 @@ export default class extends Command {
 		let duration: number;
 		let targetChannel: Snowflake = args[0].replace(NonDigits, "");
 		if (!args[1]) targetChannel = message.channel.id;
-		const channel: TextChannel = <TextChannel>message.guild?.channels.cache.get(targetChannel);
+		const channel: TextChannel | null = targetChannel ? <TextChannel>await message.guild?.channels.fetch(targetChannel).catch(() => null) : null;
 
 		if (!channel)
 			return message.channel.send(

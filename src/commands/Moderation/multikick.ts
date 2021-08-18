@@ -59,7 +59,7 @@ export default class extends Command {
 			await this.client.bulbutils.sleep(massCommandSleep);
 
 			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember = <GuildMember>await message.guild?.members.cache.get(t);
+			const target: GuildMember | null = t ? <GuildMember>await message.guild?.members.fetch(t).catch(() => null) : null;
 			let infID: number;
 
 			if (!target) {

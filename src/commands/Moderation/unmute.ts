@@ -27,7 +27,7 @@ export default class extends Command {
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		await message.guild?.members.fetch();
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>message.guild?.members.cache.get(targetID);
+		const target: GuildMember | null = targetID ? <GuildMember>await message.guild?.members.fetch(targetID).catch(() => null) : null;
 		const muteRole: Snowflake = <Snowflake>await databaseManager.getMuteRole(<Snowflake>message.guild?.id);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;

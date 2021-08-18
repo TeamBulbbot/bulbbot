@@ -27,8 +27,8 @@ export default class extends SubCommand {
 		else {
 			role = role.replace(NonDigits, "");
 
-			const rTemp: Role = <Role>message.guild?.roles.cache.get(role);
-			if (rTemp === undefined)
+			const rTemp: Role | null = role ? <Role>await message.guild?.roles.fetch(role).catch(() => null) : null;
+			if (!rTemp)
 				return message.channel.send(
 					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),

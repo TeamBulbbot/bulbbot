@@ -32,7 +32,7 @@ export default class extends Command {
 		if (args[0] === undefined) target = message.author.id;
 		else target = args[0].replace(NonDigits, "");
 
-		let user: any = message.guild?.members.cache.get(target);
+		let user: any = await message.guild?.members.cache.get(target);
 		let isGuildMember = true;
 
 		if (!user) {
@@ -68,7 +68,7 @@ export default class extends Command {
 
 		let components;
 
-		if ((await databaseManager.getConfig(<Snowflake>message.guild?.id)).actionsOnInfo !== true) components = []
+		if ((await databaseManager.getConfig(<Snowflake>message.guild?.id)).actionsOnInfo !== true) components = [];
 		else if (!isGuildMember) components = [];
 		else if (!args[0]) components = [];
 		else components = [row];

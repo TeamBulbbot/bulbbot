@@ -29,6 +29,7 @@ export default class extends Command {
 		let earlysupport = 0;
 		let botdeveloper = 0;
 
+		message.guild?.members.fetch();
 		message.guild?.members.cache.forEach(member => {
 			const badges = this.badge(<number>member.user.flags?.bitfield);
 			for (let i = 0; i < badges.length; i++) {
