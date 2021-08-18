@@ -75,7 +75,7 @@ export default class extends Command {
 		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>message.guild?.id)];
 		await message.channel.send(
 			await this.client.bulbutils.translate("action_success_temp", message.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", message.guild?.id, {}),
+				action: await this.client.bulbutils.translate("mod_action_types.mute", message.guild?.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,
