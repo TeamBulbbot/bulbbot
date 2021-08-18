@@ -17,7 +17,7 @@ export default class extends Command {
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["action:string"],
-			subDevOnly: true,
+			devOnly: true,
 		});
 	}
 }

@@ -33,6 +33,7 @@ export default class extends Command {
 			usage: "[part]",
 			clearance: 75,
 			maxArgs: 1,
+			devOnly: true, // command still WIP
 		});
 	}
 
