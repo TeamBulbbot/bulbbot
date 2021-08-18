@@ -2,8 +2,8 @@ import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData } from "di
 import * as Emotes from "./emotes.json";
 
 export const name: string = "Bulbbot";
-export const developers: string[] = ["190160914765316096", "439396770695479297"];
-export const subDevelopers: string[] = ["193160566334947340"];
+export const developers: string[] = ["190160914765316096", "439396770695479297", "193160566334947340"];
+export const subDevelopers: string[] = [];
 export const version: string = "1.0.0";
 export const lib: string = "Discord.JS";
 
