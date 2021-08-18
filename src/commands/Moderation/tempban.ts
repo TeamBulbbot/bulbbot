@@ -5,11 +5,13 @@ import { NonDigits } from "../../utils/Regex";
 import parse from "parse-duration";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
+import TempbanManager from "../../utils/managers/TempbanManager";
 import moment from "moment";
 import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
+const { createTempBan, deleteTempBan, getLatestTempBan }: TempbanManager = new TempbanManager();
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -67,6 +69,9 @@ export default class extends Command {
 			Date.now() + <number>parse(args[1]),
 		);
 
+		await createTempBan(target, reason, Date.now() + <number>parse(args[1]), message.guild!.id);
+		const tempban: any = await getLatestTempBan(target, message.guild!.id);
+
 		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>message.guild?.id)];
 		await message.channel.send(
 			await this.client.bulbutils.translate("action_success_temp", message.guild?.id, {
@@ -100,7 +105,7 @@ export default class extends Command {
 				"Automatic unban",
 			);
 
-			//TempmuteDelete(tempmuteId);
+			await deleteTempBan(tempban.id);
 		}, duration);
 	}
 }

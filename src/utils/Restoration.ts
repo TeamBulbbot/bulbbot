@@ -2,13 +2,16 @@ import ReminderManager from "./managers/ReminderManager";
 import MuteManger from "./managers/MuteManger";
 import InfractionsManager from "./managers/InfractionsManager";
 import DatabaseManager from "./managers/DatabaseManager";
+import TempbanManager from "./managers/TempbanManager";
 import { Guild, GuildMember, Message, Snowflake, User } from "discord.js";
 import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { MuteType } from "./types/MuteType";
+import { BanType } from "./types/BanType";
 
 const { getAllReminders, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 const { getAllMutes, deleteMute }: MuteManger = new MuteManger();
+const { getAllTemBans, deleteTempBan }: TempbanManager = new TempbanManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const { getMuteRole }: DatabaseManager = new DatabaseManager();
 
@@ -94,6 +97,43 @@ export default class {
 
 	async loadTempBans(client: BulbBotClient): Promise<void> {
 		client.log.client("[CLIENT - TEMP BANS] Starting to restore temp bans...");
-		client.log.client(`[CLIENT - TEMP BANS] Successfully handled ${1 + 1} temp bans(s)`);
+		const tempbans: any = await getAllTemBans();
+		for (let i = 0; i < tempbans.length; i++) {
+			const tempban: any = tempbans[i]; // @ts-ignore
+			const guild: Guild = await client.guilds.fetch(tempban.gId);
+			if (!guild) {
+				await deleteTempBan(tempban.id);
+				continue;
+			}
+			// @ts-ignore
+			const target: User = await client.users.fetch(tempban.targetId);
+
+			if (!target) {
+				await deleteTempBan(tempban.id);
+				continue;
+			}
+			setTimeout(async function () {
+				try {
+					await infractionsManager.unban(
+						client,
+						<Guild>guild,
+						BanType.TEMP,
+						target,
+						<GuildMember>guild?.me,
+						await client.bulbutils.translate("global_mod_action_log", guild?.id, {
+							action: await client.bulbutils.translate("mod_action_types.auto_unban", guild?.id, {}),
+							moderator: client.user,
+							target: target,
+							reason: "Automatic unban",
+						}),
+						"Automatic unban",
+					);
+				} catch (error) {}
+
+				await deleteTempBan(tempban.id);
+			}, tempban.expireTime - Date.now());
+		}
+
+		client.log.client(`[CLIENT - TEMP BANS] Successfully handled ${tempbans.length} temp bans(s)`);
 	}
 }
