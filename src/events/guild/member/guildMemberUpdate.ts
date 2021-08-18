@@ -1,12 +1,10 @@
 import Event from "../../../structures/Event";
 import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, User, Util, Permissions } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
-// import InfractionsManager from "../../../utils/managers/InfractionsManager";
-// import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
-// const infractionsManager: InfractionsManager = new InfractionsManager();
-// const databaseManager: DatabaseManager = new DatabaseManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -17,9 +15,8 @@ export default class extends Event {
 	}
 
 	public async run(oldMember: GuildMember, newMember: GuildMember) {
-		// let autoRoleName: string | null;
-		// if (oldMember.pending && !newMember.pending && (autoRoleName = await databaseManager.getAutoRole(newMember.guild.id)) !== null)
-		//	  newMember.roles.add(autoRoleName);
+		let autoRoleName: string | null;
+		if (oldMember.pending && !newMember.pending && (autoRoleName = (await databaseManager.getConfig(newMember.guild.id))["autorole"]) !== null) await newMember.roles.add(autoRoleName);
 
 		let change: "newrole" | "removedrole" | "nickname";
 		let message: string;

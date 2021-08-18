@@ -1,8 +1,10 @@
 import Event from "../../../structures/Event";
 import { GuildMember, Util } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -24,5 +26,12 @@ export default class extends Event {
 				}),
 			),
 		);
+
+		if (member.pending) return;
+
+		const config = await databaseManager.getConfig(member.guild.id)
+		if (!config["autorole"]) return;
+
+		await member.roles.add(config["autorole"])
 	}
 }
