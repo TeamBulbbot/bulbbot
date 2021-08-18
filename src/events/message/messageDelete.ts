@@ -21,6 +21,7 @@ export default class extends Event {
 			user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 			user: message.author,
 			message,
+			channel: message.channel,
 			content: message.content ? `**C:** ${Util.cleanContent(message.content, message.channel)}\n` : "",
 			reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
 			sticker: message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "",
