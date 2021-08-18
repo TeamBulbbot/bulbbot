@@ -1,4 +1,4 @@
-import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
+import { ContextMenuInteraction, GuildMember, Message, Snowflake, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
@@ -213,44 +213,6 @@ export default class {
 	public async sleep(ms: number) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
-
-	public async embedPage(message: Message, pages: MessageEmbed[], timeout: number = 120000) {
-		if (!pages) throw new Error("Pages are not given.");
-
-		const row = new MessageActionRow().addComponents([
-			new MessageButton()
-				.setStyle("SECONDARY")
-				.setEmoji(Emotes.other.LEFT)
-				.setCustomId("prev_page")
-				.setDisabled(pages.length <= 2),
-			new MessageButton()
-				.setStyle("SECONDARY")
-				.setEmoji(Emotes.other.RIGHT)
-				.setCustomId("next_page")
-				.setDisabled(pages.length <= 2),
-		]);
-
-		let page = 0;
-		const curPage = await message.channel.send({ components: [row], embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)] });
-		const filter = (i: ButtonInteraction) => i.user.id === message.author.id;
-		const collector = curPage.createMessageComponentCollector({ filter, time: timeout });
-		collector.on("collect", interaction => {
-			if (interaction.customId === "prev_page") {
-				page = page > 0 ? --page : pages.length - 1;
-			} else {
-				page = page + 1 < pages.length ? ++page : 0;
-			}
-
-			interaction.update({ embeds: [pages[page].setFooter(`Page ${page + 1} / ${pages.length}`)] });
-		});
-		collector.on("end", () => {
-			if (!curPage.deleted) {
-				curPage.edit({ components: [] });
-			}
-		});
-		return curPage;
-	}
-
 	formatDays(start: Date) {
 		const end: string = moment.utc().format("YYYY-MM-DD");
 		const date: Moment = moment(moment.utc(start).format("YYYY-MM-DD"));
@@ -299,12 +261,6 @@ export default class {
 
 		return user;
 	}
-
-	formatSmall(start: number) {
-		const string = moment(new Date(start)).fromNow();
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
-
 	prettify(action: string): string {
 		let finalString = "";
 		switch (action) {
@@ -386,7 +342,7 @@ export default class {
 				return true;
 
 			case UserHandle.CANNOT_ACTION_ROLE_EQUAL:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild?.id, { taregt: user }));
+				await message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_BOT_SELF:
@@ -403,6 +359,71 @@ export default class {
 
 			case UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT:
 				await message.channel.send(await this.translate("global_cannot_action_role_equal_bot", message.guild?.id, { target: user }));
+				return true;
+
+			case UserHandle.SUCCESS:
+				return false;
+
+			default:
+				return false;
+		}
+	}
+
+	async checkUserFromInteraction(interaction: ContextMenuInteraction, user: GuildMember): Promise<UserHandle> {
+		const author = await interaction.guild?.members.fetch(interaction.user.id);
+		if (
+			interaction.user.id === interaction.guild?.ownerId &&
+			interaction.guild?.me &&
+			interaction.guild?.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < interaction.guild?.me.roles.highest.rawPosition
+		)
+			return UserHandle.SUCCESS;
+
+		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
+
+		if (interaction.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
+
+		if (author?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
+
+		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
+
+		if (author?.roles && user.roles.highest.rawPosition >= author?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+
+		if (interaction.guild?.me && interaction.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+
+		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild?.me?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+
+		return UserHandle.SUCCESS;
+	}
+
+	async resolveUserHandleFromInteraction(interaction: ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
+		switch (handle) {
+			case UserHandle.CANNOT_ACTION_SELF:
+				await interaction.reply({ content: await this.translate("global_cannot_action_self", interaction.guild?.id, {}), ephemeral: true });
+				return true;
+
+			case UserHandle.CANNOT_ACTION_OWNER:
+				await interaction.reply({ content: await this.translate("global_cannot_action_owner", interaction.guild?.id, {}), ephemeral: true });
+				return true;
+
+			case UserHandle.CANNOT_ACTION_ROLE_EQUAL:
+				await interaction.reply({ content: await this.translate("global_cannot_action_role_equal", interaction.guild?.id, { target: user }), ephemeral: true });
+				return true;
+
+			case UserHandle.CANNOT_ACTION_BOT_SELF:
+				await interaction.reply({ content: await this.translate("global_cannot_action_bot_self", interaction.guild?.id, {}), ephemeral: true });
+				return true;
+
+			case UserHandle.CANNOT_ACTION_ROLE_HIGHER:
+				await interaction.reply({ content: await this.translate("global_cannot_action_role_equal", interaction.guild?.id, { target: user }), ephemeral: true });
+				return true;
+
+			case UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT:
+				await interaction.reply({ content: await this.translate("global_cannot_action_role_equal_bot", interaction.guild?.id, { target: user }), ephemeral: true });
+				return true;
+
+			case UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT:
+				await interaction.reply({ content: await this.translate("global_cannot_action_role_equal_bot", interaction.guild?.id, { target: user }), ephemeral: true });
 				return true;
 
 			case UserHandle.SUCCESS:

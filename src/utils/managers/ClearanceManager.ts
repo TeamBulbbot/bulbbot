@@ -1,4 +1,4 @@
-import { Message, Permissions, Snowflake } from "discord.js";
+import { Interaction, Message, Permissions, Snowflake } from "discord.js";
 import { sequelize } from "../database/connection";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
@@ -120,6 +120,23 @@ export default class {
 		let clearance: number = 0;
 		response.forEach(entry => {
 			if (entry.clearanceLevel > clearance && message.member?.roles.cache.find(r => r.id === entry.roleId)) clearance = entry.clearanceLevel;
+		});
+
+		return clearance;
+	}
+
+	async getUserClearanceFromInteraction(interaction: Interaction): Promise<number> {
+		if (interaction.guild?.ownerId === interaction.user.id) return 100;
+		if (!!(interaction.member?.permissions["bitfield"] & BigInt(8))) return 75;
+
+		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: interaction.guild?.id },
+			type: QueryTypes.SELECT,
+		});
+
+		let clearance: number = 0;
+		response.forEach(entry => {
+			if (entry.clearanceLevel > clearance && interaction.member?.roles["member"]["_roles"].includes(entry.roleId)) clearance = entry.clearanceLevel;
 		});
 
 		return clearance;
