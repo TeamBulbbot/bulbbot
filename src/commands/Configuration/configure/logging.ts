@@ -1,6 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, Snowflake, TextChannel } from "discord.js";
+import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
@@ -21,7 +21,7 @@ export default class extends SubCommand {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const part: string = args[0];
-		const original: TextChannel = <TextChannel>message.guild?.channels.cache.get((await databaseManager.getLoggingConfig(<Snowflake>message.guild?.id))["modAction"]);
+		const original: string = (await databaseManager.getLoggingConfig(<Snowflake>message.guild?.id))["modAction"];
 		let channel: string | null = args[1];
 		let confirmMsg: Message;
 
@@ -137,7 +137,7 @@ export default class extends SubCommand {
 			return await message.channel.send(
 				await this.client.bulbutils.translate("config_logging_remove", message.guild?.id, {
 					logging_type: part,
-					channel: original.id,
+					channel: original,
 				}),
 			);
 		} else {
