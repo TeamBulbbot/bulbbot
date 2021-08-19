@@ -25,7 +25,7 @@ export default class extends SubCommand {
 		let channel: string | null = args[1];
 		let confirmMsg: Message;
 
-		if (channel === "remove") channel = null;
+		if (channel === "remove" || channel === "disable") channel = null;
 		else {
 			channel = channel.replace(NonDigits, "");
 			const cTemp: GuildChannel = <GuildChannel>message.guild?.channels.cache.get(channel);
