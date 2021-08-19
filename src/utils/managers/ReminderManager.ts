@@ -24,17 +24,6 @@ export default class {
 		return response[0][0];
 	}
 
-	public async getLatestReminder(userId: Snowflake): Promise<any> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "userId" = $UserId  ORDER BY id DESC LIMIT 1', {
-			bind: {
-				UserId: userId,
-			},
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0];
-	}
-
 	public async getReminder(id: number): Promise<any> {
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "id" = $Id', {
 			bind: { Id: id },

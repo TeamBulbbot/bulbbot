@@ -6,7 +6,7 @@ import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
 
-const { createReminder, getLatestReminder, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
+const { createReminder, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -79,15 +79,26 @@ export default class extends SubCommand {
 				if (reminder.channelId !== "") {
 					// @ts-ignore
 					const channel: TextChannel = await this.client.channels.fetch(reminder.channelId);
-					const message: Message = await channel.messages.fetch(reminder.messageId);
-
-					message.reply({
-						content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+					let message: Message;
+					let options: any = {
 						allowedMentions: {
 							repliedUser: true,
-							users: [message.author.id],
+							users: [reminder.userId],
 						},
-					});
+					};
+
+					try {
+						message = await channel.messages.fetch(reminder.messageId);
+						message.reply({
+							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							options,
+						});
+					} catch (_) {
+						channel.send({
+							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							options,
+						});
+					}
 				} else {
 					const user: User = await this.client.users.fetch(reminder.userId);
 
