@@ -62,9 +62,9 @@
   "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**{{emote_wrench}} Correct usage:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
-  "event_message_edit_special": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{message.channel.id}}>\n`ID (channel-message): {{message.channel.id}}-{{message.id}}`",
+  "event_message_edit_special": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
   "event_message_delete": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}>.\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}",
-  "event_message_delete_special": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{message.channel.id}}>.\n`ID (channel-message): {{message.channel.id}}-{{message.id}}`",
+  "event_message_delete_special": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}>.\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
 
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",

@@ -38,6 +38,7 @@ export default class extends Event {
 					user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 					user: message.author,
 					message,
+					channel: message.channel,
 				}),
 				`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`,
 			);
