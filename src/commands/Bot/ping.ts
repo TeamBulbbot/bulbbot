@@ -14,7 +14,8 @@ export default class extends Command {
 	}
 
 	async run(message: Message): Promise<void> {
-		const latency: number = Math.floor(Date.now() - message.createdTimestamp);
+		const pong: Message = await message.channel.send("Pong!");
+		const latency: number = Math.floor(pong.createdTimestamp - message.createdTimestamp);
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const embed: MessageEmbed = new MessageEmbed()
@@ -33,6 +34,6 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await pong.edit({ embeds: [embed] });
 	}
 }
