@@ -371,6 +371,11 @@ export default class {
 
 	async checkUserFromInteraction(interaction: ContextMenuInteraction, user: GuildMember): Promise<UserHandle> {
 		const author = await interaction.guild?.members.fetch(interaction.user.id);
+
+		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
+
+		if (interaction.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
+
 		if (
 			interaction.user.id === interaction.guild?.ownerId &&
 			interaction.guild?.me &&
@@ -378,10 +383,6 @@ export default class {
 			user.roles.highest.rawPosition < interaction.guild?.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
-
-		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
-
-		if (interaction.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
 
 		if (author?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
 
