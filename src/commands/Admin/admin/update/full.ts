@@ -18,11 +18,13 @@ export default class extends SubCommand {
 		const path: string = join(__dirname, "/../../../../../");
 		const PM2_PROCESS: String = "bulbbot";
 
+		message.reply("Okey starting to pull the latest code!");
+
 		cd(path);
 
 		const resp: ShellString = exec(`git pull`);
 
-		//if (resp.stderr) return message.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
+		if (resp) message.reply(`**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
 		message.reply(`Successfully pulled the latest code\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 		await exec(`tsc --project tsconfig.json`);
 		message.reply("Successfully built TypeScript files");

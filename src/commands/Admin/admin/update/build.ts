@@ -10,6 +10,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "build",
 			usage: "build",
+			aliases: ["compile"],
 		});
 	}
 
