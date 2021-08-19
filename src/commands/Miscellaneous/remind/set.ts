@@ -60,18 +60,18 @@ export default class extends SubCommand {
 
 		const filter = (i: any) => i.user.id === message.author.id;
 		const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
+		let reminder: any;
 
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (interaction.customId === "dm") {
-				createReminder(reason, duration, message.author.id, "", "");
+				reminder = await createReminder(reason, duration, message.author.id, "", "");
 				interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", message.guild?.id, { duration }));
 			} else {
-				createReminder(reason, duration, message.author.id, message.channel.id, message.id);
+				reminder = await createReminder(reason, duration, message.author.id, message.channel.id, message.id);
 				interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", message.guild?.id, { duration }));
 			}
 
 			msg.edit({ components: [row2] });
-			let reminder: any = await getLatestReminder(message.author.id);
 
 			setTimeout(async () => {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
