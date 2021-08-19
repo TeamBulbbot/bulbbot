@@ -254,7 +254,7 @@
   "remind_set_dm": "Send reminder in DM",
   "remind_set_channel": "Send reminder in channel",
   "remind_set_select_dm": "Will notify you in your dms **<t:{{duration}}:R>**",
-  "remind_set_select_channel": "Will notify you in this chanenl **<t:{{duration}}:R>**",
+  "remind_set_select_channel": "Will notify you in this channel **<t:{{duration}}:R>**",
 
   "inviteinfo_error": "{{emote_warn}} Unable to find a server with that invite",
   "inviteinfo_verification_level": "Verification Level: `{{guild.verificationLevel}}`\n",
