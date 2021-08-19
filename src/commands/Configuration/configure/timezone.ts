@@ -27,7 +27,7 @@ export default class extends SubCommand {
 				await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
 					argument: timezone,
 					arg_expected: "timezone:string",
-					argument_list: "",
+					argument_list: "Find all the timezones at <https://momentjs.com/timezone/>",
 				}),
 			);
 

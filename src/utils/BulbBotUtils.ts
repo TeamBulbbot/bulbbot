@@ -445,6 +445,7 @@ export default class {
 		BTT: "Asia/Dhaka",
 		UZT: "Asia/Tashkent",
 		GST: "Asia/Dubai",
+		IST: "Asia/Kolkata",
 		MSK: "Europe/Moscow",
 		CEST: "Europe/Brussels",
 		BST: "Europe/London",
