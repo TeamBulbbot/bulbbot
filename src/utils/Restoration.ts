@@ -29,15 +29,26 @@ export default class {
 				if (reminder.channelId !== "") {
 					// @ts-ignore
 					const channel: TextChannel = await client.channels.fetch(reminder.channelId);
-					const message: Message = await channel.messages.fetch(reminder.messageId);
-
-					message.reply({
-						content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+					let message: Message;
+					let options: any = {
 						allowedMentions: {
 							repliedUser: true,
-							users: [message.author.id],
+							users: [reminder.userId],
 						},
-					});
+					};
+
+					try {
+						message = await channel.messages.fetch(reminder.messageId);
+						message.reply({
+							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							options,
+						});
+					} catch (_) {
+						channel.send({
+							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							options,
+						});
+					}
 				} else {
 					const user: User = await client.users.fetch(reminder.userId);
 

@@ -4,9 +4,9 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 
 export default class {
-	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake): Promise<void> {
-		await sequelize.query(
-			'INSERT INTO reminds (reason, "expireTime", "userId", "channelId", "messageId", "createdAt", "updatedAt" ) VALUES ($Reason, $ExpireTime, $UserId, $ChannelId, $MessageId, $CreatedAt, $UpdatedAt)',
+	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake): Promise<any> {
+		const response: any = await sequelize.query(
+			'INSERT INTO reminds (reason, "expireTime", "userId", "channelId", "messageId", "createdAt", "updatedAt" ) VALUES ($Reason, $ExpireTime, $UserId, $ChannelId, $MessageId, $CreatedAt, $UpdatedAt) RETURNING *;',
 			{
 				bind: {
 					Reason: reason,
@@ -20,17 +20,8 @@ export default class {
 				type: QueryTypes.INSERT,
 			},
 		);
-	}
 
-	public async getLatestReminder(userId: Snowflake): Promise<any> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "userId" = $UserId  ORDER BY id DESC LIMIT 1', {
-			bind: {
-				UserId: userId,
-			},
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0];
+		return response[0][0];
 	}
 
 	public async getReminder(id: number): Promise<any> {
