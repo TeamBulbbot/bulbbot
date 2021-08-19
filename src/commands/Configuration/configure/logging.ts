@@ -137,7 +137,7 @@ export default class extends SubCommand {
 			return await message.channel.send(
 				await this.client.bulbutils.translate("config_logging_remove", message.guild?.id, {
 					logging_type: part,
-					channel: original,
+					channel: original.id,
 				}),
 			);
 		} else {
