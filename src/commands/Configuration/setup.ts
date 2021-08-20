@@ -12,7 +12,7 @@ import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
 import ConfigPart from "../../utils/types/ConfigPart";
 import GuildSetup from "../../utils/types/GuildSetup";
 import AutoModSetup from "../../utils/types/AutoModSetup";
-import CommandContext from "src/structures/CommandContext";
+import CommandContext from "../../structures/CommandContext";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
