@@ -11,6 +11,7 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "logging",
+			aliases: ["log", "logs"],
 			clearance: 75,
 			minArgs: 2,
 			maxArgs: 2,

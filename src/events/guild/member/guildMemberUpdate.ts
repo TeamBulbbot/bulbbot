@@ -19,6 +19,7 @@ export default class extends Event {
 		if (oldMember.pending && !newMember.pending && (autoRoleName = (await databaseManager.getConfig(newMember.guild.id))["autorole"]) !== null) await newMember.roles.add(autoRoleName);
 
 		let change: "newrole" | "removedrole" | "nickname";
+		let part: "member" | "role";
 		let message: string;
 		let audit: GuildAuditLogs;
 		let auditLog: GuildAuditLogsEntry | undefined;
@@ -34,9 +35,11 @@ export default class extends Event {
 				switch (change) {
 					case "newrole":
 					case "removedrole":
+						part = "role";
 						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
 						break;
 					default:
+						part = "member";
 						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 						break;
 				}
@@ -80,6 +83,6 @@ export default class extends Event {
 				break;
 		}
 
-		await loggingManager.sendServerEventLog(this.client, newMember.guild, Util.removeMentions(message));
+		await loggingManager.sendEventLog(this.client, newMember.guild, part!, Util.removeMentions(message));
 	}
 }
