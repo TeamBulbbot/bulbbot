@@ -77,7 +77,7 @@ export default class extends Event {
 
 		let used: string = `${prefix}${command.name}`;
 		options.args.forEach(arg => (used += ` ${arg}`));
-		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, message.guild, message.author, message.channel.id, used);
+		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, message.guild, message.author, message.channel.id, message.content);
 
 		await command.run(message, options.args);
 	}
