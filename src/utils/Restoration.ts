@@ -8,6 +8,7 @@ import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { MuteType } from "./types/MuteType";
 import { BanType } from "./types/BanType";
+import { setTimeout } from "safe-timers";
 
 const { getAllReminders, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 const { getAllMutes, deleteMute }: MuteManger = new MuteManger();

@@ -41,6 +41,7 @@
 		"pg": "^8.7.1",
 		"pg-hstore": "^2.3.4",
 		"prom-client": "^13.2.0",
+		"safe-timers": "^1.1.0",
 		"sequelize": "^6.6.5",
 		"sharp": "^0.28.3",
 		"shelljs": "^0.8.4",

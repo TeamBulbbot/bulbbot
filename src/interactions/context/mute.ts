@@ -5,6 +5,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import MuteManger from "../../utils/managers/MuteManger";
+import { setTimeout } from "safe-timers";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
