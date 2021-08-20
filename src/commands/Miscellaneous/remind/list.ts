@@ -17,13 +17,13 @@ export default class extends SubCommand {
 	public async run(message: Message): Promise<void | Message> {
 		let options: any[] = [];
 		const reminders: any = await listUserReminders(message.author.id);
-		if (!reminders.length) return await message.channel.send(await this.client.bulbutils.translate("remind_list_none", message.guild?.id, {}))
+		if (!reminders.length) return await message.channel.send(await this.client.bulbutils.translate("remind_list_none", message.guild?.id, {}));
 
 		for (let i = 0; i < 25; i++) {
 			if (reminders?.[i] === undefined) continue;
 
 			options.push({
-				label: `Reminder #${i + 1}`,
+				label: `Reminder #${reminders[i].id}`,
 				description: await this.client.bulbutils.translate("infraction_interaction_description", message.guild?.id, {}),
 				value: `${message.author.id}_${reminders[i].id}`,
 				emoji: Emotes.other.REMIND,
