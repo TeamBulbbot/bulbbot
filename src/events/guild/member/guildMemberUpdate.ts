@@ -36,11 +36,11 @@ export default class extends Event {
 					case "newrole":
 					case "removedrole":
 						part = "role";
-						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
+						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
 						break;
 					default:
 						part = "member";
-						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_ROLE_UPDATE" });
+						audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
 						break;
 				}
 				auditLog = audit.entries.first();
