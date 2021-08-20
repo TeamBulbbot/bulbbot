@@ -1,8 +1,9 @@
 import BulbBotClient from "./BulbBotClient";
-import { DMChannel, Guild, Message, Snowflake } from "discord.js";
+import { DMChannel, Guild, Snowflake } from "discord.js";
 import AutoModManager from "../utils/managers/AutoModManager";
 import LoggingManager from "../utils/managers/LoggingManager";
 import DatabaseManager from "../utils/managers/DatabaseManager";
+import CommandContext from "./CommandContext";
 
 const automodManager: AutoModManager = new AutoModManager();
 const loggingManager: LoggingManager = new LoggingManager();
@@ -10,7 +11,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 let cache = {};
 
-export async function set(client: BulbBotClient, message: Message, guild: Snowflake, category: "mentions" | "messages", user: Snowflake, value: number, timeout: number = 10000): Promise<void> {
+export async function set(client: BulbBotClient, context: CommandContext, guild: Snowflake, category: "mentions" | "messages", user: Snowflake, value: number, timeout: number = 10000): Promise<void> {
 	if (cache[guild] === undefined) cache[guild] = { mentions: {}, messages: {} };
 
 	if (!cache[guild][category][user]) cache[guild][category][user] = { count: value, time: Date.now() };
@@ -22,13 +23,13 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 	const mentionsLimit = dbGuild.limitMentions;
 
 	if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
-		if (!(message.channel instanceof DMChannel)) {
+		if (!(context.channel instanceof DMChannel)) {
 			await automodManager.resolveAction(
 				client,
-				message,
+				context,
 				dbGuild.punishmentMessages,
-				await client.bulbutils.translate("automod_violation_max_messages_reason", message.guild?.id, {
-					channel: message.channel,
+				await client.bulbutils.translate("automod_violation_max_messages_reason", context.guild?.id, {
+					channel: context.channel,
 					amount: cache[guild]["messages"][user]["count"],
 					limit: dbGuild.timeoutMessages,
 				}),
@@ -36,10 +37,10 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 		}
 		await loggingManager.sendAutoModLog(
 			client,
-			<Guild>message.guild,
-			await client.bulbutils.translate("automod_violation_max_messages_log", message.guild?.id, {
-				target: message.author,
-				channel: message.channel,
+			<Guild>context.guild,
+			await client.bulbutils.translate("automod_violation_max_messages_log", context.guild?.id, {
+				target: context.author,
+				channel: context.channel,
 				amount: cache[guild]["messages"][user]["count"],
 				limit: (Date.now() - cache[guild]["messages"][user]["time"]) / 1000,
 			}),
@@ -47,13 +48,13 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 		delete cache[guild]["messages"][user];
 	}
 	if (cache[guild]["mentions"][user] && cache[guild]["mentions"][user]["count"] >= mentionsLimit && mentionsLimit !== 0) {
-		if (!(message.channel instanceof DMChannel)) {
+		if (!(context.channel instanceof DMChannel)) {
 			await automodManager.resolveAction(
 				client,
-				message,
+				context,
 				dbGuild.punishmentMentions,
-				await client.bulbutils.translate("automod_violation_max_mentions_reason", message.guild?.id, {
-					channel: message.channel,
+				await client.bulbutils.translate("automod_violation_max_mentions_reason", context.guild?.id, {
+					channel: context.channel,
 					amount: cache[guild]["mentions"][user]["count"],
 					limit: dbGuild.timeoutMentions,
 				}),
@@ -61,10 +62,10 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 		}
 		await loggingManager.sendAutoModLog(
 			client,
-			<Guild>message.guild,
-			await client.bulbutils.translate("automod_violation_max_mentions_log", message.guild?.id, {
-				target: message.author,
-				channel: message.channel,
+			<Guild>context.guild,
+			await client.bulbutils.translate("automod_violation_max_mentions_log", context.guild?.id, {
+				target: context.author,
+				channel: context.channel,
 				amount: cache[guild]["mentions"][user]["count"],
 				limit: (Date.now() - cache[guild]["mentions"][user]["time"]) / 1000,
 			}),

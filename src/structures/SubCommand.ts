@@ -34,8 +34,8 @@ export default class SubCommand extends Command {
 		this.parent = parent;
 	}
 
-	public async run(message: CommandContext, args: string[]): Promise<any> {
+	public async run(context: CommandContext, args: string[]): Promise<any> {
 		if (!args.length || !this.subCommands.length) throw new CommandException(`SubCommand \`${this.qualifiedName}\` doesn't provide a run method!`);
-		return super.run(message, args);
+		return super.run(context, args);
 	}
 }
