@@ -54,11 +54,11 @@ export const translatorEmojis: Record<string, string> = {
 	emote_edit: Emotes.other.EDIT,
 	emote_add: Emotes.other.ADD,
 	emote_remove: Emotes.other.REMOVE,
-
 	emote_ban: Emotes.actions.BAN,
 	emote_kick: Emotes.actions.KICK,
 	emote_unban: Emotes.actions.UNBAN,
 	emote_mute: Emotes.actions.MUTE,
+	emote_remind: Emotes.other.REMIND,
 };
 
 export const translatorConfig: Record<string, any> = {

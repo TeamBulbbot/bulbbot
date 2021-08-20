@@ -7,6 +7,7 @@ import ban from "../../interactions/context/ban";
 import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
+import reminders from "../../interactions/select/reminders";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -20,8 +21,8 @@ export default class extends Event {
 
 	async run(interaction: Interaction) {
 		if (interaction.isSelectMenu()) {
-			if (interaction.customId !== "infraction") return;
-			await infraction(this.client, interaction);
+			if (interaction.customId === "infraction") await infraction(this.client, interaction);
+			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
 			if ((await clearanceManager.getUserClearanceFromInteraction(interaction)) < 50)
 				return await interaction.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true });
@@ -40,16 +41,11 @@ export default class extends Event {
 				return;
 
 			//Context commands
-			if (interaction.commandName === "Ban")
-				await ban(this.client, interaction, message);
-			else if (interaction.commandName === "Kick")
-				await kick(this.client, interaction, message);
-			else if (interaction.commandName === "Warn")
-				await warn(this.client, interaction, message);
-			else if (interaction.commandName === "Quick Mute (1h)")
-				await mute(this.client, interaction, message);
-			else if (interaction.commandName === "Clean All Messages")
-				await clean(this.client, interaction, message);
+			if (interaction.commandName === "Ban") await ban(this.client, interaction, message);
+			else if (interaction.commandName === "Kick") await kick(this.client, interaction, message);
+			else if (interaction.commandName === "Warn") await warn(this.client, interaction, message);
+			else if (interaction.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
+			else if (interaction.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		}
 	}
 }
