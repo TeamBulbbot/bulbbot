@@ -1,10 +1,13 @@
-import { APIInteractionGuildMember, APIUser, MessageType } from "discord-api-types";
-import { AwaitMessageComponentOptions, AwaitReactionsOptions, BaseCommandInteraction, Client, ClientApplication, Collection, EmojiIdentifierResolvable, Guild, GuildMember, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionReplyOptions, InteractionType, Message, MessageActionRow, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook } from "discord.js";
+import { APIInteractionGuildMember, APIUser, MessageType, APIMessage, APIMessageComponent, APIActionRowComponent } from "discord-api-types";
+import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, BaseCommandInteraction, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, ContextMenuInteraction, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions } from "discord.js";
 
 export default class CommandContext {
+	// CommandContext
 	public readonly source: Message | Interaction;
 	public readonly contextType: "message" | "interaction";
+	public contextReady: boolean;
 
+	// Common properties
 	public readonly client: Client;
 	public readonly channel: TextBasedChannels;
 	public channelId: Snowflake;
@@ -17,10 +20,12 @@ export default class CommandContext {
 	public applicationId: Snowflake | null;
 	private _user: User;
 
+	// Interaction
 	public readonly token: string | null;
 	public type: InteractionType | MessageType;
 	public version: number | null;
 
+	// Message
 	public activity: MessageActivity | null;
 	public attachments: Collection<Snowflake, MessageAttachment>;
 	public readonly cleanContent: string;
@@ -51,16 +56,43 @@ export default class CommandContext {
 	public flags: Readonly<MessageFlags>;
 	public reference: MessageReference | null;
 
-	public contextReady: boolean;
 
+	// BaseCommandInteraction
+	public readonly command: ApplicationCommand | ApplicationCommand<{ guild: GuildResolvable }> | null;
+	public commandId: Snowflake | null;
+	public commandName: string | null;
+	public deferred: boolean;
+	public ephemeral: boolean | null;
+	public replied: boolean;
+	public webhook: InteractionWebhook | null;
+
+	// CommandInteraction
+	public options: CommandInteractionOptionResolver;
+
+	// ContextMenuInteraction
+	public targetId: Snowflake | null;
+	public targetType: Exclude<ApplicationCommandType, 'CHAT_INPUT'> | null;
+
+	// MessageComponentInteraction
+	public readonly component: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;
+	public componentType: MessageComponentType | null;
+	public message: Message | APIMessage;
+
+	// SelectMenuInteraction
+	public values: string[];
+
+	// getters/setters for user/author to underlying _user property
 	public get user(): User {return this._user;}
 	public set user(user: User) {this._user = user;}
 	public get author(): User {return this._user;}
 	public set author(author: User) {this._user = author;}
 
+
+	// Methods
 	private _toJSON: Function;
 	public toJSON(): unknown {return this._toJSON()}
 
+	// Interaction
 	private _isButton: Function;
 	public isButton(): boolean {return this._isButton()}
 	private _isCommand: Function;
@@ -74,11 +106,13 @@ export default class CommandContext {
 	private _inGuild: Function;
 	public inGuild(): boolean {return this._inGuild()}
 
+	// Common-ish
 	private _reply: Function;
 	public reply(options: string | MessagePayload | ReplyMessageOptions | InteractionReplyOptions): Promise<void | Message | never> {return this._reply(options)}
 	private _startThread: Function;
 	public startThread<T>(options: StartThreadOptions | ThreadCreateOptions<T>): Promise<ThreadChannel | never> {return this._startThread(options)}
 
+	// Message
 	private _awaitMessageComponent: Function;
 	public awaitMessageComponent<T extends MessageComponentInteraction = MessageComponentInteraction> (
 		options?: AwaitMessageComponentOptions<T>,
@@ -116,6 +150,29 @@ export default class CommandContext {
 	private _unpin: Function;
 	public unpin(): Promise<Message> {return this._unpin()};
 
+	// MessageComponentInteraction
+	private _deferReply: Function;
+	public deferReply(options: InteractionDeferReplyOptions & { fetchReply: true }): Promise<Message | APIMessage>;
+	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply: any | void }): Promise<void>;
+	public deferReply(options?: InteractionDeferReplyOptions): Promise<void | Message | APIMessage> {return this._deferReply(options)}
+	private _deferUpdate: Function;
+	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
+	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public deferUpdate(options?: InteractionDeferUpdateOptions): Promise<void | Message | APIMessage> {return this._deferUpdate(options)}
+	private _deleteReply: Function;
+	public deleteReply(): Promise<void> {return this._deleteReply()}
+	private _editReply: Function;
+	public editReply(options: string | MessagePayload | WebhookEditMessageOptions): Promise<Message | APIMessage> {return this._editReply(options)}
+	private _fetchReply: Function;
+	public fetchReply(): Promise<Message | APIMessage> {return this._fetchReply()}
+	private _followUp: Function;
+	public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message | APIMessage> {return this._followUp(options)}
+	private _update: Function;
+	public update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
+	public update(options: InteractionUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage> {return this._update(options)}
+
+	// Constructor
 	constructor(source: Message | Interaction) {
 		this.contextReady = false;
 		this.source = source;
@@ -147,6 +204,7 @@ export default class CommandContext {
 			this._user = source.user;
 			this.token = source.token;
 			this.version = source.version;
+
 			this.activity = null;
 			this.attachments = new Collection;
 			this.cleanContent = "";
@@ -177,6 +235,8 @@ export default class CommandContext {
 			this.flags = new MessageFlags();
 			this.reference = null;
 
+			this.message = mockMessage;
+
 			this._isButton = source.isButton;
 			this._isCommand = source.isCommand;
 			this._isContextMenu = source.isContextMenu;
@@ -203,11 +263,87 @@ export default class CommandContext {
 			this._suppressEmbeds = (_?: any) => Promise.reject();
 			this._unpin = () => Promise.reject();
 
+			if(source instanceof BaseCommandInteraction) {
+				this.command = source.command;
+				this.commandId = source.commandId;
+				this.commandName = source.commandName;
+				this.deferred = source.deferred;
+				this.ephemeral = source.ephemeral;
+				this.replied = source.replied;
+				this.webhook = source.webhook;
+
+				this.component = null;
+				this.componentType = null;
+				this.values = [];
+
+				if(source instanceof CommandInteraction) {
+					this.options = source.options;
+					this.targetId = null;
+					this.targetType = null;
+				} else if(source instanceof ContextMenuInteraction) {
+					this.options = source.options;
+					this.targetId = source.targetId;
+					this.targetType = source.targetType;
+				} else {
+					this.options = new CommandInteractionOptionResolver(this.client, []);
+					this.targetId = null;
+					this.targetType = null;
+				}
+			} else {
+				this.command = null;
+				this.commandId = null;
+				this.commandName = null;
+				this.deferred = false;
+				this.ephemeral = null;
+				this.replied = false;
+				this.webhook = null;
+
+				this.options = new CommandInteractionOptionResolver(this.client, []);
+				this.targetId = null;
+				this.targetType = null;
+
+				if(source instanceof MessageComponentInteraction) {
+					this.component = source.component;
+					this.componentType = source.componentType;
+					this.values = source instanceof SelectMenuInteraction ? source.values : [];
+				} else {
+					this.component = null;
+					this.componentType = null;
+					this.values = [];
+				}
+			}
+
+			if(source instanceof BaseCommandInteraction || source instanceof MessageComponentInteraction) {
+				this._deferReply = source.deferReply;
+				this._deleteReply = source.deleteReply;
+				this._editReply = source.editReply;
+				this._fetchReply = source.fetchReply;
+				this._followUp = source.followUp;
+
+				if(source instanceof MessageComponentInteraction) {
+					this._deferUpdate = source.deferUpdate;
+					this._update = source.update;
+				} else {
+					this._deferUpdate = () => Promise.reject();
+					this._update = () => Promise.reject();
+				}
+			} else {
+				this._deferReply = () => Promise.reject();
+				this._deleteReply = () => Promise.reject();
+				this._editReply = () => Promise.reject();
+				this._fetchReply = () => Promise.reject();
+				this._followUp = this.reply;
+				this._deferUpdate = () => Promise.reject();
+				this._update = () => Promise.reject();
+			}
+
 		} else if(source instanceof Message) {
 			this.contextType = "message";
 			this._user = source.author;
 			this.token = null;
 			this.version = null;
+
+			this.message = source;
 
 			this.activity = source.activity;
 			this.attachments = source.attachments;
@@ -265,6 +401,29 @@ export default class CommandContext {
 			this._suppressEmbeds = source.suppressEmbeds;
 			this._unpin = source.unpin;
 
+			this.command = null;
+			this.commandId = null;
+			this.commandName = null;
+			this.deferred = false;
+			this.ephemeral = null;
+			this.replied = false;
+			this.webhook = null;
+
+			this.options = new CommandInteractionOptionResolver(this.client, []);
+			this.targetId = null;
+			this.targetType = null;
+
+			this.component = null;
+			this.componentType = null;
+			this.values = [];
+
+			this._deferReply = () => Promise.reject();
+			this._deleteReply = () => Promise.reject();
+			this._editReply = () => Promise.reject();
+			this._fetchReply = () => Promise.reject();
+			this._followUp = this.reply;
+			this._deferUpdate = () => Promise.reject();
+			this._update = () => Promise.reject();
 		} else {
 			// makes TS happy and does safety stuff
 			throw new Error();
