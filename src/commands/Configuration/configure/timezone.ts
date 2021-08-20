@@ -10,7 +10,7 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "timezone",
-			aliases: ["zone"],
+			aliases: ["zone", "tz"],
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: 1,
