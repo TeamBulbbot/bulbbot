@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { GuildMember, Interaction, Message, Snowflake, TextChannel } from "discord.js";
+import { ContextMenuInteraction, GuildMember, Interaction, Message, Snowflake, TextChannel } from "discord.js";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import warn from "../../interactions/context/warn";
 import kick from "../../interactions/context/kick";
@@ -7,6 +7,7 @@ import ban from "../../interactions/context/ban";
 import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
+import CommandContext from "../../structures/CommandContext";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -18,16 +19,17 @@ export default class extends Event {
 		});
 	}
 
-	async run(interaction: Interaction) {
+	async run(interaction: Interaction): Promise<void> {
+		const context = new CommandContext(interaction);
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId !== "infraction") return;
 			await infraction(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			if ((await clearanceManager.getUserClearanceFromInteraction(interaction)) < 50)
-				return await interaction.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true });
-
+			if ((await clearanceManager.getUserClearance(context)) < 50)
+				return void await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true });
+			ContextMenuInteraction
 			const message: Message = <Message>(
-				await (<TextChannel>this.client.guilds.cache.get(<Snowflake>interaction.guild?.id)?.channels.cache.get(interaction.channelId)).messages.fetch(interaction.targetId)
+				await (<TextChannel>this.client.guilds.cache.get(<Snowflake>context.guildId)?.channels.cache.get(context.channelId)).messages.fetch(interaction.targetId)
 			);
 
 			if (

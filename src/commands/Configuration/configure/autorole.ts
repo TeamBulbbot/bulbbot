@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message, Role, Snowflake } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
@@ -20,15 +21,15 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let role: Role | null;
 		const targetRole = args[0].replace(NonDigits, "")
-		role = targetRole ? <Role>await message.guild?.roles.fetch(targetRole).catch(() => null) : null;
+		role = targetRole ? <Role>await context.guild?.roles.fetch(targetRole).catch(() => null) : null;
 
 		if (!role && args[0] !== "disable")
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.role", context.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "role:Role",
 					usage: this.usage,
@@ -36,16 +37,16 @@ export default class extends SubCommand {
 			);
 
 		if (args[0] !== "disable") {
-			if (message.guild?.me?.roles.highest && message.guild?.me.roles.highest.rawPosition < role!!.rawPosition)
-				return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild.id, {}));
+			if (context.guild?.me?.roles.highest && context.guild?.me.roles.highest.rawPosition < role!!.rawPosition)
+				return context.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", context.guild.id, {}));
 		}
 
 		if (role !== undefined) {
-			await databaseManager.setAutoRole(<Snowflake>message.guild?.id, role!!.id);
-			return message.channel.send(await this.client.bulbutils.translate("config_autorole_success", message.guild?.id, { role: role!!.name }));
+			await databaseManager.setAutoRole(<Snowflake>context.guild?.id, role!!.id);
+			return context.channel.send(await this.client.bulbutils.translate("config_autorole_success", context.guild?.id, { role: role!!.name }));
 		} else {
-			await databaseManager.setAutoRole(<Snowflake>message.guild?.id, null);
-			return message.channel.send(await this.client.bulbutils.translate("config_autorole_disable", message.guild?.id, {}));
+			await databaseManager.setAutoRole(<Snowflake>context.guild?.id, null);
+			return context.channel.send(await this.client.bulbutils.translate("config_autorole_disable", context.guild?.id, {}));
 		}
 	}
 }

@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
@@ -16,7 +17,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let command: Command | undefined = Command.resolve(this.client, args);
 
 		if(!command) return;
@@ -28,6 +29,6 @@ export default class extends SubCommand {
 		command.aliases.forEach(alias => this.client.aliases.delete(alias));
 
 		this.client.log.client(`[CLIENT - COMMANDS] Unloaded command "${command.qualifiedName}"`);
-		await message.channel.send(`Unloaded command \`${command.qualifiedName}\``); // needs TL?
+		await context.channel.send(`Unloaded command \`${command.qualifiedName}\``); // needs TL?
 	}
 }

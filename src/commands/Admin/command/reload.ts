@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import path from "path";
@@ -21,7 +22,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let command: Command | undefined = Command.resolve(this.client, args);
 
 		if(!command) return;
@@ -37,11 +38,11 @@ export default class extends SubCommand {
 		delete require.cache[require.resolve(commandFile)];
 		let { name } = path.parse(commandFile);
 		let File = require(commandFile);
-		if (!this.isClass(File.default)) return message.channel.send(`Command ${name} is not an instance of Command`);
+		if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 		const loadedCommand = new File.default(this.client, name);
 		// any SubCommand is-a Command
-		if (!(loadedCommand instanceof Command)) return message.channel.send(`Event ${name} doesn't belong in commands!`);
+		if (!(loadedCommand instanceof Command)) return context.channel.send(`Event ${name} doesn't belong in commands!`);
 		if(command instanceof SubCommand) {
 			command.parent.subCommands.push(<SubCommand>loadedCommand);
 		} else {
@@ -53,6 +54,6 @@ export default class extends SubCommand {
 			}
 		}
 		this.client.log.client(`[CLIENT - COMMANDS] Reloaded command "${loadedCommand.qualifiedName}"`);
-		return message.channel.send(`Reloaded command \`${loadedCommand.qualifiedName}\``)
+		return context.channel.send(`Reloaded command \`${loadedCommand.qualifiedName}\``)
 	}
 }

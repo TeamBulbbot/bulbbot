@@ -1,5 +1,6 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
+import { MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -16,8 +17,8 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message): Promise<void> {
-		if (message.guild === null || message.member === null) return;
+	async run(context: CommandContext): Promise<void> {
+		if (context.guild === null || context.member === null) return;
 		this.client.guilds.cache.map(g => g.members.fetch());
 
 		const shardData: string[] = this.client.ws.shards.map(shard => `${selectEmoji(shard.ping)} Shard ID: ${shard.id} \`${shard.ping} ms\`\n`);
@@ -30,7 +31,7 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
-			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild.id, { user: message.author }), <string>message.author.avatarURL({ dynamic: true }))
+			.setFooter(await this.client.bulbutils.translate("global_executed_by", context.guild.id, { user: context.author }), <string>context.author.avatarURL({ dynamic: true }))
 			.setDescription(desc)
 			.addField("Shard Data", `${shardData.join("")}`, true)
 			.addField(
@@ -42,7 +43,7 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await context.channel.send({ embeds: [embed] });
 	}
 }
 

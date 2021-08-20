@@ -1,10 +1,11 @@
-import * as Emotes from "../../../../emotes.json";
-import { embedColor } from "../../../../Config";
 import { Message, MessageEmbed, Snowflake } from "discord.js";
-import ClearanceManager from "../../../../utils/managers/ClearanceManager";
+import { embedColor } from "../../../../Config";
+import * as Emotes from "../../../../emotes.json";
+import BulbBotClient from "../../../../structures/BulbBotClient";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
-import BulbBotClient from "../../../../structures/BulbBotClient";
+import CommandContext from "../../../../structures/CommandContext";
+import ClearanceManager from "../../../../utils/managers/ClearanceManager";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -17,8 +18,8 @@ export default class extends SubCommand {
 		});
 	}
 
-	async run(message: Message): Promise<void | Message> {
-		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>message.guild?.id);
+	async run(context: CommandContext): Promise<void | Message> {
+		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>context.guild?.id);
 
 		let roles: string[] = [];
 		let commands: string[] = [];
@@ -38,15 +39,15 @@ export default class extends SubCommand {
 		// needs translation
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setAuthor(`Overrides for ${message.guild?.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
+			.setAuthor(`Overrides for ${context.guild?.name}`, context.guild?.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription([...commands, ...roles].join("\n") || "*None*")
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				message.author.avatarURL({ dynamic: true }) ?? undefined,
+				context.author.avatarURL({ dynamic: true }) ?? undefined,
 			);
 
-		await message.channel.send({ embeds: [embed] });
+		await context.channel.send({ embeds: [embed] });
 	}
 }

@@ -1,7 +1,8 @@
+import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
-import BulbBotClient from "../../../structures/BulbBotClient";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import { NonDigits } from "../../../utils/Regex";
 
@@ -19,16 +20,16 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const reminderId: number = Number(args[0].replace(NonDigits, ""));
-		const allowedToDelete: boolean = await deleteUserReminder(reminderId, message.author.id);
+		const allowedToDelete: boolean = await deleteUserReminder(reminderId, context.author.id);
 
 		if (!allowedToDelete)
-			return message.reply(
-				await this.client.bulbutils.translate("remind_remove_unable_to_find", message.guild?.id, {
+			return context.reply(
+				await this.client.bulbutils.translate("remind_remove_unable_to_find", context.guild?.id, {
 					reminderId,
 				}),
 			);
-		else message.reply(await this.client.bulbutils.translate("remind_remove_removed", message.guild?.id, { reminderId }));
+		else context.reply(await this.client.bulbutils.translate("remind_remove_removed", context.guild?.id, { reminderId }));
 	}
 }

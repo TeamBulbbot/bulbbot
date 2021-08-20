@@ -1,7 +1,8 @@
+import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel, User } from "discord.js";
-import BulbBotClient from "../../../structures/BulbBotClient";
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
@@ -20,55 +21,56 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let duration: number = <number>parse(args[0]);
 		const reason: string = args.slice(1).join(" ");
 
-		if (duration <= 0) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", message.guild?.id, {}));
-		if (duration > <number>parse("1y")) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", message.guild?.id, {}));
+		if (duration <= 0) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
+		if (duration > <number>parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton()
 				.setCustomId("dm")
-				.setLabel(await this.client.bulbutils.translate("remind_set_dm", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", context.guild?.id, {}))
 				.setStyle("PRIMARY"),
 			new MessageButton()
 				.setCustomId("channel")
-				.setLabel(await this.client.bulbutils.translate("remind_set_channel", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", context.guild?.id, {}))
 				.setStyle("SUCCESS"),
 		]);
 
 		const row2 = new MessageActionRow().addComponents([
 			new MessageButton()
 				.setCustomId("dm")
-				.setLabel(await this.client.bulbutils.translate("remind_set_dm", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", context.guild?.id, {}))
 				.setStyle("PRIMARY")
 				.setDisabled(true),
 			new MessageButton()
 				.setCustomId("channel")
-				.setLabel(await this.client.bulbutils.translate("remind_set_channel", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", context.guild?.id, {}))
 				.setStyle("SUCCESS")
 				.setDisabled(true),
 		]);
 
 		duration = Math.floor(Date.now() / 1000) + duration / 1000;
 
-		const msg: Message = await message.reply({
-			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", message.guild?.id, {}),
+		const msg: Message | void = await context.reply({
+			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", context.guild?.id, {}),
 			components: [row],
 		});
+		if(!msg) return;
 
-		const filter = (i: any) => i.user.id === message.author.id;
+		const filter = (i: any) => i.user.id === context.author.id;
 		const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
 		let reminder: any;
 
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (interaction.customId === "dm") {
-				reminder = await createReminder(reason, duration, message.author.id, "", "");
-				interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", message.guild?.id, { duration }));
+				reminder = await createReminder(reason, duration, context.author.id, "", "");
+				interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", context.guild?.id, { duration }));
 			} else {
-				reminder = await createReminder(reason, duration, message.author.id, message.channel.id, message.id);
-				interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", message.guild?.id, { duration }));
+				reminder = await createReminder(reason, duration, context.author.id, context.channel.id, context.id);
+				interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", context.guild?.id, { duration }));
 			}
 
 			msg.edit({ components: [row2] });

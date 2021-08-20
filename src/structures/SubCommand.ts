@@ -1,8 +1,8 @@
 import BulbBotClient from "./BulbBotClient";
-import { Message } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import Command from "./Command";
 import CommandOptions from "../utils/types/CommandOptions";
+import CommandContext from "./CommandContext";
 
 export type SubCommandClass = typeof SubCommand;
 export default class SubCommand extends Command {
@@ -34,7 +34,7 @@ export default class SubCommand extends Command {
 		this.parent = parent;
 	}
 
-	public async run(message: Message, args: string[]): Promise<any> {
+	public async run(message: CommandContext, args: string[]): Promise<any> {
 		if (!args.length || !this.subCommands.length) throw new CommandException(`SubCommand \`${this.qualifiedName}\` doesn't provide a run method!`);
 		return super.run(message, args);
 	}

@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import CommandContext from "src/structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
 
@@ -17,13 +18,13 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]) {
+	async run(context: CommandContext, args: string[]): Promise<Message> {
 		let command: Command = this.client.commands.get(args[0].toLowerCase()) || this.client.commands.get(this.client.aliases.get(args[0].toLowerCase())!)!;
 
 		if (command === undefined || command.devOnly || command.subDevOnly)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild!.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.cmd", message.guild?.id, {}),
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.cmd", context.guild?.id, {}),
 					arg_expected: "command:string",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -51,7 +52,7 @@ export default class extends Command {
 				command.examples.forEach(ex => (msg += `\`${this.client.prefix}${ex}\`\n`));
 			}
 
-			return message.channel.send(msg);
+			return context.channel.send(msg);
 		}
 	}
 }
