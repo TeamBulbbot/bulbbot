@@ -1,5 +1,5 @@
 import { APIInteractionGuildMember, APIUser, MessageType, APIMessage, APIMessageComponent, APIActionRowComponent } from "discord-api-types";
-import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, BaseCommandInteraction, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, ContextMenuInteraction, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions } from "discord.js";
+import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, BaseCommandInteraction, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, ContextMenuInteraction, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions } from "discord.js";
 
 export default class CommandContext {
 	// CommandContext
@@ -319,6 +319,11 @@ export default class CommandContext {
 				this._editReply = source.editReply;
 				this._fetchReply = source.fetchReply;
 				this._followUp = source.followUp;
+				if(this.channel) this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
+					const r = await this.followUp(options);
+					if (r instanceof Message) return r;
+					return new Message(this.client, r);
+				};
 
 				if(source instanceof MessageComponentInteraction) {
 					this._deferUpdate = source.deferUpdate;
