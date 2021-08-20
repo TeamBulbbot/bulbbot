@@ -197,11 +197,11 @@ export default class CommandContext {
 		else this._reply = (_: string | MessagePayload | ReplyMessageOptions | InteractionReplyOptions) => Promise.reject();
 
 		if(source instanceof Interaction) {
+			this.contextType = "interaction";
+			this._user = source.user;
 			const mockApiAuthor: APIUser = {id: this.user.id, username: this.user.username, discriminator: this.user.discriminator, avatar: this.user.avatar};
 			const mockApiClient: APIUser = {id: this.client.user!.id, username: this.client.user!.username, discriminator: this.client.user!.discriminator, avatar: this.client.user!.avatar};
 			const mockMessage = new Message(this.client, {content: "", id: "", channel_id: this.channelId, author: mockApiAuthor, timestamp: `${this.createdTimestamp}`, edited_timestamp: null, tts: false, mention_everyone: false, mentions: [mockApiClient], mention_roles: [], attachments: [], embeds: [], pinned: false, type: MessageType.Default});
-			this.contextType = "interaction";
-			this._user = source.user;
 			this.token = source.token;
 			this.version = source.version;
 
