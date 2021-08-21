@@ -12,7 +12,7 @@ import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
 import ConfigPart from "../../utils/types/ConfigPart";
 import GuildSetup from "../../utils/types/GuildSetup";
 import AutoModSetup from "../../utils/types/AutoModSetup";
-import CommandContext from "../../structures/CommandContext";
+import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -242,7 +242,7 @@ export default class extends Command {
 	public _filter(user: User, f: CollectorFilter<[CommandContext]>): CollectorFilter<[Message]> {
 		// Only accept contexts from the command issuer
 		// Replying with just-the-prefix means "use default"/"don't change". The default/current for each setting is in parenthesis after the prompt
-		return async (context: Message): Promise<boolean> => context.author.id === user.id && (context.content === this.client.prefix || (await f(new CommandContext(context))));
+		return async (context: Message): Promise<boolean> => context.author.id === user.id && (context.content === this.client.prefix || (await f(getCommandContext(context))));
 	}
 
 	private filter(part: ConfigPart, user: User): CollectorFilter<[Message]> {

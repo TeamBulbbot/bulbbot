@@ -4,6 +4,8 @@ import * as Config from "../../Config";
 import { ColorResolvable, Message, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 
+///type Actual<T> =
+
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {

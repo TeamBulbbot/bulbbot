@@ -8,7 +8,7 @@ import * as Config from "../../Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
-import CommandContext from "../../structures/CommandContext";
+import { getCommandContext } from "../../structures/CommandContext";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -23,7 +23,7 @@ export default class extends Event {
 	}
 
 	public async run(message: Message): Promise<any> {
-		const context = new CommandContext(message);
+		const context = getCommandContext(message);
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 

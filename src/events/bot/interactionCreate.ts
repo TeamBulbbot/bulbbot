@@ -7,7 +7,7 @@ import ban from "../../interactions/context/ban";
 import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
-import CommandContext from "../../structures/CommandContext";
+import { getCommandContext } from "../../structures/CommandContext";
 import Command from "../../structures/Command";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -21,7 +21,7 @@ export default class extends Event {
 	}
 
 	async run(interaction: Interaction): Promise<void> {
-		const context = new CommandContext(interaction);
+		const context = getCommandContext(interaction);
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId !== "infraction") return;
 			await infraction(this.client, interaction);
