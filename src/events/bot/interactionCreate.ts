@@ -22,6 +22,7 @@ export default class extends Event {
 
 	async run(interaction: Interaction): Promise<void> {
 		const context = getCommandContext(interaction);
+
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId !== "infraction") return;
 			await infraction(this.client, interaction);
@@ -40,19 +41,37 @@ export default class extends Event {
 				return;
 
 			//Context commands
-			if (interaction.commandName === "Ban") await ban(this.client, interaction, message);
-			else if (interaction.commandName === "Kick") await kick(this.client, interaction, message);
-			else if (interaction.commandName === "Warn") await warn(this.client, interaction, message);
-			else if (interaction.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
-			else if (interaction.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+			if (context.commandName === "Ban") await ban(this.client, interaction, message);
+			else if (context.commandName === "Kick") await kick(this.client, interaction, message);
+			else if (context.commandName === "Warn") await warn(this.client, interaction, message);
+			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
+			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
-			if (interaction.commandName === "ping") {
-				await interaction.deferReply()
-				Command.resolve(this.client, "ping")?.run(context, []);
-			} else if (interaction.commandName === "warn") {
-				await interaction.deferReply();
-				Command.resolve(this.client, "warn")?.run(context, [<string>interaction.options.data[0].value])
+			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
+			const subCommand: string = <string>context.options.getSubcommand(false);
+			let args: string[] = [];
+			let cmd: string = <string>context.commandName;
+
+			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
+			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
+
+			for (const option of context.options["_hoistedOptions"]) {
+				if (option.type === "STRING") args = [...args, ...option.value!!.toString().split(" ")];
+				else args.push(option.value!!.toString());
 			}
+
+			const command = Command.resolve(this.client, cmd);
+			if (!command) return;
+			const invalidReason = await command.validate(context, args);
+			console.log(invalidReason)
+			if (invalidReason !== undefined) {
+				if (!invalidReason) return;
+				await interaction.reply({ content: <string>invalidReason, ephemeral: true });
+				return;
+			}
+
+			await context.deferReply();
+			await command.run(context, args);
 		}
 	}
 }
