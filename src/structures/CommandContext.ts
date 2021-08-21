@@ -1,7 +1,7 @@
 import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
 import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
 
-function clone(obj: object | null): any {
+function clone<T extends object | null>(obj: T): T {
 	return Object.assign(Object.create(obj), obj);
 }
 
@@ -64,9 +64,10 @@ abstract class BaseCommandContext {
 	public commandId!: Snowflake | null;
 	public commandName!: string | null;
 	public deferred!: boolean;
-	public ephemeral!: boolean | null;
 	public replied!: boolean;
 	public webhook!: InteractionWebhook | null;
+	public abstract get ephemeral(): boolean | null;
+	public abstract set ephemeral(e: boolean | null);
 
 	// CommandInteraction
 	public options!: CommandInteractionOptionResolver;
@@ -212,9 +213,16 @@ class MessageCommandContext implements BaseCommandContext {
 	public commandId: null;
 	public commandName: null;
 	public deferred: false;
-	public ephemeral: null;
 	public replied: false;
 	public webhook: null;
+	public get ephemeral(): null {
+		// @ts-ignore
+		return null;
+	}
+	public set ephemeral(e: boolean | null) {
+		// @ts-ignore
+		;
+	}
 
 	// CommandInteraction
 	public options: CommandInteractionOptionResolver;
@@ -396,7 +404,6 @@ class MessageCommandContext implements BaseCommandContext {
 		this.commandId = null;
 		this.commandName = null;
 		this.deferred = false;
-		this.ephemeral = null;
 		this.replied = false;
 		this.webhook = null;
 		this.customId = null;
@@ -485,9 +492,16 @@ class InteractionCommandContext implements BaseCommandContext {
 	public commandId: Snowflake | null;
 	public commandName: Snowflake | null;
 	public deferred: boolean;
-	public ephemeral: boolean | null;
 	public replied: boolean;
 	public webhook: InteractionWebhook | null;
+	public get ephemeral(): boolean | null {
+		// @ts-ignore
+		return this.source?.ephemeral ?? null;
+	}
+	public set ephemeral(e: boolean | null) {
+		// @ts-ignore
+		if("ephemeral" in this.source) this.source.ephemeral = e;
+	}
 
 	// CommandInteraction
 	public options: CommandInteractionOptionResolver;
@@ -600,7 +614,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.contextType = "interaction";
 		this.source = source;
 		this.client = source.client;
-		this.channel = clone(source.channel ?? this.user.dmChannel);
+		this.channel = clone(source.channel ?? this.user.dmChannel)!;
 		this.channelId = this.channel?.id ?? source.channelId;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
@@ -686,7 +700,6 @@ class InteractionCommandContext implements BaseCommandContext {
 		if(source.isMessageComponent() || source.isContextMenu() || source.isCommand()) {
 
 			this.deferred = source.deferred;
-			this.ephemeral = source.ephemeral;
 			this.replied = source.replied;
 			this.webhook = source.webhook;
 			if (source.isMessageComponent()) {
@@ -705,7 +718,6 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.commandId = source.commandId;
 				this.commandName = source.commandName;
 				this.deferred = source.deferred;
-				this.ephemeral = source.ephemeral;
 				this.replied = source.replied;
 				this.webhook = source.webhook;
 
@@ -733,7 +745,6 @@ class InteractionCommandContext implements BaseCommandContext {
 			this.commandId = null;
 			this.commandName = null;
 			this.deferred = false;
-			this.ephemeral = null;
 			this.replied = false;
 			this.webhook = null;
 			this.component = null;
@@ -752,12 +763,22 @@ class InteractionCommandContext implements BaseCommandContext {
 			this._editReply = source.editReply;
 			this._fetchReply = source.fetchReply;
 			this._followUp = source.followUp;
-			if(this.channel)
+			if(this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
-					const r = await this.followUp(options);
-					if (r instanceof Message) return r;
-					return new Message(this.client, r);
+					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : {...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true});
+					let msg = r instanceof Message ? clone(r) : new Message(this.client, r);
+					msg.edit = async (content: string | MessageEditOptions | MessagePayload): Promise<Message> => {
+						let e: Message | APIMessage;
+						if(typeof content === "object" && "embeds" in content) {
+							e = await this.editReply({...content, embeds: content.embeds ?? undefined });
+						} else {
+							e = await this.editReply(<string | MessagePayload>content);
+						}
+						return e instanceof Message ? e : new Message(this.client, e);
+					}
+					return msg;
 				};
+			}
 
 			if(source.isMessageComponent()) {
 				this._deferUpdate = source.deferUpdate;
