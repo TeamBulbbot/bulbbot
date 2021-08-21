@@ -1,6 +1,9 @@
 import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
 import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
 
+function clone(obj: object | null): any {
+	return Object.assign(Object.create(obj), obj);
+}
 
 abstract class BaseCommandContext {
 	// CommandContext
@@ -333,7 +336,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this.contextReady = false;
 		this.source = source;
 		this.client = source.client;
-		this.channel = source.channel ?? this.user.dmChannel;
+		this.channel = clone(source.channel ?? this.user.dmChannel);;
 		this.channelId = this.channel?.id ?? null;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
@@ -616,7 +619,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.contextReady = false;
 		this.source = source;
 		this.client = source.client;
-		this.channel = source.channel ?? this.user.dmChannel!;
+		this.channel = clone(source.channel ?? this.user.dmChannel);
 		this.channelId = this.channel?.id ?? source.channelId;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
