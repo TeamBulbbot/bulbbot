@@ -11,9 +11,8 @@ export default class extends Event {
 	}
 
 	async run(channel: DMChannel | GuildChannel) {
-		if (!channel) return;
 		if (!(channel instanceof GuildChannel)) return;
-
+		// TODO: attempt to fetch executor from audit log
 		await loggingManager.sendEventLog(this.client, channel.guild, "channel", await this.client.bulbutils.translate("event_channel_delete", channel.guild.id, { channel }));
 	}
 }
