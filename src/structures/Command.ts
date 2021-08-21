@@ -20,7 +20,7 @@ export default class Command {
 	public readonly examples: string[];
 	public readonly userPerms: Readonly<BitField<PermissionString, bigint>>;
 	public readonly clientPerms: Readonly<BitField<PermissionString, bigint>>;
-	public readonly clearance: number;
+	public clearance: number;
 	public readonly subDevOnly: boolean;
 	public readonly devOnly: boolean;
 	public readonly premium: boolean;
@@ -76,24 +76,17 @@ export default class Command {
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return "";
-			if (commandOverride["clearanceLevel"] > options.clearance) {
-				return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
-			}
+			this.clearance = commandOverride["clearanceLevel"]
 		}
 
-		this.client.userClearance = options.clearance;
-		if (this.clearance > options.clearance && !commandOverride) {
-			return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
-		}
+		this.client.userClearance = options.clearance
 
-		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
-		if (userPermCheck && this.clearance <= options.clearance) {
+		if (this.clearance > options.clearance) {
+			const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
 			const userMember: GuildMember = message.member!;
 			const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>message.channel).has(userPermCheck)); // !x || !y === !(x && y)
 
-			if (missing) {
-				return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
-			}
+			if (missing) return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
 		}
 
 		const clientPermCheck: BitField<PermissionString, bigint> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
