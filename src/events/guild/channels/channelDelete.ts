@@ -1,4 +1,4 @@
-import { DMChannel, GuildChannel } from "discord.js";
+import { DMChannel, GuildAuditLogs, GuildChannel, Permissions } from "discord.js";
 import Event from "../../../structures/Event";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
@@ -12,15 +12,33 @@ export default class extends Event {
 
 	async run(channel: DMChannel | GuildChannel) {
 		if (!(channel instanceof GuildChannel)) return;
-		// TODO: attempt to fetch executor from audit log
+
+		let log: string = "";
+		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
+			const logs: GuildAuditLogs = await channel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_DELETE" });
+			const first = logs.entries.first();
+			if (first) {
+				const { executor, createdTimestamp } = first;
+				if (Date.now() < createdTimestamp + 3000)
+					log = await this.client.bulbutils.translate("event_channel_delete_moderator", channel.guild.id, {
+						channel,
+						moderator: executor,
+						type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
+					});
+			}
+		}
+
+		if(!log)
+			log = await this.client.bulbutils.translate("event_channel_delete", channel.guild.id, {
+				channel,
+				type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
+			});
+
 		await loggingManager.sendEventLog(
 			this.client,
 			channel.guild,
 			"channel",
-			await this.client.bulbutils.translate("event_channel_delete", channel.guild.id, {
-				channel,
-				type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
-			}),
+			log,
 		);
 	}
 }

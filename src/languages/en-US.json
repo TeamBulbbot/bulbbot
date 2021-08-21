@@ -73,7 +73,9 @@
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
 
   "event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
+  "event_channel_create_moderator": "{{emote_add}} A new **{{type}}** has been created  by **{{moderator.tag}}** `({{moderator.id}})` <#{{channel.id}}> (`{{channel.id}}`).",
   "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted.",
+  "event_channel_delete_moderator": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted by **{{moderator.tag}}** `({{moderator.id}})`.",
 
   "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archive at **{{thread_archive}}**",
   "event_thread_delete": "{{emote_remove}} Thread **{{thread.name}}** `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> has been removed",
