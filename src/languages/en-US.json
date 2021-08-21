@@ -80,7 +80,7 @@
   "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
   "event_invite_delete": "{{emote_remove}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite.code}}`",
 
-  "event_role_create": "{{emote_add}} A new role has been created <@&{{role.id}}>",
+  "event_role_create": "{{emote_add}} A new role has been created <@&{{role.id}}> (`{{role.id}}`)",
   "event_role_delete": "{{emote_remove}} The **@{{role.name}}** (`{{role.id}}`) role has been deleted.",
 
   "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** <t:{{user_age}}:R>",
