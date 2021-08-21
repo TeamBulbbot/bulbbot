@@ -131,17 +131,17 @@ abstract class BaseCommandContext {
 
 	// MessageComponentInteraction
 	public abstract deferReply(options: InteractionDeferReplyOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public abstract deferReply(options?: InteractionDeferReplyOptions & { fetchReply: any | void }): Promise<void>;
+	public abstract deferReply(options: InteractionDeferReplyOptions & { fetchReply?: any }): Promise<void>;
 	public abstract deferReply(options?: InteractionDeferReplyOptions): Promise<void | Message | APIMessage>;
 	public abstract deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public abstract deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public abstract deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public abstract deferUpdate(options?: InteractionDeferUpdateOptions): Promise<void | Message | APIMessage>;
 	public abstract deleteReply(): Promise<void>;
 	public abstract editReply(options: string | MessagePayload | WebhookEditMessageOptions): Promise<Message | APIMessage>;
 	public abstract fetchReply(): Promise<Message | APIMessage>;
 	public abstract followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message | APIMessage>;
 	public abstract update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public abstract update(options: InteractionUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public abstract update(options: InteractionUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public abstract update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage>;
 
 	static async makeMember(client: Client, member: GuildMember | APIInteractionGuildMember | User, guild: Guild | null) {
@@ -313,11 +313,11 @@ class MessageCommandContext implements BaseCommandContext {
 	// MessageComponentInteraction
 	private readonly _deferReply: Function;
 	public deferReply(options: InteractionDeferReplyOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply: any | void }): Promise<void>;
+	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply?: any }): Promise<void>;
 	public deferReply(options?: InteractionDeferReplyOptions): Promise<void | Message | APIMessage> {return this._deferReply(options)}
 	private readonly _deferUpdate: Function;
 	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public deferUpdate(options?: InteractionDeferUpdateOptions): Promise<void | Message | APIMessage> {return this._deferUpdate(options)}
 	private readonly _deleteReply: Function;
 	public deleteReply(): Promise<void> {return this._deleteReply()}
@@ -329,7 +329,7 @@ class MessageCommandContext implements BaseCommandContext {
 	public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message | APIMessage> {return this._followUp(options)}
 	private readonly _update: Function;
 	public update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public update(options: InteractionUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public update(options: InteractionUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage> {return this._update(options)}
 
 	constructor(source: Message) {
@@ -595,11 +595,11 @@ class InteractionCommandContext implements BaseCommandContext {
 	// MessageComponentInteraction
 	private readonly _deferReply: Function;
 	public deferReply(options: InteractionDeferReplyOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply: any | void }): Promise<void>;
+	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply?: any }): Promise<void>;
 	public deferReply(options?: InteractionDeferReplyOptions): Promise<void | Message | APIMessage> {return this._deferReply(options)}
 	private readonly _deferUpdate: Function;
 	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public deferUpdate(options?: InteractionDeferUpdateOptions): Promise<void | Message | APIMessage> {return this._deferUpdate(options)}
 	private readonly _deleteReply: Function;
 	public deleteReply(): Promise<void> {return this._deleteReply()}
@@ -611,7 +611,7 @@ class InteractionCommandContext implements BaseCommandContext {
 	public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message | APIMessage> {return this._followUp(options)}
 	private readonly _update: Function;
 	public update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
-	public update(options: InteractionUpdateOptions & { fetchReply: any | void }): Promise<void>;
+	public update(options: InteractionUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage> {return this._update(options)}
 
 	constructor(source: Interaction) {
