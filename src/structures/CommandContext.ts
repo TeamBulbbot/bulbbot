@@ -9,7 +9,6 @@ abstract class BaseCommandContext {
 	// CommandContext
 	public readonly source!: Message | Interaction;
 	public readonly contextType!: "message" | "interaction";
-	public contextReady!: boolean;
 
 	// Common properties
 	public readonly client!: Client;
@@ -144,19 +143,6 @@ abstract class BaseCommandContext {
 	public abstract update(options: InteractionUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public abstract update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage>;
 
-	static async makeMember(client: Client, member: GuildMember | APIInteractionGuildMember | User, guild: Guild | null) {
-		if(member instanceof GuildMember) return member;
-		if(guild === null) return null;
-		if(member instanceof User) {
-			try {
-				return await guild.members.fetch(member);
-			} catch(_) {
-				return null;
-			}
-		}
-		return new GuildMember(client, member, guild);
-	}
-
 	isMessageContext(): this is MessageCommandContext {
 		return this instanceof MessageCommandContext;
 	}
@@ -170,7 +156,6 @@ class MessageCommandContext implements BaseCommandContext {
 	// CommandContext
 	public readonly source: Message;
 	public readonly contextType: "message";
-	public contextReady: boolean;
 
 	// Common properties
 	public readonly client: Client;
@@ -333,7 +318,6 @@ class MessageCommandContext implements BaseCommandContext {
 	public update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage> {return this._update(options)}
 
 	constructor(source: Message) {
-		this.contextReady = false;
 		this.source = source;
 		this.client = source.client;
 		this.channel = clone(source.channel ?? this.user.dmChannel);;
@@ -347,7 +331,6 @@ class MessageCommandContext implements BaseCommandContext {
 		this.applicationId = source.applicationId;
 
 		this.member = null;
-		BaseCommandContext.makeMember(this.client, source.member ?? this.user, this.guild).then(member => {this.member = member; this.contextReady = true});
 
 		this.valueOf = source.valueOf;
 		this.toString = source.toString;
@@ -446,7 +429,6 @@ class InteractionCommandContext implements BaseCommandContext {
 	// CommandContext
 	public readonly source: Interaction;
 	public readonly contextType: "interaction";
-	public contextReady: boolean;
 
 	// Common properties
 	public readonly client: Client;
@@ -616,7 +598,6 @@ class InteractionCommandContext implements BaseCommandContext {
 
 	constructor(source: Interaction) {
 		this.contextType = "interaction";
-		this.contextReady = false;
 		this.source = source;
 		this.client = source.client;
 		this.channel = clone(source.channel ?? this.user.dmChannel);
@@ -630,7 +611,6 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.applicationId = source.applicationId;
 
 		this.member = null;
-		BaseCommandContext.makeMember(this.client, source.member ?? this.user, this.guild).then(member => {this.member = member; this.contextReady = true});
 
 		this.valueOf = source.valueOf;
 		this.toString = source.toString;
@@ -806,19 +786,33 @@ class InteractionCommandContext implements BaseCommandContext {
 	}
 }
 
+export async function resolveMember(client: Client, member: GuildMember | APIInteractionGuildMember | User, guild: Guild | null) {
+	if(member instanceof GuildMember) return member;
+	if(guild === null) return null;
+	if(member instanceof User) {
+		try {
+			return await guild.members.fetch(member);
+		} catch(_) {
+			return null;
+		}
+	}
+	return new GuildMember(client, member, guild);
+}
+
 type ContextSource = Message | Interaction;
 type CommandContext = MessageCommandContext | InteractionCommandContext;
 
-function isCommandContext(context: any): context is CommandContext {
+export function isCommandContext(context: any): context is CommandContext {
 	return context instanceof BaseCommandContext;
 }
 
-export function getCommandContext<T extends CommandContext, K extends T["contextType"]>(source: T): Extract<CommandContext, { contextType: K }>;
-export function getCommandContext<T extends ContextSource, K extends (T extends Message ? "message" : "interaction")>(source: T): Extract<CommandContext, { contextType: K }>;
-export function getCommandContext(source: ContextSource | CommandContext): CommandContext {
-	if(isCommandContext(source)) return getCommandContext(source.source);
-	if(source instanceof Message) return new MessageCommandContext(source);
-	return new InteractionCommandContext(source);
+export async function getCommandContext<T extends CommandContext, K extends T["contextType"]>(source: T): Promise<Extract<InteractionCommandContext, { contextType: K; }> | Extract<MessageCommandContext, { contextType: K; }>>;
+export async function getCommandContext<T extends ContextSource, K extends (T extends Message ? "message" : "interaction")>(source: T): Promise<Extract<InteractionCommandContext, { contextType: K; }> | Extract<MessageCommandContext, { contextType: K; }>>;
+export async function getCommandContext(source: ContextSource | CommandContext): Promise<CommandContext> {
+	if(isCommandContext(source)) return await getCommandContext(source.source);
+	let instance = source instanceof Message ? new MessageCommandContext(source) : new InteractionCommandContext(source);
+	instance.member = await resolveMember(instance.client, source.member ?? instance.user, instance.guild);
+	return instance;
 }
 
 export default CommandContext;

@@ -21,7 +21,7 @@ export default class extends Event {
 	}
 
 	async run(interaction: Interaction): Promise<void> {
-		const context = getCommandContext(interaction);
+		const context = await getCommandContext(interaction);
 
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId !== "infraction") return;
@@ -63,10 +63,9 @@ export default class extends Event {
 			const command = Command.resolve(this.client, cmd);
 			if (!command) return;
 			const invalidReason = await command.validate(context, args);
-			console.log(invalidReason)
 			if (invalidReason !== undefined) {
 				if (!invalidReason) return;
-				await interaction.reply({ content: <string>invalidReason, ephemeral: true });
+				await interaction.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
 

@@ -70,7 +70,7 @@ export default class Command {
 
 	public async validate(context: CommandContext, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
 		if(options === undefined) {
-			options = new ResolveCommandOptions(this, context, args);
+			options = await ResolveCommandOptions.create(this, context, args);
 		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
 

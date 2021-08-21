@@ -110,8 +110,9 @@ export default class {
 	}
 
 	async getUserClearance(context: CommandContext): Promise<number> {
-		if (context.guild?.ownerId === context.member?.user.id) return 100;
-		if (context.member?.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return 75;
+		if (!context.guild || !context.member) return 0;
+		if (context.guild.ownerId === context.member.user.id) return 100;
+		if (context.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return 75;
 
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: context.guild?.id },

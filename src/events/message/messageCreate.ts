@@ -23,7 +23,7 @@ export default class extends Event {
 	}
 
 	public async run(message: Message): Promise<any> {
-		const context = getCommandContext(message);
+		const context = await getCommandContext(message);
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 
