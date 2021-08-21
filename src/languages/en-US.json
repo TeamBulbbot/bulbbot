@@ -69,10 +69,10 @@
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** Role. Changed {{changes}}",
-  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated <#{{channel.id}}>. Changed {{changes}}",
+  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
 
-  "event_channel_create": "{{emote_add}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
-  "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) channel has been deleted.",
+  "event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
+  "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted.",
 
   "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archive at **{{thread_archive}}**",
   "event_thread_delete": "{{emote_remove}} Thread **{{thread.name}}** `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> has been removed",
@@ -91,6 +91,21 @@
   "event_member_update_role_add_moderator": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_remove_moderator": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+
+  "channel_types": {
+    "GUILD_TEXT" : "text channel",
+    "DM" : "direct message channel",
+    "GUILD_VOICE" : "voice channel",
+    "GROUP_DM" : "group DM",
+    "GUILD_CATEGORY" : "channel category",
+    "GUILD_NEWS" : "news channel",
+    "GUILD_STORE" : "store channel",
+    "GUILD_NEWS_THREAD" : "news thread",
+    "GUILD_PUBLIC_THREAD" : "thread",
+    "GUILD_PRIVATE_THREAD" : "private thread",
+    "GUILD_STAGE_VOICE" : "stage channel",
+    "UNKNOWN" : "channel"
+  },
 
   "config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
 
