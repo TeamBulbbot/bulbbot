@@ -65,7 +65,7 @@ export default class extends Event {
 			const invalidReason = await command.validate(context, args);
 			if (invalidReason !== undefined) {
 				if (!invalidReason) return;
-				await interaction.reply({ content: invalidReason, ephemeral: true });
+				await context.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
 

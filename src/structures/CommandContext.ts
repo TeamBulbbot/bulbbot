@@ -629,7 +629,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.valueOf = source.valueOf;
 		this.toString = source.toString;
 		this._toJSON = source.toJSON;
-		if(source.isMessageComponent() || source.isCommand() || source.isContextMenu()) this._reply = source.reply;
+		if(source.isMessageComponent() || source.isCommand() || source.isContextMenu()) this._reply = source.reply.bind(source);
 		else this._reply = (_: string | MessagePayload | InteractionReplyOptions) => Promise.reject();
 		this.contextType = "interaction";
 		this._user = source.user;
@@ -762,7 +762,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			this._deleteReply = source.deleteReply;
 			this._editReply = source.editReply;
 			this._fetchReply = source.fetchReply;
-			this._followUp = source.followUp;
+			this._followUp = source.followUp.bind(source);
 			if(this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
 					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : {...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true});
