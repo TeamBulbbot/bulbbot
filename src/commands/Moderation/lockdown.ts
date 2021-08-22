@@ -24,14 +24,17 @@ export default class extends Command {
 		// @ts-ignore
 		const channel: GuildChannel = message.guild?.channels.cache.get(args[0].replace(NonDigits, ""));
 		if (!channel || channel.type !== "GUILD_TEXT") {
-			return await message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return await message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "channel:Channel",
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		}
 
 		if (args[1] !== "true" && args[1] !== "false") {

@@ -31,14 +31,17 @@ export default class extends Command {
 		try {
 			target = await this.client.users.fetch(targetID);
 		} catch (error) {
-			return await message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return await message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		}
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;

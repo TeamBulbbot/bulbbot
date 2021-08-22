@@ -335,5 +335,7 @@
   "infraction_interaction_placeholder": "No Infractions Selected",
   "infraction_interaction_description": "Click to view more info",
 
-  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.mrphilip.xyz/command-list)**"
+  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.mrphilip.xyz/command-list)**",
+
+  "help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.mrphilip.xyz/command-list>"
 }

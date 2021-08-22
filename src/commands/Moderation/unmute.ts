@@ -35,14 +35,17 @@ export default class extends Command {
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
 		if (!muteRole) return message.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found", message.guild?.id, {}));
 		if (!target)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "member:Member",
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		if (!target.roles.cache.find(role => role.id === muteRole)) return message.channel.send(await this.client.bulbutils.translate("mute_not_muted", message.guild?.id, { target: target.user }));
 
 		const latestMute: Record<string, any> = <Record<string, any>>await infractionsManager.getLatestMute(<Snowflake>message.guild?.id, target.user.id);

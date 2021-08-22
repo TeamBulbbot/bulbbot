@@ -28,14 +28,17 @@ export default class extends Command {
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
 		if (targets === null)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
@@ -63,14 +66,17 @@ export default class extends Command {
 			let infID: number;
 
 			if (!target) {
-				await message.channel.send(
-					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+				await message.channel.send({
+					content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 						arg_provided: t,
 						arg_expected: "member:Member",
 						usage: this.usage,
 					}),
-				);
+					allowedMentions: {
+						parse: ["everyone", "roles", "users"],
+					},
+				});
 				continue;
 			}
 			if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;

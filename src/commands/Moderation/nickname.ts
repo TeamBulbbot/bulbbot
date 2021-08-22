@@ -28,14 +28,17 @@ export default class extends Command {
 		UserMentionAndID.lastIndex = 0;
 		const match: RegExpMatchArray = <RegExpMatchArray>UserMentionAndID.exec(args[0]);
 		if (!match)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		const targetID: Snowflake = match[1] ?? match[2];
 		const target: GuildMember | null = targetID ? <GuildMember>await message.guild?.members.fetch(targetID).catch(() => null) : null;
 		const nickmatch: RegExpMatchArray = <RegExpMatchArray>QuoteMarked.exec(argString);
@@ -46,14 +49,17 @@ export default class extends Command {
 				.join(" ")
 				.trim() || (await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {}));
 		if (!target)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;
 
 		if (nickname.length > 32) return message.channel.send(await this.client.bulbutils.translate("nickname_too_long", message.guild?.id, { length: nickname.length.toString() }));

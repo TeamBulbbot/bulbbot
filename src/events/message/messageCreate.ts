@@ -52,7 +52,7 @@ export default class extends Event {
 
 		if (!message.content.startsWith(this.client.prefix) && !message.content.match(mentionRegex)) return;
 		if (message.content.match(mentionRegex) && message.content.replace(mentionRegex, "").trim().length === 0)
-			return message.channel.send(`My prefix for **${message.guild.name}** is \`\`${this.client.prefix}\`\``);
+			return message.channel.send(`My prefix for **${message.guild.name}** is \`${this.client.prefix}\``);
 		if (message.content.match(mentionRegex)) message.content = `${this.client.prefix}${message.content.replace(mentionRegex, "").trim()}`;
 
 		const args = message.content.slice(this.client.prefix.length).trim().split(/ +/g);
@@ -90,7 +90,12 @@ export default class extends Event {
 		const invalidReason = await command.validate(message, args, options);
 		if (invalidReason !== undefined) {
 			if (!invalidReason) return;
-			return message.channel.send(invalidReason);
+			return message.channel.send({
+				content: invalidReason,
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		}
 		return command;
 	}

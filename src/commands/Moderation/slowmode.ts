@@ -28,14 +28,17 @@ export default class extends Command {
 		const channel: TextChannel | null = targetChannel ? <TextChannel>await message.guild?.channels.fetch(targetChannel).catch(() => null) : null;
 
 		if (!channel)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", message.guild?.id, {}),
 					arg_expected: "channel:Channel",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 
 		if (args.length === 1) duration = <number>parse(args[0]);
 		else duration = <number>parse(args[1]);

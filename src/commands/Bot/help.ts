@@ -21,14 +21,12 @@ export default class extends Command {
 		let command: Command = this.client.commands.get(args[0].toLowerCase()) || this.client.commands.get(this.client.aliases.get(args[0].toLowerCase())!)!;
 
 		if (command === undefined || command.devOnly || command.subDevOnly)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild!.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.cmd", message.guild?.id, {}),
-					arg_expected: "command:string",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("help_unable_to_find_command", message.guild!.id, { commandName: args[0] }),
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		else {
 			let currCommand = command;
 			let i: number;

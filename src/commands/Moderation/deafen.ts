@@ -31,14 +31,17 @@ export default class extends Command {
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
 		if (!target)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "member:Member",
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;
 		if (!target.voice.channel) return message.channel.send(await this.client.bulbutils.translate("global_not_in_voice", message.guild?.id, { target: target.user }));
 		if (target.voice.serverDeaf) return message.channel.send(await this.client.bulbutils.translate("deafen_already_deaf", message.guild?.id, { target: target.user }));

@@ -27,19 +27,22 @@ export default class extends Command {
 
 	async run(message: Message, args: string[]): Promise<void> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>message.guild!.members.resolve(args[0]) || <GuildMember> await message.guild!.members.fetch(targetID);
+		const target: GuildMember = <GuildMember>message.guild!.members.resolve(args[0]) || <GuildMember>await message.guild!.members.fetch(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
 		if (!target) {
-			await message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			await message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 			return;
 		}
 		if (await this.client.bulbutils.resolveUserHandle(message, this.client.bulbutils.checkUser(message, target), target.user)) return;

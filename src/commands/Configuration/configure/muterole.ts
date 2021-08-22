@@ -29,14 +29,17 @@ export default class extends SubCommand {
 
 			const rTemp: Role | null = role ? <Role>await message.guild?.roles.fetch(role).catch(() => null) : null;
 			if (!rTemp)
-				return message.channel.send(
-					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+				return message.channel.send({
+					content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
 						arg_provided: args[0],
 						arg_expected: "role:Role",
 						usage: this.usage,
 					}),
-				);
+					allowedMentions: {
+						parse: ["everyone", "roles", "users"],
+					},
+				});
 			if (message.guild?.me?.roles.highest && message.guild?.me?.roles.highest.rawPosition < rTemp.rawPosition)
 				return message.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", message.guild?.id, {}));
 

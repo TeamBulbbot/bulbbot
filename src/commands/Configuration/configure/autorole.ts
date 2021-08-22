@@ -22,18 +22,21 @@ export default class extends SubCommand {
 
 	public async run(message: Message, args: string[]): Promise<void | Message> {
 		let role: Role | null;
-		const targetRole = args[0].replace(NonDigits, "")
+		const targetRole = args[0].replace(NonDigits, "");
 		role = targetRole ? <Role>await message.guild?.roles.fetch(targetRole).catch(() => null) : null;
 
 		if (!role && args[0] !== "disable")
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "role:Role",
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 
 		if (args[0] !== "disable") {
 			if (message.guild?.me?.roles.highest && message.guild?.me.roles.highest.rawPosition < role!!.rawPosition)

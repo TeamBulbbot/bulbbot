@@ -55,14 +55,17 @@ export default class extends Command {
 			try {
 				target = await this.client.users.fetch(targets[i].replace(NonDigits, ""));
 			} catch (error) {
-				await message.channel.send(
-					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+				await message.channel.send({
+					content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 						arg_expected: "user:User",
 						arg_provided: targets[i],
 						usage: this.usage,
 					}),
-				);
+					allowedMentions: {
+						parse: ["everyone", "roles", "users"],
+					},
+				});
 			}
 
 			infID = await infractionsManager.unban(

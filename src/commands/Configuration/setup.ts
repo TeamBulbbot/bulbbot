@@ -293,14 +293,17 @@ export default class extends Command {
 						const role: string = RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content;
 						const rTemp = message.guild?.roles.cache.get(role);
 						if (rTemp === undefined || (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < rTemp.rawPosition)) {
-							await message.channel.send(
-								await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+							await message.channel.send({
+								content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 									type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
 									arg_provided: role,
 									arg_expected: "role:Role",
 									usage: "configure mute_role <role>",
 								}),
-							);
+								allowedMentions: {
+									parse: ["everyone", "roles", "users"],
+								},
+							});
 							return false;
 						}
 					}
@@ -335,14 +338,17 @@ export default class extends Command {
 						default:
 							const role = message.guild?.roles.cache.get(RoleMention.test(message.content) ? message.content.replace(NonDigits, "") : message.content);
 							if (role === undefined) {
-								await message.channel.send(
-									await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+								await message.channel.send({
+									content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 										type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
 										arg_expected: "role:Role",
 										arg_provided: message.content,
 										usage: "configure auto_role <role>",
 									}),
-								);
+									allowedMentions: {
+										parse: ["everyone", "roles", "users"],
+									},
+								});
 								return false;
 							}
 							if (message.guild?.me?.roles.highest && message.guild.me.roles.highest.rawPosition < role.rawPosition) {

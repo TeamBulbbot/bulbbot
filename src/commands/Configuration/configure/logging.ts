@@ -31,14 +31,17 @@ export default class extends SubCommand {
 			channel = channel.replace(NonDigits, "");
 			const cTemp: GuildChannel = <GuildChannel>message.guild?.channels.cache.get(channel);
 			if (cTemp === undefined) {
-				return message.channel.send(
-					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+				return message.channel.send({
+					content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.channel", message.guild?.id, {}),
 						arg_expected: "channel:Channel",
 						arg_provided: args[1],
 						usage: this.usage,
 					}),
-				);
+					allowedMentions: {
+						parse: ["everyone", "roles", "users"],
+					},
+				});
 			}
 
 			if (!cTemp.permissionsFor(<GuildMember>message.guild?.me)?.has(["SEND_MESSAGES", "VIEW_CHANNEL"])) {

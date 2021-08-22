@@ -23,33 +23,38 @@ export default class extends SubCommand {
 		let clearance = Number(args.at(-1));
 
 		if (isNaN(clearance))
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+			return message.channel.send({
+				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.int", message.guild?.id, {}),
 					arg_expected: "clearance:int",
 					arg_provided: args[2],
 					usage: this.usage,
 				}),
-			);
+				allowedMentions: {
+					parse: ["everyone", "roles", "users"],
+				},
+			});
 		if (clearance <= 0) return message.channel.send(await this.client.bulbutils.translate("override_clearance_less_than_0", message.guild?.id, {}));
 		if (clearance >= 100) return message.channel.send(await this.client.bulbutils.translate("override_clearance_more_than_100", message.guild?.id, {}));
 		if (clearance > this.client.userClearance) return message.channel.send(await this.client.bulbutils.translate("override_clearance_higher_than_self", message.guild?.id, {}));
 
 		switch (part) {
-			case "role":
-			{
+			case "role": {
 				const name = args[1];
 				const roleID = name.replace(NonDigits, "");
 				const rTemp = message.guild?.roles.cache.get(roleID);
 				if (rTemp === undefined)
-					return message.channel.send(
-						await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					return message.channel.send({
+						content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.role", message.guild?.id, {}),
 							arg_expected: "role:Role",
 							arg_provided: args[1],
 							usage: this.usage,
 						}),
-					);
+						allowedMentions: {
+							parse: ["everyone", "roles", "users"],
+						},
+					});
 
 				if ((await clearanceManager.getRoleOverride(<Snowflake>message.guild?.id, rTemp.id)) === undefined)
 					return message.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", message.guild?.id, { role: rTemp.name }));
@@ -57,19 +62,21 @@ export default class extends SubCommand {
 				break;
 			}
 
-			case "command":
-			{
+			case "command": {
 				const name = args.slice(1, -1);
 				const command = Command.resolve(this.client, name);
 				if (command === undefined)
-					return message.channel.send(
-						await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+					return message.channel.send({
+						content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.cmd", message.guild?.id, {}),
 							arg_expected: "command:string",
 							arg_provided: name.join(" "),
 							usage: this.usage,
 						}),
-					);
+						allowedMentions: {
+							parse: ["everyone", "roles", "users"],
+						},
+					});
 
 				if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName)) === undefined)
 					return message.channel.send(

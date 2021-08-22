@@ -40,14 +40,17 @@ export default class extends Command {
 				user = await this.client.users.fetch(target);
 				isGuildMember = false;
 			} catch (error) {
-				await message.channel.send(
-					await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
+				await message.channel.send({
+					content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
 						arg_expected: "user:User",
 						arg_provided: args[0],
 						usage: this.usage,
 					}),
-				);
+					allowedMentions: {
+						parse: ["everyone", "roles", "users"],
+					},
+				});
 				return;
 			}
 		}
@@ -149,8 +152,8 @@ export default class extends Command {
 
 						const command = Command.resolve(this.client, "warn")!;
 						const reason = await command.validate(message, cArgs);
-						if(reason !== undefined) {
-							if(reason) {
+						if (reason !== undefined) {
+							if (reason) {
 								await message.channel.send(reason);
 							}
 						} else {
@@ -181,8 +184,8 @@ export default class extends Command {
 
 						const command = Command.resolve(this.client, "kick")!;
 						const reason = await command.validate(message, cArgs);
-						if(reason !== undefined) {
-							if(reason) {
+						if (reason !== undefined) {
+							if (reason) {
 								await message.channel.send(reason);
 							}
 						} else {
@@ -213,8 +216,8 @@ export default class extends Command {
 
 						const command = Command.resolve(this.client, "ban")!;
 						const reason = await command.validate(message, cArgs);
-						if(reason !== undefined) {
-							if(reason) {
+						if (reason !== undefined) {
+							if (reason) {
 								await message.channel.send(reason);
 							}
 						} else {
