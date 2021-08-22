@@ -334,5 +334,5 @@
   "infraction_interaction_placeholder": "No Infractions Selected",
   "infraction_interaction_description": "Click to view more info",
 
-  "commands_help": "You can find all the commands Bulbbot offers at our **[GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**"
+  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.mrphilip.xyz/command-list)**"
 }
