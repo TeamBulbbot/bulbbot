@@ -340,10 +340,10 @@ class MessageCommandContext implements BaseCommandContext {
 
 		this.member = null;
 
-		this.valueOf = source.valueOf;
-		this.toString = source.toString;
-		this._toJSON = source.toJSON;
-		this._reply = source.reply;
+		this.valueOf = source.valueOf.bind(source);
+		this.toString = source.toString.bind(source);
+		this._toJSON = source.toJSON.bind(source);
+		this._reply = source.reply.bind(source);
 
 		this.contextType = "message";
 		this._user = source.author;
@@ -382,23 +382,23 @@ class MessageCommandContext implements BaseCommandContext {
 		this.flags = source.flags;
 		this.reference = source.reference;
 
-		this._startThread = source.startThread;
-		this._awaitMessageComponent = source.awaitMessageComponent;
-		this._awaitReactions = source.awaitReactions;
-		this._createReactionCollector = source.createReactionCollector;
-		this._createMessageComponentCollector = source.createMessageComponentCollector;
-		this._delete = source.delete;
-		this._edit = source.edit;
-		this._equals = source.equals;
-		this._fetchReference = source.fetchReference;
-		this._fetchWebhook = source.fetchWebhook;
-		this._crosspost = source.crosspost;
-		this._fetch = source.fetch;
-		this._pin = source.pin;
-		this._react = source.react;
-		this._removeAttachments = source.removeAttachments;
-		this._suppressEmbeds = source.suppressEmbeds;
-		this._unpin = source.unpin;
+		this._startThread = source.startThread.bind(source);
+		this._awaitMessageComponent = source.awaitMessageComponent.bind(source);
+		this._awaitReactions = source.awaitReactions.bind(source);
+		this._createReactionCollector = source.createReactionCollector.bind(source);
+		this._createMessageComponentCollector = source.createMessageComponentCollector.bind(source);
+		this._delete = source.delete.bind(source);
+		this._edit = source.edit.bind(source);
+		this._equals = source.equals.bind(source);
+		this._fetchReference = source.fetchReference.bind(source);
+		this._fetchWebhook = source.fetchWebhook.bind(source);
+		this._crosspost = source.crosspost.bind(source);
+		this._fetch = source.fetch.bind(source);
+		this._pin = source.pin.bind(source);
+		this._react = source.react.bind(source);
+		this._removeAttachments = source.removeAttachments.bind(source);
+		this._suppressEmbeds = source.suppressEmbeds.bind(source);
+		this._unpin = source.unpin.bind(source);
 
 		this.command = null;
 		this.commandId = null;
@@ -626,9 +626,9 @@ class InteractionCommandContext implements BaseCommandContext {
 
 		this.member = null;
 
-		this.valueOf = source.valueOf;
-		this.toString = source.toString;
-		this._toJSON = source.toJSON;
+		this.valueOf = source.valueOf.bind(source);
+		this.toString = source.toString.bind(source)
+		this._toJSON = source.toJSON.bind(source);
 		if(source.isMessageComponent() || source.isCommand() || source.isContextMenu()) this._reply = source.reply.bind(source);
 		else this._reply = (_: string | MessagePayload | InteractionReplyOptions) => Promise.reject();
 		this.contextType = "interaction";
@@ -671,14 +671,14 @@ class InteractionCommandContext implements BaseCommandContext {
 
 		this.message = mockMessage;
 
-		this._isButton = source.isButton;
-		this._isCommand = source.isCommand;
-		this._isContextMenu = source.isContextMenu;
-		this._isMessageComponent = source.isMessageComponent;
-		this._isSelectMenu = source.isSelectMenu;
-		this._inGuild = source.inGuild;
+		this._isButton = source.isButton.bind(source);
+		this._isCommand = source.isCommand.bind(source);
+		this._isContextMenu = source.isContextMenu.bind(source);
+		this._isMessageComponent = source.isMessageComponent.bind(source);
+		this._isSelectMenu = source.isSelectMenu.bind(source);
+		this._inGuild = source.inGuild.bind(source);
 
-		this._startThread = this.channel && "threads" in this.channel ? this.channel.threads.create : (_: any) => Promise.reject();
+		this._startThread = this.channel && "threads" in this.channel ? this.channel.threads.create.bind(this.channel) : (_: any) => Promise.reject();
 
 		this._awaitMessageComponent = (_?: any) => Promise.reject();
 		this._awaitReactions = (_?: any) => Promise.reject();
@@ -758,10 +758,10 @@ class InteractionCommandContext implements BaseCommandContext {
 		}
 
 		if(source.isCommand() || source.isContextMenu() || source.isMessageComponent()) {
-			this._deferReply = source.deferReply;
-			this._deleteReply = source.deleteReply;
-			this._editReply = source.editReply;
-			this._fetchReply = source.fetchReply;
+			this._deferReply = source.deferReply.bind(source);
+			this._deleteReply = source.deleteReply.bind(source);
+			this._editReply = source.editReply.bind(source);
+			this._fetchReply = source.fetchReply.bind(source);
 			this._followUp = source.followUp.bind(source);
 			if(this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
@@ -781,8 +781,8 @@ class InteractionCommandContext implements BaseCommandContext {
 			}
 
 			if(source.isMessageComponent()) {
-				this._deferUpdate = source.deferUpdate;
-				this._update = source.update;
+				this._deferUpdate = source.deferUpdate.bind(source);
+				this._update = source.update.bind(source);
 			} else {
 				this._deferUpdate = () => Promise.reject();
 				this._update = () => Promise.reject();
