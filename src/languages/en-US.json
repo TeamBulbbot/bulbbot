@@ -2,7 +2,7 @@
   "global_executed_by": "Executed by {{user.tag}}",
   "global_execution_cancel": "{{emote_fail}} Command execution cancelled",
   "global_missing_permissions": "{{emote_lock}} Missing permission(s)",
-  "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bots permissions.\n{{missing}}",
+  "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n{{missing}}",
   "global_cannot_convert": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "global_not_found_types": {
