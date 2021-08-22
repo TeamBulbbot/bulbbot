@@ -30,11 +30,8 @@ export default class extends SubCommand {
 					arg_provided: args[2],
 					usage: this.usage,
 				}),
-				allowedMentions: {
-					parse: [],
-				},
 			});
-		if (clearance < 0) return message.channel.send(await this.client.bulbutils.translate("override_clearance_less_than_0", message.guild?.id, {}));
+		if (clearance < 0) clearance = 0;
 		if (clearance >= 100) return message.channel.send(await this.client.bulbutils.translate("override_clearance_more_than_100", message.guild?.id, {}));
 		if (clearance > this.client.userClearance) return message.channel.send(await this.client.bulbutils.translate("override_clearance_higher_than_self", message.guild?.id, {}));
 
@@ -51,9 +48,6 @@ export default class extends SubCommand {
 							arg_provided: args[1],
 							usage: this.usage,
 						}),
-						allowedMentions: {
-							parse: ["everyone", "roles", "users"],
-						},
 					});
 
 				if ((await clearanceManager.getRoleOverride(<Snowflake>message.guild?.id, rTemp.id)) === undefined)
@@ -61,7 +55,6 @@ export default class extends SubCommand {
 				await clearanceManager.editRoleOverride(<Snowflake>message.guild?.id, roleID, clearance);
 				break;
 			}
-
 			case "command": {
 				const name = args.slice(1, -1);
 				const command = Command.resolve(this.client, name);
@@ -73,9 +66,6 @@ export default class extends SubCommand {
 							arg_provided: name.join(" "),
 							usage: this.usage,
 						}),
-						allowedMentions: {
-							parse: ["everyone", "roles", "users"],
-						},
 					});
 
 				if ((await clearanceManager.getCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName)) === undefined)
@@ -85,7 +75,6 @@ export default class extends SubCommand {
 						}),
 					);
 				await clearanceManager.editCommandOverride(<Snowflake>message.guild?.id, command.qualifiedName, clearance);
-
 				break;
 			}
 			default:
