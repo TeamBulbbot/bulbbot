@@ -52,7 +52,7 @@ export default class extends Event {
 
 		if (msg.length >= 1850) {
 			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`, message.content);
-			await loggingManager.sendEventLog(
+			await loggingManager.sendEventLogFile(
 				this.client,
 				message.guild,
 				"message",

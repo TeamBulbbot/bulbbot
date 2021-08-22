@@ -21,7 +21,7 @@ export default class extends Event {
 
 		const { executor, changes, createdTimestamp } = first;
 		if (createdTimestamp + 5000 < Date.now()) return;
-		if (!changes?.length) return;
+		if (!changes) return;
 
 		const log: string[] = [];
 
@@ -35,10 +35,10 @@ export default class extends Event {
 			);
 		}
 
-		await loggingManager.sendEventLog(
+		await loggingManager.sendServerEventLog(
 			this.client,
-			newGuild,
 			"other",
+			newGuild,
 			await this.client.bulbutils.translate("event_update_server", newGuild.id, {
 				moderator: executor,
 				changes: log.join(", "),
