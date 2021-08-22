@@ -12,6 +12,7 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 	const reminder: Record<string, any> = await getReminder(ID);
 
 	if (user !== interaction.user.id) return await interaction.reply({ content: await client.bulbutils.translate("remind_no_permissions", interaction.guild?.id, {}), ephemeral: true });
+	if (!reminder) return await interaction.reply({ content: await client.bulbutils.translate("remind_not_found", interaction.guild?.id, {}), ephemeral: true });
 
 	let desc: string = "";
 	desc += await client.bulbutils.translate("remind_desc_reason", interaction.guild?.id, { reminder });

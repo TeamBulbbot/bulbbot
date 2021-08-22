@@ -278,6 +278,7 @@
   "remind_set_select_dm": "Will notify you in your dms **<t:{{duration}}:R>**",
   "remind_set_select_channel": "Will notify you in this channel **<t:{{duration}}:R>**",
   "remind_no_permissions": "{{emote_lock}} You cannot view another users reminders!",
+  "remind_not_found": "{{emote_warn}} Unable to find that reminder",
 
   "remind_desc_header": "Reminder #{{reminder.id}}",
   "remind_desc_reason": "**Reminder:** {{reminder.reason}}\n",
