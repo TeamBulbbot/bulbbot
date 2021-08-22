@@ -20,7 +20,7 @@ export default class Command {
 	public readonly examples: string[];
 	public readonly userPerms: Readonly<BitField<PermissionString, bigint>>;
 	public readonly clientPerms: Readonly<BitField<PermissionString, bigint>>;
-	public clearance: number;
+	public readonly clearance: number;
 	public readonly subDevOnly: boolean;
 	public readonly devOnly: boolean;
 	public readonly premium: boolean;
@@ -78,19 +78,18 @@ export default class Command {
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return "";
-			if (commandOverride["clearanceLevel"]) clearance = commandOverride["clearanceLevel"]
+			clearance = commandOverride["clearanceLevel"];
 		}
 
 		this.client.userClearance = options.clearance;
-		if (clearance > options.clearance) {
-			const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
-			if (userPermCheck) {
-				const userMember: GuildMember = message.member!;
-				const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>message.channel).has(userPermCheck)); // !x || !y === !(x && y)
+		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
 
-				if (missing) return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
-			}
+		let missing: boolean = clearance > options.clearance;
+		if (missing && ~~userPermCheck) {
+			const userMember: GuildMember = message.member!;
+			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>message.channel).has(userPermCheck)); // !x || !y === !(x && y)
 		}
+		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
 
 		const clientPermCheck: BitField<PermissionString, bigint> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
 		if (clientPermCheck) {
@@ -100,7 +99,7 @@ export default class Command {
 
 			if (missing.length)
 				return await this.client.bulbutils.translate("global_missing_permissions_bot", message.guild?.id, {
-					permissions: missing.map(perm => `\`${perm}\``).join(", "),
+					missing: missing.map(perm => `\`${perm}\``).join(", "),
 				});
 		}
 
