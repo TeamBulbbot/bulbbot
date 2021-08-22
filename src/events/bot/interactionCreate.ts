@@ -56,16 +56,15 @@ export default class extends Event {
 			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
 
 			for (const option of context.options["_hoistedOptions"]) {
-				if (option.type === "STRING") args = [...args, ...option.value!!.toString().split(" ")];
-				else args.push(option.value!!.toString());
+				if (option.type === "STRING") args.push(...(`${option.value}`.split(" ")));
+				else args.push(`${option.value}`);
 			}
 
 			const command = Command.resolve(this.client, cmd);
 			if (!command) return;
 			const invalidReason = await command.validate(context, args);
 			if (invalidReason !== undefined) {
-				if (!invalidReason) return;
-				await context.reply({ content: invalidReason, ephemeral: true });
+				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
 
