@@ -39,7 +39,7 @@ export default class extends SubCommand {
 		let File = require(commandFile);
 		if (!this.isClass(File.default)) return message.channel.send(`Command ${name} is not an instance of Command`);
 
-		const loadedCommand = new File.default(this.client, name);
+		const loadedCommand = new File.default(this.client, command instanceof SubCommand ? command.parent : name);
 		// any SubCommand is-a Command
 		if (!(loadedCommand instanceof Command)) return message.channel.send(`Event ${name} doesn't belong in commands!`);
 		if(command instanceof SubCommand) {
