@@ -1,5 +1,6 @@
 import Command from "../../structures/Command";
-import { Invite, Message, MessageEmbed } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
+import { Invite, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -20,19 +21,19 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]): Promise<void> {
+	async run(context: CommandContext, args: string[]): Promise<void> {
 		const code: string = args[0];
 		let invite!: Invite;
 
 		try {
 			invite = await this.client.fetchInvite(code);
 		} catch (error) {
-			await message.channel.send(await this.client.bulbutils.translate("inviteinfo_error", message.guild!.id, {}));
+			await context.channel.send(await this.client.bulbutils.translate("inviteinfo_error", context.guild!.id, {}));
 			return;
 		}
 
 		const guild = invite!.guild;
-		if (guild === null || message.guild === null || message.member === null) return;
+		if (guild === null || context.guild === null || context.member === null) return;
 
 		let desc: string = "";
 		let inviteInfo: string = "";
@@ -72,13 +73,13 @@ export default class extends Command {
 			.setThumbnail(guild.iconURL({ dynamic: true, size: 4096 })!)
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
+					user: context.author,
 				}),
-				await this.client.bulbutils.userObject(true, message.member).avatarUrl,
+				await this.client.bulbutils.userObject(true, context.member).avatarUrl,
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await context.channel.send({ embeds: [embed] });
 	}
 }

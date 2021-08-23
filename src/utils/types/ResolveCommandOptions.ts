@@ -1,8 +1,8 @@
-import { Message } from "discord.js";
 import Command from "../../structures/Command";
 import DatabaseManager from "../managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../Config";
+import CommandContext from "src/structures/CommandContext";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -15,7 +15,7 @@ interface ResolveCommandOptionsOptions {
 }
 
 export default class ResolveCommandOptions {
-	public message: Message;
+	public context: CommandContext;
 	public baseCommand: Command;
 	public args: string[];
 	public clearance: number;
@@ -23,27 +23,28 @@ export default class ResolveCommandOptions {
 	public isDev: boolean;
 	public isSubDev: boolean;
 
-	constructor(command: Command, message: Message, args: string[], options: ResolveCommandOptionsOptions = {}) {
+	static async create(command: Command, context: CommandContext, args: string[], options: ResolveCommandOptionsOptions = {}): Promise<ResolveCommandOptions> {
+		let instance = new ResolveCommandOptions(command, context, args, options);
+		instance.clearance = await clearanceManager.getUserClearance(context);
+		instance.premiumGuild = (await databaseManager.getConfig(context.guild!.id)).premiumGuild;
+		return instance;
+	}
+
+	private constructor(command: Command, context: CommandContext, args: string[], options: ResolveCommandOptionsOptions = {}) {
 		this.baseCommand = command;
-		this.message = message;
+		this.context = context;
 		this.args = args;
+
 		if(options.clearance !== undefined) this.clearance = options.clearance;
-		else {
-			this.clearance = 0;
-			clearanceManager.getUserClearance(message).then(c => this.clearance = c);
-		}
+		else this.clearance = 0;
+
 		if(options.premiumGuild !== undefined) this.premiumGuild = options.premiumGuild;
-		else {
-			this.premiumGuild = false;
-			databaseManager.getConfig(message.guild!.id).then(c => this.premiumGuild = c.premiumGuild);
-		}
+		else this.premiumGuild = false;
+
 		if(options.isDev !== undefined) this.isDev = options.isDev;
-		else {
-			this.isDev = Config.developers.includes(message.author.id);
-		}
+		else this.isDev = Config.developers.includes(context.author.id);
+
 		if(options.isSubDev !== undefined) this.isSubDev = options.isSubDev;
-		else {
-			this.isSubDev = Config.developers.includes(message.author.id) || Config.subDevelopers.includes(message.author.id);
-		}
+		else this.isSubDev = Config.developers.includes(context.author.id) || Config.subDevelopers.includes(context.author.id);
 	}
 }

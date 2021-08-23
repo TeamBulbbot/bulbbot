@@ -1,11 +1,12 @@
 import BulbBotClient from "./BulbBotClient";
-import { BitField, GuildMember, Message, PermissionString, GuildChannelResolvable } from "discord.js";
+import { BitField, GuildMember, PermissionString, GuildChannelResolvable } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import { Permissions } from "discord.js";
 import SubCommand from "./SubCommand";
 import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
+import CommandContext from "./CommandContext";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -56,10 +57,10 @@ export default class Command {
 		this.subCommands = options.subCommands?.map(sc => new sc(this.client, this)) || [];
 	}
 
-	public async run(message: Message, args: string[]): Promise<any> {
+	public async run(context: CommandContext, args: string[]): Promise<any> {
 		if (!args.length || !this.subCommands.length) throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
-		return await message.channel.send(
-			await this.client.bulbutils.translate("event_message_args_missing_list", message.guild?.id, {
+		return await context.channel.send(
+			await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
 				argument: args[args.length - 1].toLowerCase(),
 				arg_expected: this.argList[0],
 				argument_list: this.subCommands.map(sc => `\`${sc.name}\``).join(", "),
@@ -67,15 +68,15 @@ export default class Command {
 		);
 	}
 
-	public async validate(message: Message, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
+	public async validate(context: CommandContext, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
 		let clearance = this.clearance;
 
 		if (options === undefined) {
-			options = new ResolveCommandOptions(this, message, args);
+			options = await ResolveCommandOptions.create(this, context, args);
 		}
-		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", message.guild?.id, {});
+		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(message.guild!.id, this.qualifiedName);
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return "";
 			clearance = commandOverride["clearanceLevel"];
@@ -86,19 +87,19 @@ export default class Command {
 
 		let missing: boolean = clearance > options.clearance;
 		if (missing && ~~userPermCheck) {
-			const userMember: GuildMember = message.member!;
-			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>message.channel).has(userPermCheck)); // !x || !y === !(x && y)
+			const userMember: GuildMember = context.member!;
+			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
 		}
-		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", message.guild?.id, {});
+		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
 
 		const clientPermCheck: BitField<PermissionString, bigint> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
 		if (clientPermCheck) {
-			let missing: PermissionString[] = message.guild?.me?.permissions.missing(clientPermCheck)!;
+			let missing: PermissionString[] = context.guild?.me?.permissions.missing(clientPermCheck)!;
 			if (!missing) return "";
-			if (!missing.length) missing = message.guild!.me!.permissionsIn(<GuildChannelResolvable>message.channel).missing(clientPermCheck);
+			if (!missing.length) missing = context.guild!.me!.permissionsIn(<GuildChannelResolvable>context.channel).missing(clientPermCheck);
 
 			if (missing.length)
-				return await this.client.bulbutils.translate("global_missing_permissions_bot", message.guild?.id, {
+				return await this.client.bulbutils.translate("global_missing_permissions_bot", context.guild?.id, {
 					missing: missing.map(perm => `\`${perm}\``).join(", "),
 				});
 		}
@@ -107,7 +108,7 @@ export default class Command {
 		if (this.devOnly) if (!options.isDev) return "";
 
 		if (this.maxArgs < args.length && this.maxArgs !== -1) {
-			return await this.client.bulbutils.translate("event_message_args_unexpected", message.guild?.id, {
+			return await this.client.bulbutils.translate("event_message_args_unexpected", context.guild?.id, {
 				argument: args[this.maxArgs],
 				arg_expected: this.maxArgs,
 				arg_provided: args.length,
@@ -116,7 +117,7 @@ export default class Command {
 		}
 
 		if (this.minArgs > args.length) {
-			return await this.client.bulbutils.translate("event_message_args_missing", message.guild?.id, {
+			return await this.client.bulbutils.translate("event_message_args_missing", context.guild?.id, {
 				argument: this.argList[args.length],
 				arg_expected: this.minArgs,
 				usage: `\`${this.client.prefix}${this.usage}\``,

@@ -1,5 +1,6 @@
-import { SnowflakeUtil, DeconstructedSnowflake, Message, MessageEmbed } from "discord.js";
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
+import { SnowflakeUtil, DeconstructedSnowflake, MessageEmbed } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -19,11 +20,11 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]) {
+	async run(context: CommandContext, args: string[]) {
 		const snowflake: string = args[0].replace(NonDigits, "");
 		if (+snowflake <= SnowflakeUtil.EPOCH)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", message.guild?.id, {
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					arg_provided: args[0],
 					arg_expected: "snowflake:Snowflake",
 					usage: this.usage,
@@ -41,13 +42,13 @@ export default class extends Command {
 			.setColor(Config.embedColor)
 			.setDescription(desc)
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				<string>message.author.avatarURL({ dynamic: true }),
+				<string>context.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 
-		return message.channel.send({ embeds: [embed] });
+		return context.channel.send({ embeds: [embed] });
 	}
 }

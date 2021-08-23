@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { ButtonInteraction, Collection, Guild, GuildMember, Message, MessageActionRow, MessageButton, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -25,49 +26,46 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]): Promise<void | Message> {
+	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		//Variable declarations
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: any = message.guild?.members.cache.get(targetID);
+		let target: any = context.guild?.members.cache.get(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let notInGuild: boolean = !target;
 		let infID: number = 0;
 
 		if (!notInGuild) {
-			if (await this.client.bulbutils.resolveUserHandle(message, this.client.bulbutils.checkUser(message, target), target.user)) return;
+			if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 		}
 
 		//Fetches the ban list
 		//@ts-ignore
-		const banList: Collection<string, { user: User; reason: string }> | undefined = await message.guild?.bans.fetch();
+		const banList: Collection<string, { user: User; reason: string }> | undefined = await context.guild?.bans.fetch();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 
-		//If the user is already banned return with a message
+		//If the user is already banned return with a context
 		if (bannedUser) {
-			await message.channel.send(
-				await this.client.bulbutils.translate("already_banned", message.guild?.id, {
+			await context.channel.send(
+				await this.client.bulbutils.translate("already_banned", context.guild?.id, {
 					target: bannedUser.user,
 					reason: bannedUser.reason.split("Reason: ").pop(),
 				}),
 			);
 			return;
 		}
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {});
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		if (!target) {
 			try {
 				target = await this.client.users.fetch(targetID);
 			} catch (error) {
-				await message.channel.send({
-					content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
+				await context.channel.send(
+					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
 						arg_expected: "user:User",
 						arg_provided: args[0],
 						usage: this.usage,
 					}),
-					allowedMentions: {
-						parse: ["everyone", "roles", "users"],
-					},
-				});
+				);
 				return;
 			}
 		}
@@ -79,32 +77,32 @@ export default class extends Command {
 				new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 			]);
 
-			const confirmMsg = await message.channel.send({
-				content: await this.client.bulbutils.translate("ban_force_confirm", message.guild?.id, { target }),
+			const confirmMsg = await context.channel.send({
+				content: await this.client.bulbutils.translate("ban_force_confirm", context.guild?.id, { target }),
 				components: [row],
 			});
 
-			const filter = (i: ButtonInteraction) => i.user.id === message.author.id;
+			const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
 			let interaction: ButtonInteraction;
 
 			try {
 				interaction = await confirmMsg.awaitMessageComponent({ filter, time: 15000 });
 			} catch (_) {
 				await confirmMsg.delete();
-				return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
+				return await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
 			}
 
 			if (interaction.customId === "confirm") {
 				await confirmMsg.delete();
 				infID = await infractionsManager.ban(
 					this.client,
-					<Guild>message.guild,
+					<Guild>context.guild,
 					BanType.FORCE,
 					<User>target,
-					<GuildMember>message.member,
-					await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.force_ban", message.guild?.id, {}),
-						moderator: message.author,
+					<GuildMember>context.member,
+					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
+						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
+						moderator: context.author,
 						target,
 						reason,
 					}),
@@ -112,20 +110,20 @@ export default class extends Command {
 				);
 			} else {
 				await confirmMsg.delete();
-				return await message.channel.send(await this.client.bulbutils.translate("global_execution_cancel", message.guild?.id, {}));
+				return await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
 			}
 		} else {
 			//Else execute a normal ban
 			target = target.user;
 			infID = await infractionsManager.ban(
 				this.client,
-				<Guild>message.guild,
+				<Guild>context.guild,
 				BanType.NORMAL,
 				target,
-				<GuildMember>message.member,
-				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
-					moderator: message.author,
+				<GuildMember>context.member,
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+					moderator: context.author,
 					target,
 					reason,
 				}),
@@ -133,10 +131,10 @@ export default class extends Command {
 			);
 		}
 
-		//Sends the response message
-		await message.channel.send(
-			await this.client.bulbutils.translate("action_success", message.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
+		//Sends the response context
+		await context.channel.send(
+			await this.client.bulbutils.translate("action_success", context.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
 				target,
 				reason,
 				infraction_id: infID,

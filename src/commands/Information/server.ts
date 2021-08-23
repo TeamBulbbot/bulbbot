@@ -1,5 +1,6 @@
 import Command from "../../structures/Command";
-import { Emoji, Guild, GuildChannel, Message, MessageEmbed, Role } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
+import { Emoji, Guild, GuildChannel, MessageEmbed, Role } from "discord.js";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -16,9 +17,9 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message): Promise<void> {
-		await message.guild?.members.fetch();
-		const guild: Guild = <Guild>message.guild;
+	async run(context: CommandContext): Promise<void> {
+		await context.guild?.members.fetch();
+		const guild: Guild = <Guild>context.guild;
 
 		let description = "";
 		description += await this.client.bulbutils.translate("serverinfo_embed_owner", guild.id, { guild });
@@ -66,8 +67,8 @@ export default class extends Command {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setThumbnail(<string>message.guild?.iconURL({ dynamic: true }))
-			.setAuthor(message.guild!?.name, <string>message.guild?.iconURL({ dynamic: true }))
+			.setThumbnail(<string>context.guild?.iconURL({ dynamic: true }))
+			.setAuthor(context.guild!?.name, <string>context.guild?.iconURL({ dynamic: true }))
 			.addField(await this.client.bulbutils.translate("serverinfo_server_stats", guild.id, {}), serverStats, true)
 			.addField(await this.client.bulbutils.translate("serverinfo_channel_stats", guild.id, {}), channelStats, true)
 			.addField(await this.client.bulbutils.translate("serverinfo_booster_stats", guild.id, {}), boosterStats, true)
@@ -87,12 +88,12 @@ export default class extends Command {
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", guild.id, {
-					user: message.author,
+					user: context.author,
 				}),
-				<string>message.author.avatarURL({ dynamic: true }),
+				<string>context.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await context.channel.send({ embeds: [embed] });
 	}
 }

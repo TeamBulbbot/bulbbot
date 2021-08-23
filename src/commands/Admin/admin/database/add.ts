@@ -1,6 +1,7 @@
 import { Guild, Message } from "discord.js";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
+import CommandContext from "../../../../structures/CommandContext";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 
@@ -17,7 +18,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// adds the guild to the database
 
 		let guild: Guild;
@@ -25,11 +26,11 @@ export default class extends SubCommand {
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			message.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
 		await databaseManager.createGuild(guild);
-		message.reply(`Added **${guild.name}** to the database`);
+		context.reply(`Added **${guild.name}** to the database`);
 	}
 }

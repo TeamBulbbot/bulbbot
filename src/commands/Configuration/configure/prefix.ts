@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message, Snowflake } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
@@ -18,13 +19,13 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const prefix = args[0];
 
-		if (prefix.length > 255) return message.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", message.guild?.id, {}));
+		if (prefix.length > 255) return context.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", context.guild?.id, {}));
 
-		await databaseManager.setPrefix(<Snowflake>message.guild?.id, prefix);
+		await databaseManager.setPrefix(<Snowflake>context.guild?.id, prefix);
 
-		await message.channel.send(await this.client.bulbutils.translate("config_prefix_success", message.guild?.id, { prefix }));
+		await context.channel.send(await this.client.bulbutils.translate("config_prefix_success", context.guild?.id, { prefix }));
 	}
 }

@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
+import CommandContext from "../../../../structures/CommandContext";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import { cd, exec, ShellString } from "shelljs";
 import { join } from "path";
@@ -13,7 +14,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// force pulls the HEAD
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);
@@ -22,7 +23,7 @@ export default class extends SubCommand {
 		await exec(`git clean -f -d`);
 		const resp: ShellString = exec(`git pull`);
 
-		if (resp.stderr) return message.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
-		message.reply(`Successfully force pullled\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
+		if (resp.stderr) return context.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
+		context.reply(`Successfully force pullled\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 	}
 }

@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Guild, GuildChannel, Message, TextChannel } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
@@ -14,13 +15,13 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let guild: Guild;
 
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			message.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
@@ -32,10 +33,10 @@ export default class extends SubCommand {
 		const invite = await channel[0].createInvite({
 			maxAge: 0,
 			maxUses: 1,
-			reason: `[Developer] ${message.author.tag} created this invite to the first channel`,
+			reason: `[Developer] ${context.author.tag} created this invite to the first channel`,
 			unique: true,
 		});
 
-		message.channel.send(`Created an invite to **${guild.name}**\nhttps://discord.gg/${invite?.code}`);
+		context.channel.send(`Created an invite to **${guild.name}**\nhttps://discord.gg/${invite?.code}`);
 	}
 }

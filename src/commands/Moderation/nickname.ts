@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { Guild, GuildMember, Message, Snowflake } from "discord.js";
 import { QuoteMarked, UserMentionAndID } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -23,60 +24,54 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const argString: string = args.slice(1).join(" ");
 		UserMentionAndID.lastIndex = 0;
 		const match: RegExpMatchArray = <RegExpMatchArray>UserMentionAndID.exec(args[0]);
 		if (!match)
-			return message.channel.send({
-				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-				allowedMentions: {
-					parse: ["everyone", "roles", "users"],
-				},
-			});
+			);
 		const targetID: Snowflake = match[1] ?? match[2];
-		const target: GuildMember | null = targetID ? <GuildMember>await message.guild?.members.fetch(targetID).catch(() => null) : null;
+		const target: GuildMember | null = targetID ? <GuildMember>await context.guild?.members.fetch(targetID).catch(() => null) : null;
 		const nickmatch: RegExpMatchArray = <RegExpMatchArray>QuoteMarked.exec(argString);
 		const nickname: string = (nickmatch ? nickmatch[1] : args[1])?.trim() ?? "";
 		const reason: string =
 			args
 				.slice(1 + nickname.split(" ").length)
 				.join(" ")
-				.trim() || (await this.client.bulbutils.translate("global_no_reason", message.guild?.id, {}));
+				.trim() || (await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {}));
 		if (!target)
-			return message.channel.send({
-				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
-				allowedMentions: {
-					parse: ["everyone", "roles", "users"],
-				},
-			});
-		if (await this.client.bulbutils.resolveUserHandle(message, await this.client.bulbutils.checkUser(message, target), target.user)) return;
+			);
+		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
-		if (nickname.length > 32) return message.channel.send(await this.client.bulbutils.translate("nickname_too_long", message.guild?.id, { length: nickname.length.toString() }));
-		if (!nickname && !target.nickname) return message.channel.send(await this.client.bulbutils.translate("already_no_nickname", message.guild?.id, { target: target.user }));
-		if (nickname === target.nickname) return message.channel.send(await this.client.bulbutils.translate("already_has_nickname", message.guild?.id, { target: target.user, nickname: target.nickname }));
+		if (nickname.length > 32) return context.channel.send(await this.client.bulbutils.translate("nickname_too_long", context.guild?.id, { length: nickname.length.toString() }));
+		if (!nickname && !target.nickname) return context.channel.send(await this.client.bulbutils.translate("already_no_nickname", context.guild?.id, { target: target.user }));
+		if (nickname === target.nickname) return context.channel.send(await this.client.bulbutils.translate("already_has_nickname", context.guild?.id, { target: target.user, nickname: target.nickname }));
 
 		const nickOld: string = target.nickname || target.user.username;
 		let infID: number;
 		try {
 			infID = await infractionsManager.nickname(
 				this.client,
-				<Guild>message.guild,
+				<Guild>context.guild,
 				target,
-				<GuildMember>message.member,
-				await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
+				<GuildMember>context.member,
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 					action: nickname ? "Nickname changed" : "Nickname removed",
-					moderator: message.author,
+					moderator: context.author,
 					target: target.user,
 					reason,
 				}),
@@ -86,15 +81,15 @@ export default class extends Command {
 			);
 		} catch (e: any) {
 			console.error(e.stack);
-			return message.channel.send(await this.client.bulbutils.translate("change_nick_fail", message.guild?.id, { target: target.user }));
+			return context.channel.send(await this.client.bulbutils.translate("change_nick_fail", context.guild?.id, { target: target.user }));
 		}
 
-		return message.channel.send(
-			await this.client.bulbutils.translate(nickname ? "change_nick_success" : "remove_nick_success", message.guild?.id, {
+		return context.channel.send(
+			await this.client.bulbutils.translate(nickname ? "change_nick_success" : "remove_nick_success", context.guild?.id, {
 				target: target.user,
 				nick_old: nickOld,
 				nick_new: nickname,
-				moderator: message.author,
+				moderator: context.author,
 				reason,
 				infraction_id: infID,
 			}),

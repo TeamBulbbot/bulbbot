@@ -1,9 +1,10 @@
-import { Message } from "discord.js";
-import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import BulbBotClient from "../../../../structures/BulbBotClient";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
+import CommandContext from "../../../../structures/CommandContext";
+import { Message } from "discord.js";
 import AutoModPart, { AutoModAntiSpamPart } from "../../../../utils/types/AutoModPart";
-import BulbBotClient from "../../../../structures/BulbBotClient";
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -19,14 +20,14 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const partArg = args[0];
 		const limit = Number(args[1]);
 
 		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
-			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_missing_list", message.guild!.id, {
+			return context.channel.send(
+				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
 					argument: args[0],
 					arg_expected: "part:string",
 					argument_list: "`messages` or `mentions`",
@@ -35,8 +36,8 @@ export default class extends SubCommand {
 		const partString = partexec[1];
 
 		if (isNaN(limit))
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", message.guild!.id, {
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild!.id, {
 					arg_provided: args[1],
 					arg_expected: "limit:int",
 					usage: this.usage,
@@ -44,10 +45,10 @@ export default class extends SubCommand {
 			);
 
 		const part: AutoModAntiSpamPart = AutoModPart[partString];
-		await databaseManager.automodSetLimit(message.guild!.id, part, limit);
+		await databaseManager.automodSetLimit(context.guild!.id, part, limit);
 
-		await message.channel.send(
-			await this.client.bulbutils.translate("automod_updated_limit", message.guild!.id, {
+		await context.channel.send(
+			await this.client.bulbutils.translate("automod_updated_limit", context.guild!.id, {
 				category: partArg,
 				limit,
 			}),

@@ -1,5 +1,6 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
+import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import * as Emotes from "../../emotes.json";
@@ -16,9 +17,9 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message): Promise<void> {
+	async run(context: CommandContext): Promise<void> {
 		const realCommitTime: string = this.client.bulbutils.formatDays(new Date(this.client.about.build.time.slice(0, -7)));
-		const latency: number = Math.floor(new Date().getTime() - message.createdTimestamp);
+		const latency: number = Math.floor(new Date().getTime() - context.createdTimestamp);
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const row = new MessageActionRow().addComponents([
@@ -35,7 +36,7 @@ export default class extends Command {
 		desc += `**Last Commit:**\n**Hash:** \`${this.client.about.build.hash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;
 		desc +=
-			(await this.client.bulbutils.translate("uptime_uptime", message.guild?.id, {
+			(await this.client.bulbutils.translate("uptime_uptime", context.guild?.id, {
 				uptime: this.client.bulbutils.getUptime(this.client.uptime),
 			})) + "\n\n";
 		desc += `**Supporters**\n`;
@@ -44,13 +45,13 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setDescription(desc)
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				<string>message.author.avatarURL({ dynamic: true }),
+				<string>context.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed], components: [row] });
+		await context.channel.send({ embeds: [embed], components: [row] });
 	}
 }

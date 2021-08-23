@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
@@ -14,8 +15,8 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: Message, _: string[]): Promise<void | Message> {
-		await message.guild?.fetch();
+	public async run(context: CommandContext, _: string[]): Promise<void | Message> {
+		await context.guild?.fetch();
 
 		let staff = 0;
 		let partner = 0;
@@ -29,8 +30,8 @@ export default class extends Command {
 		let earlysupport = 0;
 		let botdeveloper = 0;
 
-		message.guild?.members.fetch();
-		message.guild?.members.cache.forEach(member => {
+		context.guild?.members.fetch();
+		context.guild?.members.cache.forEach(member => {
 			const badges = this.badge(<number>member.user.flags?.bitfield);
 			for (let i = 0; i < badges.length; i++) {
 				switch (badges[i]) {
@@ -74,7 +75,7 @@ export default class extends Command {
 		});
 
 		const desc = [
-			`Badges in **${message.guild?.name}** from **${message.guild?.memberCount}** members\n`,
+			`Badges in **${context.guild?.name}** from **${context.guild?.memberCount}** members\n`,
 			`${Emotes.flags.DISCORD_EMPLOYEE} Discord Staff: **${staff}**`,
 			`${Emotes.flags.PARTNERED_SERVER_OWNER} Partnered Server Owner: **${partner}**`,
 			`${Emotes.flags.CERTIFIED_MODERATOR} Discord Certified Moderator: **${certifiedMod}**`,
@@ -92,14 +93,14 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setDescription(desc.join("\n"))
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				<string>message.author.avatarURL({ dynamic: true }),
+				<string>context.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 
-		return message.channel.send({ embeds: [embed] });
+		return context.channel.send({ embeds: [embed] });
 	}
 
 	private badge(bitfield: number) {

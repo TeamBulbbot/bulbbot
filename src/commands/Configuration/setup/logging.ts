@@ -1,9 +1,9 @@
+import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { Message } from "discord.js";
 import LoggingSetup from "../../../utils/types/LoggingSetup";
-import BulbBotClient from "../../../structures/BulbBotClient";
 
 // @ts-ignore
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -16,9 +16,9 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<null | LoggingSetup> {
+	public async run(context: CommandContext, args: string[]): Promise<null | LoggingSetup> {
 		if (!args.length) {
-			await message.channel.send("Welcome to **Bulbbot Logging Setup**.");
+			await context.channel.send("Welcome to **Bulbbot Logging Setup**.");
 			await this.client.bulbutils.sleep(1000);
 		}
 
