@@ -131,26 +131,25 @@ export default class extends Command {
 			const msg = await context.channel.send({ embeds: [embed], components });
 
 			const filter = (i: any) => !i.bot;
-			const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
+			const collector = msg.createMessageComponentCollector({ filter, time: 30000 });
 
 			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
 				if (interaction.user.id !== context.author.id)
 					return void (await interaction.reply({
 						content: await this.client.bulbutils.translate("global_missing_permissions", context.guildId!, {}),
-						ephemeral: true
+						ephemeral: true,
 					}));
 
 				const command = Command.resolve(this.client, interaction.customId);
 				if (!command)
 					return void (await interaction.reply({
 						content: await this.client.bulbutils.translate("global_error.unknown", context.guildId!, {}),
-						ephemeral: true
+						ephemeral: true,
 					}));
 
 				const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
 				if (reason !== undefined) {
-					if (reason)
-						await interaction.reply({content: reason, ephemeral: true});
+					if (reason) await interaction.reply({ content: reason, ephemeral: true });
 					return;
 				}
 
@@ -175,6 +174,10 @@ export default class extends Command {
 					await interaction.deleteReply();
 				});
 			});
+
+			collector.on("end", async () => {
+				msg.edit({ components: [rowDisabled] });
+			})
 		}
 	}
 }

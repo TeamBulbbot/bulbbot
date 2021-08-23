@@ -219,10 +219,7 @@ class MessageCommandContext implements BaseCommandContext {
 		// @ts-ignore
 		return null;
 	}
-	public set ephemeral(e: boolean | null) {
-		// @ts-ignore
-		;
-	}
+	public set ephemeral(e: boolean | null) {}
 
 	// CommandInteraction
 	public options: CommandInteractionOptionResolver;
@@ -328,7 +325,7 @@ class MessageCommandContext implements BaseCommandContext {
 	constructor(source: Message) {
 		this.source = source;
 		this.client = source.client;
-		this.channel = clone(source.channel ?? this.user.dmChannel);;
+		this.channel = clone(source.channel ?? this.user.dmChannel);
 		this.channelId = this.channel?.id ?? null;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
@@ -511,7 +508,7 @@ class InteractionCommandContext implements BaseCommandContext {
 	public targetType: Exclude<ApplicationCommandType, 'CHAT_INPUT'> | null;
 
 	// MessageComponentInteraction
-	public readonly component: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;;
+	public readonly component: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;
 	public componentType: MessageComponentType | null;
 	public message: Message;
 	public customId: string | null;
