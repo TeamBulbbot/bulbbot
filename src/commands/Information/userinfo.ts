@@ -1,5 +1,5 @@
 import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
+import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import { ButtonInteraction, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -129,11 +129,25 @@ export default class extends Command {
 
 			const msg = await context.channel.send({ embeds: [embed], components });
 
-			const filter = (i: any) => i.user.id === context.author.id;
+			const filter = (i: any) => !i.bot;
 			const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
 
-			collector.on("collect", async (interaction: ButtonInteraction) => {
+			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
+				if (interaction.user.id  !== context.author.id)
+					return void (await interaction.reply({
+						content: await this.client.bulbutils.translate("global_missing_permissions", context.guildId!, {}),
+						ephemeral: true
+					}));
+
 				if (interaction.customId === "warn") {
+					const command = Command.resolve(this.client, "warn")!;
+					const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
+					if (reason !== undefined) {
+						if (reason)
+							await interaction.reply({content: reason, ephemeral: true});
+						return;
+					}
+
 					msg.edit({ components: [rowDisabled] });
 					await interaction.reply({
 						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
@@ -147,16 +161,7 @@ export default class extends Command {
 
 					collector?.on("collect", async m => {
 						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
-
-						const command = Command.resolve(this.client, "warn")!;
-						const reason = await command.validate(context, cArgs);
-						if (reason !== undefined) {
-							if (reason) {
-								await context.channel.send(reason);
-							}
-						} else {
-							await command.run(context, cArgs);
-						}
+						await command.run(context, cArgs);
 						await m.delete();
 					});
 
@@ -166,6 +171,14 @@ export default class extends Command {
 				}
 
 				if (interaction.customId === "kick") {
+					const command = Command.resolve(this.client, "kick")!;
+					const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
+					if (reason !== undefined) {
+						if (reason)
+							await interaction.reply({content: reason, ephemeral: true});
+						return;
+					}
+
 					msg.edit({ components: [rowDisabled] });
 					await interaction.reply({
 						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
@@ -179,16 +192,7 @@ export default class extends Command {
 
 					collector?.on("collect", async m => {
 						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
-
-						const command = Command.resolve(this.client, "kick")!;
-						const reason = await command.validate(context, cArgs);
-						if(reason !== undefined) {
-							if(reason) {
-								await context.channel.send(reason);
-							}
-						} else {
-							await command.run(context, cArgs);
-						}
+						await command.run(context, cArgs);
 						await m.delete();
 					});
 
@@ -198,6 +202,14 @@ export default class extends Command {
 				}
 
 				if (interaction.customId === "ban") {
+					const command = Command.resolve(this.client, "ban")!;
+					const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
+					if (reason !== undefined) {
+						if (reason)
+							await interaction.reply({content: reason, ephemeral: true});
+						return;
+					}
+
 					msg.edit({ components: [rowDisabled] });
 					await interaction.reply({
 						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
@@ -211,16 +223,7 @@ export default class extends Command {
 
 					collector?.on("collect", async m => {
 						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
-
-						const command = Command.resolve(this.client, "ban")!;
-						const reason = await command.validate(context, cArgs);
-						if(reason !== undefined) {
-							if(reason) {
-								await context.channel.send(reason);
-							}
-						} else {
-							await command.run(context, cArgs);
-						}
+						await command.run(context, cArgs);
 						await m.delete();
 					});
 
