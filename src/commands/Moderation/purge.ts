@@ -13,7 +13,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Purges contexts from a chat",
+			description: "Purges messages from a chat",
 			category: "Moderation",
 			aliases: ["clear", "clean"],
 			subCommands: [all, embeds, images, bots, emojis, user, contains, between],

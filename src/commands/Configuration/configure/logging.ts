@@ -58,8 +58,8 @@ export default class extends SubCommand {
 			case "auto_mod":
 				await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
 				break;
-			case "contextlogs":
-			case "context_logs":
+			case "messagelogs":
+			case "message_logs":
 				await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
 				break;
 			case "rolelogs":

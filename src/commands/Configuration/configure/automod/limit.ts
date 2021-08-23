@@ -24,13 +24,13 @@ export default class extends SubCommand {
 		const partArg = args[0];
 		const limit = Number(args[1]);
 
-		const partexec = /^(context|mention)s?$/.exec(partArg.toLowerCase());
+		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 			return context.channel.send(
 				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
 					argument: args[0],
 					arg_expected: "part:string",
-					argument_list: "`contexts` or `mentions`",
+					argument_list: "`messages` or `mentions`",
 				}),
 			);
 		const partString = partexec[1];

@@ -42,7 +42,7 @@ export default class extends SubCommand {
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
-		let contextsToPurge: Snowflake[] = [];
+		let messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
 		for (let i = 0; i < deleteMsg.length; i++) {
@@ -53,13 +53,13 @@ export default class extends SubCommand {
 			msgs.map(async m => {
 				if (m.content.match(CustomEmote) || m.content.match(Emoji)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
-					contextsToPurge.push(m.id);
+					messagesToPurge.push(m.id);
 					amount++;
 				}
 			});
 		}
 
-		await (<TextChannel>context.channel).bulkDelete(contextsToPurge);
+		await (<TextChannel>context.channel).bulkDelete(messagesToPurge);
 
 		fs.writeFile(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);

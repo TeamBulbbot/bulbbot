@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 2,
 			maxArgs: 2,
-			argList: ["context1:Snowflake", "context2:Snowflake"],
+			argList: ["message1:Snowflake", "message2:Snowflake"],
 			usage: "<context1> <context2>",
 		});
 	}
@@ -24,7 +24,7 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
 		const allMessages: Message[] = msgs.map(m => m).reverse();
-		const contexts: Snowflake[] = [];
+		const messages: Snowflake[] = [];
 		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
@@ -36,14 +36,14 @@ export default class extends SubCommand {
 			}
 
 			if (counting) {
-				contexts.push(msg.id);
+				messages.push(msg.id);
 				delMsgs += `${moment(msg.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${msg.author.tag} (${msg.author.id}) | ${msg.id} | ${msg.content} |\n`;
 			}
 
 			if (msg.id === args[1]) counting = false;
 		}
 
-		await (<TextChannel>context.channel).bulkDelete(contexts);
+		await (<TextChannel>context.channel).bulkDelete(messages);
 
 		fs.writeFile(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);
@@ -53,12 +53,12 @@ export default class extends SubCommand {
 			this.client,
 			<Guild>context.guild,
 			"Purge",
-			contexts.length,
+			messages.length,
 			`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`,
 			context.channel,
 			context.author,
 		);
 
-		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: contexts.length }));
+		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: messages.length }));
 	}
 }

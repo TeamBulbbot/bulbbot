@@ -33,12 +33,12 @@ export default class extends SubCommand {
 		const apply = !args.length ? async (setup: AutoModSetup) => (await this.applySetup(context, setup), null) : async (setup: AutoModSetup) => setup;
 		let result: string | number | null;
 
-		if (null === (result = await this.prompt(context, AutoModPart.message, "Should I limit how fast users can send contexts?", "Yes", autoModSetup))) return await apply(autoModSetup);
+		if (null === (result = await this.prompt(context, AutoModPart.message, "Should I limit how fast users can send messages?", "Yes", autoModSetup))) return await apply(autoModSetup);
 		if (result.toLowerCase() === "no") {
 			autoModSetup.limitMessages = 0;
 		} else {
 			const limitMessagesCandidate = amdb.limitMessages || 20; // TODO: fine tune default suggestion
-			if (null === (result = await this.prompt(context, AutoModPart.limit, "How many contexts in a short time is OK?", limitMessagesCandidate, autoModSetup))) return await apply(autoModSetup);
+			if (null === (result = await this.prompt(context, AutoModPart.limit, "How many messages in a short time is OK?", limitMessagesCandidate, autoModSetup))) return await apply(autoModSetup);
 			autoModSetup.limitMessages = +result;
 
 			const timeoutMessagesCandidate = amdb.timeoutMessages;
@@ -56,7 +56,7 @@ export default class extends SubCommand {
 			autoModSetup.limitMentions = 0;
 		} else {
 			const limitMentionsCandidate = amdb.limitMentions || 20; // TODO: fine tune default suggestion
-			if (null === (result = await this.prompt(context, AutoModPart.limit, "How many contexts in a short time is OK?", limitMentionsCandidate, autoModSetup))) return await apply(autoModSetup);
+			if (null === (result = await this.prompt(context, AutoModPart.limit, "How many messages in a short time is OK?", limitMentionsCandidate, autoModSetup))) return await apply(autoModSetup);
 			autoModSetup.limitMentions = +result;
 
 			const timeoutMentionsCandidate = amdb.timeoutMentions;
@@ -174,7 +174,7 @@ export default class extends SubCommand {
 				await context.channel.send("AutoMod Setup mention timed out or something");
 				break;
 			case AutoModPart.message:
-				await context.channel.send("AutoMod Setup context timed out or something");
+				await context.channel.send("AutoMod Setup message timed out or something");
 				break;
 			case AutoModPart.token:
 				await context.channel.send("AutoMod Setup token timed out or something");
