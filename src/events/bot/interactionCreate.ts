@@ -22,6 +22,13 @@ export default class extends Event {
 	}
 
 	async run(interaction: Interaction): Promise<void> {
+		if (interaction.isCommand() && !interaction.inGuild()) {
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("event_interaction_dm_command", "742094927403679816", {}),
+				ephemeral: true
+			})
+			return;
+		}
 		const context = await getCommandContext(interaction);
 
 		if (interaction.isSelectMenu()) {
@@ -48,14 +55,6 @@ export default class extends Event {
 			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
-			if (context.channel.type === "DM") {
-				await context.reply({
-					content: await this.client.bulbutils.translate("event_interaction_dm_command", context.guild?.id, {}),
-					ephemeral: true
-				})
-				return;
-			}
-
 			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
 			const subCommand: string = <string>context.options.getSubcommand(false);
 			let args: string[] = [];
