@@ -55,7 +55,7 @@ export default class extends SubCommand {
 
 		duration = Math.floor(Date.now() / 1000) + duration / 1000;
 
-		const msg: Message | void = await context.reply({
+		const msg: Message | void = await context.channel.send({
 			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", context.guild?.id, {}),
 			components: [row],
 		});
@@ -68,13 +68,13 @@ export default class extends SubCommand {
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (interaction.customId === "dm") {
 				reminder = await createReminder(reason, duration, context.author.id, "", "");
-				interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", context.guild?.id, { duration }));
+				await interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", context.guild?.id, { duration }));
 			} else {
 				reminder = await createReminder(reason, duration, context.author.id, context.channel.id, context.id);
-				interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", context.guild?.id, { duration }));
+				await interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", context.guild?.id, { duration }));
 			}
 
-			msg.edit({ components: [row2] });
+			await msg.edit({ components: [row2] });
 
 			setTimeout(async () => {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
@@ -92,12 +92,12 @@ export default class extends SubCommand {
 
 					try {
 						message = await channel.messages.fetch(reminder.messageId);
-						message.reply({
+						await message.reply({
 							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
 							options,
 						});
 					} catch (_) {
-						channel.send({
+						await channel.send({
 							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
 							options,
 						});
@@ -110,7 +110,7 @@ export default class extends SubCommand {
 					});
 				}
 
-				deleteReminder(reminder.id);
+				await deleteReminder(reminder.id);
 			}, <number>parse(args[0]));
 		});
 	}

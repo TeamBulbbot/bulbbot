@@ -22,6 +22,13 @@ export default class extends Event {
 	}
 
 	async run(interaction: Interaction): Promise<void> {
+		if (interaction.isCommand() && !interaction.inGuild()) {
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("event_interaction_dm_command", "742094927403679816", {}),
+				ephemeral: true
+			})
+			return;
+		}
 		const context = await getCommandContext(interaction);
 
 		if (interaction.isSelectMenu()) {
