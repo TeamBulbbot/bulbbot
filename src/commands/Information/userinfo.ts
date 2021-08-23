@@ -11,7 +11,8 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-// @ts-nocheck
+type ButtonActionType = "warn" | "kick" | "ban";
+
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
@@ -133,104 +134,46 @@ export default class extends Command {
 			const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
 
 			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
-				if (interaction.user.id  !== context.author.id)
+				if (interaction.user.id !== context.author.id)
 					return void (await interaction.reply({
 						content: await this.client.bulbutils.translate("global_missing_permissions", context.guildId!, {}),
 						ephemeral: true
 					}));
 
-				if (interaction.customId === "warn") {
-					const command = Command.resolve(this.client, "warn")!;
-					const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
-					if (reason !== undefined) {
-						if (reason)
-							await interaction.reply({content: reason, ephemeral: true});
-						return;
-					}
+				const command = Command.resolve(this.client, interaction.customId);
+				if (!command)
+					return void (await interaction.reply({
+						content: await this.client.bulbutils.translate("global_error.unknown", context.guildId!, {}),
+						ephemeral: true
+					}));
 
-					msg.edit({ components: [rowDisabled] });
-					await interaction.reply({
-						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
-							target: user,
-						}),
-					});
-
-					const filter = m => m.content && m.author.id === context.author.id;
-					const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
-
-					collector?.on("collect", async m => {
-						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
-						await command.run(context, cArgs);
-						await m.delete();
-					});
-
-					collector?.on("end", async () => {
-						await interaction.deleteReply();
-					});
+				const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
+				if (reason !== undefined) {
+					if (reason)
+						await interaction.reply({content: reason, ephemeral: true});
+					return;
 				}
 
-				if (interaction.customId === "kick") {
-					const command = Command.resolve(this.client, "kick")!;
-					const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
-					if (reason !== undefined) {
-						if (reason)
-							await interaction.reply({content: reason, ephemeral: true});
-						return;
-					}
+				msg.edit({ components: [rowDisabled] });
+				await interaction.reply({
+					content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
+						action: await this.client.bulbutils.translate(`mod_action_types.${<ButtonActionType>interaction.customId}`, context.guild?.id, {}),
+						target: user,
+					}),
+				});
 
-					msg.edit({ components: [rowDisabled] });
-					await interaction.reply({
-						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-							target: user,
-						}),
-					});
+				const filter = m => m.content && m.author.id === context.author.id;
+				const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
 
-					const filter = m => m.content && m.author.id === context.author.id;
-					const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
+				collector?.on("collect", async m => {
+					let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
+					await command.run(context, cArgs);
+					await m.delete();
+				});
 
-					collector?.on("collect", async m => {
-						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
-						await command.run(context, cArgs);
-						await m.delete();
-					});
-
-					collector?.on("end", async () => {
-						await interaction.deleteReply();
-					});
-				}
-
-				if (interaction.customId === "ban") {
-					const command = Command.resolve(this.client, "ban")!;
-					const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
-					if (reason !== undefined) {
-						if (reason)
-							await interaction.reply({content: reason, ephemeral: true});
-						return;
-					}
-
-					msg.edit({ components: [rowDisabled] });
-					await interaction.reply({
-						content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-							target: user,
-						}),
-					});
-
-					const filter = m => m.content && m.author.id === context.author.id;
-					const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
-
-					collector?.on("collect", async m => {
-						let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
-						await command.run(context, cArgs);
-						await m.delete();
-					});
-
-					collector?.on("end", async () => {
-						await interaction.deleteReply();
-					});
-				}
+				collector?.on("end", async () => {
+					await interaction.deleteReply();
+				});
 			});
 		}
 	}
