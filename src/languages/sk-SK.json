@@ -4,7 +4,7 @@
   "global_missing_permissions": "{{emote_lock}} Nedostatočné oprávnenia",
   "global_missing_permissions_bot": "Bot postráda dôležité oprávnenia pre prevedenie tohto príkazu. Skontroluj prosím oprávnenia bota.\n{{missing}}",
   "global_cannot_convert": "{{emote_fail}} Nemožem vykonať `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správne použítie:** {{usage}}",
-  "global_not_found": "{{emote_fail}} Špecifikovaný/á {{type}} nebol(a) nájdený(á). Nemohu převést `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správne použítie:** {{usage}}",
+  "global_not_found": "{{emote_fail}} Špecifikovaný/á {{type}} nebol(a) nájdený(á). Nemôžem previesť `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správne použítie:** {{usage}}",
   "global_not_found_types": {
       "user": "uživateľ",
       "member": "člen",
@@ -18,7 +18,7 @@
       "snowflake": "snowflake"
     },
 
-    "global_mod_action_log": "{{action}} moderátorom: {{moderator.tag}} ({{moderator.id}}) | Ciel: {{target.tag}} ({{target.id}}) | Dôvod: {{reason}}",
+    "global_mod_action_log": "{{action}} moderátorom: {{moderator.tag}} ({{moderator.id}}) | Cieľ: {{target.tag}} ({{target.id}}) | Dôvod: {{reason}}",
     "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} moderátorom **{{moderator.tag}}** `({{moderator.id}})` z dôvodu **{{reason}}** `[#{{infraction_id}}]`",
     "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} moderátorom **{{moderator.tag}}** `({{moderator.id}})` po tom čo jeich dočasný trest vypršal.`[#{{infraction_id}}]`",
     "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} do **{{until}}** moderátorom **{{moderator.tag}}** `({{moderator.id}})` z dôvodu **{{reason}}** `[#{{infraction_id}}]`",
@@ -61,10 +61,10 @@
   "event_message_args_unexpected": "{{emote_warn}} Neočakávaný argument {{argument}}. Očakával som `{{arg_expected}}` dostal som `{{arg_provided}}`.\n{{emote_wrench}} **Správne použitie:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Chýbajúci argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n**{{emote_wrench}} Správne použitie:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Neočakavaný argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n{{emote_wrench}} **Správne argumenty:** {{argument_list}}",
-  "event_message_edit": "{{emote_edit}} Správa od uživatela **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
-  "event_message_edit_special": "{{emote_edit}} Správa od uživatela **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
-  "event_message_delete": "{{emote_trash}} Správa od uživatela **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{channel.id}}>.\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}{{embed}}",
-  "event_message_delete_special": "{{emote_trash}} Správa od uživatela **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{message.channel.id}}>.\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
+  "event_message_edit": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
+  "event_message_edit_special": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
+  "event_message_delete": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{channel.id}}>.\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}{{embed}}",
+  "event_message_delete_special": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{message.channel.id}}>.\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
   
   "event_change": "`{{part}}` z `{{before}}` na `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` upravil nastavenia serveru. Zmenil {{changes}}",
