@@ -59,7 +59,7 @@
   "global_premium_only": "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
 
   "event_message_args_unexpected": "{{emote_warn}} Unexpected argument {{argument}}. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
-  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**{{emote_wrench}} Correct usage:** {{usage}}",
+  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
   "event_message_edit_special": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
@@ -136,7 +136,7 @@
   "override_nonexistent_command": "{{emote_fail}} No command override with the name of `{{command}}` was found! You need to create an override first in order to edit it.",
   "override_nonexistent_role": "{{emote_fail}} No role override for the `{{role}}` Role was found. You need to create an override first in order to edit it.",
 
-  "override_create_success": "{{emote_success}} Successfully crated an override with clearance level of `{{clearance}}`",
+  "override_create_success": "{{emote_success}} Successfully created an override with clearance level of `{{clearance}}`",
   "override_already_exists": "{{emote_fail}} An override with that name already exists!\n{{emote_wrench}} **Tip:** If you're trying to edit an override use `!configure override edit <part> <name> <clearance>`",
 
   "override_disable_success": "{{emote_success}} Successfully disabled command `{{command}}`",
