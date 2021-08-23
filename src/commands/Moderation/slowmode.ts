@@ -11,7 +11,7 @@ export default class extends Command {
 			name,
 			description: "Sets a slowmode to the selected channel",
 			category: "Moderation",
-			usage: "[channel] <duration>",
+			usage: "<duration> [channel]",
 			examples: ["slowmode 60m", "slowmode 123456789012345678 30m", "slowmode #general 0s"],
 			argList: ["duration:Duration"],
 			minArgs: 1,
@@ -24,8 +24,9 @@ export default class extends Command {
 
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let duration: number;
-		let targetChannel: Snowflake = args[0].replace(NonDigits, "");
+		let targetChannel: Snowflake;
 		if (!args[1]) targetChannel = context.channel.id;
+		else targetChannel = args[1].replace(NonDigits, "");
 		const channel: TextChannel | null = targetChannel ? <TextChannel>await context.guild?.channels.fetch(targetChannel).catch(() => null) : null;
 
 		if (!channel)
@@ -33,13 +34,13 @@ export default class extends Command {
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
 					arg_expected: "channel:Channel",
-					arg_provided: args[0],
+					arg_provided: args[1],
 					usage: this.usage,
 				}),
 			);
 
 		if (args.length === 1) duration = <number>parse(args[0]);
-		else duration = <number>parse(args[1]);
+		else duration = <number>parse(args[0]);
 
 		if (duration < <number>parse("0s") || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
 		if (duration > <number>parse("6h")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_6h", context.guild?.id, {}));
@@ -66,7 +67,7 @@ export default class extends Command {
 			await context.channel.send(
 				await this.client.bulbutils.translate("slowmode_success", context.guild?.id, {
 					channel,
-					slowmode: args[1],
+					slowmode: args[0],
 				}),
 			);
 	}
