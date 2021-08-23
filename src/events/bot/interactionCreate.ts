@@ -48,6 +48,14 @@ export default class extends Event {
 			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
+			if (context.channel.type === "DM") {
+				await context.reply({
+					content: await this.client.bulbutils.translate("event_interaction_dm_command", context.guild?.id, {}),
+					ephemeral: true
+				})
+				return;
+			}
+
 			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
 			const subCommand: string = <string>context.options.getSubcommand(false);
 			let args: string[] = [];
