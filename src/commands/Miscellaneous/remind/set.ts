@@ -6,6 +6,7 @@ import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChanne
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
+import { setTimeout } from "safe-timers";
 
 const { createReminder, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 

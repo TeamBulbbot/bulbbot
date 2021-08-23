@@ -55,7 +55,7 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) return;
+		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		if (nickname.length > 32) return context.channel.send(await this.client.bulbutils.translate("nickname_too_long", context.guild?.id, { length: nickname.length.toString() }));
 		if (!nickname && !target.nickname) return context.channel.send(await this.client.bulbutils.translate("already_no_nickname", context.guild?.id, { target: target.user }));

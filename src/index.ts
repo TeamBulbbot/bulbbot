@@ -10,7 +10,7 @@ import * as enUS from "./languages/en-US.json";
 const config = {
 	token: process.env.TOKEN,
 	prefix: Config.prefix,
-	defaultPerms: ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
+	defaultPerms: Config.defaultPerms,
 };
 
 const client: BulbBotClient = new BulbBotClient(config);

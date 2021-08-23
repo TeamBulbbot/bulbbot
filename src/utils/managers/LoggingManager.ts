@@ -142,17 +142,21 @@ export default class {
 		await (<TextChannel>client.channels.cache.get(logChannel)).send({
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
 			files: [file],
+			allowedMentions: { parse: [] },
 		});
 	}
 
-	public async sendServerEventLog(client: BulbBotClient, guild: Guild, log: string): Promise<void> {
+	public async sendServerEventLog(client: BulbBotClient, type: "other" | "channel", guild: Guild, log: string): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
+		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild[type]);
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
 
-		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+		await modChannel.send({
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
+			allowedMentions: { parse: [] }
+		});
 	}
 
 	public async sendModActionPreformatted(client: BulbBotClient, guild: Guild, log: string) {

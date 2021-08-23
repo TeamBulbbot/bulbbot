@@ -40,7 +40,7 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) return;
+		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild?.id, { target: target.user }));
 		if (target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("deafen_already_deaf", context.guild?.id, { target: target.user }));
 

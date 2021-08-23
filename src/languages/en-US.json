@@ -2,7 +2,7 @@
   "global_executed_by": "Executed by {{user.tag}}",
   "global_execution_cancel": "{{emote_fail}} Command execution cancelled",
   "global_missing_permissions": "{{emote_lock}} Missing permission(s)",
-  "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bots permissions.\n{{missing}}",
+  "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n{{missing}}",
   "global_cannot_convert": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "global_not_found_types": {
@@ -64,21 +64,27 @@
   "event_message_edit": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
   "event_message_edit_special": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
   "event_message_delete": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}>.\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}",
+  "event_message_delete_moderator": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}> by **{{moderator.tag}}** `({{moderator.id}})`.\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}",
   "event_message_delete_special": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}>.\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
 
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** Role. Changed {{changes}}",
-  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated <#{{channel.id}}>. Changed {{changes}}",
+  "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
 
-  "event_channel_create": "{{emote_add}} A new channel has been created <#{{channel.id}}> (`{{channel.type}}`)",
-  "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) channel has been deleted.",
+  "event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
+  "event_channel_create_moderator": "{{emote_add}} A new **{{type}}** has been created by **{{moderator.tag}}** `({{moderator.id}})` <#{{channel.id}}> (`{{channel.id}}`).",
+  "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted.",
+  "event_channel_delete_moderator": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted by **{{moderator.tag}}** `({{moderator.id}})`.",
 
   "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archive at **{{thread_archive}}**",
   "event_thread_delete": "{{emote_remove}} Thread **{{thread.name}}** `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> has been removed",
 
   "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
   "event_invite_delete": "{{emote_remove}} **{{moderator.tag}}** `({{moderator.id}})` has deleted an invite `{{invite.code}}`",
+
+  "event_role_create": "{{emote_add}} A new role has been created <@&{{role.id}}> (`{{role.id}}`)",
+  "event_role_delete": "{{emote_remove}} The **@{{role.name}}** (`{{role.id}}`) role has been deleted.",
 
   "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** <t:{{user_age}}:R>",
   "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>",
@@ -88,6 +94,21 @@
   "event_member_update_role_add_moderator": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_remove_moderator": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
+
+  "channel_types": {
+    "GUILD_TEXT" : "text channel",
+    "DM" : "direct message channel",
+    "GUILD_VOICE" : "voice channel",
+    "GROUP_DM" : "group DM",
+    "GUILD_CATEGORY" : "channel category",
+    "GUILD_NEWS" : "news channel",
+    "GUILD_STORE" : "store channel",
+    "GUILD_NEWS_THREAD" : "news thread",
+    "GUILD_PUBLIC_THREAD" : "thread",
+    "GUILD_PRIVATE_THREAD" : "private thread",
+    "GUILD_STAGE_VOICE" : "stage channel",
+    "UNKNOWN" : "channel"
+  },
 
   "config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
 
@@ -246,8 +267,9 @@
 
   "invite_desc": "**Invite the bot to your server**\n{{bot_invite}}\n\n**Join the support server**\n{{support_guild}}",
 
-  "remind_list_none": "You have not set any reminders",
-  "remind_list_top10": "Only showing the top 10 closets reminders",
+  "remind_list_none": "{{emote_warn}} You have not set any reminders",
+  "remind_placeholder": "No Reminders Selected",
+  "remind_prompt": "{{emote_remind}} **{{user.tag}}'s** `({{user.id}})` active reminders",
   "remind_remove_unable_to_find": "{{emote_fail}} Unable to find a reminder with the ID of `{{reminderId}}`",
   "remind_remove_removed": "{{emote_success}} Successfully removed the reminder with the ID of `{{reminderId}}`",
   "remind_set_how_to_get_reminded": "How would you like to get reminded?",
@@ -255,6 +277,13 @@
   "remind_set_channel": "Send reminder in channel",
   "remind_set_select_dm": "Will notify you in your dms **<t:{{duration}}:R>**",
   "remind_set_select_channel": "Will notify you in this channel **<t:{{duration}}:R>**",
+  "remind_no_permissions": "{{emote_lock}} You cannot view another users reminders!",
+  "remind_not_found": "{{emote_warn}} Unable to find that reminder",
+
+  "remind_desc_header": "Reminder #{{reminder.id}}",
+  "remind_desc_reason": "**Reminder:** {{reminder.reason}}\n",
+  "remind_desc_expire": "**Expires:** <t:{{reminder.expireTime}}:R>\n",
+  "remind_desc_created": "**Created:** <t:{{createdAt}}> [`Link`]({{message}})",
 
   "inviteinfo_error": "{{emote_warn}} Unable to find a server with that invite",
   "inviteinfo_verification_level": "Verification Level: `{{guild.verificationLevel}}`\n",
@@ -306,5 +335,7 @@
   "infraction_interaction_placeholder": "No Infractions Selected",
   "infraction_interaction_description": "Click to view more info",
 
-  "commands_help": "You can find all the commands Bulbbot offers at our **[GitHub](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**"
+  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.mrphilip.xyz/command-list)**",
+
+  "help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.mrphilip.xyz/command-list>"
 }

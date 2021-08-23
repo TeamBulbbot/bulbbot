@@ -3,7 +3,7 @@ import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
 import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
-import { NonDigits} from "../../../utils/Regex";
+import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import { Infraction } from "../../../utils/types/Infraction";
 

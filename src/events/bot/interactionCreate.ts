@@ -9,6 +9,7 @@ import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
 import { getCommandContext } from "../../structures/CommandContext";
 import Command from "../../structures/Command";
+import reminders from "../../interactions/select/reminders";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -24,8 +25,8 @@ export default class extends Event {
 		const context = await getCommandContext(interaction);
 
 		if (interaction.isSelectMenu()) {
-			if (interaction.customId !== "infraction") return;
-			await infraction(this.client, interaction);
+			if (interaction.customId === "infraction") await infraction(this.client, interaction);
+			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
 			if ((await clearanceManager.getUserClearance(context)) < 50)
 				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));

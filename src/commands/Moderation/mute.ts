@@ -9,6 +9,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import moment from "moment";
 import { MuteType } from "../../utils/types/MuteType";
 import MuteManger from "../../utils/managers/MuteManger";
+import { setTimeout } from "safe-timers";
 
 const { createMute, deleteMute, getLatestMute }: MuteManger = new MuteManger();
 

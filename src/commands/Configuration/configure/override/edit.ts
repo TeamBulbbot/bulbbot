@@ -37,8 +37,7 @@ export default class extends SubCommand {
 		if (clearance > this.client.userClearance) return context.channel.send(await this.client.bulbutils.translate("override_clearance_higher_than_self", context.guild?.id, {}));
 
 		switch (part) {
-			case "role":
-			{
+			case "role": {
 				const name = args[1];
 				const roleID = name.replace(NonDigits, "");
 				const rTemp = context.guild?.roles.cache.get(roleID);
@@ -58,8 +57,7 @@ export default class extends SubCommand {
 				break;
 			}
 
-			case "command":
-			{
+			case "command": {
 				const name = args.slice(1, -1);
 				const command = Command.resolve(this.client, name);
 				if (command === undefined)

@@ -1,0 +1,45 @@
+# KlukCZ's files
+# --------------------
+/src/events/bot/interactionCreate.ts @KlukCZ
+/src/interactions/ @KlukCZ
+/src/structures/AutoModCache.ts @KlukCZ
+/src/commands/Moderation/purge/ @KlukCZ
+/src/commands/Moderation/purge.ts @KlukCZ
+src/utils/managers/AutoModManager.ts @KlukCZ
+/src/utils/managers/ClearanceManager.ts @KlukCZ
+/src/utils/managers/InfractionsManager.ts @KlukCZ
+
+# wakfi's files
+# --------------------
+/src/structures/CommandContext.ts @wakfi
+/src/structures/SubCommand.ts @wakfi
+/src/commands/Configuration/setup/ @wakfi
+/src/commands/Configuration/setup.ts @wakfi
+/src/commands/Admin/command/ @wakfi
+/src/commands/Admin/command.ts @wakfi
+/src/commands/Moderation/nickname.ts @wakfi
+/src/utils/types/TranslateString.ts @wakfi
+/src/utils/types/ResolveCommandOptions.ts @wakfi
+/src/events/message/messageCreate.ts @wakfi
+
+# mrphilip's (y3ll0wlife) files
+# --------------------
+/src/utils/database/ @y3ll0wlife
+/src/commands/Miscellaneous/jumbo.ts @y3ll0wlife
+/src/commands/Miscellaneous/remind/ @y3ll0wlife
+/src/commands/Miscellaneous/remind.ts @y3ll0wlife
+/src/commands/Admin/logs.ts @y3ll0wlife
+/src/commands/Admin/admin/ @y3ll0wlife
+/src/commands/Admin/admin.ts @y3ll0wlife
+/src/utils/managers/ReminderManager.ts @y3ll0wlife
+/src/utils/managers/TempbanManager.ts @y3ll0wlife
+/src/utils/managers/MuteManager.ts @y3ll0wlife
+
+# Shared files
+# --------------------
+/src/utils/Regex.ts @y3ll0wlife @wakfi
+/src/utils/managers/DatabaseManager.ts @y3ll0wlife @KlukCZ @wakfi
+/src/utils/managers/LoggingManager.ts @y3ll0wlife @KlukCZ @wakfi
+/src/structures/Command.ts @wakfi @y3ll0wlife @KlukCZ
+/src/events/guild/member/guildMemberUpdate.ts @wakfi @y3ll0wlife
+/src/utils/AutoMod.ts @KlukCZ @wakfi @y3ll0wlife

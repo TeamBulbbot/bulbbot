@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Warn",
+    "type": 3
+  },
+  {
+    "name": "Quick Mute (1h)",
+    "type": 3
+  },
+  {
+    "name": "Kick",
+    "type": 3
+  },
+  {
+    "name": "Ban",
+    "type": 3
+  },
+  {
+    "name": "Clean All Messages",
+    "type": 3
+  }
+]

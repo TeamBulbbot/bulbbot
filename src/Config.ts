@@ -1,6 +1,10 @@
 import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData } from "discord.js";
 import * as Emotes from "./emotes.json";
 
+function ArrayLiteralType<K extends string, T extends { [ I: number ]: K }>(arr: T): T {
+	return arr;
+}
+
 export const name: string = "Bulbbot";
 export const developers: string[] = ["190160914765316096", "439396770695479297", "193160566334947340"];
 export const subDevelopers: string[] = [];
@@ -11,6 +15,8 @@ export const lib: string = "Discord.JS";
 export const prefix: string = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
+export const intents = ArrayLiteralType(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]);
+export const defaultPerms = ArrayLiteralType(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"]);
 
 // pm2 configs
 export const pm2Name: string = "bulbbot";
@@ -54,11 +60,11 @@ export const translatorEmojis: Record<string, string> = {
 	emote_edit: Emotes.other.EDIT,
 	emote_add: Emotes.other.ADD,
 	emote_remove: Emotes.other.REMOVE,
-
 	emote_ban: Emotes.actions.BAN,
 	emote_kick: Emotes.actions.KICK,
 	emote_unban: Emotes.actions.UNBAN,
 	emote_mute: Emotes.actions.MUTE,
+	emote_remind: Emotes.other.REMIND,
 };
 
 export const translatorConfig: Record<string, any> = {

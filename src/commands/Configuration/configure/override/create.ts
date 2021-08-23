@@ -41,7 +41,7 @@ export default class extends SubCommand {
 			case "role":
 				if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, name[0])) !== undefined)
 				return await context.channel.send(await this.client.bulbutils.translate("override_already_exists", context.guild?.id, {}));
-				const rTemp = context.guild?.roles.cache.get(name[0].replace(NonDigits, ""));
+					const rTemp = context.guild?.roles.cache.get(name[0].replace(NonDigits, ""));
 				if (rTemp === undefined)
 					return context.channel.send(
 						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
@@ -69,7 +69,7 @@ export default class extends SubCommand {
 					);
 
 				if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)) !== undefined)
-				return await context.channel.send(await this.client.bulbutils.translate("override_already_exists", context.guild?.id, {}));
+					return await context.channel.send(await this.client.bulbutils.translate("override_already_exists", context.guild?.id, {}));
 
 				await clearanceManager.createCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, true, clearance);
 				break;

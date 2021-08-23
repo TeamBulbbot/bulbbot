@@ -69,7 +69,9 @@ export default class Command {
 	}
 
 	public async validate(context: CommandContext, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
-		if(options === undefined) {
+		let clearance = this.clearance;
+
+		if (options === undefined) {
 			options = await ResolveCommandOptions.create(this, context, args);
 		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
@@ -77,25 +79,18 @@ export default class Command {
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride["enabled"]) return "";
-			if (commandOverride["clearanceLevel"] > options.clearance) {
-				return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
-			}
+			clearance = commandOverride["clearanceLevel"];
 		}
 
 		this.client.userClearance = options.clearance;
-		if (this.clearance > options.clearance && !commandOverride) {
-			return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
-		}
-
 		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
-		if (userPermCheck && this.clearance <= options.clearance) {
-			const userMember: GuildMember = context.member!;
-			const missing: boolean = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
 
-			if (missing) {
-				return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
-			}
+		let missing: boolean = clearance > options.clearance;
+		if (missing && ~~userPermCheck) {
+			const userMember: GuildMember = context.member!;
+			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
 		}
+		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
 
 		const clientPermCheck: BitField<PermissionString, bigint> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
 		if (clientPermCheck) {
@@ -105,7 +100,7 @@ export default class Command {
 
 			if (missing.length)
 				return await this.client.bulbutils.translate("global_missing_permissions_bot", context.guild?.id, {
-					permissions: missing.map(perm => `\`${perm}\``).join(", "),
+					missing: missing.map(perm => `\`${perm}\``).join(", "),
 				});
 		}
 
@@ -141,16 +136,16 @@ export default class Command {
 	}
 
 	static resolve(client: BulbBotClient, commandPath: string | string[]): undefined | Command {
-		if(typeof commandPath === "string") commandPath = commandPath.split(" ");
-		if(!commandPath.length) return;
+		if (typeof commandPath === "string") commandPath = commandPath.split(" ");
+		if (!commandPath.length) return;
 		const cmd: string = commandPath[0];
 		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase())!);
 		if (!command) return;
 
-		for(let i = 1; i < commandPath.length; ++i) {
+		for (let i = 1; i < commandPath.length; ++i) {
 			let currCommand = command;
 			command = command!.resolveSubcommand(commandPath.slice(i));
-			if(command === currCommand) break;
+			if (command === currCommand) break;
 		}
 
 		return command;

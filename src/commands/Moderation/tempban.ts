@@ -9,6 +9,7 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import TempbanManager from "../../utils/managers/TempbanManager";
 import moment from "moment";
 import { BanType } from "../../utils/types/BanType";
+import { setTimeout } from "safe-timers";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();

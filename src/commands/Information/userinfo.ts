@@ -150,8 +150,8 @@ export default class extends Command {
 
 						const command = Command.resolve(this.client, "warn")!;
 						const reason = await command.validate(context, cArgs);
-						if(reason !== undefined) {
-							if(reason) {
+						if (reason !== undefined) {
+							if (reason) {
 								await context.channel.send(reason);
 							}
 						} else {

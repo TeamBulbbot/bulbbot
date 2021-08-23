@@ -77,7 +77,7 @@ export default class extends Event {
 		if (resolved instanceof Message) return resolved;
 		command = resolved;
 
-		let used: string = `${prefix}${command.name}`;
+		let used: string = `${prefix}${command.qualifiedName}`;
 		options.args.forEach(arg => (used += ` ${arg}`));
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 

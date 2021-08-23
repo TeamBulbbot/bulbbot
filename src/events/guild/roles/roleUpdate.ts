@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Event from "../../../structures/Event";
 import { GuildAuditLogs, Permissions, Role } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
@@ -13,6 +15,7 @@ export default class extends Event {
 	}
 
 	public async run(newRole: Role): Promise<void> {
+		return; // There's a big bug where creating a role and immediately modifying it will spam this event, one for every role in the guild
 		if (!newRole.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
 		const logs: GuildAuditLogs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
@@ -21,8 +24,7 @@ export default class extends Event {
 
 		const { executor, changes, createdTimestamp } = first;
 		if (createdTimestamp + 3000 < Date.now()) return;
-		if (!changes) return;
-
+		if (!changes || !changes.length) return;
 		let log: string[] = [];
 
 		for (const change of changes) {
@@ -35,9 +37,10 @@ export default class extends Event {
 			);
 		}
 
-		await loggingManager.sendServerEventLog(
+		await loggingManager.sendEventLog(
 			this.client,
 			newRole.guild,
+			"role",
 			await this.client.bulbutils.translate("event_update_role", newRole.guild.id, {
 				moderator: executor,
 				role: newRole,
