@@ -1,5 +1,7 @@
 # KlukCZ's files
 # --------------------
+/interactionCommands.json @KlukCZ
+/.github/CODEOWNERS @KlukCZ
 /src/events/bot/interactionCreate.ts @KlukCZ
 /src/interactions/ @KlukCZ
 /src/structures/AutoModCache.ts @KlukCZ
@@ -18,9 +20,18 @@ src/utils/managers/AutoModManager.ts @KlukCZ
 /src/commands/Admin/command/ @wakfi
 /src/commands/Admin/command.ts @wakfi
 /src/commands/Moderation/nickname.ts @wakfi
+/src/utils/types/AutoModListOperation.ts @wakfi
+/src/utils/types/AutoModPart.ts @wakfi
+/src/utils/types/AutoModSetup.ts @wakfi
+/src/utils/types/CommandOptions.ts @wakfi
+/src/utils/types/ConfigPart.ts @wakfi
+/src/utils/types/GuildSetup.ts @wakfi
+/src/utils/types/LoggingSetup.ts @wakfi
+/src/utils/types/PunishmentType.ts @wakfi
 /src/utils/types/TranslateString.ts @wakfi
 /src/utils/types/ResolveCommandOptions.ts @wakfi
 /src/events/message/messageCreate.ts @wakfi
+
 
 # mrphilip's (y3ll0wlife) files
 # --------------------
@@ -34,6 +45,8 @@ src/utils/managers/AutoModManager.ts @KlukCZ
 /src/utils/managers/ReminderManager.ts @y3ll0wlife
 /src/utils/managers/TempbanManager.ts @y3ll0wlife
 /src/utils/managers/MuteManager.ts @y3ll0wlife
+/src/utils/Restoration.ts @y3ll0wlife
+/src/languages/sv-SE.json @y3ll0wlife
 
 # Shared files
 # --------------------
