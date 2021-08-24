@@ -325,7 +325,7 @@ class MessageCommandContext implements BaseCommandContext {
 	constructor(source: Message) {
 		this.source = source;
 		this.client = source.client;
-		this.channel = clone(source.channel ?? this.user.dmChannel);
+		this.channel = clone(source.channel);
 		this.channelId = this.channel?.id ?? null;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
@@ -611,7 +611,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.contextType = "interaction";
 		this.source = source;
 		this.client = source.client;
-		this.channel = clone(source.channel ?? this.user.dmChannel)!;
+		this.channel = source.channel ? clone(source.channel) : null!;
 		this.channelId = this.channel?.id ?? source.channelId;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
