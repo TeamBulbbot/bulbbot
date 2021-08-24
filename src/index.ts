@@ -6,6 +6,7 @@ env.config({ path: `${__dirname}/../src/.env` });
 
 import i18next from "i18next";
 import * as enUS from "./languages/en-US.json";
+import * as skSK from "./languages/sk-SK.json"
 
 const config = {
 	token: process.env.TOKEN,
@@ -16,11 +17,14 @@ const config = {
 const client: BulbBotClient = new BulbBotClient(config);
 
 i18next.init({
-	fallbackLng: "en_US",
+	fallbackLng: "en-US",
 	resources: {
-		en_US: {
+		"en-US": {
 			translation: enUS,
 		},
+		"sk-SK": {
+			translation: skSK,
+		}
 	},
 });
 

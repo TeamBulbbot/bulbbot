@@ -477,6 +477,7 @@ export default class {
 	// Supported languages
 	public readonly languages: Record<string, string> = {
 		"en-US": "en-US",
+		"sk-SK": "sk-SK",
 	};
 
 	public formatAction(action: string): string {
