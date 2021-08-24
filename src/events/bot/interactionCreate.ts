@@ -7,6 +7,8 @@ import ban from "../../interactions/context/ban";
 import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
+import { getCommandContext } from "../../structures/CommandContext";
+import Command from "../../structures/Command";
 import reminders from "../../interactions/select/reminders";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -19,17 +21,23 @@ export default class extends Event {
 		});
 	}
 
-	async run(interaction: Interaction) {
+	async run(interaction: Interaction): Promise<void> {
+		if (interaction.isCommand() && !interaction.inGuild()) {
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("event_interaction_dm_command", "742094927403679816", {}),
+				ephemeral: true
+			})
+			return;
+		}
+		const context = await getCommandContext(interaction);
+
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			if ((await clearanceManager.getUserClearanceFromInteraction(interaction)) < 50)
-				return await interaction.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true });
-
-			const message: Message = <Message>(
-				await (<TextChannel>this.client.guilds.cache.get(<Snowflake>interaction.guild?.id)?.channels.cache.get(interaction.channelId)).messages.fetch(interaction.targetId)
-			);
+			if ((await clearanceManager.getUserClearance(context)) < 50)
+				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));
+			const message: Message = <Message>await (<TextChannel>this.client.guilds.cache.get(<Snowflake>context.guildId)?.channels.cache.get(context.channelId)).messages.fetch(interaction.targetId);
 
 			if (
 				await this.client.bulbutils.resolveUserHandleFromInteraction(
@@ -41,11 +49,35 @@ export default class extends Event {
 				return;
 
 			//Context commands
-			if (interaction.commandName === "Ban") await ban(this.client, interaction, message);
-			else if (interaction.commandName === "Kick") await kick(this.client, interaction, message);
-			else if (interaction.commandName === "Warn") await warn(this.client, interaction, message);
-			else if (interaction.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
-			else if (interaction.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+			if (context.commandName === "Ban") await ban(this.client, interaction, message);
+			else if (context.commandName === "Kick") await kick(this.client, interaction, message);
+			else if (context.commandName === "Warn") await warn(this.client, interaction, message);
+			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
+			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+		} else if (interaction.isCommand()) {
+			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
+			const subCommand: string = <string>context.options.getSubcommand(false);
+			let args: string[] = [];
+			let cmd: string = <string>context.commandName;
+
+			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
+			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
+
+			for (const option of context.options["_hoistedOptions"]) {
+				if (option.type === "STRING") args.push(...(`${option.value}`.split(" ")));
+				else args.push(`${option.value}`);
+			}
+
+			const command = Command.resolve(this.client, cmd);
+			if (!command) return;
+			const invalidReason = await command.validate(context, args);
+			if (invalidReason !== undefined) {
+				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
+				return;
+			}
+
+			await context.deferReply();
+			await command.run(context, args);
 		}
 	}
 }

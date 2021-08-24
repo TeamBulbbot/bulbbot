@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { Channel, GuildChannel, Message, Role } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -20,26 +21,23 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]): Promise<void | Message | Channel> {
+	async run(context: CommandContext, args: string[]): Promise<void | Message | Channel> {
 		// @ts-ignore
-		const channel: GuildChannel = message.guild?.channels.cache.get(args[0].replace(NonDigits, ""));
+		const channel: GuildChannel = context.guild?.channels.cache.get(args[0].replace(NonDigits, ""));
 		if (!channel || channel.type !== "GUILD_TEXT") {
-			return await message.channel.send({
-				content: await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.channel", message.guild?.id, {}),
+			return await context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "channel:Channel",
 					usage: this.usage,
 				}),
-				allowedMentions: {
-					parse: ["everyone", "roles", "users"],
-				},
-			});
+			);
 		}
 
 		if (args[1] !== "true" && args[1] !== "false") {
-			return await message.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", message.guild?.id, {
+			return await context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					arg_provided: args[1],
 					arg_expected: "lock:boolean",
 					usage: this.usage,
@@ -48,11 +46,11 @@ export default class extends Command {
 		}
 
 		if (args[1] === "true") {
-			await message.channel.send(await this.client.bulbutils.translate("lockdown_locked", message.guild?.id, { channel }));
-			return channel?.permissionOverwrites.edit(<Role>message.guild?.roles.everyone, { SEND_MESSAGES: false });
+			await context.channel.send(await this.client.bulbutils.translate("lockdown_locked", context.guild?.id, { channel }));
+			return channel?.permissionOverwrites.edit(<Role>context.guild?.roles.everyone, { SEND_MESSAGES: false });
 		} else {
-			await channel?.permissionOverwrites.edit(<Role>message.guild?.roles.everyone, { SEND_MESSAGES: null });
-			return await message.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", message.guild?.id, { channel }));
+			await channel?.permissionOverwrites.edit(<Role>context.guild?.roles.everyone, { SEND_MESSAGES: null });
+			return await context.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", context.guild?.id, { channel }));
 		}
 	}
 }

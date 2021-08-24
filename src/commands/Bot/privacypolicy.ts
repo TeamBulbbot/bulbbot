@@ -1,5 +1,6 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
+import { MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -13,18 +14,18 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message): Promise<void> {
+	async run(context: CommandContext): Promise<void> {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setDescription(await this.client.bulbutils.translate("privacy_policy", message.guild?.id, {}))
+			.setDescription(await this.client.bulbutils.translate("privacy_policy", context.guild?.id, {}))
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				<string>message.author.avatarURL({ dynamic: true }),
+				<string>context.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await context.channel.send({ embeds: [embed] });
 	}
 }

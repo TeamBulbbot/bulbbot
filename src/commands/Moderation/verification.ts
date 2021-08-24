@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { Message } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -20,21 +21,21 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const level: number = parseInt(args[0].replace(NonDigits, ""));
 		if (!level && level !== 0)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", message.guild?.id, {
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					arg_provided: args[0],
 					arg_expected: "verification:int",
 					usage: this.usage,
 				}),
 			);
-		if (message.guild?.features.includes("COMMUNITY") && level === 0) return message.channel.send(await this.client.bulbutils.translate("verification_community_zero", message.guild.id, {}));
+		if (context.guild?.features.includes("COMMUNITY") && level === 0) return context.channel.send(await this.client.bulbutils.translate("verification_community_zero", context.guild.id, {}));
 
-		if (level > 4 || level < 0) return message.channel.send(await this.client.bulbutils.translate("verification_level_error", message.guild?.id, {}));
+		if (level > 4 || level < 0) return context.channel.send(await this.client.bulbutils.translate("verification_level_error", context.guild?.id, {}));
 
-		await message.guild?.setVerificationLevel(level);
-		await message.channel.send(await this.client.bulbutils.translate("verification_level_success", message.guild?.id, { level }));
+		await context.guild?.setVerificationLevel(level);
+		await context.channel.send(await this.client.bulbutils.translate("verification_level_success", context.guild?.id, { level }));
 	}
 }

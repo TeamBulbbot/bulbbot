@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import glob from "glob";
@@ -24,17 +25,17 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const cmd: string = args[0].toLowerCase();
 		let cmdFile: string = "";
 		let command: Command | undefined = Command.resolve(this.client, args);
 		let dirPath: string;
 
 		if(args.length > 1) {
-			if(!command) return message.channel.send(`Cannot load command \`${args[0]}\``);
-			if(command.name === args[args.length - 1]) return await message.channel.send(`Already have command \`${command.qualifiedName}\` loaded (did you mean to use \`reload\` instead?)`);
+			if(!command) return context.channel.send(`Cannot load command \`${args[0]}\``);
+			if(command.name === args[args.length - 1]) return await context.channel.send(`Already have command \`${command.qualifiedName}\` loaded (did you mean to use \`reload\` instead?)`);
 			// TODO: Internally call load command (this command) to attempt to load missing command first
-			if(command.name !== args[args.length - 2]) return await message.channel.send(`Cannot load command \`${args.slice(0, command.qualifiedName.split(" ").length + 1).join(" ")}\``);
+			if(command.name !== args[args.length - 2]) return await context.channel.send(`Cannot load command \`${args.slice(0, command.qualifiedName.split(" ").length + 1).join(" ")}\``);
 			cmdFile = args[args.length - 1];
 			dirPath = `${process.cwd()}/build/commands/*/${command.qualifiedName.replace(/ /g, "/")}/${cmdFile}.js`;
 		} else {
@@ -61,21 +62,21 @@ export default class extends SubCommand {
 					delete require.cache[require.resolve(commandFile)];
 					let { name } = path.parse(commandFile);
 					let File = require(commandFile);
-					if (!this.isClass(File.default)) return message.channel.send(`Command ${name} is not an instance of Command`);
+					if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 					const loadedCommand = new File.default(this.client, command);
 					// any SubCommand is-a Command
-					if (!(loadedCommand instanceof SubCommand)) return message.channel.send(`Event ${name} doesn't belong in commands!`);
+					if (!(loadedCommand instanceof SubCommand)) return context.channel.send(`Event ${name} doesn't belong in commands!`);
 					command!.subCommands.push(loadedCommand);
 					command = loadedCommand;
 				} else {
 					delete require.cache[require.resolve(commandFile)];
 					let { name } = path.parse(commandFile);
 					let File = require(commandFile);
-					if (!this.isClass(File.default)) return message.channel.send(`Command ${name} is not an instance of Command`);
+					if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 					const loadedCommand = new File.default(this.client, name);
-					if (!(loadedCommand instanceof Command)) return message.channel.send(`Event ${name} doesn't belong in commands!`);
+					if (!(loadedCommand instanceof Command)) return context.channel.send(`Event ${name} doesn't belong in commands!`);
 
 					this.client.commands.set(loadedCommand.name, loadedCommand);
 					if (loadedCommand.aliases.length) {
@@ -86,9 +87,9 @@ export default class extends SubCommand {
 					command = loadedCommand;
 				}
 				this.client.log.client(`[CLIENT - COMMANDS] Loaded command "${command.qualifiedName}"`);
-				return message.channel.send(`Loaded command \`${command.qualifiedName}\``);
+				return context.channel.send(`Loaded command \`${command.qualifiedName}\``);
 			}
-			return message.channel.send(`Cannot load command \`${args.join(" ")}\``);
+			return context.channel.send(`Cannot load command \`${args.join(" ")}\``);
 		});
 	}
 }

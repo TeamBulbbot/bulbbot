@@ -1,5 +1,5 @@
 import Command from "../../structures/Command";
-import { Message } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
 import fs from "fs";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -18,13 +18,13 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]): Promise<void> {
+	async run(context: CommandContext, args: string[]): Promise<void> {
 		const dayBefore = new Date();
 		dayBefore.setDate(dayBefore.getDate() - parseInt(args[0]));
-		this.client.log.info(`[DEVELOPER] ${message.author.tag} (${message.author.id}) got the logs for ${dayBefore.toLocaleDateString()}`);
+		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) got the logs for ${dayBefore.toLocaleDateString()}`);
 
 		if (fs.existsSync(`${__dirname}/../../../logs/${dayBefore.toLocaleDateString()}-combined.log`)) {
-			message.channel.send({
+			context.channel.send({
 				content: `Showing the logs for **${dayBefore.toLocaleDateString()}**.\n1: Combined, 2: Error, 3: Info, 4: Warn, 5: Client, 6: Database`,
 				files: [
 					`${__dirname}/../../../logs/${dayBefore.toLocaleDateString()}-combined.log`,
@@ -36,7 +36,7 @@ export default class extends Command {
 				],
 			});
 		} else {
-			message.channel.send(`Can't find any logs for **${dayBefore.toLocaleDateString()}**`);
+			context.channel.send(`Can't find any logs for **${dayBefore.toLocaleDateString()}**`);
 		}
 	}
 }

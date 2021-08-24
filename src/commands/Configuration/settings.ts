@@ -1,6 +1,7 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import { Message, MessageEmbed } from "discord.js";
+import { MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -19,9 +20,9 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message) {
-		const guildConfig = await databaseManager.getConfig(message.guild!.id);
-		const loggingConfig = await databaseManager.getLoggingConfig(message.guild!.id);
+	async run(context: CommandContext) {
+		const guildConfig = await databaseManager.getConfig(context.guild!.id);
+		const loggingConfig = await databaseManager.getLoggingConfig(context.guild!.id);
 
 		const configs: string[] = [
 			`**Configuration **`,
@@ -48,15 +49,15 @@ export default class extends Command {
 			`Other: ${loggingConfig.other !== null ? `<#${loggingConfig.other}>` : Emotes.other.SWITCHOFF}`,
 		];
 
-		const memberObj = await this.client.bulbutils.userObject(true, message.member!);
+		const memberObj = await this.client.bulbutils.userObject(true, context.member!);
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setAuthor(`Settings for ${message.guild!.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
+			.setAuthor(`Settings for ${context.guild!.name}`, context.guild?.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription(`${configs.join("\n")}\n\n${loggingModule.join("\n")}`)
-			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild!.id, { user: message.author }), memberObj.avatarUrl)
+			.setFooter(await this.client.bulbutils.translate("global_executed_by", context.guild!.id, { user: context.author }), memberObj.avatarUrl)
 			.setTimestamp();
 
-		return message.channel.send({ embeds: [embed] });
+		return context.channel.send({ embeds: [embed] });
 	}
 }

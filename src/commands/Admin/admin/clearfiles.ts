@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import { readdirSync, unlinkSync } from "fs";
 import { join } from "path";
@@ -12,7 +13,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message): Promise<void | Message> {
+	public async run(context: CommandContext): Promise<void | Message> {
 		let count: number = 0;
 		const path: string = `${__dirname}/../../../../files`;
 		const files: string[] = readdirSync(path);
@@ -23,6 +24,6 @@ export default class extends SubCommand {
 			unlinkSync(join(path, file));
 		}
 
-		message.channel.send(`Successfully deleted \`${count}\` files from the storage`);
+		context.channel.send(`Successfully deleted \`${count}\` files from the storage`);
 	}
 }
