@@ -22,7 +22,6 @@ export default class extends Client {
 
 	constructor(options: any) {
 		super({
-			// @ts-ignore
 			intents: new Intents(Config.intents),
 			http: { version: 9 },
 			messageCacheLifetime: 0,
