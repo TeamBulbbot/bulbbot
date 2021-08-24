@@ -1,5 +1,5 @@
 import { NonDigits } from "../../../../utils/Regex";
-import { Message, Snowflake } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import ClearanceManager from "../../../../utils/managers/ClearanceManager";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
@@ -75,6 +75,39 @@ export default class extends SubCommand {
 							command: command.qualifiedName,
 						}),
 					);
+
+				if ((clearance === 0 && command.category === "Moderation") || command.category === "Configuration") {
+					const rowDisabled = new MessageActionRow().addComponents([
+						new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm").setDisabled(),
+						new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel").setDisabled(),
+					]);
+
+					const row = new MessageActionRow().addComponents([
+						new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
+						new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
+					]);
+
+					const msg: Message = await context.channel.send({ content: await this.client.bulbutils.translate("override_clearance_0_confirmation", context.guild?.id, {}), components: [rowDisabled] });
+					await this.client.bulbutils.sleep(5000);
+					await msg.edit({ components: [row] });
+
+					const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
+					let interaction: ButtonInteraction;
+
+					try {
+						interaction = await msg.awaitMessageComponent({ filter, time: 30000 });
+					} catch (_) {
+						return await msg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+					}
+
+					if (interaction.customId === "confirm") {
+						await interaction.update({ content: await this.client.bulbutils.translate("override_create_success", context.guild?.id, { clearance }), components: [] });
+						return await clearanceManager.editCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, clearance);
+					} else {
+						return await interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+					}
+				}
+
 				await clearanceManager.editCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, clearance);
 
 				break;
