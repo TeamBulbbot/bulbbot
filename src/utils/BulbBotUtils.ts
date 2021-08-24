@@ -19,7 +19,7 @@ export default class {
 	}
 
 	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"])
+		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 
@@ -478,6 +478,7 @@ export default class {
 	public readonly languages: Record<string, string> = {
 		"en-US": "en-US",
 		"sk-SK": "sk-SK",
+		"sv-SE": "sv-SE",
 	};
 
 	public formatAction(action: string): string {
