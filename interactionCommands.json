@@ -399,6 +399,33 @@
 				]
 			},
 			{
+				"name": "language",
+				"type": 1,
+				"description": "Changes the server language",
+				"options": [
+					{
+						"name": "language",
+						"type": 3,
+						"description": "The desired server language",
+						"choices": [
+							{
+								"name": "en-US",
+								"value": "en-US"
+							},
+							{
+								"name": "sk-SK",
+								"value": "sk-SK"
+							},
+							{
+								"name": "pt-BR",
+								"value": "pt-BR"
+							}
+						],
+						"required": true
+					}
+				]
+			},
+			{
 				"name": "muterole",
 				"type": 1,
 				"description": "Configures the server mute role",

@@ -7,6 +7,9 @@ import { UserHandle } from "./types/UserHandle";
 import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig } from "../Config";
 import TranslateString from "./types/TranslateString";
+import DatabaseManager from "./managers/DatabaseManager";
+
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -16,7 +19,7 @@ export default class {
 	}
 
 	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		// await i18next.changeLanguage(lng)
+		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"])
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 
