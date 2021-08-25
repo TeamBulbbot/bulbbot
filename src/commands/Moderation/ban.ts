@@ -82,36 +82,52 @@ export default class extends Command {
 				components: [row],
 			});
 
-			const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
-			let interaction: ButtonInteraction;
+			const collector = confirmMsg.createMessageComponentCollector({ time: 30000 });
 
-			try {
-				interaction = await confirmMsg.awaitMessageComponent({ filter, time: 15000 });
-			} catch (_) {
-				await confirmMsg.delete();
-				return await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
-			}
+			collector.on("collect", async (interaction: ButtonInteraction) => {
+				if (interaction.user.id !== context.author.id) {
+					return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
+				}
 
-			if (interaction.customId === "confirm") {
-				await confirmMsg.delete();
-				infID = await infractionsManager.ban(
-					this.client,
-					<Guild>context.guild,
-					BanType.FORCE,
-					<User>target,
-					<GuildMember>context.member,
-					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
-						moderator: context.author,
-						target,
+				if (interaction.customId === "confirm") {
+					collector.stop("clicked");
+
+					infID = await infractionsManager.ban(
+						this.client,
+						<Guild>context.guild,
+						BanType.FORCE,
+						<User>target,
+						<GuildMember>context.member,
+						await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
+							moderator: context.author,
+							target,
+							reason,
+						}),
 						reason,
-					}),
-					reason,
-				);
-			} else {
-				await confirmMsg.delete();
-				return await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
-			}
+					);
+
+					return await interaction.update({
+						content: await this.client.bulbutils.translate("action_success", context.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+							target,
+							reason,
+							infraction_id: infID,
+						}),
+						components: [],
+					});
+				} else {
+					collector.stop("clicked");
+					return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+				}
+			});
+
+			collector.on("end", async (interaction: ButtonInteraction, reason: string) => {
+				if (reason !== "time") return;
+
+				await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+				return;
+			});
 		} else {
 			//Else execute a normal ban
 			target = target.user;
@@ -129,16 +145,15 @@ export default class extends Command {
 				}),
 				reason,
 			);
-		}
 
-		//Sends the response context
-		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-				target,
-				reason,
-				infraction_id: infID,
-			}),
-		);
+			await context.channel.send(
+				await this.client.bulbutils.translate("action_success", context.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+					target,
+					reason,
+					infraction_id: infID,
+				}),
+			);
+		}
 	}
 }
