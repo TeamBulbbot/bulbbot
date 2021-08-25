@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Guild, Message, User } from "discord.js";
 import * as Emotes from "../../../emotes.json";
 import { NonDigits } from "../../../utils/Regex";
@@ -16,22 +17,22 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let guild: Guild;
 
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			message.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
-		let msg = message.channel.send(`Are you sure you want the bot to leave **${guild.name}**?`);
+		let msg = context.channel.send(`Are you sure you want the bot to leave **${guild.name}**?`);
 		(await msg).react(Emotes.other.SUCCESS.replace(NonDigits, ""));
 		(await msg).react(Emotes.other.FAIL.replace(NonDigits, ""));
 
 		const filter = (reaction: any, user: User) => {
-			return [Emotes.other.SUCCESS.replace(NonDigits, ""), Emotes.other.FAIL.replace(NonDigits, "")].includes(reaction.emoji.id) && user.id === message.author.id;
+			return [Emotes.other.SUCCESS.replace(NonDigits, ""), Emotes.other.FAIL.replace(NonDigits, "")].includes(reaction.emoji.id) && user.id === context.author.id;
 		};
 
 		(await msg).awaitReactions({ filter, max: 1, time: 60000, errors: ["time"] }).then(async (collected: any) => {
@@ -39,10 +40,10 @@ export default class extends SubCommand {
 			if (reaction.emoji.id === Emotes.other.SUCCESS.replace(NonDigits, "")) {
 				guild.leave();
 				(await msg).reactions.removeAll();
-				return message.channel.send("Sir yes sir, bot yeeted");
+				return context.channel.send("Sir yes sir, bot yeeted");
 			} else {
 				(await msg).reactions.removeAll();
-				return message.channel.send("Operation canceled");
+				return context.channel.send("Operation canceled");
 			}
 		});
 	}

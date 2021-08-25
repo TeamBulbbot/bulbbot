@@ -1,8 +1,9 @@
-import { Message } from "discord.js";
-import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import BulbBotClient from "../../../../structures/BulbBotClient";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
-import BulbBotClient from "../../../../structures/BulbBotClient";
+import CommandContext from "../../../../structures/CommandContext";
+import { Message } from "discord.js";
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -14,8 +15,8 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
-		await databaseManager.enableAutomod(message.guild!.id, true);
-		await message.channel.send(await this.client.bulbutils.translate("automod_enabled", message.guild?.id, {}));
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		await databaseManager.enableAutomod(context.guild!.id, true);
+		await context.channel.send(await this.client.bulbutils.translate("automod_enabled", context.guild?.id, {}));
 	}
 }

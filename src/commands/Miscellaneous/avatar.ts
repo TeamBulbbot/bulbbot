@@ -1,5 +1,6 @@
-import { Message, MessageEmbed } from "discord.js";
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
+import { MessageEmbed } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -18,17 +19,17 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message, args: string[]) {
+	async run(context: CommandContext, args: string[]) {
 		let id;
-		if (args[0] === undefined) id = message.author.id;
+		if (args[0] === undefined) id = context.author.id;
 		else id = args[0].replace(NonDigits, "");
 		let user;
 		try {
 			user = await this.client.users.fetch(id);
 		} catch (error) {
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", message.guild?.id, {}),
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
 					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
@@ -63,13 +64,13 @@ export default class extends Command {
 			.setDescription(desc)
 			.setImage(user.avatar !== null ? user.avatarURL({ dynamic: true, size: 4096 }) : avatar)
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				await this.client.bulbutils.userObject(false, message.author).avatarUrl,
+				await this.client.bulbutils.userObject(false, context.author).avatarUrl,
 			)
 			.setTimestamp();
 
-		return message.channel.send({ embeds: [embed] });
+		return context.channel.send({ embeds: [embed] });
 	}
 }

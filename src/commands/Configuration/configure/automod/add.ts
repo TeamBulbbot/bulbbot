@@ -1,7 +1,8 @@
-import { Message } from "discord.js";
-import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
+import CommandContext from "../../../../structures/CommandContext";
+import { Message } from "discord.js";
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import AutoModPart, { AutoModListPart } from "../../../../utils/types/AutoModPart";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import { NonDigits } from "../../../../utils/Regex";
@@ -20,14 +21,14 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const partArg: string = args[0];
 		let items: string[] = args.slice(1);
 
 		const partexec = /^(website|invite|word)s?$|^(?:words?_?)?(token)s?$|^(ignore)d?_?(channel|user|role)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
-			return message.channel.send(
-				await this.client.bulbutils.translate("event_message_args_unexpected", message.guild!.id, {
+			return context.channel.send(
+				await this.client.bulbutils.translate("event_message_args_unexpected", context.guild!.id, {
 					argument: partArg,
 					arg_expected: "part:string",
 					arg_provided: partArg,
@@ -36,15 +37,15 @@ export default class extends SubCommand {
 			);
 		const partString = partexec[1] ?? partexec[2] ?? `${partexec[3]}_${partexec[4]}`;
 
-		if (!items.length) return message.channel.send(await this.client.bulbutils.translate("global_error.automod_items_length_undefined", message.guild!.id, {}));
+		if (!items.length) return context.channel.send(await this.client.bulbutils.translate("global_error.automod_items_length_undefined", context.guild!.id, {}));
 
 		const part: AutoModListPart = AutoModPart[partString];
 		if(partString.includes("_")) items = items.map(item => item.replace(NonDigits, ""));
-		const result = await databaseManager.automodAppend(message.guild!.id, part, items);
+		const result = await databaseManager.automodAppend(context.guild!.id, part, items);
 
-		if (!result.added.length) return message.channel.send(await this.client.bulbutils.translate("automod_already_in_database", message.guild!.id, { item: items.join("`, `") }));
-		await message.channel.send(
-			await this.client.bulbutils.translate("automod_add_success", message.guild!.id, {
+		if (!result.added.length) return context.channel.send(await this.client.bulbutils.translate("automod_already_in_database", context.guild!.id, { item: items.join("`, `") }));
+		await context.channel.send(
+			await this.client.bulbutils.translate("automod_add_success", context.guild!.id, {
 				category: partArg,
 				item: result.added.join("`, `"),
 			}),

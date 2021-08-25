@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { Message } from "discord.js";
 import { existsSync, unlinkSync } from "fs";
 import { CustomEmote, GetEverythingAfterColon } from "../../utils/Regex";
@@ -23,7 +24,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const PATH: string = `${__dirname}/../../../files`;
 		const TWEMOJI_VERSION: string = "13.1.0";
 
@@ -31,7 +32,7 @@ export default class extends Command {
 		const imgPath: any = [];
 		sharp.cache({ files: 0 });
 
-		if (args.length > 10) return message.channel.send(await this.client.bulbutils.translate("jumbo_too_many", message.guild?.id, {}));
+		if (args.length > 10) return context.channel.send(await this.client.bulbutils.translate("jumbo_too_many", context.guild?.id, {}));
 
 		try {
 			const jumboList: string[] = [];
@@ -46,9 +47,9 @@ export default class extends Command {
 				},
 			})
 				.png()
-				.toFile(`${PATH}/${message.author.id}-${message.guild?.id}.png`);
+				.toFile(`${PATH}/${context.author.id}-${context.guild?.id}.png`);
 
-			jumboList.push(`${message.author.id}-${message.guild?.id}.png`);
+			jumboList.push(`${context.author.id}-${context.guild?.id}.png`);
 
 			for (let i = 0; i < args.length; i++) {
 				let emote: RegExpMatchArray | string = args[i];
@@ -83,16 +84,16 @@ export default class extends Command {
 				});
 			}
 
-			await sharp(`${PATH}/${jumboList[0]}`).composite(imgPath).png().toFile(`${PATH}/final-${message.author.id}-${message.guild?.id}.png`);
-			await message.channel.send({
-				files: [`${PATH}/final-${message.author.id}-${message.guild?.id}.png`],
+			await sharp(`${PATH}/${jumboList[0]}`).composite(imgPath).png().toFile(`${PATH}/final-${context.author.id}-${context.guild?.id}.png`);
+			await context.channel.send({
+				files: [`${PATH}/final-${context.author.id}-${context.guild?.id}.png`],
 			});
 
-			unlinkSync(`${PATH}/${message.author!.id}-${message.guild!.id}.png`);
-			unlinkSync(`${PATH}/final-${message.author!.id}-${message.guild!.id}.png`);
+			unlinkSync(`${PATH}/${context.author!.id}-${context.guild!.id}.png`);
+			unlinkSync(`${PATH}/final-${context.author!.id}-${context.guild!.id}.png`);
 		} catch (err) {
-			this.client.log.error(`[JUMBO] ${message.author.tag} (${message.author.id}) had en error: `, err);
-			return message.channel.send(await this.client.bulbutils.translate("jumbo_invalid", message.guild?.id, {}));
+			this.client.log.error(`[JUMBO] ${context.author.tag} (${context.author.id}) had en error: `, err);
+			return context.channel.send(await this.client.bulbutils.translate("jumbo_invalid", context.guild?.id, {}));
 		}
 	}
 }

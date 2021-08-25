@@ -1,11 +1,15 @@
-import { ContextMenuInteraction, GuildMember, Message, Snowflake, User } from "discord.js";
+import { ContextMenuInteraction, GuildMember, Snowflake, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
+import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
 import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig } from "../Config";
 import TranslateString from "./types/TranslateString";
+import DatabaseManager from "./managers/DatabaseManager";
+
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -15,7 +19,7 @@ export default class {
 	}
 
 	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		// await i18next.changeLanguage(lng)
+		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 
@@ -54,7 +58,7 @@ export default class {
 		return badges.map(i => `${i}`).join(" ");
 	}
 
-	public guildFeatures(guildFeatures: any[]) {
+	public guildFeatures(guildFeatures: string[]) {
 		let features: string[] = [];
 
 		guildFeatures.forEach(feature => {
@@ -213,7 +217,8 @@ export default class {
 	public async sleep(ms: number) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
-	formatDays(start: Date) {
+
+	public formatDays(start: Date) {
 		const end: string = moment.utc().format("YYYY-MM-DD");
 		const date: Moment = moment(moment.utc(start).format("YYYY-MM-DD"));
 		const days: number = moment.duration(date.diff(end)).asDays();
@@ -261,7 +266,8 @@ export default class {
 
 		return user;
 	}
-	prettify(action: string): string {
+
+	public prettify(action: string): string {
 		let finalString = "";
 		switch (action) {
 			case "Ban":
@@ -305,60 +311,60 @@ export default class {
 		return finalString;
 	}
 
-	checkUser(message: Message, user: GuildMember): UserHandle {
+	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
 		if (
-			message.author.id === message.guild?.ownerId &&
-			message.guild?.me &&
-			message.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < message.guild?.me.roles.highest.rawPosition
+			context.author.id === context.guild?.ownerId &&
+			context.guild?.me &&
+			context.guild?.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < context.guild?.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
-		if (user.id === message.author.id) return UserHandle.CANNOT_ACTION_SELF;
+		if (user.id === context.author.id) return UserHandle.CANNOT_ACTION_SELF;
 
-		if (message.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
+		if (context.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
 
-		if (message.member?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
+		if (context.member?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (message.member?.roles && user.roles.highest.rawPosition >= message.member?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (context.member?.roles && user.roles.highest.rawPosition >= context.member?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (message.guild?.me && message.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (context.guild?.me && context.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (message.guild?.me && user.roles.highest.rawPosition >= message.guild?.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild?.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
 
-	async resolveUserHandle(message: Message, handle: UserHandle, user: User): Promise<boolean> {
+	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
-				await message.channel.send(await this.translate("global_cannot_action_self", message.guild?.id, {}));
+				await context.channel.send(await this.translate("global_cannot_action_self", context.guild?.id, {}));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_OWNER:
-				await message.channel.send(await this.translate("global_cannot_action_owner", message.guild?.id, {}));
+				await context.channel.send(await this.translate("global_cannot_action_owner", context.guild?.id, {}));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_ROLE_EQUAL:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild?.id, { target: user }));
+				await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_BOT_SELF:
-				await message.channel.send(await this.translate("global_cannot_action_bot_self", message.guild?.id, {}));
+				await context.channel.send(await this.translate("global_cannot_action_bot_self", context.guild?.id, {}));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_ROLE_HIGHER:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal", message.guild?.id, { target: user }));
+				await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal_bot", message.guild?.id, { target: user }));
+				await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT:
-				await message.channel.send(await this.translate("global_cannot_action_role_equal_bot", message.guild?.id, { target: user }));
+				await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
 				return true;
 
 			case UserHandle.SUCCESS:
@@ -369,8 +375,14 @@ export default class {
 		}
 	}
 
+	/** @deprecated */
 	async checkUserFromInteraction(interaction: ContextMenuInteraction, user: GuildMember): Promise<UserHandle> {
 		const author = await interaction.guild?.members.fetch(interaction.user.id);
+
+		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
+
+		if (interaction.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
+
 		if (
 			interaction.user.id === interaction.guild?.ownerId &&
 			interaction.guild?.me &&
@@ -378,10 +390,6 @@ export default class {
 			user.roles.highest.rawPosition < interaction.guild?.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
-
-		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
-
-		if (interaction.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
 
 		if (author?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
 
@@ -396,6 +404,7 @@ export default class {
 		return UserHandle.SUCCESS;
 	}
 
+	/** @deprecated */
 	async resolveUserHandleFromInteraction(interaction: ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
@@ -434,6 +443,7 @@ export default class {
 		}
 	}
 
+	// Supported timezones
 	public readonly timezones: Record<string, string> = {
 		ANAT: "Asia/Anadyr",
 		AEDT: "Australia/Melbourne",
@@ -444,6 +454,7 @@ export default class {
 		BTT: "Asia/Dhaka",
 		UZT: "Asia/Tashkent",
 		GST: "Asia/Dubai",
+		IST: "Asia/Kolkata",
 		MSK: "Europe/Moscow",
 		CEST: "Europe/Brussels",
 		BST: "Europe/London",
@@ -466,6 +477,8 @@ export default class {
 	// Supported languages
 	public readonly languages: Record<string, string> = {
 		"en-US": "en-US",
+		"sk-SK": "sk-SK",
+		"sv-SE": "sv-SE",
 	};
 
 	public formatAction(action: string): string {

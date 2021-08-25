@@ -37,11 +37,13 @@ export default class extends Event {
 
 		await loggingManager.sendServerEventLog(
 			this.client,
+			"channel",
 			newChannel.guild,
 			await this.client.bulbutils.translate("event_update_channel", newChannel.guild.id, {
 				moderator: executor,
 				channel: newChannel,
-				changes: log.join(", "),
+				type: await this.client.bulbutils.translate(`channel_types.${newChannel.type}`, newChannel.guild.id, {}),
+				changes: log.join("\n> "),
 			}),
 		);
 	}

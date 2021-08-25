@@ -1,14 +1,14 @@
+import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { CollectorFilter, Message, User } from "discord.js";
+import CommandContext from "../../../structures/CommandContext";
+import { CollectorFilter, User } from "discord.js";
 import AutoModSetup from "../../../utils/types/AutoModSetup";
 import AutoModPart from "../../../utils/types/AutoModPart";
 import Setup, { PromptOptions } from "../setup";
 import AutoModConfiguration from "../../../utils/types/AutoModConfiguration";
 import { NonDigits } from "../../../utils/Regex";
-// @ts-ignoreimport CommandOptions from "../../utils/types/CommandOptions";
-import BulbBotClient from "../../structures/BulbBotClient";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -21,55 +21,55 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<AutoModSetup | null> {
+	public async run(context: CommandContext, args: string[]): Promise<AutoModSetup | null> {
 		if (!args.length) {
-			await message.channel.send("Welcome to **Bulbbot AutoMod Setup**.");
+			await context.channel.send("Welcome to **Bulbbot AutoMod Setup**.");
 			await this.client.bulbutils.sleep(1000);
 		} else {
 			this.client.prefix = args[0]; // use updated prefix when called by full Setup command
 		}
 		const autoModSetup: AutoModSetup = {};
-		const amdb: AutoModConfiguration = await databaseManager.getAutoModConfig(message.guild!.id);
-		const apply = !args.length ? async (setup: AutoModSetup) => (await this.applySetup(message, setup), null) : async (setup: AutoModSetup) => setup;
+		const amdb: AutoModConfiguration = await databaseManager.getAutoModConfig(context.guild!.id);
+		const apply = !args.length ? async (setup: AutoModSetup) => (await this.applySetup(context, setup), null) : async (setup: AutoModSetup) => setup;
 		let result: string | number | null;
 
-		if (null === (result = await this.prompt(message, AutoModPart.message, "Should I limit how fast users can send messages?", "Yes", autoModSetup))) return await apply(autoModSetup);
+		if (null === (result = await this.prompt(context, AutoModPart.message, "Should I limit how fast users can send messages?", "Yes", autoModSetup))) return await apply(autoModSetup);
 		if (result.toLowerCase() === "no") {
 			autoModSetup.limitMessages = 0;
 		} else {
 			const limitMessagesCandidate = amdb.limitMessages || 20; // TODO: fine tune default suggestion
-			if (null === (result = await this.prompt(message, AutoModPart.limit, "How many messages in a short time is OK?", limitMessagesCandidate, autoModSetup))) return await apply(autoModSetup);
+			if (null === (result = await this.prompt(context, AutoModPart.limit, "How many messages in a short time is OK?", limitMessagesCandidate, autoModSetup))) return await apply(autoModSetup);
 			autoModSetup.limitMessages = +result;
 
 			const timeoutMessagesCandidate = amdb.timeoutMessages;
-			if (null === (result = await this.prompt(message, AutoModPart.timeout, "How long should this time be?", timeoutMessagesCandidate, autoModSetup))) return await apply(autoModSetup);
+			if (null === (result = await this.prompt(context, AutoModPart.timeout, "How long should this time be?", timeoutMessagesCandidate, autoModSetup))) return await apply(autoModSetup);
 			autoModSetup.timeoutMessages = +result;
 
 			const punishmentMessagesCandidate = amdb.timeoutMessages;
-			if (null === (result = await this.prompt(message, AutoModPart.punishment, "What should I do when a user breaks this limit?", punishmentMessagesCandidate, autoModSetup)))
+			if (null === (result = await this.prompt(context, AutoModPart.punishment, "What should I do when a user breaks this limit?", punishmentMessagesCandidate, autoModSetup)))
 				return await apply(autoModSetup);
-			autoModSetup.punishmentMessages = /^(LOG|WARN|KICK|BAN)$/.exec(message.content.toUpperCase())![1];
+			autoModSetup.punishmentMessages = /^(LOG|WARN|KICK|BAN)$/.exec(context.content.toUpperCase())![1];
 		}
 
-		if (null === (result = await this.prompt(message, AutoModPart.mention, "Should I limit how fast users can send mentions?", "Yes", autoModSetup))) return await apply(autoModSetup);
+		if (null === (result = await this.prompt(context, AutoModPart.mention, "Should I limit how fast users can send mentions?", "Yes", autoModSetup))) return await apply(autoModSetup);
 		if (result.toLowerCase() === "no") {
 			autoModSetup.limitMentions = 0;
 		} else {
 			const limitMentionsCandidate = amdb.limitMentions || 20; // TODO: fine tune default suggestion
-			if (null === (result = await this.prompt(message, AutoModPart.limit, "How many messages in a short time is OK?", limitMentionsCandidate, autoModSetup))) return await apply(autoModSetup);
+			if (null === (result = await this.prompt(context, AutoModPart.limit, "How many messages in a short time is OK?", limitMentionsCandidate, autoModSetup))) return await apply(autoModSetup);
 			autoModSetup.limitMentions = +result;
 
 			const timeoutMentionsCandidate = amdb.timeoutMentions;
-			if (null === (result = await this.prompt(message, AutoModPart.timeout, "How long should this time be?", timeoutMentionsCandidate, autoModSetup))) return await apply(autoModSetup);
+			if (null === (result = await this.prompt(context, AutoModPart.timeout, "How long should this time be?", timeoutMentionsCandidate, autoModSetup))) return await apply(autoModSetup);
 			autoModSetup.timeoutMentions = +result;
 
 			const punishmentMentionsCandidate = amdb.timeoutMentions;
-			if (null === (result = await this.prompt(message, AutoModPart.punishment, "What should I do when a user breaks this limit?", punishmentMentionsCandidate, autoModSetup)))
+			if (null === (result = await this.prompt(context, AutoModPart.punishment, "What should I do when a user breaks this limit?", punishmentMentionsCandidate, autoModSetup)))
 				return await apply(autoModSetup);
-			autoModSetup.punishmentMentions = /^(LOG|WARN|KICK|BAN)$/.exec(message.content.toUpperCase())![1];
+			autoModSetup.punishmentMentions = /^(LOG|WARN|KICK|BAN)$/.exec(context.content.toUpperCase())![1];
 		}
 
-		if (null === (result = await this.prompt(message, AutoModPart.word, "Would you like to ", "Yes", autoModSetup))) return await apply(autoModSetup);
+		if (null === (result = await this.prompt(context, AutoModPart.word, "Would you like to ", "Yes", autoModSetup))) return await apply(autoModSetup);
 		if (result.toLowerCase() === "no") {
 			autoModSetup.limitMentions = 0;
 		} else {
@@ -86,33 +86,33 @@ export default class extends SubCommand {
 		switch (part) {
 			case AutoModPart.message:
 			case AutoModPart.mention:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
-					if (/n(o(ne)?)?/.test(message.content.toLowerCase())) {
-						message.content = "no";
-					} else if (/y(es)?|enable/.test(message.content.toLowerCase())) {
-						message.content = "yes";
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
+					if (/n(o(ne)?)?/.test(context.content.toLowerCase())) {
+						context.content = "no";
+					} else if (/y(es)?|enable/.test(context.content.toLowerCase())) {
+						context.content = "yes";
 					} else {
-						await message.channel.send(await this.client.bulbutils.needsTranslation("`Yes` or `No`", message.guild?.id, {}));
+						await context.channel.send(await this.client.bulbutils.needsTranslation("`Yes` or `No`", context.guild?.id, {}));
 						return false;
 					}
 					return true;
 				});
 			case AutoModPart.timeout:
 			case AutoModPart.limit:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
-					if (!NonDigits.test(message.content) && Number.isSafeInteger(message.content)) return true;
-					await message.channel.send(await this.client.bulbutils.needsTranslation("Argument must be a number"));
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
+					if (!NonDigits.test(context.content) && Number.isSafeInteger(context.content)) return true;
+					await context.channel.send(await this.client.bulbutils.needsTranslation("Argument must be a number"));
 					return false;
 				});
 			case AutoModPart.punishment:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
-					const itemexec = /^(LOG|WARN|KICK|BAN)$/.exec(message.content.toUpperCase());
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
+					const itemexec = /^(LOG|WARN|KICK|BAN)$/.exec(context.content.toUpperCase());
 					if (!itemexec) {
-						await message.channel.send(
-							await this.client.bulbutils.translate("event_message_args_unexpected", message.guild!.id, {
+						await context.channel.send(
+							await this.client.bulbutils.translate("event_message_args_unexpected", context.guild!.id, {
 								argument: "punishment",
 								arg_expected: "punishment:string",
-								arg_provided: message.content,
+								arg_provided: context.content,
 								usage: "`LOG`, `WARN`, `KICK` or `BAN`",
 							}),
 						);
@@ -122,19 +122,19 @@ export default class extends SubCommand {
 					return true;
 				});
 			case AutoModPart.word:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
 					return true;
 				});
 			case AutoModPart.token:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
 					return true;
 				});
 			case AutoModPart.invite:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
 					return true;
 				});
 			case AutoModPart.website:
-				return (<Setup>this.parent)._filter(user, async (message: Message): Promise<boolean> => {
+				return (<Setup>this.parent)._filter(user, async (context: CommandContext): Promise<boolean> => {
 					return true;
 				});
 			default:
@@ -142,25 +142,25 @@ export default class extends SubCommand {
 		}
 	}
 
-	private async prompt(message: Message, part: AutoModPart, text: string, defaultOption: string | number, autoModSetup: AutoModSetup, options: PromptOptions = {}): Promise<string | null> {
+	private async prompt(context: CommandContext, part: AutoModPart, text: string, defaultOption: string | number, autoModSetup: AutoModSetup, options: PromptOptions = {}): Promise<string | null> {
 		let maxtime = options.maxtime ?? 180000;
 		if (maxtime < 1000) maxtime *= 60000; // Permit maxtime in minutes
 		const partName: string = Object.getOwnPropertyNames(AutoModPart).find(n => AutoModPart[n] === part)!;
 		const defaultText = options.defaultText ?? `\`${defaultOption}\``;
-		await message.channel.send({ content: `${text} (${defaultText})`, allowedMentions: { parse: [] } });
-		const response = (await message.channel.awaitMessages({ filter: this.filter(part, message.author), max: 1, time: maxtime })).first();
+		await context.channel.send({ content: `${text} (${defaultText})`, allowedMentions: { parse: [] } });
+		const response = (await context.channel.awaitMessages({ filter: this.filter(part, context.author), max: 1, time: maxtime })).first();
 		if (!response) {
-			await this.timedout(part, message);
+			await this.timedout(part, context);
 			return null;
 		}
 		if (response.content === this.client.prefix) autoModSetup[partName] = defaultOption;
 
-		// Should each prompt send a success/confirmation message? e.g. "Prefix set to `bulb!`"
+		// Should each prompt send a success/confirmation context? e.g. "Prefix set to `bulb!`"
 
 		return response.content;
 	}
 
-	private async timedout(part: AutoModPart, message: Message) {
+	private async timedout(part: AutoModPart, context: CommandContext) {
 		// TODO
 		// THESE ARE PLACEHOLDERS
 		// WE NEED ACTUAL STUFF HERE BEFORE WE SHIP
@@ -168,27 +168,27 @@ export default class extends SubCommand {
 		// Perhaps we just accept default action on timeout, another option. Maybe circumstantial
 		switch (part) {
 			case AutoModPart.invite:
-				await message.channel.send("AutoMod Setup invite timed out or something");
+				await context.channel.send("AutoMod Setup invite timed out or something");
 				break;
 			case AutoModPart.mention:
-				await message.channel.send("AutoMod Setup mention timed out or something");
+				await context.channel.send("AutoMod Setup mention timed out or something");
 				break;
 			case AutoModPart.message:
-				await message.channel.send("AutoMod Setup message timed out or something");
+				await context.channel.send("AutoMod Setup message timed out or something");
 				break;
 			case AutoModPart.token:
-				await message.channel.send("AutoMod Setup token timed out or something");
+				await context.channel.send("AutoMod Setup token timed out or something");
 				break;
 			case AutoModPart.website:
-				await message.channel.send("AutoMod Setup website timed out or something");
+				await context.channel.send("AutoMod Setup website timed out or something");
 				break;
 			case AutoModPart.word:
-				await message.channel.send("AutoMod Setup word timed out or something");
+				await context.channel.send("AutoMod Setup word timed out or something");
 				break;
 		}
 	}
 
-	public async applySetup(message: Message, guildSetup: AutoModSetup | undefined): Promise<void> {
+	public async applySetup(context: CommandContext, guildSetup: AutoModSetup | undefined): Promise<void> {
 		if (!guildSetup || guildSetup === {}) return;
 	}
 }

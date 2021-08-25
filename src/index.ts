@@ -6,20 +6,28 @@ env.config({ path: `${__dirname}/../src/.env` });
 
 import i18next from "i18next";
 import * as enUS from "./languages/en-US.json";
+import * as skSK from "./languages/sk-SK.json";
+import * as svSE from "./languages/sv-SE.json";
 
 const config = {
 	token: process.env.TOKEN,
 	prefix: Config.prefix,
-	defaultPerms: ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
+	defaultPerms: Config.defaultPerms,
 };
 
 const client: BulbBotClient = new BulbBotClient(config);
 
 i18next.init({
-	fallbackLng: "en_US",
+	fallbackLng: "en-US",
 	resources: {
-		en_US: {
+		"en-US": {
 			translation: enUS,
+		},
+		"sk-SK": {
+			translation: skSK,
+		},
+		"sv-SE": {
+			translation: svSE,
 		},
 	},
 });

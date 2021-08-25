@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Collection, Guild, GuildMember, Message, Snowflake, TextChannel } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import moment from "moment";
@@ -21,21 +22,21 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[1]);
-		const user: GuildMember = <GuildMember>message.guild?.members.cache.get(args[0].replace(NonDigits, ""));
+		const user: GuildMember = <GuildMember>context.guild?.members.cache.get(args[0].replace(NonDigits, ""));
 		if (!user)
-			return message.channel.send(
-				await this.client.bulbutils.translate("global_not_found", message.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", message.guild?.id, {}),
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
 					arg_expected: "member:Member",
 					arg_provided: args[1],
 					usage: this.usage,
 				}),
 			);
 
-		if (amount > 100) return message.channel.send(await this.client.bulbutils.translate("purge_too_many", message.guild?.id, {}));
-		if (amount <= 1 || isNaN(amount)) return message.channel.send(await this.client.bulbutils.translate("purge_too_few", message.guild?.id, {}));
+		if (amount > 100) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
+		if (amount <= 1 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 
 		let deleteMsg: number[] = [];
 		let a: number = 0;
@@ -48,7 +49,7 @@ export default class extends SubCommand {
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		let delMsgs = `Message purge in #${(<TextChannel>message.channel).name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format(
+		let delMsgs = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
@@ -56,7 +57,7 @@ export default class extends SubCommand {
 		amount = 0;
 
 		for (let i = 0; i < deleteMsg.length; i++) {
-			const msgs: Collection<string, Message> = await message.channel.messages.fetch({
+			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
 				limit: deleteMsg[i],
 			});
 
@@ -69,14 +70,14 @@ export default class extends SubCommand {
 			});
 		}
 
-		await (<TextChannel>message.channel).bulkDelete(messagesToPurge);
+		await (<TextChannel>context.channel).bulkDelete(messagesToPurge);
 
-		fs.writeFile(`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, delMsgs, function (err) {
+		fs.writeFile(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);
 		});
 
-		await loggingManager.sendModActionFile(this.client, <Guild>message.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, message.channel, message.author);
+		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
-		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: amount }));
+		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
 	}
 }

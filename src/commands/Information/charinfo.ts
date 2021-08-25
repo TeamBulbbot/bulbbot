@@ -1,4 +1,5 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -16,7 +17,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const categories: string[] = [
 			"Cc",
 			"Zs",
@@ -63,6 +64,6 @@ export default class extends Command {
 		if (text === "") text = "Unable to find any data about the given character(s)";
 		else if (text.length >= 1000) text = text.substring(0, 1000) + "...";
 
-		return message.channel.send(`\`\`\`${text}\`\`\``);
+		return context.channel.send(`\`\`\`${text}\`\`\``);
 	}
 }

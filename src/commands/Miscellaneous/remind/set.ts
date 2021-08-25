@@ -1,12 +1,14 @@
+import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel, User } from "discord.js";
-import BulbBotClient from "../../../structures/BulbBotClient";
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
+import { setTimeout } from "safe-timers";
 
-const { createReminder, getLatestReminder, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
+const { createReminder, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -20,58 +22,59 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let duration: number = <number>parse(args[0]);
 		const reason: string = args.slice(1).join(" ");
 
-		if (duration <= 0) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", message.guild?.id, {}));
-		if (duration > <number>parse("1y")) return message.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", message.guild?.id, {}));
+		if (duration <= 0) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
+		if (duration > <number>parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton()
 				.setCustomId("dm")
-				.setLabel(await this.client.bulbutils.translate("remind_set_dm", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", context.guild?.id, {}))
 				.setStyle("PRIMARY"),
 			new MessageButton()
 				.setCustomId("channel")
-				.setLabel(await this.client.bulbutils.translate("remind_set_channel", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", context.guild?.id, {}))
 				.setStyle("SUCCESS"),
 		]);
 
 		const row2 = new MessageActionRow().addComponents([
 			new MessageButton()
 				.setCustomId("dm")
-				.setLabel(await this.client.bulbutils.translate("remind_set_dm", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", context.guild?.id, {}))
 				.setStyle("PRIMARY")
 				.setDisabled(true),
 			new MessageButton()
 				.setCustomId("channel")
-				.setLabel(await this.client.bulbutils.translate("remind_set_channel", message.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", context.guild?.id, {}))
 				.setStyle("SUCCESS")
 				.setDisabled(true),
 		]);
 
 		duration = Math.floor(Date.now() / 1000) + duration / 1000;
 
-		const msg: Message = await message.reply({
-			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", message.guild?.id, {}),
+		const msg: Message | void = await context.channel.send({
+			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", context.guild?.id, {}),
 			components: [row],
 		});
+		if(!msg) return;
 
-		const filter = (i: any) => i.user.id === message.author.id;
+		const filter = (i: any) => i.user.id === context.author.id;
 		const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
+		let reminder: any;
 
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (interaction.customId === "dm") {
-				createReminder(reason, duration, message.author.id, "", "");
-				interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", message.guild?.id, { duration }));
+				reminder = await createReminder(reason, duration, context.author.id, "", "");
+				await interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", context.guild?.id, { duration }));
 			} else {
-				createReminder(reason, duration, message.author.id, message.channel.id, message.id);
-				interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", message.guild?.id, { duration }));
+				reminder = await createReminder(reason, duration, context.author.id, context.channel.id, context.id);
+				await interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", context.guild?.id, { duration }));
 			}
 
-			msg.edit({ components: [row2] });
-			let reminder: any = await getLatestReminder(message.author.id);
+			await msg.edit({ components: [row2] });
 
 			setTimeout(async () => {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
@@ -79,15 +82,26 @@ export default class extends SubCommand {
 				if (reminder.channelId !== "") {
 					// @ts-ignore
 					const channel: TextChannel = await this.client.channels.fetch(reminder.channelId);
-					const message: Message = await channel.messages.fetch(reminder.messageId);
-
-					message.reply({
-						content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+					let message: Message;
+					let options: any = {
 						allowedMentions: {
 							repliedUser: true,
-							users: [message.author.id],
+							users: [reminder.userId],
 						},
-					});
+					};
+
+					try {
+						message = await channel.messages.fetch(reminder.messageId);
+						await message.reply({
+							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							options,
+						});
+					} catch (_) {
+						await channel.send({
+							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							options,
+						});
+					}
 				} else {
 					const user: User = await this.client.users.fetch(reminder.userId);
 
@@ -96,7 +110,7 @@ export default class extends SubCommand {
 					});
 				}
 
-				deleteReminder(reminder.id);
+				await deleteReminder(reminder.id);
 			}, <number>parse(args[0]));
 		});
 	}

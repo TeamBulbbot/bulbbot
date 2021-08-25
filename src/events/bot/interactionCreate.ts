@@ -1,15 +1,16 @@
 import Event from "../../structures/Event";
-import { Guild, GuildMember, Interaction, Message, MessageEmbed, Snowflake, TextChannel } from "discord.js";
-import { NonDigits, ReasonImage } from "../../utils/Regex";
-import InfractionsManager from "../../utils/managers/InfractionsManager";
-import { Infraction } from "../../utils/types/Infraction";
-import moment from "moment";
-import * as Emotes from "../../emotes.json";
-import { embedColor } from "../../Config";
+import { GuildMember, Interaction, Message, Snowflake, TextChannel } from "discord.js";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
-import { BanType } from "../../utils/types/BanType";
+import warn from "../../interactions/context/warn";
+import kick from "../../interactions/context/kick";
+import ban from "../../interactions/context/ban";
+import mute from "../../interactions/context/mute";
+import infraction from "../../interactions/select/infraction";
+import clean from "../../interactions/context/clean";
+import { getCommandContext } from "../../structures/CommandContext";
+import Command from "../../structures/Command";
+import reminders from "../../interactions/select/reminders";
 
-const infractionsManager: InfractionsManager = new InfractionsManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default class extends Event {
@@ -20,55 +21,23 @@ export default class extends Event {
 		});
 	}
 
-	async run(interaction: Interaction) {
+	async run(interaction: Interaction): Promise<void> {
+		if (interaction.isCommand() && !interaction.inGuild()) {
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("event_interaction_dm_command", "742094927403679816", {}),
+				ephemeral: true
+			})
+			return;
+		}
+		const context = await getCommandContext(interaction);
+
 		if (interaction.isSelectMenu()) {
-			if (interaction.customId !== "infraction") return;
-			const infID = Number(interaction.values[0].replace(NonDigits, ""));
-			const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>interaction.guild?.id, infID);
-
-			const user = await this.client.bulbutils.userObject(false, await this.client.users.fetch(inf.targetId));
-			const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
-			const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
-
-			let description: string = "";
-			description += await this.client.bulbutils.translate("infraction_info_inf_id", interaction.guild?.id, { infraction_id: inf.id });
-			description += await this.client.bulbutils.translate("infraction_info_target", interaction.guild?.id, { target });
-			description += await this.client.bulbutils.translate("infraction_info_moderator", interaction.guild?.id, { moderator });
-			description += await this.client.bulbutils.translate("infraction_info_created", interaction.guild?.id, {
-				created: moment(Date.parse(inf.createdAt)).format("MMM Do YYYY, h:mm:ss a"),
-			});
-
-			if (inf.active !== "false" && inf.active !== "true") {
-				description += await this.client.bulbutils.translate("infraction_info_expires", interaction.guild?.id, {
-					expires: `${Emotes.status.ONLINE} ${moment(parseInt(inf.active)).format("MMM Do YYYY, h:mm:ss a")}`,
-				});
-			} else {
-				description += await this.client.bulbutils.translate("infraction_info_active", interaction.guild?.id, {
-					active: this.client.bulbutils.prettify(inf.active),
-				});
-			}
-
-			description += await this.client.bulbutils.translate("infraction_info_reason", interaction.guild?.id, { reason: inf.reason });
-
-			const image = inf.reason.match(ReasonImage);
-
-			const embed: MessageEmbed = new MessageEmbed()
-				.setTitle(this.client.bulbutils.prettify(inf.action))
-				.setDescription(description)
-				.setColor(embedColor)
-				.setImage(<string>(image ? image[0] : null))
-				.setThumbnail(user.avatarUrl)
-				.setFooter(await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, { user: interaction.user }), <string>interaction.user.avatarURL({ dynamic: true }))
-				.setTimestamp();
-
-			await interaction.reply({ embeds: [embed], ephemeral: true });
+			if (interaction.customId === "infraction") await infraction(this.client, interaction);
+			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			if ((await clearanceManager.getUserClearanceFromInteraction(interaction)) < 50)
-				return await interaction.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true });
-
-			const message: Message = <Message>(
-				await (<TextChannel>this.client.guilds.cache.get(<Snowflake>interaction.guild?.id)?.channels.cache.get(interaction.channelId)).messages.fetch(interaction.targetId)
-			);
+			if ((await clearanceManager.getUserClearance(context)) < 50)
+				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));
+			const message: Message = <Message>await (<TextChannel>this.client.guilds.cache.get(<Snowflake>context.guildId)?.channels.cache.get(context.channelId)).messages.fetch(interaction.targetId);
 
 			if (
 				await this.client.bulbutils.resolveUserHandleFromInteraction(
@@ -80,83 +49,35 @@ export default class extends Event {
 				return;
 
 			//Context commands
-			if (interaction.commandName === "Ban") {
-				const infID = await infractionsManager.ban(
-					this.client,
-					<Guild>interaction.guild,
-					BanType.CLEAN,
-					message.author,
-					<GuildMember>interaction.member,
-					await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.ban", message.guild?.id, {}),
-						moderator: interaction.user,
-						target: message.author,
-						reason: await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-					}),
-					await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-				);
+			if (context.commandName === "Ban") await ban(this.client, interaction, message);
+			else if (context.commandName === "Kick") await kick(this.client, interaction, message);
+			else if (context.commandName === "Warn") await warn(this.client, interaction, message);
+			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
+			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+		} else if (interaction.isCommand()) {
+			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
+			const subCommand: string = <string>context.options.getSubcommand(false);
+			let args: string[] = [];
+			let cmd: string = <string>context.commandName;
 
-				await interaction.reply({
-					content: await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.ban", interaction.guild?.id, {}),
-						target: message.author,
-						moderator: interaction.user,
-						reason: await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-						infraction_id: infID,
-					}),
-					ephemeral: true,
-				});
-			} else if (interaction.commandName === "Kick") {
-				const infID = await infractionsManager.kick(
-					this.client,
-					<Snowflake>interaction.guild?.id,
-					<GuildMember>await interaction.guild?.members.fetch(message.author.id),
-					<GuildMember>interaction.member,
-					await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.kick", message.guild?.id, {}),
-						moderator: interaction.user,
-						target: message.author,
-						reason: await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-					}),
-					await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-				);
+			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
+			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
 
-				await interaction.reply({
-					content: await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.kick", interaction.guild?.id, {}),
-						target: message.author,
-						moderator: interaction.user,
-						reason: await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-						infraction_id: infID,
-					}),
-					ephemeral: true,
-				});
-			} else if (interaction.commandName === "Warn") {
-				const infID = await infractionsManager.warn(
-					this.client,
-					<Snowflake>interaction.guild?.id,
-					<GuildMember>await interaction.guild?.members.fetch(message.author.id),
-					<GuildMember>interaction.member,
-					await this.client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.warn", message.guild?.id, {}),
-						moderator: interaction.user,
-						target: message.author,
-						reason: await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-					}),
-					await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-				);
-
-				await interaction.reply({
-					content: await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.warn", interaction.guild?.id, {}),
-						target: message.author,
-						moderator: interaction.user,
-						reason: await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
-						infraction_id: infID,
-					}),
-					ephemeral: true,
-				});
+			for (const option of context.options["_hoistedOptions"]) {
+				if (option.type === "STRING") args.push(...(`${option.value}`.split(" ")));
+				else args.push(`${option.value}`);
 			}
+
+			const command = Command.resolve(this.client, cmd);
+			if (!command) return;
+			const invalidReason = await command.validate(context, args);
+			if (invalidReason !== undefined) {
+				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
+				return;
+			}
+
+			await context.deferReply();
+			await command.run(context, args);
 		}
 	}
 }

@@ -22,6 +22,7 @@ export default class extends Event {
 			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 			user: newMessage.author,
 			message: newMessage,
+			channel: newMessage.channel,
 			before: Util.cleanContent(oldMessage.content, oldMessage.channel),
 			after: Util.cleanContent(newMessage.content, newMessage.channel),
 		});
@@ -36,6 +37,7 @@ export default class extends Event {
 					user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 					user: newMessage.author,
 					message: newMessage,
+					channel: newMessage.channel,
 				}),
 				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`,
 			);

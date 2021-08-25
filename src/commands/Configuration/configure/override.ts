@@ -13,6 +13,7 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "override",
+			aliases: ["overide"],
 			subCommands: [create, disable, edit, enable, list, remove],
 			clearance: 75,
 			minArgs: 1,

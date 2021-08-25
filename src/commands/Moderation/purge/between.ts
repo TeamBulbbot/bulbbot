@@ -1,5 +1,6 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
 import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
 import moment from "moment";
 import * as fs from "fs";
@@ -16,15 +17,15 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["message1:Snowflake", "message2:Snowflake"],
-			usage: "<message1> <message2>",
+			usage: "<context1> <context2>",
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<void | Message> {
-		const msgs: Collection<string, Message> = await message.channel.messages.fetch({ limit: 100 });
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
 		const allMessages: Message[] = msgs.map(m => m).reverse();
 		const messages: Snowflake[] = [];
-		let delMsgs: string = `Message purge in #${(<TextChannel>message.channel).name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format(
+		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
@@ -42,22 +43,22 @@ export default class extends SubCommand {
 			if (msg.id === args[1]) counting = false;
 		}
 
-		await (<TextChannel>message.channel).bulkDelete(messages);
+		await (<TextChannel>context.channel).bulkDelete(messages);
 
-		fs.writeFile(`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`, delMsgs, function (err) {
+		fs.writeFile(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs, function (err) {
 			if (err) console.error(err);
 		});
 
 		await loggingManager.sendModActionFile(
 			this.client,
-			<Guild>message.guild,
+			<Guild>context.guild,
 			"Purge",
 			messages.length,
-			`${__dirname}/../../../../files/PURGE-${message.guild?.id}.txt`,
-			message.channel,
-			message.author,
+			`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`,
+			context.channel,
+			context.author,
 		);
 
-		await message.channel.send(await this.client.bulbutils.translate("purge_success", message.guild?.id, { count: messages.length }));
+		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: messages.length }));
 	}
 }

@@ -1,5 +1,6 @@
 import Command from "../../structures/Command";
-import { Message, MessageEmbed } from "discord.js";
+import CommandContext from "../../structures/CommandContext";
+import { MessageEmbed } from "discord.js";
 import moment, { Duration } from "moment";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -11,7 +12,7 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: Message): Promise<void> {
+	async run(context: CommandContext): Promise<void> {
 		const time: Duration = moment.duration(this.client.uptime, "milliseconds");
 		const days: number = Math.floor(time.asDays());
 		const hours: number = Math.floor(time.asHours() - days * 24);
@@ -26,15 +27,15 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setDescription(await this.client.bulbutils.translate("uptime_uptime", message.guild?.id, { uptime }))
+			.setDescription(await this.client.bulbutils.translate("uptime_uptime", context.guild?.id, { uptime }))
 			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", message.guild?.id, {
-					user: message.author,
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
 				}),
-				<string>message.author.avatarURL(),
+				<string>context.author.avatarURL(),
 			)
 			.setTimestamp();
 
-		await message.channel.send({ embeds: [embed] });
+		await context.channel.send({ embeds: [embed] });
 	}
 }

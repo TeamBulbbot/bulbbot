@@ -1,6 +1,7 @@
 import Command from "../../structures/Command";
+import CommandContext from "../../structures/CommandContext";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import { Message, MessageEmbed } from "discord.js";
+import { MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -13,46 +14,50 @@ export default class extends Command {
 			name,
 			description: "Get the settings for the guild",
 			category: "Configuration",
-			aliases: ["overrides"],
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
-	async run(message: Message) {
-		const guildConfig = await databaseManager.getConfig(message.guild!.id);
-		const loggingConfig = await databaseManager.getLoggingConfig(message.guild!.id);
+	async run(context: CommandContext) {
+		const guildConfig = await databaseManager.getConfig(context.guild!.id);
+		const loggingConfig = await databaseManager.getLoggingConfig(context.guild!.id);
 
-		const configs = `
-		**Configuration **
-		Prefix: \`${guildConfig.prefix}\`
-		Bot language: \`${guildConfig.language}\`
-		Premium server: ${guildConfig.premiumGuild !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}
-		Mute role: ${guildConfig.muteRole !== null ? `<@&${guildConfig.muteRole}>` : Emotes.other.SWITCHOFF}
-		Auto role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}
-		`;
+		const configs: string[] = [
+			`**Configuration **`,
+			`Prefix: \`${guildConfig.prefix}\``,
+			`Bot Language: \`${guildConfig.language}\``,
+			`Premium Server: ${guildConfig.premiumGuild ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Mute Role: ${guildConfig.muteRole !== null ? `<@&${guildConfig.muteRole}>` : Emotes.other.SWITCHOFF}`,
+			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
+			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+		];
 
-		const loggingModule = `
-		**Logging**
-		Logging timezone: \`${guildConfig.timezone}\`
-		Mod actions: ${loggingConfig.modAction !== null ? `<#${loggingConfig.modAction}>` : Emotes.other.SWITCHOFF}
-		Automod: ${loggingConfig.automod !== null ? `<#${loggingConfig.automod}>` : Emotes.other.SWITCHOFF}
-		Message logs: ${loggingConfig.message !== null ? `<#${loggingConfig.message}>` : Emotes.other.SWITCHOFF}
-		Role logs: ${loggingConfig.role !== null ? `<#${loggingConfig.role}>` : Emotes.other.SWITCHOFF}
-		Member logs: ${loggingConfig.member !== null ? `<#${loggingConfig.member}>` : Emotes.other.SWITCHOFF}
-		Channel logs: ${loggingConfig.channel !== null ? `<#${loggingConfig.channel}>` : Emotes.other.SWITCHOFF}
-		Join leave logs: ${loggingConfig.joinLeave !== null ? `<#${loggingConfig.joinLeave}>` : Emotes.other.SWITCHOFF} `;
+		const loggingModule: string[] = [
+			`**Logging**`,
+			`Logging Timezone: \`${guildConfig.timezone}\``,
+			`Mod Logs: ${loggingConfig.modAction !== null ? `<#${loggingConfig.modAction}>` : Emotes.other.SWITCHOFF}`,
+			`Automod: ${loggingConfig.automod !== null ? `<#${loggingConfig.automod}>` : Emotes.other.SWITCHOFF}`,
+			`Message Logs: ${loggingConfig.message !== null ? `<#${loggingConfig.message}>` : Emotes.other.SWITCHOFF}`,
+			`Role Logs: ${loggingConfig.role !== null ? `<#${loggingConfig.role}>` : Emotes.other.SWITCHOFF}`,
+			`Member Logs: ${loggingConfig.member !== null ? `<#${loggingConfig.member}>` : Emotes.other.SWITCHOFF}`,
+			`Channel Logs: ${loggingConfig.channel !== null ? `<#${loggingConfig.channel}>` : Emotes.other.SWITCHOFF}`,
+			`Thread Logs: ${loggingConfig.thread !== null ? `<#${loggingConfig.thread}>` : Emotes.other.SWITCHOFF}`,
+			`Invite Logs: ${loggingConfig.invite !== null ? `<#${loggingConfig.invite}>` : Emotes.other.SWITCHOFF}`,
+			`Join Leave Logs: ${loggingConfig.joinLeave !== null ? `<#${loggingConfig.joinLeave}>` : Emotes.other.SWITCHOFF}`,
+			`Other: ${loggingConfig.other !== null ? `<#${loggingConfig.other}>` : Emotes.other.SWITCHOFF}`,
+		];
 
-		const memberObj = await this.client.bulbutils.userObject(true, message.member!);
+		const memberObj = await this.client.bulbutils.userObject(true, context.member!);
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setAuthor(`Settings for ${message.guild!.name}`, message.guild?.iconURL({ dynamic: true }) ?? undefined)
-			.setDescription(configs + loggingModule)
-			.setFooter(await this.client.bulbutils.translate("global_executed_by", message.guild!.id, { user: message.author }), memberObj.avatarUrl)
+			.setAuthor(`Settings for ${context.guild!.name}`, context.guild?.iconURL({ dynamic: true }) ?? undefined)
+			.setDescription(`${configs.join("\n")}\n\n${loggingModule.join("\n")}`)
+			.setFooter(await this.client.bulbutils.translate("global_executed_by", context.guild!.id, { user: context.author }), memberObj.avatarUrl)
 			.setTimestamp();
 
-		return message.channel.send({ embeds: [embed] });
+		return context.channel.send({ embeds: [embed] });
 	}
 }
