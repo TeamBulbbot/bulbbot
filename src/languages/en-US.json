@@ -247,7 +247,7 @@
   "invite_desc": "**Invite the bot to your server**\n{{bot_invite}}\n\n**Join the support server**\n{{support_guild}}",
 
   "remind_list_none": "You have not set any reminders",
-  "remind_list_top10": "Only showing the top 10 closets reminders",
+  "remind_list_top10": "Only showing the top 10 closest reminders",
   "remind_remove_unable_to_find": "{{emote_fail}} Unable to find a reminder with the ID of `{{reminderId}}`",
   "remind_remove_removed": "{{emote_success}} Successfully removed the reminder with the ID of `{{reminderId}}`",
   "remind_set_how_to_get_reminded": "How would you like to get reminded?",
