@@ -53,26 +53,33 @@ export default class extends SubCommand {
 			components: [row],
 		});
 
-		const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
-		await confirmMsg
-			.awaitMessageComponent({ filter, time: 15000 })
-			.then(async (interaction: ButtonInteraction) => {
-				if (interaction.customId === "confirm") {
-					await infractionsManager.deleteInfraction(<Snowflake>context.guild?.id, infID);
-					await confirmMsg.delete();
-					await context.channel.send(
-						await this.client.bulbutils.translate("infraction_delete_success", context.guild?.id, {
-							infraction_id: infID,
-						}),
-					);
-				} else {
-					await confirmMsg.delete();
-					await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
-				}
-			})
-			.catch(async _ => {
-				await confirmMsg.delete();
-				await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
-			});
+		const collector = confirmMsg.createMessageComponentCollector({ time: 30000 });
+
+		collector.on("collect", async (interaction: ButtonInteraction) => {
+			if (interaction.user.id !== context.author.id) {
+				return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
+			}
+
+			if (interaction.customId === "confirm") {
+				await interaction.update({
+					content: await this.client.bulbutils.translate("infraction_delete_success", context.guild?.id, {
+						infraction_id: infID,
+					}),
+					components: [],
+				});
+				collector.stop("clicked");
+				return await infractionsManager.deleteInfraction(<Snowflake>context.guild?.id, infID);
+			} else {
+				collector.stop("clicked");
+				return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+			}
+		});
+
+		collector.on("end", async (interaction: ButtonInteraction, reason: string) => {
+			if (reason !== "time") return;
+
+			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+			return;
+		})
 	}
 }
