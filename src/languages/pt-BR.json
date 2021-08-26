@@ -52,8 +52,8 @@
   
     "global_cannot_action_self": "{{emote_warn}} Você não pode realizar esta ação em si mesmo!",
     "global_cannot_action_owner": "{{emote_warn}} Você não pode realizar esta ação no proprietário do servidor!",
-    "global_cannot_action_role_equal": "{{emote_warn}} Você não pode realizar esta ação em **{{target.tag}}** `({{target.id}})` como você não tem uma função superior a eles!",
-    "global_cannot_action_role_equal_bot": "{{emote_warn}} Eu não posso realizar esta ação em **{{target.tag}}** `({{target.id}})` como eu não tenho uma função superior a eles!",
+    "global_cannot_action_role_equal": "{{emote_warn}} Você não pode realizar esta ação em **{{target.tag}}** `({{target.id}})` como você não tem um cargo superior a eles!",
+    "global_cannot_action_role_equal_bot": "{{emote_warn}} Eu não posso realizar esta ação em **{{target.tag}}** `({{target.id}})` como eu não tenho um cargo superior a eles!",
     "global_cannot_action_bot_self": "{{emote_warn}} Você não pode realizar esta ação no bot!",
   
     "global_premium_only": "Este é um comando premium. Torne-se um Patron e tenha acesso a este comando e outras coisas exclusivas em <https://www.patreon.com/bulbbot>",
@@ -69,7 +69,7 @@
 
     "event_change": "`{{part}}` de `{{before}}` para `{{after}}`",
     "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` atualizou as configurações do servidor. Mudou {{changes}}",
-    "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` atualizou a função **{{role.name}}**. Mudou {{changes}}",
+    "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` atualizou o cargo **{{role.name}}**. Mudou {{changes}}",
     "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` atualizou o canal **{{type}}** <#{{channel.id}}>.\nMudanças:\n> {{changes}}",
   
     "event_channel_create": "{{emote_add}} Um novo **{{type}}** foi criado <#{{channel.id}}> (`{{channel.id}}`).",
@@ -83,17 +83,17 @@
     "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` criou um novo convite `{{invite.code}}`, expira em **{{expire_time}}**, máximo de usos **{{max_uses}}**",
     "event_invite_delete": "{{emote_remove}} **{{moderator.tag}}** `({{moderator.id}})` deletou um convite `{{invite.code}}`",
   
-    "event_role_create": "{{emote_add}} Uma nova função foi criada <@&{{role.id}}> (`{{role.id}}`)",
-    "event_role_delete": "{{emote_remove}} A função **@{{role.name}}** (`{{role.id}}`) foi deletada.",
+    "event_role_create": "{{emote_add}} Um novo cargo foi criado <@&{{role.id}}> (`{{role.id}}`)",
+    "event_role_delete": "{{emote_remove}} O cargo **@{{role.name}}** (`{{role.id}}`) foi deletado.",
   
     "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` entrou no servidor.\n**Conta criada:** <t:{{user_age}}:R>",
     "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` saiu do servidor.\n**Conta entrou:** <t:{{user_joined}}:f>",
   
     "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` mudou seu nickname de `{{before}}` para `{{after}}`",
-    "event_member_update_role_add": "{{emote_add}} A função **{{role.name}}** foi adicionada em **{{user.tag}}** `({{user.id}})`",
-    "event_member_update_role_add_moderator": "{{emote_add}} A função **{{role.name}}** foi adicionada em **{{user.tag}}** `({{user.id}})` por **{{moderator.tag}}** `({{moderator.id}})`",
-    "event_member_update_role_remove": "{{emote_remove}} A função **{{role.name}}** foi removida de **{{user.tag}}** `({{user.id}})`",
-    "event_member_update_role_remove_moderator": "{{emote_remove}} A função **{{role.name}}** foi removida de **{{user.tag}}** `({{user.id}})` por **{{moderator.tag}}** `({{moderator.id}})`",
+    "event_member_update_role_add": "{{emote_add}} O cargo **{{role.name}}** foi adicionado em **{{user.tag}}** `({{user.id}})`",
+    "event_member_update_role_add_moderator": "{{emote_add}} O cargo **{{role.name}}** foi adicionada em **{{user.tag}}** `({{user.id}})` por **{{moderator.tag}}** `({{moderator.id}})`",
+    "event_member_update_role_remove": "{{emote_remove}} O cargo **{{role.name}}** foi removido de **{{user.tag}}** `({{user.id}})`",
+    "event_member_update_role_remove_moderator": "{{emote_remove}} O cargo **{{role.name}}** foi removido de **{{user.tag}}** `({{user.id}})` por **{{moderator.tag}}** `({{moderator.id}})`",
   
     "channel_types": {
       "GUILD_TEXT" : "canal de texto",
@@ -120,31 +120,31 @@
     "config_logging_unable_to_send_messages": "{{emote_fail}} Faltam ao bot as permissões cruciais para enviar mensagens em <#{{channel}}>",
     "config_logging_all_confirm": "{{emote_warn}} Você tem certeza de que deseja adicionar todos os tipos de registro ao canal <#{{channel}}>? Isto começará a registrar todas as ações registráveis no canal selecionado.",
   
-    "config_mute_success": "{{emote_success}} Função silenciado(a) atualizada com sucesso.",
-    "config_mute_unable_to_manage": "{{emote_fail}} O bot é incapaz de administrar a função selecionada. Mova a função do bot para cima da função selecionada.",
+    "config_mute_success": "{{emote_success}} O cargo silenciado(a) atualizada com sucesso.",
+    "config_mute_unable_to_manage": "{{emote_fail}} O bot é incapaz de gerenciar o cargo selecionada. Mova o cargo do bot para cima do cargo selecionada.",
   
     "config_prefix_success": "{{emote_success}} Mudança bem sucedida do prefixo do servidor `{{prefix}}`",
     "config_prefix_too_long": "{{emote_fail}} O prefixo selecionado é muito grande. Favor tornar o prefixo menor que 255 caracteres.",
   
-    "config_autorole_success": "{{emote_success}} Mudança bem sucedida da função automática para **{{role}}**",
-    "config_autorole_disable": "{{emote_success}} Função automática desabilitada com sucesso",
+    "config_autorole_success": "{{emote_success}} Mudança bem sucedida do cargo automática para **{{role}}**",
+    "config_autorole_disable": "{{emote_success}} Cargo automática desabilitada com sucesso",
   
-    "override_clearance_less_than_0": "{{emote_warn}} O nível de autorização não pode ser menor ou igual a **0**",
+    "override_clearance_0_confirmation": "{{emote_warn}} Você está prestes a permitir comandos apenas de Administrador/Moderador para o nivel de autorização `0`.\n\nIsso irá permitir que __**qualquer usuário**__ possa usar esse comando. Você tem certeza de que quer fazer isso?",
     "override_clearance_more_than_100": "{{emote_warn}} O nível de autorização não pode ser maior que **100**",
-    "override_clearance_higher_than_self": "{{emote_warn}} Você não pode fazer uma substituição com nível de autorização superior ao seu nível de autorização.",
+    "override_clearance_higher_than_self": "{{emote_warn}} Você não pode fazer uma sobreposição com nível de autorização superior ao seu nível de autorização.",
   
     "override_nonexistent_command": "{{emote_fail}} Nenhum comando com o nome de `{{command}}` foi encontrado! É preciso criar um comando de anulação primeiro para editá-lo.",
-    "override_nonexistent_role": "{{emote_fail}} Não foi encontrada nenhuma substituição de função para `{{role}}`. Você precisa criar uma anulação primeiro para editá-la.",
+    "override_nonexistent_role": "{{emote_fail}} Não foi encontrada nenhuma sobreposição de cargo para `{{role}}`. Você precisa criar uma sobreposição primeiro para editá-la.",
 
-    "override_create_success": "{{emote_success}} Criado com sucesso uma anulação com nível de autorização de `{{clearance}}`",
-    "override_already_exists": "{{emote_fail}} Já existe uma anulação com esse nome!\n{{emote_wrench}} **Dica:** Se você estiver tentando editar uma anulação, use `!configure override edit <part> <name> <clearance>`",
+    "override_create_success": "{{emote_success}} Criado com sucesso uma sobreposição com nível de autorização de `{{clearance}}`",
+    "override_already_exists": "{{emote_fail}} Já existe uma sobreposição com esse nome!\n{{emote_wrench}} **Dica:** Se você estiver tentando editar uma sobreposição, use `!configure override edit <part> <name> <clearance>`",
   
     "override_disable_success": "{{emote_success}} Comando desativado com sucesso `{{command}}`",
     "override_enable_success": "{{emote_success}} Comando habilitado com sucesso `{{command}}`",
   
-    "override_edit_success": "{{emote_success}} A anulação foi atualizada com sucesso com um novo nível de autorização de `{{clearance}}`",
+    "override_edit_success": "{{emote_success}} A sobreposição foi atualizada com sucesso com um novo nível de autorização de `{{clearance}}`",
   
-    "override_remove_success": "{{emote_success}} Eliminou com sucesso a anulação selecionada.",
+    "override_remove_success": "{{emote_success}} Eliminou com sucesso a sobreposição selecionada.",
   
     "automod_less_than_zero": "{{emote_warn}} {{limit}} não pode ser menor que `0`",
   
@@ -167,8 +167,8 @@
     "automod_settings_words": "**Palavras:** {{enabled}}\n**Palavras na blacklist:** {{word_blacklist}}\n**Token das palavras:** {{word_token_blacklist}}",
     "automod_settings_mentions": "**Menções:** {{enabled}}\n**Limite:** {{limit}}\n**Timeout:** {{timeout}}s",
     "automod_settings_messages": "**Mensages:** {{enabled}}\n**Limite:** {{limit}}\n**Timeout:** {{timeout}}s",
-    "automod_settings_ignored": "**Funções imunes:** {{roles}}\n**Canais imunes:** {{channels}}\n**Usuários imunes:** {{users}}",
-    "automod_settings_footer": "Administradores e funções com autorizações +25 são sempre imunes às verificações do AutoMod",
+    "automod_settings_ignored": "**Cargos imunes:** {{roles}}\n**Canais imunes:** {{channels}}\n**Usuários imunes:** {{users}}",
+    "automod_settings_footer": "Administradores e cargos com autorização +25 são sempre imunes às verificações do AutoMod",
   
     "automod_violation_max_messages_reason": "Violou `MAX_MESSAGES` veja em #{{channel.name}} ({amount}/{limit}s)",
     "automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` violou `MAX_MESSAGES` veja em <#{{channel.id}}>. Mensagens ({{amount}}/{{limit}}s)",
@@ -216,7 +216,7 @@
     "serverinfo_booster_tier_1": "Espaços de emoji: **100**\nQualidade do áudio: **128** kbps\n",
     "serverinfo_booster_tier_2": "Espaços de emoji: **150**\nQualidade do áudio: **256** kbps\nLimite de upload: **50 MB**\n",
     "serverinfo_booster_tier_3": "Espaços de emoji: **250**\nQualidade do áudio: **384** kbps\nLimite de upload: **100 MB**\n",
-    "serverinfo_roles": "Funções ({{guild_amount_roles}})",
+    "serverinfo_roles": "Cargos ({{guild_amount_roles}})",
     "serverinfo_emotes": "Emojis ({{guild_amount_emotes}})",
     "serverinfo_roles_too_many": " e **{{guild_roles_left}}** mais",
     "serverinfo_emotes_too_many": " e **{{guild_emotes_left}}** mais",
@@ -238,9 +238,9 @@
     "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` não está banido do servidor!",
     "ban_force_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` não está atualmente no servidor. Você quer banir a força de qualquer forma?",
   
-    "purge_too_many": "{{emote_fail}} Só é possível purgar um máximo de 99 mensagens de cada vez",
-    "purge_too_few": "{{emote_fail}} Você não pode purgar menos que 2 mensagens",
-    "purge_success": "{{emote_success}} Purgado com sucesso **{{count}}** mensagens",
+    "purge_too_many": "{{emote_fail}} Só é possível apagar um máximo de 99 mensagens de cada vez",
+    "purge_too_few": "{{emote_fail}} Você não pode apagar menos que 2 mensagens",
+    "purge_success": "{{emote_success}} Apagou com sucesso **{{count}}** mensagens",
   
     "verification_community_zero": "{{emote_fail}} Nível de verificação não pode ser `0` para servidores comunitários!",
     "verification_level_error": "{{emote_fail}} Nível de verificação não pode ser maior que `4` ou menor que `0`.",
@@ -250,7 +250,7 @@
     "remove_nick_success": "{{emote_success}} Apelido foi removido de **{{target.tag}}** `({{target.id}})` devido a **{{reason}}** `[#{{infraction_id}}]`",
     "change_nick_mod_action_log": "{{emote_success}} Apelido de **{{target.tag}}** `({{target.id}})` foi {{action}} de `{{nick_old}}` para `{{nick_new}}` por **{{moderator.tag}}** `({{moderator.id}})` devido a **{{reason}}** `[#{{infraction_id}}]`",
     "remove_nick_mod_action_log": "{{emote_success}} Apelido {{action}} de **{{target.tag}}** `({{target.id}})` por **{{moderator.tag}}** `({{moderator.id}})` devido a **{{reason}}** `[#{{infraction_id}}]`",
-    "change_nick_fail": "{{emote_fail}} Incapaz de mudar o apelido de **{{target.tag}}** `({{target.id}})`",
+    "change_nick_fail": "{{emote_fail}} Não foi possível alterar o apelido de **{{target.tag}}** `({{target.id}})`",
     "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` não tem apelido para remover",
     "already_has_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` já tem o apelido `{{nickname}}`",
     "nickname_too_long": "{{emote_warn}} Apelido tem muitos caracteres (`{{length}}`). Os apelidos são limitados a 32 caracteres",
@@ -278,14 +278,14 @@
     "remind_set_select_dm": "Notificarei você em suas mensagens diretas **<t:{{duration}}:R>**",
     "remind_set_select_channel": "Notificarei você neste canal **<t:{{duration}}:R>**",
     "remind_no_permissions": "{{emote_lock}} Você não pode ver os lembretes de outros usuários!",
-    "remind_not_found": "{{emote_warn}} Incapaz de encontrar esse lembrete",
+    "remind_not_found": "{{emote_warn}} Não foi possível encontrar esse lembrete",
   
     "remind_desc_header": "Lembrete #{{reminder.id}}",
     "remind_desc_reason": "**Lembrete:** {{reminder.reason}}\n",
     "remind_desc_expire": "**Expira:** <t:{{reminder.expireTime}}:R>\n",
     "remind_desc_created": "**Criado:** <t:{{createdAt}}> [`Link`]({{message}})",
   
-    "inviteinfo_error": "{{emote_warn}} Incapaz de encontrar um servidor com esse convite",
+    "inviteinfo_error": "{{emote_warn}} Não foi possível encontrar um servidor com esse convite",
     "inviteinfo_verification_level": "Nível de verificação: `{{guild.verificationLevel}}`\n",
     "inviteinfo_large": "Tamanho: `{{guild.large}}`\n",
     "inviteinfo_code": "Código: `{{invite.code}}`\n",
@@ -299,7 +299,7 @@
     "deafen_already_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` já está com o áudio desativado!",
     "undeafen_not_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` não está com o áudio desativado!",
   
-    "slowmode_success_remove": "{{emote_success}} Modo leto removido com sucesso de <#{{channel}}>",
+    "slowmode_success_remove": "{{emote_success}} Modo lento removido com sucesso de <#{{channel}}>",
     "slowmode_success": "{{emote_success}} Modo lento de **{{slowmode}}** colocado com sucesso em <#{{channel}}>",
     "slowmode_missing_perms": "{{emote_fail}} Faltam ao bot as permissões para administrar <#{{channel}}>",
   
@@ -310,10 +310,10 @@
     "lockdown_locked": "{{emote_success}} Canal <#{{channel}}> foi bloqueado com sucesso",
     "lockdown_unlocked": "{{emote_success}} Canal <#{{channel}}> foi desbloqueado com sucesso",
   
-    "mute_muterole_not_found": "{{emote_warn}} Este servidor não tem uma função silenciado(a) configurado!\n{{emote_wrench}} **Dica:** Você pode configurar a função de silenciado(a) utilizando o comando `!configure mute_role`",
+    "mute_muterole_not_found": "{{emote_warn}} Este servidor não tem um cargo de silenciado(a) configurado!\n{{emote_wrench}} **Dica:** Você pode configurar um cargo de silenciado(a) utilizando o comando `!configure mute_role`",
     "mute_not_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` não está atualmente silenciado(a)!",
     "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` já está silenciado(a)!",
-    "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` não foi silenciado(a) por Bulbbot. Você tem certeza de que quer desilencia-lo(a)?\n*Desilenciando um usuário que não tenha sido silenciado por Bulbbot somente removerá a função silenciado dele*",
+    "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` não foi silenciado(a) por Bulbbot. Você tem certeza de que quer desilencia-lo(a)?\n*Desilenciando um usuário que não tenha sido silenciado por Bulbbot somente removerá o cargo silenciado dele*",
     "unmute_special": "{{emote_success}} **{{target.tag}}** `({{target.id}})` foi desilenciado(a) por **{{reason}}** ",
   
     "infraction_not_found": "{{emote_fail}} Infração **#{{infraction_id}}** não pôde ser encontrada!",
