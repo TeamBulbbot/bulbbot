@@ -52,6 +52,7 @@ export default class extends SubCommand {
 					);
 
 				await clearanceManager.createRoleOverride(<Snowflake>context.guild?.id, name[0].replace(NonDigits, ""), clearance);
+				await context.channel.send(await this.client.bulbutils.translate("override_create_success", context.guild?.id, { clearance }));
 				break;
 			case "command":
 				const command = Command.resolve(this.client, name);
@@ -69,7 +70,7 @@ export default class extends SubCommand {
 				if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)) !== undefined)
 					return await context.channel.send(await this.client.bulbutils.translate("override_already_exists", context.guild?.id, {}));
 
-				if ((clearance === 0 && command.category === "Moderation") || command.category === "Configuration") {
+				if (clearance === 0 && (command.category === "Moderation" || command.category === "Configuration")) {
 					const rowDisabled = new MessageActionRow().addComponents([
 						new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm").setDisabled(),
 						new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel").setDisabled(),

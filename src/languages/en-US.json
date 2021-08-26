@@ -133,7 +133,7 @@
   "config_autorole_disable": "{{emote_success}} Successfully disabled the autorole",
 
   "override_clearance_more_than_100": "{{emote_warn}} Clearance level cannot be higher than **100**",
-  "override_clearance_0_confirmation": "{{emote_warn}} You're about to set an administrator/moderator command only to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",
+  "override_clearance_0_confirmation": "{{emote_warn}} You're about to set a restricted command to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",
   "override_clearance_higher_than_self": "{{emote_warn}} You cannot create an override with clearance level higher than your clearance level.",
 
   "override_nonexistent_command": "{{emote_fail}} No command override with the name of `{{command}}` was found! You need to create an override first in order to edit it.",

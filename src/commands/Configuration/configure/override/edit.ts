@@ -54,6 +54,7 @@ export default class extends SubCommand {
 				if ((await clearanceManager.getRoleOverride(<Snowflake>context.guild?.id, rTemp.id)) === undefined)
 					return context.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", context.guild?.id, { role: rTemp.name }));
 				await clearanceManager.editRoleOverride(<Snowflake>context.guild?.id, roleID, clearance);
+				await context.channel.send(await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }));
 				break;
 			}
 			case "command": {
@@ -76,7 +77,7 @@ export default class extends SubCommand {
 						}),
 					);
 
-				if ((clearance === 0 && command.category === "Moderation") || command.category === "Configuration") {
+				if (clearance === 0 && (command.category === "Moderation" || command.category === "Configuration")) {
 					const rowDisabled = new MessageActionRow().addComponents([
 						new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm").setDisabled(),
 						new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel").setDisabled(),
