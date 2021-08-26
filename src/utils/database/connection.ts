@@ -29,6 +29,8 @@ const models: any[] = [
 	require("./models/Tempmute").default,
 	require("./models/Blacklist").default,
 	require("./models/Remind").default,
+	require("./models/Banpools").default,
+	require("./models/BanpoolSubscribers").default,
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);
