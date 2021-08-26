@@ -30,7 +30,7 @@
       "kick": "expulso(a)",
       "ban": "banido(a)",
       "force_ban": "banido(a) à força",
-      "soft_ban": "banido(a) suavemente",
+      "soft_ban": "banido(a) parcialmente",
       "temp_ban": "banido(a) temporariamente",
       "unban": "desbanido(a)",
       "auto_unban": "automaticamente desbanido(a)",
