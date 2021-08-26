@@ -54,6 +54,7 @@ export default class extends SubCommand {
 				if ((await clearanceManager.getRoleOverride(<Snowflake>context.guild?.id, rTemp.id)) === undefined)
 					return context.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", context.guild?.id, { role: rTemp.name }));
 				await clearanceManager.editRoleOverride(<Snowflake>context.guild?.id, roleID, clearance);
+				await context.channel.send(await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }));
 				break;
 			}
 			case "command": {
@@ -76,7 +77,7 @@ export default class extends SubCommand {
 						}),
 					);
 
-				if ((clearance === 0 && command.category === "Moderation") || command.category === "Configuration") {
+				if (clearance === 0 && (command.category === "Moderation" || command.category === "Configuration")) {
 					const rowDisabled = new MessageActionRow().addComponents([
 						new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm").setDisabled(),
 						new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel").setDisabled(),
@@ -91,25 +92,33 @@ export default class extends SubCommand {
 					await this.client.bulbutils.sleep(5000);
 					await msg.edit({ components: [row] });
 
-					const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
-					let interaction: ButtonInteraction;
+					const collector = msg.createMessageComponentCollector({ time: 30000 });
 
-					try {
-						interaction = await msg.awaitMessageComponent({ filter, time: 30000 });
-					} catch (_) {
-						return await msg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
-					}
+					collector.on("collect", async (interaction: ButtonInteraction) => {
+						if (interaction.user.id !== context.author.id) {
+							return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
+						}
 
-					if (interaction.customId === "confirm") {
-						await interaction.update({ content: await this.client.bulbutils.translate("override_create_success", context.guild?.id, { clearance }), components: [] });
-						return await clearanceManager.editCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, clearance);
-					} else {
-						return await interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
-					}
+						if (interaction.customId === "confirm") {
+							await interaction.update({ content: await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }), components: [] });
+							collector.stop("clicked");
+							return clearanceManager.createCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, true, clearance);
+						} else {
+							collector.stop("clicked");
+							return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+						}
+					});
+
+					collector.on("end", async (interaction: ButtonInteraction, reason: string) => {
+						if (reason !== "time") return;
+
+						await msg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+						return;
+					});
+				} else {
+					await clearanceManager.editCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, clearance);
+					await context.channel.send(await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }));
 				}
-
-				await clearanceManager.editCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, clearance);
-
 				break;
 			}
 			default:
@@ -121,6 +130,5 @@ export default class extends SubCommand {
 					}),
 				);
 		}
-		await context.channel.send(await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }));
 	}
 }
