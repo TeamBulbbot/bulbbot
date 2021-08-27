@@ -71,7 +71,7 @@ export default class {
 
 	public async getAllUserInfractions(guildID: Snowflake, targetID: Snowflake, page: number): Promise<Infraction[] | undefined> {
 		return await sequelize.query(
-			'SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID OR "moderatorId" = $ModeratorID LIMIT 25 OFFSET $Page',
+			'SELECT * FROM infractions WHERE ("guildId" = (SELECT id FROM guilds WHERE "guildId") = $GuildID) AND ("targetId" = $TargetID OR "moderatorId" = $ModeratorID) LIMIT 25 OFFSET $Page',
 			{
 				bind: { GuildID: guildID, TargetID: targetID, ModeratorID: targetID, Page: page > 1 ? (page - 1) * 25 : 0 },
 				type: QueryTypes.SELECT,
