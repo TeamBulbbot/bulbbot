@@ -22,10 +22,20 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		const logConfig = await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id);
 		const part: string = args[0];
-		const original: string = (await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id))["modAction"];
+		const original: string = logConfig[part];
 		let channel: string | null = args[1];
 		let confirmMsg: Message;
+
+		if(original === undefined)
+			return await context.channel.send(
+				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
+					argument: part.toLowerCase(),
+					arg_expected: "part:string",
+					argument_list: "`mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
+				}),
+			);
 
 		if (channel === "remove" || channel === "disable") channel = null;
 		else {
