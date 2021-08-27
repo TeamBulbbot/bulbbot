@@ -31,6 +31,10 @@ export default function (sequelize: Sequelize): void {
         actionsOnInfo: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        rolesOnLeave: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     });
 }

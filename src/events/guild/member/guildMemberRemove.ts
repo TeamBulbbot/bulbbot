@@ -1,8 +1,10 @@
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, GuildMember, User, Util, Permissions } from "discord.js";
+import { GuildAuditLogs, GuildMember, User, Permissions } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
+const databaseManager: DatabaseManager = new DatabaseManager();
 const loggingManager: LoggingManager = new LoggingManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -17,17 +19,28 @@ export default class extends Event {
 	public async run(member: GuildMember): Promise<void> {
 		if (!member.joinedTimestamp) return;
 
-		await loggingManager.sendEventLog(
-			this.client,
-			member.guild,
-			"joinleave",
-			Util.removeMentions(
-				await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
+		if (member.roles.cache.size > 1 && (await databaseManager.getConfig(member.guild.id)).rolesOnLeave) {
+			await loggingManager.sendEventLog(
+				this.client,
+				member.guild,
+				"joinleave",
+				await this.client.bulbutils.translate("event_member_leave_roles", member.guild.id, {
 					user: member.user,
 					user_joined: Math.floor(member.joinedTimestamp / 1000),
+					user_roles: member.roles.cache.filter(role => role.id !== member.guild.id).map(role => `${role}`).join(", "),
 				}),
-			),
-		);
+			);
+		} else {
+			await loggingManager.sendEventLog(
+				this.client,
+				member.guild,
+				"joinleave",
+					await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
+						user: member.user,
+						user_joined: Math.floor(member.joinedTimestamp / 1000),
+					}),
+			);
+		}
 
 		if (!member.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
