@@ -227,6 +227,7 @@ export default class {
 				break;
 
 			case "kicked":
+			case "manually kicked":
 				action = `${Emotes.actions.KICK}`;
 				break;
 
