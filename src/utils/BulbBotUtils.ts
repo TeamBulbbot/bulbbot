@@ -1,11 +1,11 @@
-import { ContextMenuInteraction, GuildMember, Snowflake, User } from "discord.js";
+import { ContextMenuInteraction, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
 import i18next, { TOptions } from "i18next";
-import { translatorEmojis, translatorConfig } from "../Config";
+import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
 
@@ -507,5 +507,24 @@ export default class {
 		}
 
 		return Emotes.actions.WARN;
+	}
+
+	public async logError(err: Error, context?: CommandContext): Promise<void> {
+		if (process.env.ENVIRONMENT === "dev") throw err;
+		const embed = new MessageEmbed()
+			.setColor("RED")
+			.setTitle(`New Error | ${err.name}`)
+			.addField("Name", err.name, true)
+			.addField("Message", err.message, true)
+			.addField("String", `${err.name}: ${err.message}`, true)
+			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
+
+		if (context) {
+			embed.addField("Guild ID", <string>context?.guild?.id, true);
+			embed.addField("User", <string>context.author.id, true);
+			embed.addField("Message Content", <string>context.content, true);
+		}
+
+		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
 	}
 }

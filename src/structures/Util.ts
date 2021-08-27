@@ -65,7 +65,11 @@ export default class {
 
 				this.client.events.set(event.name, event);
 				event.emitter[event.type](name, async (...args: any) => {
-					await event.run(...args);
+					try {
+						await event.run(...args);
+					} catch (err) {
+						await this.client.bulbutils.logError(err);
+					}
 				});
 			}
 			this.client.log.client("[CLIENT - EVENTS] Successfully registered all events");
