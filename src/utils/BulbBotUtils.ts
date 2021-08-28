@@ -478,6 +478,7 @@ export default class {
 	public readonly languages: Record<string, string> = {
 		"en-US": "en-US",
 		"pt-BR": "pt-BR",
+		"fr-FR": "fr-FR",
 		"sk-SK": "sk-SK",
 		"sv-SE": "sv-SE",
 	};
