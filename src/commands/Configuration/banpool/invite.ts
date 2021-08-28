@@ -3,6 +3,8 @@ import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import BanpoolManager from "../../../utils/managers/BanpoolManager";
+const { haveAccessToPool }: BanpoolManager = new BanpoolManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -17,6 +19,13 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		// todo log in banpool logs that an invite was created
+		// store the invite on the client class for 15 minutes then remove it
+
+		const name: string = args[0];
+
+		if (await haveAccessToPool(context.guild!?.id, name)) return context.channel.send("well can't access that my friend");
+
 		const filter = (i: any) => i.user.id === context.author.id;
 
 		const row = new MessageActionRow().addComponents([new MessageButton().setCustomId("generate-ban-pool-code").setLabel("Generate code").setStyle("SUCCESS")]);
@@ -37,7 +46,7 @@ export default class extends SubCommand {
 
 			interaction.reply({
 				ephemeral: true,
-				content: `Here is your banpool code \`${code}\`. Keep it safe until the other server uses it to join. It will expire <t:${Math.floor(
+				content: `Here is your banpool code \`${code}\` for the **${name}** pool. Keep it safe until the other server uses it to join. It will expire <t:${Math.floor(
 					Date.now() / 1000 + 15 * 60,
 				)}:R> and only has **one** use. The other server can use the \`!banpool join ${code}\` command to join the pool.`,
 			});

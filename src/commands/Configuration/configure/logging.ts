@@ -54,6 +54,10 @@ export default class extends SubCommand {
 			case "modactions":
 				await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
 				break;
+			case "banpoollogs":
+			case "banpool_logs":
+				await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
+				break;
 			case "automod":
 			case "auto_mod":
 				await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
@@ -109,6 +113,7 @@ export default class extends SubCommand {
 
 				if (interaction.customId === "confirm") {
 					await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
+					await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
@@ -130,7 +135,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
 						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						argument_list: "`mute_role`, `mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
+						argument_list: "`mod_logs`, `banpool_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),
 				);
 		}

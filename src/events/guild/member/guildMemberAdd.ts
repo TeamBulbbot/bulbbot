@@ -29,9 +29,9 @@ export default class extends Event {
 
 		if (member.pending) return;
 
-		const config = await databaseManager.getConfig(member.guild.id)
+		const config = await databaseManager.getConfig(member.guild.id);
 		if (!config["autorole"]) return;
 
-		await member.roles.add(config["autorole"])
+		await member.roles.add(config["autorole"]);
 	}
 }

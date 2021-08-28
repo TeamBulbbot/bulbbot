@@ -17,5 +17,8 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {}
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		// todo log in banpool logs
+		// delete the banpool and subscribers
+	}
 }

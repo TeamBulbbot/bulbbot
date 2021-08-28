@@ -169,6 +169,13 @@ export default class {
 		});
 	}
 
+	async setBanpool(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
+		await sequelize.query('UPDATE "guildLoggings" SET "banpool" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { ChannelID: channelID, GuildID: guildID },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
 	async setAutoMod(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
 		await sequelize.query('UPDATE "guildLoggings" SET automod = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { ChannelID: channelID, GuildID: guildID },

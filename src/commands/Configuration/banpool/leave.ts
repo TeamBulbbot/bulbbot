@@ -16,5 +16,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {}
+	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		// todo log in banpool logs (in og and this server) that a serer left the pool
+	}
 }

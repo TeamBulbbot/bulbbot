@@ -13,6 +13,6 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		context.reply("yo");
+		// well make this works :kek:
 	}
 }

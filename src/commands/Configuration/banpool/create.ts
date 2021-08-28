@@ -3,7 +3,8 @@ import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
-
+import BanpoolManager from "../../../utils/managers/BanpoolManager";
+const { doesbanpoolExist, createBanpool }: BanpoolManager = new BanpoolManager();
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
@@ -17,6 +18,13 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		context.reply("Successfully created the banpool");
+		// todo log creation in banpool logs
+
+		const name: string = args[0];
+
+		if (await doesbanpoolExist(name)) return context.channel.send("naw pal that name is already taken sorry");
+
+		await createBanpool(context.guild!?.id, name);
+		context.channel.send("wow pal crated a pog new banpool with the name of " + name);
 	}
 }
