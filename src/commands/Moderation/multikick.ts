@@ -27,56 +27,65 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		if (targets === null)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
+		const potentialTargets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		let validTargets: GuildMember[] = [];
+		let invalidTargets: number = 0;
+		let fullList: string = "";
+		let reason: string = args.slice(potentialTargets?.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string = "";
 
-		if (targets!!.length <= 1) {
+		for (const potentialTarget of potentialTargets) {
+			const t = potentialTarget.replace(NonDigits, "");
+			if (!t.length) continue;
+
+			const target: GuildMember | null = t ? <GuildMember>await context.guild?.members.fetch(t).catch(() => null) : null;
+
+			if (!target) {
+				invalidTargets++;
+				continue;
+			}
+
+			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) continue;
+
+			validTargets = [...validTargets, target];
+		}
+
+		if (validTargets.length === 1) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_multi_less_than_2", context.guild?.id, {
 					action: await this.client.bulbutils.translate("action_multi_types.kick", context.guild?.id, {}),
 				}),
 			);
-			return await this.client.commands.get("kick")!.run(context, args);
+			return this.client.commands.get("kick")!.run(context, [validTargets[0].id, ...reason.split(" ")]);
 		}
 
-		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
-			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
+		await context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
+			setTimeout(async () => {
+				if (validTargets.length)
+					await msg.edit(
+						await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+							full_list: fullList,
+							reason,
+						}),
+					);
+				else await msg.edit(await this.client.bulbutils.translate("action_multi_no_valid_targets", context.guild?.id, {}));
+
+				if (invalidTargets !== 0)
+					await context.channel.send(
+						await this.client.bulbutils.translate("action_multi_invalid_targets", context.guild?.id, {
+							amount: invalidTargets,
+						}),
+					);
+			}, (args.length - 0.5) * massCommandSleep);
 		});
 
-		for (let i = 0; i < targets.length; i++) {
-			if (targets[i] === undefined) continue;
+
+		for (const target of validTargets) {
 			await this.client.bulbutils.sleep(massCommandSleep);
 
-			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember | null = t ? <GuildMember>await context.guild?.members.fetch(t).catch(() => null) : null;
-			let infID: number;
-
-			if (!target) {
-				await context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-						arg_provided: t,
-						arg_expected: "member:Member",
-						usage: this.usage,
-					}),
-				);
-				continue;
-			}
-			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) return;
-
-			infID = await infractionsManager.kick(
+			const infID = await infractionsManager.kick(
 				this.client,
 				<Snowflake>context.guild?.id,
 				target,
@@ -92,13 +101,5 @@ export default class extends Command {
 
 			fullList += ` **${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``;
 		}
-
-		return context.channel.send(
-			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-				full_list: fullList,
-				reason,
-			}),
-		);
 	}
 }
