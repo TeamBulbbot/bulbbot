@@ -80,7 +80,7 @@ export default class extends Command {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 					action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
-					full_list: fullList,
+					full_list: fullList.join(" "),
 					reason,
 				}),
 			);
