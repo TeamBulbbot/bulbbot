@@ -119,7 +119,7 @@
     "config_timezone_success": "{{emote_success}} Časová zóna byla úspěšně změněna na `{{timezone}}`",
   
     "config_logging_success": "{{emote_success}} Úspěšně zaznamenávám `{{logging_type}}` v kanálu <#{{channel}}>",
-    "config_logging_remove": "{{emote_success}} Zaznamenávaní `{{logging_type}}` bylo úspěšně zrušeno v kanálu <#{{channel}}>",
+    "config_logging_remove": "{{emote_success}} Zaznamenávání `{{logging_type}}` bylo úspěšně zrušeno v kanálu <#{{channel}}>",
     "config_logging_unable_to_send_messages": "{{emote_fail}} Bot postrádá důležitá oprávnéní pro posílání zpráv v kanálu <#{{channel}}>",
     "config_logging_all_confirm": "{{emote_warn}} Jsi si jistý že chceš začít zaznamenávat vše v kanálu <#{{channel}}>? Toto začne zaznamenávat vše co lze zaznamenávat v určeném kanále.",
   
