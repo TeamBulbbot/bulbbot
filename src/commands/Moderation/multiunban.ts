@@ -35,6 +35,7 @@ export default class extends Command {
 		let reason: string = args.slice(potentialTargets?.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
+		if (!potentialTargets) return context.channel.send(await this.client.bulbutils.translate("action_multi_no_valid_targets", context.guild?.id, {}));
 
 		for (const potentialTarget of potentialTargets) {
 			const t = potentialTarget.replace(NonDigits, "");
