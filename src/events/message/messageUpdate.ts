@@ -29,7 +29,7 @@ export default class extends Event {
 
 		if (msg.length >= 1850) {
 			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`, `**B:** ${oldMessage.content}\n**A:** ${newMessage.content}`);
-			await loggingManager.sendEventLogFile(
+			await loggingManager.sendEventLog(
 				this.client,
 				newMessage.guild,
 				"message",

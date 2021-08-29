@@ -18,7 +18,7 @@ export default class extends Event {
 		await loggingManager.sendEventLog(
 			this.client,
 			member.guild,
-			"joinleave",
+			"joinLeave",
 			Util.removeMentions(
 				await this.client.bulbutils.translate("event_member_joined", member.guild.id, {
 					user: member.user,

@@ -109,6 +109,13 @@ export default class {
 		});
 	}
 
+	async setRolesOnLeave(guildID: Snowflake, enabled: boolean): Promise<void> {
+		await sequelize.query('UPDATE "guildConfigurations" SET "rolesOnLeave" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID, Enabled: enabled },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
 	async setPremium(guildID: Snowflake, premium: boolean): Promise<void> {
 		await sequelize.query('UPDATE "guildConfigurations" SET "premiumGuild" = $Premium WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { Premium: premium, GuildID: guildID },
