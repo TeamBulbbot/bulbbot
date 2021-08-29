@@ -61,11 +61,11 @@
   "event_message_args_unexpected": "{{emote_warn}} Neočakávaný argument {{argument}}. Očakával som `{{arg_expected}}` dostal som `{{arg_provided}}`.\n{{emote_wrench}} **Správne použitie:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Chýbajúci argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n**{{emote_wrench}} Správne použitie:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Neočakavaný argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n{{emote_wrench}} **Správne argumenty:** {{argument_list}}",
-  "event_message_edit": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
-  "event_message_edit_special": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
+  "event_message_edit": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{channel.id}}>\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
+  "event_message_edit_special": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{channel.id}}>\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`",
   "event_message_delete": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{channel.id}}>.\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}{{embed}}",
-  "event_message_delete_special": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{message.channel.id}}>.\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
-  
+  "event_message_delete_special": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{channel.id}}>.\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`",
+
   "event_change": "`{{part}}` z `{{before}}` na `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` upravil nastavenia serveru. Zmenil {{changes}}",
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` upravil rolu **{{role.name}}**. Zmenil {{changes}}",
@@ -110,7 +110,7 @@
   },
 
   "config_generic_success": "{{emote_success}} `{{setting}}` bol úspešne aktualizovaný na `{{value}}`",
-  
+
   "config_language_success": "{{emote_success}} Jazyk serveru bol úspešne zmenený na `{{language}}`",
   "config_timezone_success": "{{emote_success}} Časová zóna serveru bola zmenená na `{{timezone}}`",
 
@@ -127,14 +127,14 @@
 
   "config_autorole_success": "{{emote_success}} Autorola bola úspešne zmenená na **{{role}}**",
   "config_autorole_disable": "{{emote_success}} Autorola bola úspešne zablokovaná",
-  
+
   "override_clearance_less_than_0": "{{emote_warn}} Úroveň priority nemôže byť menšia alebo rovná **nule**",
   "override_clearance_more_than_100": "{{emote_warn}} Úroveň priority nemôže byť vyššia ako **100**",
   "override_clearance_higher_than_self": "{{emote_warn}} Nemôžete prepísať úroveň priority vyššie ako je vaša úroveň priority.",
 
   "override_nonexistent_command": "{{emote_fail}} Žiadne prepísanie príkazu s menom `{{command}}` nebolo nájdené! Na úpravu prepísania musíte najprv prepísanie vytvoriť.",
   "override_nonexistent_role": "{{emote_fail}} Žiadne prepísanie role s menom `{{role}}` nebolo nájdené. Na úpravu prepísania musíte najprv prepísanie vytvoriť.",
-  
+
   "override_create_success": "{{emote_success}} Prepísanie bolo úspešne vytvorené s úrovňou priority `{{clearance}}`",
   "override_already_exists": "{{emote_fail}} Prepísanie s týmto menom už existuje!\n{{emote_wrench}} **Pomôcka:** Ak sa snažíte upraviť prepísanie, použite `!configure override edit <part> <name> <clearance>`",
 
@@ -259,11 +259,11 @@
   "uptime_uptime": "Bot momentálne beží **{{uptime}}**",
 
   "license_license": "📜 Tento bot je licencovaný pod MIT licenciu, pre viac informacii pozrite **[sem](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
-  
+
   "privacy_policy": "📜 Pozrite zásady ochrany osobných údajov bota **[tu](https://bulbbot.mrphilip.xyz/privacy-policy)**",
-  
+
   "github_source_code": "{{emote_github}} Bulbbot je plne open source projekt. Zdrojový kód môžete nájsť v našom GitHub úložisku **[tu](https://github.com/TestersQTs/Bulbbot)**",
-  
+
   "invite_desc": "**Pozvite bota do svojho serveru**\n{{bot_invite}}\n\n**Pripojte sa do serveru pre podporu**\n{{support_guild}}",
 
   "remind_list_none": "{{emote_warn}} Nenastavil si si žiadne pripomienky",
@@ -329,11 +329,11 @@
   "infraction_list_not_found": "{{emote_warn}} Vyzerá to tak, že tento server nemá žiadne infrakcie!",
   "infraction_claim_success": "{{emote_success}} Obdržal si zodpovednosť nad infrakciou **#{{infraction_id}}**",
   "infraction_update_success": "{{emote_success}} Infrakcia **#{{infraction_id}}** bola aktualizovaná!",
-  
+
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` infrakcie",
   "infraction_interaction_placeholder": "Žiadne infrakcie neboli zvolené",
   "infraction_interaction_description": "Klikni pre viac informácii",
-  
+
   "commands_help": "Všetky príkazy ktoré Bulbbot ponúka možeš nájsť na našom **[GitHube](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**",
 
   "help_unable_to_find_command": "`{{commandName}}` nie je platný príkaz, list všetkých príkazov môžete nájsť na našej stránke <https://docs.bulbbot.mrphilip.xyz/command-list>"
