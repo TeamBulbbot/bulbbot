@@ -23,7 +23,7 @@ export default class extends Event {
 			await loggingManager.sendEventLog(
 				this.client,
 				member.guild,
-				"joinleave",
+				"joinLeave",
 				await this.client.bulbutils.translate("event_member_leave_roles", member.guild.id, {
 					user: member.user,
 					user_joined: Math.floor(member.joinedTimestamp / 1000),
@@ -34,7 +34,7 @@ export default class extends Event {
 			await loggingManager.sendEventLog(
 				this.client,
 				member.guild,
-				"joinleave",
+				"joinLeave",
 					await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
 						user: member.user,
 						user_joined: Math.floor(member.joinedTimestamp / 1000),
