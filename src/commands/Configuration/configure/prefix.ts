@@ -13,7 +13,6 @@ export default class extends SubCommand {
 			name: "prefix",
 			clearance: 75,
 			minArgs: 1,
-			maxArgs: 1,
 			argList: ["prefix:string"],
 			usage: "<prefix>",
 		});
