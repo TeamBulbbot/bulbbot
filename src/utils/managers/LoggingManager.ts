@@ -233,6 +233,7 @@ export default class {
 				break;
 
 			case await client.bulbutils.translate("mod_action_types.mute", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.deafen", guildID, {}):
 				action = `${Emotes.actions.MUTE}`;
 				break;
 
@@ -245,6 +246,7 @@ export default class {
 			case await client.bulbutils.translate("mod_action_types.auto_unmute", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.auto_unban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.manual_unban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.undeafen", guildID, {}):
 				action = `${Emotes.actions.UNBAN}`;
 				break;
 
