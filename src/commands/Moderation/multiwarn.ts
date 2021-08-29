@@ -27,7 +27,7 @@ export default class extends Command {
 		const potentialTargets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
 		let validTargets: GuildMember[] = [];
 		let invalidTargets: number = 0;
-		let fullList: string = "";
+		let fullList: string[] = [];
 		let reason: string = args.slice(potentialTargets?.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
@@ -72,7 +72,7 @@ export default class extends Command {
 				reason,
 			);
 
-			fullList += ` **${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``;
+			fullList.push(`**${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``);
 		}
 
 		if (validTargets.length)
