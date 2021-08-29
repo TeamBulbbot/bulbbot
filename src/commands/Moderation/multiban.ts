@@ -88,7 +88,7 @@ export default class extends Command {
 					reason,
 				);
 
-				fullList.push(`**${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``);
+				fullList.push(`**${target.user.tag}** \`(${target.user.id})\` \`[#${infID}]\``);
 			} else {
 				const infID = await infractionsManager.ban(
 					this.client,

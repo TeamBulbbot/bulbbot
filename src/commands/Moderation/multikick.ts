@@ -80,7 +80,7 @@ export default class extends Command {
 				reason,
 			);
 
-			fullList.push(`**${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``);
+			fullList.push(`**${target.user.tag}** \`(${target.user.id})\` \`[#${infID}]\``);
 		}
 
 		if (validTargets.length)
