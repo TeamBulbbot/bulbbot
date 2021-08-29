@@ -163,10 +163,12 @@ export default class {
 			case "banned":
 			case "force-banned":
 			case "temp-banned":
+			case "manually banned":
 				action = `${Emotes.actions.BAN}`;
 				break;
 
 			case "kicked":
+			case "manually kicked":
 				action = `${Emotes.actions.KICK}`;
 				break;
 
@@ -182,6 +184,7 @@ export default class {
 			case "unmuted":
 			case "automatically unmuted":
 			case "automatically unbanned":
+			case "manually unbanned":
 				action = `${Emotes.actions.UNBAN}`;
 				break;
 
