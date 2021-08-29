@@ -25,13 +25,14 @@ export default class extends Command {
 		const loggingConfig = await databaseManager.getLoggingConfig(context.guild!.id);
 
 		const configs: string[] = [
-			`**Configuration **`,
+			`**Configuration**`,
 			`Prefix: \`${guildConfig.prefix}\``,
 			`Bot Language: \`${guildConfig.language}\``,
 			`Premium Server: ${guildConfig.premiumGuild ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Mute Role: ${guildConfig.muteRole !== null ? `<@&${guildConfig.muteRole}>` : Emotes.other.SWITCHOFF}`,
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
 			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 		];
 
 		const loggingModule: string[] = [

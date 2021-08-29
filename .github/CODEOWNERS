@@ -31,6 +31,7 @@ src/utils/managers/AutoModManager.ts @KlukCZ
 /src/utils/types/TranslateString.ts @wakfi
 /src/utils/types/ResolveCommandOptions.ts @wakfi
 /src/events/message/messageCreate.ts @wakfi
+/src/commands/Configuration/configure/rolesOnLeave.ts @wakfi
 
 
 # mrphilip's (y3ll0wlife) files
