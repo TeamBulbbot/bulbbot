@@ -41,7 +41,7 @@ export default class extends Event {
 			"other",
 			await this.client.bulbutils.translate("event_update_server", newGuild.id, {
 				moderator: executor,
-				changes: log.join(", "),
+				changes: log.join("\n> "),
 			}),
 		);
 	}

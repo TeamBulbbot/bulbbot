@@ -71,8 +71,8 @@
   "event_message_delete_special": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}>.\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
 
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
-  "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
-  "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** Role. Changed {{changes}}",
+  "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changes:\n> {{changes}}",
+  "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** role. Changes:\n> {{changes}}",
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
 
   "event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
