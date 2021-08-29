@@ -2,10 +2,10 @@
     "global_executed_by": "Provedeno uživatelem {{user.tag}}",
     "global_execution_cancel": "{{emote_fail}} Provedení příkazu bylo zrušeno",
     "global_missing_permissions": "{{emote_lock}} Nedostatečná oprávnění",
-    "global_not_invoked_by_user": "{{emote_lock}} You did not invoke this command",
-    "global_missing_permissions_bot": "Bot postradá důležitá opravnění pro provedení tohoto příkazu. Zkontroluj prosím oprávnění bota.\n{{missing}}",
+    "global_not_invoked_by_user": "{{emote_lock}} Tento příkaz nebyl vyvolán tebou",
+    "global_missing_permissions_bot": "Bot postrádá důležitá oprávnění pro provedení tohoto příkazu. Zkontroluj prosím oprávnění bota.\n{{missing}}",
     "global_cannot_convert": "{{emote_fail}} Nemohu převést `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správné použítí:** {{usage}}",
-    "global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Správné použítí:** {{usage}}",
+    "global_not_found": "{{emote_fail}} Nemohu najít specifikovaný {{type}}. Nemohu převést `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správné použítí:** {{usage}}",
     "global_not_found_types": {
       "user": "uživatel",
       "member": "člen",
@@ -47,7 +47,7 @@
     "global_loading": "{{emote_loading}} Načítání...",
     "global_not_in_voice": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` momentálně není v žádném hlasovém kanále!",
     "global_error": {
-      "unknown": "Nastala chyba neznámého původu, zkuste to prosím později nebo pokud se problém stále objevuje kontaktuje vývojáře na serveru: {{discord_invite}}",
+      "unknown": "Nastala chyba neznámého původu, zkuste to prosím později a pokud se problém stále vyskytuje, kontaktuje vývojáře na serveru: {{discord_invite}}",
       "automod_items_length_undefined": "{{emote_fail}} Nastala chyba při pokusu o analýzu vybraných Automod položek. Žádné Automod položky nebyly obdrženy nebo je nedefinovaná délka položky AutoModa."
     },
   
@@ -100,7 +100,7 @@
   
     "channel_types": {
       "GUILD_TEXT" : "textový kanál",
-      "DM" : "kanál přímych zpráv",
+      "DM" : "kanál přímých zpráv",
       "GUILD_VOICE" : "hlasový kanál",
       "GROUP_DM" : "skupina",
       "GUILD_CATEGORY" : "kategorie",
@@ -115,13 +115,13 @@
   
     "config_generic_success": "{{emote_success}} {{setting}} byl úspěšně aktualizován na {{value}}`",
   
-    "config_language_success": "{{emote_success}} Jazyk serveru byl uspěšně změněn na `{{language}}`",
-    "config_timezone_success": "{{emote_success}} Časová zóna byla uspěšně změněna na `{{timezone}}`",
+    "config_language_success": "{{emote_success}} Jazyk serveru byl úspěšně změněn na `{{language}}`",
+    "config_timezone_success": "{{emote_success}} Časová zóna byla úspěšně změněna na `{{timezone}}`",
   
     "config_logging_success": "{{emote_success}} Úspěšně zaznamenávám `{{logging_type}}` v kanálu <#{{channel}}>",
-    "config_logging_remove": "{{emote_success}} Zaznamenavaní `{{logging_type}}` bylo uspěšně zrušeno v kanálu <#{{channel}}>",
-    "config_logging_unable_to_send_messages": "{{emote_fail}} Bot postrádá duležítá oprávnéní pro posílání zpráv v kanálu <#{{channel}}>",
-    "config_logging_all_confirm": "{{emote_warn}} Jsi si jistý že chceš vše začít zaznamenávat v kanálu <#{{channel}}>? Toto začne zaznamenávat vše co lze zaznamenávat v určeném kanále.",
+    "config_logging_remove": "{{emote_success}} Zaznamenávaní `{{logging_type}}` bylo úspěšně zrušeno v kanálu <#{{channel}}>",
+    "config_logging_unable_to_send_messages": "{{emote_fail}} Bot postrádá důležitá oprávnéní pro posílání zpráv v kanálu <#{{channel}}>",
+    "config_logging_all_confirm": "{{emote_warn}} Jsi si jistý že chceš začít zaznamenávat vše v kanálu <#{{channel}}>? Toto začne zaznamenávat vše co lze zaznamenávat v určeném kanále.",
   
     "config_mute_success": "{{emote_success}} Role umlčení byla úspěšně aktualizována",
     "config_mute_unable_to_manage": "{{emote_fail}} Bot nemůže spravovat vybranou roli. Posuňte roli bota nad vybranou roli.",
@@ -129,23 +129,23 @@
     "config_prefix_success": "{{emote_success}} Prefix serveru byl úspěšně změněn na `{{prefix}}`",
     "config_prefix_too_long": "{{emote_fail}} Vybraný prefix je moc dlouhý. Prefix nesmí být delší než 255 znaků.",
   
-    "config_autorole_success": "{{emote_success}} Autorole byla úspěšně přizařena k roli **{{role}}**",
+    "config_autorole_success": "{{emote_success}} Autorole byla úspěšně přiřazena k roli **{{role}}**",
     "config_autorole_disable": "{{emote_success}} Autorole byla úspěšně vypnuta",
   
     "override_clearance_more_than_100": "{{emote_warn}} Úroveň ověření nesmí být vyšší než **100**",
-    "override_clearance_0_confirmation": "{{emote_warn}} Pokoušíš se nastavit přikaz pro administrátory/moderátory pro uroveň ověření `0`.\n\nToto povolí __**komukoliv**__ používat tento příkaz. Jsi si jistý že toto chceš udělat?",
-    "override_clearance_higher_than_self": "{{emote_warn}} Nemužeš vytvořit prioritní pravidlo s větší úrovní ověření než je tvá úrověň ověření.",
+    "override_clearance_0_confirmation": "{{emote_warn}} Pokoušíš se nastavit přikaz pro administrátory/moderátory pro úroveň ověření `0`.\n\nToto povolí __**komukoliv**__ používat tento příkaz. Jsi si jistý že to chceš udělat?",
+    "override_clearance_higher_than_self": "{{emote_warn}} Nemůžeš vytvořit prioritní pravidlo s větší úrovní ověření než je tvá úroveň ověření.",
   
-    "override_nonexistent_command": "Žádné prioritní pravidlo pro příkaz nesoucí jméno `{{command}}` nebylo nalezeno. Nejdříve musíš vytvořít prioritní pravidlo aby jsi ho mohl upravovat.",
-    "override_nonexistent_role": "{{emote_fail}} Žádne prioritní pravidlo pro roli `{{role}}` nebylo nalezeno. Nejdříve musíš vytvořít prioritní pravidlo aby jsi ho mohl upravovat.",
+    "override_nonexistent_command": "Žádné prioritní pravidlo pro příkaz nesoucí jméno `{{command}}` nebylo nalezeno. Nejdříve musíš vytvořit prioritní pravidlo aby jsi ho mohl upravovat.",
+    "override_nonexistent_role": "{{emote_fail}} Žádné prioritní pravidlo pro roli `{{role}}` nebylo nalezeno. Nejdříve musíš vytvořit prioritní pravidlo aby jsi ho mohl upravovat.",
   
-    "override_create_success": "{{emote_success}} Prioritní pravidlo s urovní ověření `{{clearance}}` bylo vytvořeno",
-    "override_already_exists": "{{emote_fail}} Prioritní pravidlo s tímto jménem už existuje!\n{{emote_wrench}} **Tip:** Pokud se snažíš upravit prioritní pravidlo použíj příkaz: `!configure override edit <part> <name> <clearance>`",
+    "override_create_success": "{{emote_success}} Prioritní pravidlo s úrovní ověření `{{clearance}}` bylo vytvořeno",
+    "override_already_exists": "{{emote_fail}} Prioritní pravidlo s tímto jménem již existuje!\n{{emote_wrench}} **Tip:** Pokud se snažíš upravit prioritní pravidlo použij příkaz: `!configure override edit <part> <name> <clearance>`",
   
     "override_disable_success": "{{emote_success}} Příkaz `{{command}}` byl úspěšně vypnut",
     "override_enable_success": "{{emote_success}} Příkaz `{{command}}` byl úspěšně zapnut",
   
-    "override_edit_success": "{{emote_success}} Prioritní pravidlo bylo úspěšně upraveno s urovní ověření `{{clearance}}`",
+    "override_edit_success": "{{emote_success}} Prioritní pravidlo bylo úspěšně upraveno s úrovní ověření `{{clearance}}`",
   
     "override_remove_success": "{{emote_success}} Prioritní pravidlo bylo úspěšně odstraněno.",
   
@@ -167,13 +167,13 @@
     "automod_settings_enabled": "**Zapnuto:** {{enabled}}",
     "automod_settings_websites": "**Stránky:** {{enabled}}\n**Zakázané stránky:** {{websites_blacklist}}",
     "automod_settings_invites": "**Pozvánky:** {{enabled}}\n**Povolené pozvánky:** {{invites_blacklist}}",
-    "automod_settings_words": "**Slova:** {{enabled}}\n**Zakázaná slova:** {{word_blacklist}}\n**Token words:** {{word_token_blacklist}}",
+    "automod_settings_words": "**Slova:** {{enabled}}\n**Zakázaná slova:** {{word_blacklist}}\n**Zakázané tokeny:** {{word_token_blacklist}}",
     "automod_settings_mentions": "**Zmínky:** {{enabled}}\n**Limit:** {{limit}}\n**Časový limit:** {{timeout}}s",
     "automod_settings_messages": "**Zprávy:** {{enabled}}\n**Limit:** {{limit}}\n**Časový limit:** {{timeout}}s",
     "automod_settings_ignored": "****Immunní role:** {{roles}}\n**Imunní kanály:** {{channels}}\n**Imunní uživatelé:** {{users}}",
-    "automod_settings_footer": "Administrátoři a role s urovní ověření vyšší než 25 jsou vždy imunní vůči AutoModu",
+    "automod_settings_footer": "Administrátoři a role s úrovní ověření vyšší než 25 jsou vždy imunní vůči AutoModu",
   
-    "automod_violation_max_messages_reason": "Purušení `MAX_MESSAGES` v kanálu #{{channel.name}} ({amount}/{limit}s)",
+    "automod_violation_max_messages_reason": "Porušení `MAX_MESSAGES` v kanálu #{{channel.name}} ({amount}/{limit}s)",
     "automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` porušil `MAX_MESSAGES` v kanálu <#{{channel.id}}>. Počet Zpráv/Časový Limit: ({{amount}}/{{limit}}s)",
     "automod_violation_max_mentions_reason": "Porušení `MAX_MENTIONS` v kanálu #{{channel.name}} ({{amount}}/{{limit}}s)",
     "automod_violation_max_mentions_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` porušil `MAX_MENTIONS` v kanálu <#{{channel.id}}>. Počet Zmínek/Časový Limit: ({{amount}}/{{limit}}s)",
@@ -195,7 +195,7 @@
     "userinfo_embed_bot": "**Bot:** {{user.bot}}\n",
     "userinfo_embed_created": "**Účet Vytvořen:** <t:{{user_age}}:F> (<t:{{user_age}}:R>)\n",
     "userinfo_embed_joined": "**Uživatel Se Připojil** <t:{{user_joined}}:F> (<t:{{user_joined}}:R>)\n",
-    "userinfo_embed_premium": "**Vylepšuje Od:** <t:{{user_premium}}:F> (<t:{{user_premium}}:R>)\n",
+    "userinfo_embed_premium": "**Boostuje Od:** <t:{{user_premium}}:F> (<t:{{user_premium}}:R>)\n",
     "userinfo_embed_roles": "**Role:** {{user_roles}}\n",
     "userinfo_embed_infractions": "\n**Přestupky:** {{emote_inf}} **{{user_infractions}}**",
   
@@ -221,15 +221,15 @@
     "serverinfo_booster_tier_3": "Pozice Na Emoji: **250**\nKvalita Zvuku: **384** kbps\nLimit Velikosti Souboru: **100 MB**\n",
     "serverinfo_roles": "Role ({{guild_amount_roles}})",
     "serverinfo_emotes": "Emoji ({{guild_amount_emotes}})",
-    "serverinfo_roles_too_many": "and **{{guild_roles_left}}** more",
-    "serverinfo_emotes_too_many": "and **{{guild_emotes_left}}** more",
-    "serverinfo_emotes_none": "Žádne Emoji",
+    "serverinfo_roles_too_many": "a **{{guild_roles_left}}** další/ch",
+    "serverinfo_emotes_too_many": "a **{{guild_emotes_left}}** další/ch",
+    "serverinfo_emotes_none": "Žádné Emoji",
   
     "action_success": "{{emote_success}} **{{target.tag}}** `({{target.id}})` byl {{action}} z důvodu **{{reason}}** `[#{{infraction_id}}]`",
     "action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` byl dočasně {{action}} do **{{until}}** z důvodu **{{reason}}** `[#{{infraction_id}}]`",
   
     "action_success_multi": "{{emote_success}} {{full_list}} byli {{action}} z důvodu **{{reason}}**",
-    "action_multi_less_than_2": "{{emote_warn}} {{emote_warn}} Měně než 2 cíle byli vybráni. Provádím normální {{action}}",
+    "action_multi_less_than_2": "{{emote_warn}} {{emote_warn}} Méně než 2 cíle byli vybráni. Provádím normální {{action}}",
     "action_multi_types": {
       "ban": "zabanováni",
       "kick": "vyhozeni",
@@ -241,28 +241,28 @@
     "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` není zabanován na tomto serveru!",
     "ban_force_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` není aktualně členem serveru. Chceš je opravdu force-zabanovat?",
   
-    "purge_too_many": "{{emote_fail}} Najednou můžu pročistit pouze 99 zpráv",
-    "purge_too_few": "{{emote_fail}} Nemužeš pročistit méně než 2 zprávy",
-    "purge_success": "{{emote_success}} **{{count}}** zpráv bylo uspěšně pročištěno",
+    "purge_too_many": "{{emote_fail}} Najednou mohu pročistit pouze 99 zpráv",
+    "purge_too_few": "{{emote_fail}} Nemůžeš pročistit méně než 2 zprávy",
+    "purge_success": "{{emote_success}} **{{count}}** zpráv bylo úspěšně pročištěno",
   
-    "verification_community_zero": "{{emote_fail}} Úroveň oveření nemuže být `0` pro komunitní servery!",
-    "verification_level_error": "{{emote_fail}} Úroveň  ověření nesmí být vetší než `4` nebo menší než `0`",
+    "verification_community_zero": "{{emote_fail}} Úroveň ověření nemůže být `0` pro komunitní servery!",
+    "verification_level_error": "{{emote_fail}} Úroveň ověření nesmí být větší než `4` nebo menší než `0`",
     "verification_level_success": "{{emote_success}} Úroveň oveření byla změněna na úroveň `{{level}}`",
   
     "change_nick_success": "{{emote_success}} Přezdívka uživatele **{{target.tag}}** `({{target.id}})` byla změněna z `{{nick_old}}` na `{{nick_new}}` z důvodu **{{reason}}** `[#{{infraction_id}}]`",
     "remove_nick_success": "Přezdívka uživatele **{{target.tag}}** `({{target.id}})` byla odstraněna z důvodu **{{reason}}** `[#{{infraction_id}}]`",
     "change_nick_mod_action_log": "{{emote_success}} Přezdívka uživatele **{{target.tag}}** `({{target.id}})` byla {{action}} z `{{nick_old}}` na `{{nick_new}}` moderátorem **{{moderator.tag}}** `({{moderator.id}})` z důvodu **{{reason}}** `[#{{infraction_id}}]`",
     "remove_nick_mod_action_log": "{{emote_success}} Přezdívka byla {{action}} od uživatele **{{target.tag}}** `({{target.id}})` moderátorem **{{moderator.tag}}** `({{moderator.id}})` z důvodu **{{reason}}** `[#{{infraction_id}}]`",
-    "change_nick_fail": "{{emote_fail}} Změna přezdivky uživatele **{{target.tag}}** `({{target.id}})` není možná",
-    "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` nemá přezdívku, tudíž jí nemužeš odstranit",
+    "change_nick_fail": "{{emote_fail}} Změna přezdívky uživatele **{{target.tag}}** `({{target.id}})` není možná",
+    "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` nemá přezdívku, tudíž jí nemůžeš odstranit",
     "already_has_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` už má přezdívku `{{nickname}}`",
-    "nickname_too_long": "{{emote_warn}} Pŕezdívka je moc dlouhá (`{{length}}`). Přezdívky mohou maximalně mít 32 znaků",
+    "nickname_too_long": "{{emote_warn}} Pŕezdívka je moc dlouhá (`{{length}}`). Přezdívky mohou mít maximálně 32 znaků",
   
     "ping_latency": "Latence bota je **{{latency_bot}}ms**\nLatence WebSocketu je **{{latency_ws}}ms**",
   
-    "uptime_uptime": "Bot beží již **{{uptime}}**",
+    "uptime_uptime": "Bot běží již **{{uptime}}**",
   
-    "license_license": "📜 Tento bot je licencovaný pod MIT licencí, pro více informací si přečtěte celou licencí **[zde](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+    "license_license": "📜 Tento bot je licencovaný pod MIT licencí, pro více informací si přečtěte celou licenci **[zde](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
   
     "privacy_policy": "Zásady ochrany osobních udajů jsou dostupné **[zde](https://bulbbot.mrphilip.xyz/privacy-policy)**",
   
@@ -273,13 +273,13 @@
     "remind_list_none": "{{emote_warn}} Nemáš nastaveny žádné upomínky",
     "remind_placeholder": "Žádné upomínky vybrány",
     "remind_prompt": "{{emote_remind}} **{{user.tag}}** `({{user.id}})` aktivní upomínky",
-    "remind_remove_unable_to_find": "{{emote_fail}} Nemohu najít připomínku s ID `{{reminderId}}`",
+    "remind_remove_unable_to_find": "{{emote_fail}} Nemohu najít upomínku s ID `{{reminderId}}`",
     "remind_remove_removed": "{{emote_success}} Upomínka s ID `{{reminderId}}` byla úspěšně odebrána",
     "remind_set_how_to_get_reminded": "Jak by jsi chtěl být upomenut?",
     "remind_set_dm": "Poslat upomínku do DM",
     "remind_set_channel": "Poslat upomínku do kanálu",
-    "remind_set_select_dm": "Připomenu ve tvých DMs **<t:{{duration}}:R>**",
-    "remind_set_select_channel": "Připomenu v tomto kanále **<t:{{duration}}:R>**",
+    "remind_set_select_dm": "Upomenu ve tvých DMs **<t:{{duration}}:R>**",
+    "remind_set_select_channel": "Upomenu v tomto kanále **<t:{{duration}}:R>**",
     "remind_no_permissions": "{{emote_lock}} Nemůžeš nahlížet do cizích upomínek!",
     "remind_not_found": "{{emote_warn}} Nemohu najít tuto upomínku",
   
