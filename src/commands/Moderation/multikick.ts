@@ -48,7 +48,7 @@ export default class extends Command {
 
 			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) continue;
 
-			validTargets = [...validTargets, target];
+			validTargets.push(target);
 		}
 
 		if (validTargets.length === 1) {
@@ -60,27 +60,7 @@ export default class extends Command {
 			return this.client.commands.get("kick")!.run(context, [validTargets[0].id, ...reason.split(" ")]);
 		}
 
-		await context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
-			setTimeout(async () => {
-				if (validTargets.length)
-					await msg.edit(
-						await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-							full_list: fullList,
-							reason,
-						}),
-					);
-				else await msg.edit(await this.client.bulbutils.translate("action_multi_no_valid_targets", context.guild?.id, {}));
-
-				if (invalidTargets !== 0)
-					await context.channel.send(
-						await this.client.bulbutils.translate("action_multi_invalid_targets", context.guild?.id, {
-							amount: invalidTargets,
-						}),
-					);
-			}, (args.length - 0.5) * massCommandSleep);
-		});
-
+		const msg: Message = await context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {}));
 
 		for (const target of validTargets) {
 			await this.client.bulbutils.sleep(massCommandSleep);
@@ -101,5 +81,22 @@ export default class extends Command {
 
 			fullList += ` **${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``;
 		}
+
+		if (validTargets.length)
+			await msg.edit(
+				await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+					full_list: fullList,
+					reason,
+				}),
+			);
+		else await msg.edit(await this.client.bulbutils.translate("action_multi_no_valid_targets", context.guild?.id, {}));
+
+		if (invalidTargets !== 0)
+			await context.channel.send(
+				await this.client.bulbutils.translate("action_multi_invalid_targets", context.guild?.id, {
+					amount: invalidTargets,
+				}),
+			);
 	}
 }
