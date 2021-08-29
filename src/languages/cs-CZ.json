@@ -47,7 +47,7 @@
     "global_loading": "{{emote_loading}} Načítání...",
     "global_not_in_voice": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` momentálně není v žádném hlasovém kanále!",
     "global_error": {
-      "unknown": "Nastala chyba neznámého původu, zkuste to prosím později a pokud se problém stále vyskytuje, kontaktuje vývojáře na serveru: {{discord_invite}}",
+      "unknown": "Nastala chyba neznámého původu, zkuste to prosím později a pokud se problém stále vyskytuje, kontaktujte vývojáře na serveru: {{discord_invite}}",
       "automod_items_length_undefined": "{{emote_fail}} Nastala chyba při pokusu o analýzu vybraných Automod položek. Žádné Automod položky nebyly obdrženy nebo je nedefinovaná délka položky AutoModa."
     },
   
