@@ -105,7 +105,7 @@ export default class extends Command {
 					reason,
 				);
 
-				fullList.push(`**${target.tag}** \`\`(${target.id})\`\` \`\`[#${infID}]\`\``);
+				fullList.push(`**${target.tag}** \`(${target.id})\` \`[#${infID}]\``);
 			}
 		}
 
