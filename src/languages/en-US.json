@@ -80,7 +80,7 @@
   "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted.",
   "event_channel_delete_moderator": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted by **{{moderator.tag}}** `({{moderator.id}})`.",
 
-  "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archive at **{{thread_archive}}**",
+  "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archived at **{{thread_archive}}**",
   "event_thread_delete": "{{emote_remove}} Thread **{{thread.name}}** `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> has been removed",
 
   "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
