@@ -1,10 +1,12 @@
 import BulbBotClient from "../../structures/BulbBotClient";
-import { Guild, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { Guild, MessageEmbed, NewsChannel, Snowflake, TextChannel, User } from "discord.js";
 import DatabaseManager from "./DatabaseManager";
 import * as Emotes from "../../emotes.json";
+import { defaultPerms } from "../../Config";
 import moment, { MomentInput } from "moment";
 import "moment-timezone";
 import LoggingConfiguration from "../types/LoggingConfiguration";
+import { LoggingPartString } from "../types/LoggingPart";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -16,7 +18,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod", guildID, {
@@ -37,7 +39,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_unban_auto", guild.id, {
@@ -58,7 +60,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send({
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
@@ -72,7 +74,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_temp", guild.id, {
@@ -94,7 +96,7 @@ export default class {
 		if (!dbGuild || dbGuild.other === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.other);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_command", guild.id, {
@@ -109,53 +111,25 @@ export default class {
 	public async sendEventLog(
 		client: BulbBotClient,
 		guild: Guild,
-		part: "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinleave" | "automod",
+		part: Exclude<LoggingPartString, "modAction">,
 		log: string,
-		embeds: MessageEmbed[] | null = null,
+		extra: string | MessageEmbed[] | null = null,
 	): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
-		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
+		const logChannelId: Snowflake = dbGuild[part];
+		if (!logChannelId) return;
+		const logChannel = client.channels.cache.get(logChannelId);
 
-		if (logChannel === null) return;
-		await (<TextChannel>client.channels.cache.get(logChannel)).send({
+		if(!(logChannel instanceof TextChannel || logChannel instanceof NewsChannel)) return;
+		if (!logChannel.guild.me?.permissionsIn(logChannel).has(defaultPerms)) return;
+
+		await logChannel.send({
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
-			embeds: embeds !== null ? embeds : [],
+			embeds: typeof extra !== "string" && extra !== null ? extra : [],
+			files: typeof extra === "string" ? [extra] : undefined,
 			allowedMentions: { parse: [] },
-		});
-	}
-
-	public async sendEventLogFile(
-		client: BulbBotClient,
-		guild: Guild,
-		part: "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinleave" | "automod",
-		log: string,
-		file: string,
-	): Promise<void> {
-		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
-
-		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
-		const logChannel: Snowflake = <string>this.getPart(dbGuild, part);
-
-		if (logChannel === null) return;
-		await (<TextChannel>client.channels.cache.get(logChannel)).send({
-			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
-			files: [file],
-			allowedMentions: { parse: [] },
-		});
-	}
-
-	public async sendServerEventLog(client: BulbBotClient, type: "other" | "channel", guild: Guild, log: string): Promise<void> {
-		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
-
-		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild[type]);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
-
-		await modChannel.send({
-			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
-			allowedMentions: { parse: [] }
 		});
 	}
 
@@ -166,7 +140,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
@@ -178,43 +152,9 @@ export default class {
 		if (dbGuild.automod === null) return;
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.automod);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"])) return;
+		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
-	}
-
-	private getPart(dbGuild: LoggingConfiguration, part: string) {
-		switch (part.toLowerCase()) {
-			case "message":
-				part = dbGuild.message;
-				break;
-			case "role":
-				part = dbGuild.role;
-				break;
-			case "member":
-				part = dbGuild.member;
-				break;
-			case "channel":
-				part = dbGuild.channel;
-				break;
-			case "thread":
-				part = dbGuild.thread;
-				break;
-			case "invite":
-				part = dbGuild.invite;
-				break;
-			case "joinleave":
-				part = dbGuild.joinLeave;
-				break;
-			case "automod":
-				part = dbGuild.automod;
-				break;
-			default:
-				part = "";
-				break;
-		}
-
-		return part;
 	}
 
 	private betterActions(action: string): string {
@@ -223,10 +163,12 @@ export default class {
 			case "banned":
 			case "force-banned":
 			case "temp-banned":
+			case "manually banned":
 				action = `${Emotes.actions.BAN}`;
 				break;
 
 			case "kicked":
+			case "manually kicked":
 				action = `${Emotes.actions.KICK}`;
 				break;
 
@@ -242,6 +184,7 @@ export default class {
 			case "unmuted":
 			case "automatically unmuted":
 			case "automatically unbanned":
+			case "manually unbanned":
 				action = `${Emotes.actions.UNBAN}`;
 				break;
 

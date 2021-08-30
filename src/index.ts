@@ -9,6 +9,8 @@ import * as enUS from "./languages/en-US.json";
 import * as skSK from "./languages/sk-SK.json";
 import * as svSE from "./languages/sv-SE.json";
 import * as csCZ from "./languages/cs-CZ.json";
+import * as ptBR from "./languages/pt-BR.json";
+import * as frFR from "./languages/fr-FR.json";
 
 const config = {
 	token: process.env.TOKEN,
@@ -23,6 +25,12 @@ i18next.init({
 	resources: {
 		"en-US": {
 			translation: enUS,
+		},
+		"pt-BR": {
+			translation: ptBR,
+		},
+		"fr-FR": {
+			translation: frFR,
 		},
 		"sk-SK": {
 			translation: skSK,

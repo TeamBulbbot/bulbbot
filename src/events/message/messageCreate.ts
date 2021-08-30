@@ -81,7 +81,11 @@ export default class extends Event {
 		options.args.forEach(arg => (used += ` ${arg}`));
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 
-		await command.run(context, options.args);
+		try {
+			await command.run(context, options.args);
+		} catch (err) {
+			await this.client.bulbutils.logError(err, context);
+		}
 	}
 
 	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {

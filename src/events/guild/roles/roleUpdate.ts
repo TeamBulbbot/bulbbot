@@ -44,7 +44,7 @@ export default class extends Event {
 			await this.client.bulbutils.translate("event_update_role", newRole.guild.id, {
 				moderator: executor,
 				role: newRole,
-				changes: log.join(", "),
+				changes: log.join("\n> "),
 			}),
 		);
 	}

@@ -121,7 +121,7 @@
 			{
 				"name": "actions_on_info",
 				"type": 1,
-				"description": "Enabled the action buttons when using /userinfo",
+				"description": "Enables the action buttons when using /userinfo",
 				"options": [
 					{
 						"name": "enabled",
@@ -421,6 +421,10 @@
 								"value": "sv-SE"
 							},
 							{
+								"name": "fr-FR",
+								"value": "fr-FR"
+							},
+							{
 								"name": "pt-BR",
 								"value": "pt-BR"
 							},
@@ -593,6 +597,19 @@
 						"name": "prefix",
 						"type": 3,
 						"description": "The prefix the bot should listen to",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "roles_on_leave",
+				"type": 1,
+				"description": "Enables logging of roles when a member leaves the server",
+				"options": [
+					{
+						"name": "enabled",
+						"type": 5,
+						"description": "Whether roles should be logged or not",
 						"required": true
 					}
 				]
