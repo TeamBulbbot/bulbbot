@@ -49,12 +49,37 @@ export default class {
 				Name: invite.banpool.name,
 			},
 			type: QueryTypes.INSERT,
-		}).catch((err: Error) =>  console.error(err))
+		}).catch((err: Error) => console.error(err))
 
 		return true
 	}
 
-	async getPools(guildId: Snowflake): Promise<any>{
-		
+	async getPools(guildId: Snowflake): Promise<any> {
+		const poolIds: any = await sequelize.query('SELECT "banpoolId" FROM "banpoolSubscribers" WHERE "guildId" = $GuildId',
+			{
+				bind: {
+					GuildId: guildId
+				},
+				type: QueryTypes.SELECT
+			}
+		)
+
+		let pools: any[] = [];
+		for (let i = 0; i < poolIds.length; i++) {
+			const pool = await sequelize.query('SELECT * FROM "banpools" WHERE id = $PoolId',
+				{
+					bind: {
+						PoolId: poolIds[i].banpoolId
+					},
+					type: QueryTypes.SELECT
+				})
+
+
+			if (!pools.includes(pool[0])) pools.push(pool[0])
+
+		}
+
+		return pools
+
 	}
 }

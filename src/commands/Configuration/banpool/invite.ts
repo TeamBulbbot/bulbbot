@@ -20,7 +20,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// todo log in banpool logs that an invite was created
-		
+
 		const name: string = args[0];
 
 		if (await haveAccessToPool(context.guild!?.id, name)) return context.channel.send("well can't access that my friend");
@@ -52,7 +52,8 @@ export default class extends SubCommand {
 				},
 				banpool: {
 					name,
-					code
+					code,
+					expires: Math.floor(Date.now() / 1000) + 15 * 60
 				}
 			})
 

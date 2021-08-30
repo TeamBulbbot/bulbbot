@@ -2,6 +2,8 @@ import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
+import BanpoolManager from "../../utils/managers/BanpoolManager";
+const { getPools }: BanpoolManager = new BanpoolManager();
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -22,6 +24,6 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		
+		console.log(await getPools(context.guild!?.id))
 	}
 }
