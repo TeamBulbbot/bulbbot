@@ -47,7 +47,11 @@ export default class extends Command {
 				continue;
 			}
 
-			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) continue;
+			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) {
+				invalidTargets++;
+				continue;
+			}
+			if (validTargets.find(user => user.user.id === target.user.id)) continue;
 
 			validTargets.push(target);
 		}

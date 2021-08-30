@@ -53,9 +53,19 @@ export default class extends Command {
 			}
 
 			if (target instanceof GuildMember)
-				if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) continue;
+				if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) {
+					invalidTargets++;
+					continue;
+				}
 
-			validTargets.push(target);
+			if (
+				validTargets.find(user => {
+					if (user instanceof GuildMember && target instanceof GuildMember) return user.user.id === target.user.id;
+					else if (user instanceof User && target instanceof User) return user.id === target?.id;
+					else return false;
+				})
+			) continue;
+				validTargets.push(target);
 		}
 
 		if (validTargets.length === 1) {

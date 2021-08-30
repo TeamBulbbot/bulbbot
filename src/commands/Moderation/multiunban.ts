@@ -19,7 +19,7 @@ export default class extends Command {
 			usage: "<user> <user2>... [reason]",
 			examples: ["multiunban 123456789012345678 123456789012345678 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
 			argList: ["user:User"],
-			minArgs: 2,
+			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
 			userPerms: ["BAN_MEMBERS"],
@@ -49,6 +49,8 @@ export default class extends Command {
 				continue;
 			}
 
+			if (validTargets.find(user => user.id === target.id)) continue;
+
 			validTargets.push(target);
 		}
 
@@ -68,6 +70,7 @@ export default class extends Command {
 
 			await context.guild?.bans.fetch();
 			if (!context.guild?.bans.cache.get(target.id)) {
+				validTargets.splice(validTargets.findIndex(user => user.id === target.id), 1);
 				invalidTargets++;
 				continue;
 			}
