@@ -173,6 +173,13 @@ export default class {
 			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
+		} else if (type == BanType.POOL) {
+			await this.createInfraction(guild.id, "Pool-ban", true, reason, target, moderator.user);
+			await guild.members.ban(target, { reason: reasonLog });
+			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Pool-ban");
+			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.pool_ban", guild.id, {}), target, moderator.user, reason, infID);
+
+			return infID;
 		} else {
 			await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
 			await guild.members.cache.get(target.id)?.ban({ reason: reasonLog });

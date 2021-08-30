@@ -39,47 +39,60 @@ export default class {
 		return !access[0];
 	}
 
-
 	async joinBanpool(invite: any, guildId: Snowflake): Promise<boolean> {
-		await sequelize.query('INSERT INTO "banpoolSubscribers" ("guildId", "createdAt", "updatedAt", "banpoolId") VALUES ($GuildId, $CreatedAt, $UpdatedAt, (SELECT id FROM banpools WHERE "name" = $Name))', {
-			bind: {
-				GuildId: guildId,
-				CreatedAt: moment().format(),
-				UpdatedAt: moment().format(),
-				Name: invite.banpool.name,
-			},
-			type: QueryTypes.INSERT,
-		}).catch((err: Error) => console.error(err))
+		await sequelize
+			.query('INSERT INTO "banpoolSubscribers" ("guildId", "createdAt", "updatedAt", "banpoolId") VALUES ($GuildId, $CreatedAt, $UpdatedAt, (SELECT id FROM banpools WHERE "name" = $Name))', {
+				bind: {
+					GuildId: guildId,
+					CreatedAt: moment().format(),
+					UpdatedAt: moment().format(),
+					Name: invite.banpool.name,
+				},
+				type: QueryTypes.INSERT,
+			})
+			.catch((err: Error) => console.error(err));
 
-		return true
+		return true;
 	}
 
 	async getPools(guildId: Snowflake): Promise<any> {
-		const poolIds: any = await sequelize.query('SELECT "banpoolId" FROM "banpoolSubscribers" WHERE "guildId" = $GuildId',
-			{
-				bind: {
-					GuildId: guildId
-				},
-				type: QueryTypes.SELECT
-			}
-		)
+		const poolIds: any = await sequelize.query('SELECT "banpoolId" FROM "banpoolSubscribers" WHERE "guildId" = $GuildId', {
+			bind: {
+				GuildId: guildId,
+			},
+			type: QueryTypes.SELECT,
+		});
 
 		let pools: any[] = [];
 		for (let i = 0; i < poolIds.length; i++) {
-			const pool = await sequelize.query('SELECT * FROM "banpools" WHERE id = $PoolId',
-				{
-					bind: {
-						PoolId: poolIds[i].banpoolId
-					},
-					type: QueryTypes.SELECT
-				})
+			const pool = await sequelize.query('SELECT * FROM "banpools" WHERE id = $PoolId', {
+				bind: {
+					PoolId: poolIds[i].banpoolId,
+				},
+				type: QueryTypes.SELECT,
+			});
 
-
-			if (!pools.includes(pool[0])) pools.push(pool[0])
-
+			if (!pools.includes(pool[0])) pools.push(pool[0]);
 		}
 
-		return pools
+		return pools;
+	}
 
+	async getGuildsFromPools(pools: any[]): Promise<any> {
+		let g: any[] = [];
+
+		for (let i = 0; i < pools.length; i++) {
+			const guilds: any = await sequelize.query('SELECT "guildId" FROM "banpoolSubscribers" WHERE "banpoolId" = $PoolId', {
+				bind: {
+					PoolId: pools[i].id,
+				},
+				type: QueryTypes.SELECT,
+			});
+
+			for (let ii = 0; ii < guilds.length; ii++) g.push(guilds[ii].guildId);
+		}
+
+		// remove dupes and send back
+		return [...new Set(g)];
 	}
 }

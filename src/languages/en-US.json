@@ -33,6 +33,7 @@
     "force_ban": "force-banned",
     "soft_ban": "soft-banned",
     "temp_ban": "temp-banned",
+    "pool_ban": "pool-banned",
     "unban": "unbanned",
     "auto_unban": "automatically unbanned",
     "deafen": "deafened",

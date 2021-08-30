@@ -109,7 +109,7 @@ export default class {
 	public async sendEventLog(
 		client: BulbBotClient,
 		guild: Guild,
-		part: "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinleave" | "automod",
+		part: "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinleave" | "automod" | "banpool",
 		log: string,
 		embeds: MessageEmbed[] | null = null,
 	): Promise<void> {
@@ -155,7 +155,7 @@ export default class {
 
 		await modChannel.send({
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
-			allowedMentions: { parse: [] }
+			allowedMentions: { parse: [] },
 		});
 	}
 
@@ -187,6 +187,9 @@ export default class {
 		switch (part.toLowerCase()) {
 			case "message":
 				part = dbGuild.message;
+				break;
+			case "banpool":
+				part = dbGuild.banpool;
 				break;
 			case "role":
 				part = dbGuild.role;
