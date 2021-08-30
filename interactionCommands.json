@@ -423,6 +423,10 @@
 							{
 								"name": "pt-BR",
 								"value": "pt-BR"
+							},
+							{
+								"name": "cs-CZ",
+								"value": "cs-CZ"
 							}
 						],
 						"required": true
