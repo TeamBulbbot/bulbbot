@@ -20,8 +20,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// todo log in banpool logs that an invite was created
-		// store the invite on the client class for 15 minutes then remove it
-
+		
 		const name: string = args[0];
 
 		if (await haveAccessToPool(context.guild!?.id, name)) return context.channel.send("well can't access that my friend");
@@ -41,6 +40,25 @@ export default class extends SubCommand {
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (!interaction) return;
 			const code: string = createInviteCode();
+
+			this.client.banpoolInvites.set(code, {
+				guild: {
+					id: context.guild?.id,
+					name: context.guild?.name,
+				},
+				inviter: {
+					tag: context.author.tag,
+					id: context.author.id
+				},
+				banpool: {
+					name,
+					code
+				}
+			})
+
+			setTimeout(() => {
+				this.client.banpoolInvites.delete(code)
+			}, 15 * 60 * 1000)
 
 			await msg.edit({ components: [rowDisabled] });
 

@@ -38,4 +38,23 @@ export default class {
 
 		return !access[0];
 	}
+
+
+	async joinBanpool(invite: any, guildId: Snowflake): Promise<boolean> {
+		await sequelize.query('INSERT INTO "banpoolSubscribers" ("guildId", "createdAt", "updatedAt", "banpoolId") VALUES ($GuildId, $CreatedAt, $UpdatedAt, (SELECT id FROM banpools WHERE "name" = $Name))', {
+			bind: {
+				GuildId: guildId,
+				CreatedAt: moment().format(),
+				UpdatedAt: moment().format(),
+				Name: invite.banpool.name,
+			},
+			type: QueryTypes.INSERT,
+		}).catch((err: Error) =>  console.error(err))
+
+		return true
+	}
+
+	async getPools(guildId: Snowflake): Promise<any>{
+		
+	}
 }

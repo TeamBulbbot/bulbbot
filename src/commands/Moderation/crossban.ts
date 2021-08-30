@@ -10,9 +10,9 @@ export default class extends Command {
 			description: "Too be written",
 			category: "Moderation",
 			aliases: ["poolban"],
-			usage: "<user> <force> <reason> [pool]",
-			examples: ["crossban 123456789012345678 true rude user", "crossban 123456789012345678 false rude user", "crossban 123456789012345678 true rude user raiding-pool"],
-			argList: ["user:User", "force:true|false", "reason:string", "pool:string"],
+			usage: "<user> <force> <reason>",
+			examples: ["crossban 123456789012345678 true rude user", "crossban 123456789012345678 false rude user", "crossban 123456789012345678 true rude user"],
+			argList: ["user:User", "force:true|false", "reason:string"],
 			minArgs: 3,
 			maxArgs: -1,
 			clearance: 75,
@@ -21,5 +21,7 @@ export default class extends Command {
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void | Message> {}
+	async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		
+	}
 }
