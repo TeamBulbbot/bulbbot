@@ -20,7 +20,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const prefix = args[0];
+		const prefix = args.join(" ");
 
 		if (prefix.length > 255) return context.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", context.guild?.id, {}));
 
