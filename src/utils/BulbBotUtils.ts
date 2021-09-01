@@ -375,6 +375,37 @@ export default class {
 		}
 	}
 
+	public async resolveUserHandleNew(context: CommandContext, handle: UserHandle, user: User): Promise<string> {
+		switch (handle) {
+			case UserHandle.CANNOT_ACTION_SELF:
+				return await this.translate("global_cannot_action_self", context.guild?.id, {});
+
+			case UserHandle.CANNOT_ACTION_OWNER:
+				return await this.translate("global_cannot_action_owner", context.guild?.id, {});
+
+			case UserHandle.CANNOT_ACTION_ROLE_EQUAL:
+				return await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user });
+
+			case UserHandle.CANNOT_ACTION_BOT_SELF:
+				return await this.translate("global_cannot_action_bot_self", context.guild?.id, {});
+
+			case UserHandle.CANNOT_ACTION_ROLE_HIGHER:
+				return await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user });
+
+			case UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT:
+				return await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user });
+
+			case UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT:
+				return await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user });
+
+			case UserHandle.SUCCESS:
+				return "";
+
+			default:
+				return "";
+		}
+	}
+
 	/** @deprecated */
 	async checkUserFromInteraction(interaction: ContextMenuInteraction, user: GuildMember): Promise<UserHandle> {
 		const author = await interaction.guild?.members.fetch(interaction.user.id);

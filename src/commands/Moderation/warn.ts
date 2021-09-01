@@ -4,6 +4,7 @@ import { GuildMember, Snowflake } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -26,25 +27,9 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		//Variable declarations
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember | null = targetID ? <GuildMember>await context.guild?.members.fetch(targetID).catch(() => null) : null;
-		let reason: string = args.slice(1).join(" ");
+		const target: GuildMember = <GuildMember>await context.guild?.members.fetch(targetID);
+		const reason: string = args.slice(1).join(" ") || await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		let infID: number;
-
-		//Checks if reason or target are null and if the target is actionable
-		if (!target) {
-			await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-			return;
-		}
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-
-		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		//Executes the action
 		infID = await infractionsManager.warn(
@@ -70,5 +55,28 @@ export default class extends Command {
 				infraction_id: infID,
 			}),
 		);
+	}
+
+	public async validate(context: CommandContext, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
+		const generalValidate = await super.validate(context, args, options);
+		if(generalValidate !== undefined) return generalValidate;
+
+		//Variable declarations
+		const targetID: Snowflake = args[0].replace(NonDigits, "");
+		const target: GuildMember | null = targetID ? <GuildMember>await context.guild?.members.fetch(targetID).catch(() => null) : null;
+
+		//Checks if target is null and if the target is actionable
+		if (!target)
+			return await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+				type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
+				arg_expected: "member:Member",
+				arg_provided: args[0],
+				usage: this.usage,
+			});
+
+		const userHandle = await this.client.bulbutils.resolveUserHandleNew(context, this.client.bulbutils.checkUser(context, target), target.user);
+		if (userHandle) return userHandle;
+
+		return;
 	}
 }
