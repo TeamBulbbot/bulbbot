@@ -28,7 +28,7 @@ export default class {
 				reason: log,
 				infraction_id: infID,
 				action: action,
-				emoji: this.betterActions(action),
+				emoji: await this.betterActions(client, guildID, action),
 			}),
 		);
 	}
@@ -49,7 +49,7 @@ export default class {
 				reason: log,
 				infraction_id: infID,
 				action: action,
-				emoji: this.betterActions(action),
+				emoji: await this.betterActions(client, guild.id, action),
 			}),
 		);
 	}
@@ -63,7 +63,7 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send({
-			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${this.betterActions("trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${await this.betterActions(client, guild.id,"trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
 			files: [file],
 		});
 	}
@@ -85,7 +85,7 @@ export default class {
 				infraction_id: infID,
 				action: action,
 				until: moment(until).tz(zone).format("MMM Do YYYY, h:mm:ssa z"),
-				emoji: this.betterActions(action),
+				emoji: await this.betterActions(client, guild.id, action),
 			}),
 		);
 	}
@@ -157,34 +157,36 @@ export default class {
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
-	private betterActions(action: string): string {
+	private async betterActions(client: BulbBotClient, guildID: Snowflake, action: string): Promise<string> {
 		switch (action) {
-			case "soft-banned":
-			case "banned":
-			case "force-banned":
-			case "temp-banned":
-			case "manually banned":
+			case await client.bulbutils.translate("mod_action_types.soft_ban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.ban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.force_ban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.temp_ban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.manual_ban", guildID, {}):
 				action = `${Emotes.actions.BAN}`;
 				break;
 
-			case "kicked":
-			case "manually kicked":
+			case await client.bulbutils.translate("mod_action_types.kick", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.manual_kick", guildID, {}):
 				action = `${Emotes.actions.KICK}`;
 				break;
 
-			case "muted":
+			case await client.bulbutils.translate("mod_action_types.mute", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.deafen", guildID, {}):
 				action = `${Emotes.actions.MUTE}`;
 				break;
 
-			case "warned":
+			case await client.bulbutils.translate("mod_action_types.warn", guildID, {}):
 				action = `${Emotes.actions.WARN}`;
 				break;
 
-			case "unbanned":
-			case "unmuted":
-			case "automatically unmuted":
-			case "automatically unbanned":
-			case "manually unbanned":
+			case await client.bulbutils.translate("mod_action_types.unban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.unmute", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.auto_unmute", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.auto_unban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.manual_unban", guildID, {}):
+			case await client.bulbutils.translate("mod_action_types.undeafen", guildID, {}):
 				action = `${Emotes.actions.UNBAN}`;
 				break;
 

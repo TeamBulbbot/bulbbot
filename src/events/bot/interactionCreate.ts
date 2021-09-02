@@ -10,8 +10,10 @@ import clean from "../../interactions/context/clean";
 import { getCommandContext } from "../../structures/CommandContext";
 import Command from "../../structures/Command";
 import reminders from "../../interactions/select/reminders";
+import LoggingManager from "../../utils/managers/LoggingManager";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
+const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -75,6 +77,11 @@ export default class extends Event {
 				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
+
+
+			let used: string = `/${command.qualifiedName}`;
+			args.forEach(arg => (used += ` ${arg}`));
+			await loggingManager.sendCommandLog(this.client, interaction.guild!, context.author, context.channel.id, used);
 
 			await context.deferReply();
 			await command.run(context, args);

@@ -13,14 +13,14 @@ export default class extends SubCommand {
 			name: "prefix",
 			clearance: 75,
 			minArgs: 1,
-			maxArgs: 1,
+			maxArgs: -1,
 			argList: ["prefix:string"],
 			usage: "<prefix>",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const prefix = args[0];
+		const prefix = args.join(" ");
 
 		if (prefix.length > 255) return context.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", context.guild?.id, {}));
 
