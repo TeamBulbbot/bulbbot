@@ -1,6 +1,7 @@
-import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData } from "discord.js";
+import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData, IntentsString, PermissionString } from "discord.js";
 import * as Emotes from "./emotes.json";
 
+// @ts-ignore
 function ArrayLiteralType<K extends string, T extends { [ I: number ]: K }>(arr: T): T {
 	return arr;
 }
@@ -15,8 +16,8 @@ export const lib: string = "Discord.JS";
 export const prefix: string = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
-export const intents = ArrayLiteralType(["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS"]);
-export const defaultPerms = ArrayLiteralType(["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"]);
+export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "DIRECT_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES"];
+export const defaultPerms: PermissionString[] = ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"];
 
 // pm2 configs
 export const pm2Name: string = "bulbbot";
