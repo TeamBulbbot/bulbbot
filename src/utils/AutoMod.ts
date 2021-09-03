@@ -106,7 +106,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	}
 
 	await set(client, context, context.guild.id, "messages", context.author.id, 1, dbGuild.timeoutMessages);
-	if (shouldDelete) await context.delete();
+	if (shouldDelete && !(await context.deleted)) await context.delete();
 }
 
 function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): string {
