@@ -35,7 +35,8 @@ abstract class BaseCommandContext {
 	public content!: string;
 	public readonly crosspostable!: boolean;
 	public readonly deletable!: boolean;
-	public deleted!: boolean;
+	public abstract get deleted(): Promise<boolean>;
+	public abstract set deleted(arg: Promise<boolean>);
 	public readonly editable!: boolean;
 	public readonly editedAt!: Date | null;
 	public editedTimestamp!: number | null;
@@ -184,7 +185,12 @@ class MessageCommandContext implements BaseCommandContext {
 	public content: string;
 	public readonly crosspostable: boolean;
 	public readonly deletable: boolean;
-	public deleted: boolean;
+	public get deleted(): Promise<boolean> {
+		return new Promise(resolve => this.channel.messages.cache.get(this.id)?.fetch(true).then(m=>resolve(m.deleted)).catch(_=>resolve(true)));
+	}
+	public set deleted(arg: Promise<boolean>) {
+		arg.then(a=>this.source.deleted=a);
+	}
 	public readonly editable: boolean;
 	public readonly editedAt: Date | null;
 	public editedTimestamp: number | null;
@@ -356,7 +362,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this.components = source.components;
 		this.crosspostable = source.crosspostable;
 		this.deletable = source.deletable;
-		this.deleted = source.deleted;
+		this.deleted = Promise.resolve(source.deleted);
 		this.editable = source.editable;
 		this.editedAt = source.editedAt;
 		this.editedTimestamp = source.editedTimestamp;
@@ -460,7 +466,10 @@ class InteractionCommandContext implements BaseCommandContext {
 	public content: string;
 	public readonly crosspostable: false;
 	public readonly deletable: false;
-	public deleted: false;
+	public get deleted(): Promise<boolean> {
+		return Promise.resolve(false);
+	}
+	public set deleted(_: Promise<boolean>) {}
 	public readonly editable: false;
 	public readonly editedAt: null;
 	public editedTimestamp: null;
@@ -643,7 +652,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.components = [];
 		this.crosspostable = false;
 		this.deletable = false;
-		this.deleted = false;
+		this.deleted = Promise.resolve(false);
 		this.editable = false;
 		this.editedAt = null;
 		this.editedTimestamp = null;
