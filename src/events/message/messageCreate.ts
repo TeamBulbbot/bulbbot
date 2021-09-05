@@ -9,6 +9,7 @@ import LoggingManager from "../../utils/managers/LoggingManager";
 import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
 import { getCommandContext } from "../../structures/CommandContext";
+import * as Sentry from "@sentry/node";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -24,6 +25,31 @@ export default class extends Event {
 
 	public async run(message: Message): Promise<any> {
 		const context = await getCommandContext(message);
+		Sentry.setContext("user", {
+			tag: context.author.tag,
+			id: context.author.id, // @ts-ignore
+			channelPerms: context.channel.permissionsFor(context.author).bitfield,
+			guildPerms: context.member!.permissions.bitfield,
+		});
+		Sentry.setContext("client", {
+			// @ts-ignore
+			channelPerms: context.channel.permissionsFor(this.client.user).bitfield,
+			guildPerms: context.guild!.me!.permissions.bitfield,
+		});
+
+		Sentry.setContext("guild", {
+			name: context.guild?.name,
+			id: context.guild?.id,
+		});
+		Sentry.setContext("channel", {
+			id: context.channel.id,
+			type: context.channel.type,
+		});
+		Sentry.setContext("message", {
+			content: context.content,
+			context_type: context.contextType,
+		});
+
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 
@@ -83,7 +109,7 @@ export default class extends Event {
 
 		try {
 			await command.run(context, options.args);
-		} catch (err) {
+		} catch (err: any) {
 			await this.client.bulbutils.logError(err, context);
 		}
 	}
