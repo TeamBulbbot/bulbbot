@@ -50,7 +50,7 @@ export default class extends Command {
 
 			// @ts-ignore, will this break anything prob not idk :shrug:
 			if (code.includes("token")) this.client.token = process.env.TOKEN;
-			if (evaled < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
+			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {
 				writeFile(`${__dirname}/../../../files/EVAL-${context.guild?.id}.js`, evaled, (err: any) => {
 					if (err) this.client.log.error(err);
