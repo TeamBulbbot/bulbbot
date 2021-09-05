@@ -2,6 +2,8 @@ import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import { writeFile } from "fs";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { MessageEmbed } from "discord.js";
+import { inspect } from "util";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -20,35 +22,74 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
-		const clean = async (text: string) => {
-			if (typeof text === "string") return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-			else return text;
-		};
+		let embed = new MessageEmbed()
+			.setFooter(
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+					user: context.author,
+				}),
+				<string>context.author.avatarURL({ dynamic: true }),
+			)
+			.setTimestamp();
+
+		const start: number = new Date().getTime();
+		const code: string = args.join(" ");
+		let evaled: any;
+		let output: any;
+		let isFile: boolean = false;
+
+		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) ran eval with the code: ${code}`);
+
+		let description: string = `**Input**\n\`\`\`js\n${code}\n\`\`\``;
 
 		try {
-			const code: string = args.join(" ");
-			let evaled = eval(code);
+			if (code.includes("token")) this.client.token = `${Buffer.from(this.client.user!?.id).toString("base64")}.${genString(7)}.${genString(27)}`;
 
-			if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-			if (evaled.includes(process.env.TOKEN)) evaled = evaled.replace(process.env.TOKEN, "Y0U.TH0UGHT.1_W0ULD.L34V3_MY_D1SC0RD_T0K3N_H3R3");
-			this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) ran eval with the code: ${code}`);
+			evaled = await eval(code);
+			description += `\n**Type:** ${typeof evaled}`;
+			if (typeof evaled !== "string") evaled = inspect(evaled);
 
-			if (evaled.length > 2000) {
-				writeFile(`${__dirname}/../../../files/EVAL-${context.guild?.id}.js`, await clean(evaled), function (err) {
-					if (err) console.error(err);
+			// @ts-ignore, will this break anything prob not idk :shrug:
+			if (code.includes("token")) this.client.token = process.env.TOKEN;
+			if (evaled < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
+			else {
+				writeFile(`${__dirname}/../../../files/EVAL-${context.guild?.id}.js`, evaled, (err: any) => {
+					if (err) this.client.log.error(err);
 				});
 
-				await context.channel.send({
-					content: "The evaled code is more than 2000 characters so I am giving you a file instead, have fun 🙂",
-					files: [`${__dirname}/../../../files/EVAL-${context.guild?.id}.js`],
-				});
-
-				return;
+				isFile = true;
 			}
 
-			await context.channel.send(`\`\`\`js\n${evaled}\n\`\`\``);
+			embed.setColor("GREEN");
 		} catch (err: any) {
-			await context.channel.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``);
+			description += `\n**Error:** ${err.name}\n> ${err.message}\n \`\`\`\n${err.stack}\n\`\`\``;
+			Math.floor(Math.random() * 10) === 0 ? embed.setImage("https://i.imgur.com/YHb5kNm.gif") : null;
+			embed.setColor("RED");
 		}
+
+		const end: number = new Date().getTime();
+
+		embed.setDescription(description);
+		embed.setAuthor(`Run time: ${start - end} ms`);
+
+		context.reply({
+			embeds: [embed],
+			content: output,
+			files: isFile
+				? [
+						{
+							attachment: `${__dirname}/../../../files/EVAL-${context.guild?.id}.js`,
+							name: "eval.js",
+						},
+				  ]
+				: [],
+		});
 	}
+}
+
+function genString(l: number) {
+	var res = "";
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	for (var i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+
+	return Buffer.from(res).toString("base64").substring(0, l);
 }
