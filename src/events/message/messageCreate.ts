@@ -28,12 +28,12 @@ export default class extends Event {
 		Sentry.setContext("user", {
 			tag: context.author.tag,
 			id: context.author.id, // @ts-ignore
-			channelPerms: context.channel.permissionsFor(context.author).bitfield,
+			channelPerms: context.channel.permissionsFor(context.author).bitfield || -1,
 			guildPerms: context.member!.permissions.bitfield,
 		});
 		Sentry.setContext("client", {
 			// @ts-ignore
-			channelPerms: context.channel.permissionsFor(this.client.user).bitfield,
+			channelPerms: context.channel.permissionsFor(this.client.user).bitfield || -1,
 			guildPerms: context.guild!.me!.permissions.bitfield,
 		});
 
