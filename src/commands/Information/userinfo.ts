@@ -68,9 +68,10 @@ export default class extends Command {
 			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
 		]);
 
-		let components;
+		let components: MessageActionRow[];
+		const actionsOnInfo: boolean = (await databaseManager.getConfig(<Snowflake>context.guild?.id)).actionsOnInfo;
 
-		if ((await databaseManager.getConfig(<Snowflake>context.guild?.id)).actionsOnInfo !== true) components = [];
+		if (actionsOnInfo !== true) components = [];
 		else if (!isGuildMember) components = [];
 		else if (!args[0]) components = [];
 		else components = [row];
@@ -163,6 +164,7 @@ export default class extends Command {
 
 				const filter = m => m.content && m.author.id === context.author.id;
 				const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
+				console.log("hi4");
 
 				collector?.on("collect", async m => {
 					let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
@@ -176,8 +178,8 @@ export default class extends Command {
 			});
 
 			collector.on("end", async () => {
-				msg.edit({ components: [rowDisabled] });
-			})
+				if (actionsOnInfo) msg.edit({ components: [rowDisabled] });
+			});
 		}
 	}
 }
