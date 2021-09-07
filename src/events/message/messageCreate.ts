@@ -83,7 +83,7 @@ export default class extends Event {
 
 		try {
 			await command.run(context, options.args);
-		} catch (err) {
+		} catch (err: any) {
 			await this.client.bulbutils.logError(err, context);
 		}
 	}
