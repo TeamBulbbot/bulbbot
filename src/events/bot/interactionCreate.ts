@@ -27,11 +27,14 @@ export default class extends Event {
 		if (interaction.isCommand() && !interaction.inGuild()) {
 			await interaction.reply({
 				content: await this.client.bulbutils.translate("event_interaction_dm_command", "742094927403679816", {}),
-				ephemeral: true
-			})
+				ephemeral: true,
+			});
 			return;
 		}
 		const context = await getCommandContext(interaction);
+		if (this.client.blacklist.get(context.author.id) !== undefined) return;
+		if (!context.guild || context.author.bot) return;
+		if (this.client.blacklist.get(context.guild.id)) return;
 
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
@@ -66,7 +69,7 @@ export default class extends Event {
 			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
 
 			for (const option of context.options["_hoistedOptions"]) {
-				if (option.type === "STRING") args.push(...(`${option.value}`.split(" ")));
+				if (option.type === "STRING") args.push(...`${option.value}`.split(" "));
 				else args.push(`${option.value}`);
 			}
 
@@ -77,7 +80,6 @@ export default class extends Event {
 				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
-
 
 			let used: string = `/${command.qualifiedName}`;
 			args.forEach(arg => (used += ` ${arg}`));
