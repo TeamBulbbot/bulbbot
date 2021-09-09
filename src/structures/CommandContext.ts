@@ -1,5 +1,6 @@
 import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
 import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
+import { logger } from "../utils/Logger";
 
 function clone<T extends object | null>(obj: T): T {
 	return Object.assign(Object.create(obj), obj);
@@ -105,7 +106,7 @@ abstract class BaseCommandContext {
 	public abstract inGuild(): boolean;
 
 	// Common-ish
-	public abstract reply(options: string | MessagePayload | ReplyMessageOptions | InteractionReplyOptions): Promise<void | Message | never>;
+	/** @deprecated */ public abstract reply(options: string | MessagePayload | ReplyMessageOptions | InteractionReplyOptions): Promise<void | Message | never>;
 	public abstract startThread<T>(options: StartThreadOptions | ThreadCreateOptions<T>): Promise<ThreadChannel | never>;
 
 	// Message
@@ -264,7 +265,7 @@ class MessageCommandContext implements BaseCommandContext {
 
 	// Common-ish
 	private readonly _reply: Function;
-	public reply(options: string | MessagePayload | ReplyMessageOptions): Promise<Message> {return this._reply(options)}
+	/** @deprecated */ public reply(options: string | MessagePayload | ReplyMessageOptions): Promise<Message> {logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead"); return this._reply(options)}
 	private readonly _startThread: Function;
 	public startThread(options: StartThreadOptions): Promise<ThreadChannel> {return this._startThread(options)}
 
@@ -421,7 +422,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this._deleteReply = () => Promise.reject();
 		this._editReply = () => Promise.reject();
 		this._fetchReply = () => Promise.reject();
-		this._followUp = this.reply;
+		this._followUp = source.reply.bind(source);
 		this._deferUpdate = () => Promise.reject();
 		this._update = () => Promise.reject();
 	}
@@ -552,7 +553,7 @@ class InteractionCommandContext implements BaseCommandContext {
 
 	// Common-ish
 	private readonly _reply: Function;
-	public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {return this._reply(options)}
+	/** @deprecated */ public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead"); return this._reply(options)}
 	private readonly _startThread: Function;
 	public startThread<T>(options: StartThreadOptions | ThreadCreateOptions<T>): Promise<ThreadChannel | never> {return this._startThread(options)}
 
