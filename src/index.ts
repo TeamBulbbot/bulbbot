@@ -11,6 +11,7 @@ import * as svSE from "./languages/sv-SE.json";
 import * as csCZ from "./languages/cs-CZ.json";
 import * as ptBR from "./languages/pt-BR.json";
 import * as frFR from "./languages/fr-FR.json";
+import * as itIT from "./languages/it-IT.json";
 
 const config = {
 	token: process.env.TOKEN,
@@ -41,6 +42,9 @@ i18next.init({
 		"cs-CZ": {
 			translation: csCZ,
 		},
+		"it-IT": {
+			translation: itIT,
+		}
 	},
 });
 

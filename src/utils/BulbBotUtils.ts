@@ -482,6 +482,7 @@ export default class {
 		"sk-SK": "sk-SK",
 		"sv-SE": "sv-SE",
 		"cs-CZ": "cs-CZ",
+		"it-IT": "it-IT",
 	};
 
 	public formatAction(action: string): string {
