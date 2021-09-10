@@ -25,7 +25,7 @@ const client: BulbBotClient = new BulbBotClient(config);
 
 i18next.init({
 	fallbackLng: "en-US",
-	debug: process.env.ENVIRONMENT === "dev" ? true : false,
+	debug: process.env.ENVIRONMENT === "dev",
 	resources: {
 		"en-US": {
 			translation: enUS,
@@ -60,7 +60,7 @@ Sentry.init({
 	sampleRate: 1.0,
 	attachStacktrace: true,
 	autoSessionTracking: true,
-	debug: process.env.ENVIRONMENT === "dev" ? true : false,
+	debug: process.env.ENVIRONMENT === "dev",
 	maxBreadcrumbs: 100,
 	integrations: [new Sentry.Integrations.Http({ tracing: true })],
 });
