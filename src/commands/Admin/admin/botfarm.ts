@@ -4,6 +4,7 @@ import CommandContext from "../../../structures/CommandContext";
 import { Guild, Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import { writeFileSync } from "fs";
+import { whitelistedGuilds } from "../../../Config";
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -17,16 +18,14 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		this.client.guilds.cache.map(async (guild: Guild) => await guild.members.fetch());
+		this.client.guilds.cache.map((guild: Guild) => guild.members.fetch());
 
-		let botfarms: any = [];
+		const botfarms: any = [];
 		let isFile: boolean = false;
-
-		const whitelisted: string[] = ["742094927403679816", "784408056997216327", "818176562901549066", "820945336327602186"];
 
 		this.client.guilds.cache.map(g => {
 			if (Math.round((g.members.cache.filter(u => u.user.bot).size / g.members.cache.size) * 100) < parseInt(args[0])) return;
-			if (whitelisted.includes(g.id)) return;
+			if (whitelistedGuilds.includes(g.id)) return;
 
 			botfarms.push({
 				id: g.id,
@@ -37,7 +36,7 @@ export default class extends SubCommand {
 			});
 		});
 
-		botfarms = await botfarms.sort(dynamicSort("botP"));
+		botfarms.sort(dynamicSort("botP"));
 		const content: string = await botfarms.map((bf: any) => `\`\`\`\nName: ${bf.name}\nId: ${bf.id}\nMembers: ${bf.members}\nBots: ${bf.bots}\n% Bots: ${bf.botP}\`\`\``).join("");
 		if (content.length > 1800) {
 			writeFileSync(`${__dirname}/../../../../files/BOT-FARM-${context.guild?.id}.json`, JSON.stringify(botfarms, null, 2)), "utf8";
