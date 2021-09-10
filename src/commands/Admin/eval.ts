@@ -31,7 +31,7 @@ export default class extends Command {
 			)
 			.setTimestamp();
 
-		const start: number = new Date().getTime();
+		const start: number = Date.now();
 		const code: string = args.join(" ");
 		let evaled: any;
 		let output: any;
@@ -66,7 +66,7 @@ export default class extends Command {
 			embed.setColor("RED");
 		}
 
-		const end: number = new Date().getTime();
+		const end: number = Date.now();
 
 		embed.setDescription(description);
 		embed.setAuthor(`Run time: ${start - end} ms`);
