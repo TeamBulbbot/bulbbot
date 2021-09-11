@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, Util } from "discord.js";
 import CommandContext from "src/structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
@@ -26,7 +26,7 @@ export default class extends Command {
 				await this.client.bulbutils.translate("help_unable_to_find_command", context.guild!.id, { commandName: args[0] })
 			);
 
-		let msg = `**${context.prefix}${command.qualifiedName}** ${command.aliases.length !== 0 ? `(${command.aliases.map(alias => `**${alias}**`).join(", ")})` : ""}\n`;
+		let msg = `**${Util.escapeMarkdown(context.prefix)}${command.qualifiedName}** ${command.aliases.length !== 0 ? `(${command.aliases.map(alias => `**${alias}**`).join(", ")})` : ""}\n`;
 		msg += `> ${command.description}\n\n`;
 		msg += `**Usage:** \`${context.prefix}${command.usage}\`\n`;
 
