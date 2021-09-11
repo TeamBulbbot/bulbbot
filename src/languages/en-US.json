@@ -160,7 +160,7 @@
   "automod_add_success": "{{emote_success}} Successfully added item(s) `{{item}}` to `{{category}}`.",
   "automod_remove_success": "{{emote_success}} Successfully removed item(s) `{{item}}` from `{{category}}`",
 
-  "automod_updated_limit": "{{emote_success}} Successfully updated the limit for `{{category}}` with a new limit of `{{limit}}`",
+  "automod_updated_limit": "{{emote_success}} Successfully updated the limit for `{{category}}` to `{{limit}}`",
   "automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",
 
   "automod_enabled": "{{emote_success}} Successfully enabled AutoMod in the server.",
@@ -213,13 +213,13 @@
 
   "serverinfo_server_stats": "**Server stats**",
   "serverinfo_channel_stats": "**Channel stats**",
-  "serverinfo_booster_stats": "**Booster stats**",
+  "serverinfo_booster_stats": "**Boost stats**",
   "serverinfo_server_stats_total": "Total: **{{guild.memberCount}}**/{{guild.maximumMembers}}\n",
   "serverinfo_channel_stats_voice": "Voice Channels: **{{guild_voice}}**\n",
   "serverinfo_channel_stats_text": "Text Channels: **{{guild_text}}**\n",
   "serverinfo_channel_stats_category": "Category: **{{guild_category}}**\n",
-  "serverinfo_booster_tier": "Booster Tier: **{{guild.premiumTier}}**\n",
-  "serverinfo_booster_boosters": "Boosters: **{{guild.premiumSubscriptionCount}}**\n",
+  "serverinfo_booster_tier": "Boost Tier: **{{guild.premiumTier}}**\n",
+  "serverinfo_booster_boosters": "Boost: **{{guild.premiumSubscriptionCount}}**\n",
   "serverinfo_booster_tier_1": "Emote slots: **100**\nAudio quality: **128** kbps\n",
   "serverinfo_booster_tier_2": "Emote slots: **150**\nAudio quality: **256** kbps\nUpload limit: **50 MB**\n",
   "serverinfo_booster_tier_3": "Emote slots: **250**\nAudio quality: **384** kbps\nUpload limit: **100 MB**\n",
