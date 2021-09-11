@@ -293,6 +293,7 @@
   "remind_desc_created": "**Created:** <t:{{createdAt}}> [`Link`]({{message}})",
 
   "inviteinfo_error": "{{emote_warn}} Unable to find a server with that invite",
+  "inviteinfo_groupdm": "{{emote_warn}} We are currently not supporting inviteinfo for group dms",
   "inviteinfo_verification_level": "Verification Level: `{{guild.verificationLevel}}`\n",
   "inviteinfo_large": "Large: `{{guild.large}}`\n",
   "inviteinfo_code": "Code: `{{invite.code}}`\n",
