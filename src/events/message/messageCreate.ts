@@ -1,7 +1,6 @@
 import Event from "../../structures/Event";
 import { Message } from "discord.js";
 import Command from "../../structures/Command";
-import DMUtils from "../../utils/DMUtils";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../Config";
@@ -26,8 +25,6 @@ export default class extends Event {
 		const context = await getCommandContext(message);
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
-
-		if (context.channel.type === "DM") return DMUtils(this.client, context);
 		if (!context.guild || context.author.bot) return;
 
 		// checks if the guild is in the blacklist
