@@ -21,7 +21,7 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<Message> {
 		const command = Command.resolve(this.client, args);
 
-		if (command === undefined || command.devOnly || command.subDevOnly)
+		if (!command || !await command.validateUserPerms(context))
 			return context.channel.send(
 				await this.client.bulbutils.translate("help_unable_to_find_command", context.guild!.id, { commandName: args[0] })
 			);

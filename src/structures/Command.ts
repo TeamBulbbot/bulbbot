@@ -7,6 +7,7 @@ import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
+import { developers, subDevelopers } from "../Config";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -125,6 +126,31 @@ export default class Command {
 		}
 
 		return;
+	}
+
+	public async validateUserPerms(context: CommandContext): Promise<boolean> {
+		let clearance = this.clearance;
+		const isDev = developers.includes(context.author.id);
+		const isSubDev = subDevelopers.includes(context.author.id);
+
+		if(this.devOnly && !isDev) return false;
+		if(this.subDevOnly && !(isDev || isSubDev)) return false;
+
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		if (commandOverride !== undefined) {
+			if (!commandOverride["enabled"]) return false;
+			clearance = commandOverride["clearanceLevel"];
+		}
+
+		const userClearance = await clearanceManager.getUserClearance(context);;
+		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
+
+		let missing: boolean = clearance > userClearance;
+		if (missing && ~~userPermCheck) {
+			const userMember: GuildMember = context.member!;
+			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
+		}
+		return !missing;
 	}
 
 	public resolveSubcommand(commandPath: string[]): Command {
