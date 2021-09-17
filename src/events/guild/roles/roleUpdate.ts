@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, Permissions, Role } from "discord.js";
+import { GuildAuditLogs, GuildMember, Permissions, Role } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
@@ -14,19 +14,31 @@ export default class extends Event {
 		});
 	}
 
-	public async run(newRole: Role): Promise<void> {
-		return; // There's a big bug where creating a role and immediately modifying it will spam this event, one for every role in the guild
-		if (!newRole.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
+	public async run(oldRole: Role, newRole: Role): Promise<void> {
+		const difference = this.client.bulbutils.diff(oldRole, newRole).filter(k => k !== "rawPosition")
+		if(difference.length === 0) return;
 
-		const logs: GuildAuditLogs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
-		const first = logs.entries.first();
-		if (!first) return;
+		let executor: GuildMember | null = null;
+		let changes: any[] | null = null
+		let createdTimestamp: number | null = null;
+		const log: string[] = [];
+		try {
+			const logs: GuildAuditLogs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
+			const first = logs.entries.first();
+			if (!first) return;
 
-		const { executor, changes, createdTimestamp } = first;
-		if (createdTimestamp + 3000 < Date.now()) return;
+			executor = first.executor;
+			createdTimestamp = first.createdTimestamp;
+			changes = first.changes;
+			// if (createdTimestamp + 3000 < Date.now()) return;
+		} catch(_) {
+			changes = [];
+			for(const key of difference) {
+				changes.push({key, old: oldRole[key], new: newRole[key]});
+			}
+		}
+
 		if (!changes || !changes.length) return;
-		let log: string[] = [];
-
 		for (const change of changes) {
 			log.push(
 				await this.client.bulbutils.translate("event_change", newRole.guild.id, {
@@ -37,15 +49,28 @@ export default class extends Event {
 			);
 		}
 
-		await loggingManager.sendEventLog(
-			this.client,
-			newRole.guild,
-			"role",
-			await this.client.bulbutils.translate("event_update_role", newRole.guild.id, {
-				moderator: executor,
-				role: newRole,
-				changes: log.join("\n> "),
-			}),
-		);
+
+		if(!!executor) {
+			await loggingManager.sendEventLog(
+				this.client,
+				newRole.guild,
+				"role",
+				await this.client.bulbutils.translate("event_update_role_moderator", newRole.guild.id, {
+					moderator: executor,
+					role: newRole,
+					changes: log.join("\n> "),
+				}),
+			);
+		} else {
+			await loggingManager.sendEventLog(
+				this.client,
+				newRole.guild,
+				"role",
+				await this.client.bulbutils.translate("event_update_role", newRole.guild.id, {
+					role: newRole,
+					changes: log.join("\n> "),
+				}),
+			);
+		}
 	}
 }
