@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message } from "discord.js";
+import { Message, Permissions } from "discord.js";
 import Command from "../../structures/Command";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
@@ -92,7 +92,7 @@ export default class extends Event {
 		if (!context.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		const invalidReason = await command.validate(context, args, options);
 		if (invalidReason !== undefined) {
-			if (!invalidReason) return;
+			if (!invalidReason || !context.guild.me.permissionsIn(context.channel.id).has(Permissions.FLAGS.SEND_MESSAGES)) return;
 			return context.channel.send(invalidReason);
 		}
 		return command;
