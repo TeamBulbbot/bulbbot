@@ -67,7 +67,7 @@ export default class {
 				event.emitter[event.type](name, async (...args: any) => {
 					try {
 						await event.run(...args);
-					} catch (err) {
+					} catch (err: any) {
 						await this.client.bulbutils.logError(err);
 					}
 				});
