@@ -431,6 +431,10 @@
 							{
 								"name": "cs-CZ",
 								"value": "cs-CZ"
+							},
+							{
+								"name": "it-IT",
+								"value": "it-IT"
 							}
 						],
 						"required": true

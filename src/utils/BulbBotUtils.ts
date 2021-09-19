@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -482,6 +482,7 @@ export default class {
 		"sk-SK": "sk-SK",
 		"sv-SE": "sv-SE",
 		"cs-CZ": "cs-CZ",
+		"it-IT": "it-IT",
 	};
 
 	public formatAction(action: string): string {
@@ -511,7 +512,7 @@ export default class {
 		return Emotes.actions.WARN;
 	}
 
-	public async logError(err: Error, context?: CommandContext): Promise<void> {
+	public async logError(err: Error, context?: CommandContext, eventName?: string, runArgs?: any): Promise<void> {
 		if (process.env.ENVIRONMENT === "dev") throw err;
 		const embed = new MessageEmbed()
 			.setColor("RED")
@@ -525,6 +526,15 @@ export default class {
 			embed.addField("Guild ID", <string>context?.guild?.id, true);
 			embed.addField("User", <string>context.author.id, true);
 			embed.addField("Message Content", <string>context.content, true);
+		} else if(runArgs) {
+			const argsDesc: string[] = [];
+			for(const [k, v] of Object.entries(runArgs)) {
+				if((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
+				let additionalInfo = typeof v === "object" ? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (\`" + (<any>v)?.guild.id + "\`)" : ""}${(<any>v)?.member ? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">" : (<any>v)?.user ? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">" : ""}${(<any>v)?.channel && (<any>v)?.channel?.name ? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (\`" + (<any>v)?.channel.id + ")\`" : v instanceof GuildChannel ? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (\`" + (<any>v)?.id + ")\`" : ""}` : "";
+				argsDesc.push(`**${k}:** ${typeof v === "object" ? "[object " +  v?.constructor.name + "]" + additionalInfo.trimEnd() : v}`);
+			}
+			embed.addField("Event Name", `${eventName}`, true);
+			embed.addField("Event Arguments", argsDesc.join("\n").slice(0, 1024));
 		}
 
 		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
