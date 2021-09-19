@@ -33,7 +33,7 @@ export default class extends Event {
 		}
 		const context = await getCommandContext(interaction);
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
-		if (!context.guild || context.author.bot) return;
+		if (!context.guild) return;
 		if (this.client.blacklist.get(context.guild.id)) return;
 
 		if (interaction.isSelectMenu()) {
