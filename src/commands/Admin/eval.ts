@@ -42,14 +42,13 @@ export default class extends Command {
 		let description: string = `**Input**\n\`\`\`js\n${code}\n\`\`\``;
 
 		try {
-			if (code.includes("token")) this.client.token = `${Buffer.from(this.client.user!?.id).toString("base64")}.${genString(7)}.${genString(27)}`;
-
 			evaled = await eval(code);
+
 			description += `\n**Type:** ${typeof evaled}`;
 			if (typeof evaled !== "string") evaled = inspect(evaled);
 
-			// @ts-ignore, will this break anything prob not idk :shrug:
-			if (code.includes("token")) this.client.token = process.env.TOKEN;
+			evaled = evaled.replace(this.client.token, `${Buffer.from(this.client.user!?.id).toString("base64")}.${genString(7)}.${genString(27)}`);
+
 			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {
 				writeFile(`${__dirname}/../../../files/EVAL-${context.guild?.id}.js`, evaled, (err: any) => {
