@@ -33,10 +33,10 @@ export default class extends Event {
 
 		const mute: Record<string, any> = await getLatestMute(member, member.guild.id);
 		if (mute) {
-			const muteRole: Snowflake = <Snowflake>await databaseManager.getMuteRole(<Snowflake>member.guild?.id);
+			const muteRole: Snowflake | null = await databaseManager.getMuteRole(<Snowflake>member.guild.id);
 			if (!muteRole) return;
 
-			member.roles.add(muteRole);
+			await member.roles.add(muteRole);
 
 			await loggingManager.sendModActionPreformatted(
 				this.client,
