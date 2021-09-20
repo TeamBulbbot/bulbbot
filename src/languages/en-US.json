@@ -230,7 +230,7 @@
   "action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} until **{{until}}** for **{{reason}}** `[#{{infraction_id}}]`",
 
   "action_success_multi": "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
-  "action_multi_invalid_targets": "{{emote_warn}} Was unable to perform the selected action on **{{amount}}** target(s)",
+  "action_multi_invalid_targets": "{{emote_warn}} Was unable to perform the selected action on $t(targets, {\"count\": {{amount}}})",
   "action_multi_no_valid_targets": "{{emote_fail}} No valid targets have been selected.",
   "action_multi_less_than_2": "{{emote_warn}} Selected less than 2 targets. Executing normal {{action}} instead",
   "action_multi_types": {
@@ -239,6 +239,9 @@
     "unban": "unban",
     "warn": "warn"
   },
+
+  "targets": "**{{count}}** target",
+  "targets_plural": "**{{count}}** targets",
 
   "already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
   "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
