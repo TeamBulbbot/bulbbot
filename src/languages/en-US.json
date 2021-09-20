@@ -97,6 +97,7 @@
   "event_member_leave_roles": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>\n**Roles:** {{user_roles}}",
 
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
+  "event_member_remove_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has removed their nickname (was: `{{before}}`)",
   "event_member_update_role_add": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_add_moderator": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
@@ -253,13 +254,13 @@
   "verification_level_error": "{{emote_fail}} Verification level cannot be greater than `4` or less than `0`",
   "verification_level_success": "{{emote_success}} Server verification level changed to `{{level}}`",
 
-  "change_nick_success": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
-  "remove_nick_success": "{{emote_success}} Nickname removed from **{{target.tag}}** `({{target.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "change_nick_mod_action_log": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "remove_nick_mod_action_log": "{{emote_success}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "change_nick_fail": "{{emote_fail}} Unable to change nickname of **{{target.tag}}** `({{target.id}})`",
-  "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` does not have a nickname to remove",
-  "already_has_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already nicknamed `{{nickname}}`",
+  "nickname_success": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_remove_success": "{{emote_success}} Nickname removed from **{{target.tag}}** `({{target.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_mod_action_log": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_remove_mod_action_log": "{{emote_success}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_fail": "{{emote_fail}} Unable to change nickname of **{{target.tag}}** `({{target.id}})`",
+  "nickname_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` does not have a nickname to remove",
+  "nickname_same_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already nicknamed `{{nickname}}`",
   "nickname_too_long": "{{emote_warn}} Nickname has too many characters (`{{length}}`). Nicknames are limited to 32 characters",
 
   "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**",

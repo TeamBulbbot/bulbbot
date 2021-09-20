@@ -111,7 +111,7 @@ export default class {
 	public async sendEventLog(
 		client: BulbBotClient,
 		guild: Guild,
-		part: Exclude<LoggingPartString, "modAction">,
+		part: LoggingPartString,
 		log: string,
 		extra: string | MessageEmbed[] | null = null,
 	): Promise<void> {
