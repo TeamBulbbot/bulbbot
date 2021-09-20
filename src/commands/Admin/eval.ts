@@ -68,9 +68,9 @@ export default class extends Command {
 		const end: number = Date.now();
 
 		embed.setDescription(description);
-		embed.setAuthor(`Run time: ${start - end} ms`);
+		embed.setAuthor(`Run time: ${end - start} ms`);
 
-		context.reply({
+		context.channel.send({
 			embeds: [embed],
 			content: output,
 			files: isFile

@@ -24,30 +24,6 @@ export default class extends Event {
 
 	public async run(message: Message): Promise<any> {
 		const context = await getCommandContext(message);
-		Sentry.setContext("user", {
-			tag: context.author.tag,
-			id: context.author.id, // @ts-ignore
-			channelPerms: context.channel.permissionsFor(context.author).bitfield || -1,
-			guildPerms: context.member!.permissions.bitfield,
-		});
-		Sentry.setContext("client", {
-			// @ts-ignore
-			channelPerms: context.channel.permissionsFor(this.client.user).bitfield || -1,
-			guildPerms: context.guild!.me!.permissions.bitfield,
-		});
-
-		Sentry.setContext("guild", {
-			name: context.guild?.name,
-			id: context.guild?.id,
-		});
-		Sentry.setContext("channel", {
-			id: context.channel.id,
-			type: context.channel.type,
-		});
-		Sentry.setContext("message", {
-			content: context.content,
-			context_type: context.contextType,
-		});
 
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
@@ -111,7 +87,7 @@ export default class extends Event {
 		}
 	}
 
-	private async safeReply(context: CommandContext, text: string): Promise<Message| undefined> {
+	private async safeReply(context: CommandContext, text: string): Promise<Message | undefined> {
 		if (!context.guild?.me?.permissionsIn(context.channel.id).has(Permissions.FLAGS.SEND_MESSAGES)) return;
 		return await context.channel.send(text);
 	}
