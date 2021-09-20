@@ -2,7 +2,7 @@ import * as Config from "./Config";
 import BulbBotClient from "./structures/BulbBotClient";
 import * as env from "dotenv";
 import { sequelize } from "./utils/database/connection";
-import * as Sentry from "@sentry/node"; // @ts-ignore
+import { init, Integrations } from "@sentry/node"; // @ts-ignore
 import * as Tracing from "@sentry/tracing";
 
 env.config({ path: `${__dirname}/../src/.env` });
@@ -48,7 +48,7 @@ i18next.init({
 		},
 		"it-IT": {
 			translation: itIT,
-		}
+		},
 	},
 });
 
@@ -58,7 +58,7 @@ sequelize
 	.catch((err: Error) => client.log.error(`[DATABASE] Connection error: ${err.name} | ${err.message} | ${err.stack}`))
 	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
 
-Sentry.init({
+init({
 	dsn: process.env.SENTRY_DSN,
 	tracesSampleRate: 1.0,
 	sampleRate: 1.0,
@@ -66,7 +66,7 @@ Sentry.init({
 	autoSessionTracking: true,
 	debug: process.env.ENVIRONMENT === "dev",
 	maxBreadcrumbs: 100,
-	integrations: [new Sentry.Integrations.Http({ tracing: true })],
+	integrations: [new Integrations.Http({ tracing: true })],
 });
 
 client.login().catch((err: Error) => {
