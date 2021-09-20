@@ -80,12 +80,12 @@ export default class extends Event {
 
 		try {
 			await command.run(context, options.args);
-		} catch (err: unknown) {
+		} catch (err: any) {
 			await this.client.bulbutils.logError(err, context);
 		}
 	}
 
-	private async safeReply(context: CommandContext, text: string): Promise<Message| undefined> {
+	private async safeReply(context: CommandContext, text: string): Promise<Message | undefined> {
 		if (!context.guild?.me?.permissionsIn(context.channel.id).has(Permissions.FLAGS.SEND_MESSAGES)) return;
 		return await context.channel.send(text);
 	}

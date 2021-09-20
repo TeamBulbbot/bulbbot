@@ -33,7 +33,7 @@ export default class extends Event {
 
 		const mute: Record<string, any> = await getLatestMute(member, member.guild.id);
 		if (mute) {
-			const muteRole: Snowflake | null = await databaseManager.getMuteRole(<Snowflake>member.guild.id);
+			const muteRole: Snowflake | null = await databaseManager.getMuteRole(member.guild.id);
 			if (!muteRole) return;
 
 			await member.roles.add(muteRole);
