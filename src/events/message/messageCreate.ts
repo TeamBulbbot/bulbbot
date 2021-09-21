@@ -8,7 +8,6 @@ import LoggingManager from "../../utils/managers/LoggingManager";
 import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
-import * as Sentry from "@sentry/node";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
