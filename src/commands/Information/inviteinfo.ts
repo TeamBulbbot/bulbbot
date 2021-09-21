@@ -32,6 +32,11 @@ export default class extends Command {
 			return;
 		}
 
+		if (invite.channel.type === "GROUP_DM") {
+			context.channel.send(await this.client.bulbutils.translate("inviteinfo_groupdm", context.guild!.id, {}));
+			return;
+		}
+
 		const guild = invite!.guild;
 		if (guild === null || context.guild === null || context.member === null) return;
 
