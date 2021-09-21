@@ -9,6 +9,8 @@ const bint0 = BigInt(0);
 const bint1 = BigInt(1);
 const bint2 = BigInt(2);
 const PERM_STRINGS = Object.keys(Permissions.FLAGS);
+const log10 = (num: number) => num ? Math.log10(num) : 0;
+const loglen = ~~log10(PERM_STRINGS.length);
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -32,7 +34,7 @@ export default class extends Command {
         for(let i = 0 ; permsInt > bint0; permsInt >>= bint1, ++i)
         {
             const val = permsInt % bint2;
-            if(val) permissionStrings.push(PERM_STRINGS[i]);
+            if(val) permissionStrings.push(`\`1 << ${" ".repeat(loglen - ~~log10(i))}${i}\` - \`${PERM_STRINGS[i]}\``);
         }
 
 		const embed = new MessageEmbed()
