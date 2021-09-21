@@ -133,10 +133,10 @@ export default class {
 		return response[0]["id"];
 	}
 
-	public async warn(client: BulbBotClient, guildID: Snowflake, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
-		await this.createInfraction(guildID, "Warn", true, reason, target.user, moderator.user);
+	public async warn(client: BulbBotClient, guildID: Snowflake, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
+		await this.createInfraction(guildID, "Warn", true, reason, target, moderator.user);
 		const infID: number = await this.getLatestInfraction(guildID, moderator.id, target.id, "Warn");
-		await loggingManager.sendModAction(client, guildID, await client.bulbutils.translate("mod_action_types.warn", guildID, {}), target.user, moderator.user, reason, infID);
+		await loggingManager.sendModAction(client, guildID, await client.bulbutils.translate("mod_action_types.warn", guildID, {}), target, moderator.user, reason, infID);
 
 		return infID;
 	}

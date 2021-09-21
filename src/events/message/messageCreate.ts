@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message } from "discord.js";
+import { Message, Permissions } from "discord.js";
 import Command from "../../structures/Command";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
@@ -7,7 +7,8 @@ import * as Config from "../../Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
-import { getCommandContext } from "../../structures/CommandContext";
+import CommandContext, { getCommandContext } from "../../structures/CommandContext";
+import * as Sentry from "@sentry/node";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
@@ -23,6 +24,7 @@ export default class extends Event {
 
 	public async run(message: Message): Promise<any> {
 		const context = await getCommandContext(message);
+
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 		if (!context.guild || context.author.bot) return;
@@ -37,7 +39,7 @@ export default class extends Event {
 			await databaseManager.deleteGuild(context.guild.id);
 			await databaseManager.createGuild(context.guild);
 			if (!(guildCfg = await databaseManager.getConfig(context.guild.id)))
-				return context.channel.send("Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
+				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
 		}
 
 		const prefix = guildCfg.prefix;
@@ -52,7 +54,7 @@ export default class extends Event {
 
 		if (!context.content.startsWith(this.client.prefix) && !context.content.match(mentionRegex)) return;
 		if (context.content.match(mentionRegex) && context.content.replace(mentionRegex, "").trim().length === 0)
-			return context.channel.send(`My prefix for **${context.guild.name}** is \`\`${this.client.prefix}\`\``);
+			return this.safeReply(context, `My prefix for **${context.guild.name}** is \`\`${this.client.prefix}\`\``);
 		if (context.content.match(mentionRegex)) context.content = `${this.client.prefix}${context.content.replace(mentionRegex, "").trim()}`;
 
 		const args = context.content.slice(this.client.prefix.length).trim().split(/ +/g);
@@ -81,9 +83,14 @@ export default class extends Event {
 
 		try {
 			await command.run(context, options.args);
-		} catch (err) {
+		} catch (err: any) {
 			await this.client.bulbutils.logError(err, context);
 		}
+	}
+
+	private async safeReply(context: CommandContext, text: string): Promise<Message | undefined> {
+		if (!context.guild?.me?.permissionsIn(context.channel.id).has(Permissions.FLAGS.SEND_MESSAGES)) return;
+		return await context.channel.send(text);
 	}
 
 	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
@@ -94,7 +101,7 @@ export default class extends Event {
 		const invalidReason = await command.validate(context, args, options);
 		if (invalidReason !== undefined) {
 			if (!invalidReason) return;
-			return context.channel.send(invalidReason);
+			return this.safeReply(context, invalidReason);
 		}
 		return command;
 	}
