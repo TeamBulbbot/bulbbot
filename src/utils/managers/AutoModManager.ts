@@ -23,7 +23,7 @@ export default class {
 				await infractionsManager.warn(
 					client,
 					<Snowflake>context.guild?.id,
-					<GuildMember>target,
+					<User>target.user,
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),

@@ -2,13 +2,14 @@ import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData, IntentsSt
 import * as Emotes from "./emotes.json";
 
 // @ts-ignore
-function ArrayLiteralType<K extends string, T extends { [ I: number ]: K }>(arr: T): T {
+function ArrayLiteralType<K extends string, T extends { [I: number]: K }>(arr: T): T {
 	return arr;
 }
 
 export const name: string = "Bulbbot";
 export const developers: string[] = ["190160914765316096", "439396770695479297", "193160566334947340"];
 export const subDevelopers: string[] = [];
+export const whitelistedGuilds: string[] = ["742094927403679816", "784408056997216327", "818176562901549066", "820945336327602186"];
 export const version: string = "1.0.0";
 export const lib: string = "Discord.JS";
 

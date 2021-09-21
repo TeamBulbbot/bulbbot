@@ -1,5 +1,6 @@
 import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
 import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
+import { logger } from "../utils/Logger";
 
 function clone<T extends object | null>(obj: T): T {
 	return Object.assign(Object.create(obj), obj);
@@ -35,7 +36,8 @@ abstract class BaseCommandContext {
 	public content!: string;
 	public readonly crosspostable!: boolean;
 	public readonly deletable!: boolean;
-	public deleted!: boolean;
+	public abstract get deleted(): Promise<boolean>;
+	public abstract set deleted(arg: Promise<boolean>);
 	public readonly editable!: boolean;
 	public readonly editedAt!: Date | null;
 	public editedTimestamp!: number | null;
@@ -104,7 +106,7 @@ abstract class BaseCommandContext {
 	public abstract inGuild(): boolean;
 
 	// Common-ish
-	public abstract reply(options: string | MessagePayload | ReplyMessageOptions | InteractionReplyOptions): Promise<void | Message | never>;
+	/** @deprecated */ public abstract reply(options: string | MessagePayload | ReplyMessageOptions | InteractionReplyOptions): Promise<void | Message | never>;
 	public abstract startThread<T>(options: StartThreadOptions | ThreadCreateOptions<T>): Promise<ThreadChannel | never>;
 
 	// Message
@@ -184,7 +186,12 @@ class MessageCommandContext implements BaseCommandContext {
 	public content: string;
 	public readonly crosspostable: boolean;
 	public readonly deletable: boolean;
-	public deleted: boolean;
+	public get deleted(): Promise<boolean> {
+		return new Promise(resolve => this.channel.messages.cache.get(this.id)?.fetch(true).then(m=>resolve(m.deleted)).catch(_=>resolve(true)));
+	}
+	public set deleted(arg: Promise<boolean>) {
+		arg.then(a=>this.source.deleted=a);
+	}
 	public readonly editable: boolean;
 	public readonly editedAt: Date | null;
 	public editedTimestamp: number | null;
@@ -258,7 +265,7 @@ class MessageCommandContext implements BaseCommandContext {
 
 	// Common-ish
 	private readonly _reply: Function;
-	public reply(options: string | MessagePayload | ReplyMessageOptions): Promise<Message> {return this._reply(options)}
+	/** @deprecated */ public reply(options: string | MessagePayload | ReplyMessageOptions): Promise<Message> {logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead"); return this._reply(options)}
 	private readonly _startThread: Function;
 	public startThread(options: StartThreadOptions): Promise<ThreadChannel> {return this._startThread(options)}
 
@@ -356,7 +363,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this.components = source.components;
 		this.crosspostable = source.crosspostable;
 		this.deletable = source.deletable;
-		this.deleted = source.deleted;
+		this.deleted = Promise.resolve(source.deleted);
 		this.editable = source.editable;
 		this.editedAt = source.editedAt;
 		this.editedTimestamp = source.editedTimestamp;
@@ -415,7 +422,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this._deleteReply = () => Promise.reject();
 		this._editReply = () => Promise.reject();
 		this._fetchReply = () => Promise.reject();
-		this._followUp = this.reply;
+		this._followUp = source.reply.bind(source);
 		this._deferUpdate = () => Promise.reject();
 		this._update = () => Promise.reject();
 	}
@@ -460,7 +467,10 @@ class InteractionCommandContext implements BaseCommandContext {
 	public content: string;
 	public readonly crosspostable: false;
 	public readonly deletable: false;
-	public deleted: false;
+	public get deleted(): Promise<boolean> {
+		return Promise.resolve(false);
+	}
+	public set deleted(_: Promise<boolean>) {}
 	public readonly editable: false;
 	public readonly editedAt: null;
 	public editedTimestamp: null;
@@ -543,7 +553,7 @@ class InteractionCommandContext implements BaseCommandContext {
 
 	// Common-ish
 	private readonly _reply: Function;
-	public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {return this._reply(options)}
+	/** @deprecated */ public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead"); return this._reply(options)}
 	private readonly _startThread: Function;
 	public startThread<T>(options: StartThreadOptions | ThreadCreateOptions<T>): Promise<ThreadChannel | never> {return this._startThread(options)}
 
@@ -643,7 +653,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.components = [];
 		this.crosspostable = false;
 		this.deletable = false;
-		this.deleted = false;
+		this.deleted = Promise.resolve(false);
 		this.editable = false;
 		this.editedAt = null;
 		this.editedTimestamp = null;
