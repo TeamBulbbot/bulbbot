@@ -1,7 +1,7 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Guild, Message } from "discord.js";
+import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import { writeFileSync } from "fs";
 import { whitelistedGuilds } from "../../../Config";
@@ -18,8 +18,6 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		this.client.guilds.cache.map((guild: Guild) => guild.members.fetch());
-
 		const botfarms: any = [];
 		let isFile: boolean = false;
 
