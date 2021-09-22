@@ -539,4 +539,82 @@ export default class {
 
 		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
 	}
+
+	/** Return a list of property keys where the values differ between the two objects */
+	public diff<T>(oldObj: T, newObj: T): string[] {
+		const diff: string[] = [];
+		for(const key of Object.keys(oldObj)) {
+			if(oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
+		}
+		return diff;
+	}
+
+	/** Deep equality check for arrays */
+	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T)
+	{
+		if(typeof firstArray !== typeof secondArray) return false;
+		if(firstArray instanceof Array !== secondArray instanceof Array) return false;
+		if(typeof firstArray !== "object") return firstArray === secondArray;
+		// @ts-ignore
+		if("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
+		if(firstArray.length != secondArray.length) return false;
+		const len = firstArray.length;
+		for(let i = 0; i < len; i++)
+		{
+			if(firstArray[i] !== secondArray[i])
+			{
+				if(firstArray[i] instanceof Array && secondArray[i] instanceof Array)
+				{
+					if(!this.arrayEquals(firstArray[i], secondArray[i])) return false;
+				} else if(typeof firstArray[i] === "object" && typeof secondArray[i] === "object") {
+					if(!this.objectEquals(firstArray[i], secondArray[i])) return false;
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/** Deep equality check for objects */
+	public objectEquals<T>(firstObject: T,secondObject: T)
+	{
+		if(typeof firstObject !== "object" && typeof secondObject !== "object"){
+			return firstObject === secondObject;
+		}
+		// @ts-ignore
+		if("equals" in firstObject && typeof firstObject.equals === "function"){
+			// @ts-ignore
+			return firstObject.equals(secondObject);
+		}
+		for(const propertyName of Object.keys(firstObject))
+		{
+			if(!(propertyName in secondObject))
+			{
+				return false;
+			}/*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+				return false;
+			} */
+		}
+		for(const propertyName of Object.keys(secondObject))
+		{
+			if(!(propertyName in firstObject))
+			{
+				return false;
+			}/*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+				return false;
+			} */
+			if(firstObject[propertyName] !== secondObject[propertyName]){
+				if(firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array)
+				{
+					if(!this.arrayEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				} else if(typeof firstObject[propertyName] === "object" && typeof secondObject[propertyName] === "object") {
+					if(!this.objectEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
