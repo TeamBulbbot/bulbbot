@@ -160,12 +160,14 @@
   "automod_add_success": "{{emote_success}} Successfully added item(s) `{{item}}` to `{{category}}`.",
   "automod_remove_success": "{{emote_success}} Successfully removed item(s) `{{item}}` from `{{category}}`",
 
-  "automod_updated_limit": "{{emote_success}} Successfully updated the limit for `{{category}}` with a new limit of `{{limit}}`",
+  "automod_updated_limit": "{{emote_success}} Successfully set the limit for `{{category}}` to `{{limit}}`",
   "automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",
 
   "automod_enabled": "{{emote_success}} Successfully enabled AutoMod in the server.",
   "automod_disabled": "{{emote_success}} Successfully disabled AutoMod in the server.",
   "automod_disabled_part": "{{emote_success}} Successfully disabled AutoMod category `{{category}}`",
+
+  "automod_timeout_too_large": "{{emote_fail}} The timeout limit cannot be larger than `30 seconds`",
 
   "automod_settings_header": "AutoMod settings for {{guild.name}}",
   "automod_settings_enabled": "**Enabled:** {{enabled}}",
