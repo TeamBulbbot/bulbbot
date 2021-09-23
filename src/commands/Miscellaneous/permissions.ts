@@ -28,18 +28,28 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]) {
-		let permsInt: bigint = BigInt(args[0].replace(NonDigits, ""));
+		if(NonDigits.test(args[0])) return await context.channel.send(await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
+			arg_provided: args[0],
+			arg_expected: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
+			usage: `\`${this.client.prefix}${this.usage}\``,
+		}));
 
+		// Decimal-to-Binary conversion algorithm
+		// This is closely based on the algorithm taught for doing conversions in writing
+		let permsInt: bigint = BigInt(args[0]);
         const permissionStrings: string[] = [];
-        for(let i = 0 ; permsInt > bint0; permsInt >>= bint1, ++i)
-        {
+        for(let i = 0 ; permsInt > bint0; permsInt >>= bint1, ++i) {
             const val = permsInt % bint2;
             if(val) permissionStrings.push(`\`1 << ${" ".repeat(loglen - ~~log10(i))}${i}\` - \`${PERM_STRINGS[i]}\``);
         }
 
+		// There are better ways to accomplish dynamic first-letter-capitalization but am going to leave that for later
+		let noneWord = await this.client.bulbutils.translate("global_words.none", context.guild?.id, {});
+		noneWord = noneWord[0].toUpperCase() + noneWord.slice(1);
+
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setDescription(permissionStrings.join('\n'))
+			.setDescription(permissionStrings.length ? permissionStrings.join('\n') : `*${noneWord}*`)
 			.setFooter(
 				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
