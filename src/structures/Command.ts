@@ -63,7 +63,7 @@ export default class Command {
 		if (!args.length || !this.subCommands.length) throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
 		return await context.channel.send(
 			await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
-				argument: args[args.length - 1].toLowerCase(),
+				argument: args[0].toLowerCase(),
 				arg_expected: this.argList[0],
 				argument_list: this.subCommands.map(sc => `\`${sc.name}\``).join(", "),
 			}),
