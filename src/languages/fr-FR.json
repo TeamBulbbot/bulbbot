@@ -54,7 +54,7 @@
   "global_cannot_action_bot_self": "{{emote_warn}} Vous ne pouvez pas effectuer cette action sur le bot !",
   "global_premium_only": "Ceci est une commande premium. Devenez Patron et accédez à cette commande et à d'autres fonctionnalités exclusives sur <https://www.patreon.com/bulbbot>",
   "event_message_args_unexpected": "{{emote_warn}} Argument inattendu `{{argument}}`. Attendu : `{{arg_expected}}`, obtenu : `{{arg_provided}}`.\n{{emote_wrench}} **Utilisation correcte :** {{usage}}",
-  "event_message_args_missing": "{{emote_warn}} Argument manquant {{argument}}. Attendu : `{{arg_expected}}`.\n{{emote_wrench}} **Utilisation correcte :** {{usage}}",
+  "event_message_args_missing": "{{emote_warn}} Argument manquant `{{argument}}`. Attendu : `{{arg_expected}}`.\n{{emote_wrench}} **Utilisation correcte :** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Argument inattendu `{{argument}}`. Attendu : `{{arg_expected}}`.\n{{emote_wrench}} **Arguments corrects :** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Un message de **{{user_tag}}** `({{user.id}})` a été modifié dans <#{{channel.id}}>.\n`ID (salon-message) : {{channel.id}}-{{message.id}}`\n**Avant :** {{before}}\n**Après :** {{after}}",
   "event_message_edit_special": "{{emote_edit}} Un message de **{{user_tag}}** `({{user.id}})` a été modifié dans <#{{channel.id}}>.\n`ID (salon-message) : {{channel.id}}-{{message.id}}`",

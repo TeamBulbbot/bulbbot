@@ -53,7 +53,7 @@
   "global_cannot_action_role_equal_bot": "{{emote_warn}} Eu não posso realizar esta ação em **{{target.tag}}** `({{target.id}})` como eu não tenho um cargo superior a eles!",
   "global_cannot_action_bot_self": "{{emote_warn}} Você não pode realizar esta ação no bot!",
   "global_premium_only": "Este é um comando premium. Torne-se um Patron e tenha acesso a este comando e outras coisas exclusivas em <https://www.patreon.com/bulbbot>",
-  "event_message_args_unexpected": "{{emote_warn}} Argumento inesperado {{argument}}. Eu esperava `{{arg_expected}}` eu recebi `{{arg_provided}}`.\n{{emote_wrench}} **Uso correto:** {{usage}}",
+  "event_message_args_unexpected": "{{emote_warn}} Argumento inesperado `{{argument}}`. Eu esperava `{{arg_expected}}` eu recebi `{{arg_provided}}`.\n{{emote_wrench}} **Uso correto:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Falta de argumento `{{argument}}`. Eu esperava `{{arg_expected}}`.\n{{emote_wrench}} **Uso correto:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Argumento inesperado `{{argument}}`. Eu esperava `{{arg_expected}}`.\n{{emote_wrench}} **Argumentos corretos:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Mensagem de **{{user_tag}}** `({{user.id}})` foi atualizada em <#{{channel.id}}>\n`ID (canal-de-texto): {{channel.id}}-{{message.id}}`\n**Antes:** {{before}}\n**Depois:** {{after}}",

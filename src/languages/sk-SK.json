@@ -53,7 +53,7 @@
   "global_cannot_action_role_equal_bot": "{{emote_warn}} Túto akciu nemôžem vykonať na uživatelovi **{{target.tag}}** `({{target.id}})` keďže nemám vyššiu rolu ako oni!",
   "global_cannot_action_bot_self": "{{emote_warn}} Túto akciu nemôžeš vykonať na botovi!",
   "global_premium_only": "Toto je prémiový príkaz. Staň sa patreonom a získaj prístup ku tomuto príkazu, a ku dalším prémiovým funkciam na <https://www.patreon.com/bulbbot>",
-  "event_message_args_unexpected": "{{emote_warn}} Neočakávaný argument {{argument}}. Očakával som `{{arg_expected}}` dostal som `{{arg_provided}}`.\n{{emote_wrench}} **Správne použitie:** {{usage}}",
+  "event_message_args_unexpected": "{{emote_warn}} Neočakávaný argument `{{argument}}`. Očakával som `{{arg_expected}}` dostal som `{{arg_provided}}`.\n{{emote_wrench}} **Správne použitie:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Chýbajúci argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n**{{emote_wrench}} Správne použitie:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Neočakavaný argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n{{emote_wrench}} **Správne argumenty:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{channel.id}}>\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
