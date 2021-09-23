@@ -28,6 +28,7 @@ export default class Command {
 	public readonly maxArgs: number;
 	public readonly minArgs: number;
 	public readonly argList: string[];
+	public readonly depth: number;
 
 	get qualifiedName() {
 		return this.name;
@@ -45,6 +46,7 @@ export default class Command {
 		this.category = options.category || "Miscellaneous";
 		this._usage = options.usage || "";
 		this.examples = options.examples || [];
+		this.depth = ~~options.depth!;
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();
 		this.clearance = options.clearance || 0;
