@@ -187,7 +187,15 @@ class MessageCommandContext implements BaseCommandContext {
 	public readonly crosspostable: boolean;
 	public readonly deletable: boolean;
 	public get deleted(): Promise<boolean> {
-		return new Promise(resolve => this.channel.messages.cache.get(this.id)?.fetch(true).then(m=>resolve(m.deleted)).catch(_=>resolve(true)));
+		return (new Promise(async resolve => {
+			// if(this.source.deleted) {resolve(true); return} // This should work, would reduce api calls. It's possible it could have false positives though and cause some missed deletes
+			try {
+				const m = await this.channel?.messages.cache.get(this.id)?.fetch(true);
+				resolve(m?.deleted ?? true);
+			} catch (e:any) {
+				resolve(true);
+			}
+		}));
 	}
 	public set deleted(arg: Promise<boolean>) {
 		arg.then(a=>this.source.deleted=a);
