@@ -47,7 +47,7 @@ export default class extends Event {
 			);
 		}
 
-		const config: Record<string, any> = await databaseManager.getConfig(member.guild.id);
+		const config = await databaseManager.getConfig(member.guild.id);
 		if (!config["autorole"]) return;
 
 		await member.roles.add(config["autorole"]);

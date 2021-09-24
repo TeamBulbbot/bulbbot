@@ -1,6 +1,6 @@
 enum ConfigPart {
 	language, prefix,
-	timezone, muterole,
+	timezone, muteRole,
 	automod, logging,
 	autorole, override,
 }

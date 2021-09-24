@@ -8,6 +8,7 @@ import LoggingConfiguration from "../types/LoggingConfiguration";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
 import PunishmentType from "../types/PunishmentType";
+import GuildConfigType from "../types/GuildConfigType";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -61,8 +62,8 @@ export default class {
 		});
 	}
 
-	async getConfig(guildID: Snowflake): Promise<Record<string, any>> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+	async getConfig(guildID: Snowflake): Promise<GuildConfigType> {
+		const response: GuildConfigType[] = await sequelize.query('SELECT * FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
 		});

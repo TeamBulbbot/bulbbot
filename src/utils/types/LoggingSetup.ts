@@ -5,6 +5,7 @@ export default interface LoggingSetup {
 	role?: string;
 	member?: string;
 	channel?: string;
+	thread?: string;
 	invite?: string;
 	joinLeave?: string;
 	other?: string;
