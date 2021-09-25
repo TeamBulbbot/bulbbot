@@ -20,7 +20,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const language: string = args[0];
+		const language: string = args[0].toLowerCase();
 		const languageCode: string = this.client.bulbutils.languages[language];
 
 		if (!languageCode)
