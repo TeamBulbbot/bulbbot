@@ -435,6 +435,10 @@
 							{
 								"name": "it-IT",
 								"value": "it-IT"
+							},
+							{
+								"name": "hi-IN",
+								"value": "hi-IN"
 							}
 						],
 						"required": true
