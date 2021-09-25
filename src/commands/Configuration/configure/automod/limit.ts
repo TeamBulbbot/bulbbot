@@ -13,16 +13,17 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "limit",
 			clearance: 75,
-			minArgs: 2,
-			maxArgs: 2,
-			argList: ["part:string", "limit:number"],
-			usage: "<part> <limit>",
+			minArgs: 3,
+			maxArgs: 3,
+			argList: ["part:string", "limit:number", "timeout:number"],
+			usage: "<part> <limit> <timeout>",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const partArg = args[0];
 		const limit = Number(args[1]);
+		const timeout = Number(args[2]);
 
 		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
@@ -44,13 +45,26 @@ export default class extends SubCommand {
 				}),
 			);
 
+		if (isNaN(timeout))
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
+					arg_provided: args[2],
+					arg_expected: "timeout:int",
+					usage: this.usage,
+				}),
+			);
+
+		if (timeout > 30) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_large", context.guild?.id, {}));
+		if (timeout < 3) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_small", context.guild?.id, {}))
+
 		const part: AutoModAntiSpamPart = AutoModPart[partString];
 		await databaseManager.automodSetLimit(context.guild!.id, part, limit);
+		await databaseManager.automodSetTimeout(context.guild!.id, part, timeout * 1000);
 
 		await context.channel.send(
 			await this.client.bulbutils.translate("automod_updated_limit", context.guild!.id, {
 				category: partArg,
-				limit,
+				limit: `${limit}/${timeout}s`,
 			}),
 		);
 	}

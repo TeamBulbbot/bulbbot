@@ -319,6 +319,22 @@ export default class {
 		});
 	}
 
+	public async automodSetTimeout(guildID: Snowflake, part: AutoModAntiSpamPart, timeout: number): Promise<void> {
+		const dbkey: string = (function (part) {
+			switch (part) {
+				case AutoModPart.message:
+					return "timeoutMessages";
+				case AutoModPart.mention:
+					return "timeoutMentions";
+			}
+		})(part);
+
+		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Timeout WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)`, {
+			bind: { Timeout: timeout, Part: dbkey, GuildID: guildID },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
 	public async automodSetLimit(guildID: Snowflake, part: AutoModAntiSpamPart, limit: number): Promise<void> {
 		const dbkey: string = (function (part) {
 			switch (part) {
