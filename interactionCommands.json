@@ -410,35 +410,35 @@
 						"choices": [
 							{
 								"name": "English, US (English US)",
-								"value": "en-US"
+								"value": "en-us"
 							},
 							{
 								"name": "Slovak (Slovenčina)",
-								"value": "sk-SK"
+								"value": "sk-sk"
 							},
 							{
 								"name": "Swedish (Svenska)",
-								"value": "sv-SE"
+								"value": "sv-se"
 							},
 							{
 								"name": "French (Français)",
-								"value": "fr-FR"
+								"value": "fr-fr"
 							},
 							{
 								"name": "Portuguese (Português)",
-								"value": "pt-BR"
+								"value": "pt-br"
 							},
 							{
 								"name": "Czech (Čeština)",
-								"value": "cs-CZ"
+								"value": "cs-cz"
 							},
 							{
 								"name": "Italian (Italiano)",
-								"value": "it-IT"
+								"value": "it-it"
 							},
 							{
 								"name": "Hindi (हिंदी)",
-								"value": "hi-IN"
+								"value": "hi-in"
 							}
 						],
 						"required": true
