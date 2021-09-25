@@ -44,13 +44,14 @@ export default class extends Event {
 						break;
 				}
 				auditLog = audit.entries.first();
+				if (<number>auditLog?.createdTimestamp + 3000 < Date.now()) auditLog = undefined;
 			} catch (e) {
 				if (!(e instanceof DiscordAPIError)) throw e;
 			}
 		}
 		switch (change) {
 			case "nickname":
-				if (auditLog?.changes && auditLog.changes[0].key === "nick") executor = <User>auditLog.executor;
+				if (auditLog?.changes && auditLog!!.changes[0].key === "nick") executor = <User>auditLog.executor;
 				message = await this.client.bulbutils.translate("event_member_update_nickname", newMember.guild.id, {
 					user: newMember.user,
 					before: oldMember.nickname ?? oldMember.user.username,

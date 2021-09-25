@@ -41,7 +41,7 @@ export default class extends SubCommand {
 				return context.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", context.guild.id, {}));
 		}
 
-		if (role !== undefined) {
+		if (role !== undefined && role !== null) {
 			await databaseManager.setAutoRole(<Snowflake>context.guild?.id, role!!.id);
 			return context.channel.send(await this.client.bulbutils.translate("config_autorole_success", context.guild?.id, { role: role!!.name }));
 		} else {

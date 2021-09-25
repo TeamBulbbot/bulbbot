@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message, Util, Permissions, GuildAuditLogs } from "discord.js";
+import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
 
@@ -33,12 +33,12 @@ export default class extends Event {
 						content: message.content ? `**C:** ${Util.cleanContent(message.content, message.channel)}\n` : "",
 						reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
 						sticker: message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "",
-						attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}\n` : "",
+						attachment: message.attachments.first() ? `**A**: ${message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${attach.proxyURL}`).join("\n")}\n` : "",
 					});
 			}
 		}
 
-		if(!msg)
+		if (!msg)
 			msg = await this.client.bulbutils.translate("event_message_delete", message.guild.id, {
 				user_tag: message.author.bot ? `${message.author.tag} :robot:` : message.author.tag,
 				user: message.author,
@@ -47,12 +47,12 @@ export default class extends Event {
 				content: message.content ? `**C:** ${Util.cleanContent(message.content, message.channel)}\n` : "",
 				reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
 				sticker: message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "",
-				attachment: message.attachments.first() ? `**A**: ${message.attachments.first()?.proxyURL}\n` : "",
+				attachment: message.attachments.first() ? `**A**: ${message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${attach.proxyURL}`).join("\n")}\n` : "",
 			});
 
 		if (msg.length >= 1850) {
 			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${message.guild?.id}.txt`, message.content);
-			await loggingManager.sendEventLogFile(
+			await loggingManager.sendEventLog(
 				this.client,
 				message.guild,
 				"message",

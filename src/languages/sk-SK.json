@@ -6,94 +6,81 @@
   "global_cannot_convert": "{{emote_fail}} Nemožem vykonať `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správne použítie:** {{usage}}",
   "global_not_found": "{{emote_fail}} Špecifikovaný/á {{type}} nebol(a) nájdený(á). Nemôžem previesť `{{arg_provided}}` na `{{arg_expected}}`.\n{{emote_wrench}} **Správne použítie:** {{usage}}",
   "global_not_found_types": {
-      "user": "uživateľ",
-      "member": "člen",
-      "role": "rola",
-      "channel": "kanál",
-      "lang": "jazyk",
-      "cmd": "príkaz",
-      "emoji": "emoji",
-      "int": "číslo",
-      "bool": "boolean",
-      "snowflake": "snowflake"
-    },
-
-    "global_mod_action_log": "{{action}} moderátorom: {{moderator.tag}} ({{moderator.id}}) | Cieľ: {{target.tag}} ({{target.id}}) | Dôvod: {{reason}}",
-    "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} moderátorom **{{moderator.tag}}** `({{moderator.id}})` z dôvodu **{{reason}}** `[#{{infraction_id}}]`",
-    "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} moderátorom **{{moderator.tag}}** `({{moderator.id}})` po tom čo jeich dočasný trest vypršal.`[#{{infraction_id}}]`",
-    "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} do **{{until}}** moderátorom **{{moderator.tag}}** `({{moderator.id}})` z dôvodu **{{reason}}** `[#{{infraction_id}}]`",
-    "mod_action_types": {
-      "warn": "varovaný",
-      "mute": "umlčaný",
-      "unmute": "odmlčaný",
-      "auto_unmute": "automaticky odmlčaný",
-      "kick": "vyhodený",
-      "ban": "zabanovaný",
-      "force_ban": "force-zabanovaný",
-      "soft_ban": "soft-zabanovaný",
-      "temp_ban": "dočasne zabanovaný",
-      "unban": "odbanovaný",
-      "auto_unban": "automaticky odbanovaný",
-      "deafen": "utĺmený",
-      "undeafen": "neutĺmený",
-      "voice_kick": "odpojený",
-      "nick_change": "zmenený",
-      "nick_remove": "odstránený"
-    },
-
-    "global_logging_command": "`[{{timestamp}}]` {{emote_wrench}} **{{user.tag}}** `({{user.id}})` vykonal `{{command}}` v kanále <#{{channel}}>.",
-    "global_no_reason": "Bez udania dôvodu",
-    "global_loading": "{{emote_loading}} Načítavanie...",
-    "global_not_in_voice": "{{emote_fail}} Uživateľ **{{target.tag}}** `({{target.id}})` nie je momentálne v žiadnom hlasovom kanále!",
-    "global_error": {
+    "user": "uživateľ",
+    "member": "člen",
+    "role": "rola",
+    "channel": "kanál",
+    "lang": "jazyk",
+    "cmd": "príkaz",
+    "emoji": "emoji",
+    "int": "číslo",
+    "bool": "boolean",
+    "snowflake": "snowflake"
+  },
+  "global_mod_action_log": "{{action}} moderátorom: {{moderator.tag}} ({{moderator.id}}) | Cieľ: {{target.tag}} ({{target.id}}) | Dôvod: {{reason}}",
+  "global_logging_mod": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} moderátorom **{{moderator.tag}}** `({{moderator.id}})` z dôvodu **{{reason}}** `[#{{infraction_id}}]`",
+  "global_logging_mod_unban_auto": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} moderátorom **{{moderator.tag}}** `({{moderator.id}})` po tom čo jeich dočasný trest vypršal.`[#{{infraction_id}}]`",
+  "global_logging_mod_temp": "`[{{timestamp}}]` {{emoji}} **{{target.tag}}** `({{target.id}})` bol {{action}} do **{{until}}** moderátorom **{{moderator.tag}}** `({{moderator.id}})` z dôvodu **{{reason}}** `[#{{infraction_id}}]`",
+  "mod_action_types": {
+    "warn": "varovaný",
+    "mute": "umlčaný",
+    "unmute": "odmlčaný",
+    "auto_unmute": "automaticky odmlčaný",
+    "kick": "vyhodený",
+    "ban": "zabanovaný",
+    "force_ban": "force-zabanovaný",
+    "soft_ban": "soft-zabanovaný",
+    "temp_ban": "dočasne zabanovaný",
+    "unban": "odbanovaný",
+    "auto_unban": "automaticky odbanovaný",
+    "deafen": "utĺmený",
+    "undeafen": "neutĺmený",
+    "voice_kick": "odpojený",
+    "nick_change": "zmenený",
+    "nick_remove": "odstránený"
+  },
+  "global_logging_command": "`[{{timestamp}}]` {{emote_wrench}} **{{user.tag}}** `({{user.id}})` vykonal `{{command}}` v kanále <#{{channel}}>.",
+  "global_no_reason": "Bez udania dôvodu",
+  "global_loading": "{{emote_loading}} Načítavanie...",
+  "global_not_in_voice": "{{emote_fail}} Uživateľ **{{target.tag}}** `({{target.id}})` nie je momentálne v žiadnom hlasovom kanále!",
+  "global_error": {
     "unknown": "{{emote_fail}} Nastala chyba neznámeho pôvodu, skúste to prosím neskôr, ak sa problém naďalej prejavuje, kontaktujte vývojárov serveru: {{discord_invite}}",
     "automod_items_length_undefined": "{{emote_fail}} Nastala chyba pri pokuse o analýzu vybraných Automod predmetov. Žiadne Automod predmety neboli obdržené alebo je nedefinovaná dĺžka Automod predmetov."
-    },
-
+  },
   "global_cannot_action_self": "{{emote_warn}} Túto akciu nemôžeš vykonať na sebe!",
   "global_cannot_action_owner": "{{emote_warn}} Túto akciu nemôžeš vykonať na majitelovi serveru!",
   "global_cannot_action_role_equal": "{{emote_warn}} Túto akciu nemôžeš vykonať na uživatelovi **{{target.tag}}** `({{target.id}})` keďže nemáš vyššiu rolu ako oni!",
   "global_cannot_action_role_equal_bot": "{{emote_warn}} Túto akciu nemôžem vykonať na uživatelovi **{{target.tag}}** `({{target.id}})` keďže nemám vyššiu rolu ako oni!",
   "global_cannot_action_bot_self": "{{emote_warn}} Túto akciu nemôžeš vykonať na botovi!",
-
   "global_premium_only": "Toto je prémiový príkaz. Staň sa patreonom a získaj prístup ku tomuto príkazu, a ku dalším prémiovým funkciam na <https://www.patreon.com/bulbbot>",
-
   "event_message_args_unexpected": "{{emote_warn}} Neočakávaný argument {{argument}}. Očakával som `{{arg_expected}}` dostal som `{{arg_provided}}`.\n{{emote_wrench}} **Správne použitie:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Chýbajúci argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n**{{emote_wrench}} Správne použitie:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Neočakavaný argument `{{argument}}`. Očakával som `{{arg_expected}}`.\n{{emote_wrench}} **Správne argumenty:** {{argument_list}}",
-  "event_message_edit": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
-  "event_message_edit_special": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{message.channel.id}}>\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
+  "event_message_edit": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{channel.id}}>\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
+  "event_message_edit_special": "{{emote_edit}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola upravená v kanále <#{{channel.id}}>\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`",
   "event_message_delete": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{channel.id}}>.\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`\n{{content}}{{reply}}{{sticker}}{{attachment}}{{embed}}",
-  "event_message_delete_special": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{message.channel.id}}>.\n`ID (kanál-správa): {{message.channel.id}}-{{message.id}}`",
-  
+  "event_message_delete_special": "{{emote_trash}} Správa od uživateľa **{{user_tag}}** `({{user.id}})` bola zmazaná v kanále <#{{channel.id}}>.\n`ID (kanál-správa): {{channel.id}}-{{message.id}}`",
   "event_change": "`{{part}}` z `{{before}}` na `{{after}}`",
   "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` upravil nastavenia serveru. Zmenil {{changes}}",
   "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` upravil rolu **{{role.name}}**. Zmenil {{changes}}",
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` upravil kanál <#{{channel.id}}>. Zmenil {{changes}}",
-
   "event_channel_create": "{{emote_add}} Nový kanál bol vytvorený <#{{channel.id}}> (`{{channel.type}}`)",
   "event_channel_create_moderator": "{{emote_add}} Nový **{{type}}** bol vytvorený **{{moderator.tag}}** `({{moderator.id}})` <#{{channel.id}}> (`{{channel.id}}`).",
   "event_channel_delete": "{{emote_remove}} Kanál **#{{channel.name}}** (`{{channel.id}}`) (`{{channel.type}}`) bol zmazáný.",
   "event_channel_delete_moderator": "{{emote_remove}} **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** bol zmazaný moderátorom **{{moderator.tag}}** `({{moderator.id}})`.",
-
   "event_thread_create": "{{emote_add}} Nové vlákno **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` bolo vytvorené uživatelom <@{{thread.ownerId}}> v kanále <#{{thread.parentId}}>. Vlákno bude achrivované v **{{thread_archive}}**",
-    "event_thread_delete": "{{emote_remove}} Vlákno **{{thread.name}}** `({{thread.id}})` vytvorené uživatelom <@{{thread.ownerId}}> v kanále <#{{thread.parentId}}> bolo zmazané",
-
+  "event_thread_delete": "{{emote_remove}} Vlákno **{{thread.name}}** `({{thread.id}})` vytvorené uživatelom <@{{thread.ownerId}}> v kanále <#{{thread.parentId}}> bolo zmazané",
   "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` vytvoril novú pozvánku `{{invite.code}}`, ktorá vyprší v **{{expire_time}}**, maximálny počet použití: **{{max_uses}}**",
   "event_invite_delete": "{{emote_remove}} **{{moderator.tag}}** `({{moderator.id}})` zmazal pozvánku `{{invite.code}}`",
-
   "event_role_create": "{{emote_add}} Nová rola bola vytvorená <@&{{role.id}}> (`{{role.id}}`)",
   "event_role_delete": "{{emote_remove}} **@{{role.name}}** (`{{role.id}}`) rola bola zmazaná.",
-
   "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` sa pripojil na server.\n**Učet vytvorený:** <t:{{user_age}}:R>",
   "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` opustil server.\n**Učet sa pripojil:** <t:{{user_joined}}:f>",
-
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` si zmenil prezívku z `{{before}}` na `{{after}}`",
   "event_member_update_role_add": "{{emote_add}} Rola **{{role.name}}** bola pridaná ku uživatelovi **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_add_moderator": "{{emote_add}} Rola **{{role.name}}** bola přidaná ku **{{user.tag}}** `({{user.id}})` moderátorom **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_remove": "{{emote_remove}} Rola **{{role.name}}** bola odobraná od **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_remove_moderator": "{{emote_remove}} Rola **{{role.name}}** bola odobraná od **{{user.tag}}** `({{user.id}})` moderátorom **{{moderator.tag}}** `({{moderator.id}})`",
-
   "channel_types": {
     "GUILD_TEXT" : "textový kanál",
     "DM" : "kanál priamych správ",
@@ -108,57 +95,40 @@
     "GUILD_STAGE_VOICE" : "pódiový kanál",
     "UNKNOWN" : "kanál"
   },
-
   "config_generic_success": "{{emote_success}} `{{setting}}` bol úspešne aktualizovaný na `{{value}}`",
-  
   "config_language_success": "{{emote_success}} Jazyk serveru bol úspešne zmenený na `{{language}}`",
   "config_timezone_success": "{{emote_success}} Časová zóna serveru bola zmenená na `{{timezone}}`",
-
   "config_logging_success": "{{emote_success}} Úspešne zaznamenávám `{{logging_type}}` v kanále <#{{channel}}>",
   "config_logging_remove": "{{emote_success}} Zaznamenávanie `{{logging_type}}` bolo úspešne zrušené v kanále <#{{channel}}>",
   "config_logging_unable_to_send_messages": "{{emote_fail}} Bot postráda dôležíté oprávnénie pre posielanie správ v kanále <#{{channel}}>",
   "config_logging_all_confirm": "{{emote_warn}} Si si istý že chceš začat zaznamenávať všetko v kanále  <#{{channel}}>? Toto začne zaznamenávať všetko čo ide zaznamenávať v určenom kanále.",
-
   "config_mute_success": "{{emote_success}} Stĺmená rola bola úspešne aktualizovaná",
   "config_mute_unable_to_manage": "{{emote_fail}} Bot nie je schopný spravovať určenú rolu. Presuňte rolu bota vyššie ako je určená rola.",
-
   "config_prefix_success": "{{emote_success}} Prefix serveru bol úspešne zmenený na `{{prefix}}`",
   "config_prefix_too_long": "{{emote_fail}} Zvolený prefix je príliš dlhý. Prosím urobte prefix menším ako 255 znakov.",
-
   "config_autorole_success": "{{emote_success}} Autorola bola úspešne zmenená na **{{role}}**",
   "config_autorole_disable": "{{emote_success}} Autorola bola úspešne zablokovaná",
-  
   "override_clearance_less_than_0": "{{emote_warn}} Úroveň priority nemôže byť menšia alebo rovná **nule**",
   "override_clearance_more_than_100": "{{emote_warn}} Úroveň priority nemôže byť vyššia ako **100**",
   "override_clearance_higher_than_self": "{{emote_warn}} Nemôžete prepísať úroveň priority vyššie ako je vaša úroveň priority.",
-
   "override_nonexistent_command": "{{emote_fail}} Žiadne prepísanie príkazu s menom `{{command}}` nebolo nájdené! Na úpravu prepísania musíte najprv prepísanie vytvoriť.",
   "override_nonexistent_role": "{{emote_fail}} Žiadne prepísanie role s menom `{{role}}` nebolo nájdené. Na úpravu prepísania musíte najprv prepísanie vytvoriť.",
-  
   "override_create_success": "{{emote_success}} Prepísanie bolo úspešne vytvorené s úrovňou priority `{{clearance}}`",
   "override_already_exists": "{{emote_fail}} Prepísanie s týmto menom už existuje!\n{{emote_wrench}} **Pomôcka:** Ak sa snažíte upraviť prepísanie, použite `!configure override edit <part> <name> <clearance>`",
-
   "override_disable_success": "{{emote_success}} Príkaz `{{command}}` bol úspešne zablokovaný",
   "override_enable_success": "{{emote_success}} Príkaz `{{command}}` bol úspešne odblokovaný",
-
   "override_edit_success": "{{emote_success}} Prepísanie bolo úspešne akutalizované s novou úrovňou priority `{{clearance}}`",
-
   "override_remove_success": "{{emote_success}} Prepísanie bolo úspešne odstránené.",
-
   "automod_less_than_zero": "{{emote_warn}} {{limit}} nemôže byť menší ako `0`",
-
   "automod_not_in_database": "{{emote_warn}} Položka(y) `{{item}}` nebola doteraz pridaná do AutoMod databáze.",
   "automod_already_in_database": "{{emote_warn}} Položka(y) `{{item}}` už bola pridaná do AutoMod databáze.",
   "automod_add_success": "{{emote_success}} Položka(y) `{{item}}` bol(i) úspešne pridané do `{{category}}`.",
   "automod_remove_success": "{{emote_success}} Položka(y) `{{item}}` bol(i) úspešne odstránené z `{{category}}`",
-
   "automod_updated_limit": "{{emote_success}} Limit v `{{category}}` bol úspešne aktualizovaný s novým limitom `{{limit}}`",
   "automod_updated_punishment": "{{emote_success}} Trest v `{{category}}` bol úspešne aktualizovaný na `{{punishment}}`",
-
   "automod_enabled": "{{emote_success}} AutoMod v tomto serveri bol úspešne aktivovaný.",
   "automod_disabled": "{{emote_success}} AutoMod v tomto serveri bol úspešne deaktivovaný.",
   "automod_disabled_part": "{{emote_success}} AutoMod bol úspešne zablokovaný v `{{category}}`",
-
   "automod_settings_header": "AutoMod nastavenia pre {{guild.name}}",
   "automod_settings_enabled": "**Aktivovaný:** {{enabled}}",
   "automod_settings_websites": "**Webstránky:** {{enabled}}\n**Zablokované webstránky:** {{websites_blacklist}}",
@@ -168,7 +138,6 @@
   "automod_settings_messages": "**Správy:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
   "automod_settings_ignored": "**Role s výnimkou:** {{roles}}\n**Kanále s vynkmkou:** {{channels}}\n**Užívatelia s výnimkou:** {{users}}",
   "automod_settings_footer": "Administrátori a role s 25+ prioritou sú vždy imunitní pred kontrolou AutoMod",
-
   "automod_violation_max_messages_reason": "Porušil kontrolu `MAX_MESSAGES` v #{{channel.name}} ({amount}/{limit}s)",
   "automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` porušil kontrolu `MAX_MESSAGES` <#{{channel.id}}>. Správy ({{amount}}/{{limit}}s)",
   "automod_violation_max_mentions_reason": "Porušil kontrolu `MAX_MESSAGES` v #{{channel.name}} ({{amount}}/{{limit}}s)",
@@ -179,10 +148,8 @@
   "automod_violation_invites_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` porušil kontrolu `DISCORD_INVITE` v <#{{channel.id}}> | Trest: **{{punishment}}**\n```{{message}}```",
   "automod_violation_website_reason": "Porušil kontrolu `FORBIDDEN_WEBSITE` v #{{channel.name}}",
   "automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` porušil kontrolu `FORBIDDEN_WEBSITE` v <#{{channel.id}}> | Trest: **{{punishment}}**\n```{{message}}```",
-
   "jumbo_too_many": "{{emote_warn}} Bolo poskytnutých príliš veľa emoji. Bot momentálne podporuje maximálne 10 emoji naraz.",
   "jumbo_invalid": "{{emote_fail}} Bolo poskytnuté neplatné emoji. Prosím použite platné emoji.",
-
   "userinfo_embed_id": "**ID:** {{user.id}}\n",
   "userinfo_embed_username": "**Používateľské meno:** {{user.username}}\n",
   "userinfo_embed_nickname": "**Prezývka:** {{user.nickname}}\n",
@@ -194,15 +161,12 @@
   "userinfo_embed_premium": "**Boostuje od:** <t:{{user_premium}}:F> (<t:{{user_premium}}:R>)\n",
   "userinfo_embed_roles": "**Role:** {{user_roles}}\n",
   "userinfo_embed_infractions": "\n**Infrakcie:** {{emote_inf}} **{{user_infractions}}** infrakcia(ie) na tomto serveri",
-
   "userinfo_interaction_confirm": "{{emote_warn}} Pre aký dôvod by **{{target.tag}}** `({{target.id}})` mal dostať trest {{action}}?",
-
   "serverinfo_embed_owner": "{{emote_owner}} **Majiteľ:** <@{{guild.ownerId}}> `{{guild.ownerId}}`\n",
   "serverinfo_embed_features": "**Vlastnosti:**\n{{guild_features}}\n",
   "serverinfo_embed_region": "**Región:** {{guild_region}}\n",
   "serverinfo_embed_verification": "**Level Verifikácie:** {{guild.verificationLevel}}\n",
   "serverinfo_embed_created": "**Založený:** <t:{{guild_age}}:F> (<t:{{guild_age}}:R>)",
-
   "serverinfo_server_stats": "**Štatistiky serveru**",
   "serverinfo_channel_stats": "**Štatistiky kanálu**",
   "serverinfo_booster_stats": "**Štatistiky boostovania**",
@@ -220,10 +184,8 @@
   "serverinfo_roles_too_many": " a ešte **{{guild_roles_left}}** ostáva",
   "serverinfo_emotes_too_many": " a ešte **{{guild_emotes_left}}** ostáva",
   "serverinfo_emotes_none": "Bez emoji",
-
   "action_success": "{{emote_success}} **{{target.tag}}** `({{target.id}})` bol {{action}} kvôli **{{reason}}** `[#{{infraction_id}}]`",
   "action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` bol {{action}} na **{{until}}** kvôli **{{reason}}** `[#{{infraction_id}}]`",
-
   "action_success_multi": "{{emote_success}} {{full_list}} bol {{action}} kvôli **{{reason}}**",
   "action_multi_less_than_2": "{{emote_warn}} Bolo zvolených 2 a viac cieľov. Vykonávam namiesto toho normálnu akciu {{action}}",
   "action_multi_types": {
@@ -232,19 +194,15 @@
     "unban": "odbanovať",
     "warn": "upozorniť"
   },
-
   "already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` bol už zabanovaný kvôli `{{reason}}`",
   "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` neni zabanovaný z tohto serveru!",
   "ban_force_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` nie je momentálne na serveri. Chcete aby som ho aj tak zabanoval?",
-
   "purge_too_many": "{{emote_fail}} Môžeš vymazať iba 99 správ naraz",
   "purge_too_few": "{{emote_fail}} Nemôžeš vymazať menej ako dve správy naraz",
   "purge_success": "{{emote_success}} **{{count}}** správ(y) bolo úspešne vymazaných",
-
   "verification_community_zero": "{{emote_fail}} Level verifikácie nemôže byť zmenený na `0` pre komunitné servery!",
   "verification_level_error": "{{emote_fail}} Level verifikácie nemôže byť vačší ako `4` alebo menší ako `0`",
   "verification_level_success": "{{emote_success}} Level verifikácie serveru bol zmenený na `{{level}}`",
-
   "change_nick_success": "{{emote_success}} Prezývka uživateľa **{{target.tag}}** `({{target.id}})` bola zmenená z `{{nick_old}}` na `{{nick_new}}` kvôli **{{reason}}** `[#{{infraction_id}}]`",
   "remove_nick_success": "{{emote_success}} Prezývka bola odstránená z **{{target.tag}}** `({{target.id}})` kvôli **{{reason}}** `[#{{infraction_id}}]`",
   "change_nick_mod_action_log": "{{emote_success}} Prezývka uživateľa **{{target.tag}}** `({{target.id}})` bola {{action}} z `{{nick_old}}` na `{{nick_new}}` moderátorom **{{moderator.tag}}** `({{moderator.id}})` kvôli **{{reason}}** `[#{{infraction_id}}]`",
@@ -253,19 +211,12 @@
   "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` nemá žiadnu prezývku",
   "already_has_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` už má prezývku `{{nickname}}`",
   "nickname_too_long": "{{emote_warn}} Prezývka má moc znakov (`{{length}}`). Prezývky môžu mať maximálne 32 znakov.",
-
   "ping_latency": "Momentálna odozva bota je **{{latency_bot}}ms**\nOdozva WebSocket je **{{latency_ws}}ms**",
-
   "uptime_uptime": "Bot momentálne beží **{{uptime}}**",
-
   "license_license": "📜 Tento bot je licencovaný pod MIT licenciu, pre viac informacii pozrite **[sem](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
-  
   "privacy_policy": "📜 Pozrite zásady ochrany osobných údajov bota **[tu](https://bulbbot.mrphilip.xyz/privacy-policy)**",
-  
   "github_source_code": "{{emote_github}} Bulbbot je plne open source projekt. Zdrojový kód môžete nájsť v našom GitHub úložisku **[tu](https://github.com/TestersQTs/Bulbbot)**",
-  
   "invite_desc": "**Pozvite bota do svojho serveru**\n{{bot_invite}}\n\n**Pripojte sa do serveru pre podporu**\n{{support_guild}}",
-
   "remind_list_none": "{{emote_warn}} Nenastavil si si žiadne pripomienky",
   "remind_placeholder": "Žiadne pripomienky niesu zvolené",
   "remind_prompt": "{{emote_remind}} **{{user.tag}}** `({{user.id}})` aktívne pripomienky",
@@ -278,12 +229,10 @@
   "remind_set_select_channel": "Upozorníme ťa v tomto kanáli za **<t:{{duration}}:R>**",
   "remind_no_permissions": "{{emote_lock}} Nemôžeš vidieť pripomienky iného uživateľa!",
   "remind_not_found": "{{emote_warn}} Pripomienka nebola nájdená",
-
   "remind_desc_header": "Pripomienka #{{reminder.id}}",
   "remind_desc_reason": "**Pripomienka:** {{reminder.reason}}\n",
   "remind_desc_expire": "**Vyprší:** <t:{{reminder.expireTime}}:R>\n",
   "remind_desc_created": "**Vytvorená:** <t:{{createdAt}}> [`Link`]({{message}})",
-
   "inviteinfo_error": "{{emote_warn}} Server s touto pozvánkou nebol nájdený",
   "inviteinfo_verification_level": "Level verifikácie: `{{guild.verificationLevel}}`\n",
   "inviteinfo_large": "Veľkosť: `{{guild.large}}`\n",
@@ -294,27 +243,21 @@
   "inviteinfo_channel_id": "ID: `{{invite.channel.id}}`\n",
   "inviteinfo_channel_name": "Meno: `{{invite.channel.name}}`\n",
   "inviteinfo_channel_nsfw": "NSFW: `{{invite.channel.nsfw}}`\n",
-
   "deafen_already_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` je už utĺmený!",
   "undeafen_not_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` nie je utĺmený!",
-
   "slowmode_success_remove": "{{emote_success}} Pomalý režim bol úspešne odstránený z <#{{channel}}>",
   "slowmode_success": "{{emote_success}} Pomalý režim bol úspešne nastavený v <#{{channel}}> na **{{slowmode}}**",
   "slowmode_missing_perms": "{{emote_fail}} Tento bot postráda povolenia na spravovanie <#{{channel}}>",
-
   "duration_invalid_0s": "{{emote_fail}} Dĺžka nemôže byť menšia ako **0 sekund**!",
   "duration_invalid_6h": "{{emote_fail}} Dĺžka nemôže byť dlhšia ako **6 hodín**",
   "duration_invalid_1y": "{{emote_fail}} Dĺžka nemôže byť dlhšia ako **1 rok**!",
-
   "lockdown_locked": "{{emote_success}} Server <#{{channel}}> bol úspešne uzamknutý",
   "lockdown_unlocked": "{{emote_success}} Server <#{{channel}}> bol úspešne odomknutý",
-
   "mute_muterole_not_found": "{{emote_warn}} Tento server nemá nakonfigurovanú stĺmenú rolu!\n{{emote_wrench}} **Pomôcka:** Môžeš si nakonfigurovať stĺmenú rolu s použitím `!configure mute_role` command",
   "mute_not_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` nie je momentálne stĺmený(á)!",
   "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` už je stĺmený(á)!",
   "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` nebol stĺmený Bulbbotom. Si si istý že chceš uživateľa odtĺmiť?\n*Odtlmovanie uživateľov ktorí neboli stĺmení Bulbbotom, sa iba odstráni stĺmená rola*",
   "unmute_special": "{{emote_success}} **{{target.tag}}** `({{target.id}})` bol odtĺmený kvôli **{{reason}}** ",
-
   "infraction_not_found": "{{emote_fail}} Infrakcia **#{{infraction_id}}** nebola nájdená!",
   "infraction_delete_confirm": "{{emote_warn}} Si si istý že chceš odstrániť infrakciu **#{{infraction_id}}**? Táto akcia sa __**nedá**__ vrátiť späť.\n**Vinník:** {{target.tag}} `({{target.id}})`\n**Moderátor:** {{moderator.tag}} `({{moderator.id}})`\n**Dôvod:** {{reason}}",
   "infraction_delete_success": "{{emote_success}} Infrakcia **#{{infraction_id}}** bola úspešne odstránená!",
@@ -329,12 +272,9 @@
   "infraction_list_not_found": "{{emote_warn}} Vyzerá to tak, že tento server nemá žiadne infrakcie!",
   "infraction_claim_success": "{{emote_success}} Obdržal si zodpovednosť nad infrakciou **#{{infraction_id}}**",
   "infraction_update_success": "{{emote_success}} Infrakcia **#{{infraction_id}}** bola aktualizovaná!",
-  
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` infrakcie",
   "infraction_interaction_placeholder": "Žiadne infrakcie neboli zvolené",
   "infraction_interaction_description": "Klikni pre viac informácii",
-  
   "commands_help": "Všetky príkazy ktoré Bulbbot ponúka možeš nájsť na našom **[GitHube](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**",
-
   "help_unable_to_find_command": "`{{commandName}}` nie je platný príkaz, list všetkých príkazov môžete nájsť na našej stránke <https://docs.bulbbot.mrphilip.xyz/command-list>"
 }

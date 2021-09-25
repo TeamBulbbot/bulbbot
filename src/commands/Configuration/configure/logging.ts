@@ -135,7 +135,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
 						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						argument_list: "`mod_logs`, `banpool_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
+						argument_list: "`mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),
 				);
 		}

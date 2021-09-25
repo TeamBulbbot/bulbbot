@@ -62,7 +62,7 @@ export default class extends Command {
 			infID = await infractionsManager.warn(
 				this.client,
 				<Snowflake>context.guild?.id,
-				target,
+				target.user,
 				<GuildMember>context.member,
 				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 					action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),

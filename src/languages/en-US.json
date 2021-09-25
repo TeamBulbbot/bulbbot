@@ -29,13 +29,16 @@
     "unmute": "unmuted",
     "auto_unmute": "automatically unmuted",
     "kick": "kicked",
+    "manual_kick": "manually kicked",
     "ban": "banned",
     "force_ban": "force-banned",
     "soft_ban": "soft-banned",
     "temp_ban": "temp-banned",
     "pool_ban": "pool-banned",
+    "manual_ban": "manually banned",
     "unban": "unbanned",
     "auto_unban": "automatically unbanned",
+    "manual_unban": "manually unbanned",
     "deafen": "deafened",
     "undeafen": "undeafened",
     "voice_kick": "voice-kicked",
@@ -63,7 +66,7 @@
   "event_interaction_dm_command": "{{emote_warn}} Slash commands cannot be used in DMs.",
 
   "event_message_args_unexpected": "{{emote_warn}} Unexpected argument {{argument}}. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
-  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n**{{emote_wrench}} Correct usage:** {{usage}}",
+  "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
   "event_message_edit_special": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
@@ -72,8 +75,9 @@
   "event_message_delete_special": "{{emote_trash}} Message from **{{user_tag}}** `({{user.id}})` has been deleted in <#{{channel.id}}>.\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
 
   "event_change": "`{{part}}` from `{{before}}` to `{{after}}`",
-  "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changed {{changes}}",
-  "event_update_role": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{role.name}}** Role. Changed {{changes}}",
+  "event_update_server": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the server settings. Changes:\n> {{changes}}",
+  "event_update_role": "{{emote_wrench}} The <@&{{role}}> role has been updated. Changes:\n> {{changes}}",
+  "event_update_role_moderator": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the <@&{{role}}> role. Changes:\n> {{changes}}",
   "event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
 
   "event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
@@ -81,7 +85,7 @@
   "event_channel_delete": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted.",
   "event_channel_delete_moderator": "{{emote_remove}} The **#{{channel.name}}** (`{{channel.id}}`) **{{type}}** has been deleted by **{{moderator.tag}}** `({{moderator.id}})`.",
 
-  "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archive at **{{thread_archive}}**",
+  "event_thread_create": "{{emote_add}} A new thread has been created **{{thread.name}}** <#{{thread.id}}> `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> and will be archived at **{{thread_archive}}**",
   "event_thread_delete": "{{emote_remove}} Thread **{{thread.name}}** `({{thread.id}})` by <@{{thread.ownerId}}> in <#{{thread.parentId}}> has been removed",
 
   "event_invite_create": "{{emote_add}} **{{invite.inviter.tag}}** `({{invite.inviter.id}})` has created a new invite `{{invite.code}}`, expires **{{expire_time}}**, max uses **{{max_uses}}**",
@@ -92,6 +96,7 @@
 
   "event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** <t:{{user_age}}:R>",
   "event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>",
+  "event_member_leave_roles": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>\n**Roles:** {{user_roles}}",
 
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
   "event_member_update_role_add": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
@@ -100,18 +105,18 @@
   "event_member_update_role_remove_moderator": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
 
   "channel_types": {
-    "GUILD_TEXT" : "text channel",
-    "DM" : "direct message channel",
-    "GUILD_VOICE" : "voice channel",
-    "GROUP_DM" : "group DM",
-    "GUILD_CATEGORY" : "channel category",
-    "GUILD_NEWS" : "news channel",
-    "GUILD_STORE" : "store channel",
-    "GUILD_NEWS_THREAD" : "news thread",
-    "GUILD_PUBLIC_THREAD" : "thread",
-    "GUILD_PRIVATE_THREAD" : "private thread",
-    "GUILD_STAGE_VOICE" : "stage channel",
-    "UNKNOWN" : "channel"
+    "GUILD_TEXT": "text channel",
+    "DM": "direct message channel",
+    "GUILD_VOICE": "voice channel",
+    "GROUP_DM": "group DM",
+    "GUILD_CATEGORY": "channel category",
+    "GUILD_NEWS": "announcement channel",
+    "GUILD_STORE": "store channel",
+    "GUILD_NEWS_THREAD": "announcement channel thread",
+    "GUILD_PUBLIC_THREAD": "thread",
+    "GUILD_PRIVATE_THREAD": "private thread",
+    "GUILD_STAGE_VOICE": "stage channel",
+    "UNKNOWN": "channel"
   },
 
   "config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
@@ -290,6 +295,7 @@
   "remind_desc_created": "**Created:** <t:{{createdAt}}> [`Link`]({{message}})",
 
   "inviteinfo_error": "{{emote_warn}} Unable to find a server with that invite",
+  "inviteinfo_groupdm": "{{emote_warn}} We are currently not supporting inviteinfo for group DMs",
   "inviteinfo_verification_level": "Verification Level: `{{guild.verificationLevel}}`\n",
   "inviteinfo_large": "Large: `{{guild.large}}`\n",
   "inviteinfo_code": "Code: `{{invite.code}}`\n",
@@ -316,6 +322,7 @@
 
   "mute_muterole_not_found": "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
   "mute_not_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
+  "mute_rejoin": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
   "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already muted!",
   "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
   "unmute_special": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been unmuted for **{{reason}}** ",

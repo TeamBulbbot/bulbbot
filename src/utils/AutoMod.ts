@@ -102,11 +102,11 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	const mentionCount: number = hasMentions(context, dbGuild);
 	if (mentionCount) {
 		if (dbGuild.punishmentMentions) await set(client, context, context.guild.id, "mentions", context.author.id, mentionCount, dbGuild.timeoutMentions);
-		if (dbGuild.limitMentions) shouldDelete = mentionCount >= dbGuild.limitMentions;
+		if (dbGuild.limitMentions) shouldDelete ||= mentionCount >= dbGuild.limitMentions;
 	}
 
 	await set(client, context, context.guild.id, "messages", context.author.id, 1, dbGuild.timeoutMessages);
-	if (shouldDelete) await context.delete();
+	if (shouldDelete && !(await context.deleted)) await context.delete();
 }
 
 function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): string {

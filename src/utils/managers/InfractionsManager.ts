@@ -71,7 +71,7 @@ export default class {
 
 	public async getAllUserInfractions(guildID: Snowflake, targetID: Snowflake, page: number): Promise<Infraction[] | undefined> {
 		return await sequelize.query(
-			'SELECT * FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND "targetId" = $TargetID OR "moderatorId" = $ModeratorID LIMIT 25 OFFSET $Page',
+			'SELECT * FROM infractions WHERE ("guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)) AND ("targetId" = $TargetID OR "moderatorId" = $ModeratorID) LIMIT 25 OFFSET $Page',
 			{
 				bind: { GuildID: guildID, TargetID: targetID, ModeratorID: targetID, Page: page > 1 ? (page - 1) * 25 : 0 },
 				type: QueryTypes.SELECT,
@@ -133,10 +133,10 @@ export default class {
 		return response[0]["id"];
 	}
 
-	public async warn(client: BulbBotClient, guildID: Snowflake, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
-		await this.createInfraction(guildID, "Warn", true, reason, target.user, moderator.user);
+	public async warn(client: BulbBotClient, guildID: Snowflake, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
+		await this.createInfraction(guildID, "Warn", true, reason, target, moderator.user);
 		const infID: number = await this.getLatestInfraction(guildID, moderator.id, target.id, "Warn");
-		await loggingManager.sendModAction(client, guildID, await client.bulbutils.translate("mod_action_types.warn", guildID, {}), target.user, moderator.user, reason, infID);
+		await loggingManager.sendModAction(client, guildID, await client.bulbutils.translate("mod_action_types.warn", guildID, {}), target, moderator.user, reason, infID);
 
 		return infID;
 	}
@@ -160,15 +160,15 @@ export default class {
 			return infID;
 		} else if (type == BanType.CLEAN) {
 			await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
-			await guild.members.ban(target, { reason: reasonLog, days: 7 });
+			await guild.members.ban(target.id, { reason: reasonLog, days: 7 });
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Ban");
 			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else if (type == BanType.SOFT) {
 			await this.createInfraction(guild.id, "Soft-ban", true, reason, target, moderator.user);
-			await guild.members.ban(target, { reason: reasonLog, days: 7 });
-			await guild.members.unban(target);
+			await guild.members.ban(target.id, { reason: reasonLog, days: 7 });
+			await guild.members.unban(target.id);
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Soft-ban");
 			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
 

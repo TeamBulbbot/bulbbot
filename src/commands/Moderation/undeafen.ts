@@ -40,8 +40,8 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild?.id, {}));
-		if (!target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("undeafen_not_deaf", context.guild?.id, {}));
+		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild?.id, { target: target.user }));
+		if (!target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("undeafen_not_deaf", context.guild?.id, { target: target.user }));
 
 		infID = await infractionsManager.undeafen(
 			this.client,
@@ -59,7 +59,7 @@ export default class extends Command {
 
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("undeafen_not_deaf", context.guild?.id, {}),
+				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
 				target: target.user,
 				reason,
 				infractionId: infID,

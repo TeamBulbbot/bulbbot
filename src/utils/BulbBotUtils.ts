@@ -1,11 +1,11 @@
-import { ContextMenuInteraction, GuildMember, Snowflake, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
 import i18next, { TOptions } from "i18next";
-import { translatorEmojis, translatorConfig } from "../Config";
+import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
 
@@ -477,8 +477,12 @@ export default class {
 	// Supported languages
 	public readonly languages: Record<string, string> = {
 		"en-US": "en-US",
+		"pt-BR": "pt-BR",
+		"fr-FR": "fr-FR",
 		"sk-SK": "sk-SK",
 		"sv-SE": "sv-SE",
+		"cs-CZ": "cs-CZ",
+		"it-IT": "it-IT",
 	};
 
 	public formatAction(action: string): string {
@@ -506,5 +510,111 @@ export default class {
 		}
 
 		return Emotes.actions.WARN;
+	}
+
+	public async logError(err: Error, context?: CommandContext, eventName?: string, runArgs?: any): Promise<void> {
+		if (process.env.ENVIRONMENT === "dev") throw err;
+		const embed = new MessageEmbed()
+			.setColor("RED")
+			.setTitle(`New Error | ${err.name}`)
+			.addField("Name", err.name, true)
+			.addField("Message", err.message, true)
+			.addField("String", `${err.name}: ${err.message}`, true)
+			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
+
+		if (context) {
+			embed.addField("Guild ID", <string>context?.guild?.id, true);
+			embed.addField("User", <string>context.author.id, true);
+			embed.addField("Message Content", <string>context.content, true);
+		} else if(runArgs) {
+			const argsDesc: string[] = [];
+			for(const [k, v] of Object.entries(runArgs)) {
+				if((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
+				let additionalInfo = typeof v === "object" ? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (\`" + (<any>v)?.guild.id + "\`)" : ""}${(<any>v)?.member ? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">" : (<any>v)?.user ? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">" : ""}${(<any>v)?.channel && (<any>v)?.channel?.name ? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (\`" + (<any>v)?.channel.id + ")\`" : v instanceof GuildChannel ? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (\`" + (<any>v)?.id + ")\`" : ""}` : "";
+				argsDesc.push(`**${k}:** ${typeof v === "object" ? "[object " +  v?.constructor.name + "]" + additionalInfo.trimEnd() : v}`);
+			}
+			embed.addField("Event Name", `${eventName}`, true);
+			embed.addField("Event Arguments", argsDesc.join("\n").slice(0, 1024));
+		}
+
+		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
+	}
+
+	/** Return a list of property keys where the values differ between the two objects */
+	public diff<T>(oldObj: T, newObj: T): string[] {
+		const diff: string[] = [];
+		for(const key of Object.keys(oldObj)) {
+			if(oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
+		}
+		return diff;
+	}
+
+	/** Deep equality check for arrays */
+	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T)
+	{
+		if(typeof firstArray !== typeof secondArray) return false;
+		if(firstArray instanceof Array !== secondArray instanceof Array) return false;
+		if(typeof firstArray !== "object") return firstArray === secondArray;
+		// @ts-ignore
+		if("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
+		if(firstArray.length != secondArray.length) return false;
+		const len = firstArray.length;
+		for(let i = 0; i < len; i++)
+		{
+			if(firstArray[i] !== secondArray[i])
+			{
+				if(firstArray[i] instanceof Array && secondArray[i] instanceof Array)
+				{
+					if(!this.arrayEquals(firstArray[i], secondArray[i])) return false;
+				} else if(typeof firstArray[i] === "object" && typeof secondArray[i] === "object") {
+					if(!this.objectEquals(firstArray[i], secondArray[i])) return false;
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/** Deep equality check for objects */
+	public objectEquals<T>(firstObject: T,secondObject: T)
+	{
+		if(typeof firstObject !== "object" && typeof secondObject !== "object"){
+			return firstObject === secondObject;
+		}
+		// @ts-ignore
+		if("equals" in firstObject && typeof firstObject.equals === "function"){
+			// @ts-ignore
+			return firstObject.equals(secondObject);
+		}
+		for(const propertyName of Object.keys(firstObject))
+		{
+			if(!(propertyName in secondObject))
+			{
+				return false;
+			}/*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+				return false;
+			} */
+		}
+		for(const propertyName of Object.keys(secondObject))
+		{
+			if(!(propertyName in firstObject))
+			{
+				return false;
+			}/*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+				return false;
+			} */
+			if(firstObject[propertyName] !== secondObject[propertyName]){
+				if(firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array)
+				{
+					if(!this.arrayEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				} else if(typeof firstObject[propertyName] === "object" && typeof secondObject[propertyName] === "object") {
+					if(!this.objectEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

@@ -8,7 +8,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	const infID = await infractionsManager.warn(
 		client,
 		<Snowflake>interaction.guild?.id,
-		<GuildMember>await interaction.guild?.members.fetch(message.author.id),
+		(<GuildMember>await interaction.guild?.members.fetch(message.author.id)).user,
 		<GuildMember>interaction.member,
 		await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
 			action: await client.bulbutils.translate("mod_action_types.warn", message.guild?.id, {}),
