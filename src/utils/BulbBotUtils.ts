@@ -475,16 +475,20 @@ export default class {
 	};
 
 	// Supported languages
-	public readonly languages: Record<string, string> = {
-		"en-US": "en-US",
-		"pt-BR": "pt-BR",
-		"fr-FR": "fr-FR",
-		"sk-SK": "sk-SK",
-		"sv-SE": "sv-SE",
-		"cs-CZ": "cs-CZ",
-		"it-IT": "it-IT",
-		"hi-IN": "hi-IN",
-	};
+	// dont ask me how this works found it on stackoverflow
+	public readonly languages = new Proxy(
+		{
+			"en-us|english": "en-US",
+			"pt-br|portuguese|português": "pt-BR",
+			"fr-fr|french|français": "fr-FR",
+			"sk-sk|slovak|slovenčina": "sk-SK",
+			"sv-se|swedish|svenska": "sv-SE",
+			"cs-cz|czech|čeština": "cs-CZ",
+			"it-it|italian|italiano": "it-IT",
+			"hi-in|hindi|हिंदी": "hi-IN",
+		}, // @ts-ignore
+		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
+	);
 
 	public formatAction(action: string): string {
 		switch (action) {

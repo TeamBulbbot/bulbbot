@@ -8,14 +8,14 @@ import * as Tracing from "@sentry/tracing";
 env.config({ path: `${__dirname}/../src/.env` });
 
 import i18next from "i18next";
-import * as enUS from "./languages/en-US.json";
-import * as skSK from "./languages/sk-SK.json";
-import * as svSE from "./languages/sv-SE.json";
-import * as csCZ from "./languages/cs-CZ.json";
-import * as ptBR from "./languages/pt-BR.json";
-import * as frFR from "./languages/fr-FR.json";
-import * as itIT from "./languages/it-IT.json";
-import * as hiIN from "./languages/hi-IN.json";
+import enUS from "./languages/en-US.json";
+import skSK from "./languages/sk-SK.json";
+import svSE from "./languages/sv-SE.json";
+import csCZ from "./languages/cs-CZ.json";
+import ptBR from "./languages/pt-BR.json";
+import frFR from "./languages/fr-FR.json";
+import itIT from "./languages/it-IT.json";
+import hiIN from "./languages/hi-IN.json";
 
 const config = {
 	token: process.env.TOKEN,

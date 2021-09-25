@@ -21,8 +21,9 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const language: string = args[0];
+		const languageCode: string = this.client.bulbutils.languages[language];
 
-		if (!this.client.bulbutils.languages[language])
+		if (!languageCode)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.lang", context.guild?.id, {}),
@@ -32,11 +33,11 @@ export default class extends SubCommand {
 				}),
 			);
 
-		await databaseManager.setLanguage(<Snowflake>context.guild?.id, language);
+		await databaseManager.setLanguage(<Snowflake>context.guild?.id, languageCode);
 		await context.channel.send(
 			await this.client.bulbutils.translate("config_generic_success", context.guild?.id, {
 				setting: "language",
-				value: language,
+				value: languageCode,
 			}),
 		);
 	}
