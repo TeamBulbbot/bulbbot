@@ -53,7 +53,7 @@
   "global_cannot_action_role_equal_bot": "{{emote_warn}} Jag kan inte utföra denna åtgärd på **{{target.tag}}** `({{target.id}})` eftersom jag inte har en högre roll än dem!",
   "global_cannot_action_bot_self": "{{emote_warn}} Du kan inte utföra denna åtgärd på boten!",
   "global_premium_only": "Detta är ett premium-kommando. Bli en donator och få tillgång till detta kommando och andra exklusiva funktioner på <https://www.patreon.com/bulbbot>",
-  "event_message_args_unexpected": "{{emote_warn}} Oväntat argument {{argument}}. Förväntade `{{arg_expected}}` fick `{{arg_provided}}`.\n{{emote_wrench}} **Korrekt användning:** {{usage}}",
+  "event_message_args_unexpected": "{{emote_warn}} Oväntat argument `{{argument}}`. Förväntade `{{arg_expected}}` fick `{{arg_provided}}`.\n{{emote_wrench}} **Korrekt användning:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Argumentet `{{argument}}`. Förväntade `{{arg_expected}}`.\n**{{emote_wrench}} Korrekt användning:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Oväntat argument `{{argument}}`. Förväntade `{{arg_expected}}`.\n{{emote_wrench}} **Korrekta argument:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Meddelande från **{{user_tag}}** `({{user.id}})` har uppdaterats i <#{{channel.id}}>\n`ID (kanal-meddelande): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",

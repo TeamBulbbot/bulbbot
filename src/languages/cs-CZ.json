@@ -55,7 +55,7 @@
   "global_cannot_action_bot_self": "{{emote_warn}} Tuto akci nemůžeš provést na botovi!",
   "global_premium_only": "Toto je prémiový příkaz. Staň se patronem a získej přístup k tomuto příkazu a k dalším prémiovým funkcím na <https://www.patreon.com/bulbbot>",
   "event_interaction_dm_command": "{{emote_warn}} / Příkazy nemohou být použity v Přímých Zprávách",
-  "event_message_args_unexpected": "{{emote_warn}} Neočekávaný argument {{argument}}. Očekával jsem `{{arg_expected}}` dostal jsem `{{arg_provided}}`.\n{{emote_wrench}} **Správné použití:** {{usage}}",
+  "event_message_args_unexpected": "{{emote_warn}} Neočekávaný argument `{{argument}}`. Očekával jsem `{{arg_expected}}` dostal jsem `{{arg_provided}}`.\n{{emote_wrench}} **Správné použití:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Chybějicí argument `{{argument}}`. Očekával jsem `{{arg_expected}}`.\n**{{emote_wrench}} Správné použití:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Neočekavaný argument `{{argument}}`. Očekával jsem `{{arg_expected}}`.\n{{emote_wrench}} **Správné argumenty:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Zpráva od uživatele **{{user_tag}}** `({{user.id}})` byla upravena v kanálu <#{{message.channel.id}}>\n`ID (kanál-zpráva): {{message.channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",

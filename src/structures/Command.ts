@@ -28,6 +28,7 @@ export default class Command {
 	public readonly maxArgs: number;
 	public readonly minArgs: number;
 	public readonly argList: string[];
+	public readonly depth: number;
 
 	get qualifiedName() {
 		return this.name;
@@ -45,6 +46,7 @@ export default class Command {
 		this.category = options.category || "Miscellaneous";
 		this._usage = options.usage || "";
 		this.examples = options.examples || [];
+		this.depth = ~~options.depth!;
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();
 		this.clearance = options.clearance || 0;
@@ -61,7 +63,7 @@ export default class Command {
 		if (!args.length || !this.subCommands.length) throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
 		return await context.channel.send(
 			await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
-				argument: args[args.length - 1].toLowerCase(),
+				argument: args[0].toLowerCase(),
 				arg_expected: this.argList[0],
 				argument_list: this.subCommands.map(sc => `\`${sc.name}\``).join(", "),
 			}),

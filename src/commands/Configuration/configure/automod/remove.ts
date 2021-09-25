@@ -29,11 +29,11 @@ export default class extends SubCommand {
 		const partexec = /^(website|invite|word)s?$|^(?:words?_?)?(token)s?$|^(ignore)d?_?(channel|user|role)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 			return context.channel.send(
-				await this.client.bulbutils.translate("event_message_args_unexpected", context.guild!.id, {
+				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
 					argument: partArg,
 					arg_expected: "part:string",
 					arg_provided: partArg,
-					usage: "`website`, `invites`, `words`, `words_token`, `ignore_channels`, `ignore_roles`, or `ignore_users`",
+					argument_list: "`website`, `invites`, `words`, `words_token`, `ignore_channels`, `ignore_roles`, or `ignore_users`",
 				}),
 			);
 		const partString = partexec[1] ?? partexec[2] ?? `${partexec[3]}_${partexec[4]}`;

@@ -19,6 +19,7 @@ export default class SubCommand extends Command {
 			usage: options.usage,
 			argList: options.argList,
 			examples: options.examples,
+			depth: parent.depth + 1,
 			minArgs: options.minArgs,
 			maxArgs: options.maxArgs,
 			subCommands: options.subCommands,
