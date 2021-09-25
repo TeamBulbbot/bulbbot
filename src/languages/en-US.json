@@ -168,6 +168,7 @@
   "automod_disabled_part": "{{emote_success}} Successfully disabled AutoMod category `{{category}}`",
 
   "automod_timeout_too_large": "{{emote_fail}} The timeout limit cannot be larger than `30 seconds`",
+  "automod_timeout_too_small": "{{emote_fail}} The timeout limit cannot be lower than `3 seconds`",
 
   "automod_settings_header": "AutoMod settings for {{guild.name}}",
   "automod_settings_enabled": "**Enabled:** {{enabled}}",
