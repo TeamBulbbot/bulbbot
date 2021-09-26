@@ -45,6 +45,7 @@ export default class extends Event {
 				}
 				auditLog = audit.entries.first();
 				if (<number>auditLog?.createdTimestamp + 3000 < Date.now()) auditLog = undefined;
+				if (!auditLog?.executor) auditLog = undefined;
 			} catch (e) {
 				if (!(e instanceof DiscordAPIError)) throw e;
 			}
@@ -54,6 +55,7 @@ export default class extends Event {
 				part = "member";
 				if (auditLog?.changes && auditLog!!.changes[0].key === "nick") {
 					executor = auditLog.executor;
+					if (executor?.id === this.client.user!.id) return;
 					const reason = auditLog.reason ?? await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {});
 					await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
 					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.id, "Manual Nickname");
