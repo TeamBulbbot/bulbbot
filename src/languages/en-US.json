@@ -256,8 +256,8 @@
 
   "nickname_success": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
   "nickname_remove_success": "{{emote_success}} Nickname removed from **{{target.tag}}** `({{target.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "nickname_mod_action_log": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "nickname_remove_mod_action_log": "{{emote_success}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_mod_log": "{{emote_warn}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_remove_mod_log": "{{emote_warn}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
   "nickname_fail": "{{emote_fail}} Unable to change nickname of **{{target.tag}}** `({{target.id}})`",
   "nickname_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` does not have a nickname to remove",
   "nickname_same_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already nicknamed `{{nickname}}`",

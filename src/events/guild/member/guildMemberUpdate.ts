@@ -60,7 +60,7 @@ export default class extends Event {
 					await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
 					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.id, "Manual Nickname");
 					const translateKey = (executor === null || executor.id === newMember.id) ? newMember.nickname ? "event_member_update_nickname" : "event_member_remove_nickname"
-					                     : newMember.nickname ?  "nickname_mod_action_log" : "nickname_remove_mod_action_log";
+					                     : newMember.nickname ?  "nickname_mod_log" : "nickname_remove_mod_log";
 					part = translateKey.startsWith("event") ? "member" : "modAction";
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
