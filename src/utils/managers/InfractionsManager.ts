@@ -253,7 +253,7 @@ export default class {
 		await loggingManager.sendModActionPreformatted(
 			client,
 			guild,
-			await client.bulbutils.translate(nickNew ? "change_nick_mod_action_log" : "remove_nick_mod_action_log", guild.id, {
+			await client.bulbutils.translate(nickNew ? "nickname_mod_log" : "nickname_remove_mod_log", guild.id, {
 				action: await client.bulbutils.translate(nickNew ? "mod_action_types.nick_change" : "mod_action_types.nick_remove", guild.id, { client: client }),
 				target: target.user,
 				nick_old: nickOld,
