@@ -23,5 +23,6 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+
 	}
 }
