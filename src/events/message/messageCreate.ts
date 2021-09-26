@@ -44,6 +44,7 @@ export default class extends Event {
 		const prefix = guildCfg.prefix;
 		const premiumGuild = guildCfg.premiumGuild;
 		this.client.prefix = prefix;
+		context.prefix = prefix;
 		const clearance: number = await clearanceManager.getUserClearance(context);
 
 		if (clearance < 25) {
