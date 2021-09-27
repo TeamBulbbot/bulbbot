@@ -4,11 +4,11 @@
 
 A powerful Discord moderation bot with rich features allowing server Moderators and Administrators to manage their communities.
 
-### Getting started with Bulbbot
+## Getting started with Bulbbot
 Click [here](https://bulbbot.mrphilip.xyz/invite) to invite Bulbbot to your server.
 
 The default prefix of the bot is `!` (or you can use [slash commands](https://docs.bulbbot.mrphilip.xyz/slash-commands) `/`), but the prefix can easily be changed with `!configure prefix <prefix>` command.
-### Main features include
+## Main features include
 - Extensive [automoderation (automod)](https://docs.bulbbot.mrphilip.xyz/automod)
   -  Message/word filter
   -  Mention spam
@@ -23,12 +23,12 @@ The default prefix of the bot is `!` (or you can use [slash commands](https://do
 
 For a full list of commands [click me](https://docs.bulbbot.mrphilip.xyz/command-list)
 
-### Support
+## Support
 Whether it is a command that's not working, your server configuration being not quite right or maybe you've found a bug in our code out in the wild we're ready to assist you with all your technical issues and questions over at our [support server](https://bulbbot.mrphilip.xyz/discord)
 
-### Meet the Team
+## Meet the Team
 [Meet the users who have built Bulbbot](https://docs.bulbbot.mrphilip.xyz/team)
 
-### Setup development environment
+## Setup development environment
 **We offer 0 support on selfhosting the bot.**
 For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.mrphilip.xyz/setup-dev) that will help you setting it up. 
