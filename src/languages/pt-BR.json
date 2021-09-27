@@ -214,7 +214,7 @@
   "nickname_too_long": "{{emote_warn}} Apelido tem muitos caracteres (`{{length}}`). Os apelidos são limitados a 32 caracteres",
   "ping_latency": "Latência do bot é **{{latency_bot}}ms**\nLatência do WebSocket é **{{latency_ws}}ms**",
   "uptime_uptime": "O tempo de atividade é **{{uptime}}**",
-  "license_license": "📜 Este bot é licenciado sob a licença do MIT, para mais informações veja a licença completa **[aqui](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+  "license_license": "📜 Este bot é licenciado sob a licença do Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0), para mais informações veja a licença completa **[aqui](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
   "privacy_policy": "📜 Veja a política de privacidade do bot **[aqui](https://bulbbot.mrphilip.xyz/privacy-policy)**",
   "github_source_code": "{{emote_github}} Bulbbot é um projeto totalmente de código aberto. Você pode encontrar o código fonte em nosso repositório GitHub **[aqui](https://github.com/TestersQTs/Bulbbot)**",
   "invite_desc": "**Convide o bot para o seu server**\n{{bot_invite}}\n\n**Entre no servidor de suporte**\n{{support_guild}}",

@@ -214,7 +214,7 @@
   "nickname_too_long": "{{emote_warn}} Il soprannome ha troppi caratteri (`{{length}}`). I soprannomi sono limitati a 32 caratteri",
   "ping_latency": "La latenza del bot è **{{latency_bot}}ms**\nLa latenza del WebSocket è **{{latency_ws}}ms**",
   "uptime_uptime": "L'uptime corrente è **{{uptime}}**",
-  "license_license": "📜 Questo bot è sotto la licenza MIT, per maggiori informazioni vedi la licenza completa **[qua](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+  "license_license": "📜 Questo bot è sotto la licenza Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0), per maggiori informazioni vedi la licenza completa **[qua](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
   "privacy_policy": "📜 Visualizza l'informativa sulla privacy del bot **[qua](https://bulbbot.mrphilip.xyz/privacy-policy)**",
   "github_source_code": "{{emote_github}} Bulbbot è un progetto open source. Puoi trovare il codice sorgente nel nostro repository GitHub **[qua](https://github.com/TestersQTs/Bulbbot)**",
   "invite_desc": "**Invita il bot sul tuo server**\n{{bot_invite}}\n\n**Entra nel server di supporto**\n{{support_guild}}",
