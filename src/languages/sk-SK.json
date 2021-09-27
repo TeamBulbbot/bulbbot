@@ -213,7 +213,7 @@
   "nickname_too_long": "{{emote_warn}} Prezývka má moc znakov (`{{length}}`). Prezývky môžu mať maximálne 32 znakov.",
   "ping_latency": "Momentálna odozva bota je **{{latency_bot}}ms**\nOdozva WebSocket je **{{latency_ws}}ms**",
   "uptime_uptime": "Bot momentálne beží **{{uptime}}**",
-  "license_license": "📜 Tento bot je licencovaný pod MIT licenciu, pre viac informacii pozrite **[sem](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+  "license_license": "📜 Tento bot je licencovaný pod Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) licenciu, pre viac informacii pozrite **[sem](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
   "privacy_policy": "📜 Pozrite zásady ochrany osobných údajov bota **[tu](https://bulbbot.mrphilip.xyz/privacy-policy)**",
   "github_source_code": "{{emote_github}} Bulbbot je plne open source projekt. Zdrojový kód môžete nájsť v našom GitHub úložisku **[tu](https://github.com/TestersQTs/Bulbbot)**",
   "invite_desc": "**Pozvite bota do svojho serveru**\n{{bot_invite}}\n\n**Pripojte sa do serveru pre podporu**\n{{support_guild}}",

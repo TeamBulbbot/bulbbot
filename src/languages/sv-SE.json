@@ -214,7 +214,7 @@
   "nickname_too_long": "{{emote_warn}} Smeknamnet har för många tecken (`{{length}}`). Smeknamn är begränsade till 32 tecken",
   "ping_latency": "Bot latens är **{{latency_bot}}ms**\nWebSocket latens är **{{latency_ws}}ms**",
   "uptime_uptime": "Den nuvarande drifttiden är **{{uptime}}**",
-  "license_license": "📜 Denna bot är licensierad under MIT-licensen, för mer info se hela licensen **[här](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+  "license_license": "📜 Denna bot är licensierad under Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)-licensen, för mer info se hela licensen **[här](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
   "privacy_policy": "📜 Se integritetspolicyn för boten **[here](https://bulbbot.mrphilip.xyz/privacy-policy)**",
   "github_source_code": "{{emote_github}} Bulbbot är ett helt projekt med öppen källkod. Du kan hitta källkoden på vårt GitHub-arkiv **[här](https://github.com/TestersQTs/Bulbbot)**",
   "invite_desc": "**Bjud in boten till din server**\n{{bot_invite}}\n\n**Gå med i supportservern**\n{{support_guild}}",
