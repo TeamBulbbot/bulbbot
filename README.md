@@ -1,47 +1,34 @@
-<div align="center">
+![Bulbbot Banner](./assets/BannerWide.png)
 
-![GitHub](https://img.shields.io/discord/742094927403679816?label=Discord&logo=Discord&logoColor=white)
-![Github](https://img.shields.io/github/issues/TestersQTs/Bulbbot?color=red&label=Active%20issues&logo=github)
-![Github](https://img.shields.io/github/stars/TestersQTs/Bulbbot?color=yellow&label=Stars&logo=github)
+# Bulbbot
 
-</div>
+A powerful Discord moderation bot with rich features allowing server Moderators and Administrators to manage their communities.
 
-<h1>Bulbbot</h1>
+### Getting started with Bulbbot
+Click [here](https://bulbbot.mrphilip.xyz/invite) to invite Bulbbot to your server.
 
-Bulbbot is a powerful discord moderation bot written in Javascript using the discord.js libary.
+The default prefix of the bot is `!` (or you can use [slash commands](https://docs.bulbbot.mrphilip.xyz/slash-commands) `/`), but the prefix can easily be changed with `!configure prefix <prefix>` command.
+### Main features include
+- Extensive [automoderation (automod)](https://docs.bulbbot.mrphilip.xyz/automod)
+  -  Message/word filter
+  -  Mention spam
+  -  Website filter
+  -  Invite filtering
+- [Logging](https://docs.bulbbot.mrphilip.xyz/logs) (have logs of what is going on in your server)
+- [Infraction history](https://docs.bulbbot.mrphilip.xyz/infractions) (have logs on all of the moderation actions)
+- Fully customizable restrictions on commands with [clearance](https://docs.bulbbot.mrphilip.xyz/clearance)
+- 100% translation in 8 languages
+- A lot of utility commands
+- And a lot more
 
-## Add the bot to your Discord server
+For a full list of commands [click me](https://docs.bulbbot.mrphilip.xyz/command-list)
 
-Click [here](https://discord.com/oauth2/authorize?client_id=755149065137815623&scope=bot&permissions=1573252311) to invite the bot to your server.
+### Support
+Whether it is a command that's not working, your server configuration being not quite right or maybe you've found a bug in our code out in the wild we're ready to assist you with all your technical issues and questions over at our [support server](https://bulbbot.mrphilip.xyz/discord)
 
-The defualt prefix of the bot is `!`, but it can easily be changed with the `configure` command. To change the prefix just type
-`!configure prefix <prefix>`
+### Meet the Team
+[Meet the users who have built Bulbbot](https://docs.bulbbot.mrphilip.xyz/team)
 
-## License
-
-This project is licensed under the MIT License, see the [LICENSE](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE) file for more
-information.
-
-## Cloning the bot and running a local copy
-
-You can find a more detailed explanation of how to clone, setup and run the bot locally on your machine [here](https://www.notion.so/How-to-setup-a-local-dev-environment-e02c5c648ebb40458408ccc2a26c1f61)
-
-## Developers
-
-👤 **KlukCZ**
-
-- Twitter: [@KlukCZ](https://twitter.com/KlukCZ)
-- Github: [@KlukCZ](https://github.com/KlukCZ)
-- Discord: KlukCZ#6589 (439396770695479297)
-
-👤 **y3ll0w**
-
-- Website: https://mrphilip.xyz/
-- Twitter: [@y3ll0wLife](https://twitter.com/y3ll0wLife)
-- Github: [@y3ll0wlife](https://github.com/y3ll0wlife)
-- Discord: mrphilip#2938 (190160914765316096)
-
-👤 **wakfi**
-
-- Github: [@wakfi](https://github.com/wakfi)
-- Discord: wakfi#6999 (193160566334947340)
+### Setup development environment
+**We offer 0 support on selfhosting the bot.**
+For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.mrphilip.xyz/setup-dev) that will help you setting it up. 
