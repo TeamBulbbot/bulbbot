@@ -289,7 +289,7 @@
 
   "github_source_code": "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TestersQTs/Bulbbot)**",
 
-  "invite_desc": "**Invite the bot to your server**\n{{bot_invite}}\n\n**Join the support server**\n{{support_guild}}",
+  "invite_content": "Links to invite Bulbbot to your server",
 
   "remind_list_none": "{{emote_warn}} You have not set any reminders",
   "remind_placeholder": "No Reminders Selected",

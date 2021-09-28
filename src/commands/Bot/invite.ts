@@ -1,9 +1,10 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { MessageEmbed } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
-
+import { NonDigits } from "../../utils/Regex";
+import * as Emotes from "../../emotes.json";
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
@@ -16,22 +17,11 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext): Promise<void> {
-		const embed: MessageEmbed = new MessageEmbed()
-			.setColor(Config.embedColor)
-			.setDescription(
-				await this.client.bulbutils.translate("invite_desc", context.guild?.id, {
-					bot_invite: Config.botInvite,
-					support_guild: Config.supportInvite,
-				}),
-			)
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
-				}),
-				<string>context.author.avatarURL({ dynamic: true }),
-			)
-			.setTimestamp();
+		const row = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Invite").setStyle("LINK").setEmoji(Emotes.other.DISCORD.replace(NonDigits, "")).setURL(Config.botInvite),
+			new MessageButton().setLabel("Support").setStyle("LINK").setEmoji(Emotes.other.SUPPORT.replace(NonDigits, "")).setURL(Config.supportInvite),
+		]);
 
-		await context.channel.send({ embeds: [embed] });
+		await context.channel.send({ content: await this.client.bulbutils.translate("invite_content", context.guild?.id, {}), components: [row] });
 	}
 }
