@@ -37,6 +37,8 @@ export default class extends Command {
 		let user: any = await context.guild?.members.cache.get(target);
 		let isGuildMember = true;
 
+		console.log(user);
+
 		if (!user) {
 			try {
 				user = await this.client.users.fetch(target);

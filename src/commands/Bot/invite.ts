@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { MessageActionRow, MessageButton } from "discord.js";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { NonDigits } from "../../utils/Regex";
