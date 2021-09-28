@@ -67,6 +67,8 @@ export const translatorEmojis: Record<string, string> = {
 	emote_unban: Emotes.actions.UNBAN,
 	emote_mute: Emotes.actions.MUTE,
 	emote_remind: Emotes.other.REMIND,
+	emote_locked: Emotes.other.LOCKED,
+	emote_unlocked: Emotes.other.UNLOCKED,
 };
 
 export const translatorConfig: Record<string, any> = {
