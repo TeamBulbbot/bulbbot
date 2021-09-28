@@ -119,9 +119,6 @@ export default class {
 			} else if (feature === "WELCOME_SCREEN_ENABLED") {
 				f = Emotes.features.WELCOME_SCREEN_ENABLED;
 				desc = "Has the welcome screen enabled enabled, which will show a model when new users join the guild";
-			} else if (feature === "FEATURABLE") {
-				f = Emotes.features.FEATURABLE;
-				desc = "Deprecated";
 			} else if (feature === "VIP_REGIONS") {
 				f = Emotes.features.VIP_REGIONS;
 				desc = "Adds the ability to create voice channels with 384kbps max bitrate";
@@ -143,6 +140,12 @@ export default class {
 			} else if (feature === "MORE_STICKERS") {
 				f = Emotes.features.MORE_STICKERS;
 				desc = "Makes it possible to have 60 stickers in your server";
+			} else if (feature === "ROLE_ICONS") {
+				f = Emotes.features.ROLE_ICONS;
+				desc = "Adds the ability to add icons to roles (requires boost level 2)";
+			} else {
+				f = "⭐";
+				desc = "";
 			}
 
 			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
