@@ -109,7 +109,9 @@
   "event_member_leave_roles": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>\n**Roles:** {{user_roles}}",
 
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
+  "event_member_update_nickname_moderator": "{{emote_warn}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_remove_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has removed their nickname (was: `{{before}}`)",
+  "event_member_remove_nickname_moderator": "{{emote_warn}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_add": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_add_moderator": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
