@@ -193,7 +193,7 @@ export default class {
 	}
 
 	public async mute(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, muteRole: Snowflake, until: MomentInput) {
-		await target.roles.add(<Snowflake>muteRole);
+		await target.roles.add(<Snowflake>muteRole, reasonLog);
 		await this.createInfraction(guild.id, "Mute", <number>until, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Mute");
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.mute", guild.id, {}), target.user, moderator.user, reason, infID, until);
@@ -202,7 +202,7 @@ export default class {
 	}
 
 	public async unmute(client: BulbBotClient, guild: Guild, type: MuteType, target: GuildMember, moderator: User, reasonLog: string, reason: string, muteRole: Snowflake) {
-		await target.roles.remove(muteRole);
+		await target.roles.remove(muteRole, reasonLog);
 		await this.createInfraction(guild.id, "Unmute", true, reason, target.user, moderator);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.id, target.user.id, "Unmute");
 		if (type == MuteType.MANUAL) {
