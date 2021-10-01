@@ -1,0 +1,116 @@
+{
+  "mainMenu": {
+    "mainRow": [
+      {
+        "label": "Logging",
+        "description": "Configures the logging module",
+        "value": "logging"
+      },
+      {
+        "label": "AutoMod",
+        "description": "Configures the AutoMod module",
+        "value": "automod"
+      },
+      {
+        "label": "Settings",
+        "description": "Configures the settings module",
+        "value": "settings"
+      }
+    ],
+    "backRow": [
+      {
+        "type": "BUTTON",
+        "label": "Back",
+        "customId": "back",
+        "style": "DANGER",
+        "emoji": null,
+        "url": null,
+        "disabled": true
+      }
+    ]
+  },
+
+  "logging": {
+    "mainRow": [
+      {
+        "label": "Mod Logs",
+        "value": "mod_logs"
+      },
+      {
+        "label": "Fuck you",
+        "value": "idk"
+      },
+      {
+        "label": "Oof",
+        "value": "lmao"
+      }
+    ],
+    "backRow": [
+      {
+        "type": "BUTTON",
+        "label": "Back",
+        "customId": "back_mainMenu",
+        "style": "DANGER",
+        "emoji": null,
+        "url": null,
+        "disabled": false
+      }
+    ]
+  },
+
+  "automod": {
+    "mainRow": [
+      {
+        "label": "Option 1",
+        "value": "op1"
+      },
+      {
+        "label": "Option 2",
+        "value": "op2"
+      },
+      {
+        "label": "Option 3",
+        "value": "op3"
+      }
+    ],
+    "backRow": [
+      {
+        "type": "BUTTON",
+        "label": "Back",
+        "customId": "back_mainMenu",
+        "style": "DANGER",
+        "emoji": null,
+        "url": null,
+        "disabled": false
+      }
+    ]
+  },
+
+  "settings": {
+    "mainRow": [
+      {
+        "label": "Option 4",
+        "value": "op4"
+      },
+      {
+        "label": "Option 5",
+        "value": "op5"
+      },
+      {
+        "label": "Option 6",
+        "value": "op6"
+      }
+    ],
+    "backRow": [
+      {
+        "type": "BUTTON",
+        "label": "Back",
+        "customId": "back_mainMenu",
+        "style": "DANGER",
+        "emoji": null,
+        "url": null,
+        "disabled": false
+      }
+    ]
+  }
+}
