@@ -1,0 +1,28 @@
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+"base_path": "."
+"base_url": "https://api.crowdin.com"
+"preserve_hierarchy": true
+
+"pull_request_title": "New Crowdin Translations"
+"pull_request_labels": ["translation"]
+
+files:
+  [
+    {
+      "source": "/src/languages/en-US.json",
+      "translation": "/src/languages/%locale%.json",
+      "excluded_target_languages": [
+          "ar",     # Arabic
+          "nl",     # Dutch
+          "de",     # German
+          "hu",     # Hungarian
+          "en-PT",  # Pirate English
+          "pl",     # Polish
+          "ru",     # Russian
+          "es-ES",  # Spanish
+          "tr",     # Turkish
+          "owo",    # OwO
+        ],
+    },
+  ]
