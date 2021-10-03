@@ -19,6 +19,15 @@ export default class extends Event {
 	public async run(member: GuildMember): Promise<void> {
 		if (!member.joinedTimestamp) return;
 
+		if (member.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
+			const audit = await member.guild.fetchAuditLogs({ limit: 1 });
+			let auditLog = audit.entries.first();
+			if (<number>auditLog?.createdTimestamp + 3000 < Date.now()) auditLog = undefined;
+			if (!auditLog?.executor) auditLog = undefined;
+
+			if (auditLog !== undefined) if (auditLog?.action === "MEMBER_BAN_ADD" || auditLog?.action === "MEMBER_KICK") return;
+		}
+
 		if (member.roles.cache.size > 1 && (await databaseManager.getConfig(member.guild.id)).rolesOnLeave) {
 			await loggingManager.sendEventLog(
 				this.client,
@@ -27,7 +36,10 @@ export default class extends Event {
 				await this.client.bulbutils.translate("event_member_leave_roles", member.guild.id, {
 					user: member.user,
 					user_joined: Math.floor(member.joinedTimestamp / 1000),
-					user_roles: member.roles.cache.filter(role => role.id !== member.guild.id).map(role => `${role}`).join(", "),
+					user_roles: member.roles.cache
+						.filter(role => role.id !== member.guild.id)
+						.map(role => `${role}`)
+						.join(", "),
 				}),
 			);
 		} else {
@@ -35,10 +47,10 @@ export default class extends Event {
 				this.client,
 				member.guild,
 				"joinLeave",
-					await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
-						user: member.user,
-						user_joined: Math.floor(member.joinedTimestamp / 1000),
-					}),
+				await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
+					user: member.user,
+					user_joined: Math.floor(member.joinedTimestamp / 1000),
+				}),
 			);
 		}
 
