@@ -16,72 +16,68 @@
         "description": "Configures the settings module",
         "value": "settings"
       }
-    ],
-    "backRow": [
-      {
-        "type": "BUTTON",
-        "label": "Back",
-        "customId": "back",
-        "style": "DANGER",
-        "emoji": null,
-        "url": null,
-        "disabled": true
-      }
     ]
   },
 
   "logging": {
     "mainRow": [
       {
-        "label": "Mod Logs",
-        "value": "mod_logs"
+        "label": "Mod Logging",
+        "value": "selectedModActions"
       },
       {
-        "label": "Fuck you",
-        "value": "idk"
+        "label": "Automoderation Logs",
+        "value": "selectedAutomod"
       },
       {
-        "label": "Oof",
-        "value": "lmao"
-      }
-    ],
-    "backRow": [
+        "label": "Message Logging",
+        "value": "selectedMessage"
+      },
       {
-        "type": "BUTTON",
-        "label": "Back",
-        "customId": "back_mainMenu",
-        "style": "DANGER",
-        "emoji": null,
-        "url": null,
-        "disabled": false
+        "label": "Role Logging",
+        "value": "selecetedRole"
+      },
+      {
+        "label": "Member Logging",
+        "value": "selectedMember"
+      },
+      {
+        "label": "Channel Logging",
+        "value": "selecetedChannel"
+      },
+      {
+        "label": "Thread Logging",
+        "value": "selectedThread"
+      },
+      {
+        "label": "Invite Logging",
+        "value": "selectedInvite"
+      },
+      {
+        "label": "Join Leave Logging",
+        "value": "selectedJoinLeave"
+      },
+      {
+        "label": "Other Logging",
+        "value": "selectedOther"
       }
     ]
+   
   },
 
   "automod": {
     "mainRow": [
       {
-        "label": "Option 1",
-        "value": "op1"
+        "label": "Enable/Disable",
+        "value": "selectedEnableDisable"
       },
       {
-        "label": "Option 2",
-        "value": "op2"
+        "label": "Punishment",
+        "value": "selectedPunishment"
       },
       {
-        "label": "Option 3",
-        "value": "op3"
-      }
-    ],
-    "backRow": [
-      {
-        "type": "BUTTON",
-        "label": "Back",
-        "customId": "back_mainMenu",
-        "style": "DANGER",
-        "emoji": null,
-        "url": null,
-        "disabled": false
+        "label": "Settings",
+        "value": "selectedSettings"
       }
     ]
   },
@@ -89,28 +85,26 @@
   "settings": {
     "mainRow": [
       {
-        "label": "Option 4",
-        "value": "op4"
+        "label": "Language",
+        "value": "selectedLanguage"
       },
       {
-        "label": "Option 5",
-        "value": "op5"
+        "label": "Mute Role",
+        "value": "selectedMuteRole"
       },
       {
-        "label": "Option 6",
-        "value": "op6"
-      }
-    ],
-    "backRow": [
+        "label": "Auto Role",
+        "value": "selectedAutoRole"
+      },
       {
-        "type": "BUTTON",
-        "label": "Back",
-        "customId": "back_mainMenu",
-        "style": "DANGER",
-        "emoji": null,
-        "url": null,
-        "disabled": false
+        "label": "Actions on Info",
+        "value": "selectedActionOnInfo"
+      },
+      {
+        "label": "Roles on Leave",
+        "value": "selectedRolesOnLeave"
       }
     ]
+   
   }
 }

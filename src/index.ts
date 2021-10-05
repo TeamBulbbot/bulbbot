@@ -62,16 +62,16 @@ sequelize
 	.catch((err: Error) => client.log.error(`[DATABASE] Connection error: ${err.name} | ${err.message} | ${err.stack}`))
 	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
 
-init({
-	dsn: process.env.SENTRY_DSN,
-	tracesSampleRate: 1.0,
-	sampleRate: 1.0,
-	attachStacktrace: true,
-	autoSessionTracking: true,
-	debug: process.env.ENVIRONMENT === "dev",
-	maxBreadcrumbs: 100,
-	integrations: [new Integrations.Http({ tracing: true })],
-});
+if (process.env.ENVIRONMENT !== "dev")
+	init({
+		dsn: process.env.SENTRY_DSN,
+		tracesSampleRate: 1.0,
+		sampleRate: 1.0,
+		attachStacktrace: true,
+		autoSessionTracking: true,
+		maxBreadcrumbs: 100,
+		integrations: [new Integrations.Http({ tracing: true })],
+	});
 
 client.login().catch((err: Error) => {
 	client.log.error(`[CLIENT] Login error: ${err.name} | ${err.message} | ${err.stack}`);
