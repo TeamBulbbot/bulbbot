@@ -45,7 +45,7 @@ export default class extends SubCommand {
 					} catch (_) {
 						return;
 					}
-					if (invite.guild?.id !== context.guild?.id) return;
+
 					return invite.code;
 				}),
 			);
