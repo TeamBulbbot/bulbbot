@@ -25,8 +25,8 @@ export default class extends Command {
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setLabel("Invite").setStyle("LINK").setEmoji(Emotes.other.DISCORD.replace(NonDigits, "")).setURL(botInvite),
 			new MessageButton().setLabel("Support").setStyle("LINK").setEmoji(Emotes.other.SUPPORT.replace(NonDigits, "")).setURL(supportInvite),
-			new MessageButton().setLabel("Patreon").setStyle("LINK").setEmoji(Emotes.other.PATREON.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/patreon"),
-			new MessageButton().setLabel("Source Code").setStyle("LINK").setEmoji(Emotes.other.GITHUB.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/github"),
+			new MessageButton().setLabel("Patreon").setStyle("LINK").setEmoji(Emotes.other.PATREON.replace(NonDigits, "")).setURL("https://www.patreon.com/bulbbot"),
+			new MessageButton().setLabel("Source Code").setStyle("LINK").setEmoji(Emotes.other.GITHUB.replace(NonDigits, "")).setURL("https://github.com/TeamBulbbot/bulbbot"),
 		]);
 
 		const version = Number(this.client.about.buildId.replace("\n", "")) - 782;
