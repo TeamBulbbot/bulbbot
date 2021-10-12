@@ -133,7 +133,7 @@ export default class extends Command {
 			const msg = await context.channel.send({ embeds: [embed], components });
 
 			const filter = (i: any) => !i.bot;
-			const collector = msg.createMessageComponentCollector({ filter, time: 1000 });
+			const collector = msg.createMessageComponentCollector({ filter, time: 30000 });
 
 			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
 				if (interaction.user.id !== context.author.id)
