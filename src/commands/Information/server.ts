@@ -18,7 +18,7 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext): Promise<void> {
-		await context.guild?.members.fetch();
+		// await context.guild?.members.fetch();
 		const guild: Guild = <Guild>context.guild;
 
 		let description = "";

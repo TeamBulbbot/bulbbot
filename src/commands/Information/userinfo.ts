@@ -29,7 +29,7 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
-		await context.guild?.members.fetch();
+		// await context.guild?.members.fetch();
 		let target: string;
 		if (args[0] === undefined) target = context.author.id;
 		else target = args[0].replace(NonDigits, "");

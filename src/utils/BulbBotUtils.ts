@@ -596,8 +596,8 @@ export default class {
 	}
 
 	public async updateChannelsWithMutedRole(guild: Guild, role: Snowflake): Promise<void> {
-		await guild.channels.fetch();
-		await guild.channels.cache.map(channel => {
+		// await guild.channels.fetch();
+		guild.channels.cache.map(channel => {
 			if (!guild.me?.permissionsIn(channel).has(Permissions.FLAGS.VIEW_CHANNEL) || !guild.me?.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) return;
 
 			if (channel.type === "GUILD_TEXT") channel.permissionOverwrites.create(role, { SEND_MESSAGES: false });

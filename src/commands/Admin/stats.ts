@@ -19,7 +19,7 @@ export default class extends Command {
 
 	async run(context: CommandContext): Promise<void> {
 		if (context.guild === null || context.member === null) return;
-		this.client.guilds.cache.map(g => g.members.fetch());
+		//this.client.guilds.cache.map(g => g.members.fetch());
 
 		const shardData: string[] = this.client.ws.shards.map(shard => `${selectEmoji(shard.ping)} Shard ID: ${shard.id} \`${shard.ping} ms\`\n`);
 		const desc: string = `Guild Count: \`${numberWithCommas(this.client.guilds.cache.size)}\`\n Users: \`${numberWithCommas(
