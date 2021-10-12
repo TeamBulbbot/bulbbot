@@ -12,6 +12,7 @@ export default class extends Command {
 			description: "Returns the amount of badges in the server",
 			category: "Bot",
 			clientPerms: ["EMBED_LINKS"],
+			devOnly: true,
 		});
 	}
 
