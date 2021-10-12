@@ -28,7 +28,7 @@ export default class extends SubCommand {
 		if (!page) page = 0;
 
 		try {
-			user = await this.client.users.fetch(targetID);
+			user = await this.client.bulbfetch.getUser(targetID);
 		} catch (err) {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {

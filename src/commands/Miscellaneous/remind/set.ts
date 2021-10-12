@@ -59,7 +59,7 @@ export default class extends SubCommand {
 			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", context.guild?.id, {}),
 			components: [row],
 		});
-		if(!msg) return;
+		if (!msg) return;
 
 		const filter = (i: any) => i.user.id === context.author.id;
 		const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
@@ -81,7 +81,7 @@ export default class extends SubCommand {
 
 				if (reminder.channelId !== "") {
 					// @ts-ignore
-					const channel: TextChannel = await this.client.channels.fetch(reminder.channelId);
+					const channel: TextChannel = await this.client.bulbfetch.getChannel(this.client.channels, reminder.channelId);
 					let message: Message;
 					let options: any = {
 						allowedMentions: {
@@ -103,7 +103,7 @@ export default class extends SubCommand {
 						});
 					}
 				} else {
-					const user: User = await this.client.users.fetch(reminder.userId);
+					const user: User = await this.client.bulbfetch.getUser(reminder.userId);
 
 					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch(_ => {
 						this.client.log.info(`[REMIND - DM] Unable to dm ${user.tag} (${user.id}) with the reminder of ${reminder.reason}`);

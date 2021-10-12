@@ -29,7 +29,7 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		//Variable declarations
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: any = context.guild?.members.cache.get(targetID);
+		let target: any = this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
 		let notInGuild: boolean = !target;
 		let infID: number = 0;
@@ -56,7 +56,7 @@ export default class extends Command {
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		if (!target) {
 			try {
-				target = await this.client.users.fetch(targetID);
+				target = this.client.bulbfetch.getUser(targetID);
 			} catch (error) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {

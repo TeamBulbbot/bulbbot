@@ -35,7 +35,7 @@ export default class extends SubCommand {
 			);
 		}
 
-		const user = await this.client.bulbutils.userObject(false, await this.client.users.fetch(inf.targetId));
+		const user = await this.client.bulbutils.userObject(false, await this.client.bulbfetch.getUser(inf.targetId));
 		const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
 		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
 

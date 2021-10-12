@@ -25,7 +25,7 @@ export default class extends Command {
 		else id = args[0].replace(NonDigits, "");
 		let user;
 		try {
-			user = await this.client.users.fetch(id);
+			user = await this.client.bulbfetch.getUser(id);
 		} catch (error) {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {

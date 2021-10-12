@@ -24,7 +24,8 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[1]);
-		const user: GuildMember = <GuildMember>context.guild?.members.cache.get(args[0].replace(NonDigits, ""));
+		const user: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, args[0].replace(NonDigits, ""));
+
 		if (!user)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {

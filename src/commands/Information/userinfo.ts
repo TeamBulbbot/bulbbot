@@ -30,16 +30,17 @@ export default class extends Command {
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		// await context.guild?.members.fetch();
+
 		let target: string;
 		if (args[0] === undefined) target = context.author.id;
 		else target = args[0].replace(NonDigits, "");
 
-		let user: any = await context.guild?.members.cache.get(target);
+		let user: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, target);
 		let isGuildMember = true;
 
 		if (!user) {
 			try {
-				user = await this.client.users.fetch(target);
+				user = await this.client.bulbfetch.getUser(target);
 				isGuildMember = false;
 			} catch (error) {
 				await context.channel.send(

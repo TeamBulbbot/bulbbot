@@ -54,7 +54,7 @@ export default class extends Command {
 			let target;
 			let infID: number;
 			try {
-				target = await this.client.users.fetch(targets[i].replace(NonDigits, ""));
+				target = await this.client.bulbfetch.getUser(targets[i].replace(NonDigits, ""));
 			} catch (error) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {

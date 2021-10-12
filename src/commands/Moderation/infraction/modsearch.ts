@@ -26,7 +26,7 @@ export default class extends SubCommand {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let user: User;
 		try {
-			user = await this.client.users.fetch(targetID);
+			user = await this.client.bulbfetch.getUser(targetID);
 		} catch (err) {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
