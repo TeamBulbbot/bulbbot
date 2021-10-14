@@ -71,9 +71,10 @@ export default class extends Command {
 		let components: MessageActionRow[];
 		const actionsOnInfo: boolean = (await databaseManager.getConfig(<Snowflake>context.guild?.id)).actionsOnInfo;
 
-		if (actionsOnInfo !== true) components = [];
+		if (!actionsOnInfo) components = [];
 		else if (!isGuildMember) components = [];
 		else if (!args[0]) components = [];
+		else if (user.id === context.author.id) components = [];
 		else components = [row];
 
 		let description: string = "";
@@ -177,7 +178,11 @@ export default class extends Command {
 			});
 
 			collector.on("end", async () => {
-				if (actionsOnInfo) msg.edit({ components: [rowDisabled] });
+				if (!actionsOnInfo) return;
+				else if (!isGuildMember) return;
+				else if (!args[0]) return;
+				else if (user.id === context.author.id) return;
+				msg.edit({ components: [rowDisabled] });
 			});
 		}
 	}
