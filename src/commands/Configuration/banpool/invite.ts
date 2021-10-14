@@ -12,8 +12,8 @@ export default class extends SubCommand {
 			name: "invite",
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["poolName:string"],
-			usage: "<poolName>",
+			argList: ["pool name:string"],
+			usage: "<pool name>",
 			clearance: 100,
 		});
 	}
@@ -48,18 +48,18 @@ export default class extends SubCommand {
 				},
 				inviter: {
 					tag: context.author.tag,
-					id: context.author.id
+					id: context.author.id,
 				},
 				banpool: {
 					name,
 					code,
-					expires: Math.floor(Date.now() / 1000) + 15 * 60
-				}
-			})
+					expires: Math.floor(Date.now() / 1000) + 15 * 60,
+				},
+			});
 
 			setTimeout(() => {
-				this.client.banpoolInvites.delete(code)
-			}, 15 * 60 * 1000)
+				this.client.banpoolInvites.delete(code);
+			}, 15 * 60 * 1000);
 
 			await msg.edit({ components: [rowDisabled] });
 

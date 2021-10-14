@@ -10,8 +10,8 @@ export default class extends SubCommand {
 			name: "leave",
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["poolName:string"],
-			usage: "<poolName>",
+			argList: ["pool name:string"],
+			usage: "<pool name>",
 			clearance: 100,
 		});
 	}

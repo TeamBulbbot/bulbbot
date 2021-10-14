@@ -12,8 +12,8 @@ export default class extends SubCommand {
 			name: "create",
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["poolName:string"],
-			usage: "<poolName>",
+			argList: ["pool name:string"],
+			usage: "<pool name>",
 			clearance: 100,
 		});
 	}
@@ -26,11 +26,14 @@ export default class extends SubCommand {
 		if (await doesbanpoolExist(name)) return context.channel.send("naw pal that name is already taken sorry");
 
 		await createBanpool(context.guild!?.id, name);
-		!await joinBanpool({
-			banpool: {
-				name
-			}
-		}, context.guild!?.id)
+		!(await joinBanpool(
+			{
+				banpool: {
+					name,
+				},
+			},
+			context.guild!?.id,
+		));
 		context.channel.send("wow pal crated a pog new banpool with the name of " + name);
 	}
 }

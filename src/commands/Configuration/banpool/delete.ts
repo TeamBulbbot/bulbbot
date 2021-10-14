@@ -11,8 +11,8 @@ export default class extends SubCommand {
 			aliases: ["del"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["poolName:string"],
-			usage: "<poolName>",
+			argList: ["pool name:string"],
+			usage: "<pool name>",
 			clearance: 100,
 		});
 	}
