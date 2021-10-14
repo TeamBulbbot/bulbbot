@@ -1,7 +1,7 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
-import { embedColor } from "../../Config";
+import { botInvite, embedColor, supportInvite } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import * as Emotes from "../../emotes.json";
 import { NonDigits } from "../../utils/Regex";
@@ -23,16 +23,16 @@ export default class extends Command {
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const row = new MessageActionRow().addComponents([
-			new MessageButton().setLabel("Invite").setStyle("LINK").setEmoji(Emotes.other.DISCORD.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/invite"),
-			new MessageButton().setLabel("Support").setStyle("LINK").setEmoji(Emotes.other.SUPPORT.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/discord"),
-			new MessageButton().setLabel("Patreon").setStyle("LINK").setEmoji(Emotes.other.PATREON.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/patreon"),
-			new MessageButton().setLabel("Source Code").setStyle("LINK").setEmoji(Emotes.other.GITHUB.replace(NonDigits, "")).setURL("https://bulbbot.mrphilip.xyz/github"),
+			new MessageButton().setLabel("Invite").setStyle("LINK").setEmoji(Emotes.other.DISCORD.replace(NonDigits, "")).setURL(botInvite),
+			new MessageButton().setLabel("Support").setStyle("LINK").setEmoji(Emotes.other.SUPPORT.replace(NonDigits, "")).setURL(supportInvite),
+			new MessageButton().setLabel("Patreon").setStyle("LINK").setEmoji(Emotes.other.PATREON.replace(NonDigits, "")).setURL("https://www.patreon.com/bulbbot"),
+			new MessageButton().setLabel("Source Code").setStyle("LINK").setEmoji(Emotes.other.GITHUB.replace(NonDigits, "")).setURL("https://github.com/TeamBulbbot/bulbbot"),
 		]);
 
 		const version = Number(this.client.about.buildId.replace("\n", "")) - 782;
 
 		let desc: string = `**__Bulbbot Information__**\n`;
-		desc += `**Version:** TS ${((Math.floor(version / 100) + 1) + "" + version).replace(/\B(?=(\d)+(?!\d))/g, ".")} (${this.client.about.build.hash.replace("\n", "")})\n\n`;
+		desc += `**Version:** TS ${(Math.floor(version / 100) + 1 + "" + version).replace(/\B(?=(\d)+(?!\d))/g, ".")} (${this.client.about.build.hash.replace("\n", "")})\n\n`;
 		desc += `**Last Commit:**\n**Hash:** \`${this.client.about.build.hash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;
 		desc +=

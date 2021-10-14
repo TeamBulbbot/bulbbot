@@ -1,5 +1,5 @@
 import BulbBotClient from "../structures/BulbBotClient";
-import { Permissions, TextChannel } from "discord.js";
+import { GuildChannel, Permissions, TextChannel } from "discord.js";
 import DatabaseManager from "./managers/DatabaseManager";
 import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
@@ -19,7 +19,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(context.author.id)) return;
-	if (dbGuild.ignoreChannels.includes(context.channel.id)) return;
+	if (dbGuild.ignoreChannels.includes(context.channel.id) || (<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((<GuildChannel>context.channel).parent!.id)) return;
 
 	if (!context.member?.roles.cache.values()) return;
 	for (const role of context.member.roles.cache.values()) {

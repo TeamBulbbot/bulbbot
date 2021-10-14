@@ -409,32 +409,36 @@
 						"description": "The desired server language",
 						"choices": [
 							{
-								"name": "en-US",
-								"value": "en-US"
+								"name": "English, US (English US)",
+								"value": "en-us"
 							},
 							{
-								"name": "sk-SK",
-								"value": "sk-SK"
+								"name": "Slovak (Slovenčina)",
+								"value": "sk-sk"
 							},
 							{
-								"name": "sv-SE",
-								"value": "sv-SE"
+								"name": "Swedish (Svenska)",
+								"value": "sv-se"
 							},
 							{
-								"name": "fr-FR",
-								"value": "fr-FR"
+								"name": "French (Français)",
+								"value": "fr-fr"
 							},
 							{
-								"name": "pt-BR",
-								"value": "pt-BR"
+								"name": "Portuguese (Português)",
+								"value": "pt-br"
 							},
 							{
-								"name": "cs-CZ",
-								"value": "cs-CZ"
+								"name": "Czech (Čeština)",
+								"value": "cs-cz"
 							},
 							{
-								"name": "it-IT",
-								"value": "it-IT"
+								"name": "Italian (Italiano)",
+								"value": "it-it"
+							},
+							{
+								"name": "Hindi (हिंदी)",
+								"value": "hi-in"
 							}
 						],
 						"required": true

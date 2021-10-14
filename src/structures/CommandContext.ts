@@ -1,5 +1,6 @@
 import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
 import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
+import CommandContextException from "./exceptions/CommandContextException";
 import { logger } from "../utils/Logger";
 
 function clone<T extends object | null>(obj: T): T {
@@ -10,6 +11,8 @@ abstract class BaseCommandContext {
 	// CommandContext
 	public readonly source!: Message | Interaction;
 	public readonly contextType!: "message" | "interaction";
+	public abstract get prefix(): string;
+	public abstract set prefix(p: string);
 
 	// Common properties
 	public readonly client!: Client;
@@ -159,6 +162,14 @@ class MessageCommandContext implements BaseCommandContext {
 	// CommandContext
 	public readonly source: Message;
 	public readonly contextType: "message";
+	private _prefix!: string | null;
+	public get prefix(): string {
+		if(this._prefix === null) throw new CommandContextException("Invalid attempt to use CommandContext prefix before it has been set");
+		return this._prefix;
+	}
+	public set prefix(p: string) {
+		this._prefix = p;
+	}
 
 	// Common properties
 	public readonly client: Client;
@@ -187,7 +198,15 @@ class MessageCommandContext implements BaseCommandContext {
 	public readonly crosspostable: boolean;
 	public readonly deletable: boolean;
 	public get deleted(): Promise<boolean> {
-		return new Promise(resolve => this.channel.messages.cache.get(this.id)?.fetch(true).then(m=>resolve(m.deleted)).catch(_=>resolve(true)));
+		return (new Promise(async resolve => {
+			// if(this.source.deleted) {resolve(true); return} // This should work, would reduce api calls. It's possible it could have false positives though and cause some missed deletes
+			try {
+				const m = await this.channel?.messages.cache.get(this.id)?.fetch(true);
+				resolve(m?.deleted ?? true);
+			} catch (e:any) {
+				resolve(true);
+			}
+		}));
 	}
 	public set deleted(arg: Promise<boolean>) {
 		arg.then(a=>this.source.deleted=a);
@@ -331,6 +350,7 @@ class MessageCommandContext implements BaseCommandContext {
 
 	constructor(source: Message) {
 		this.source = source;
+		this._prefix = null;
 		this.client = source.client;
 		this.channel = clone(source.channel);
 		this.channelId = this.channel?.id ?? null;
@@ -440,6 +460,14 @@ class InteractionCommandContext implements BaseCommandContext {
 	// CommandContext
 	public readonly source: Interaction;
 	public readonly contextType: "interaction";
+	private _prefix!: string | null;
+	public get prefix(): string {
+		if(this._prefix === null) throw new CommandContextException("Invalid attempt to use CommandContext prefix before it has been set");
+		return this._prefix;
+	}
+	public set prefix(p: string) {
+		this._prefix = p;
+	}
 
 	// Common properties
 	public readonly client: Client;
@@ -620,6 +648,7 @@ class InteractionCommandContext implements BaseCommandContext {
 	constructor(source: Interaction) {
 		this.contextType = "interaction";
 		this.source = source;
+		this._prefix = null;
 		this.client = source.client;
 		this.channel = source.channel ? clone(source.channel) : null!;
 		this.channelId = this.channel?.id ?? source.channelId;

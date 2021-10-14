@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, Guild, GuildChannel, GuildMember, MessageEmbed, Permissions, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -119,9 +119,6 @@ export default class {
 			} else if (feature === "WELCOME_SCREEN_ENABLED") {
 				f = Emotes.features.WELCOME_SCREEN_ENABLED;
 				desc = "Has the welcome screen enabled enabled, which will show a model when new users join the guild";
-			} else if (feature === "FEATURABLE") {
-				f = Emotes.features.FEATURABLE;
-				desc = "Deprecated";
 			} else if (feature === "VIP_REGIONS") {
 				f = Emotes.features.VIP_REGIONS;
 				desc = "Adds the ability to create voice channels with 384kbps max bitrate";
@@ -143,6 +140,12 @@ export default class {
 			} else if (feature === "MORE_STICKERS") {
 				f = Emotes.features.MORE_STICKERS;
 				desc = "Makes it possible to have 60 stickers in your server";
+			} else if (feature === "ROLE_ICONS") {
+				f = Emotes.features.ROLE_ICONS;
+				desc = "Adds the ability to add icons to roles (requires boost level 2)";
+			} else {
+				f = "⭐";
+				desc = "";
 			}
 
 			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
@@ -475,15 +478,20 @@ export default class {
 	};
 
 	// Supported languages
-	public readonly languages: Record<string, string> = {
-		"en-US": "en-US",
-		"pt-BR": "pt-BR",
-		"fr-FR": "fr-FR",
-		"sk-SK": "sk-SK",
-		"sv-SE": "sv-SE",
-		"cs-CZ": "cs-CZ",
-		"it-IT": "it-IT",
-	};
+	// dont ask me how this works found it on stackoverflow
+	public readonly languages = new Proxy(
+		{
+			"en-us|english": "en-US",
+			"pt-br|portuguese|português": "pt-BR",
+			"fr-fr|french|français": "fr-FR",
+			"sk-sk|slovak|slovenčina": "sk-SK",
+			"sv-se|swedish|svenska": "sv-SE",
+			"cs-cz|czech|čeština": "cs-CZ",
+			"it-it|italian|italiano": "it-IT",
+			"hi-in|hindi|हिंदी": "hi-IN",
+		}, // @ts-ignore
+		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
+	);
 
 	public formatAction(action: string): string {
 		switch (action) {
@@ -526,12 +534,27 @@ export default class {
 			embed.addField("Guild ID", <string>context?.guild?.id, true);
 			embed.addField("User", <string>context.author.id, true);
 			embed.addField("Message Content", <string>context.content, true);
-		} else if(runArgs) {
+		} else if (runArgs) {
 			const argsDesc: string[] = [];
-			for(const [k, v] of Object.entries(runArgs)) {
-				if((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
-				let additionalInfo = typeof v === "object" ? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (\`" + (<any>v)?.guild.id + "\`)" : ""}${(<any>v)?.member ? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">" : (<any>v)?.user ? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">" : ""}${(<any>v)?.channel && (<any>v)?.channel?.name ? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (\`" + (<any>v)?.channel.id + ")\`" : v instanceof GuildChannel ? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (\`" + (<any>v)?.id + ")\`" : ""}` : "";
-				argsDesc.push(`**${k}:** ${typeof v === "object" ? "[object " +  v?.constructor.name + "]" + additionalInfo.trimEnd() : v}`);
+			for (const [k, v] of Object.entries(runArgs)) {
+				if ((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
+				let additionalInfo =
+					typeof v === "object"
+						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${
+								(<any>v)?.member
+									? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">"
+									: (<any>v)?.user
+									? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
+									: ""
+						  }${
+								(<any>v)?.channel && (<any>v)?.channel?.name
+									? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
+									: v instanceof GuildChannel
+									? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
+									: ""
+						  }`
+						: "";
+				argsDesc.push(`**${k}:** ${typeof v === "object" ? "[object " + v?.constructor.name + "]" + additionalInfo.trimEnd() : v}`);
 			}
 			embed.addField("Event Name", `${eventName}`, true);
 			embed.addField("Event Arguments", argsDesc.join("\n").slice(0, 1024));
@@ -543,31 +566,27 @@ export default class {
 	/** Return a list of property keys where the values differ between the two objects */
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
-		for(const key of Object.keys(oldObj)) {
-			if(oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
+		for (const key of Object.keys(oldObj)) {
+			if (oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
 		}
 		return diff;
 	}
 
 	/** Deep equality check for arrays */
-	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T)
-	{
-		if(typeof firstArray !== typeof secondArray) return false;
-		if(firstArray instanceof Array !== secondArray instanceof Array) return false;
-		if(typeof firstArray !== "object") return firstArray === secondArray;
+	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T) {
+		if (typeof firstArray !== typeof secondArray) return false;
+		if (firstArray instanceof Array !== secondArray instanceof Array) return false;
+		if (typeof firstArray !== "object") return firstArray === secondArray;
 		// @ts-ignore
-		if("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
-		if(firstArray.length != secondArray.length) return false;
+		if ("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
+		if (firstArray.length != secondArray.length) return false;
 		const len = firstArray.length;
-		for(let i = 0; i < len; i++)
-		{
-			if(firstArray[i] !== secondArray[i])
-			{
-				if(firstArray[i] instanceof Array && secondArray[i] instanceof Array)
-				{
-					if(!this.arrayEquals(firstArray[i], secondArray[i])) return false;
-				} else if(typeof firstArray[i] === "object" && typeof secondArray[i] === "object") {
-					if(!this.objectEquals(firstArray[i], secondArray[i])) return false;
+		for (let i = 0; i < len; i++) {
+			if (firstArray[i] !== secondArray[i]) {
+				if (firstArray[i] instanceof Array && secondArray[i] instanceof Array) {
+					if (!this.arrayEquals(firstArray[i], secondArray[i])) return false;
+				} else if (typeof firstArray[i] === "object" && typeof secondArray[i] === "object") {
+					if (!this.objectEquals(firstArray[i], secondArray[i])) return false;
 				} else {
 					return false;
 				}
@@ -576,40 +595,44 @@ export default class {
 		return true;
 	}
 
+	public async updateChannelsWithMutedRole(guild: Guild, role: Snowflake): Promise<void> {
+		await guild.channels.fetch();
+		await guild.channels.cache.map(channel => {
+			if (!guild.me?.permissionsIn(channel).has(Permissions.FLAGS.VIEW_CHANNEL) || !guild.me?.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) return;
+
+			if (channel.type === "GUILD_TEXT") channel.permissionOverwrites.create(role, { SEND_MESSAGES: false });
+			else if (channel.type === "GUILD_VOICE") channel.permissionOverwrites.create(role, { CONNECT: false, SPEAK: false });
+		});
+	}
+
 	/** Deep equality check for objects */
-	public objectEquals<T>(firstObject: T,secondObject: T)
-	{
-		if(typeof firstObject !== "object" && typeof secondObject !== "object"){
+	public objectEquals<T>(firstObject: T, secondObject: T) {
+		if (typeof firstObject !== "object" && typeof secondObject !== "object") {
 			return firstObject === secondObject;
 		}
 		// @ts-ignore
-		if("equals" in firstObject && typeof firstObject.equals === "function"){
+		if ("equals" in firstObject && typeof firstObject.equals === "function") {
 			// @ts-ignore
 			return firstObject.equals(secondObject);
 		}
-		for(const propertyName of Object.keys(firstObject))
-		{
-			if(!(propertyName in secondObject))
-			{
+		for (const propertyName of Object.keys(firstObject)) {
+			if (!(propertyName in secondObject)) {
 				return false;
-			}/*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+			} /*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
 				return false;
 			} */
 		}
-		for(const propertyName of Object.keys(secondObject))
-		{
-			if(!(propertyName in firstObject))
-			{
+		for (const propertyName of Object.keys(secondObject)) {
+			if (!(propertyName in firstObject)) {
 				return false;
-			}/*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+			} /*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
 				return false;
 			} */
-			if(firstObject[propertyName] !== secondObject[propertyName]){
-				if(firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array)
-				{
-					if(!this.arrayEquals(firstObject[propertyName], secondObject[propertyName])) return false;
-				} else if(typeof firstObject[propertyName] === "object" && typeof secondObject[propertyName] === "object") {
-					if(!this.objectEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+			if (firstObject[propertyName] !== secondObject[propertyName]) {
+				if (firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array) {
+					if (!this.arrayEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				} else if (typeof firstObject[propertyName] === "object" && typeof secondObject[propertyName] === "object") {
+					if (!this.objectEquals(firstObject[propertyName], secondObject[propertyName])) return false;
 				} else {
 					return false;
 				}

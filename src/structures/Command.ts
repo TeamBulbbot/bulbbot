@@ -7,6 +7,7 @@ import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
+import { developers, subDevelopers } from "../Config";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -28,6 +29,7 @@ export default class Command {
 	public readonly maxArgs: number;
 	public readonly minArgs: number;
 	public readonly argList: string[];
+	public readonly depth: number;
 
 	get qualifiedName() {
 		return this.name;
@@ -45,6 +47,7 @@ export default class Command {
 		this.category = options.category || "Miscellaneous";
 		this._usage = options.usage || "";
 		this.examples = options.examples || [];
+		this.depth = ~~options.depth!;
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();
 		this.clearance = options.clearance || 0;
@@ -61,7 +64,7 @@ export default class Command {
 		if (!args.length || !this.subCommands.length) throw new CommandException(`Command \`${this.name}\` doesn't provide a run method!`);
 		return await context.channel.send(
 			await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
-				argument: args[args.length - 1].toLowerCase(),
+				argument: args[0].toLowerCase(),
 				arg_expected: this.argList[0],
 				argument_list: this.subCommands.map(sc => `\`${sc.name}\``).join(", "),
 			}),
@@ -125,6 +128,31 @@ export default class Command {
 		}
 
 		return;
+	}
+
+	public async validateUserPerms(context: CommandContext): Promise<boolean> {
+		let clearance = this.clearance;
+		const isDev = developers.includes(context.author.id);
+		const isSubDev = subDevelopers.includes(context.author.id);
+
+		if(this.devOnly && !isDev) return false;
+		if(this.subDevOnly && !(isDev || isSubDev)) return false;
+
+		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		if (commandOverride !== undefined) {
+			if (!commandOverride["enabled"]) return false;
+			clearance = commandOverride["clearanceLevel"];
+		}
+
+		const userClearance = await clearanceManager.getUserClearance(context);;
+		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
+
+		let missing: boolean = clearance > userClearance;
+		if (missing && ~~userPermCheck) {
+			const userMember: GuildMember = context.member!;
+			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
+		}
+		return !missing;
 	}
 
 	public resolveSubcommand(commandPath: string[]): Command {

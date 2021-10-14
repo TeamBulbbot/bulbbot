@@ -29,7 +29,15 @@ export default class {
 
 				if (reminder.channelId !== "") {
 					// @ts-ignore
-					const channel: TextChannel = await client.channels.fetch(reminder.channelId);
+					let channel: TextChannel;
+
+					try {
+						channel = await client.channels.fetch(reminder.channelId);
+					} catch (_) {
+						client.log.client(`[CLIENT - REMINDERS] [#${reminder.id}] Bot was was unable to find the channel: ${reminder.channelId}`);
+						return;
+					}
+
 					let message: Message;
 					let options: any = {
 						allowedMentions: {
@@ -69,20 +77,36 @@ export default class {
 		client.log.client("[CLIENT - MUTES] Starting to restore mutes...");
 		const mutes: any = await getAllMutes();
 		for (let i = 0; i < mutes.length; i++) {
-			const mute: any = mutes[i]; // @ts-ignore
-			const guild: Guild = await client.guilds.fetch(mute.gId);
-			if (!guild) {
+			const mute: any = mutes[i];
+
+			let guild: Guild;
+
+			try {
+				guild = await client.guilds.fetch(mute.gId);
+			} catch (_) {
+				client.log.client(`[CLIENT - MUTES] [#${mute.id}] Bot was kicked from the guild cant restore the mute on user: ${mute.targetId}`);
 				await deleteMute(mute.id);
 				continue;
 			}
-			// @ts-ignore
-			const target: GuildMember = await guild?.members.fetch(mute.targetId);
+
+			let target: GuildMember;
 			const muteRole: Snowflake = <Snowflake>await getMuteRole(<Snowflake>guild?.id);
 
-			if (!target || !muteRole) {
+			try {
+				target = await guild?.members.fetch(mute.targetId);
+			} catch (_) {
+				client.log.client(`[CLIENT - MUTES] [#${mute.id}] Bot was was unable to find the user: ${mute.targetId} in guild: ${guild.id}`);
 				await deleteMute(mute.id);
 				continue;
 			}
+
+			if (!muteRole) {
+				await deleteMute(mute.id);
+				continue;
+			}
+
+			if (mute.expireTime - Date.now() < 0) client.log.client(`[CLIENT - MUTES] [#${mute.id}] Old mute, unmuting user ${mute.targetId}`);
+
 			setTimeout(async function () {
 				await infractionsManager.unmute(
 					client,
@@ -111,19 +135,25 @@ export default class {
 		client.log.client("[CLIENT - TEMP BANS] Starting to restore temp bans...");
 		const tempbans: any = await getAllTemBans();
 		for (let i = 0; i < tempbans.length; i++) {
-			const tempban: any = tempbans[i]; // @ts-ignore
-			const guild: Guild = await client.guilds.fetch(tempban.gId);
-			if (!guild) {
+			const tempban: any = tempbans[i];
+			let guild: Guild;
+			try {
+				guild = await client.guilds.fetch(tempban.gId);
+			} catch (_) {
+				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was kicked from the guild cant unban the user: ${tempban.targetId}`);
 				await deleteTempBan(tempban.id);
 				continue;
 			}
-			// @ts-ignore
-			const target: User = await client.users.fetch(tempban.targetId);
 
-			if (!target) {
+			let target: User;
+			try {
+				target = await client.users.fetch(tempban.targetId);
+			} catch (error) {
+				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was was unable to find the user: ${tempban.targetId} in guild: ${guild.id}`);
 				await deleteTempBan(tempban.id);
 				continue;
 			}
+
 			setTimeout(async function () {
 				try {
 					await infractionsManager.unban(

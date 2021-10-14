@@ -1,7 +1,7 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Message, Role, Snowflake } from "discord.js";
+import { Guild, Message, Role, Snowflake } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
@@ -38,10 +38,12 @@ export default class extends SubCommand {
 						usage: this.usage,
 					}),
 				);
+
 			if (context.guild?.me?.roles.highest && context.guild?.me?.roles.highest.rawPosition < rTemp.rawPosition)
 				return context.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", context.guild?.id, {}));
 
 			await databaseManager.setMuteRole(<Snowflake>context.guild?.id, rTemp.id);
+			await this.client.bulbutils.updateChannelsWithMutedRole(<Guild>context.guild, rTemp.id);
 		}
 
 		await context.channel.send(await this.client.bulbutils.translate("config_mute_success", context.guild?.id, {}));

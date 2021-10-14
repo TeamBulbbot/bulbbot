@@ -1,8 +1,23 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Message } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
+
+const levels = {
+	levelNone: 0,
+	levelLow: 1,
+	levelMedium: 2,
+	levelHigh: 3,
+	levelVeryHigh: 4,
+};
+
+const verficationLevel = {
+	NONE: "levelNone",
+	LOW: "levelLow",
+	MEDIUM: "levelMedium",
+	HIGH: "levelHigh",
+	VERY_HIGH: "levelVeryHigh",
+};
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -10,11 +25,6 @@ export default class extends Command {
 			name,
 			description: "Changes the server verification level",
 			category: "Moderation",
-			usage: "<level>",
-			examples: ["verification 2"],
-			argList: ["level:int"],
-			minArgs: 1,
-			maxArgs: -1,
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["MANAGE_GUILD"],
@@ -22,20 +32,92 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const level: number = parseInt(args[0].replace(NonDigits, ""));
-		if (!level && level !== 0)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[0],
-					arg_expected: "verification:int",
-					usage: this.usage,
-				}),
-			);
-		if (context.guild?.features.includes("COMMUNITY") && level === 0) return context.channel.send(await this.client.bulbutils.translate("verification_community_zero", context.guild.id, {}));
+		let selected: string = verficationLevel[context.guild!?.verificationLevel];
+		let done: boolean = false;
+		let content: string = await this.client.bulbutils.translate("verification_level_select", context.guild?.id, {});
 
-		if (level > 4 || level < 0) return context.channel.send(await this.client.bulbutils.translate("verification_level_error", context.guild?.id, {}));
+		let mainrow = new MessageActionRow().addComponents([
+			new MessageButton()
+				.setStyle(selected === "levelNone" ? "PRIMARY" : "SECONDARY")
+				.setLabel("None")
+				.setCustomId("levelNone")
+				.setDisabled(context.guild?.features.includes("COMMUNITY")),
+			new MessageButton()
+				.setStyle(selected === "levelLow" ? "PRIMARY" : "SECONDARY")
+				.setLabel("Low")
+				.setCustomId("levelLow"),
+			new MessageButton()
+				.setStyle(selected === "levelMedium" ? "PRIMARY" : "SECONDARY")
+				.setLabel("Medium")
+				.setCustomId("levelMedium"),
+			new MessageButton()
+				.setStyle(selected === "levelHigh" ? "PRIMARY" : "SECONDARY")
+				.setLabel("High")
+				.setCustomId("levelHigh"),
+			new MessageButton()
+				.setStyle(selected === "levelVeryHigh" ? "PRIMARY" : "SECONDARY")
+				.setLabel("Very High")
+				.setCustomId("levelVeryHigh"),
+		]);
+		let saverow = new MessageActionRow().addComponents([new MessageButton().setStyle("SUCCESS").setLabel("Save").setCustomId("verificationSave")]);
 
-		await context.guild?.setVerificationLevel(level);
-		await context.channel.send(await this.client.bulbutils.translate("verification_level_success", context.guild?.id, { level }));
+		const message = await context.channel.send({
+			content,
+			components: [mainrow, saverow],
+		});
+
+		const collector = message.createMessageComponentCollector({ time: 30000 });
+
+		collector.on("collect", async (interaction: ButtonInteraction) => {
+			if (interaction.user.id !== context.author.id)
+				return interaction.reply({
+					ephemeral: true,
+					content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}),
+				});
+
+			if (interaction.customId !== "verificationSave") selected = interaction.customId;
+			else {
+				done = true;
+				await context.guild?.setVerificationLevel(levels[selected]);
+				content = await this.client.bulbutils.translate("verification_level_success", context.guild?.id, { level: levels[selected] });
+			}
+
+			mainrow = new MessageActionRow().addComponents([
+				new MessageButton()
+					.setStyle(selected === "levelNone" ? "PRIMARY" : "SECONDARY")
+					.setLabel("None")
+					.setCustomId("levelNone")
+					.setDisabled(context.guild?.features.includes("COMMUNITY") || done),
+				new MessageButton()
+					.setStyle(selected === "levelLow" ? "PRIMARY" : "SECONDARY")
+					.setLabel("Low")
+					.setCustomId("levelLow")
+					.setDisabled(done),
+				new MessageButton()
+					.setStyle(selected === "levelMedium" ? "PRIMARY" : "SECONDARY")
+					.setLabel("Medium")
+					.setCustomId("levelMedium")
+					.setDisabled(done),
+				new MessageButton()
+					.setStyle(selected === "levelHigh" ? "PRIMARY" : "SECONDARY")
+					.setLabel("High")
+					.setCustomId("levelHigh")
+					.setDisabled(done),
+				new MessageButton()
+					.setStyle(selected === "levelVeryHigh" ? "PRIMARY" : "SECONDARY")
+					.setLabel("Very High")
+					.setCustomId("levelVeryHigh")
+					.setDisabled(done),
+			]);
+
+			saverow = new MessageActionRow().addComponents([new MessageButton().setStyle("SUCCESS").setLabel("Save").setCustomId("verificationSave").setDisabled(done)]);
+
+			interaction.deferUpdate();
+
+			message.edit({
+				content,
+				components: [mainrow, saverow],
+			});
+		});
 	}
 }

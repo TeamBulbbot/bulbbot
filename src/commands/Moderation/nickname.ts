@@ -58,8 +58,8 @@ export default class extends Command {
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		if (nickname.length > 32) return context.channel.send(await this.client.bulbutils.translate("nickname_too_long", context.guild?.id, { length: nickname.length.toString() }));
-		if (!nickname && !target.nickname) return context.channel.send(await this.client.bulbutils.translate("already_no_nickname", context.guild?.id, { target: target.user }));
-		if (nickname === target.nickname) return context.channel.send(await this.client.bulbutils.translate("already_has_nickname", context.guild?.id, { target: target.user, nickname: target.nickname }));
+		if (!nickname && !target.nickname) return context.channel.send(await this.client.bulbutils.translate("nickname_no_nickname", context.guild?.id, { target: target.user }));
+		if (nickname === target.nickname) return context.channel.send(await this.client.bulbutils.translate("nickname_same_nickname", context.guild?.id, { target: target.user, nickname: target.nickname }));
 
 		const nickOld: string = target.nickname || target.user.username;
 		let infID: number;
@@ -81,11 +81,11 @@ export default class extends Command {
 			);
 		} catch (e: any) {
 			console.error(e.stack);
-			return context.channel.send(await this.client.bulbutils.translate("change_nick_fail", context.guild?.id, { target: target.user }));
+			return context.channel.send(await this.client.bulbutils.translate("nickname_fail", context.guild?.id, { target: target.user }));
 		}
 
 		return context.channel.send(
-			await this.client.bulbutils.translate(nickname ? "change_nick_success" : "remove_nick_success", context.guild?.id, {
+			await this.client.bulbutils.translate(nickname ? "nickname_success" : "nickname_remove_success", context.guild?.id, {
 				target: target.user,
 				nick_old: nickOld,
 				nick_new: nickname,

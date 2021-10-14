@@ -291,15 +291,15 @@ export default class {
 		return result;
 	}
 
-	public async automodAppend(guildID: Snowflake, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
+	public async automodAppend(guildID: Snowflake, part: AutoModListPart, items: (string | undefined)[]): Promise<AutoModListOperationResult> {
 		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
 			const dbSet: Set<string> = new Set(dblist);
-			const itemSet: Set<string> = new Set(items);
+			const itemSet: Set<string | undefined> = new Set(items);
 			const duplicateSet: Set<string> = new Set();
 			const addedSet: Set<string> = new Set();
 			for (const item of itemSet) {
-				if (dbSet.has(item)) duplicateSet.add(item);
-				else dbSet.add(item), addedSet.add(item);
+				if (dbSet.has(item!)) duplicateSet.add(item!);
+				else dbSet.add(item!), addedSet.add(item!);
 			}
 			return { list: [...dbSet], added: [...addedSet], removed: [], other: [...duplicateSet] };
 		});
@@ -323,6 +323,22 @@ export default class {
 				dblist = dblist.slice(dblist.findIndex(i => !items.includes(i)));
 			}
 			return { list: dblist, added: [], removed: removed, other: notPresent };
+		});
+	}
+
+	public async automodSetTimeout(guildID: Snowflake, part: AutoModAntiSpamPart, timeout: number): Promise<void> {
+		const dbkey: string = (function (part) {
+			switch (part) {
+				case AutoModPart.message:
+					return "timeoutMessages";
+				case AutoModPart.mention:
+					return "timeoutMentions";
+			}
+		})(part);
+
+		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Timeout WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)`, {
+			bind: { Timeout: timeout, Part: dbkey, GuildID: guildID },
+			type: QueryTypes.UPDATE,
 		});
 	}
 

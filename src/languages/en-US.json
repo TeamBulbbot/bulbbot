@@ -54,6 +54,17 @@
     "unknown": "{{emote_fail}} An unknown error has occurred, please try again later or if the issue persists contact the developers at {{discord_invite}}",
     "automod_items_length_undefined": "{{emote_fail}} An error occurred while attempting to parse the selected Automod items. No Automod items have been provided or Automod items length is undefined."
   },
+  "global_words": {
+    "none": "none",
+    "some": "some",
+    "all": "all",
+    "and": "and",
+    "or": "or",
+    "yes": "yes",
+    "no": "no",
+    "confirm": "confirm",
+    "cancel": "cancel"
+  },
 
   "global_cannot_action_self": "{{emote_warn}} You cannot perform this action on yourself!",
   "global_cannot_action_owner": "{{emote_warn}} You cannot perform this action on the server owner!",
@@ -65,7 +76,7 @@
 
   "event_interaction_dm_command": "{{emote_warn}} Slash commands cannot be used in DMs.",
 
-  "event_message_args_unexpected": "{{emote_warn}} Unexpected argument {{argument}}. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
+  "event_message_args_unexpected": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "event_message_args_missing": "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
   "event_message_args_missing_list": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
   "event_message_edit": "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
@@ -99,6 +110,9 @@
   "event_member_leave_roles": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>\n**Roles:** {{user_roles}}",
 
   "event_member_update_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has changed their nickname from `{{before}}` to `{{after}}`",
+  "event_member_update_nickname_moderator": "{{emote_warn}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})`",
+  "event_member_remove_nickname": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has removed their nickname (was: `{{before}}`)",
+  "event_member_remove_nickname_moderator": "{{emote_warn}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_add": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})`",
   "event_member_update_role_add_moderator": "{{emote_add}} The **{{role.name}}** Role has been added to **{{user.tag}}** `({{user.id}})` by **{{moderator.tag}}** `({{moderator.id}})`",
   "event_member_update_role_remove": "{{emote_remove}} The **{{role.name}}** Role has been removed from **{{user.tag}}** `({{user.id}})`",
@@ -162,12 +176,15 @@
   "automod_add_success": "{{emote_success}} Successfully added item(s) `{{item}}` to `{{category}}`.",
   "automod_remove_success": "{{emote_success}} Successfully removed item(s) `{{item}}` from `{{category}}`",
 
-  "automod_updated_limit": "{{emote_success}} Successfully updated the limit for `{{category}}` with a new limit of `{{limit}}`",
+  "automod_updated_limit": "{{emote_success}} Successfully set the limit for `{{category}}` to `{{limit}}`",
   "automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",
 
   "automod_enabled": "{{emote_success}} Successfully enabled AutoMod in the server.",
   "automod_disabled": "{{emote_success}} Successfully disabled AutoMod in the server.",
   "automod_disabled_part": "{{emote_success}} Successfully disabled AutoMod category `{{category}}`",
+
+  "automod_timeout_too_large": "{{emote_fail}} The timeout limit cannot be larger than `30 seconds`",
+  "automod_timeout_too_small": "{{emote_fail}} The timeout limit cannot be lower than `3 seconds`",
 
   "automod_settings_header": "AutoMod settings for {{guild.name}}",
   "automod_settings_enabled": "**Enabled:** {{enabled}}",
@@ -250,31 +267,30 @@
   "purge_too_many": "{{emote_fail}} Can only purge a max of 99 messages at a time",
   "purge_too_few": "{{emote_fail}} You cannot purge less than 2 messages",
   "purge_success": "{{emote_success}} Successfully purged **{{count}}** messages",
-
-  "verification_community_zero": "{{emote_fail}} Verification level cannot be set to `0` for community servers!",
-  "verification_level_error": "{{emote_fail}} Verification level cannot be greater than `4` or less than `0`",
+ 
+  "verification_level_select": "Please select your verification level then press save",
   "verification_level_success": "{{emote_success}} Server verification level changed to `{{level}}`",
 
-  "change_nick_success": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
-  "remove_nick_success": "{{emote_success}} Nickname removed from **{{target.tag}}** `({{target.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "change_nick_mod_action_log": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "remove_nick_mod_action_log": "{{emote_success}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "change_nick_fail": "{{emote_fail}} Unable to change nickname of **{{target.tag}}** `({{target.id}})`",
-  "already_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` does not have a nickname to remove",
-  "already_has_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already nicknamed `{{nickname}}`",
+  "nickname_success": "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_remove_success": "{{emote_success}} Nickname removed from **{{target.tag}}** `({{target.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_mod_log": "{{emote_warn}} Nickname of **{{target.tag}}** `({{target.id}})` has been {{action}} from `{{nick_old}}` to `{{nick_new}}` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_remove_mod_log": "{{emote_warn}} Nickname {{action}} from **{{target.tag}}** `({{target.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "nickname_fail": "{{emote_fail}} Unable to change nickname of **{{target.tag}}** `({{target.id}})`",
+  "nickname_no_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` does not have a nickname to remove",
+  "nickname_same_nickname": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already nicknamed `{{nickname}}`",
   "nickname_too_long": "{{emote_warn}} Nickname has too many characters (`{{length}}`). Nicknames are limited to 32 characters",
 
   "ping_latency": "Bot latency is **{{latency_bot}}ms**\nWebSocket latency is **{{latency_ws}}ms**",
 
   "uptime_uptime": "The current uptime is **{{uptime}}**",
 
-  "license_license": "📜 This bot is licensed under the MIT license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
+  "license_license": "📜 This bot is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license, for more info see the full license **[here](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
 
   "privacy_policy": "📜 View the privacy policy of the bot **[here](https://bulbbot.mrphilip.xyz/privacy-policy)**",
 
   "github_source_code": "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TestersQTs/Bulbbot)**",
 
-  "invite_desc": "**Invite the bot to your server**\n{{bot_invite}}\n\n**Join the support server**\n{{support_guild}}",
+  "invite_content": "Links to invite Bulbbot to your server",
 
   "remind_list_none": "{{emote_warn}} You have not set any reminders",
   "remind_placeholder": "No Reminders Selected",
@@ -317,12 +333,13 @@
   "duration_invalid_6h": "{{emote_fail}} Duration cannot be longer than **6 hours**",
   "duration_invalid_1y": "{{emote_fail}} Duration cannot be longer than **1 year**!",
 
-  "lockdown_locked": "{{emote_success}} Successfully locked down channel <#{{channel}}>",
-  "lockdown_unlocked": "{{emote_success}} Successfully unlocked channel <#{{channel}}>",
+  "lockdown_locked": "{{emote_locked}} Successfully locked down channel <#{{channel}}>",
+  "lockdown_unlocked": "{{emote_unlocked}} Successfully unlocked channel <#{{channel}}>",
 
   "mute_muterole_not_found": "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
   "mute_not_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
   "mute_rejoin": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
+  "mute_rejoin_reason": "{{user.tag}} ({{user.id}}) has rejoined the server before their mute expired and has been automatically muted again.",
   "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already muted!",
   "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
   "unmute_special": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been unmuted for **{{reason}}** ",

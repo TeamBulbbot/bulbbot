@@ -36,7 +36,12 @@ export default class extends Event {
 			const muteRole: Snowflake | null = await databaseManager.getMuteRole(member.guild.id);
 			if (!muteRole) return;
 
-			await member.roles.add(muteRole);
+			await member.roles.add(
+				muteRole,
+				await this.client.bulbutils.translate("mute_rejoin_reason", member.guild.id, {
+					user: member.user,
+				}),
+			);
 
 			await loggingManager.sendModActionPreformatted(
 				this.client,

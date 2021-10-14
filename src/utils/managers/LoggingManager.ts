@@ -110,7 +110,7 @@ export default class {
 		);
 	}
 
-	public async sendEventLog(client: BulbBotClient, guild: Guild, part: Exclude<LoggingPartString, "modAction">, log: string, extra: string | MessageEmbed[] | null = null): Promise<void> {
+	public async sendEventLog(client: BulbBotClient, guild: Guild, part: LoggingPartString, log: string, extra: string | MessageEmbed[] | null = null): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);

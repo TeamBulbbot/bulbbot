@@ -29,8 +29,8 @@ export const id: Snowflake = "868821693571932191";
 export const activityName: string = "the light shine";
 export const type: ActivityType = "WATCHING";
 export const status: PresenceStatusData = "online";
-export const supportInvite: string = "https://bulbbot.mrphilip.xyz/discord";
-export const botInvite: string = "https://bulbbot.mrphilip.xyz/invite";
+export const supportInvite: string = "https://discord.com/invite/WgEtVqyNFZ";
+export const botInvite: string = "https://discord.com/oauth2/authorize?client_id=868821693571932191&permissions=261955644663&scope=bot+applications.commands";
 
 // Server
 export const prometheusHost: string = "localhost";
@@ -67,6 +67,8 @@ export const translatorEmojis: Record<string, string> = {
 	emote_unban: Emotes.actions.UNBAN,
 	emote_mute: Emotes.actions.MUTE,
 	emote_remind: Emotes.other.REMIND,
+	emote_locked: Emotes.other.LOCKED,
+	emote_unlocked: Emotes.other.UNLOCKED,
 };
 
 export const translatorConfig: Record<string, any> = {
