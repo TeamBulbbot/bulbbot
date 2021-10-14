@@ -17,7 +17,7 @@ export default class extends Command {
 			subCommands: [create, _delete, invite, join, leave, list, remove],
 			aliases: ["bp"],
 			usage: "<action>",
-			examples: ["banpool invite <poolName>", "banpool remove <guildId>", "banpool delete <poolName>"],
+			examples: ["banpool invite <pool name>", "banpool remove <guildId>", "banpool delete <pool name>"],
 			argList: ["action:string"],
 			minArgs: 1,
 			maxArgs: -1,

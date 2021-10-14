@@ -8,6 +8,7 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "remove",
+			aliases: ["kick"],
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["guildId:snowflake"],
@@ -18,5 +19,6 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// todo log in banpool logs (in og and this server) that a server was removed from the pool
+		// only og pool can remove other guilds from the pool
 	}
 }

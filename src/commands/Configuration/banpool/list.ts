@@ -14,5 +14,6 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// well make this works :kek:
+		// list all banpools the guild is subscired to + total pool size
 	}
 }

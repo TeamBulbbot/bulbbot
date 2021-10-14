@@ -7,7 +7,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
-			name: "leave",
+			name: "info",
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["pool name:string"],
@@ -17,7 +17,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// todo log in banpool logs (in og and this server) that a serer left the pool
-		// leaves a banpool
+		// get information about a banpool your guild has created
+		// list of all subbed guild ids
 	}
 }

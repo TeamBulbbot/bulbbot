@@ -12,8 +12,8 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class {
 	async createInfraction(guildID: Snowflake, action: string, active: boolean | number, reason: string, target: User, moderator: User): Promise<void> {
-		await sequelize.query(
-			'INSERT INTO infractions (action, active, reason, target, "targetId", moderator, "moderatorId", "createdAt", "updatedAt", "guildId") VALUES ($InfAction, $Active, $Reason, $Target, $TargetID, $Moderator, $ModeratorID, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID))',
+		const response: any = await sequelize.query(
+			'INSERT INTO infractions (action, active, reason, target, "targetId", moderator, "moderatorId", "createdAt", "updatedAt", "guildId") VALUES ($InfAction, $Active, $Reason, $Target, $TargetID, $Moderator, $ModeratorID, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID)) RETURNING *;',
 			{
 				bind: {
 					GuildID: guildID,
@@ -30,6 +30,8 @@ export default class {
 				type: QueryTypes.INSERT,
 			},
 		);
+
+		return response[0][0];
 	}
 
 	public async deleteInfraction(guildID: Snowflake, infractionID: number): Promise<void> {

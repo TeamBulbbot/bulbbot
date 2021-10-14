@@ -10,6 +10,7 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "invite",
+			aliases: ["inv"],
 			minArgs: 1,
 			maxArgs: -1,
 			argList: ["pool name:string"],
@@ -20,6 +21,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// todo log in banpool logs that an invite was created
+		// todo move stuff to translator
 
 		const name: string = args[0];
 

@@ -2,6 +2,7 @@ import { Snowflake } from "discord.js";
 import { sequelize } from "../database/connection";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
+import BulbBotClient from "src/structures/BulbBotClient";
 
 export default class {
 	async createBanpool(guildId: Snowflake, poolName: string): Promise<void> {
@@ -94,5 +95,9 @@ export default class {
 
 		// remove dupes and send back
 		return [...new Set(g)];
+	}
+
+	async sendLogToOG(client: BulbBotClient, guildId: Snowflake, log: string) {
+		// todo make this works
 	}
 }

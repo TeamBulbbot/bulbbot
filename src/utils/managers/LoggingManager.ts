@@ -155,6 +155,7 @@ export default class {
 
 	private async betterActions(client: BulbBotClient, guildID: Snowflake, action: string): Promise<string> {
 		switch (action) {
+			case await client.bulbutils.translate("mod_action_types.pool_ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.soft_ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.force_ban", guildID, {}):

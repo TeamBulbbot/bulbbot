@@ -6,7 +6,7 @@ async function sync(): Promise<void> {
 
 	await sequelize.sync({
 		alter: true,
-		//force: true,
+		// force: true,
 		logging: true,
 		benchmark: true,
 	});

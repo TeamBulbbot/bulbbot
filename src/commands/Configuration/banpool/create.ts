@@ -4,6 +4,7 @@ import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
+
 const { doesbanpoolExist, createBanpool, joinBanpool }: BanpoolManager = new BanpoolManager();
 
 export default class extends SubCommand {
@@ -20,6 +21,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// todo log creation in banpool logs
+		// todo move stuff to translator
 
 		const name: string = args[0];
 
