@@ -1,11 +1,13 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Message } from "discord.js";
+import { Guild, Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
+import LoggingManager from "../../../utils/managers/LoggingManager";
 
-const { joinBanpool, sendLogToOG }: BanpoolManager = new BanpoolManager();
+const { sendEventLog }: LoggingManager = new LoggingManager();
+const { joinBanpool }: BanpoolManager = new BanpoolManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -20,19 +22,36 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// todo log in banpool logs (in og and this server) that a serer joined the pool
-		// tood move stuff to translator
-
 		const code: string = args[0];
 		const invite = this.client.banpoolInvites.get(code);
 
-		if (!invite) return context.channel.send("no such invite can exist in this world try again");
-		if (invite.guild.id === context.guild?.id) return context.channel.send("m8 why are you joining your own banpool????");
-		if (!(await joinBanpool(invite, context.guild!?.id))) return context.channel.send("Something went horrible wrong :(");
+		if (!invite) return context.channel.send(await this.client.bulbutils.translate("banpool_join_unable_to_find", context.guild?.id, {}));
+		if (invite.guild.id === context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("banpool_join_own_guild", context.guild?.id, {}));
+		if (!(await joinBanpool(invite, context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_join_error", context.guild?.id, {}));
 
-		await sendLogToOG(this.client, invite.guild.id, `new guild joined the banpool lol`);
+		const poolguild: Guild = await this.client.guilds.fetch(invite.guild.id);
 
-		context.channel.send("wow pal joined the server you are very pogggers");
+		await sendEventLog(
+			this.client,
+			poolguild,
+			"banpool",
+			await this.client.bulbutils.translate("banpool_join_log_og", context.guild?.id, {
+				user: context.user,
+				invite,
+				guild: context.guild,
+			}),
+		);
+		await sendEventLog(
+			this.client,
+			context.guild!,
+			"banpool",
+			await this.client.bulbutils.translate("banpool_join_log", context.guild?.id, {
+				user: context.user,
+				invite,
+			}),
+		);
+
+		context.channel.send(await this.client.bulbutils.translate("banpool_join_success", context.guild?.id, {}));
 
 		this.client.banpoolInvites.delete(invite.banpool.code);
 	}

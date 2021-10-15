@@ -16,7 +16,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Too be written",
+			description: "Crossban a user across multiple servers",
 			category: "Moderation",
 			aliases: ["poolban"],
 			usage: "<user> <reason>",
@@ -49,8 +49,8 @@ export default class extends Command {
 			return;
 		}
 
-		const pooles: any[] = await getPools(context.guild!?.id);
-		const poolGuilds: any[] = await getGuildsFromPools(pooles);
+		const pools: any[] = await getPools(context.guild!?.id);
+		const poolGuilds: any[] = await getGuildsFromPools(pools);
 		let totalBans: number = 0;
 
 		for (let i = 0; i < poolGuilds.length; i++) {
@@ -58,20 +58,13 @@ export default class extends Command {
 			const guild: Guild = await this.client.guilds.fetch(guildId);
 			if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild?.id, {});
 
-			if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-				console.log("missing perms to ban");
-				continue;
-			}
+			if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
 
-			// check if user is already banned
 			const banList = await guild.bans.fetch();
 			const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
 
-			// todo remove console logs
-			if (bannedUser) {
-				console.log("already banned");
-				continue;
-			} else {
+			if (bannedUser) continue;
+			else {
 				let guildTarget: GuildMember | undefined = undefined;
 				try {
 					guildTarget = await guild.members.fetch(target.id);
@@ -80,22 +73,22 @@ export default class extends Command {
 				if (!guildTarget) {
 					totalBans++;
 					banUser(this.client, target, context.author, guild, context.guild!, reason);
-					//console.log("not in guild ban");
 				} else {
 					if (guildTarget.bannable) {
 						totalBans++;
 						banUser(this.client, target, context.author, guild, context.guild!, reason);
-						//console.log("in guild ban");
-					} else {
-						console.log("user is in guild but I cant ban");
-						continue;
-					}
+					} else continue;
 				}
 			}
 		}
 
-		// todo write a better message lol
-		context.channel.send(`total bans: ${totalBans}/${poolGuilds.length}`);
+		context.channel.send(
+			await this.client.bulbutils.translate("crossban_success", context.guild?.id, {
+				target,
+				totalBans,
+				totalPossible: poolGuilds.length,
+			}),
+		);
 	}
 }
 
@@ -104,10 +97,22 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 	await sendEventLog(
 		client,
 		guild,
-		"banpool", // todo move to translator
-		`${Emotes.actions.BAN} **${target.tag}** \`${target.id}\` has been crossbanned from **${startedGuild.name}** \`(${startedGuild.id})\` by **${moderator.tag}** \`(${moderator.id})\` for **${reason}** \`[#${infraction.id}]\``,
+		"banpool",
+		await client.bulbutils.translate("crossban_reason", guild?.id, {
+			emoji: Emotes.actions.BAN,
+			target,
+			guild,
+			moderator,
+			reason,
+			infraction_id: infraction.id,
+		}),
 	);
-	// todo remove this line before prod
-	//guild.members.ban(target, { reason: `Crossban from: ${startedGuild.name} (${startedGuild.id}) | Moderator: ${moderator.tag} (${moderator.id}) for ${reason}` });
-	console.log(`[POOL BAN] ${target.tag} was beaned in ${guild.name} for ${reason}`);
+
+	guild.members.ban(target, {
+		reason: await client.bulbutils.translate("crossban_reason_audit", guild?.id, {
+			guild,
+			moderator,
+			reason,
+		}),
+	});
 }

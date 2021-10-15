@@ -2,7 +2,6 @@ import { Snowflake } from "discord.js";
 import { sequelize } from "../database/connection";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
-import BulbBotClient from "src/structures/BulbBotClient";
 
 export default class {
 	async createBanpool(guildId: Snowflake, poolName: string): Promise<void> {
@@ -37,7 +36,7 @@ export default class {
 			type: QueryTypes.SELECT,
 		});
 
-		return !access[0];
+		return !!access[0];
 	}
 
 	async joinBanpool(invite: any, guildId: Snowflake): Promise<boolean> {
@@ -97,7 +96,58 @@ export default class {
 		return [...new Set(g)];
 	}
 
-	async sendLogToOG(client: BulbBotClient, guildId: Snowflake, log: string) {
-		// todo make this works
+	async getPoolData(poolname: string) {
+		const pool: any = await sequelize.query('SELECT * FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE "name" = $PoolName)', {
+			bind: {
+				PoolName: poolname,
+			},
+			type: QueryTypes.SELECT,
+		});
+
+		return pool;
+	}
+
+	async isGuildInPool(guildId: Snowflake, poolname: string) {
+		let guids: string[] = [];
+		const guilds: any = await sequelize.query('SELECT "guildId" FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE "name" = $PoolName)', {
+			bind: {
+				PoolName: poolname,
+			},
+			type: QueryTypes.SELECT,
+		});
+
+		for (let ii = 0; ii < guilds.length; ii++) guids.push(guilds[ii].guildId);
+
+		return guids.includes(guildId);
+	}
+
+	async leavePool(guildId: Snowflake, poolname: string) {
+		await sequelize.query('DELETE FROM "banpoolSubscribers" WHERE "guildId" = $GuildID AND "banpoolId" = (SELECT id FROM banpools WHERE name = $PoolName)', {
+			bind: { GuildID: guildId, PoolName: poolname },
+			type: QueryTypes.DELETE,
+		});
+	}
+
+	async getCreatorGuild(poolname: string) {
+		const guid: any = await sequelize.query('SELECT "guildId" from guilds WHERE id = (SELECT "guildId" from banpools WHERE name = $PoolName)', {
+			bind: {
+				PoolName: poolname,
+			},
+			type: QueryTypes.SELECT,
+		});
+
+		return guid[0].guildId;
+	}
+
+	async deletePool(poolname: string) {
+		await sequelize.query('DELETE FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE name = $PoolName)', {
+			bind: { PoolName: poolname },
+			type: QueryTypes.DELETE,
+		});
+
+		await sequelize.query("DELETE FROM banpools WHERE name = $PoolName", {
+			bind: { PoolName: poolname },
+			type: QueryTypes.DELETE,
+		});
 	}
 }

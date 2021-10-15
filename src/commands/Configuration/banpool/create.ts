@@ -4,8 +4,10 @@ import CommandContext from "../../../structures/CommandContext";
 import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
+import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const { doesbanpoolExist, createBanpool, joinBanpool }: BanpoolManager = new BanpoolManager();
+const { sendEventLog }: LoggingManager = new LoggingManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -20,12 +22,9 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// todo log creation in banpool logs
-		// todo move stuff to translator
-
 		const name: string = args[0];
 
-		if (await doesbanpoolExist(name)) return context.channel.send("naw pal that name is already taken sorry");
+		if (await doesbanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild?.id, {}));
 
 		await createBanpool(context.guild!?.id, name);
 		!(await joinBanpool(
@@ -36,6 +35,21 @@ export default class extends SubCommand {
 			},
 			context.guild!?.id,
 		));
-		context.channel.send("wow pal crated a pog new banpool with the name of " + name);
+
+		await sendEventLog(
+			this.client,
+			context.guild!,
+			"banpool",
+			await this.client.bulbutils.translate("banpool_create_log", context.guild?.id, {
+				user: context.user,
+				name,
+			}),
+		);
+
+		context.channel.send(
+			await this.client.bulbutils.translate("banpool_create_success", context.guild?.id, {
+				name,
+			}),
+		);
 	}
 }

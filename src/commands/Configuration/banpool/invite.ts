@@ -4,6 +4,9 @@ import CommandContext from "../../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
+import LoggingManager from "../../../utils/managers/LoggingManager";
+
+const { sendEventLog }: LoggingManager = new LoggingManager();
 const { haveAccessToPool }: BanpoolManager = new BanpoolManager();
 
 export default class extends SubCommand {
@@ -20,12 +23,9 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// todo log in banpool logs that an invite was created
-		// todo move stuff to translator
-
 		const name: string = args[0];
 
-		if (await haveAccessToPool(context.guild!?.id, name)) return context.channel.send("well can't access that my friend");
+		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
 
 		const filter = (i: any) => i.user.id === context.author.id;
 
@@ -33,7 +33,7 @@ export default class extends SubCommand {
 		const rowDisabled = new MessageActionRow().addComponents([new MessageButton().setCustomId("generate-ban-pool-code").setLabel("Generate code").setStyle("SUCCESS").setDisabled(true)]);
 
 		const msg: Message = await context.channel.send({
-			content: "Press the green button to generate your banpool code",
+			content: await this.client.bulbutils.translate("banpool_invite_message", context.guild?.id, {}),
 			components: [row],
 		});
 
@@ -59,6 +59,17 @@ export default class extends SubCommand {
 				},
 			});
 
+			await sendEventLog(
+				this.client,
+				context.guild!,
+				"banpool",
+				await this.client.bulbutils.translate("banpool_invite_success_log", context.guild?.id, {
+					user: context.user,
+					name,
+					expireTime: Math.floor(Date.now() / 1000 + 15 * 60),
+				}),
+			);
+
 			setTimeout(() => {
 				this.client.banpoolInvites.delete(code);
 			}, 15 * 60 * 1000);
@@ -67,9 +78,11 @@ export default class extends SubCommand {
 
 			interaction.reply({
 				ephemeral: true,
-				content: `Here is your banpool code \`${code}\` for the **${name}** pool. Keep it safe until the other server uses it to join. It will expire <t:${Math.floor(
-					Date.now() / 1000 + 15 * 60,
-				)}:R> and only has **one** use. The other server can use the \`!banpool join ${code}\` command to join the pool.`,
+				content: await this.client.bulbutils.translate("banpool_invite_reply", context.guild?.id, {
+					code,
+					name,
+					expireTime: Math.floor(Date.now() / 1000 + 15 * 60),
+				}),
 			});
 		});
 
