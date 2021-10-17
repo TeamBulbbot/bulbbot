@@ -9,6 +9,7 @@ enum LoggingPart {
 	modAction,
 	joinLeave,
 	thread,
+	banpool,
 }
 export default LoggingPart;
-export type LoggingPartString = "message" | "member" | "role" | "channel" | "thread" | "invite" | "joinLeave" | "automod" | "modAction" | "banpool" | "other";
+export type LoggingPartString = keyof typeof LoggingPart;
