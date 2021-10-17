@@ -14,8 +14,8 @@
 		"delete:build": "rimraf build/*"
 	},
 	"repository": "git+https://github.com/TeamBulbbot//Bulbbot.git",
-	"author": "TesterQTs",
-	"license": "MIT",
+	"author": "Team Bulbbot",
+	"license": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License",
 	"bugs": {
 		"url": "https://github.com/TeamBulbbot//Bulbbot/issues"
 	},
