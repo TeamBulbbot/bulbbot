@@ -236,9 +236,9 @@
   "nickname_too_long": "{{emote_warn}} Pŕezdívka je moc dlouhá (`{{length}}`). Přezdívky mohou mít maximálně 32 znaků",
   "ping_latency": "Latence bota je **{{latency_bot}}ms**\nLatence WebSocketu je **{{latency_ws}}ms**",
   "uptime_uptime": "Bot běží již **{{uptime}}**",
-  "license_license": "📜 Tento bot je licencovaný pod Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) licencí, pro více informací si přečtěte celou licenci **[zde](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
-  "privacy_policy": "Zásady ochrany osobních udajů jsou dostupné **[zde](https://bulbbot.mrphilip.xyz/privacy-policy)**",
-  "github_source_code": "{{emote_github}} BulbBot je plně open source. Zdrojový kód mužete najít v našem GitHub repozitáři **[zde](https://github.com/TestersQTs/Bulbbot)**",
+  "license_license": "📜 Tento bot je licencovaný pod Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) licencí, pro více informací si přečtěte celou licenci **[zde](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
+  "privacy_policy": "Zásady ochrany osobních udajů jsou dostupné **[zde](https://docs.bulbbot.rocks/privacy-policy/)**",
+  "github_source_code": "{{emote_github}} BulbBot je plně open source. Zdrojový kód mužete najít v našem GitHub repozitáři **[zde](https://github.com/TeamBulbbot//Bulbbot)**",
   "invite_content": "Odkazy pro pozvání Bulbbota na tvůj server",
   "remind_list_none": "{{emote_warn}} Nemáš nastaveny žádné připomínky",
   "remind_placeholder": "Žádné připomínky vybrány",
@@ -301,6 +301,6 @@
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` přestupky",
   "infraction_interaction_placeholder": "Nejsou vybrány žádné přestupky",
   "infraction_interaction_description": "Klikni pro zobrazení více informací",
-  "commands_help": "Všechny příkazy které Bulbbot nabízí lze najít **[zde](https://docs.bulbbot.mrphilip.xyz/command-list)**",
-  "help_unable_to_find_command": "`{{commandName}}` není platný příkaz, pro úplný list příkazů navštiv naší stránku <https://docs.bulbbot.mrphilip.xyz/command-list>"
+  "commands_help": "Všechny příkazy které Bulbbot nabízí lze najít **[zde](https://docs.bulbbot.rocks/command-list)**",
+  "help_unable_to_find_command": "`{{commandName}}` není platný příkaz, pro úplný list příkazů navštiv naší stránku <https://docs.bulbbot.rocks/command-list>"
 }
