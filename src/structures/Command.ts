@@ -81,7 +81,8 @@ export default class Command {
 
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
-			if (!commandOverride["enabled"]) return "";
+			if (!commandOverride["enabled"] && context.isMessageContext()) return "";
+			else if (!commandOverride["enabled"] && context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
 			clearance = commandOverride["clearanceLevel"];
 		}
 
@@ -135,8 +136,8 @@ export default class Command {
 		const isDev = developers.includes(context.author.id);
 		const isSubDev = subDevelopers.includes(context.author.id);
 
-		if(this.devOnly && !isDev) return false;
-		if(this.subDevOnly && !(isDev || isSubDev)) return false;
+		if (this.devOnly && !isDev) return false;
+		if (this.subDevOnly && !(isDev || isSubDev)) return false;
 
 		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
@@ -144,7 +145,7 @@ export default class Command {
 			clearance = commandOverride["clearanceLevel"];
 		}
 
-		const userClearance = await clearanceManager.getUserClearance(context);;
+		const userClearance = await clearanceManager.getUserClearance(context);
 		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
 
 		let missing: boolean = clearance > userClearance;

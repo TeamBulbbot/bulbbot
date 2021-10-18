@@ -2,6 +2,7 @@
   "global_executed_by": "Executed by {{user.tag}}",
   "global_execution_cancel": "{{emote_fail}} Command execution cancelled",
   "global_missing_permissions": "{{emote_lock}} Missing permission(s)",
+  "global_command_disabled": "{{emote_lock}} This command has been disabled by the server administrators",
   "global_not_invoked_by_user": "{{emote_lock}} You did not invoke this command",
   "global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n{{missing}}",
   "global_cannot_convert": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
