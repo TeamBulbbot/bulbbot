@@ -13,13 +13,13 @@
 		"db-sync": "node build/utils/database/sync.js",
 		"delete:build": "rimraf build/*"
 	},
-	"repository": "git+https://github.com/TestersQTs/Bulbbot.git",
-	"author": "TesterQTs",
-	"license": "MIT",
+	"repository": "git+https://github.com/TeamBulbbot//Bulbbot.git",
+	"author": "Team Bulbbot",
+	"license": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License",
 	"bugs": {
-		"url": "https://github.com/TestersQTs/Bulbbot/issues"
+		"url": "https://github.com/TeamBulbbot//Bulbbot/issues"
 	},
-	"homepage": "https://github.com/TestersQTs/Bulbbot#readme",
+	"homepage": "https://github.com/TeamBulbbot//Bulbbot#readme",
 	"dependencies": {
 		"@hapi/hapi": "^20.2.0",
 		"@messageformat/runtime": "^3.0.0",

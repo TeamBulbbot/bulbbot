@@ -148,7 +148,7 @@ export default class {
 				desc = "";
 			}
 
-			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
+			f += `[\`${feature}\`](https://bulbbot.rocks '${desc}')`;
 			features.push(f);
 		});
 

@@ -236,9 +236,9 @@
   "nickname_too_long": "{{emote_warn}} Prezývka má moc znakov (`{{length}}`). Prezývky môžu mať maximálne 32 znakov.",
   "ping_latency": "Momentálna odozva bota je **{{latency_bot}}ms**\nOdozva WebSocket je **{{latency_ws}}ms**",
   "uptime_uptime": "Bot momentálne beží **{{uptime}}**",
-  "license_license": "📜 Tento bot je licencovaný pod Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) licenciu, pre viac informacii pozrite **[sem](https://github.com/TestersQTs/Bulbbot/blob/master/LICENSE)**",
-  "privacy_policy": "📜 Pozrite zásady ochrany osobných údajov bota **[tu](https://bulbbot.mrphilip.xyz/privacy-policy)**",
-  "github_source_code": "{{emote_github}} Bulbbot je plne open source projekt. Zdrojový kód môžete nájsť v našom GitHub úložisku **[tu](https://github.com/TestersQTs/Bulbbot)**",
+  "license_license": "📜 Tento bot je licencovaný pod Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) licenciu, pre viac informacii pozrite **[sem](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
+  "privacy_policy": "📜 Pozrite zásady ochrany osobných údajov bota **[tu](https://docs.bulbbot.rocks/privacy-policy/)**",
+  "github_source_code": "{{emote_github}} Bulbbot je plne open source projekt. Zdrojový kód môžete nájsť v našom GitHub úložisku **[tu](https://github.com/TeamBulbbot//Bulbbot)**",
   "invite_content": "Links to invite Bulbbot to your server",
   "remind_list_none": "{{emote_warn}} Nenastavil si si žiadne pripomienky",
   "remind_placeholder": "Žiadne pripomienky niesu zvolené",
@@ -301,6 +301,6 @@
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` infrakcie",
   "infraction_interaction_placeholder": "Žiadne infrakcie neboli zvolené",
   "infraction_interaction_description": "Klikni pre viac informácii",
-  "commands_help": "Všetky príkazy ktoré Bulbbot ponúka možeš nájsť na našom **[GitHube](https://github.com/TestersQTs/Bulbbot/blob/master/docs/CommandList.md)**",
-  "help_unable_to_find_command": "`{{commandName}}` nie je platný príkaz, list všetkých príkazov môžete nájsť na našej stránke <https://docs.bulbbot.mrphilip.xyz/command-list>"
+  "commands_help": "Všetky príkazy ktoré Bulbbot ponúka možeš nájsť na našom **[GitHube](https://github.com/TeamBulbbot//Bulbbot/blob/master/docs/CommandList.md)**",
+  "help_unable_to_find_command": "`{{commandName}}` nie je platný príkaz, list všetkých príkazov môžete nájsť na našej stránke <https://docs.bulbbot.rocks/command-list>"
 }
