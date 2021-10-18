@@ -5,7 +5,7 @@
 A powerful Discord moderation bot with rich features allowing server Moderators and Administrators to manage their communities.
 
 ## Getting started with Bulbbot
-Click [here](https://bulbbot.mrphilip.xyz/invite) to invite Bulbbot to your server.
+Click [here](https://bulbbot.rocks/invite) to invite Bulbbot to your server.
 
 The default prefix of the bot is `!` (or you can use [slash commands](https://docs.bulbbot.mrphilip.xyz/slash-commands) `/`), but the prefix can easily be changed with `!configure prefix <prefix>` command.
 ## Main features include
@@ -24,7 +24,7 @@ The default prefix of the bot is `!` (or you can use [slash commands](https://do
 For a full list of commands [click me](https://docs.bulbbot.mrphilip.xyz/command-list)
 
 ## Support
-Whether it is a command that's not working, your server configuration being not quite right or maybe you've found a bug in our code out in the wild we're ready to assist you with all your technical issues and questions over at our [support server](https://bulbbot.mrphilip.xyz/discord)
+Whether it is a command that's not working, your server configuration being not quite right or maybe you've found a bug in our code out in the wild we're ready to assist you with all your technical issues and questions over at our [support server](https://bulbbot.rocks/discord)
 
 ## Meet the Team
 [Meet the users who have built Bulbbot](https://docs.bulbbot.mrphilip.xyz/team)
