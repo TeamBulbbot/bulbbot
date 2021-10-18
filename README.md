@@ -31,4 +31,4 @@ Whether it is a command that's not working, your server configuration being not 
 
 ## Setup development environment
 **We offer 0 support on selfhosting the bot.**
-For a full and detailed list on how to setup a development environment see [this article](https://docs.rocks/setup-dev) that will help you setting it up. 
+For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.rocks/setup-dev) that will help you setting it up. 
