@@ -21,6 +21,16 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		if (!Number.isSafeInteger(args[0].replace(NonDigits, "")))
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
+					arg_expected: "id:int",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
+
 		if (!(await infractionsManager.getInfraction(<Snowflake>context.guild?.id, Number(args[0].replace(NonDigits, ""))))) {
 			return context.channel.send(
 				await this.client.bulbutils.translate("infraction_not_found", context.guild?.id, {
