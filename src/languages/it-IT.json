@@ -236,9 +236,9 @@
   "nickname_too_long": "{{emote_warn}} Il soprannome ha troppi caratteri (`{{length}}`). I soprannomi sono limitati a 32 caratteri",
   "ping_latency": "La latenza del bot è **{{latency_bot}}ms**\nLa latenza del WebSocket è **{{latency_ws}}ms**",
   "uptime_uptime": "L'uptime corrente è **{{uptime}}**",
-  "license_license": "📜 Questo bot è sotto la licenza Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0), per maggiori informazioni vedi la licenza completa **[qua](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
-  "privacy_policy": "📜 Visualizza l'informativa sulla privacy del bot **[qua](https://docs.bulbbot.rocks/privacy-policy/)**",
-  "github_source_code": "{{emote_github}} Bulbbot è un progetto open source. Puoi trovare il codice sorgente nel nostro repository GitHub **[qua](https://github.com/TeamBulbbot//Bulbbot)**",
+  "license_license": "📜 This bot is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license, for more info see the full license **[here](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
+  "privacy_policy": "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
+  "github_source_code": "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TeamBulbbot//Bulbbot)**",
   "invite_content": "Links to invite Bulbbot to your server",
   "remind_list_none": "{{emote_warn}} Non hai impostato alcun promemoria",
   "remind_placeholder": "Nessun promemoria selezionato",
@@ -301,6 +301,6 @@
   "infraction_interaction_reply": "{{emote_warn}} Infrazioni di **{{target.tag}}** `({{target.id}})`",
   "infraction_interaction_placeholder": "Nessuna Infrazione Selezionata",
   "infraction_interaction_description": "Clicca per maggiori informazioni",
-  "commands_help": "Puoi trovare tutti i comandi di Bulbbot **[qua](https://docs.bulbbot.rocks/command-list)**",
-  "help_unable_to_find_command": "`{{commandName}}` non è un comando valido, per una lista completa di comandi visita il nostro sito <https://docs.bulbbot.rocks/command-list>"
+  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
+  "help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>"
 }

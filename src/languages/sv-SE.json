@@ -236,9 +236,9 @@
   "nickname_too_long": "{{emote_warn}} Smeknamnet har för många tecken (`{{length}}`). Smeknamn är begränsade till 32 tecken",
   "ping_latency": "Bot latens är **{{latency_bot}}ms**\nWebSocket latens är **{{latency_ws}}ms**",
   "uptime_uptime": "Den nuvarande drifttiden är **{{uptime}}**",
-  "license_license": "📜 Denna bot är licensierad under Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)-licensen, för mer info se hela licensen **[här](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
-  "privacy_policy": "📜 Se integritetspolicyn för boten **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
-  "github_source_code": "{{emote_github}} Bulbbot är ett helt projekt med öppen källkod. Du kan hitta källkoden på vårt GitHub-arkiv **[här](https://github.com/TeamBulbbot//Bulbbot)**",
+  "license_license": "📜 This bot is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license, for more info see the full license **[here](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
+  "privacy_policy": "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
+  "github_source_code": "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TeamBulbbot//Bulbbot)**",
   "invite_content": "Länkar för att bjuda in Bulbbot till din server",
   "remind_list_none": "{{emote_warn}} Du har inte ställt in några påminnelser",
   "remind_placeholder": "Inga påminnelser valda",
@@ -301,6 +301,6 @@
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}'s** `({{target.id}})` överträdelser",
   "infraction_interaction_placeholder": "Inga överträdelser valda",
   "infraction_interaction_description": "Klicka för att se mer information",
-  "commands_help": "Du kan hitta alla kommandon Bulbbot erbjuder över **[här](https://docs.bulbbot.rocks/command-list)**",
-  "help_unable_to_find_command": "`{{commandName}}` är inte ett giltigt kommando, för en fullständig lista över kommandon besök vår hemsida <https://docs.bulbbot.rocks/command-list>"
+  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
+  "help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>"
 }

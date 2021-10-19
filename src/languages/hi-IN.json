@@ -236,9 +236,9 @@
   "nickname_too_long": "{{emote_warn}} प्रचलित नाम में बहुत अधिक वर्ण हैं (`{{length}}`)। उपनाम 32 वर्णों तक सीमित हैं",
   "ping_latency": "बॉट प्रतीक्षा अवधि **{{latency_bot}}ms** है\nWebSocket विलंबता **{{latency_ws}}ms** है",
   "uptime_uptime": "वर्तमान अपटाइम **{{uptime}}** है",
-  "license_license": "📜 यह बॉट एट्रिब्यूशन-नॉन-कमर्शियल-नोडेरिवेटिव्स 4.0 इंटरनेशनल (सीसी बाय-एनसी-एनडी 4.0) लाइसेंस के तहत लाइसेंस प्राप्त है, अधिक विवरण के लिए पूर्ण लाइसेंस देखें **[here](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
-  "privacy_policy": "📜 बॉट की गोपनीयता नीति देखें **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
-  "github_source_code": "{{emote_github}} Bulbbot पूरी तरह से ओपन सोर्स प्रोजेक्ट है। आप हमारे GitHub रिपॉजिटरी में स्रोत कोड पा सकते हैं **[here](https://github.com/TeamBulbbot//Bulbbot)**",
+  "license_license": "📜 This bot is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license, for more info see the full license **[here](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
+  "privacy_policy": "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
+  "github_source_code": "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TeamBulbbot//Bulbbot)**",
   "invite_content": "Bulbbot को आपके सर्वर पर आमंत्रित करने के लिए लिंक",
   "remind_list_none": "{{emote_warn}} आपने कोई रिमाइंडर सेट नहीं किया है",
   "remind_placeholder": "कोई रिमाइंडर नहीं चुना गया",
@@ -301,6 +301,6 @@
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}'s** `({{target.id}})` उल्लंघन",
   "infraction_interaction_placeholder": "कोई अवरोध नहीं चुना गया",
   "infraction_interaction_description": "अधिक जानकारी देखने के लिए क्लिक करें",
-  "commands_help": "आपको Bulbbot द्वारा प्रदान किए जाने वाले सभी आदेश **[here](https://docs.bulbbot.rocks/command-list)** पर मिल सकते हैं।",
-  "help_unable_to_find_command": "`{{commandName}}` मान्य कमांड नहीं है, कमांड की पूरी सूची के लिए हमारी वेबसाइट पर जाएं <https://docs.bulbbot.rocks/command-list>"
+  "commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
+  "help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>"
 }
