@@ -10,7 +10,7 @@ import * as Emotes from "../../emotes.json";
 
 const { createInfraction }: InfractionsManager = new InfractionsManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
-const { getPools, getGuildsFromPools }: BanpoolManager = new BanpoolManager();
+const { getPools, getGuildsFromPools, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -34,6 +34,8 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let reason: string = args.slice(1).join(" ");
 		let target: User;
+
+		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 
 		try {
 			target = await this.client.users.fetch(targetID);

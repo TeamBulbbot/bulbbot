@@ -265,7 +265,8 @@
   "crossban_reason_audit": "Crossban from: {{guild.name}} ({{guild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 
   "banpool_missing_access_not_found": "{{emote_warn}} That pool does not exists our you are missing access to view it",
-  
+  "banpool_missing_logging": "{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `!configure logging banpool_logs <channel>` command to setup a logging channel.",
+
   "banpool_create_name_exists": "{{emote_warn}} That banpool name already exists, choice another one",
   "banpool_create_log": "{{emote_success}} **{{user.tag}}** `({{user.id}})` created a new banpool with the name **{{name}}**",
   "banpool_create_success": "{{emote_success}} Successfully created a new banpool with the name of **{{name}}**",

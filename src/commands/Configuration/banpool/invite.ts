@@ -7,7 +7,7 @@ import BanpoolManager from "../../../utils/managers/BanpoolManager";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
 const { sendEventLog }: LoggingManager = new LoggingManager();
-const { haveAccessToPool }: BanpoolManager = new BanpoolManager();
+const { haveAccessToPool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -25,6 +25,7 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name: string = args[0];
 
+		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
 
 		const filter = (i: any) => i.user.id === context.author.id;

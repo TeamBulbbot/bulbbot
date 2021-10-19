@@ -16,6 +16,15 @@ export default class {
 		});
 	}
 
+	async hasBanpoolLog(guildId: Snowflake): Promise<boolean> {
+		const response: Record<string, any> = await sequelize.query('SELECT banpool FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildId },
+			type: QueryTypes.SELECT,
+		});
+
+		return !!response[0].banpool;
+	}
+
 	async doesbanpoolExist(name: string): Promise<boolean> {
 		const doesExist: any = await sequelize.query('SELECT id FROM "banpools" WHERE name = $PoolName LIMIT 1', {
 			bind: {

@@ -6,7 +6,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
 
-const { haveAccessToPool, deletePool }: BanpoolManager = new BanpoolManager();
+const { haveAccessToPool, deletePool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
@@ -23,6 +23,8 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name = args[0];
+
+		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
