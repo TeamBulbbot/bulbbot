@@ -140,8 +140,10 @@
 
   "config_logging_success": "{{emote_success}} Successfully started logging `{{logging_type}}` in <#{{channel}}>",
   "config_logging_remove": "{{emote_success}} Successfully removed logging for `{{logging_type}}` from <#{{channel}}>",
+  "config_logging_remove_all": "{{emote_success}} Successfully removed all logging types from all channels",
   "config_logging_unable_to_send_messages": "{{emote_fail}} The bot is missing crucial permissions to send messages in <#{{channel}}>",
   "config_logging_all_confirm": "{{emote_warn}} Are you sure you want to add all logging types to <#{{channel}}>? This will begin to log all loggable actions in the selected channel.",
+  "config_logging_all_remove": "{{emote_warn}} Are you sure you want to remove all logging types from all channels in this server?",
 
   "config_mute_success": "{{emote_success}} Successfully updated the mute role",
   "config_mute_unable_to_manage": "{{emote_fail}} The bot is unable to manage the selected role. Move the bot's role higher than the selected role.",

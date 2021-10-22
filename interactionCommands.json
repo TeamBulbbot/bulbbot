@@ -443,6 +443,10 @@
 							{
 								"name": "Other",
 								"value": "other"
+							},
+							{
+								"name": "All",
+								"value": "all"
 							}
 						],
 						"required": true
