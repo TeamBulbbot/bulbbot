@@ -55,11 +55,11 @@ export default class extends Event {
 				part = "member";
 				if (auditLog?.changes && auditLog!!.changes[0].key === "nick") {
 					executor = auditLog.executor;
-					if (executor?.id === this.client.user!.id || executor?.id === newMember.user.id) return;
+					if (executor?.id === this.client.user!.id) return;
 
 					const reason = auditLog.reason ?? (await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}));
-					if (!executor?.bot) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
-					const infID: number = !executor?.bot ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.id, "Manual Nickname") : -1;
+					if (!executor?.bot && executor?.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
+					const infID: number = !executor?.bot && executor?.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.user.id, "Manual Nickname") : -1;
 					const translateKey =
 						executor === null || executor.id === newMember.id
 							? newMember.nickname
