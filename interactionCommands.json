@@ -114,6 +114,110 @@
 	},
 
 	{
+		"name": "banpool",
+		"type": 1,
+		"description": "Banpool main command",
+		"options": [
+			{
+				"name": "create",
+				"type": 1,
+				"description": "Creates a banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The banpool name",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "delete",
+				"type": 1,
+				"description": "Deletes the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The name of the banpool that should be deleted",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "info",
+				"type": 1,
+				"description": "Returns information about the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The name of the banpool that should be info'd",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "invite",
+				"type": 1,
+				"description": "Creates a one-time invite for the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "Name of the selected banpool",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "join",
+				"type": 1,
+				"description": "Joins the selected banpool",
+				"options": [
+					{
+						"name": "code",
+						"type": 3,
+						"description": "The invite code of that banpool that you want to join",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "leave",
+				"type": 1,
+				"description": "Leaves the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "Name of the banpool that you want to leave",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "kick",
+				"type": 1,
+				"description": "Kicks the selected guild from the selected banpool",
+				"options": [
+					{
+						"name": "guild_id",
+						"type": 3,
+						"description": "ID of the selected guild",
+						"required": true
+					},
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The name of the selected banpool",
+						"required": true
+					}
+				]
+			}
+		]
+	},
+	{
 		"name": "configure",
 		"type": 1,
 		"description": "Configure main command",
@@ -812,6 +916,25 @@
 				"type": 3,
 				"description": "The reason behind the ban",
 				"required": false
+			}
+		]
+	},
+	{
+		"name": "crossban",
+		"type": 1,
+		"description": "Cross-bans the selected user from all connected banpools",
+		"options": [
+			{
+				"name": "member",
+				"type": 6,
+				"description": "The user that should be cross-banned from all connected banpools",
+				"required": true
+			},
+			{
+				"name": "reason",
+				"type": 3,
+				"description": "The reason for the ban",
+				"required": true
 			}
 		]
 	},

@@ -1,6 +1,7 @@
 export default interface LoggingConfiguration {
 	id: number;
 	modAction: string;
+	banpool: string;
 	automod: string;
 	message: string;
 	role: string;

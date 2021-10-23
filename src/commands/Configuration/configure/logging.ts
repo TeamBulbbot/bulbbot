@@ -5,9 +5,10 @@ import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import BanpoolManager from "../../../utils/managers/BanpoolManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
-
+const { getPools }: BanpoolManager = new BanpoolManager();
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
@@ -48,6 +49,10 @@ export default class extends SubCommand {
 			}
 		}
 
+		const amtOfPools = (await getPools(context.guild!?.id)).length;
+		if ((channel === null && part === "banpoollogs") || (part === "banpool_logs" && amtOfPools > 0))
+			return await context.channel.send(await this.client.bulbutils.translate("configure_logging_banpool_with_still_pools", context.guild?.id, { amount: amtOfPools }));
+
 		switch (part) {
 			case "mod_actions":
 			case "mod_logs":
@@ -55,6 +60,10 @@ export default class extends SubCommand {
 			case "modactions":
 				await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
 				original = loggingConfig["modAction"];
+				break;
+			case "banpoollogs":
+			case "banpool_logs":
+				await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
 				break;
 			case "automod":
 			case "auto_mod":
@@ -123,6 +132,7 @@ export default class extends SubCommand {
 
 				if (interaction.customId === "confirm") {
 					await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
+					await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
@@ -144,7 +154,7 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
 						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						argument_list: "`mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
+						argument_list: "`mod_logs`, `automod`, `banpool_logs`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),
 				);
 		}

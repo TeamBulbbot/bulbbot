@@ -12,8 +12,8 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class {
 	async createInfraction(guildID: Snowflake, action: string, active: boolean | number, reason: string, target: User, moderator: User): Promise<void> {
-		await sequelize.query(
-			'INSERT INTO infractions (action, active, reason, target, "targetId", moderator, "moderatorId", "createdAt", "updatedAt", "guildId") VALUES ($InfAction, $Active, $Reason, $Target, $TargetID, $Moderator, $ModeratorID, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID))',
+		const response: any = await sequelize.query(
+			'INSERT INTO infractions (action, active, reason, target, "targetId", moderator, "moderatorId", "createdAt", "updatedAt", "guildId") VALUES ($InfAction, $Active, $Reason, $Target, $TargetID, $Moderator, $ModeratorID, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID)) RETURNING *;',
 			{
 				bind: {
 					GuildID: guildID,
@@ -30,6 +30,8 @@ export default class {
 				type: QueryTypes.INSERT,
 			},
 		);
+
+		return response[0][0];
 	}
 
 	public async deleteInfraction(guildID: Snowflake, infractionID: number): Promise<void> {
@@ -171,6 +173,13 @@ export default class {
 			await guild.members.unban(target.id);
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Soft-ban");
 			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
+
+			return infID;
+		} else if (type == BanType.POOL) {
+			await this.createInfraction(guild.id, "Pool-ban", true, reason, target, moderator.user);
+			await guild.members.ban(target, { reason: reasonLog });
+			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Pool-ban");
+			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.pool_ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else {

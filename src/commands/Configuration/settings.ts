@@ -39,6 +39,7 @@ export default class extends Command {
 			`**Logging**`,
 			`Logging Timezone: \`${guildConfig.timezone}\``,
 			`Mod Logs: ${loggingConfig.modAction !== null ? `<#${loggingConfig.modAction}>` : Emotes.other.SWITCHOFF}`,
+			`Banpool Logs: ${loggingConfig.banpool !== null ? `<#${loggingConfig.banpool}>` : Emotes.other.SWITCHOFF}`,
 			`Automod: ${loggingConfig.automod !== null ? `<#${loggingConfig.automod}>` : Emotes.other.SWITCHOFF}`,
 			`Message Logs: ${loggingConfig.message !== null ? `<#${loggingConfig.message}>` : Emotes.other.SWITCHOFF}`,
 			`Role Logs: ${loggingConfig.role !== null ? `<#${loggingConfig.role}>` : Emotes.other.SWITCHOFF}`,
