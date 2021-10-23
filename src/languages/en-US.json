@@ -141,6 +141,7 @@
   "config_logging_success": "{{emote_success}} Successfully started logging `{{logging_type}}` in <#{{channel}}>",
   "config_logging_remove": "{{emote_success}} Successfully removed logging for `{{logging_type}}` from <#{{channel}}>",
   "config_logging_unable_to_send_messages": "{{emote_fail}} The bot is missing crucial permissions to send messages in <#{{channel}}>",
+  "configure_logging_banpool_with_still_pools": "{{emote_fail}} You are unable to disable the logging for banpools as you are still in **{{amount}}** banpool(s). Leave or delete them to remove the logging fully.",
   "config_logging_all_confirm": "{{emote_warn}} Are you sure you want to add all logging types to <#{{channel}}>? This will begin to log all loggable actions in the selected channel.",
 
   "config_mute_success": "{{emote_success}} Successfully updated the mute role",

@@ -5,9 +5,10 @@ import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import BanpoolManager from "../../../utils/managers/BanpoolManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
-
+const { getPools }: BanpoolManager = new BanpoolManager();
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
@@ -46,6 +47,10 @@ export default class extends SubCommand {
 				return await context.channel.send(await this.client.bulbutils.translate("config_logging_unable_to_send_messages", context.guild?.id, { channel: cTemp }));
 			}
 		}
+
+		const amtOfPools = (await getPools(context.guild!?.id)).length;
+		if ((channel === null && part === "banpoollogs") || (part === "banpool_logs" && amtOfPools > 0))
+			return await context.channel.send(await this.client.bulbutils.translate("configure_logging_banpool_with_still_pools", context.guild?.id, { amount: amtOfPools }));
 
 		switch (part) {
 			case "mod_actions":
