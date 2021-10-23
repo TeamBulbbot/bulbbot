@@ -19,7 +19,9 @@ export default class {
 	}
 
 	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+		const language = (await databaseManager.getConfig(guildID))["language"];
+		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 

@@ -23,8 +23,9 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const part: string = args[0];
-		const original: string = (await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id))["modAction"];
 		let channel: string | null = args[1];
+		let original: string = "";
+		const loggingConfig: Record<string, any> = await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id);
 		let confirmMsg: Message;
 
 		if (channel === "remove" || channel === "disable") channel = null;
@@ -53,41 +54,51 @@ export default class extends SubCommand {
 			case "modlogs":
 			case "modactions":
 				await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["modAction"];
 				break;
 			case "automod":
 			case "auto_mod":
 				await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["automod"];
 				break;
 			case "messagelogs":
 			case "message_logs":
 				await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["message"];
 				break;
 			case "rolelogs":
 			case "role_logs":
 				await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["role"];
 				break;
 			case "memberlogs":
 			case "member_logs":
 				await databaseManager.setMember(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["member"];
 				break;
 			case "channellogs":
 			case "channel_logs":
 				await databaseManager.setChannel(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["channel"];
 				break;
 			case "threadlogs":
 			case "thread_logs":
 				await databaseManager.setThread(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["thread"];
 				break;
 			case "invitelogs":
 			case "invite_logs":
 				await databaseManager.setInvite(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["invite"];
 				break;
 			case "joinleave":
 			case "join_leave":
 				await databaseManager.setJoinLeave(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["joinLeave"];
 				break;
 			case "other":
 				await databaseManager.setOther(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["other"];
 				break;
 			case "all":
 				const row = new MessageActionRow().addComponents([
@@ -95,7 +106,10 @@ export default class extends SubCommand {
 					new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 				]);
 
-				confirmMsg = await context.channel.send({ content: await this.client.bulbutils.translate("config_logging_all_confirm", context.guild?.id, { channel }), components: [row] });
+				confirmMsg = await context.channel.send({
+					content: await this.client.bulbutils.translate(channel === null ? "config_logging_all_remove" : "config_logging_all_confirm", context.guild?.id, { channel }),
+					components: [row],
+				});
 
 				const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
 				let interaction: ButtonInteraction;
@@ -137,7 +151,7 @@ export default class extends SubCommand {
 
 		if (channel === null) {
 			return await context.channel.send(
-				await this.client.bulbutils.translate("config_logging_remove", context.guild?.id, {
+				await this.client.bulbutils.translate(part === "all" ? "config_logging_remove_all" : "config_logging_remove", context.guild?.id, {
 					logging_type: part,
 					channel: original,
 				}),

@@ -399,6 +399,67 @@
 				]
 			},
 			{
+				"name": "logging",
+				"type": 1,
+				"description": "Configures the logging module in the selected channel",
+				"options": [
+					{
+						"name": "type",
+						"type": 3,
+						"description": "The logging module you want to enable",
+						"choices": [
+							{
+								"name": "Mod logs",
+								"value": "mod_logs"
+							},
+							{
+								"name": "Automod logs",
+								"value": "automod"
+							},
+							{
+								"name": "Message logs",
+								"value": "message_logs"
+							},
+							{
+								"name": "Role logs",
+								"value": "role_logs"
+							},
+							{
+								"name": "Member logs",
+								"value": "member_logs"
+							},
+							{
+								"name": "Channel logs",
+								"value": "channel_logs"
+							},
+							{
+								"name": "Thread logs",
+								"value": "thread_logs"
+							},
+							{
+								"name": "Invite logs",
+								"value": "invite_logs"
+							},
+							{
+								"name": "Other",
+								"value": "other"
+							},
+							{
+								"name": "All",
+								"value": "all"
+							}
+						],
+						"required": true
+					},
+					{
+						"name": "channel",
+						"type": 7,
+						"description": "The channel where you want to enable the logging module",
+						"required": true
+					}
+				]
+			},
+			{
 				"name": "language",
 				"type": 1,
 				"description": "Changes the server language",
