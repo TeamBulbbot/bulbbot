@@ -51,7 +51,7 @@ export default class extends Command {
 			return;
 		}
 
-		const pools: any[] = await getPools(context.guild!?.id);
+		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild!?.id);
 		const options: MessageSelectOptionData[] = pools.map(pool => {
 			return {
 				label: pool.name,

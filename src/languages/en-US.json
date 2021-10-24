@@ -283,6 +283,8 @@
   "banpool_info_top": "Banpool data from {{name}} | Servers subscribed: {{amountOfServers}}",
   "banpool_info_desc": "**Server ID:** `{{guildId}}`\n**Joined:** <t:{{createdAt}}> (<t:{{createdAt}}:R>)",
 
+  "banpool_list_desc": "**Name:** `{{name}}`\n**Created:** <t:{{createdAt}}> (<t:{{createdAt}}:R>)",
+
   "banpool_invite_message": "Press the green button to generate your banpool invite code",
   "banpool_invite_success_log": "{{emote_success}} **{{user.tag}}** `({{user.id}})` created a banpool invite for **{{name}}** that expires <t:{{expireTime}}:R>",
   "banpool_invite_reply": "Here is your banpool code `{{code}}` for the **{{name}}** banpool. Keep it safe until the other server uses it to join. It will expire <t:{{expireTime}}:R> and only has **one** use. The other server can use the `banpool join {{code}}` command to join the pool",

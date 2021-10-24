@@ -7,6 +7,7 @@ import leave from "./banpool/leave";
 import remove from "./banpool/remove";
 import join from "./banpool/join";
 import info from "./banpool/info";
+import list from "./banpool/list";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -14,7 +15,7 @@ export default class extends Command {
 			name,
 			description: "Ban users cross servers easily",
 			category: "Configuration",
-			subCommands: [create, _delete, invite, join, leave, remove, info],
+			subCommands: [create, _delete, invite, join, leave, remove, info, list],
 			aliases: ["bp"],
 			usage: "<action>",
 			examples: ["banpool invite <pool name>", "banpool remove <guildId>", "banpool delete <pool name>"],
