@@ -266,6 +266,7 @@
 
   "crossban_success": "{{emote_success}} Successfully banned **{{target.tag}}** `({{target.id}})` in {{totalBans}}/{{totalPossible}} servers. Banpools used: {{usedPools}}",
   "crossban_select_pools": "Select the banpools where you want the user to get banned from." ,
+  "crossban_select_subscribed": "{{amount}} server(s) subscribed",
   "crossban_reason": "{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{startedGuild.name}}** `({{startedGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
   "crossban_reason_audit": "Crossban from: {{startedGuild.name}} ({{startedGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 

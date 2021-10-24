@@ -10,7 +10,7 @@ import * as Emotes from "../../emotes.json";
 
 const { createInfraction }: InfractionsManager = new InfractionsManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
-const { getPools, getGuildsFromPools, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
+const { getPools, getGuildsFromPools, hasBanpoolLog, getPoolData }: BanpoolManager = new BanpoolManager();
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -52,14 +52,23 @@ export default class extends Command {
 		}
 
 		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild!?.id);
-		const options: MessageSelectOptionData[] = pools.map(pool => {
+		const options: Promise<MessageSelectOptionData>[] = pools.map(async pool => {
+			const data = await getPoolData(pool.name);
+
 			return {
 				label: pool.name,
 				value: `${pool.id}:${pool.name}`,
+				description: await this.client.bulbutils.translate("crossban_select_subscribed", context.guild?.id, { amount: data.length }),
 			};
 		});
 
-		const row = new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId("banpool-dropdown").setPlaceholder("Select banpool(s)").addOptions(options).setMinValues(1));
+		const row = new MessageActionRow().addComponents(
+			new MessageSelectMenu()
+				.setCustomId("banpool-dropdown")
+				.setPlaceholder("Select banpool(s)")
+				.addOptions(await Promise.all(options))
+				.setMinValues(1),
+		);
 		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild?.id, {}) });
 		const compCollector = banpoolSelect.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 60_000 });
 
