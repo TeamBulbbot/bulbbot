@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildBan, GuildMember, Message, Permissions, Snowflake, User } from "discord.js";
+import { Guild, GuildBan, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, Permissions, SelectMenuInteraction, Snowflake, User } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import BanpoolManager from "../../utils/managers/BanpoolManager";
 import { NonDigits } from "../../utils/Regex";
@@ -52,45 +52,70 @@ export default class extends Command {
 		}
 
 		const pools: any[] = await getPools(context.guild!?.id);
-		const poolGuilds: any[] = await getGuildsFromPools(pools);
-		let totalBans: number = 0;
+		const options: MessageSelectOptionData[] = pools.map(pool => {
+			return {
+				label: pool.name,
+				value: `${pool.id}:${pool.name}`,
+			};
+		});
 
-		for (let i = 0; i < poolGuilds.length; i++) {
-			const guildId = poolGuilds[i];
-			const guild: Guild = await this.client.guilds.fetch(guildId);
-			if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild?.id, {});
+		const row = new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId("banpool-dropdown").setPlaceholder("Select banpool(s)").addOptions(options).setMinValues(1));
+		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild?.id, {}) });
+		const compCollector = banpoolSelect.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 60_000 });
 
-			if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
+		compCollector.on("collect", async (interaction: SelectMenuInteraction) => {
+			if (interaction.user.id !== context.author.id) return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 
-			const banList = await guild.bans.fetch();
-			const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
+			const poolGuilds: any[] = await getGuildsFromPools(
+				interaction.values.map(value => {
+					return value.split(":")[0];
+				}),
+			);
+			let totalBans: number = 0;
 
-			if (bannedUser) continue;
-			else {
-				let guildTarget: GuildMember | undefined = undefined;
-				try {
-					guildTarget = await guild.members.fetch(target.id);
-				} catch (_) {}
+			for (let i = 0; i < poolGuilds.length; i++) {
+				const guildId = poolGuilds[i];
+				const guild: Guild = await this.client.guilds.fetch(guildId);
+				if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild?.id, {});
 
-				if (!guildTarget) {
-					totalBans++;
-					banUser(this.client, target, context.author, guild, context.guild!, reason);
-				} else {
-					if (guildTarget.bannable) {
+				if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
+
+				const banList = await guild.bans.fetch();
+				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
+
+				if (bannedUser) continue;
+				else {
+					let guildTarget: GuildMember | undefined = undefined;
+					try {
+						guildTarget = await guild.members.fetch(target.id);
+					} catch (_) {}
+
+					if (!guildTarget) {
 						totalBans++;
 						banUser(this.client, target, context.author, guild, context.guild!, reason);
-					} else continue;
+					} else {
+						if (guildTarget.bannable) {
+							totalBans++;
+							banUser(this.client, target, context.author, guild, context.guild!, reason);
+						} else continue;
+					}
 				}
 			}
-		}
 
-		context.channel.send(
-			await this.client.bulbutils.translate("crossban_success", context.guild?.id, {
-				target,
-				totalBans,
-				totalPossible: poolGuilds.length,
-			}),
-		);
+			banpoolSelect.edit({
+				content: await this.client.bulbutils.translate("crossban_success", context.guild?.id, {
+					target,
+					totalBans,
+					totalPossible: poolGuilds.length,
+					usedPools: interaction.values
+						.map(value => {
+							return `\`${value.split(":")[1]}\``;
+						})
+						.join(" "),
+				}),
+				components: [],
+			});
+		});
 	}
 }
 
