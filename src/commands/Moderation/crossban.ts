@@ -128,7 +128,7 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 		await client.bulbutils.translate("crossban_reason", guild?.id, {
 			emoji: Emotes.actions.BAN,
 			target,
-			guild,
+			startedGuild,
 			moderator,
 			reason,
 			infraction_id: infraction.id,
@@ -137,7 +137,7 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 
 	guild.members.ban(target, {
 		reason: await client.bulbutils.translate("crossban_reason_audit", guild?.id, {
-			guild,
+			startedGuild,
 			moderator,
 			reason,
 		}),

@@ -266,8 +266,8 @@
 
   "crossban_success": "{{emote_success}} Successfully banned **{{target.tag}}** `({{target.id}})` in {{totalBans}}/{{totalPossible}} servers. Banpools used: {{usedPools}}",
   "crossban_select_pools": "Select the banpools where you want the user to get banned from." ,
-  "crossban_reason": "{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{guild.name}}** `({{guild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-  "crossban_reason_audit": "Crossban from: {{guild.name}} ({{guild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
+  "crossban_reason": "{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{startedGuild.name}}** `({{startedGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+  "crossban_reason_audit": "Crossban from: {{startedGuild.name}} ({{startedGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 
   "banpool_missing_access_not_found": "{{emote_warn}} That pool does not exists our you are missing access to view it",
   "banpool_missing_logging": "{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `!configure logging banpool_logs <channel>` command to setup a logging channel.",
