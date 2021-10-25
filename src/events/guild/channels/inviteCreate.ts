@@ -12,8 +12,19 @@ export default class extends Event {
 		});
 	}
 
-	public async run(invite: Invite): Promise<void> {
-		if (!invite.guild) return;
+	public async run(inv: Invite): Promise<void> {
+		if (!inv.guild) return;
+
+		const invite = {
+			maxAge: inv.maxAge,
+			maxUses: inv.maxUses,
+			guild: inv.guild,
+			code: inv.code,
+			inviter: {
+				tag: inv.inviter !== null ? inv.inviter?.tag : "Server Widget",
+				id: inv.inviter !== null ? inv.inviter?.id : "N/A",
+			},
+		};
 
 		const log: string = await this.client.bulbutils.translate("event_invite_create", invite.guild.id, {
 			invite,

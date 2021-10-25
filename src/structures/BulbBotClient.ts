@@ -19,6 +19,7 @@ export default class extends Client {
 	public readonly bulbfetch: BulbBotFetch;
 	public userClearance: number = 0;
 	public blacklist: Collection<string, Record<string, any>>;
+	public banpoolInvites: Collection<string, Record<string, any>>;
 	public log: any;
 	public about: any;
 
@@ -42,6 +43,7 @@ export default class extends Client {
 		this.bulbfetch = new BulbBotFetch(this);
 
 		this.blacklist = new Collection();
+		this.banpoolInvites = new Collection();
 
 		this.about = {};
 

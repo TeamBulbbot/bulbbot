@@ -176,6 +176,13 @@ export default class {
 		});
 	}
 
+	async setBanpool(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
+		await sequelize.query('UPDATE "guildLoggings" SET "banpool" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { ChannelID: channelID, GuildID: guildID },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
 	async setAutoMod(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
 		await sequelize.query('UPDATE "guildLoggings" SET automod = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { ChannelID: channelID, GuildID: guildID },
@@ -284,15 +291,15 @@ export default class {
 		return result;
 	}
 
-	public async automodAppend(guildID: Snowflake, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
+	public async automodAppend(guildID: Snowflake, part: AutoModListPart, items: (string | undefined)[]): Promise<AutoModListOperationResult> {
 		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
 			const dbSet: Set<string> = new Set(dblist);
-			const itemSet: Set<string> = new Set(items);
+			const itemSet: Set<string | undefined> = new Set(items);
 			const duplicateSet: Set<string> = new Set();
 			const addedSet: Set<string> = new Set();
 			for (const item of itemSet) {
-				if (dbSet.has(item)) duplicateSet.add(item);
-				else dbSet.add(item), addedSet.add(item);
+				if (dbSet.has(item!)) duplicateSet.add(item!);
+				else dbSet.add(item!), addedSet.add(item!);
 			}
 			return { list: [...dbSet], added: [...addedSet], removed: [], other: [...duplicateSet] };
 		});

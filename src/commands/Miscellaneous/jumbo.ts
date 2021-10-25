@@ -32,7 +32,14 @@ export default class extends Command {
 		const imgPath: any = [];
 		sharp.cache({ files: 0 });
 
-		if (args.length > 10) return context.channel.send(await this.client.bulbutils.translate("jumbo_too_many", context.guild?.id, {}));
+		const realList: string[] = [];
+		for (let i = 0; i < args.length; i++) {
+			const customEmoji = <RegExpMatchArray>args[i].match(CustomEmote);
+			if (!customEmoji) realList.push(...args[i]);
+			else realList.push(...customEmoji);
+		}
+
+		if (realList.length > 10) return context.channel.send(await this.client.bulbutils.translate("jumbo_too_many", context.guild?.id, {}));
 
 		try {
 			const jumboList: string[] = [];
@@ -40,7 +47,7 @@ export default class extends Command {
 			// creat blank canvas
 			await sharp({
 				create: {
-					width: SIZE * args.length + 1,
+					width: SIZE * realList.length + 1,
 					height: SIZE,
 					channels: 4,
 					background: { r: 0, g: 0, b: 0, alpha: 0 },
@@ -51,14 +58,14 @@ export default class extends Command {
 
 			jumboList.push(`${context.author.id}-${context.guild?.id}.png`);
 
-			for (let i = 0; i < args.length; i++) {
-				let emote: RegExpMatchArray | string = args[i];
+			for (let i = 0; i < realList.length; i++) {
+				let emote: RegExpMatchArray | string = realList[i];
 				let emoteName: string;
 
 				emote = <RegExpMatchArray>emote.match(CustomEmote);
 
 				if (emote === null) {
-					emoteName = await emojiUnicode(args[i]).split(" ").join("-");
+					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
 
 					if (!existsSync(join(PATH, `${emoteName}.png`)))
 						await DownloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);

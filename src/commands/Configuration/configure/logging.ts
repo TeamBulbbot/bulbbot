@@ -5,9 +5,10 @@ import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import BanpoolManager from "../../../utils/managers/BanpoolManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
-
+const { getPools }: BanpoolManager = new BanpoolManager();
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
@@ -23,8 +24,9 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const part: string = args[0];
-		const original: string = (await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id))["modAction"];
 		let channel: string | null = args[1];
+		let original: string = "";
+		const loggingConfig: Record<string, any> = await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id);
 		let confirmMsg: Message;
 
 		if (channel === "remove" || channel === "disable") channel = null;
@@ -47,47 +49,65 @@ export default class extends SubCommand {
 			}
 		}
 
+		const amtOfPools = (await getPools(context.guild!?.id)).length;
+		if ((channel === null && part === "banpoollogs") || (part === "banpool_logs" && amtOfPools > 0))
+			return await context.channel.send(await this.client.bulbutils.translate("configure_logging_banpool_with_still_pools", context.guild?.id, { amount: amtOfPools }));
+
 		switch (part) {
 			case "mod_actions":
 			case "mod_logs":
 			case "modlogs":
 			case "modactions":
 				await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["modAction"];
+				break;
+			case "banpoollogs":
+			case "banpool_logs":
+				await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
 				break;
 			case "automod":
 			case "auto_mod":
 				await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["automod"];
 				break;
 			case "messagelogs":
 			case "message_logs":
 				await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["message"];
 				break;
 			case "rolelogs":
 			case "role_logs":
 				await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["role"];
 				break;
 			case "memberlogs":
 			case "member_logs":
 				await databaseManager.setMember(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["member"];
 				break;
 			case "channellogs":
 			case "channel_logs":
 				await databaseManager.setChannel(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["channel"];
 				break;
 			case "threadlogs":
 			case "thread_logs":
 				await databaseManager.setThread(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["thread"];
 				break;
 			case "invitelogs":
 			case "invite_logs":
 				await databaseManager.setInvite(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["invite"];
 				break;
 			case "joinleave":
 			case "join_leave":
 				await databaseManager.setJoinLeave(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["joinLeave"];
 				break;
 			case "other":
 				await databaseManager.setOther(<Snowflake>context.guild?.id, channel);
+				original = loggingConfig["other"];
 				break;
 			case "all":
 				const row = new MessageActionRow().addComponents([
@@ -95,7 +115,10 @@ export default class extends SubCommand {
 					new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 				]);
 
-				confirmMsg = await context.channel.send({ content: await this.client.bulbutils.translate("config_logging_all_confirm", context.guild?.id, { channel }), components: [row] });
+				confirmMsg = await context.channel.send({
+					content: await this.client.bulbutils.translate(channel === null ? "config_logging_all_remove" : "config_logging_all_confirm", context.guild?.id, { channel }),
+					components: [row],
+				});
 
 				const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
 				let interaction: ButtonInteraction;
@@ -109,6 +132,7 @@ export default class extends SubCommand {
 
 				if (interaction.customId === "confirm") {
 					await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
+					await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
 					await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
@@ -130,14 +154,14 @@ export default class extends SubCommand {
 					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
 						argument: args[0].toLowerCase(),
 						arg_expected: "part:string",
-						argument_list: "`mod_logs`, `automod`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
+						argument_list: "`mod_logs`, `automod`, `banpool_logs`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
 					}),
 				);
 		}
 
 		if (channel === null) {
 			return await context.channel.send(
-				await this.client.bulbutils.translate("config_logging_remove", context.guild?.id, {
+				await this.client.bulbutils.translate(part === "all" ? "config_logging_remove_all" : "config_logging_remove", context.guild?.id, {
 					logging_type: part,
 					channel: original,
 				}),

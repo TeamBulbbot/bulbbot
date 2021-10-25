@@ -38,7 +38,7 @@ export default class extends Event {
 			await databaseManager.deleteGuild(context.guild.id);
 			await databaseManager.createGuild(context.guild);
 			if (!(guildCfg = await databaseManager.getConfig(context.guild.id)))
-				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
+				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.rocks/invite, there has been an error with the configuration of the guild");
 		}
 
 		const prefix = guildCfg.prefix;

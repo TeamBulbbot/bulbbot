@@ -5,6 +5,9 @@ export default function (sequelize: Sequelize): void {
 		modAction: {
 			type: DataTypes.STRING,
 		},
+		banpool: {
+			type: DataTypes.STRING,
+		},
 		automod: {
 			type: DataTypes.STRING,
 		},
