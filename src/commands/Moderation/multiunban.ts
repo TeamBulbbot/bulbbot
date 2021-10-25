@@ -53,9 +53,8 @@ export default class extends Command {
 
 			let target;
 			let infID: number;
-			try {
-				target = await this.client.bulbfetch.getUser(targets[i].replace(NonDigits, ""));
-			} catch (error) {
+			target = await this.client.bulbfetch.getUser(targets[i].replace(NonDigits, ""));
+			if (!target) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -64,6 +63,7 @@ export default class extends Command {
 						usage: this.usage,
 					}),
 				);
+				continue;
 			}
 
 			infID = await infractionsManager.unban(

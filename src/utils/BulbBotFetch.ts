@@ -24,7 +24,7 @@ export default class {
 		return member;
 	}
 
-	public async getChannel(channels: GuildChannelManager | undefined, channelId: Snowflake) {
+	public async getChannel(channels: GuildChannelManager | undefined, channelId: Snowflake): Promise<GuildChannel | ThreadChannel | null | undefined> {
 		let channel: GuildChannel | ThreadChannel | undefined | null = channels?.cache.get(channelId);
 		if (!channelId.length) return undefined;
 		if (!channel) channel = await channels?.fetch(channelId).catch(_ => undefined);
@@ -32,7 +32,7 @@ export default class {
 		return channel;
 	}
 
-	public async getRole(roles: RoleManager | undefined, roleId: Snowflake) {
+	public async getRole(roles: RoleManager | undefined, roleId: Snowflake): Promise<Role | null | undefined> {
 		let role: Role | undefined | null = roles?.cache.get(roleId);
 		if (!roleId.length) return undefined;
 		if (!role) role = await roles?.fetch(roleId).catch(_ => undefined);

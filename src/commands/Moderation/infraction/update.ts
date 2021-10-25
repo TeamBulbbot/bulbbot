@@ -15,17 +15,19 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 2,
 			maxArgs: -1,
-			argList: ["infraction:int", "reason:string"],
+			argList: ["infraction:int32", "reason:string"],
 			usage: "<infraction> <reason>",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!Number.isSafeInteger(Number(args[0].replace(NonDigits, ""))))
+		const infID = Number(args[0].replace(NonDigits, ""));
+
+		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
-					arg_expected: "id:int",
+					arg_expected: "id:int32",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),

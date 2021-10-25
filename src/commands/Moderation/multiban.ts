@@ -61,9 +61,8 @@ export default class extends Command {
 			}
 
 			if (notInGuild) {
-				try {
-					target = await this.client.bulbfetch.getUser(t);
-				} catch (error) {
+				target = await this.client.bulbfetch.getUser(t);
+				if (!target) {
 					await context.channel.send(
 						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -74,6 +73,7 @@ export default class extends Command {
 					);
 					continue;
 				}
+
 				infID = await infractionsManager.ban(
 					this.client,
 					<Guild>context.guild,
