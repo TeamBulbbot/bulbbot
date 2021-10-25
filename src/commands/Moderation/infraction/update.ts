@@ -21,7 +21,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!Number.isSafeInteger(args[0].replace(NonDigits, "")))
+		if (!Number.isSafeInteger(Number(args[0].replace(NonDigits, ""))))
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),

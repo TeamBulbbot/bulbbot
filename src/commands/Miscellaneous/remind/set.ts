@@ -103,7 +103,8 @@ export default class extends SubCommand {
 						});
 					}
 				} else {
-					const user: User = await this.client.bulbfetch.getUser(reminder.userId);
+					const user: User | undefined = await this.client.bulbfetch.getUser(reminder.userId);
+					if (!user) return;
 
 					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch(_ => {
 						this.client.log.info(`[REMIND - DM] Unable to dm ${user.tag} (${user.id}) with the reminder of ${reminder.reason}`);
