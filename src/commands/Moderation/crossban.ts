@@ -84,24 +84,24 @@ export default class extends Command {
 				if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild?.id, {});
 
 				if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
-        
-			const banList = await guild.bans.fetch();
-			const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target!.id);
 
-			if (bannedUser) continue;
-			else {
-				let guildTarget: GuildMember | undefined = undefined;
-				try {
-					guildTarget = await this.client.bulbfetch.getGuildMember(guild?.members, target.id);
-				} catch (_) {}
+				const banList = await guild.bans.fetch();
+				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target!.id);
+
+				if (bannedUser) continue;
+				else {
+					let guildTarget: GuildMember | undefined = undefined;
+					try {
+						guildTarget = await this.client.bulbfetch.getGuildMember(guild?.members, target!.id);
+					} catch (_) {}
 
 					if (!guildTarget) {
 						totalBans++;
-						banUser(this.client, target, context.author, guild, context.guild!, reason);
+						banUser(this.client, target!, context.author, guild, context.guild!, reason);
 					} else {
 						if (guildTarget.bannable) {
 							totalBans++;
-							banUser(this.client, target, context.author, guild, context.guild!, reason);
+							banUser(this.client, target!, context.author, guild, context.guild!, reason);
 						} else continue;
 					}
 				}
