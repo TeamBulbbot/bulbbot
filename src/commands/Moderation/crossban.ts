@@ -33,14 +33,12 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let reason: string = args.slice(1).join(" ");
-		let target: User;
+		let target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 
 		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 
-		try {
-			target = await this.client.users.fetch(targetID);
-		} catch (error) {
-			await context.channel.send(
+		if (!target)
+			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
 					arg_expected: "user:User",
@@ -48,8 +46,6 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-			return;
-		}
 
 		const pools: any[] = await getPools(context.guild!?.id);
 		const poolGuilds: any[] = await getGuildsFromPools(pools);
@@ -63,13 +59,13 @@ export default class extends Command {
 			if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
 
 			const banList = await guild.bans.fetch();
-			const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
+			const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target!.id);
 
 			if (bannedUser) continue;
 			else {
 				let guildTarget: GuildMember | undefined = undefined;
 				try {
-					guildTarget = await guild.members.fetch(target.id);
+					guildTarget = await this.client.bulbfetch.getGuildMember(guild?.members, target.id);
 				} catch (_) {}
 
 				if (!guildTarget) {
