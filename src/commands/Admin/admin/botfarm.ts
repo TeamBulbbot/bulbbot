@@ -22,10 +22,9 @@ export default class extends SubCommand {
 		const botfarms: any = [];
 		let isFile: boolean = false;
 
-		for(const guild of this.client.guilds.cache.values()) {
-			if(guild.members.cache.size !== guild.memberCount)
-				await guild.members.fetch();
-		}
+		//for (const guild of this.client.guilds.cache.values()) {
+		//	if (guild.members.cache.size !== guild.memberCount) await guild.members.fetch();
+		//}
 
 		this.client.guilds.cache.map(g => {
 			if (Math.round((g.members.cache.filter(u => u.user.bot).size / g.members.cache.size) * 100) < parseInt(args[0])) return;

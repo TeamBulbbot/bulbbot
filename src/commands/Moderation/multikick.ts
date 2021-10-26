@@ -60,7 +60,7 @@ export default class extends Command {
 			await this.client.bulbutils.sleep(massCommandSleep);
 
 			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember | null = t ? <GuildMember>await context.guild?.members.fetch(t).catch(() => null) : null;
+			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
 			let infID: number;
 
 			if (!target) {

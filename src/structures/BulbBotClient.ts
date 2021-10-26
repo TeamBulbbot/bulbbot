@@ -6,6 +6,7 @@ import Command from "./Command";
 import BulbBotUtils from "../utils/BulbBotUtils";
 import * as Config from "../Config";
 import { logger } from "../utils/Logger";
+import BulbBotFetch from "../utils/BulbBotFetch";
 
 export default class extends Client {
 	public prefix: string = Config.prefix;
@@ -15,6 +16,7 @@ export default class extends Client {
 	public defaultPerms!: Readonly<BitField<PermissionString, bigint>>;
 	private readonly utils: Util;
 	public readonly bulbutils: BulbBotUtils;
+	public readonly bulbfetch: BulbBotFetch;
 	public userClearance: number = 0;
 	public blacklist: Collection<string, Record<string, any>>;
 	public banpoolInvites: Collection<string, Record<string, any>>;
@@ -38,6 +40,7 @@ export default class extends Client {
 
 		this.utils = new Util(this);
 		this.bulbutils = new BulbBotUtils(this);
+		this.bulbfetch = new BulbBotFetch(this);
 
 		this.blacklist = new Collection();
 		this.banpoolInvites = new Collection();

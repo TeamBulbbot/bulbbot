@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
-import { ButtonInteraction, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
@@ -28,31 +28,26 @@ export default class extends Command {
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
-		await context.guild?.members.fetch();
+	async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		// await context.guild?.members.fetch();
+
 		let target: string;
 		if (args[0] === undefined) target = context.author.id;
 		else target = args[0].replace(NonDigits, "");
 
-		let user: any = await context.guild?.members.cache.get(target);
+		let user: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, target);
 		let isGuildMember = true;
 
-		if (!user) {
-			try {
-				user = await this.client.users.fetch(target);
-				isGuildMember = false;
-			} catch (error) {
-				await context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
-						arg_expected: "user:User",
-						arg_provided: args[0],
-						usage: this.usage,
-					}),
-				);
-				return;
-			}
-		}
+		if (!user) user = await this.client.bulbfetch.getUser(target);
+		if (!user)
+			return await context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+					arg_expected: "user:User",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 
 		user = this.client.bulbutils.userObject(isGuildMember, user);
 

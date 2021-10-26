@@ -19,17 +19,19 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["id:number"],
+			argList: ["id:int32"],
 			usage: "<id>",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!Number.isSafeInteger(args[0].replace(NonDigits, "")))
+		const infID = Number(args[0].replace(NonDigits, ""));
+
+		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
-					arg_expected: "id:int",
+					arg_expected: "id:int32",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
@@ -45,7 +47,7 @@ export default class extends SubCommand {
 			);
 		}
 
-		const user = await this.client.bulbutils.userObject(false, await this.client.users.fetch(inf.targetId));
+		const user = await this.client.bulbfetch.getUser(inf.targetId);
 		const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
 		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
 
@@ -76,7 +78,7 @@ export default class extends SubCommand {
 			.setDescription(description)
 			.setColor(embedColor)
 			.setImage(<string>(image ? image[0] : null))
-			.setThumbnail(user.avatarUrl)
+			.setThumbnail(<string>user?.avatarURL({ dynamic: true }))
 			.setFooter(await this.client.bulbutils.translate("global_executed_by", context.guild?.id, { user: context.author }), <string>context.author.avatarURL())
 			.setTimestamp();
 

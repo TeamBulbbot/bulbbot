@@ -53,17 +53,16 @@ export default class extends Command {
 
 			const t: Snowflake = targets[i].replace(NonDigits, "");
 			let infID: number;
-			let target: any = await context.guild?.members.cache.get(t);
+			let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
 			const notInGuild: boolean = !target;
 
 			if (!notInGuild) {
-				if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) return;
+				if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 			}
 
 			if (notInGuild) {
-				try {
-					target = await this.client.users.fetch(t);
-				} catch (error) {
+				target = await this.client.bulbfetch.getUser(t);
+				if (!target) {
 					await context.channel.send(
 						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -74,6 +73,7 @@ export default class extends Command {
 					);
 					continue;
 				}
+
 				infID = await infractionsManager.ban(
 					this.client,
 					<Guild>context.guild,

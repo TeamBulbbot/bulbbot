@@ -5,6 +5,7 @@ import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake 
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import { Infraction } from "../../../utils/types/Infraction";
+import { NonDigits } from "../../../utils/Regex";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -16,19 +17,19 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["infraction:int"],
+			argList: ["infraction:int32"],
 			usage: "<infraction>",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const infID: number = Number(args[0]);
+		const infID = Number(args[0].replace(NonDigits, ""));
 
-		if (!Number.isSafeInteger(infID))
+		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
-					arg_expected: "id:int",
+					arg_expected: "id:int32",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
