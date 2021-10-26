@@ -50,7 +50,7 @@ export default class extends SubCommand {
 		}
 
 		const amtOfPools = (await getPools(context.guild!?.id)).length;
-		if ((channel === null && part === "banpoollogs") || (part === "banpool_logs" && amtOfPools > 0))
+		if (channel === null && amtOfPools > 0 && (part === "banpoollogs" || part === "banpool_logs"))
 			return await context.channel.send(await this.client.bulbutils.translate("configure_logging_banpool_with_still_pools", context.guild?.id, { amount: amtOfPools }));
 
 		switch (part) {
