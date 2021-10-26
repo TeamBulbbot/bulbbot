@@ -93,7 +93,7 @@ export default class {
 		for (let i = 0; i < pools.length; i++) {
 			const guilds: any = await sequelize.query('SELECT "guildId" FROM "banpoolSubscribers" WHERE "banpoolId" = $PoolId', {
 				bind: {
-					PoolId: pools[i].id,
+					PoolId: pools[i],
 				},
 				type: QueryTypes.SELECT,
 			});
