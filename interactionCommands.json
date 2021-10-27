@@ -1538,11 +1538,7 @@
 		"type": 3
 	},
 	{
-		"name": "Kick",
-		"type": 3
-	},
-	{
-		"name": "Ban",
+		"name": "List all Infractions",
 		"type": 3
 	},
 	{
