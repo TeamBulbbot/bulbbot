@@ -775,6 +775,39 @@
 				]
 			},
 			{
+				"name": "quick_reasons",
+				"type": 2,
+				"description": "Configures the quick reasons for context commands",
+				"options": [
+					{
+						"name": "add",
+						"type": 1,
+						"description": "Adds the selected quick reasons to the list",
+						"options": [
+							{
+								"name": "reason",
+								"type": 3,
+								"description": "The reason that should be added",
+								"required": true
+							}
+						]
+					},
+					{
+						"name": "remove",
+						"type": 1,
+						"description": "Removes the selected quick reasons from the list",
+						"options": [
+							{
+								"name": "reason",
+								"type": 3,
+								"description": "The reason that should be removed",
+								"required": true
+							}
+						]
+					}
+				]
+			},
+			{
 				"name": "roles_on_leave",
 				"type": 1,
 				"description": "Enables logging of roles when a member leaves the server",
