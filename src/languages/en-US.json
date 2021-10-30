@@ -135,6 +135,8 @@
   },
 
   "config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
+  "config_generic_success_add": "{{emote_success}} Successfully added `{{value}}` to `{{setting}}`",
+  "config_generic_success_remove": "{{emote_success}} Successfully removed `{{value}}` from `{{setting}}`",
 
   "config_language_success": "{{emote_success}} Successfully changed the server language to `{{language}}`",
   "config_timezone_success": "{{emote_success}} Successfully changed the server timezone to `{{timezone}}`",
@@ -155,6 +157,10 @@
 
   "config_autorole_success": "{{emote_success}} Successfully changed the autorole to **{{role}}**",
   "config_autorole_disable": "{{emote_success}} Successfully disabled the autorole",
+
+  "config_quick_reasons_already_in_list": "{{emote_fail}} The reason `{{reason}}` is already in the list.",
+  "config_quick_reasons_not_found": "{{emote_fail}} The reason `{{reason}}` was not found.",
+  "config_quick_reasons_too_many_reasons": "{{emote_fail}} You cannot have more than 24 custom quick reasons. Please remove some before adding more.",
 
   "override_clearance_more_than_100": "{{emote_warn}} Clearance level cannot be higher than **100**",
   "override_clearance_0_confirmation": "{{emote_warn}} You're about to set a restricted command to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",

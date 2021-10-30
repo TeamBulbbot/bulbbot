@@ -1,12 +1,14 @@
 import BulbBotClient from "../../structures/BulbBotClient";
 import { ContextMenuInteraction, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction, Snowflake } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import DatabaseManager from "../../utils/managers/DatabaseManager";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
-	const target: GuildMember = <GuildMember>message.member
-	const reasons: string[] = ["Spam", "Swearing", "Toxic behavior", "Advertising"];
+	const target: GuildMember = <GuildMember>message.member;
+	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
 	let options: MessageSelectOptionData[] = [];

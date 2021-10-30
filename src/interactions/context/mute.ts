@@ -22,7 +22,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	if (target.roles.cache.get(muteRole))
 		return interaction.reply({ content: await client.bulbutils.translate("mute_already_muted", interaction.guild?.id, { target: message.author }), ephemeral: true });
 
-	const reasons: string[] = ["Spam", "Swearing", "Toxic behavior", "Advertising"];
+	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
 	let options: MessageSelectOptionData[] = [];

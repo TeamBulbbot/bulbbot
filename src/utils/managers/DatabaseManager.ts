@@ -8,6 +8,7 @@ import LoggingConfiguration from "../types/LoggingConfiguration";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
 import PunishmentType from "../types/PunishmentType";
+import { GuildConfiguration } from "../types/GuildConfiguration";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -61,7 +62,7 @@ export default class {
 		});
 	}
 
-	async getConfig(guildID: Snowflake): Promise<Record<string, any>> {
+	async getConfig(guildID: Snowflake): Promise<GuildConfiguration> {
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.SELECT,
@@ -419,6 +420,26 @@ export default class {
 		await sequelize.query('DELETE FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
 			bind: { snowflakeId },
 			type: QueryTypes.DELETE,
+		});
+	}
+
+	async appendQuickReasons(guildId: Snowflake, reason: string): Promise<void> {
+		await sequelize.query('UPDATE "guildConfigurations" SET "quickReasons" = array_append("quickReasons", $reason) WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: {
+				GuildID: guildId,
+				reason,
+			},
+			type: QueryTypes.UPDATE,
+		});
+	}
+
+	async removeQuickReason(guildId: Snowflake, reason: string): Promise<void> {
+		await sequelize.query('UPDATE "guildConfigurations" SET "quickReasons" = array_remove("quickReasons", $reason) WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: {
+				GuildID: guildId,
+				reason,
+			},
+			type: QueryTypes.UPDATE,
 		});
 	}
 }
