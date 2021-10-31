@@ -5,6 +5,8 @@ import { MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { GuildConfiguration } from "../../utils/types/GuildConfiguration";
+import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
 
 const databaseManager = new DatabaseManager();
 
@@ -21,8 +23,8 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext) {
-		const guildConfig = await databaseManager.getConfig(context.guild!.id);
-		const loggingConfig = await databaseManager.getLoggingConfig(context.guild!.id);
+		const guildConfig: GuildConfiguration = await databaseManager.getConfig(context.guild!.id);
+		const loggingConfig: LoggingConfiguration = await databaseManager.getLoggingConfig(context.guild!.id);
 
 		const configs: string[] = [
 			`**Configuration**`,
@@ -33,6 +35,7 @@ export default class extends Command {
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
 			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Quick reasons: ${guildConfig.quickReasons.length ? guildConfig.quickReasons.join(", ") : Emotes.other.SWITCHOFF}`
 		];
 
 		const loggingModule: string[] = [

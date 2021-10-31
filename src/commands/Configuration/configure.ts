@@ -10,6 +10,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import actionsOnInfo from "./configure/actionsOnInfo";
 import rolesOnLeave from "./configure/rolesOnLeave";
 import language from "./configure/language";
+import quickReasons from "./configure/quickReasons";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -17,7 +18,7 @@ export default class extends Command {
 			name,
 			description: "Configure the bot in your server",
 			category: "Configuration",
-			subCommands: [muterole, timezone, prefix, logging, autorole, override, automod, actionsOnInfo, language, rolesOnLeave],
+			subCommands: [muterole, timezone, prefix, logging, autorole, override, automod, actionsOnInfo, language, rolesOnLeave, quickReasons],
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "<setting>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>", "configure mute_role <role>"],
