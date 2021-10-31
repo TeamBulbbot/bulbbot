@@ -5,8 +5,7 @@ import { MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { GuildConfiguration } from "../../utils/types/GuildConfiguration";
-import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
+import { GuildConfiguration, LoggingConfiguration } from "../../utils/types/DatabaseStructures";
 
 const databaseManager = new DatabaseManager();
 

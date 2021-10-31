@@ -8,6 +8,7 @@ import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
 import { developers, subDevelopers } from "../Config";
+import { GuildCommandOverride } from "../utils/types/DatabaseStructures";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -79,11 +80,11 @@ export default class Command {
 		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
-			if (!commandOverride["enabled"] && context.isMessageContext()) return "";
-			else if (!commandOverride["enabled"] && context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
-			clearance = commandOverride["clearanceLevel"];
+			if (!commandOverride.enabled && context.isMessageContext()) return "";
+			else if (!commandOverride.enabled && context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
+			clearance = commandOverride.clearanceLevel;
 		}
 
 		this.client.userClearance = options.clearance;
@@ -139,9 +140,9 @@ export default class Command {
 		if (this.devOnly && !isDev) return false;
 		if (this.subDevOnly && !(isDev || isSubDev)) return false;
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
-			if (!commandOverride["enabled"]) return false;
+			if (!commandOverride.enabled) return false;
 			clearance = commandOverride["clearanceLevel"];
 		}
 

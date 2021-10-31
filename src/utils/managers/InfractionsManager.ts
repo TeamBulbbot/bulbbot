@@ -6,7 +6,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import LoggingManager from "./LoggingManager";
 import { BanType } from "../types/BanType";
 import { MuteType } from "../types/MuteType";
-import { Infraction } from "../types/Infraction";
+import { Infraction } from "../types/DatabaseStructures";
 
 const loggingManager: LoggingManager = new LoggingManager();
 

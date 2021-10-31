@@ -8,6 +8,7 @@ import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
 import Command from "./Command";
 import DatabaseManager from "../utils/managers/DatabaseManager";
+import { Blacklist } from "../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -78,7 +79,7 @@ export default class {
 
 	async loadBlacklist(): Promise<void> {
 		this.client.log.client("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
-		const blacklistedUsers: any = await databaseManager.getAllBlacklisted();
+		const blacklistedUsers: Blacklist[] = await databaseManager.getAllBlacklisted();
 		for (let i = 0; i < blacklistedUsers.length; i++) {
 			const blacklist = blacklistedUsers[i];
 			this.client.blacklist.set(blacklist.snowflakeId, {

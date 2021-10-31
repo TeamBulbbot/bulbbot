@@ -4,7 +4,7 @@ import Command from "../../../../structures/Command";
 import CommandContext from "../../../../structures/CommandContext";
 import { Message } from "discord.js";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
-import { GuildConfiguration } from "../../../../utils/types/GuildConfiguration";
+import { GuildConfiguration } from "../../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 

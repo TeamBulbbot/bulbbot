@@ -5,8 +5,8 @@ import * as Emotes from "../../emotes.json";
 import { defaultPerms } from "../../Config";
 import moment, { MomentInput } from "moment";
 import "moment-timezone";
-import LoggingConfiguration from "../types/LoggingConfiguration";
 import { LoggingPartString } from "../types/LoggingPart";
+import { LoggingConfiguration } from "../types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
