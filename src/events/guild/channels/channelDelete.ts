@@ -1,8 +1,11 @@
 import { DMChannel, GuildAuditLogs, GuildChannel, Permissions } from "discord.js";
 import Event from "../../../structures/Event";
 import LoggingManager from "../../../utils/managers/LoggingManager";
+import { LoggingConfiguration } from "../../../utils/types/DatabaseStructures";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -12,6 +15,20 @@ export default class extends Event {
 
 	async run(channel: DMChannel | GuildChannel) {
 		if (!(channel instanceof GuildChannel)) return;
+
+		const config: LoggingConfiguration = await databaseManager.getLoggingConfig(channel.guild.id);
+		if (channel.id === config.modAction) await databaseManager.setModAction(channel.guild.id, null);
+		else if (channel.id === config.banpool) await databaseManager.setAutoMod(channel.guild.id, null);
+		else if (channel.id === config.automod) await databaseManager.setAutoMod(channel.guild.id, null);
+		else if (channel.id === config.message) await databaseManager.setMessage(channel.guild.id, null);
+		else if (channel.id === config.role) await databaseManager.setRole(channel.guild.id, null);
+		else if (channel.id === config.member) await databaseManager.setMember(channel.guild.id, null);
+		else if (channel.id === config.channel) await databaseManager.setChannel(channel.guild.id, null);
+		else if (channel.id === config.thread) await databaseManager.setThread(channel.guild.id, null);
+		else if (channel.id === config.invite) await databaseManager.setInvite(channel.guild.id, null);
+		else if (channel.id === config.joinLeave) await databaseManager.setJoinLeave(channel.guild.id, null);
+		else if (channel.id === config.other) await databaseManager.setOther(channel.guild.id, null);
+
 
 		let log: string = "";
 		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
