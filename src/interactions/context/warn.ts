@@ -56,5 +56,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			}),
 			components: [],
 		});
+
+		collector.stop();
 	});
 }

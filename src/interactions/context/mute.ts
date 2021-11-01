@@ -101,5 +101,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 
 			await deleteMute(mute.id);
 		}, 3600000);
+
+		collector.stop();
 	});
 }
