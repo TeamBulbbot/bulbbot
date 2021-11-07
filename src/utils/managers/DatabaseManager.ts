@@ -1,6 +1,6 @@
 import { sequelize } from "../database/connection";
 import * as Config from "../../Config";
-import { Guild, Snowflake } from "discord.js";
+import { Guild, Message, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
 import AutoModConfiguration from "../types/AutoModConfiguration";
@@ -440,6 +440,46 @@ export default class {
 				reason,
 			},
 			type: QueryTypes.UPDATE,
+		});
+	}
+
+	async addToMessageToDB(message: Message) {
+		await sequelize.query(
+			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "content", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $content, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
+			{
+				bind: {
+					messageId: message.id,
+					guildId: message.guild?.id,
+					channelId: message.channel.id,
+					authorId: message.author.id,
+					content: message.content,
+					createdAt: moment(message.createdAt).format(),
+					updatedAt: moment(message.createdAt).format(),
+				},
+				type: QueryTypes.INSERT,
+			},
+		);
+	}
+
+	async getMessageFromDB(messageId: Snowflake) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+		SELECT * FROM "messageLogs" 
+		JOIN guilds ON "messageLogs"."guildId" = guilds.id
+		WHERE ("messageId" = $messageId) 
+		`,
+			{
+				bind: { messageId },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response[0];
+	}
+
+	async deleteMessageFromDB(messageId: Snowflake) {
+		await sequelize.query('DELETE FROM "messageLogs" WHERE ("messageId" = $messageId)', {
+			bind: { messageId },
+			type: QueryTypes.DELETE,
 		});
 	}
 }

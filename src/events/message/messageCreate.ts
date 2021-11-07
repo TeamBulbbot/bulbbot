@@ -31,6 +31,8 @@ export default class extends Event {
 		// checks if the guild is in the blacklist
 		if (this.client.blacklist.get(context.guild.id)) return;
 
+		await databaseManager.addToMessageToDB(message);
+
 		const mentionRegex: RegExp = RegExp(`^<@!?${this.client.user!.id}>`);
 		let guildCfg = await databaseManager.getConfig(context.guild.id);
 

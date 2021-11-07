@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 
 export default function (sequelize: Sequelize) {
-	const { guild, guildConfiguration, guildLogging, guildModerationRoles, guildOverrideCommands, infraction, tempban, automod, tempmute, banpools, banpoolSubscribers } = sequelize.models;
+	const { guild, guildConfiguration, guildLogging, guildModerationRoles, guildOverrideCommands, infraction, tempban, automod, tempmute, banpools, banpoolSubscribers, messageLog } = sequelize.models;
 
 	guild.belongsTo(guildConfiguration, {});
 	guild.belongsTo(guildLogging, {});
@@ -17,4 +17,6 @@ export default function (sequelize: Sequelize) {
 
 	guild.hasMany(banpools, {});
 	banpools.hasMany(banpoolSubscribers, {});
+
+	guild.hasMany(messageLog, {});
 }

@@ -18,38 +18,43 @@ export default class extends Event {
 	}
 
 	public async run(oldMessage: Message, newMessage: Message): Promise<void> {
-		if (newMessage.author.id === this.client.user!.id) return;
-		if (oldMessage.content === newMessage.content) return;
 		if (!newMessage.guild) return;
 
-		const context: CommandContext = await getCommandContext(newMessage)
-		const clearance = await clearanceManager.getUserClearance(context)
+		if (oldMessage.partial) {
+			console.log(oldMessage, newMessage);
+		} else {
+			if (newMessage.author.id === this.client.user!.id) return;
+			if (oldMessage.content === newMessage.content) return;
 
-		if (clearance < 25) await AutoMod(this.client, context);
+			const context: CommandContext = await getCommandContext(newMessage);
+			const clearance = await clearanceManager.getUserClearance(context);
 
-		const msg: string = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
-			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
-			user: newMessage.author,
-			message: newMessage,
-			channel: newMessage.channel,
-			before: Util.cleanContent(oldMessage.content, oldMessage.channel),
-			after: Util.cleanContent(newMessage.content, newMessage.channel),
-		});
+			if (clearance < 25) await AutoMod(this.client, context);
 
-		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`, `**B:** ${oldMessage.content}\n**A:** ${newMessage.content}`);
-			await loggingManager.sendEventLog(
-				this.client,
-				newMessage.guild,
-				"message",
-				await this.client.bulbutils.translate("event_message_edit_special", newMessage.guild.id, {
-					user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
-					user: newMessage.author,
-					message: newMessage,
-					channel: newMessage.channel,
-				}),
-				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`,
-			);
-		} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
+			const msg: string = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
+				user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
+				user: newMessage.author,
+				message: newMessage,
+				channel: newMessage.channel,
+				before: Util.cleanContent(oldMessage.content, oldMessage.channel),
+				after: Util.cleanContent(newMessage.content, newMessage.channel),
+			});
+
+			if (msg.length >= 1850) {
+				fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`, `**B:** ${oldMessage.content}\n**A:** ${newMessage.content}`);
+				await loggingManager.sendEventLog(
+					this.client,
+					newMessage.guild,
+					"message",
+					await this.client.bulbutils.translate("event_message_edit_special", newMessage.guild.id, {
+						user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
+						user: newMessage.author,
+						message: newMessage,
+						channel: newMessage.channel,
+					}),
+					`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`,
+				);
+			} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
+		}
 	}
 }

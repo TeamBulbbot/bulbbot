@@ -8,7 +8,7 @@
 		"prestart": "tsc",
 		"start": "node build/index.js",
 		"nobuild": "node build/index.js",
-		"dev": "nodemon build/index.js --ignore ./files",
+		"dev": "nodemon build/index.js --ignore ./files --delay 100ms",
 		"pm2-start": "pm2 start build/index.js --watch --output ./logs/log.log --error ./logs/error.log --time --name bulbbot",
 		"db-sync": "node build/utils/database/sync.js",
 		"delete:build": "rimraf build/*"

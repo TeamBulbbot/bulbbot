@@ -1,4 +1,4 @@
-import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData, IntentsString, PermissionString } from "discord.js";
+import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData, IntentsString, PermissionString, PartialTypes } from "discord.js";
 import * as Emotes from "./emotes.json";
 
 // @ts-ignore
@@ -18,6 +18,7 @@ export const prefix: string = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
 export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES"];
+export const partials: PartialTypes[] = ["MESSAGE"];
 export const defaultPerms: PermissionString[] = ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"];
 
 // pm2 configs

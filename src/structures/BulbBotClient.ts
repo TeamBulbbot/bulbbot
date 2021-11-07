@@ -26,6 +26,7 @@ export default class extends Client {
 	constructor(options: any) {
 		super({
 			intents: new Intents(Config.intents),
+			partials: Config.partials,
 			http: { version: 9 },
 			messageCacheLifetime: 0,
 			messageSweepInterval: 0,
