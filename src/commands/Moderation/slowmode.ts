@@ -27,9 +27,9 @@ export default class extends Command {
 		let targetChannel: Snowflake;
 		if (!args[1]) targetChannel = context.channel.id;
 		else targetChannel = args[1].replace(NonDigits, "");
-		const channel: TextChannel | null = targetChannel ? <TextChannel>await context.guild?.channels.fetch(targetChannel).catch(() => null) : null;
+		const channel: TextChannel = <TextChannel>await this.client.bulbfetch.getChannel(context.guild?.channels, targetChannel);
 
-		if (!channel)
+		if (!channel || channel.type !== "GUILD_TEXT") {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
@@ -38,7 +38,7 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-
+		}
 		if (args.length === 1) duration = <number>parse(args[0]);
 		else duration = <number>parse(args[0]);
 

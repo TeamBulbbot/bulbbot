@@ -13,7 +13,6 @@ files:
       "source": "/src/languages/en-US.json",
       "translation": "/src/languages/%locale%.json",
       "excluded_target_languages": [
-          "ar",     # Arabic
           "nl",     # Dutch
           "de",     # German
           "hu",     # Hungarian

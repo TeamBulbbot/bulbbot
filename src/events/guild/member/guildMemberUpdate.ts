@@ -56,12 +56,22 @@ export default class extends Event {
 				if (auditLog?.changes && auditLog!!.changes[0].key === "nick") {
 					executor = auditLog.executor;
 					if (executor?.id === this.client.user!.id) return;
-					const reason = auditLog.reason ?? await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {});
-					if(!executor?.bot) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
-					const infID: number = !executor?.bot ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.id, "Manual Nickname") : -1;
-					const translateKey = (executor === null || executor.id === newMember.id) ? newMember.nickname ? "event_member_update_nickname" : "event_member_remove_nickname"
-					                     : executor?.bot ? newMember.nickname ? "event_member_update_nickname_moderator" : "event_member_remove_nickname_moderator"
-										 : newMember.nickname ? "nickname_mod_log" : "nickname_remove_mod_log";
+
+					const reason = auditLog.reason ?? (await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}));
+					if (!executor?.bot && executor?.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
+					const infID: number = !executor?.bot && executor?.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.user.id, "Manual Nickname") : -1;
+					const translateKey =
+						executor === null || executor.id === newMember.id
+							? newMember.nickname
+								? "event_member_update_nickname"
+								: "event_member_remove_nickname"
+							: executor?.bot
+							? newMember.nickname
+								? "event_member_update_nickname_moderator"
+								: "event_member_remove_nickname_moderator"
+							: newMember.nickname
+							? "nickname_mod_log"
+							: "nickname_remove_mod_log";
 					part = translateKey.startsWith("event") ? "member" : "modAction";
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,

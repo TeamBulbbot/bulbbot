@@ -63,7 +63,9 @@ export default class {
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
 
 		await modChannel.send({
-			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${await this.betterActions(client, guild.id,"trash")} **${moderator.tag}** \`(${moderator.id})\` has removed **${amount}** messages in <#${channel.id}>`,
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${await this.betterActions(client, guild.id, "trash")} **${moderator.tag}** \`(${
+				moderator.id
+			})\` has removed **${amount}** messages in <#${channel.id}>`,
 			files: [file],
 		});
 	}
@@ -108,13 +110,7 @@ export default class {
 		);
 	}
 
-	public async sendEventLog(
-		client: BulbBotClient,
-		guild: Guild,
-		part: LoggingPartString,
-		log: string,
-		extra: string | MessageEmbed[] | null = null,
-	): Promise<void> {
+	public async sendEventLog(client: BulbBotClient, guild: Guild, part: LoggingPartString, log: string, extra: string | MessageEmbed[] | null = null): Promise<void> {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
@@ -122,7 +118,7 @@ export default class {
 		if (!logChannelId) return;
 		const logChannel = client.channels.cache.get(logChannelId);
 
-		if(!(logChannel instanceof TextChannel || logChannel instanceof NewsChannel)) return;
+		if (!(logChannel instanceof TextChannel || logChannel instanceof NewsChannel)) return;
 		if (!logChannel.guild.me?.permissionsIn(logChannel).has(defaultPerms)) return;
 
 		await logChannel.send({
@@ -159,6 +155,7 @@ export default class {
 
 	private async betterActions(client: BulbBotClient, guildID: Snowflake, action: string): Promise<string> {
 		switch (action) {
+			case await client.bulbutils.translate("mod_action_types.pool_ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.soft_ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.force_ban", guildID, {}):

@@ -28,7 +28,7 @@ export default class extends Command {
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember = <GuildMember>context.guild!.members.resolve(args[0]) || <GuildMember> await context.guild!.members.fetch(targetID);
+		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 

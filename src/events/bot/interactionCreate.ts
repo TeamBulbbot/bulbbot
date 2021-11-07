@@ -2,8 +2,7 @@ import Event from "../../structures/Event";
 import { GuildMember, Interaction, Message, Snowflake, TextChannel } from "discord.js";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import warn from "../../interactions/context/warn";
-import kick from "../../interactions/context/kick";
-import ban from "../../interactions/context/ban";
+import infSearch from "../../interactions/context/infSearch";
 import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
@@ -58,8 +57,7 @@ export default class extends Event {
 				return;
 
 			//Context commands
-			if (context.commandName === "Ban") await ban(this.client, interaction, message);
-			else if (context.commandName === "Kick") await kick(this.client, interaction, message);
+			if (context.commandName === "List all Infractions") await infSearch(this.client, interaction, message);
 			else if (context.commandName === "Warn") await warn(this.client, interaction, message);
 			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);

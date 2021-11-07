@@ -13,6 +13,14 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 	const infID = Number(interaction.values[0].replace(NonDigits, ""));
 	const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>interaction.guild?.id, infID);
 
+	if (!inf)
+		return interaction.reply({
+			content: await client.bulbutils.translate("infraction_not_found", interaction.guild?.id, {
+				infraction_id: infID,
+			}),
+			ephemeral: true,
+		});
+
 	const user = await client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
 	const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
 	const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };

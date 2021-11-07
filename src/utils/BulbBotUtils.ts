@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, Guild, GuildChannel, GuildMember, MessageEmbed, Permissions, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -19,7 +19,9 @@ export default class {
 	}
 
 	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+		const language = (await databaseManager.getConfig(guildID))["language"];
+		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 
@@ -148,7 +150,7 @@ export default class {
 				desc = "";
 			}
 
-			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
+			f += `[\`${feature}\`](https://bulbbot.rocks '${desc}')`;
 			features.push(f);
 		});
 
@@ -593,6 +595,16 @@ export default class {
 			}
 		}
 		return true;
+	}
+
+	public async updateChannelsWithMutedRole(guild: Guild, role: Snowflake): Promise<void> {
+		// await guild.channels.fetch();
+		guild.channels.cache.map(channel => {
+			if (!guild.me?.permissionsIn(channel).has(Permissions.FLAGS.VIEW_CHANNEL) || !guild.me?.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) return;
+
+			if (channel.type === "GUILD_TEXT") channel.permissionOverwrites.create(role, { SEND_MESSAGES: false });
+			else if (channel.type === "GUILD_VOICE") channel.permissionOverwrites.create(role, { CONNECT: false, SPEAK: false });
+		});
 	}
 
 	/** Deep equality check for objects */

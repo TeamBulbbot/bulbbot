@@ -38,7 +38,7 @@ export default class extends Event {
 			await databaseManager.deleteGuild(context.guild.id);
 			await databaseManager.createGuild(context.guild);
 			if (!(guildCfg = await databaseManager.getConfig(context.guild.id)))
-				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
+				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.rocks/invite, there has been an error with the configuration of the guild");
 		}
 
 		const prefix = guildCfg.prefix;
@@ -95,7 +95,7 @@ export default class extends Event {
 	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
 		const { context, baseCommand, args } = options;
 		let command = baseCommand;
-		if (!context.guild?.me) await context.guild?.members.fetch(this.client.user!.id);
+		if (!context.guild?.me) await this.client.bulbfetch.getGuildMember(context.guild?.members, this.client.user!.id);
 		if (!context.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		const invalidReason = await command.validate(context, args, options);
 		if (invalidReason !== undefined) {
