@@ -1,7 +1,7 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { ButtonInteraction, GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
+import { GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, MessageComponentInteraction, Snowflake } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
@@ -120,8 +120,8 @@ export default class extends SubCommand {
 					components: [row],
 				});
 
-				const filter = (i: ButtonInteraction) => i.user.id === context.author.id;
-				let interaction: ButtonInteraction;
+				const filter = (i: MessageComponentInteraction) => i.isButton() && i.user.id === context.author.id;
+				let interaction: MessageComponentInteraction;
 
 				try {
 					interaction = await confirmMsg.awaitMessageComponent({ filter, time: 15000 });
