@@ -50,6 +50,7 @@ export default class extends SubCommand {
 			});
 
 			msgs.map(async m => {
+				if (moment(m.createdAt).isBefore(moment().subtract(14, "days"))) msgs.delete(m.id);
 				if (m.attachments.size !== 0) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.attachments.first()?.url} |\n`;
 					messagesToPurge.push(m.id);

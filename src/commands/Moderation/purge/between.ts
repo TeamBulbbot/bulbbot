@@ -36,6 +36,7 @@ export default class extends SubCommand {
 			}
 
 			if (counting) {
+				if (moment(msg.createdAt).isBefore(moment().subtract(14, "days"))) msgs.delete(msg.id);
 				messages.push(msg.id);
 				delMsgs += `${moment(msg.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${msg.author.tag} (${msg.author.id}) | ${msg.id} | ${msg.content} |\n`;
 			}

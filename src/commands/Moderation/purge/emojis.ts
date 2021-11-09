@@ -51,6 +51,7 @@ export default class extends SubCommand {
 			});
 
 			msgs.map(async m => {
+				if (moment(m.createdAt).isBefore(moment().subtract(14, "days"))) msgs.delete(m.id);
 				if (m.content.match(CustomEmote) || m.content.match(Emoji)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);
