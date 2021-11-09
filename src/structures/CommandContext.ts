@@ -431,6 +431,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this.replied = false;
 		this.webhook = null;
 		this.customId = null;
+		// @ts-ignore
 		this.options = new CommandInteractionOptionResolver(this.client, []);
 		this.targetId = null;
 		this.targetType = null;
@@ -671,6 +672,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this._user = source.user;
 		const mockApiAuthor: APIUser = {id: this.user.id, username: this.user.username, discriminator: this.user.discriminator, avatar: this.user.avatar};
 		const mockApiClient: APIUser = {id: this.client.user!.id, username: this.client.user!.username, discriminator: this.client.user!.discriminator, avatar: this.client.user!.avatar};
+		// @ts-ignore
 		const mockMessage = new Message(this.client, {content: "", id: "", channel_id: this.channelId ?? "", author: mockApiAuthor, timestamp: `${this.createdTimestamp}`, edited_timestamp: null, tts: false, mention_everyone: false, mentions: [mockApiClient], mention_roles: [], attachments: [], embeds: [], pinned: false, type: APIMessageType.Default});
 		this.token = source.token;
 		this.version = source.version;
@@ -690,11 +692,13 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.groupActivityApplication = null;
 		this.hasThread = false;
 		this.interaction = (source.isCommand() || source.isContextMenu()) ? source : null;
+		// @ts-ignore
 		this.mentions = new MessageMentions(mockMessage, [mockApiClient], new Collection, false); // Long way of saying "mentions the bot"
 		this.nonce = null;
 		this.partial = false;
 		this.pinnable = false;
 		this.pinned = false;
+		// @ts-ignore
 		this.reactions = new ReactionManager(mockMessage);
 		this.stickers = new Collection;
 		this.system = false;
@@ -746,6 +750,7 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.componentType = source.componentType;
 				this.customId = source.customId;
 				this.values = source instanceof SelectMenuInteraction ? source.values : [];
+				// @ts-ignore
 				this.options = new CommandInteractionOptionResolver(this.client, []);
 				this.targetId = null;
 				this.targetType = null;
@@ -771,6 +776,7 @@ class InteractionCommandContext implements BaseCommandContext {
 					this.targetId = source.targetId;
 					this.targetType = source.targetType;
 				} else {
+					// @ts-ignore
 					this.options = new CommandInteractionOptionResolver(this.client, []);
 					this.targetId = null;
 					this.targetType = null;
@@ -788,6 +794,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			this.customId = null;
 			this.values = [];
 
+			// @ts-ignore
 			this.options = new CommandInteractionOptionResolver(this.client, []);
 			this.targetId = null;
 			this.targetType = null;
@@ -802,6 +809,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			if(this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
 					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : {...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true});
+					// @ts-ignore
 					let msg = r instanceof Message ? clone(r) : new Message(this.client, r);
 					msg.edit = async (content: string | MessageEditOptions | MessagePayload): Promise<Message> => {
 						let e: Message | APIMessage;
@@ -810,6 +818,7 @@ class InteractionCommandContext implements BaseCommandContext {
 						} else {
 							e = await this.editReply(<string | MessagePayload>content);
 						}
+						// @ts-ignore
 						return e instanceof Message ? e : new Message(this.client, e);
 					}
 					return msg;
@@ -853,6 +862,7 @@ export async function resolveMember(client: Client, member: GuildMember | APIInt
 			return null;
 		}
 	}
+	// @ts-ignore
 	return new GuildMember(client, member, guild);
 }
 

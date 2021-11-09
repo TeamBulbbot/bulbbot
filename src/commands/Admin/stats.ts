@@ -26,7 +26,7 @@ export default class extends Command {
 			this.client.guilds.cache.map(g => g.members.cache.filter(m => !m.user.bot).size).reduce((a, b) => a + b),
 		)}\``;
 
-		const gatewayBotRaw = await axios.get("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
+		const gatewayBotRaw = await axios.get<any>("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
 		const lolNotPrivateEnoughtDiscordJS = gatewayBotRaw.data.session_start_limit;
 
 		const embed = new MessageEmbed()
