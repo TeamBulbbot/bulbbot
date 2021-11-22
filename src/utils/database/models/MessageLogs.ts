@@ -18,7 +18,19 @@ export default function (sequelize: Sequelize): void {
 		},
 		content: {
 			type: DataTypes.STRING(4000),
-			allowNull: false,
+			allowNull: true,
+		},
+		embed: {
+			type: DataTypes.JSON,
+			allowNull: true,
+		},
+		sticker: {
+			type: DataTypes.JSON,
+			allowNull: true,
+		},
+		attachments: {
+			type: DataTypes.ARRAY(DataTypes.STRING),
+			allowNull: true,
 		},
 	});
 }

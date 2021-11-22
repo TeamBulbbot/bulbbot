@@ -1,6 +1,6 @@
 import { sequelize } from "../database/connection";
 import * as Config from "../../Config";
-import { Guild, Message, Snowflake } from "discord.js";
+import { Guild, Message, MessageAttachment, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
 import AutoModConfiguration from "../types/AutoModConfiguration";
@@ -445,7 +445,7 @@ export default class {
 
 	async addToMessageToDB(message: Message) {
 		await sequelize.query(
-			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "content", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $content, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
+			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "content", "embed", "sticker", "attachments", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $content, $embed, $sticker, $attachments, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
 			{
 				bind: {
 					messageId: message.id,
@@ -453,6 +453,9 @@ export default class {
 					channelId: message.channel.id,
 					authorId: message.author.id,
 					content: message.content,
+					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
+					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-ignore
+					attachments: message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`),
 					createdAt: moment(message.createdAt).format(),
 					updatedAt: moment(message.createdAt).format(),
 				},

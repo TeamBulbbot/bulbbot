@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannels } from "discord.js";
+import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannels, MessageEmbed } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
@@ -23,6 +23,9 @@ export default class extends Event {
 		let guild: Guild;
 		let author: User;
 		let content: string;
+		let sticker: string;
+		let attachment: string;
+		let embeds: string | MessageEmbed[] | null;
 
 		if (message.partial) {
 			const dbData = await getMessageFromDB(message.id);
@@ -31,12 +34,20 @@ export default class extends Event {
 			channel = (await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId)) as TextBasedChannels;
 			guild = this.client.guilds.cache.get(dbData.guildId) as Guild;
 			content = dbData.content;
+			sticker = dbData.sticker ? `**S:** ID: \`${dbData.sticker.id}\` | **Name:** ${dbData.sticker.name} | **Format:** ${dbData.sticker.format}\n` : "";
+			attachment = dbData.attachments.length > 0 ? `**A**: ${dbData.attachments.join("\n")}` : "";
+			embeds = dbData.embeds;
 		} else {
 			if (message.author.id === this.client.user!.id) return;
 			author = message.author;
 			channel = message.channel as TextBasedChannels;
 			guild = message.guild;
 			content = message.content;
+			sticker = message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "";
+			attachment = message.attachments.first() // @ts-ignore
+				? `**A**: ${message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`).join("\n")}\n`
+				: "";
+			embeds = message.embeds.length > 0 ? message.embeds : null;
 
 			if (guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
 				const logs: GuildAuditLogs = await guild.fetchAuditLogs({ limit: 1, type: "MESSAGE_DELETE" });
@@ -52,12 +63,8 @@ export default class extends Event {
 							channel,
 							content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
 							reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
-							sticker: message.stickers.first()
-								? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n`
-								: "",
-							attachment: message.attachments.first() // @ts-ignore
-								? `**A**: ${message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`).join("\n")}\n`
-								: "",
+							sticker,
+							attachment,
 						});
 				}
 			}
@@ -71,10 +78,8 @@ export default class extends Event {
 				channel,
 				content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
 				reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
-				sticker: message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "",
-				attachment: message.attachments.first() // @ts-ignore
-					? `**A**: ${message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`).join("\n")}\n`
-					: "",
+				sticker,
+				attachment,
 			});
 
 		if (msg.length >= 1850) {
@@ -91,7 +96,7 @@ export default class extends Event {
 				}),
 				`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`,
 			);
-		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, message.embeds.length !== 0 ? message.embeds : null);
+		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
 
 		await deleteMessageFromDB(message.id);
 	}
