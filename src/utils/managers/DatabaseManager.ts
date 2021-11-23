@@ -509,4 +509,20 @@ export default class {
 		);
 		return response;
 	}
+
+	async getChannelArchive(channelId: Snowflake, serverId: Snowflake, amount: number) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+			SELECT * FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $serverId)
+			AND "channelId" = $channelId
+			LIMIT $amount
+		`,
+			{
+				bind: { serverId, channelId, amount },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response;
+	}
 }
