@@ -445,13 +445,14 @@ export default class {
 
 	async addToMessageToDB(message: Message) {
 		await sequelize.query(
-			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "content", "embed", "sticker", "attachments", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $content, $embed, $sticker, $attachments, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
+			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "authorTag", "content", "embed", "sticker", "attachments", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $authorTag, $content, $embed, $sticker, $attachments, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
 			{
 				bind: {
 					messageId: message.id,
 					guildId: message.guild?.id,
 					channelId: message.channel.id,
 					authorId: message.author.id,
+					authorTag: message.author.tag,
 					content: message.content,
 					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
 					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-ignore

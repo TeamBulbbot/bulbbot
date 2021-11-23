@@ -16,6 +16,10 @@ export default function (sequelize: Sequelize): void {
 			type: DataTypes.STRING(18),
 			allowNull: false,
 		},
+		authorTag: {
+			type: DataTypes.STRING(50),
+			allowNull: false,
+		},
 		content: {
 			type: DataTypes.STRING(4000),
 			allowNull: true,
