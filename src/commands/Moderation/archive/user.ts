@@ -24,6 +24,8 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		// todo
 		// move to translator
+		// check if archiveUserData is empty
+		// send a message to the user that a search has started because this can take a while lol
 
 		const AMOUNT: number = args[1] ? parseInt(args[1]) : 100;
 		if (AMOUNT > 5000) return context.channel.send("Too much :(");
