@@ -493,4 +493,20 @@ export default class {
 			type: QueryTypes.UPDATE,
 		});
 	}
+
+	async getUserArchive(userId: Snowflake, serverId: Snowflake, amount: number) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+			SELECT * FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $serverId)
+			AND "authorId" = $userId
+			LIMIT $amount
+		`,
+			{
+				bind: { serverId, userId, amount },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response;
+	}
 }
