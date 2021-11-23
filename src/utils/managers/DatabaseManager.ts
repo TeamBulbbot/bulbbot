@@ -485,4 +485,11 @@ export default class {
 			type: QueryTypes.DELETE,
 		});
 	}
+
+	async updateMessageContent(messageId: Snowflake, content: string) {
+		await sequelize.query('UPDATE "messageLogs" SET "content" = $content WHERE "messageId" = $messageId', {
+			bind: { messageId, content },
+			type: QueryTypes.UPDATE,
+		});
+	}
 }
