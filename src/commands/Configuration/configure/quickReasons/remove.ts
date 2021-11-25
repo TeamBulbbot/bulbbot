@@ -3,7 +3,7 @@ import BulbBotClient from "../../../../structures/BulbBotClient";
 import Command from "../../../../structures/Command";
 import CommandContext from "../../../../structures/CommandContext";
 import { Message } from "discord.js";
-import DatabaseManager from "../../../../utils/managers/DatabaseManager"
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 

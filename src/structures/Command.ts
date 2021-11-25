@@ -82,8 +82,10 @@ export default class Command {
 
 		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
-			if (!commandOverride.enabled && context.isMessageContext()) return "";
-			else if (!commandOverride.enabled && context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
+			if (!commandOverride.enabled) {
+				if (context.isMessageContext()) return "";
+				else if (context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
+			}
 			clearance = commandOverride.clearanceLevel;
 		}
 

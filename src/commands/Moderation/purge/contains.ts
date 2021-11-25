@@ -44,6 +44,8 @@ export default class extends SubCommand {
 		let messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
+
 		for (let i = 0; i < deleteMsg.length; i++) {
 			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
 				limit: deleteMsg[i],
@@ -51,7 +53,7 @@ export default class extends SubCommand {
 
 			const regex: RegExp = new RegExp(`(?:^|\\W)${args[0]}(?:$|\\W)`, "gi");
 			msgs.map(async m => {
-				if (moment(m.createdAt).isBefore(moment().subtract(14, "days"))) msgs.delete(m.id);
+				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.content.match(regex)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);

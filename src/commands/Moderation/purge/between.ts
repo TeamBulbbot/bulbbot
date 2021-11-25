@@ -30,13 +30,15 @@ export default class extends SubCommand {
 		)} \n`;
 
 		let counting: boolean = false;
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
+
 		for (let msg of allMessages) {
 			if (msg.id === args[0]) {
 				counting = true;
 			}
 
 			if (counting) {
-				if (moment(msg.createdAt).isBefore(moment().subtract(14, "days"))) msgs.delete(msg.id);
+				if (moment(msg.createdAt).unix() < twoWeeksAgo) msgs.delete(msg.id);
 				messages.push(msg.id);
 				delMsgs += `${moment(msg.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${msg.author.tag} (${msg.author.id}) | ${msg.id} | ${msg.content} |\n`;
 			}

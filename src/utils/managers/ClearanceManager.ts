@@ -58,7 +58,7 @@ export default class {
 		);
 	}
 
-	async getCommandOverride(guildID: Snowflake, name: string): Promise<GuildCommandOverride> {
+	async getCommandOverride(guildID: Snowflake, name: string): Promise<GuildCommandOverride | undefined> {
 		const response: GuildCommandOverride[] = await sequelize.query(
 			'SELECT * FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)',
 			{

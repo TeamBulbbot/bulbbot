@@ -17,18 +17,41 @@ export default class extends Event {
 		if (!(channel instanceof GuildChannel)) return;
 
 		const config: LoggingConfiguration = await databaseManager.getLoggingConfig(channel.guild.id);
-		if (channel.id === config.modAction) await databaseManager.setModAction(channel.guild.id, null);
-		else if (channel.id === config.banpool) await databaseManager.setAutoMod(channel.guild.id, null);
-		else if (channel.id === config.automod) await databaseManager.setAutoMod(channel.guild.id, null);
-		else if (channel.id === config.message) await databaseManager.setMessage(channel.guild.id, null);
-		else if (channel.id === config.role) await databaseManager.setRole(channel.guild.id, null);
-		else if (channel.id === config.member) await databaseManager.setMember(channel.guild.id, null);
-		else if (channel.id === config.channel) await databaseManager.setChannel(channel.guild.id, null);
-		else if (channel.id === config.thread) await databaseManager.setThread(channel.guild.id, null);
-		else if (channel.id === config.invite) await databaseManager.setInvite(channel.guild.id, null);
-		else if (channel.id === config.joinLeave) await databaseManager.setJoinLeave(channel.guild.id, null);
-		else if (channel.id === config.other) await databaseManager.setOther(channel.guild.id, null);
-
+		switch (channel.id) {
+			case config.modAction:
+				await databaseManager.setModAction(channel.guild.id, null);
+				break;
+			case config.banpool:
+				await databaseManager.setBanpool(channel.guild.id, null);
+				break;
+			case config.automod:
+				await databaseManager.setAutoMod(channel.guild.id, null);
+				break;
+			case config.message:
+				await databaseManager.setMessage(channel.guild.id, null);
+				break;
+			case config.role:
+				await databaseManager.setRole(channel.guild.id, null);
+				break;
+			case config.member:
+				await databaseManager.setMember(channel.guild.id, null);
+				break;
+			case config.channel:
+				await databaseManager.setChannel(channel.guild.id, null);
+				break;
+			case config.thread:
+				await databaseManager.setThread(channel.guild.id, null);
+				break;
+			case config.invite:
+				await databaseManager.setInvite(channel.guild.id, null);
+				break;
+			case config.joinLeave:
+				await databaseManager.setJoinLeave(channel.guild.id, null);
+				break;
+			case config.other:
+				await databaseManager.setOther(channel.guild.id, null);
+				break;
+		}
 
 		let log: string = "";
 		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
@@ -45,17 +68,12 @@ export default class extends Event {
 			}
 		}
 
-		if(!log)
+		if (!log)
 			log = await this.client.bulbutils.translate("event_channel_delete", channel.guild.id, {
 				channel,
 				type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 			});
 
-		await loggingManager.sendEventLog(
-			this.client,
-			channel.guild,
-			"channel",
-			log,
-		);
+		await loggingManager.sendEventLog(this.client, channel.guild, "channel", log);
 	}
 }
