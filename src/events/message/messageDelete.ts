@@ -6,7 +6,7 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { User } from "@sentry/node";
 
 const loggingManager: LoggingManager = new LoggingManager();
-const { getMessageFromDB, deleteMessageFromDB }: DatabaseManager = new DatabaseManager();
+const { getMessageFromDB }: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -97,7 +97,5 @@ export default class extends Event {
 				`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
-
-		await deleteMessageFromDB(message.id);
 	}
 }
