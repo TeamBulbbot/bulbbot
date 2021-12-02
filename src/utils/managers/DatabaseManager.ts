@@ -525,4 +525,15 @@ export default class {
 		);
 		return response;
 	}
+
+	async purgeAllMessagesOlderThan30Days() {
+		const deleted: Record<string, any> = await sequelize.query(
+			`
+			DELETE FROM "messageLogs" 
+			WHERE "createdAt" < (now() - '30 days'::interval);
+			`,
+		);
+
+		return deleted[1].rowCount;
+	}
 }
