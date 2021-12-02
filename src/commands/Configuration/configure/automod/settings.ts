@@ -3,10 +3,10 @@ import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
 import CommandContext from "../../../../structures/CommandContext";
-import AutoModConfiguration from "../../../../utils/types/AutoModConfiguration";
 import { embedColor } from "../../../../Config";
 import Emotes from "../../../../emotes.json";
 import BulbBotClient from "../../../../structures/BulbBotClient";
+import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 

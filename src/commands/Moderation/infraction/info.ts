@@ -8,7 +8,7 @@ import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import moment from "moment";
 import * as Emotes from "../../../emotes.json";
 import { embedColor } from "../../../Config";
-import { Infraction } from "../../../utils/types/Infraction";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 

@@ -5,8 +5,8 @@ import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
 import AutoModManager from "./managers/AutoModManager";
 import LoggingManager from "./managers/LoggingManager";
-import AutoModConfiguration from "./types/AutoModConfiguration";
 import CommandContext from "../structures/CommandContext";
+import { AutoModConfiguration } from "./types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const automodManager: AutoModManager = new AutoModManager();

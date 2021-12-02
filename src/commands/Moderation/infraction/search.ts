@@ -4,8 +4,8 @@ import CommandContext from "../../../structures/CommandContext";
 import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import { Infraction } from "../../../utils/types/Infraction";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 

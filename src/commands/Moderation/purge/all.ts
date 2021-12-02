@@ -40,12 +40,15 @@ export default class extends SubCommand {
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
+
 		for (let i = 0; i < deleteMsg.length; i++) {
 			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
 				limit: deleteMsg[i],
 			});
 
 			msgs.map(m => {
+				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 			});
 
