@@ -526,6 +526,20 @@ export default class {
 		return response;
 	}
 
+	async getServerArchive(guildId: Snowflake) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+			SELECT * FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
+		`,
+			{
+				bind: { guildId },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response;
+	}
+
 	async purgeAllMessagesOlderThan30Days() {
 		const deleted: Record<string, any> = await sequelize.query(
 			`
@@ -535,5 +549,19 @@ export default class {
 		);
 
 		return deleted[1].rowCount;
+	}
+
+	async purgeMessagesInGuild(guildId: Snowflake, days: string) {
+		await sequelize.query(
+			`
+			DELETE FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
+			AND "createdAt" < (now() - '${days} days'::interval);
+			`,
+			{
+				bind: { guildId },
+				type: QueryTypes.DELETE,
+			},
+		);
 	}
 }
