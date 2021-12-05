@@ -14,7 +14,7 @@ export default class extends Command {
 			description: "Deafens a member from a Voice Channel they're connected to",
 			category: "Moderation",
 			usage: "<user> [reason]",
-			examples: ["deafen 123456789012345678", "deafen 123456789012345678 rude user", "deafen @Wumos#0000 rude user"],
+			examples: ["deafen 123456789012345678", "deafen 123456789012345678 rude user", "deafen @Wumpus#0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,

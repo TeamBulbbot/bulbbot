@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 2,
 			argList: ["part:string", "punishment:string"],
 			usage: "<part> <punishment>",
+			description: "Sets the punishment for a part of the automod system.",
 		});
 	}
 

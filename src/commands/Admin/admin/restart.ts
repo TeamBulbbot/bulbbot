@@ -11,13 +11,12 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "restart",
 			usage: "restart",
+			description: "Restarts the bot.",
 		});
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
-		// restarts the bot
-		context.reply("Restarting the bot now!");
-
+		context.channel.send("Restarting the bot now!");
 		exec(`pm2 restart ${pm2Name}`);
 	}
 }

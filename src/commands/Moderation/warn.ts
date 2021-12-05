@@ -11,7 +11,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Warns the selected guild member",
+			description: "Warns the selected server member",
 			category: "Moderation",
 			usage: "<member> [reason]",
 			examples: ["warn 123456789012345678", "warn 123456789012345678 rude user", "warn @Wumpus#0000 rude user"],

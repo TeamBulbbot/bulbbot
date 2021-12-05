@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			name: "automod",
 			clearance: 75,
 			maxArgs: 0,
+			description: "Setup the automod settings for this server.",
 		});
 	}
 

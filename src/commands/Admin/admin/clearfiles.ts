@@ -10,6 +10,7 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "clearfiles",
+			description: "Clears all files from the storage",
 		});
 	}
 

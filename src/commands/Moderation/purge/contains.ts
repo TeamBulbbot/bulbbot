@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			maxArgs: 2,
 			argList: ["query:string", "amount:int"],
 			usage: "<query> <amount>",
+			description: "Purges messages containing the query.",
 		});
 	}
 

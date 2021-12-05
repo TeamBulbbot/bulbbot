@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["role:Role"],
 			usage: "<role>",
+			description: "Sets the role that will be given to users when they join the server.",
 		});
 	}
 

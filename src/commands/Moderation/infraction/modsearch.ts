@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["user:User"],
 			usage: "<user>",
+			description: "Search for moderation infractions of a user.",
 		});
 	}
 

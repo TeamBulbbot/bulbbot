@@ -12,7 +12,7 @@ export default class extends Command {
 			description: "Gets a users avatar picture",
 			category: "Miscellaneous",
 			usage: "[user]",
-			examples: ["avatar", "avatar 190160914765316096", "avatar @mrphilip#0001"],
+			examples: ["avatar", "avatar 123456789012345678", "avatar @Wumpus#0000"],
 			argList: ["user:User"],
 			maxArgs: 1,
 			clientPerms: ["EMBED_LINKS"],
@@ -25,14 +25,15 @@ export default class extends Command {
 		else id = args[0].replace(NonDigits, "");
 		const user: User | undefined = await this.client.bulbfetch.getUser(id);
 
-		if (!user) return context.channel.send(
-			await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-				type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
-				arg_provided: args[0],
-				arg_expected: "user:User",
-				usage: this.usage,
-			}),
-		);
+		if (!user)
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+					arg_provided: args[0],
+					arg_expected: "user:User",
+					usage: this.usage,
+				}),
+			);
 
 		let desc = "";
 		const formats: DynamicImageFormat[] = ["png", "jpg", "webp"];

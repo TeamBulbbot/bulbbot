@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["infraction:int32"],
 			usage: "<infraction>",
+			description: "Delete an infraction.",
 		});
 	}
 
@@ -91,6 +92,6 @@ export default class extends SubCommand {
 
 			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
 			return;
-		})
+		});
 	}
 }

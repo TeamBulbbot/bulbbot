@@ -16,6 +16,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["part:string", "name:string", "clearance:number"],
 			usage: "<part> <name> <clearance>",
+			description: "Creates a new override for the specified part.",
 		});
 	}
 

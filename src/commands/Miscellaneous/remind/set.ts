@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["duration:Duration", "reason:String"],
 			usage: "<duration> <reason>",
+			description: "Sets a reminder for the specified duration.",
 		});
 	}
 

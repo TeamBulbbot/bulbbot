@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["amount:int"],
 			usage: "<number>",
+			description: "Purges messages with custom emojis.",
 		});
 	}
 

@@ -11,11 +11,12 @@ export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "roles_on_leave",
-            aliases: ["rolesonleave"],
+			aliases: ["rolesonleave"],
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["enabled:boolean"],
 			usage: "<true|false>",
+			description: "Enable or disable the if roles should be logged on the leave message",
 		});
 	}
 

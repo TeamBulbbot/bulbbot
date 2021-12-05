@@ -15,6 +15,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["command:string"],
 			usage: "<command>",
+			description: "Enables a command",
 		});
 	}
 

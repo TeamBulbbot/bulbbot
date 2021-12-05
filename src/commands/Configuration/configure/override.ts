@@ -20,6 +20,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["action:string"],
 			usage: "<action>",
+			description: "Configure the override system.",
 		});
 	}
 }

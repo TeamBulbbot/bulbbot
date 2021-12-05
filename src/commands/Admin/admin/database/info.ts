@@ -13,6 +13,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "info",
 			usage: "info <guildID>",
+			description: "Gets all of the database information for a guild",
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
@@ -20,14 +21,12 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// get's all of the database information from a guild
-
 		let guild: Guild;
 
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			context.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
@@ -37,7 +36,7 @@ export default class extends SubCommand {
 			if (err) console.error(err);
 		});
 
-		await context.reply({
+		await context.channel.send({
 			content: `Entire database object for **${guild.name}**`,
 			files: [`${__dirname}/../../../../../files/DB-INFO-${context.guild?.id}.json`],
 		});
