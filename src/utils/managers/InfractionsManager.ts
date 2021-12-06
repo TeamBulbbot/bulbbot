@@ -201,8 +201,15 @@ export default class {
 		return infID;
 	}
 
-	public async mute(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, muteRole: Snowflake, until: MomentInput) {
-		await target.roles.add(<Snowflake>muteRole, reasonLog);
+	public async mute(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput) {
+		// @ts-ignore
+		client.api
+			.guilds(guild.id)
+			.members(target.id)
+			.patch({
+				data: { communication_disabled_until: moment(until).toISOString() },
+			});
+
 		await this.createInfraction(guild.id, "Mute", <number>until, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Mute");
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.mute", guild.id, {}), target.user, moderator.user, reason, infID, until);
@@ -210,8 +217,15 @@ export default class {
 		return infID;
 	}
 
-	public async unmute(client: BulbBotClient, guild: Guild, type: MuteType, target: GuildMember, moderator: User, reasonLog: string, reason: string, muteRole: Snowflake) {
-		await target.roles.remove(muteRole, reasonLog);
+	public async unmute(client: BulbBotClient, guild: Guild, type: MuteType, target: GuildMember, moderator: User, reasonLog: string, reason: string) {
+		// @ts-ignore
+		client.api
+			.guilds(guild.id)
+			.members(target.id)
+			.patch({
+				data: { communication_disabled_until: null },
+			});
+
 		await this.createInfraction(guild.id, "Unmute", true, reason, target.user, moderator);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.id, target.user.id, "Unmute");
 		if (type == MuteType.MANUAL) {

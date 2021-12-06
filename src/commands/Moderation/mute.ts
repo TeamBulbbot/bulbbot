@@ -29,17 +29,21 @@ export default class extends Command {
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,
-			clientPerms: ["MANAGE_ROLES"],
 		});
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		const muteRole: Snowflake = <Snowflake>await databaseManager.getMuteRole(<Snowflake>context.guild?.id);
 		const duration: number = <number>parse(args[1]);
 		let reason: string = args.slice(2).join(" ");
 		let infID: number;
+
+		// @ts-ignore
+		if (!Number((context.guild?.me!?.permissions.bitfield & (1n << 40n)) == 1n << 40n)) {
+			await context.channel.send(await this.client.bulbutils.translate("global_missing_permissions_bot", context.guild?.id, { missing: "`Moderate Members`" }));
+			return;
+		}
 
 		if (!target)
 			return context.channel.send(
@@ -53,10 +57,8 @@ export default class extends Command {
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if (!muteRole) return context.channel.send(await this.client.bulbutils.translate("mute_muterole_not_found", context.guild?.id, {}));
-		if (target.roles.cache.find(role => role.id === muteRole)) return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
 		if ((duration && duration <= <number>parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > <number>parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
+		if (duration > <number>parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild?.id, {}));
 
 		infID = await infractionsManager.mute(
 			this.client,
@@ -71,7 +73,6 @@ export default class extends Command {
 				until: Date.now() + <number>parse(args[1]),
 			}),
 			reason,
-			muteRole,
 			Date.now() + <number>parse(args[1]),
 		);
 
@@ -109,7 +110,6 @@ export default class extends Command {
 					reason: "Automatic unmute",
 				}),
 				"Automatic unmute",
-				muteRole,
 			);
 
 			await deleteMute(mute.id);

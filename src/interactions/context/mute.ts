@@ -59,7 +59,6 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 				until: Date.now() + 3600000,
 			}),
 			reason,
-			muteRole,
 			Date.now() + 3600000,
 		);
 
@@ -96,7 +95,6 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 					reason: "Automatic unmute",
 				}),
 				"Automatic unmute",
-				muteRole,
 			);
 
 			await deleteMute(mute.id);
