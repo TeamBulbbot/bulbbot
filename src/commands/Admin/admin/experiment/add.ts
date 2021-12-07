@@ -3,34 +3,32 @@ import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
 import CommandContext from "../../../../structures/CommandContext";
 import BulbBotClient from "../../../../structures/BulbBotClient";
-import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import ExperimentManager from "../../../../utils/managers/ExperimentManager";
 
-const databaseManager: DatabaseManager = new DatabaseManager();
+const { addExperimentToGuild } = new ExperimentManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "add",
-			usage: "add <guildID>",
+			usage: "add <guildID> <experiment>",
 			minArgs: 2,
 			maxArgs: 2,
 			argList: ["guildID:snowflake", "experiment:string"],
+			description: "Add a experiment to a guild",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// adds the guild to the database
-
 		let guild: Guild;
 
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			context.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
-		await databaseManager.createGuild(guild);
-		context.reply(`Added **${guild.name}** to the database`);
+		await context.channel.send(`Added \`${args[1]}\` to **${guild.name}**\n\`\`\`json\n${JSON.stringify(await addExperimentToGuild(guild.id, args[1]), null, 2)}\n\`\`\``);
 	}
 }
