@@ -32,6 +32,8 @@ export default class Command {
 	public readonly argList: string[];
 	public readonly depth: number;
 
+	public readonly overrides: string[];
+
 	get qualifiedName() {
 		return this.name;
 	}
@@ -59,6 +61,7 @@ export default class Command {
 		this.minArgs = options.minArgs || 0;
 		this.argList = options.argList || [];
 		this.subCommands = options.subCommands?.map(sc => new sc(this.client, this)) || [];
+		this.overrides = options.overrides || [];
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<any> {
