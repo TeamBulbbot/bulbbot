@@ -85,8 +85,11 @@ export default class extends Event {
 		const serverOverrides: string[] = await getAllGuildExperiments(context.guild.id);
 
 		try {
-			if (command.overrides.length) {
-				if (!serverOverrides.length) await command.run(context, options.args);
+			if (command.overrides.length > 0) {
+				if (serverOverrides.length == 0) {
+					await command.run(context, options.args);
+					return;
+				}
 				let foundOverride = false;
 
 				for (const override of serverOverrides) {
@@ -95,8 +98,14 @@ export default class extends Event {
 						foundOverride = true;
 					}
 				}
-				if (!foundOverride) await command.run(context, options.args);
-			} else await command.run(context, options.args);
+				if (!foundOverride) {
+					await command.run(context, options.args);
+					return;
+				}
+			} else {
+				await command.run(context, options.args);
+				return;
+			}
 		} catch (err: any) {
 			await this.client.bulbutils.logError(err, context);
 		}

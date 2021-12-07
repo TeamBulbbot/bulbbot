@@ -46,7 +46,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	collector?.on("collect", async (i: SelectMenuInteraction) => {
 		if (interaction.user.id !== i.user.id) return;
 
-		let infID = await infractionsManager.mute(
+		let infID = await infractionsManager.muteOld(
 			client,
 			<Guild>message.guild,
 			target,
@@ -59,6 +59,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 				until: Date.now() + 3600000,
 			}),
 			reason,
+			muteRole,
 			Date.now() + 3600000,
 		);
 
@@ -82,7 +83,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			if ((await infractionsManager.isActive(<Snowflake>interaction.guild?.id, infID)) === false) return;
 			await infractionsManager.setActive(<Snowflake>interaction.guild?.id, infID, false);
 
-			infID = await infractionsManager.unmute(
+			infID = await infractionsManager.unmuteOld(
 				client,
 				<Guild>message.guild,
 				MuteType.AUTO,
@@ -95,6 +96,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 					reason: "Automatic unmute",
 				}),
 				"Automatic unmute",
+				muteRole,
 			);
 
 			await deleteMute(mute.id);
