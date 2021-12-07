@@ -121,7 +121,6 @@ export default class {
 						reason: "Automatic unmute",
 					}),
 					"Automatic unmute",
-					muteRole,
 				);
 
 				await deleteMute(mute.id);
