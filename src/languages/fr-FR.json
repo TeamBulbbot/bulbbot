@@ -319,6 +319,7 @@
   "slowmode_missing_perms": "{{emote_fail}} Le bot ne dispose pas des permissions nécessaires pour gérer <#{{channel}}>",
   "duration_invalid_0s": "{{emote_fail}} La durée ne peut pas être inférieure à **0 secondes** !",
   "duration_invalid_6h": "{{emote_fail}} La durée ne peut pas être supérieure à **6 heures** !",
+  "duration_invalid_28d": "{{emote_fail}} Duration cannot be longer than **28 days**",
   "duration_invalid_1y": "{{emote_fail}} La durée ne peut pas être supérieure à **1 an** !",
   "lockdown_locked": "{{emote_locked}} Le salon <#{{channel}}> a été verrouillé avec succès",
   "lockdown_unlocked": "{{emote_unlocked}} Le salon <#{{channel}}> a été déverrouillé avec succès",
