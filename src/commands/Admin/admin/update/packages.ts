@@ -11,11 +11,11 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "packages",
 			usage: "packages",
+			description: "Updates the packages",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// updates the packages in package.json
 		// npm install -g npm-check-updates (before, used to update the packages globally use with caution :pleading:)
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);
@@ -25,7 +25,7 @@ export default class extends SubCommand {
 
 		const resp: ShellString = exec(`npm install`);
 
-		if (resp.stderr) return context.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
-		context.reply(`Successfully pulled the latest code\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
+		if (resp.stderr) return context.channel.send(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
+		context.channel.send(`Successfully pulled the latest code\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 	}
 }

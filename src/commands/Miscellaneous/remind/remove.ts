@@ -17,6 +17,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["id:number"],
 			usage: "<id>",
+			description: "Removes a reminder by its ID.",
 		});
 	}
 

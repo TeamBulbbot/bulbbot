@@ -12,7 +12,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Unban a user from the guild",
+			description: "Unban a user from the server",
 			category: "Moderation",
 			aliases: ["pardon"],
 			usage: "<user> [reason]",

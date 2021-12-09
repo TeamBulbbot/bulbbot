@@ -8,9 +8,8 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Returns some useful information about the current Guild",
+			description: "Returns some useful information about the current server",
 			category: "Information",
-			aliases: ["server"],
 			clearance: 50,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],

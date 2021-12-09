@@ -9,6 +9,9 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
+			description: "Shows the bot's uptime.",
+			category: "Bot",
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
@@ -32,7 +35,7 @@ export default class extends Command {
 				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				<string>context.author.avatarURL(),
+				<string>context.author.avatarURL({ dynamic: true }),
 			)
 			.setTimestamp();
 

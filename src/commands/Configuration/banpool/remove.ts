@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			argList: ["guildId:snowflake", "pool name:string"],
 			usage: "<guildId> <poolname>",
 			clearance: 100,
+			description: "Removes a guild from a banpool.",
 		});
 	}
 

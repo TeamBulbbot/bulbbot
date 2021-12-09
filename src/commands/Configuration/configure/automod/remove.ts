@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["part:string", "item:string"],
 			usage: "<part> <item> [items...]",
+			description: "Removes items from the specified part of the automod list.",
 		});
 	}
 
@@ -41,7 +42,7 @@ export default class extends SubCommand {
 		if (!items.length) return context.channel.send(await this.client.bulbutils.translate("global_error.automod_items_length_undefined", context.guild!.id, {}));
 
 		const part: AutoModListPart = AutoModPart[partString];
-		if(partString.includes("_")) items = items.map(item => item.replace(NonDigits, ""));
+		if (partString.includes("_")) items = items.map(item => item.replace(NonDigits, ""));
 		const result = await databaseManager.automodRemove(context.guild!.id, part, items);
 
 		if (!result.removed.length) return context.channel.send(await this.client.bulbutils.translate("automod_not_in_database", context.guild!.id, { item: items.join("`, `") }));

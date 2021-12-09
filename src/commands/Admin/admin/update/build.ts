@@ -12,11 +12,11 @@ export default class extends SubCommand {
 			name: "build",
 			usage: "build",
 			aliases: ["compile"],
+			description: "Compiles the TypeScript files",
 		});
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
-		// builds the JavasScript code from the TypeScript Code
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);
 

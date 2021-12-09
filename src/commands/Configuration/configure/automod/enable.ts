@@ -12,10 +12,11 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "enable",
 			clearance: 75,
+			description: "Enables automod in this server.",
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext): Promise<void | Message> {
 		await databaseManager.enableAutomod(context.guild!.id, true);
 		await context.channel.send(await this.client.bulbutils.translate("automod_enabled", context.guild?.id, {}));
 	}

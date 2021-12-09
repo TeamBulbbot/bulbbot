@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["amount:int"],
 			usage: "<number>",
+			description: "Purges all messages in the current channel.",
 		});
 	}
 

@@ -16,6 +16,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["language:string"],
 			usage: "<language>",
+			description: "Sets the language for the bot.",
 		});
 	}
 

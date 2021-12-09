@@ -13,7 +13,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Get the settings for the guild",
+			description: "Get the settings for the server",
 			category: "Configuration",
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
@@ -34,7 +34,7 @@ export default class extends Command {
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
 			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Quick reasons: ${guildConfig.quickReasons.length ? guildConfig.quickReasons.join(", ") : Emotes.other.SWITCHOFF}`
+			`Quick reasons: ${guildConfig.quickReasons.length ? guildConfig.quickReasons.join(", ") : Emotes.other.SWITCHOFF}`,
 		];
 
 		const loggingModule: string[] = [

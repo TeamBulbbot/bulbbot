@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			maxArgs: 2,
 			argList: ["user:User", "page:number"],
 			usage: "<user> [page]",
+			description: "Search for infractions of a user.",
 		});
 	}
 

@@ -12,11 +12,11 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Kicks multiple people from a guild",
+			description: "Kicks multiple people from a server",
 			category: "Moderation",
 			aliases: ["mkick"],
 			usage: "<member> <member2>.... [reason]",
-			examples: ["multikick 123456789012345678 123456789012345678 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
+			examples: ["multikick 123456789012345678 876543210987654321 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,
 			maxArgs: -1,

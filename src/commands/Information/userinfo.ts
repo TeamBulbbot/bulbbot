@@ -21,7 +21,7 @@ export default class extends Command {
 			category: "Information",
 			aliases: ["whois", "info", "user"],
 			usage: "[user]",
-			examples: ["userinfo", "userinfo 190160914765316096", "userinfo @mrphilip#0001"],
+			examples: ["userinfo", "userinfo 123456789012345678", "userinfo @Wumpus#0000"],
 			clearance: 50,
 			maxArgs: 1,
 			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],

@@ -17,6 +17,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["reason:string"],
 			usage: "<reason>",
+			description: "Adds a reason to the quick reasons list.",
 		});
 	}
 

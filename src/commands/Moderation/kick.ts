@@ -11,7 +11,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Kicks a user from the guild",
+			description: "Kicks a user from the server",
 			category: "Moderation",
 			usage: "<member> [reason]",
 			examples: ["kick 123456789012345678", "kick 123456789012345678 rude user", "kick @Wumpus#0000 rude user"],

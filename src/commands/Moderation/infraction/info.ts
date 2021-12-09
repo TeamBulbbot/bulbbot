@@ -21,6 +21,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["id:int32"],
 			usage: "<id>",
+			description: "Get information about an infraction.",
 		});
 	}
 

@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			maxArgs: 2,
 			argList: ["message1:Snowflake", "message2:Snowflake"],
 			usage: "<context1> <context2>",
+			description: "Purges messages between two messages.",
 		});
 	}
 

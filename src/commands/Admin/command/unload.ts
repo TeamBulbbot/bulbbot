@@ -5,7 +5,6 @@ import { Message } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 export default class extends SubCommand {
-
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "unload",
@@ -14,15 +13,19 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["command:Command"],
 			usage: "<command> [subcommand...]",
+			description: "Unloads a command",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let command: Command | undefined = Command.resolve(this.client, args);
 
-		if(!command) return;
-		if(command instanceof SubCommand) {
-			command.parent.subCommands.splice(command.parent.subCommands.findIndex(sc => sc === command), 1);
+		if (!command) return;
+		if (command instanceof SubCommand) {
+			command.parent.subCommands.splice(
+				command.parent.subCommands.findIndex(sc => sc === command),
+				1,
+			);
 		} else {
 			this.client.commands.delete(command.name);
 		}

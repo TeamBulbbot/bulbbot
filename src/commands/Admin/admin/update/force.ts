@@ -11,11 +11,11 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "force",
 			usage: "force",
+			description: "Force pulls the HEAD",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// force pulls the HEAD
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);
 
@@ -23,7 +23,7 @@ export default class extends SubCommand {
 		await exec(`git clean -f -d`);
 		const resp: ShellString = exec(`git pull`);
 
-		if (resp.stderr) return context.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
-		context.reply(`Successfully force pullled\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
+		if (resp.stderr) return context.channel.send(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
+		context.channel.send(`Successfully force pullled\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 	}
 }

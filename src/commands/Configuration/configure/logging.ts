@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 2,
 			argList: ["part:string", "channel:Channel"],
 			usage: "<part> <channel>",
+			description: "Configure the logging of a part of the bot.",
 		});
 	}
 

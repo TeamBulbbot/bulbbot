@@ -15,16 +15,13 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["percent:number"],
 			usage: "<percent>",
+			description: "Shows the botfarms with the specified percentage of bots.",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const botfarms: any = [];
 		let isFile: boolean = false;
-
-		//for (const guild of this.client.guilds.cache.values()) {
-		//	if (guild.members.cache.size !== guild.memberCount) await guild.members.fetch();
-		//}
 
 		this.client.guilds.cache.map(g => {
 			if (Math.round((g.members.cache.filter(u => u.user.bot).size / g.members.cache.size) * 100) < parseInt(args[0])) return;

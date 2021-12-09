@@ -11,7 +11,7 @@ export default class extends Command {
 			description: "Locks/unlocks a selected channel",
 			category: "Moderation",
 			usage: "<channel> <true|false>",
-			examples: ["lockdown 743855098073186435 true", "lockdown #general false"],
+			examples: ["lockdown 742095521962786858 true", "lockdown #general false"],
 			argList: ["channel:Channel", "lock:boolean"],
 			minArgs: 2,
 			maxArgs: 2,
