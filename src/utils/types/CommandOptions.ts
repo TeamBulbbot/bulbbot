@@ -18,6 +18,7 @@ export default interface CommandOptions {
 	maxArgs?: number;
 	minArgs?: number;
 	argList?: string[];
+	overrides?: string[];
 	/** @private Do not set manually */
 	depth?: number;
 }

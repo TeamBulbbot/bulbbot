@@ -319,6 +319,7 @@
   "slowmode_missing_perms": "{{emote_fail}} Botten saknar behörighet att hantera <#{{channel}}>",
   "duration_invalid_0s": "{{emote_fail}} Varaktigheten kan inte vara lägre än **0 sekunder**!",
   "duration_invalid_6h": "{{emote_fail}} Varaktighet kan inte vara längre än **6 timmar**",
+  "duration_invalid_28d": "{{emote_fail}} Duration cannot be longer than **28 days**",
   "duration_invalid_1y": "{{emote_fail}} Varaktighet kan inte vara längre än **1 år**!",
   "lockdown_locked": "{{emote_locked}} Låst kanal <#{{channel}}>",
   "lockdown_unlocked": "{{emote_unlocked}} Låste upp kanal <#{{channel}}>",
