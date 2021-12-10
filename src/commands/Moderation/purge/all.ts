@@ -24,7 +24,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[0]);
-		if (Number(amount) > 200) return await context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
+		if (Number(amount) >= 500) return await context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
 		if (Number(amount) < 2 || isNaN(amount)) return await context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 		let deleteMsg: number[] = [];
 		let a: number = 0;

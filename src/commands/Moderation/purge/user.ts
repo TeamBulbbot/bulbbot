@@ -37,8 +37,8 @@ export default class extends SubCommand {
 				}),
 			);
 
-		if (amount > 100) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
-		if (amount <= 1 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
+		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
+		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 
 		let deleteMsg: number[] = [];
 		let a: number = 0;

@@ -326,7 +326,7 @@
   "not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
   "ban_force_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently in the server. Do you want me to force-ban them anyway?",
 
-  "purge_too_many": "{{emote_fail}} Can only purge a max of 99 messages at a time",
+  "purge_too_many": "{{emote_fail}} Can only purge a max of 500 messages at a time",
   "purge_too_few": "{{emote_fail}} You cannot purge less than 2 messages",
   "purge_success": "{{emote_success}} Successfully purged **{{count}}** messages",
 
