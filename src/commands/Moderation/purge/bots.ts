@@ -3,7 +3,7 @@ import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
 import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
 import moment from "moment";
-import * as fs from "fs";
+import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
@@ -64,11 +64,9 @@ export default class extends SubCommand {
 
 		await (<TextChannel>context.channel).bulkDelete(messagesToPurge);
 
-		fs.writeFile(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs, function (err) {
-			if (err) console.error(err);
-		});
+		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
 
-		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
 		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
 	}
