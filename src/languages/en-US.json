@@ -329,6 +329,8 @@
   "purge_too_many": "{{emote_fail}} Can only purge a max of 500 messages at a time",
   "purge_too_few": "{{emote_fail}} You cannot purge less than 2 messages",
   "purge_success": "{{emote_success}} Successfully purged **{{count}}** messages",
+  "purge_message_not_found": "{{emote_fail}} Unable to find that message in this channel",
+  "purge_message_failed_to_delete": "{{emote_fail}} Where unable to find the message you wanted to delete, was able to delete all of the messages before",
 
   "verification_level_select": "Please select your verification level then press save",
   "verification_level_success": "{{emote_success}} Server verification level changed to `{{level}}`",

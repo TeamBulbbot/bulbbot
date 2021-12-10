@@ -12,55 +12,63 @@ const loggingManager: LoggingManager = new LoggingManager();
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
-			name: "all",
+			name: "until",
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["amount:int"],
-			usage: "<number>",
-			description: "Purges all messages in the current channel.",
+			argList: ["message:Snowflake"],
+			usage: "<message>",
+			description: "Purges messages until a message",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[0]);
-		if (Number(amount) >= 500) return await context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
-		if (Number(amount) < 2 || isNaN(amount)) return await context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
-		let deleteMsg: number[] = [];
-		let a: number = 0;
-
-		for (let i = 1; i <= amount; i++) {
-			if (i % 100 === 0) {
-				deleteMsg.push(100);
-				a = i;
-			}
-		}
-		if (amount - a !== 0) deleteMsg.push(amount - a);
+		let amount: number = 0;
+		let deletedAmount: number = 0;
+		let msg: Message;
+		let deletedMessage: boolean = false;
+		let temp: number;
 
 		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
-
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
-		for (let i = 0; i < deleteMsg.length; i++) {
-			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
-				limit: deleteMsg[i],
+		try {
+			msg = await context.channel.messages.fetch(args[0]);
+		} catch (error) {
+			return context.channel.send(await this.client.bulbutils.translate("purge_message_not_found", context.guild?.id, {}));
+		}
+
+		while (amount < 500) {
+			temp = 0;
+			let msgs: Collection<string, Message> = await context.channel.messages.fetch({
+				limit: 100,
 			});
 
+			const found = msgs.find(m => {
+				temp++;
+				return m.id === msg.id;
+			});
+			if (found) {
+				deletedMessage = true;
+				msgs = await context.channel.messages.fetch({
+					limit: temp,
+				});
+				deletedAmount += temp;
+				amount = 500;
+			} else deletedAmount += 100;
 			msgs.map(m => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 			});
-
-			amount = msgs.size;
-
 			await (<TextChannel>context.channel).bulkDelete(msgs);
+			amount += 100;
 		}
-
+		if (!deletedMessage) return context.channel.send(await this.client.bulbutils.translate("purge_message_failed_to_delete", context.guild?.id, {}));
 		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
-		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "purge", deletedAmount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
-		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
+		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: deletedAmount }));
 	}
 }
