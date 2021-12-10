@@ -30,6 +30,29 @@ export default class {
 		return string;
 	}
 
+	public applicationFlags(flag: number) {
+		let flags: string[] = [];
+		const GATEWAY_PRESENCE: number = 1 << 12;
+		const GATEWAY_PRESENCE_LIMITED: number = 1 << 13;
+		const GATEWAY_GUILD_MEMBERS: number = 1 << 14;
+		const GATEWAY_GUILD_MEMBERS_LIMITED: number = 1 << 15;
+		const VERIFICATION_PENDING_GUILD_LIMIT: number = 1 << 16;
+		const EMBEDDED: number = 1 << 17;
+		const GATEWAY_MESSAGE_CONTENT: number = 1 << 18;
+		const GATEWAY_MESSAGE_CONTENT_LIMITED: number = 1 << 19;
+
+		if ((flag & GATEWAY_PRESENCE) == GATEWAY_PRESENCE) flags.push("GATEWAY_PRESENCE");
+		if ((flag & GATEWAY_PRESENCE_LIMITED) == GATEWAY_PRESENCE_LIMITED) flags.push("GATEWAY_PRESENCE_LIMITED");
+		if ((flag & GATEWAY_GUILD_MEMBERS) == GATEWAY_GUILD_MEMBERS) flags.push("GATEWAY_GUILD_MEMBERS");
+		if ((flag & GATEWAY_GUILD_MEMBERS_LIMITED) == GATEWAY_GUILD_MEMBERS_LIMITED) flags.push("GATEWAY_GUILD_MEMBERS_LIMITED");
+		if ((flag & VERIFICATION_PENDING_GUILD_LIMIT) == VERIFICATION_PENDING_GUILD_LIMIT) flags.push("VERIFICATION_PENDING_GUILD_LIMIT");
+		if ((flag & EMBEDDED) == EMBEDDED) flags.push("EMBEDDED");
+		if ((flag & GATEWAY_MESSAGE_CONTENT) == GATEWAY_MESSAGE_CONTENT) flags.push("GATEWAY_MESSAGE_CONTENT");
+		if ((flag & GATEWAY_MESSAGE_CONTENT_LIMITED) == GATEWAY_MESSAGE_CONTENT_LIMITED) flags.push("GATEWAY_MESSAGE_CONTENT_LIMITED");
+
+		return flags;
+	}
+
 	public badges(bitfield: number) {
 		let badges: string[] = [];
 
@@ -66,7 +89,7 @@ export default class {
 		guildFeatures.forEach(feature => {
 			let f: string = "";
 			let desc: string = "";
-
+			// this should be converted to a swtich case :sweat:
 			if (feature === "ANIMATED_ICON") {
 				f = Emotes.features.ANIMATED_ICON;
 				desc = "Adds the ability to upload a animated icon to the guild";

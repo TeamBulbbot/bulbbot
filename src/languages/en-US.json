@@ -230,7 +230,14 @@
   "userinfo_embed_joined": "**Joined Server:** <t:{{user_joined}}:F> (<t:{{user_joined}}:R>)\n",
   "userinfo_embed_premium": "**Boosting since:** <t:{{user_premium}}:F> (<t:{{user_premium}}:R>)\n",
   "userinfo_embed_roles": "**Roles:** {{user_roles}}\n",
-  "userinfo_embed_infractions": "\n**Infractions:** {{emote_inf}} **{{user_infractions}}** infraction(s) in this server",
+  "userinfo_embed_infractions": "\n\n**Infractions:** {{emote_inf}} **{{user_infractions}}** infraction(s) in this server",
+  "userinfo_embed_bot_info": "\n**__Bot information__**",
+  "userinfo_embed_bot_tags": "\n**Tags:** {{tags}}\n",
+  "userinfo_embed_bot_public": "\n**Public:** {{emoji}}",
+  "userinfo_embed_bot_requires_code": "\n**Requires Code:** {{emoji}}",
+  "userinfo_embed_bot_presence_intent": "\n**Presence Intent:** {{emoji}}",
+  "userinfo_embed_server_memebers_intent": "\n**Server Members Intent:** {{emoji}}",
+  "userinfo_embed_bot_message_content_intent": "\n**Message Content Intent:** {{emoji}}",
 
   "userinfo_interaction_confirm": "{{emote_warn}} For what reason should **{{target.tag}}** `({{target.id}})` be {{action}}?",
 

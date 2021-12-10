@@ -32,6 +32,8 @@ export const status: PresenceStatusData = "online";
 export const supportInvite: string = "https://discord.com/invite/WgEtVqyNFZ";
 export const botInvite: string = "https://discord.com/oauth2/authorize?client_id=868821693571932191&permissions=261955644663&scope=bot+applications.commands";
 
+export const discordApi = "https://discord.com/api/v9";
+
 // Server
 export const prometheusHost: string = "localhost";
 export const prometheusPort: number = 7070;
