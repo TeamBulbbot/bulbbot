@@ -201,6 +201,9 @@ export default class {
 			} else if (feature === "HAS_DIRECTORY_ENTRY") {
 				f = Emotes.features.HAS_DIRECTORY_ENTRY;
 				desc = "Server is in a directory channel";
+			} else if (feature === "CHANNEL_BANNER") {
+				f = Emotes.features.CHANNEL_BANNER;
+				desc = "Adds a banner to channels";
 			} else {
 				f = "⭐";
 				desc = "";
