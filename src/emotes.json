@@ -96,5 +96,13 @@
 		"LOCKED": "<:BulbLocked:892343970775048242>",
 		"UNLOCKED": "<:BulbUnlocked:892343970842177546>",
 		"ID": "<:Id:919248830850015343>"
+	},
+	"channel": {
+		"TEXT": "<:TextChannel:919255292695420998>",
+		"VOICE": "<:VoiceChannel:919255292317945907>",
+		"CATEGORY": "<:Category:919255292557021184>",
+		"ANNOUNCEMENET": "<:Announcement:919256114175029248>",
+		"STAGE": "<:Stage:919256114254725200>"
 	}
+
 }
