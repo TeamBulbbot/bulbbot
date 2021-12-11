@@ -388,6 +388,12 @@
   "inviteinfo_channel_name": "Name: `{{invite.channel.name}}`\n",
   "inviteinfo_channel_nsfw": "NSFW: `{{invite.channel.nsfw}}`\n",
 
+  "roleinfo_unable_to_find": "{{emote_warn}} Unable to find that role",
+
+  "messageinfo_unable_to_find": "{{emote_warn}} Unable to find that message",
+  
+  "channelinfo_unable_to_find": "{{emote_warn}} Unable to find that channel",
+
   "deafen_already_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is already deafened!",
   "undeafen_not_deaf": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not deafened!",
 
