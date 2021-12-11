@@ -1,6 +1,8 @@
 export const NonDigits: RegExp = /\D/g;
 
+export const AnyId: RegExp = /[0-9]{17,20}/g;
 export const UserMention: RegExp = /<@!?(\d{17,20})>/g;
+export const ChannelMessage: RegExp = /[0-9]{17,20}-[0-9]{17,20}/gi;
 export const UserMentionAndID: RegExp = /(\d{17,20})|<@!?(\d{17,20})>/g;
 export const RoleMentionAndID: RegExp = /(\d{17,20})|<@&?(\d{17,20})>/g;
 export const RoleMention: RegExp = /<@&(\d+)>/g;
@@ -14,5 +16,3 @@ export const QuoteMarked: RegExp = /"(.*?)"/;
 
 export const AutoMod_INVITE: RegExp = /(?:https?:\/\/)?(?:www\.)?discord(?:\.gg|\.me|(?:app)?|.com\/invite)?\/([A-z0-9-_]{1,25})/gi; ///(?:https?:\/\/)?(?:www\.)?discord(?:\.gg|\.me|(?:app)?\.com\/invite)\/([A-Za-z0-9-]+)/g;
 export const AutoMod_WEBSITE: RegExp = /(?:https:\/\/)?(www\.)?((?:[A-z0-9]+\.){1,128}[A-z0-9]{2,64})/gi; ///(?:https?:\/\/)?(}(?:[A-Za-z0-9]+\.){1,128}(?:[A-Za-z0-9]{2,63})(?:\/[A-Za-z0-9._~:/?#\[\]@!$&'()*+,;%=-]*)?)/g;
-
-export const ChannelMessage: RegExp = /[0-9]{17,20}-[0-9]{17,20}/gi;
