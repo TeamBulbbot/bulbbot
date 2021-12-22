@@ -111,13 +111,13 @@ export default class extends Command {
 				const botflags = this.client.bulbutils.applicationFlags(data.flags);
 
 				description += await this.client.bulbutils.translate("userinfo_embed_bot_presence_intent", context.guild?.id, {
-					emoji: botflags.includes("GATEWAY_PRESENCE_LIMITED") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+					emoji: botflags.includes("GATEWAY_PRESENCE") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
 				description += await this.client.bulbutils.translate("userinfo_embed_server_memebers_intent", context.guild?.id, {
-					emoji: botflags.includes("GATEWAY_GUILD_MEMBERS_LIMITED") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+					emoji: botflags.includes("GATEWAY_GUILD_MEMBERS") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
 				description += await this.client.bulbutils.translate("userinfo_embed_bot_message_content_intent", context.guild?.id, {
-					emoji: botflags.includes("GATEWAY_MESSAGE_CONTENT_LIMITED") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+					emoji: botflags.includes("GATEWAY_MESSAGE_CONTENT") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
 
 				const links: string[] = [];
