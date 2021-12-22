@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			argList: ["code:string"],
 			usage: "<code>",
 			clearance: 100,
+			description: "Join a banpool.",
 		});
 	}
 

@@ -6,7 +6,6 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import path from "path";
 
 export default class extends SubCommand {
-
 	private isClass(input: any): boolean {
 		return typeof input === "function" && typeof input.prototype === "object" && input.toString().substring(0, 5) === "class";
 	}
@@ -19,15 +18,19 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["command:Command"],
 			usage: "<command>",
+			description: "Reloads a command",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let command: Command | undefined = Command.resolve(this.client, args);
 
-		if(!command) return;
-		if(command instanceof SubCommand) {
-			command.parent.subCommands.splice(command.parent.subCommands.findIndex(sc => sc === command), 1);
+		if (!command) return;
+		if (command instanceof SubCommand) {
+			command.parent.subCommands.splice(
+				command.parent.subCommands.findIndex(sc => sc === command),
+				1,
+			);
 		} else {
 			this.client.commands.delete(command.name);
 		}
@@ -43,7 +46,7 @@ export default class extends SubCommand {
 		const loadedCommand = new File.default(this.client, command instanceof SubCommand ? command.parent : name);
 		// any SubCommand is-a Command
 		if (!(loadedCommand instanceof Command)) return context.channel.send(`Event ${name} doesn't belong in commands!`);
-		if(command instanceof SubCommand) {
+		if (command instanceof SubCommand) {
 			command.parent.subCommands.push(<SubCommand>loadedCommand);
 		} else {
 			this.client.commands.set(loadedCommand.name, loadedCommand);
@@ -54,6 +57,6 @@ export default class extends SubCommand {
 			}
 		}
 		this.client.log.client(`[CLIENT - COMMANDS] Reloaded command "${loadedCommand.qualifiedName}"`);
-		return context.channel.send(`Reloaded command \`${loadedCommand.qualifiedName}\``)
+		return context.channel.send(`Reloaded command \`${loadedCommand.qualifiedName}\``);
 	}
 }

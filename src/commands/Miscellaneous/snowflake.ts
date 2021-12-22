@@ -12,7 +12,7 @@ export default class extends Command {
 			description: "Gets information about a given snowflake",
 			category: "Miscellaneous",
 			usage: "<snowflake>",
-			examples: ["snowflake 190160914765316096"],
+			examples: ["snowflake 123456789012345678"],
 			argList: ["snowflake:integer"],
 			minArgs: 1,
 			maxArgs: -1,

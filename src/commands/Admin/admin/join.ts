@@ -12,6 +12,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
 			usage: "<guildID>",
+			description: "Creates an invite to the first text channel of the specified guild",
 		});
 	}
 

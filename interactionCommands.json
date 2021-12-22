@@ -33,7 +33,7 @@
 	{
 		"name": "invite",
 		"type": 1,
-		"description": "Returns the invite link for the bot and the support guild",
+		"description": "Returns the invite link for the bot and the support server",
 		"options": []
 	},
 	{
@@ -83,12 +83,12 @@
 	{
 		"name": "inviteinfo",
 		"type": 1,
-		"description": "Returns some useful info about a guild from the invite link",
+		"description": "Returns some useful info about a server from the invite link",
 		"options": [
 			{
 				"name": "invite",
 				"type": 3,
-				"description": "The invite link of the guild you want to info",
+				"description": "The invite link of the server you want to info",
 				"required": true
 			}
 		]
@@ -96,7 +96,7 @@
 	{
 		"name": "server",
 		"type": 1,
-		"description": "Returns some useful information about the current Guild",
+		"description": "Returns some useful information about the current server",
 		"options": []
 	},
 	{
@@ -199,12 +199,12 @@
 			{
 				"name": "kick",
 				"type": 1,
-				"description": "Kicks the selected guild from the selected banpool",
+				"description": "Kicks the selected server from the selected banpool",
 				"options": [
 					{
 						"name": "guild_id",
 						"type": 3,
-						"description": "ID of the selected guild",
+						"description": "ID of the selected server",
 						"required": true
 					},
 					{
@@ -838,7 +838,7 @@
 	{
 		"name": "settings",
 		"type": 1,
-		"description": "Get the settings for the guild",
+		"description": "Get the settings for the server",
 		"options": []
 	},
 
@@ -917,7 +917,7 @@
 	{
 		"name": "ban",
 		"type": 1,
-		"description": "Bans or forcebans a user from the guild",
+		"description": "Bans or forcebans a user from the server",
 		"options": [
 			{
 				"name": "user",
@@ -936,7 +936,7 @@
 	{
 		"name": "cleanban",
 		"type": 1,
-		"description": "Bans a user and removes all their contexts from the guild",
+		"description": "Bans a user and removes all their contexts from the server",
 		"options": [
 			{
 				"name": "member",
@@ -1097,7 +1097,7 @@
 	{
 		"name": "kick",
 		"type": 1,
-		"description": "Kicks the selected member from the guild",
+		"description": "Kicks the selected member from the server",
 		"options": [
 			{
 				"name": "member",
@@ -1135,7 +1135,7 @@
 	{
 		"name": "multiban",
 		"type": 1,
-		"description": "Bans or forcebans multiple people from a guild",
+		"description": "Bans or forcebans multiple people from a server",
 		"options": [
 			{
 				"name": "users",
@@ -1154,7 +1154,7 @@
 	{
 		"name": "multikick",
 		"type": 1,
-		"description": "Kicks multiple people from a guild",
+		"description": "Kicks multiple people from a server",
 		"options": [
 			{
 				"name": "users",
@@ -1173,7 +1173,7 @@
 	{
 		"name": "multiunban",
 		"type": 1,
-		"description": "Unbans multiple people from a guild",
+		"description": "Unbans multiple people from a server",
 		"options": [
 			{
 				"name": "users",
@@ -1409,7 +1409,7 @@
 	{
 		"name": "softban",
 		"type": 1,
-		"description": "Bans and immediately unbans the selected member from the guild",
+		"description": "Bans and immediately unbans the selected member from the server",
 		"options": [
 			{
 				"name": "member",
@@ -1453,7 +1453,7 @@
 	{
 		"name": "unban",
 		"type": 1,
-		"description": "Unban a user from the guild",
+		"description": "Unban a user from the server",
 		"options": [
 			{
 				"name": "user",
@@ -1545,7 +1545,7 @@
 	{
 		"name": "warn",
 		"type": 1,
-		"description": "Warns the selected guild member",
+		"description": "Warns the selected server member",
 		"options": [
 			{
 				"name": "member",

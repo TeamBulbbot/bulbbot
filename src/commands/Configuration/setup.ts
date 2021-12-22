@@ -7,12 +7,11 @@ import { CollectorFilter, Message, User } from "discord.js";
 import { NonDigits, RoleMention } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import AutoModConfiguration from "../../utils/types/AutoModConfiguration";
-import LoggingConfiguration from "../../utils/types/LoggingConfiguration";
 import ConfigPart from "../../utils/types/ConfigPart";
 import GuildSetup from "../../utils/types/GuildSetup";
 import AutoModSetup from "../../utils/types/AutoModSetup";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
+import { AutoModConfiguration, LoggingConfiguration } from "../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 

@@ -16,6 +16,7 @@ export default class extends SubCommand {
 			argList: ["pool name:string"],
 			usage: "<pool name>",
 			clearance: 100,
+			description: "Get information about a banpool.",
 		});
 	}
 

@@ -6,9 +6,9 @@ import { CollectorFilter, User } from "discord.js";
 import AutoModSetup from "../../../utils/types/AutoModSetup";
 import AutoModPart from "../../../utils/types/AutoModPart";
 import Setup, { PromptOptions } from "../setup";
-import AutoModConfiguration from "../../../utils/types/AutoModConfiguration";
 import { NonDigits } from "../../../utils/Regex";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { AutoModConfiguration } from "../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			name: "automod",
 			clearance: 75,
 			maxArgs: 0,
+			description: "Setup the automod settings for this server.",
 		});
 	}
 

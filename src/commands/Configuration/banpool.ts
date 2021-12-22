@@ -13,7 +13,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Ban users cross servers easily",
+			description: "Manage banpools.",
 			category: "Configuration",
 			subCommands: [create, _delete, invite, join, leave, remove, info, list],
 			aliases: ["bp"],

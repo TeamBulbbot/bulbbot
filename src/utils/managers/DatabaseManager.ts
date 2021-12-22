@@ -3,12 +3,10 @@ import * as Config from "../../Config";
 import { Guild, Message, MessageAttachment, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
-import AutoModConfiguration from "../types/AutoModConfiguration";
-import LoggingConfiguration from "../types/LoggingConfiguration";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
 import PunishmentType from "../types/PunishmentType";
-import { GuildConfiguration } from "../types/GuildConfiguration";
+import { AutoModConfiguration, Blacklist, GuildConfiguration, LoggingConfiguration } from "../types/DatabaseStructures";
 
 export default class {
 	async createGuild(guild: Guild): Promise<void> {
@@ -385,13 +383,12 @@ export default class {
 		});
 	}
 
-	async getAllBlacklisted(): Promise<Record<string, any>> {
-		const response: Record<string, any> = await sequelize.query("SELECT * FROM blacklists", {});
-		return response[0];
+	async getAllBlacklisted(): Promise<Blacklist[]> {
+		return await sequelize.query("SELECT * FROM blacklists", { type: QueryTypes.SELECT });
 	}
 
-	async infoBlacklist(snowflakeId: Snowflake): Promise<Record<string, any>> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
+	async infoBlacklist(snowflakeId: Snowflake): Promise<Blacklist> {
+		const response: Blacklist[] = await sequelize.query('SELECT * FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
 			bind: { snowflakeId },
 			type: QueryTypes.SELECT,
 		});

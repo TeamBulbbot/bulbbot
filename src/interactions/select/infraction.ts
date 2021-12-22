@@ -1,11 +1,11 @@
 import { NonDigits, ReasonImage } from "../../utils/Regex";
-import { Infraction } from "../../utils/types/Infraction";
 import { MessageEmbed, SelectMenuInteraction, Snowflake } from "discord.js";
 import moment from "moment";
 import * as Emotes from "../../emotes.json";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import { Infraction } from "../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 

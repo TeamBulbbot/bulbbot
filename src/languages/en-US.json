@@ -386,6 +386,7 @@
 
   "duration_invalid_0s": "{{emote_fail}} Duration cannot be lower than **0 seconds**!",
   "duration_invalid_6h": "{{emote_fail}} Duration cannot be longer than **6 hours**",
+  "duration_invalid_28d": "{{emote_fail}} Duration cannot be longer than **28 days**",
   "duration_invalid_1y": "{{emote_fail}} Duration cannot be longer than **1 year**!",
 
   "lockdown_locked": "{{emote_locked}} Successfully locked down channel <#{{channel}}>",

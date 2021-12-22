@@ -10,10 +10,11 @@ export default class extends SubCommand {
 			name: "quick_reasons",
 			aliases: ["quickreasons"],
 			subCommands: [add, remove],
-      clearance: 75,
-      minArgs: 1,
-      maxArgs: -1,
-			argList: ["action:string"]
+			clearance: 75,
+			minArgs: 1,
+			maxArgs: -1,
+			argList: ["action:string"],
+			description: "Configure quick reasons.",
 		});
 	}
 }

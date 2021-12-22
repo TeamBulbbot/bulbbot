@@ -17,6 +17,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["infraction:int32"],
 			usage: "<infraction>",
+			description: "Claims an infraction.",
 		});
 	}
 

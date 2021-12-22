@@ -5,7 +5,7 @@ import CommandContext from "../../../structures/CommandContext";
 import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import { Infraction } from "../../../utils/types/Infraction";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["user:User"],
 			usage: "<user>",
+			description: "Search for moderation infractions of a user.",
 		});
 	}
 

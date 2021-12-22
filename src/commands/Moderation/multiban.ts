@@ -13,11 +13,11 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Bans or forcebans multiple people from a guild",
+			description: "Bans or forcebans multiple people from a server",
 			category: "Moderation",
 			aliases: ["mban"],
 			usage: "<user> <user2>.... [reason]",
-			examples: ["multiban 123456789012345678 123456789012345678 rude user", "multiban @Wumpus00000 @Nelly##0000 rude user"],
+			examples: ["multiban 123456789012345678 876543210987654321 rude user", "multiban @Wumpus00000 @Nelly##0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,

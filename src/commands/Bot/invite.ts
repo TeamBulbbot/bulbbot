@@ -9,7 +9,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Returns the invite link for the bot and the support guild",
+			description: "Returns the invite link for the bot and the support server",
 			category: "Bot",
 			aliases: ["support"],
 			clientPerms: ["EMBED_LINKS"],

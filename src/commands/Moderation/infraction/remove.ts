@@ -4,8 +4,8 @@ import CommandContext from "../../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { Infraction } from "../../../utils/types/Infraction";
 import { NonDigits } from "../../../utils/Regex";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["infraction:int32"],
 			usage: "<infraction>",
+			description: "Delete an infraction.",
 		});
 	}
 
@@ -91,6 +92,6 @@ export default class extends SubCommand {
 
 			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
 			return;
-		})
+		});
 	}
 }

@@ -16,7 +16,7 @@ export default class extends Command {
 			aliases: ["nick"],
 			usage: "<member> [nickname] [reason]",
 			argList: ["member:Member"],
-			examples: ["!nickname @Wumpus#0000 QT"],
+			examples: ["nickname @Wumpus#0000 Nellys best friend"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

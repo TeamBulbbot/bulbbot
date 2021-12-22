@@ -8,7 +8,7 @@ import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import moment from "moment";
 import * as Emotes from "../../../emotes.json";
 import { embedColor } from "../../../Config";
-import { Infraction } from "../../../utils/types/Infraction";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -21,6 +21,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["id:int32"],
 			usage: "<id>",
+			description: "Get information about an infraction.",
 		});
 	}
 

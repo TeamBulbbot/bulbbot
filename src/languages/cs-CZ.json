@@ -319,6 +319,7 @@
   "slowmode_missing_perms": "{{emote_fail}} Bot nemá dostatečné oprávnění pro správu <#{{channel}}>",
   "duration_invalid_0s": "{{emote_fail}} Doba trvání nemůže být menší než **0 vteřin**!",
   "duration_invalid_6h": "{{emote_fail}} Doba trvání nemůže být delší než **6 hodin**",
+  "duration_invalid_28d": "{{emote_fail}} Duration cannot be longer than **28 days**",
   "duration_invalid_1y": "{{emote_fail}} Doba trvání nemůže být delší než **1 rok**!",
   "lockdown_locked": "{{emote_locked}} Kanál <#{{channel}}> byl úspěšně uzamčen",
   "lockdown_unlocked": "{{emote_unlocked}} Kanál <#{{channel}}> byl úspěšně odemčen",

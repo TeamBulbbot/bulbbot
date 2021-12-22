@@ -12,6 +12,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "disable",
 			usage: "disable <guildID>",
+			description: "Disables premium for a guild",
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
@@ -19,19 +20,17 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// disables the premium of a guild
-
 		let guild: Guild;
 
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			context.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
 		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) disabled premium on ${guild.name} (${guild.id})`);
 		await databaseManager.setPremium(guild.id, false);
-		await context.reply(`Disabled premium for **${guild.name}** \`(${guild.id})\``);
+		await context.channel.send(`Disabled premium for **${guild.name}** \`(${guild.id})\``);
 	}
 }

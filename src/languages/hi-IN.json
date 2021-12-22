@@ -319,6 +319,7 @@
   "slowmode_missing_perms": "{{emote_fail}} बॉट में <#{{channel}}> को प्रबंधित करने की अनुमति नहीं है",
   "duration_invalid_0s": "{{emote_fail}} अवधि **0 सेकंड** से कम नहीं हो सकती!",
   "duration_invalid_6h": "{{emote_fail}} अवधि **6 घंटे** से अधिक नहीं हो सकती",
+  "duration_invalid_28d": "{{emote_fail}} Duration cannot be longer than **28 days**",
   "duration_invalid_1y": "{{emote_fail}} अवधि **1 वर्ष** से अधिक नहीं हो सकती!",
   "lockdown_locked": "{{emote_locked}} चैनल को सफलतापूर्वक लॉक कर दिया गया <#{{channel}}>",
   "lockdown_unlocked": "{{emote_unlocked}} चैनल को सफलतापूर्वक अनलॉक किया गया <#{{channel}}>",

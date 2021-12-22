@@ -17,6 +17,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["infraction:int32", "reason:string"],
 			usage: "<infraction> <reason>",
+			description: "Updates the reason of an infraction.",
 		});
 	}
 

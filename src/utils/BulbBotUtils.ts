@@ -145,6 +145,39 @@ export default class {
 			} else if (feature === "ROLE_ICONS") {
 				f = Emotes.features.ROLE_ICONS;
 				desc = "Adds the ability to add icons to roles (requires boost level 2)";
+			} else if (feature === "ANIMATED_BANNER") {
+				f = Emotes.features.ANIMATED_BANNER;
+				desc = "Adds the ability to set a animated banner (requires boost level 3)";
+			} else if (feature === "FEATURABLE") {
+				f = Emotes.features.FEATURABLE;
+				desc = "Deprecated";
+			} else if (feature === "MEMBER_PROFILES") {
+				f = Emotes.features.MEMBER_PROFILES;
+				desc = "Adds the ability to set a full custom member profiles.";
+			} else if (feature === "PREMIUM_TIER_3_OVERRIDE") {
+				f = Emotes.features.PREMIUM_TIER_3_OVERRIDE;
+				desc = "Forces the boost level to level 3";
+			} else if (feature === "NEW_THREAD_PERMISSIONS") {
+				f = Emotes.features.NEW_THREAD_PERMISSIONS;
+				desc = "Server has new thread permissions";
+			} else if (feature === "THREADS_ENABLED_TESTING") {
+				f = Emotes.features.THREADS_ENABLED_TESTING;
+				desc = "Used by bot developers to test threads in servers with less than 5 members";
+			} else if (feature === "MONETIZATION_ENABLED") {
+				f = Emotes.features.MONETIZATION_ENABLED;
+				desc = "Allows the server to configure a team (in the dev portal) to cash out ticketed stage events";
+			} else if (feature === "TICKETED_EVENTS_ENABLED") {
+				f = Emotes.features.TICKETED_EVENTS_ENABLED;
+				desc = "Adds the ability to view/create/manage ticketed stage events";
+			} else if (feature === "TEXT_IN_VOICE_ENABLED") {
+				f = Emotes.features.TEXT_IN_VOICE_ENABLED;
+				desc = "Adds the ability to use a dedicated text channel inside of the voice channel";
+			} else if (feature === "INTERNAL_EMPLOYEE_ONLY") {
+				f = Emotes.features.INTERNAL_EMPLOYEE_ONLY;
+				desc = "Server only accessible via the Developer badge";
+			} else if (feature === "HAS_DIRECTORY_ENTRY") {
+				f = Emotes.features.HAS_DIRECTORY_ENTRY;
+				desc = "Server is in a directory channel";
 			} else {
 				f = "⭐";
 				desc = "";

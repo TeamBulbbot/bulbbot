@@ -13,6 +13,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "logging",
 			clearance: 75,
+			description: "Setup logging for the bot.",
 		});
 	}
 

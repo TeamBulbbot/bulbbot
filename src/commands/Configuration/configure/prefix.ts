@@ -16,6 +16,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["prefix:string"],
 			usage: "<prefix>",
+			description: "Sets the prefix for the bot.",
 		});
 	}
 

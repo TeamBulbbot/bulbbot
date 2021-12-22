@@ -32,6 +32,7 @@ const models: any[] = [
 	require("./models/Banpools").default,
 	require("./models/BanpoolSubscribers").default,
 	require("./models/MessageLogs").default,
+	require("./models/Experiment").default,
 ];
 
 for (const modelDefiner of models) modelDefiner(sequelize);
