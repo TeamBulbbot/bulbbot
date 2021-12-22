@@ -414,6 +414,12 @@
   "infraction_claim_success": "{{emote_success}} You have claimed responsibility over infraction **#{{infraction_id}}**",
   "infraction_update_success": "{{emote_success}} Infraction **#{{infraction_id}}** has been updated!",
 
+  "archive_too_much": "{{emote_fail}} You can only request a max of 5000 entries",
+  "archive_header_format": "Time, channelId-messageId | AuthorTag (AuthorId): Content/Embeds/Stickers/Attachemnets\n",
+  "archive_success": "{{emote_success}} Archived data from `{{place}}` found **{{amountOfMessages}}** messages (search amount: {{searchAmount}})",
+  "archive_no_data_found": "{{emote_warn}} No data was found",
+  "archive_started_search": "{{emote_loading}} Started the searching this might take a while",
+
   "infraction_interaction_reply": "{{emote_warn}} **{{target.tag}}'s** `({{target.id}})` infractions",
   "infraction_interaction_placeholder": "No Infractions Selected",
   "infraction_interaction_description": "Click to view more info",

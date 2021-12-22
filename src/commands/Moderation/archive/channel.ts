@@ -6,6 +6,7 @@ import { Message } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { writeFileSync } from "fs";
 import moment from "moment";
+import { NonDigits } from "../../../utils/Regex";
 
 const { getChannelArchive }: DatabaseManager = new DatabaseManager();
 
@@ -22,17 +23,16 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// todo
-		// move to translator
-		// check if archiveChannelData is empty
-		// send a message to the user that a search has started because this can take a while lol
-
 		const AMOUNT: number = args[1] ? parseInt(args[1]) : 100;
-		if (AMOUNT > 5000) return context.channel.send("Too much :(");
+		if (AMOUNT > 5000) return context.channel.send(await this.client.bulbutils.translate("archive_too_much", context.guild?.id, {}));
+		const channel = args[0].replace(NonDigits, "");
+		const startMessage = await context.channel.send(await this.client.bulbutils.translate("archive_started_search", context.guild?.id, {}));
 
-		let archive: string = "Time, channelId-messageId | AuthorTag (AuthorId): Content/Embeds/Stickers/Attachemnets\n";
+		let archive: string = await this.client.bulbutils.translate("archive_header_format", context.guild?.id, {});
 		let temp: string;
-		const archiveChannelData = await getChannelArchive(args[0], context.guild!?.id, AMOUNT);
+		const archiveChannelData = await getChannelArchive(channel, context.guild!?.id, AMOUNT);
+		if (archiveChannelData.length === 0) return startMessage.edit(await this.client.bulbutils.translate("archive_no_data_found", context.guild?.id, {}));
+
 		archiveChannelData.forEach(
 			(message: { updatedAt: string; channelId: any; messageId: any; authorTag: any; authorId: any; content: any; sticker: any; embed: any; embeds: any; attachments: any[] }) => {
 				temp = `[${moment(Date.parse(message.updatedAt)).format("MMMM Do YYYY, h:mm:ss a")}] ${message.channelId}-${message.messageId} | ${message.authorTag} (${message.authorId}): `;
@@ -45,12 +45,16 @@ export default class extends SubCommand {
 			},
 		);
 
-		writeFileSync(`${__dirname}/../../../../files/archive-data-${context.guild?.id}-${args[0]}.txt`, archive);
-		await context.channel.send({
-			content: `Archived data from ${args[0]} found ${archiveChannelData.length} messages (search amount: ${AMOUNT})`,
+		writeFileSync(`${__dirname}/../../../../files/archive-data-${context.guild?.id}-${channel}.txt`, archive);
+		startMessage.edit({
+			content: await this.client.bulbutils.translate("archive_success", context.guild?.id, {
+				place: channel,
+				amountOfMessages: archiveChannelData.length,
+				searchAmount: AMOUNT,
+			}),
 			files: [
 				{
-					attachment: `${__dirname}/../../../../files/archive-data-${context.guild?.id}-${args[0]}.txt`,
+					attachment: `${__dirname}/../../../../files/archive-data-${context.guild?.id}-${channel}.txt`,
 					name: "archive.txt",
 				},
 			],
