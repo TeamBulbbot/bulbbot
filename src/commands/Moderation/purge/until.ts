@@ -37,7 +37,14 @@ export default class extends SubCommand {
 		try {
 			msg = await context.channel.messages.fetch(args[0]);
 		} catch (error) {
-			return context.channel.send(await this.client.bulbutils.translate("purge_message_not_found", context.guild?.id, {}));
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),
+					arg_expected: "message:Message",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 		}
 
 		while (amount < 500) {

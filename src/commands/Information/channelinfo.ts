@@ -26,7 +26,14 @@ export default class extends Command {
 
 		const channel: GuildChannel | ThreadChannel | undefined = context.guild?.channels.cache.get(channelId);
 		if (!channel?.permissionsFor(context.member!)?.has("VIEW_CHANNEL", true)) {
-			context.channel.send(await this.client.bulbutils.translate("channelinfo_unable_to_find", context.guild!.id, {}));
+			context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild!.id, {}),
+					arg_expected: "channel:Channel",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 			return;
 		}
 		const desc: string[] = [`**ID:** ${channel.id}`, `**Name:** ${channel.name}`, `**Mention:** <#${channel.id}>`];

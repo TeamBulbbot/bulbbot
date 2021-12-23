@@ -15,13 +15,18 @@ export default class extends Command {
 			examples: ["messageinfo 742095521962786858-877632488023945246", "messageinfo https://discord.com/channels/742094927403679816/742095521962786858/877632488023945246"],
 			clearance: 50,
 			maxArgs: 1,
-			minArgs: 1,
+			minArgs: 0,
 			argList: ["channel-message:Snowflake"],
 			clientPerms: ["EMBED_LINKS"],
+			overrides: ["message_info"]
 		});
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
+		return;
+	}
+
+	public async _message_info(context: CommandContext, args: string[]): Promise<void> {
 		let channelId: string;
 		let messageId: string;
 		let input: string | string[] = args[0];
@@ -39,14 +44,28 @@ export default class extends Command {
 		// @ts-ignore
 		let channel: TextChannel | NewsChannel | undefined = context.guild?.channels.cache.get(channelId);
 		if (channel?.type !== "GUILD_TEXT" && channel?.type !== "GUILD_NEWS" && !channel!?.permissionsFor(context.member!)?.has("VIEW_CHANNEL", true)) {
-			context.channel.send(await this.client.bulbutils.translate("messageinfo_unable_to_find", context.guild!.id, {}));
+			context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild!.id, {}),
+					arg_expected: "message:Message",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 			return;
 		}
 		let message: Message;
 		try {
 			message = await channel.messages.fetch(messageId);
 		} catch (error) {
-			context.channel.send(await this.client.bulbutils.translate("messageinfo_unable_to_find", context.guild!.id, {}));
+			context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild!.id, {}),
+					arg_expected: "message:Message",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 			return;
 		}
 

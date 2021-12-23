@@ -3,7 +3,6 @@ import CommandContext from "../../structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { NonDigits } from "../../utils/Regex";
 import { MessageEmbed, Role } from "discord.js";
-import { supportInvite } from "../../Config";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -25,7 +24,14 @@ export default class extends Command {
 		const roleId: string = args[0].replace(NonDigits, "");
 		const role: Role | undefined = context.guild?.roles.cache.get(roleId);
 		if (!role) {
-			context.channel.send(await this.client.bulbutils.translate("roleinfo_unable_to_find", context.guild?.id, { discord_invite: supportInvite }));
+			context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.role", context.guild?.id, {}),
+					arg_expected: "role:Role",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 			return;
 		}
 		const tags: string[] = [`(by `];
