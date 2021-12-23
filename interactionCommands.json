@@ -62,10 +62,17 @@
 	},
 
 	{
-		"name": "badges",
+		"name": "channelinfo",
 		"type": 1,
-		"description": "Returns the amount of badges in the server",
-		"options": []
+		"description": "Returns information about the channel",
+		"options": [
+			{
+				"name": "channel",
+				"description": "The channel you want to get information about",
+				"type": 7,
+				"required": true
+			}
+		]
 	},
 	{
 		"name": "charinfo",
@@ -89,6 +96,32 @@
 				"name": "invite",
 				"type": 3,
 				"description": "The invite link of the server you want to info",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "messageinfo",
+		"type": 1,
+		"description": "Returns information about the message provided",
+		"options": [
+			{
+				"name": "message",
+				"type": 3,
+				"description": "The message you want to get info about",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "roleinfo",
+		"type": 1,
+		"description": "Returns information about the role provided",
+		"options": [
+			{
+				"name": "role",
+				"type": 8,
+				"description": "The role you want to get info about",
 				"required": true
 			}
 		]
@@ -852,6 +885,19 @@
 				"type": 6,
 				"description": "The user who's avatar you want to retrieve",
 				"required": false
+			}
+		]
+	},
+	{
+		"name": "id",
+		"type": 1,
+		"description": "Parses Discord IDs from the provided text",
+		"options": [
+			{
+				"name": "text",
+				"type": 3,
+				"description": "The text you want to parse Discord IDs from",
+				"required": true
 			}
 		]
 	},
