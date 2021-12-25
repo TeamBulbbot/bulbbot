@@ -24,6 +24,8 @@ export default class extends Command {
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,
+			userPerms: ["MODERATE_MEMBERS"],
+			clientPerms: ["MODERATE_MEMBERS"],
 		});
 	}
 
@@ -33,12 +35,6 @@ export default class extends Command {
 		const duration: number = <number>parse(args[1]);
 		let reason: string = args.slice(2).join(" ");
 		let infID: number;
-
-		// @ts-ignore
-		if (!Number((context.guild?.me!?.permissions.bitfield & (1n << 40n)) == 1n << 40n) && !context.guild?.me!?.permissions.has("ADMINISTRATOR")) {
-			await context.channel.send(await this.client.bulbutils.translate("global_missing_permissions_bot", context.guild?.id, { missing: "`Time out members`" }));
-			return;
-		}
 
 		if (!target)
 			return context.channel.send(
@@ -54,6 +50,7 @@ export default class extends Command {
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		if ((duration && duration <= <number>parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
 		if (duration > <number>parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild?.id, {}));
+		if (target.communicationDisabledUntilTimestamp !== null) return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
 
 		infID = await infractionsManager.mute(
 			this.client,

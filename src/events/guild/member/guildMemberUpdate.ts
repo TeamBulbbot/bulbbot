@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, User, Permissions } from "discord.js";
+import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Permissions, Snowflake, User } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
@@ -26,6 +26,59 @@ export default class extends Event {
 		let audit: GuildAuditLogs<"MEMBER_ROLE_UPDATE"> | GuildAuditLogs<"MEMBER_UPDATE">;
 		let auditLog: GuildAuditLogsEntry<"MEMBER_ROLE_UPDATE"> | undefined | GuildAuditLogsEntry<"MEMBER_UPDATE">;
 		let executor: User | null = null;
+
+		if (oldMember.communicationDisabledUntilTimestamp !== newMember.communicationDisabledUntilTimestamp) {
+			audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
+			auditLog = audit.entries.first();
+			executor = auditLog ? auditLog.executor : null;
+
+			// If newMember is muted check if the executor is bot. If not, log as manual mute
+			// If newMember is not muted check if the executor is bot. If not, log as manual unmute, else log as auto mute
+			if (newMember.communicationDisabledUntilTimestamp === null) {
+				if (executor?.id !== this.client.user?.id) {
+					await infractionsManager.createInfraction(
+						newMember.guild.id,
+						"Unmute",
+						false,
+						auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+						newMember.user,
+						<User>executor,
+					);
+					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, <Snowflake>executor?.id, newMember.user.id, "Unmute");
+					await loggingManager.sendModAction(
+						this.client,
+						newMember.guild?.id,
+						await this.client.bulbutils.translate("mod_action_types.unmute", newMember.guild.id, {}),
+						newMember.user,
+						<User>executor,
+						auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+						infID,
+					);
+				}
+			} else {
+				if (executor?.id === this.client.user?.id) return;
+
+				await infractionsManager.createInfraction(
+					newMember.guild.id,
+					"Mute",
+					<number>newMember.communicationDisabledUntilTimestamp!!,
+					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+					newMember.user,
+					<User>executor,
+				);
+				const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, <Snowflake>executor?.id, newMember.user.id, "Mute");
+				await loggingManager.sendModActionTemp(
+					this.client,
+					newMember.guild,
+					await this.client.bulbutils.translate("mod_action_types.mute", newMember.guild.id, {}),
+					newMember.user,
+					<User>executor,
+					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+					infID,
+					newMember.communicationDisabledUntilTimestamp,
+				);
+			}
+		}
 
 		if (oldMember.roles.cache.size < newMember.roles.cache.size) change = "newrole";
 		else if (oldMember.roles.cache.size > newMember.roles.cache.size) change = "removedrole";
@@ -59,7 +112,8 @@ export default class extends Event {
 
 					const reason = auditLog.reason ?? (await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}));
 					if (!executor?.bot && executor?.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
-					const infID: number = !executor?.bot && executor?.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.user.id, "Manual Nickname") : -1;
+					const infID: number =
+						!executor?.bot && executor?.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.user.id, "Manual Nickname") : -1;
 					const translateKey =
 						executor === null || executor.id === newMember.id
 							? newMember.nickname
