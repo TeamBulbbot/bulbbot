@@ -4,6 +4,7 @@ import { SnowflakeUtil, DeconstructedSnowflake, MessageEmbed } from "discord.js"
 import { NonDigits } from "../../utils/Regex";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
+import moment from "moment";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -34,9 +35,12 @@ export default class extends Command {
 
 		let desc = `**❄️ [Snowflake](https://discord.com/developers/docs/reference#snowflakes) information**\n\n`;
 
-		desc += `**Creation**\n${this.client.bulbutils.formatDays(deconstruct.date)}\n`;
-		desc += `**Timestamp**\n${deconstruct.timestamp}\n\n`;
-		desc += `**Binary**\n${deconstruct.binary}\n`;
+		desc += `**Creation:** <t:${moment(deconstruct.date).unix()}:F> (<t:${moment(deconstruct.date).unix()}:R>)\n`;
+		desc += `**Timestamp:** ${deconstruct.timestamp}\n`;
+		desc += `**Worker Id:** ${deconstruct.workerId}\n`;
+		desc += `**Process Id:** ${deconstruct.processId}\n`;
+		desc += `**Increment:** ${deconstruct.increment}\n`;
+		desc += `**Binary:** ${deconstruct.binary}\n`;
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
