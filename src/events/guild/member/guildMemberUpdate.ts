@@ -23,8 +23,8 @@ export default class extends Event {
 		let change: "newrole" | "removedrole" | "nickname";
 		let part: "member" | "role" | "modAction";
 		let message: string;
-		let audit: GuildAuditLogs;
-		let auditLog: GuildAuditLogsEntry | undefined;
+		let audit: GuildAuditLogs<"MEMBER_ROLE_UPDATE"> | GuildAuditLogs<"MEMBER_UPDATE">;
+		let auditLog: GuildAuditLogsEntry<"MEMBER_ROLE_UPDATE"> | undefined | GuildAuditLogsEntry<"MEMBER_UPDATE">;
 		let executor: User | null = null;
 
 		if (oldMember.roles.cache.size < newMember.roles.cache.size) change = "newrole";

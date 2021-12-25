@@ -17,7 +17,7 @@ export default class extends Event {
 	public async run(ban: GuildBan): Promise<void> {
 		if (!ban.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
-		const auditLogs: GuildAuditLogs = await ban.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_ADD" });
+		const auditLogs: GuildAuditLogs<"MEMBER_BAN_ADD"> = await ban.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_BAN_ADD" });
 		const banLog = auditLogs.entries.first();
 
 		if (!banLog) return;
