@@ -12,7 +12,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Bans a user and removes all their messages from the guild",
+			description: "Bans a user and removes all their messages from the server",
 			category: "Moderation",
 			usage: "<member> [reason]",
 			examples: ["cleanban 123456789012345678", "softban 123456789012345678 rude user", "softban @Wumpus#0000 rude user"],
@@ -27,7 +27,7 @@ export default class extends Command {
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember | null = targetID ? <GuildMember>await context.guild?.members.fetch(targetID).catch(() => null) : null;
+		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 

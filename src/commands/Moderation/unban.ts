@@ -12,7 +12,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Unban a user from the guild",
+			description: "Unban a user from the server",
 			category: "Moderation",
 			aliases: ["pardon"],
 			usage: "<user> [reason]",
@@ -28,10 +28,14 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: User;
-		try {
-			target = await this.client.users.fetch(targetID);
-		} catch (error) {
+		let target: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		let reason: string = args.slice(1).join(" ");
+		let infID: number;
+
+		const banList = await context.guild?.bans.fetch();
+		const bannedUser = banList?.find(user => user.user.id === targetID);
+
+		if (!target)
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -40,13 +44,6 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		}
-		let reason: string = args.slice(1).join(" ");
-		let infID: number;
-
-		const banList = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find(user => user.user.id === targetID);
-
 		if (!bannedUser) return context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});

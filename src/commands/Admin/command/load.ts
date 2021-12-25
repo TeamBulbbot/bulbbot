@@ -22,6 +22,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["command:Command"],
 			usage: "<command>",
+			description: "Loads a command",
 		});
 	}
 
@@ -31,32 +32,31 @@ export default class extends SubCommand {
 		let command: Command | undefined = Command.resolve(this.client, args);
 		let dirPath: string;
 
-		if(args.length > 1) {
-			if(!command) return context.channel.send(`Cannot load command \`${args[0]}\``);
-			if(command.name === args[args.length - 1]) return await context.channel.send(`Already have command \`${command.qualifiedName}\` loaded (did you mean to use \`reload\` instead?)`);
+		if (args.length > 1) {
+			if (!command) return context.channel.send(`Cannot load command \`${args[0]}\``);
+			if (command.name === args[args.length - 1]) return await context.channel.send(`Already have command \`${command.qualifiedName}\` loaded (did you mean to use \`reload\` instead?)`);
 			// TODO: Internally call load command (this command) to attempt to load missing command first
-			if(command.name !== args[args.length - 2]) return await context.channel.send(`Cannot load command \`${args.slice(0, command.qualifiedName.split(" ").length + 1).join(" ")}\``);
+			if (command.name !== args[args.length - 2]) return await context.channel.send(`Cannot load command \`${args.slice(0, command.qualifiedName.split(" ").length + 1).join(" ")}\``);
 			cmdFile = args[args.length - 1];
 			dirPath = `${process.cwd()}/build/commands/*/${command.qualifiedName.replace(/ /g, "/")}/${cmdFile}.js`;
 		} else {
 			cmdFile = cmd;
-			dirPath = `${process.cwd()}/build/commands/*/${cmdFile}.js`
+			dirPath = `${process.cwd()}/build/commands/*/${cmdFile}.js`;
 		}
 		return await globAsync(dirPath).then((commands: any) => {
-			mainLoop:
-			for (const commandFile of commands) {
-				if(args.length > 1) {
+			mainLoop: for (const commandFile of commands) {
+				if (args.length > 1) {
 					let currCommand: Command | SubCommand = command!;
 					const cmdChain: string[] = new RegExp(`${process.cwd().replace(/\\/g, "/")}/build/commands/(.+)/${cmdFile}\.js`).exec(commandFile)![1].split("/").reverse();
-					for(const parent of cmdChain.slice(0, -1)) {
-						if(currCommand instanceof SubCommand) {
-							if(currCommand.name !== parent) continue mainLoop;
+					for (const parent of cmdChain.slice(0, -1)) {
+						if (currCommand instanceof SubCommand) {
+							if (currCommand.name !== parent) continue mainLoop;
 							currCommand = currCommand.parent;
 						} else {
-							if(currCommand.name !== parent) continue mainLoop;
+							if (currCommand.name !== parent) continue mainLoop;
 						}
 					}
-					if(currCommand.category !== cmdChain[cmdChain.length - 1]) continue mainLoop;
+					if (currCommand.category !== cmdChain[cmdChain.length - 1]) continue mainLoop;
 					// Validated path with command parent chain
 
 					delete require.cache[require.resolve(commandFile)];

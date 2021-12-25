@@ -19,12 +19,14 @@ export default class extends SubCommand {
 			maxArgs: 2,
 			argList: ["member:Member", "amount:int"],
 			usage: "<member> <amount>",
+			description: "Purges a users messages from the current channel.",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let amount: number = Number(args[1]);
-		const user: GuildMember = <GuildMember>context.guild?.members.cache.get(args[0].replace(NonDigits, ""));
+		const user: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, args[0].replace(NonDigits, ""));
+
 		if (!user)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
@@ -56,12 +58,15 @@ export default class extends SubCommand {
 		let messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
+
 		for (let i = 0; i < deleteMsg.length; i++) {
 			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
 				limit: deleteMsg[i],
 			});
 
 			msgs.map(async m => {
+				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (user.user.id === m.author.id) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);

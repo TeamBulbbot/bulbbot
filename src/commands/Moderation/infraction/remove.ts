@@ -4,7 +4,8 @@ import CommandContext from "../../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { Infraction } from "../../../utils/types/Infraction";
+import { NonDigits } from "../../../utils/Regex";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -16,13 +17,24 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["infraction:int"],
+			argList: ["infraction:int32"],
 			usage: "<infraction>",
+			description: "Delete an infraction.",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const infID: number = Number(args[0]);
+		const infID = Number(args[0].replace(NonDigits, ""));
+
+		if (!infID || infID >= 2147483647 || infID <= 0)
+			return context.channel.send(
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
+					arg_expected: "id:int32",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 
 		if (isNaN(infID) || (await infractionsManager.getInfraction(<Snowflake>context.guild?.id, infID)) === undefined) {
 			return context.channel.send(
@@ -80,6 +92,6 @@ export default class extends SubCommand {
 
 			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
 			return;
-		})
+		});
 	}
 }

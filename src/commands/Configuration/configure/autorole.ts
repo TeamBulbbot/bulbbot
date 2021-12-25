@@ -18,13 +18,13 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["role:Role"],
 			usage: "<role>",
+			description: "Sets the role that will be given to users when they join the server.",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let role: Role | null;
-		const targetRole = args[0].replace(NonDigits, "")
-		role = targetRole ? <Role>await context.guild?.roles.fetch(targetRole).catch(() => null) : null;
+		const targetRole = args[0].replace(NonDigits, "");
+		const role: Role | null | undefined = await this.client.bulbfetch.getRole(context.guild?.roles, targetRole);
 
 		if (!role && args[0] !== "disable")
 			return context.channel.send(

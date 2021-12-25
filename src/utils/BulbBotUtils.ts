@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, Guild, GuildChannel, GuildMember, MessageEmbed, Permissions, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -19,7 +19,9 @@ export default class {
 	}
 
 	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+		const language = (await databaseManager.getConfig(guildID))["language"];
+		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
 
@@ -143,12 +145,45 @@ export default class {
 			} else if (feature === "ROLE_ICONS") {
 				f = Emotes.features.ROLE_ICONS;
 				desc = "Adds the ability to add icons to roles (requires boost level 2)";
+			} else if (feature === "ANIMATED_BANNER") {
+				f = Emotes.features.ANIMATED_BANNER;
+				desc = "Adds the ability to set a animated banner (requires boost level 3)";
+			} else if (feature === "FEATURABLE") {
+				f = Emotes.features.FEATURABLE;
+				desc = "Deprecated";
+			} else if (feature === "MEMBER_PROFILES") {
+				f = Emotes.features.MEMBER_PROFILES;
+				desc = "Adds the ability to set a full custom member profiles.";
+			} else if (feature === "PREMIUM_TIER_3_OVERRIDE") {
+				f = Emotes.features.PREMIUM_TIER_3_OVERRIDE;
+				desc = "Forces the boost level to level 3";
+			} else if (feature === "NEW_THREAD_PERMISSIONS") {
+				f = Emotes.features.NEW_THREAD_PERMISSIONS;
+				desc = "Server has new thread permissions";
+			} else if (feature === "THREADS_ENABLED_TESTING") {
+				f = Emotes.features.THREADS_ENABLED_TESTING;
+				desc = "Used by bot developers to test threads in servers with less than 5 members";
+			} else if (feature === "MONETIZATION_ENABLED") {
+				f = Emotes.features.MONETIZATION_ENABLED;
+				desc = "Allows the server to configure a team (in the dev portal) to cash out ticketed stage events";
+			} else if (feature === "TICKETED_EVENTS_ENABLED") {
+				f = Emotes.features.TICKETED_EVENTS_ENABLED;
+				desc = "Adds the ability to view/create/manage ticketed stage events";
+			} else if (feature === "TEXT_IN_VOICE_ENABLED") {
+				f = Emotes.features.TEXT_IN_VOICE_ENABLED;
+				desc = "Adds the ability to use a dedicated text channel inside of the voice channel";
+			} else if (feature === "INTERNAL_EMPLOYEE_ONLY") {
+				f = Emotes.features.INTERNAL_EMPLOYEE_ONLY;
+				desc = "Server only accessible via the Developer badge";
+			} else if (feature === "HAS_DIRECTORY_ENTRY") {
+				f = Emotes.features.HAS_DIRECTORY_ENTRY;
+				desc = "Server is in a directory channel";
 			} else {
 				f = "⭐";
 				desc = "";
 			}
 
-			f += `[\`${feature}\`](https://bulbbot.mrphilip.xyz '${desc}')`;
+			f += `[\`${feature}\`](https://bulbbot.rocks '${desc}')`;
 			features.push(f);
 		});
 
@@ -593,6 +628,16 @@ export default class {
 			}
 		}
 		return true;
+	}
+
+	public async updateChannelsWithMutedRole(guild: Guild, role: Snowflake): Promise<void> {
+		// await guild.channels.fetch();
+		guild.channels.cache.map(channel => {
+			if (!guild.me?.permissionsIn(channel).has(Permissions.FLAGS.VIEW_CHANNEL) || !guild.me?.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) return;
+
+			if (channel.type === "GUILD_TEXT") channel.permissionOverwrites.create(role, { SEND_MESSAGES: false });
+			else if (channel.type === "GUILD_VOICE") channel.permissionOverwrites.create(role, { CONNECT: false, SPEAK: false });
+		});
 	}
 
 	/** Deep equality check for objects */

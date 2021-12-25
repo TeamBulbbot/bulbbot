@@ -11,17 +11,16 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "code",
 			usage: "code",
+			aliases: ["pull"],
+			description: "Pulls the latest code from the repository",
 		});
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
-		// pulls the latest code from github
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);
 
 		const resp: ShellString = exec(`git pull`);
-
-		//if (resp.stderr) return context.reply(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
-		context.reply(`Successfully pulled the latest code\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
+		context.channel.send(`Successfully pulled the latest code\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 	}
 }

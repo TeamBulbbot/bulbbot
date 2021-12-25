@@ -12,7 +12,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Infraction Desc",
+			description: "Manage infractions.",
 			category: "Moderation",
 			subCommands: [search, info, claim, update, modsearch, offendersearch, remove],
 			aliases: ["inf"],

@@ -12,11 +12,11 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Kicks multiple people from a guild",
+			description: "Kicks multiple people from a server",
 			category: "Moderation",
 			aliases: ["mkick"],
 			usage: "<member> <member2>.... [reason]",
-			examples: ["multikick 123456789012345678 123456789012345678 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
+			examples: ["multikick 123456789012345678 876543210987654321 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
 			argList: ["member:Member"],
 			minArgs: 1,
 			maxArgs: -1,
@@ -60,7 +60,7 @@ export default class extends Command {
 			await this.client.bulbutils.sleep(massCommandSleep);
 
 			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember | null = t ? <GuildMember>await context.guild?.members.fetch(t).catch(() => null) : null;
+			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
 			let infID: number;
 
 			if (!target) {

@@ -16,7 +16,7 @@ export default class extends Event {
 		this.client.user?.setActivity({
 			name: activityName,
 			type,
-			url: "https://bulbbot.mrphilip.xyz/",
+			url: "https://bulbbot.rocks/",
 		});
 
 		this.client.user?.setStatus(status);

@@ -1,17 +1,25 @@
 import { NonDigits, ReasonImage } from "../../utils/Regex";
-import { Infraction } from "../../utils/types/Infraction";
 import { MessageEmbed, SelectMenuInteraction, Snowflake } from "discord.js";
 import moment from "moment";
 import * as Emotes from "../../emotes.json";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
+import { Infraction } from "../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default async function (client: BulbBotClient, interaction: SelectMenuInteraction): Promise<void> {
 	const infID = Number(interaction.values[0].replace(NonDigits, ""));
 	const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>interaction.guild?.id, infID);
+
+	if (!inf)
+		return interaction.reply({
+			content: await client.bulbutils.translate("infraction_not_found", interaction.guild?.id, {
+				infraction_id: infID,
+			}),
+			ephemeral: true,
+		});
 
 	const user = await client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
 	const target: Record<string, string> = { tag: inf.target, id: inf.targetId };

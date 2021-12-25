@@ -14,7 +14,7 @@ export default class extends Command {
 			description: "Deafens a member from a Voice Channel they're connected to",
 			category: "Moderation",
 			usage: "<user> [reason]",
-			examples: ["deafen 123456789012345678", "deafen 123456789012345678 rude user", "deafen @Wumos#0000 rude user"],
+			examples: ["deafen 123456789012345678", "deafen 123456789012345678 rude user", "deafen @Wumpus#0000 rude user"],
 			argList: ["user:User"],
 			minArgs: 1,
 			maxArgs: -1,
@@ -26,7 +26,7 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: GuildMember | null = targetID ? <GuildMember>await context.guild?.members.fetch(targetID).catch(() => null) : null;
+		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 

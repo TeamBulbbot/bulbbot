@@ -17,6 +17,7 @@ export default class extends SubCommand {
 			maxArgs: 3,
 			argList: ["part:string", "limit:number", "timeout:number"],
 			usage: "<part> <limit> <timeout>",
+			description: "Sets the limit and timeout for a part of the automod system.",
 		});
 	}
 
@@ -55,7 +56,7 @@ export default class extends SubCommand {
 			);
 
 		if (timeout > 30) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_large", context.guild?.id, {}));
-		if (timeout < 3) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_small", context.guild?.id, {}))
+		if (timeout < 3) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_small", context.guild?.id, {}));
 
 		const part: AutoModAntiSpamPart = AutoModPart[partString];
 		await databaseManager.automodSetLimit(context.guild!.id, part, limit);

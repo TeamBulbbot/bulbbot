@@ -8,6 +8,7 @@ import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
 import { developers, subDevelopers } from "../Config";
+import { GuildCommandOverride } from "../utils/types/DatabaseStructures";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -30,6 +31,8 @@ export default class Command {
 	public readonly minArgs: number;
 	public readonly argList: string[];
 	public readonly depth: number;
+
+	public readonly overrides: string[];
 
 	get qualifiedName() {
 		return this.name;
@@ -58,6 +61,7 @@ export default class Command {
 		this.minArgs = options.minArgs || 0;
 		this.argList = options.argList || [];
 		this.subCommands = options.subCommands?.map(sc => new sc(this.client, this)) || [];
+		this.overrides = options.overrides || [];
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<any> {
@@ -79,10 +83,13 @@ export default class Command {
 		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
-			if (!commandOverride["enabled"]) return "";
-			clearance = commandOverride["clearanceLevel"];
+			if (!commandOverride.enabled) {
+				if (context.isMessageContext()) return "";
+				else if (context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
+			}
+			clearance = commandOverride.clearanceLevel;
 		}
 
 		this.client.userClearance = options.clearance;
@@ -135,16 +142,16 @@ export default class Command {
 		const isDev = developers.includes(context.author.id);
 		const isSubDev = subDevelopers.includes(context.author.id);
 
-		if(this.devOnly && !isDev) return false;
-		if(this.subDevOnly && !(isDev || isSubDev)) return false;
+		if (this.devOnly && !isDev) return false;
+		if (this.subDevOnly && !(isDev || isSubDev)) return false;
 
-		const commandOverride: Record<string, any> | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
-			if (!commandOverride["enabled"]) return false;
+			if (!commandOverride.enabled) return false;
 			clearance = commandOverride["clearanceLevel"];
 		}
 
-		const userClearance = await clearanceManager.getUserClearance(context);;
+		const userClearance = await clearanceManager.getUserClearance(context);
 		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
 
 		let missing: boolean = clearance > userClearance;

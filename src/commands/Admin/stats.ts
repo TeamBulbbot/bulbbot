@@ -19,14 +19,14 @@ export default class extends Command {
 
 	async run(context: CommandContext): Promise<void> {
 		if (context.guild === null || context.member === null) return;
-		this.client.guilds.cache.map(g => g.members.fetch());
+		//this.client.guilds.cache.map(g => g.members.fetch());
 
 		const shardData: string[] = this.client.ws.shards.map(shard => `${selectEmoji(shard.ping)} Shard ID: ${shard.id} \`${shard.ping} ms\`\n`);
 		const desc: string = `Guild Count: \`${numberWithCommas(this.client.guilds.cache.size)}\`\n Users: \`${numberWithCommas(
 			this.client.guilds.cache.map(g => g.members.cache.filter(m => !m.user.bot).size).reduce((a, b) => a + b),
 		)}\``;
 
-		const gatewayBotRaw = await axios.get("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
+		const gatewayBotRaw = await axios.get<any>("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
 		const lolNotPrivateEnoughtDiscordJS = gatewayBotRaw.data.session_start_limit;
 
 		const embed = new MessageEmbed()

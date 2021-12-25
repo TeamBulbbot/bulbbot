@@ -5,6 +5,7 @@ import { MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { GuildConfiguration, LoggingConfiguration } from "../../utils/types/DatabaseStructures";
 
 const databaseManager = new DatabaseManager();
 
@@ -12,7 +13,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Get the settings for the guild",
+			description: "Get the settings for the server",
 			category: "Configuration",
 			clearance: 75,
 			userPerms: ["MANAGE_GUILD"],
@@ -21,8 +22,8 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext) {
-		const guildConfig = await databaseManager.getConfig(context.guild!.id);
-		const loggingConfig = await databaseManager.getLoggingConfig(context.guild!.id);
+		const guildConfig: GuildConfiguration = await databaseManager.getConfig(context.guild!.id);
+		const loggingConfig: LoggingConfiguration = await databaseManager.getLoggingConfig(context.guild!.id);
 
 		const configs: string[] = [
 			`**Configuration**`,
@@ -33,12 +34,14 @@ export default class extends Command {
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
 			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Quick reasons: ${guildConfig.quickReasons.length ? guildConfig.quickReasons.join(", ") : Emotes.other.SWITCHOFF}`,
 		];
 
 		const loggingModule: string[] = [
 			`**Logging**`,
 			`Logging Timezone: \`${guildConfig.timezone}\``,
 			`Mod Logs: ${loggingConfig.modAction !== null ? `<#${loggingConfig.modAction}>` : Emotes.other.SWITCHOFF}`,
+			`Banpool Logs: ${loggingConfig.banpool !== null ? `<#${loggingConfig.banpool}>` : Emotes.other.SWITCHOFF}`,
 			`Automod: ${loggingConfig.automod !== null ? `<#${loggingConfig.automod}>` : Emotes.other.SWITCHOFF}`,
 			`Message Logs: ${loggingConfig.message !== null ? `<#${loggingConfig.message}>` : Emotes.other.SWITCHOFF}`,
 			`Role Logs: ${loggingConfig.role !== null ? `<#${loggingConfig.role}>` : Emotes.other.SWITCHOFF}`,

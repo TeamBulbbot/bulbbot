@@ -5,7 +5,7 @@ import CommandContext from "../../../structures/CommandContext";
 import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import { Infraction } from "../../../utils/types/Infraction";
+import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -19,15 +19,15 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["user:User"],
 			usage: "<user>",
+			description: "Search for offender infractions of a user.",
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let user: User;
-		try {
-			user = await this.client.users.fetch(targetID);
-		} catch (err) {
+		let user: User | undefined = await this.client.bulbfetch.getUser(targetID);
+
+		if (!user)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -36,7 +36,6 @@ export default class extends SubCommand {
 					usage: this.usage,
 				}),
 			);
-		}
 
 		let options: any[] = [];
 		const infs: Infraction[] = <Infraction[]>await infractionsManager.getOffenderInfractions(<Snowflake>context.guild?.id, user.id);

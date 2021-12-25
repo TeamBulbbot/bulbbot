@@ -13,11 +13,11 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Unbans multiple people from a guild",
+			description: "Unbans multiple people from a server",
 			category: "Moderation",
 			aliases: ["munban"],
 			usage: "<user> <user2>... [reason]",
-			examples: ["multiunban 123456789012345678 123456789012345678 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
+			examples: ["multiunban 123456789012345678 876543210987654321 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
 			argList: ["user:User"],
 			minArgs: 2,
 			maxArgs: -1,
@@ -53,9 +53,8 @@ export default class extends Command {
 
 			let target;
 			let infID: number;
-			try {
-				target = await this.client.users.fetch(targets[i].replace(NonDigits, ""));
-			} catch (error) {
+			target = await this.client.bulbfetch.getUser(targets[i].replace(NonDigits, ""));
+			if (!target) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -64,6 +63,7 @@ export default class extends Command {
 						usage: this.usage,
 					}),
 				);
+				continue;
 			}
 
 			infID = await infractionsManager.unban(

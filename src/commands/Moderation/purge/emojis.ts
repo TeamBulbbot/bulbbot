@@ -19,6 +19,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["amount:int"],
 			usage: "<number>",
+			description: "Purges messages with custom emojis.",
 		});
 	}
 
@@ -45,12 +46,15 @@ export default class extends SubCommand {
 		let messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
+
 		for (let i = 0; i < deleteMsg.length; i++) {
 			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
 				limit: deleteMsg[i],
 			});
 
 			msgs.map(async m => {
+				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.content.match(CustomEmote) || m.content.match(Emoji)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);

@@ -16,6 +16,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["enabled:boolean"],
 			usage: "<true|false>",
+			description: "Sets whether or not to the info command should show moderation actions",
 		});
 	}
 

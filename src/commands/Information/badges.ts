@@ -12,11 +12,13 @@ export default class extends Command {
 			description: "Returns the amount of badges in the server",
 			category: "Bot",
 			clientPerms: ["EMBED_LINKS"],
+			devOnly: true,
 		});
 	}
 
 	public async run(context: CommandContext, _: string[]): Promise<void | Message> {
-		await context.guild?.fetch();
+		// await context.guild?.fetch();
+		// context.guild?.members.fetch();
 
 		let staff = 0;
 		let partner = 0;
@@ -30,7 +32,6 @@ export default class extends Command {
 		let earlysupport = 0;
 		let botdeveloper = 0;
 
-		context.guild?.members.fetch();
 		context.guild?.members.cache.forEach(member => {
 			const badges = this.badge(<number>member.user.flags?.bitfield);
 			for (let i = 0; i < badges.length; i++) {

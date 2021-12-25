@@ -18,6 +18,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["amount:int"],
 			usage: "<number>",
+			description: "Purges messages with attachments in the channel.",
 		});
 	}
 
@@ -44,12 +45,15 @@ export default class extends SubCommand {
 		let messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
+
 		for (let i = 0; i < deleteMsg.length; i++) {
 			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
 				limit: deleteMsg[i],
 			});
 
 			msgs.map(async m => {
+				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.attachments.size !== 0) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.attachments.first()?.url} |\n`;
 					messagesToPurge.push(m.id);

@@ -12,7 +12,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Bans or forcebans a user from the guild",
+			description: "Bans or forcebans a user from the server",
 			category: "Moderation",
 			aliases: ["terminate", "yeet"],
 			usage: "<user> [reason]",
@@ -29,7 +29,7 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		//Variable declarations
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: any = context.guild?.members.cache.get(targetID);
+		let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
 		let notInGuild: boolean = !target;
 		let infID: number = 0;
@@ -54,21 +54,16 @@ export default class extends Command {
 			return;
 		}
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if (!target) {
-			try {
-				target = await this.client.users.fetch(targetID);
-			} catch (error) {
-				await context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
-						arg_expected: "user:User",
-						arg_provided: args[0],
-						usage: this.usage,
-					}),
-				);
-				return;
-			}
-		}
+		if (!target) target = await this.client.bulbfetch.getUser(targetID);
+		if (!target)
+			return await context.channel.send(
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+					arg_expected: "user:User",
+					arg_provided: args[0],
+					usage: this.usage,
+				}),
+			);
 
 		//If the user is not in the guild force ban
 		if (notInGuild) {

@@ -17,6 +17,7 @@ export default class extends SubCommand {
 			maxArgs: -1,
 			argList: ["part:string", "name:string"],
 			usage: "<part> <name>",
+			description: "Removes an override.",
 		});
 	}
 
@@ -24,8 +25,7 @@ export default class extends SubCommand {
 		const part = args[0];
 
 		switch (part) {
-			case "role":
-			{
+			case "role": {
 				const name = args[1];
 				if (!(await clearanceManager.getRoleOverride(<Snowflake>context.guild?.id, name.replace(NonDigits, ""))))
 					return context.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", context.guild?.id, { role: name }));
@@ -33,8 +33,7 @@ export default class extends SubCommand {
 				await clearanceManager.deleteRoleOverride(<Snowflake>context.guild?.id, name.replace(NonDigits, ""));
 				break;
 			}
-			case "command":
-			{
+			case "command": {
 				const name = args.slice(1);
 				const command = Command.resolve(this.client, name);
 				if (!command || command.name === undefined || !(await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)))

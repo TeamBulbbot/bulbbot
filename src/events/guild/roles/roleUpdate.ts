@@ -1,10 +1,13 @@
 // @ts-nocheck
 
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, GuildMember, Permissions, Role } from "discord.js";
+import { GuildAuditLogs, GuildMember, Role } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 
 const loggingManager: LoggingManager = new LoggingManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -15,11 +18,17 @@ export default class extends Event {
 	}
 
 	public async run(oldRole: Role, newRole: Role): Promise<void> {
-		const difference = this.client.bulbutils.diff(oldRole, newRole).filter(k => k !== "rawPosition")
-		if(difference.length === 0) return;
+		const config: GuildConfiguration = await databaseManager.getConfig(newRole.guild.id);
+		if (newRole.rawPosition > newRole.guild.me!!.roles.highest.rawPosition) {
+			if (newRole.id === config.muteRole) await databaseManager.setMuteRole(newRole.guild.id, null)
+			else if (newRole.id === config.autorole) await databaseManager.setAutoRole(newRole.guild.id, null)
+		}
+
+		const difference = this.client.bulbutils.diff(oldRole, newRole).filter(k => k !== "rawPosition");
+		if (difference.length === 0) return;
 
 		let executor: GuildMember | null = null;
-		let changes: any[] | null = null
+		let changes: any[] | null = null;
 		let createdTimestamp: number | null = null;
 		const log: string[] = [];
 		try {
@@ -31,10 +40,10 @@ export default class extends Event {
 			createdTimestamp = first.createdTimestamp;
 			changes = first.changes;
 			// if (createdTimestamp + 3000 < Date.now()) return;
-		} catch(_) {
+		} catch (_) {
 			changes = [];
-			for(const key of difference) {
-				changes.push({key, old: oldRole[key], new: newRole[key]});
+			for (const key of difference) {
+				changes.push({ key, old: oldRole[key], new: newRole[key] });
 			}
 		}
 
@@ -49,8 +58,7 @@ export default class extends Event {
 			);
 		}
 
-
-		if(!!executor) {
+		if (!!executor) {
 			await loggingManager.sendEventLog(
 				this.client,
 				newRole.guild,

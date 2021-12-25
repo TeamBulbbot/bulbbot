@@ -1,16 +1,15 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import { Emoji, Guild, GuildChannel, MessageEmbed, Role } from "discord.js";
-import { embedColor } from "../../Config";
+import { embedColor, supportInvite } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Returns some useful information about the current Guild",
+			description: "Returns some useful information about the current server",
 			category: "Information",
-			aliases: ["server"],
 			clearance: 50,
 			userPerms: ["MANAGE_GUILD"],
 			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
@@ -18,8 +17,12 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext): Promise<void> {
-		await context.guild?.members.fetch();
-		const guild: Guild = <Guild>context.guild;
+		const guild: Guild | null = context.guild;
+
+		if (!guild) {
+			context.channel.send(await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }));
+			return;
+		}
 
 		let description = "";
 		description += await this.client.bulbutils.translate("serverinfo_embed_owner", guild.id, { guild });

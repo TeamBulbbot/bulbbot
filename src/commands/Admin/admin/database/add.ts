@@ -12,6 +12,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "add",
 			usage: "add <guildID>",
+			description: "Adds a guild to the database",
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
@@ -19,18 +20,16 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// adds the guild to the database
-
 		let guild: Guild;
 
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			context.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
 		await databaseManager.createGuild(guild);
-		context.reply(`Added **${guild.name}** to the database`);
+		context.channel.send(`Added **${guild.name}** to the database`);
 	}
 }

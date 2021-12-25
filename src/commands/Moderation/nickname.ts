@@ -16,7 +16,7 @@ export default class extends Command {
 			aliases: ["nick"],
 			usage: "<member> [nickname] [reason]",
 			argList: ["member:Member"],
-			examples: ["!nickname @Wumpus#0000 QT"],
+			examples: ["nickname @Wumpus#0000 Nellys best friend"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -38,7 +38,7 @@ export default class extends Command {
 				}),
 			);
 		const targetID: Snowflake = match[1] ?? match[2];
-		const target: GuildMember | null = targetID ? <GuildMember>await context.guild?.members.fetch(targetID).catch(() => null) : null;
+		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		const nickmatch: RegExpMatchArray = <RegExpMatchArray>QuoteMarked.exec(argString);
 		const nickname: string = (nickmatch ? nickmatch[1] : args[1])?.trim() ?? "";
 		const reason: string =
@@ -59,7 +59,8 @@ export default class extends Command {
 
 		if (nickname.length > 32) return context.channel.send(await this.client.bulbutils.translate("nickname_too_long", context.guild?.id, { length: nickname.length.toString() }));
 		if (!nickname && !target.nickname) return context.channel.send(await this.client.bulbutils.translate("nickname_no_nickname", context.guild?.id, { target: target.user }));
-		if (nickname === target.nickname) return context.channel.send(await this.client.bulbutils.translate("nickname_same_nickname", context.guild?.id, { target: target.user, nickname: target.nickname }));
+		if (nickname === target.nickname)
+			return context.channel.send(await this.client.bulbutils.translate("nickname_same_nickname", context.guild?.id, { target: target.user, nickname: target.nickname }));
 
 		const nickOld: string = target.nickname || target.user.username;
 		let infID: number;

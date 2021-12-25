@@ -33,7 +33,7 @@
 	{
 		"name": "invite",
 		"type": 1,
-		"description": "Returns the invite link for the bot and the support guild",
+		"description": "Returns the invite link for the bot and the support server",
 		"options": []
 	},
 	{
@@ -83,12 +83,12 @@
 	{
 		"name": "inviteinfo",
 		"type": 1,
-		"description": "Returns some useful info about a guild from the invite link",
+		"description": "Returns some useful info about a server from the invite link",
 		"options": [
 			{
 				"name": "invite",
 				"type": 3,
-				"description": "The invite link of the guild you want to info",
+				"description": "The invite link of the server you want to info",
 				"required": true
 			}
 		]
@@ -96,7 +96,7 @@
 	{
 		"name": "server",
 		"type": 1,
-		"description": "Returns some useful information about the current Guild",
+		"description": "Returns some useful information about the current server",
 		"options": []
 	},
 	{
@@ -113,6 +113,110 @@
 		]
 	},
 
+	{
+		"name": "banpool",
+		"type": 1,
+		"description": "Banpool main command",
+		"options": [
+			{
+				"name": "create",
+				"type": 1,
+				"description": "Creates a banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The banpool name",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "delete",
+				"type": 1,
+				"description": "Deletes the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The name of the banpool that should be deleted",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "info",
+				"type": 1,
+				"description": "Returns information about the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The name of the banpool that should be info'd",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "invite",
+				"type": 1,
+				"description": "Creates a one-time invite for the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "Name of the selected banpool",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "join",
+				"type": 1,
+				"description": "Joins the selected banpool",
+				"options": [
+					{
+						"name": "code",
+						"type": 3,
+						"description": "The invite code of that banpool that you want to join",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "leave",
+				"type": 1,
+				"description": "Leaves the selected banpool",
+				"options": [
+					{
+						"name": "name",
+						"type": 3,
+						"description": "Name of the banpool that you want to leave",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "kick",
+				"type": 1,
+				"description": "Kicks the selected server from the selected banpool",
+				"options": [
+					{
+						"name": "guild_id",
+						"type": 3,
+						"description": "ID of the selected server",
+						"required": true
+					},
+					{
+						"name": "name",
+						"type": 3,
+						"description": "The name of the selected banpool",
+						"required": true
+					}
+				]
+			}
+		]
+	},
 	{
 		"name": "configure",
 		"type": 1,
@@ -399,6 +503,67 @@
 				]
 			},
 			{
+				"name": "logging",
+				"type": 1,
+				"description": "Configures the logging module in the selected channel",
+				"options": [
+					{
+						"name": "type",
+						"type": 3,
+						"description": "The logging module you want to enable",
+						"choices": [
+							{
+								"name": "Mod logs",
+								"value": "mod_logs"
+							},
+							{
+								"name": "Automod logs",
+								"value": "automod"
+							},
+							{
+								"name": "Message logs",
+								"value": "message_logs"
+							},
+							{
+								"name": "Role logs",
+								"value": "role_logs"
+							},
+							{
+								"name": "Member logs",
+								"value": "member_logs"
+							},
+							{
+								"name": "Channel logs",
+								"value": "channel_logs"
+							},
+							{
+								"name": "Thread logs",
+								"value": "thread_logs"
+							},
+							{
+								"name": "Invite logs",
+								"value": "invite_logs"
+							},
+							{
+								"name": "Other",
+								"value": "other"
+							},
+							{
+								"name": "All",
+								"value": "all"
+							}
+						],
+						"required": true
+					},
+					{
+						"name": "channel",
+						"type": 7,
+						"description": "The channel where you want to enable the logging module",
+						"required": true
+					}
+				]
+			},
+			{
 				"name": "language",
 				"type": 1,
 				"description": "Changes the server language",
@@ -610,6 +775,39 @@
 				]
 			},
 			{
+				"name": "quick_reasons",
+				"type": 2,
+				"description": "Configures the quick reasons for context commands",
+				"options": [
+					{
+						"name": "add",
+						"type": 1,
+						"description": "Adds the selected quick reasons to the list",
+						"options": [
+							{
+								"name": "reason",
+								"type": 3,
+								"description": "The reason that should be added",
+								"required": true
+							}
+						]
+					},
+					{
+						"name": "remove",
+						"type": 1,
+						"description": "Removes the selected quick reasons from the list",
+						"options": [
+							{
+								"name": "reason",
+								"type": 3,
+								"description": "The reason that should be removed",
+								"required": true
+							}
+						]
+					}
+				]
+			},
+			{
 				"name": "roles_on_leave",
 				"type": 1,
 				"description": "Enables logging of roles when a member leaves the server",
@@ -640,7 +838,7 @@
 	{
 		"name": "settings",
 		"type": 1,
-		"description": "Get the settings for the guild",
+		"description": "Get the settings for the server",
 		"options": []
 	},
 
@@ -719,7 +917,7 @@
 	{
 		"name": "ban",
 		"type": 1,
-		"description": "Bans or forcebans a user from the guild",
+		"description": "Bans or forcebans a user from the server",
 		"options": [
 			{
 				"name": "user",
@@ -738,7 +936,7 @@
 	{
 		"name": "cleanban",
 		"type": 1,
-		"description": "Bans a user and removes all their contexts from the guild",
+		"description": "Bans a user and removes all their contexts from the server",
 		"options": [
 			{
 				"name": "member",
@@ -751,6 +949,25 @@
 				"type": 3,
 				"description": "The reason behind the ban",
 				"required": false
+			}
+		]
+	},
+	{
+		"name": "crossban",
+		"type": 1,
+		"description": "Cross-bans the selected user from all connected banpools",
+		"options": [
+			{
+				"name": "member",
+				"type": 6,
+				"description": "The user that should be cross-banned from all connected banpools",
+				"required": true
+			},
+			{
+				"name": "reason",
+				"type": 3,
+				"description": "The reason for the ban",
+				"required": true
 			}
 		]
 	},
@@ -880,7 +1097,7 @@
 	{
 		"name": "kick",
 		"type": 1,
-		"description": "Kicks the selected member from the guild",
+		"description": "Kicks the selected member from the server",
 		"options": [
 			{
 				"name": "member",
@@ -918,7 +1135,7 @@
 	{
 		"name": "multiban",
 		"type": 1,
-		"description": "Bans or forcebans multiple people from a guild",
+		"description": "Bans or forcebans multiple people from a server",
 		"options": [
 			{
 				"name": "users",
@@ -937,7 +1154,7 @@
 	{
 		"name": "multikick",
 		"type": 1,
-		"description": "Kicks multiple people from a guild",
+		"description": "Kicks multiple people from a server",
 		"options": [
 			{
 				"name": "users",
@@ -956,7 +1173,7 @@
 	{
 		"name": "multiunban",
 		"type": 1,
-		"description": "Unbans multiple people from a guild",
+		"description": "Unbans multiple people from a server",
 		"options": [
 			{
 				"name": "users",
@@ -1192,7 +1409,7 @@
 	{
 		"name": "softban",
 		"type": 1,
-		"description": "Bans and immediately unbans the selected member from the guild",
+		"description": "Bans and immediately unbans the selected member from the server",
 		"options": [
 			{
 				"name": "member",
@@ -1236,7 +1453,7 @@
 	{
 		"name": "unban",
 		"type": 1,
-		"description": "Unban a user from the guild",
+		"description": "Unban a user from the server",
 		"options": [
 			{
 				"name": "user",
@@ -1328,7 +1545,7 @@
 	{
 		"name": "warn",
 		"type": 1,
-		"description": "Warns the selected guild member",
+		"description": "Warns the selected server member",
 		"options": [
 			{
 				"name": "member",
@@ -1354,11 +1571,7 @@
 		"type": 3
 	},
 	{
-		"name": "Kick",
-		"type": 3
-	},
-	{
-		"name": "Ban",
+		"name": "List all Infractions",
 		"type": 3
 	},
 	{

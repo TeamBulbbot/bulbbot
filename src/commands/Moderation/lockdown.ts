@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Channel, GuildChannel, Message, Role } from "discord.js";
+import { Channel, GuildChannel, Message, Role, ThreadChannel } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -11,7 +11,7 @@ export default class extends Command {
 			description: "Locks/unlocks a selected channel",
 			category: "Moderation",
 			usage: "<channel> <true|false>",
-			examples: ["lockdown 743855098073186435 true", "lockdown #general false"],
+			examples: ["lockdown 742095521962786858 true", "lockdown #general false"],
 			argList: ["channel:Channel", "lock:boolean"],
 			minArgs: 2,
 			maxArgs: 2,
@@ -22,8 +22,7 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void | Message | Channel> {
-		// @ts-ignore
-		const channel: GuildChannel = context.guild?.channels.cache.get(args[0].replace(NonDigits, ""));
+		const channel: GuildChannel | ThreadChannel | null | undefined = await this.client.bulbfetch.getChannel(context.guild?.channels, args[0].replace(NonDigits, ""));
 		if (!channel || channel.type !== "GUILD_TEXT") {
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {

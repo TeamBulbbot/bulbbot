@@ -8,10 +8,12 @@ import LoggingManager from "../../utils/managers/LoggingManager";
 import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
+import ExperimentManager from "../..//utils/managers/ExperimentManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
 const loggingManager: LoggingManager = new LoggingManager();
+const { getAllGuildExperiments }: ExperimentManager = new ExperimentManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -38,7 +40,7 @@ export default class extends Event {
 			await databaseManager.deleteGuild(context.guild.id);
 			await databaseManager.createGuild(context.guild);
 			if (!(guildCfg = await databaseManager.getConfig(context.guild.id)))
-				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.mrphilip.xyz/invite, there has been an error with the configuration of the guild");
+				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.rocks/invite, there has been an error with the configuration of the guild");
 		}
 
 		const prefix = guildCfg.prefix;
@@ -80,8 +82,30 @@ export default class extends Event {
 		options.args.forEach(arg => (used += ` ${arg}`));
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 
+		const serverOverrides: string[] = await getAllGuildExperiments(context.guild.id);
+
 		try {
-			await command.run(context, options.args);
+			if (command.overrides.length > 0) {
+				if (serverOverrides.length == 0) {
+					await command.run(context, options.args);
+					return;
+				}
+				let foundOverride = false;
+
+				for (const override of serverOverrides) {
+					if (command.overrides.includes(override)) {
+						await command[`_${command.overrides[command.overrides.indexOf(override)]}`](context, options.args);
+						foundOverride = true;
+					}
+				}
+				if (!foundOverride) {
+					await command.run(context, options.args);
+					return;
+				}
+			} else {
+				await command.run(context, options.args);
+				return;
+			}
 		} catch (err: any) {
 			await this.client.bulbutils.logError(err, context);
 		}
@@ -95,7 +119,7 @@ export default class extends Event {
 	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
 		const { context, baseCommand, args } = options;
 		let command = baseCommand;
-		if (!context.guild?.me) await context.guild?.members.fetch(this.client.user!.id);
+		if (!context.guild?.me) await this.client.bulbfetch.getGuildMember(context.guild?.members, this.client.user!.id);
 		if (!context.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		const invalidReason = await command.validate(context, args, options);
 		if (invalidReason !== undefined) {

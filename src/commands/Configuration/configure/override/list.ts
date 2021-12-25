@@ -15,6 +15,7 @@ export default class extends SubCommand {
 			name: "list",
 			maxArgs: 0,
 			argList: ["command:string"],
+			description: "Lists all overrides for the current server.",
 		});
 	}
 

@@ -12,6 +12,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "enable",
 			usage: "enable <guildID>",
+			description: "Enables premium for a guild",
 			minArgs: 1,
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
@@ -26,12 +27,12 @@ export default class extends SubCommand {
 		try {
 			guild = await this.client.guilds.fetch(args[0]);
 		} catch (_) {
-			context.reply(`Unable to find a guild with the ID of \`${args[0]}\``);
+			context.channel.send(`Unable to find a guild with the ID of \`${args[0]}\``);
 			return;
 		}
 
 		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) enabled premium on ${guild.name} (${guild.id})`);
 		await databaseManager.setPremium(guild.id, true);
-		await context.reply(`Enabled premium for **${guild.name}** \`(${guild.id})\``);
+		await context.channel.send(`Enabled premium for **${guild.name}** \`(${guild.id})\``);
 	}
 }

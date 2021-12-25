@@ -14,6 +14,7 @@ export default class extends SubCommand {
 			maxArgs: 1,
 			argList: ["guildID:snowflake"],
 			usage: "<guildID>",
+			description: "Force leaves a guild",
 		});
 	}
 
