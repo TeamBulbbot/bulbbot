@@ -523,11 +523,12 @@ export default class {
 		return response;
 	}
 
-	async getServerArchive(guildId: Snowflake) {
+	async getServerArchive(guildId: Snowflake, days: string) {
 		const response: Record<string, any> = await sequelize.query(
 			`
 			SELECT * FROM "messageLogs"
 			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
+			AND "createdAt" < (now() - '${days} days'::interval);
 		`,
 			{
 				bind: { guildId },
