@@ -772,7 +772,7 @@ class InteractionCommandContext implements BaseCommandContext {
 					this.options = source.options;
 					this.targetId = null;
 					this.targetType = null;
-				} else if(source.isContextMenu()) {
+				} else if(source.isContextMenu()) { 	
 					// @ts-ignore
 					this.options = source.options;
 					this.targetId = source.targetId;

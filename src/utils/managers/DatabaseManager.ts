@@ -1,6 +1,6 @@
 import { sequelize } from "../database/connection";
 import * as Config from "../../Config";
-import { Guild, Snowflake } from "discord.js";
+import { Guild, Message, MessageAttachment, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
@@ -438,5 +438,128 @@ export default class {
 			},
 			type: QueryTypes.UPDATE,
 		});
+	}
+
+	async addToMessageToDB(message: Message) {
+		await sequelize.query(
+			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "authorTag", "content", "embed", "sticker", "attachments", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $authorTag, $content, $embed, $sticker, $attachments, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
+			{
+				bind: {
+					messageId: message.id,
+					guildId: message.guild?.id,
+					channelId: message.channel.id,
+					authorId: message.author.id,
+					authorTag: message.author.tag,
+					content: message.content,
+					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
+					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-ignore
+					attachments: message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`),
+					createdAt: moment(message.createdAt).format(),
+					updatedAt: moment(message.createdAt).format(),
+				},
+				type: QueryTypes.INSERT,
+			},
+		);
+	}
+
+	async getMessageFromDB(messageId: Snowflake) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+		SELECT * FROM "messageLogs" 
+		JOIN guilds ON "messageLogs"."guildId" = guilds.id
+		WHERE ("messageId" = $messageId) 
+		`,
+			{
+				bind: { messageId },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response[0];
+	}
+
+	async deleteMessageFromDB(messageId: Snowflake) {
+		await sequelize.query('DELETE FROM "messageLogs" WHERE ("messageId" = $messageId)', {
+			bind: { messageId },
+			type: QueryTypes.DELETE,
+		});
+	}
+
+	async updateMessageContent(messageId: Snowflake, content: string) {
+		await sequelize.query('UPDATE "messageLogs" SET "content" = $content WHERE "messageId" = $messageId', {
+			bind: { messageId, content },
+			type: QueryTypes.UPDATE,
+		});
+	}
+
+	async getUserArchive(userId: Snowflake, serverId: Snowflake, amount: number) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+			SELECT * FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $serverId)
+			AND "authorId" = $userId
+			LIMIT $amount
+		`,
+			{
+				bind: { serverId, userId, amount },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response;
+	}
+
+	async getChannelArchive(channelId: Snowflake, serverId: Snowflake, amount: number) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+			SELECT * FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $serverId)
+			AND "channelId" = $channelId
+			LIMIT $amount
+		`,
+			{
+				bind: { serverId, channelId, amount },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response;
+	}
+
+	async getServerArchive(guildId: Snowflake, days: string) {
+		const response: Record<string, any> = await sequelize.query(
+			`
+			SELECT * FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
+			AND "createdAt" < (now() - '${days} days'::interval);
+		`,
+			{
+				bind: { guildId },
+				type: QueryTypes.SELECT,
+			},
+		);
+		return response;
+	}
+
+	async purgeAllMessagesOlderThan30Days() {
+		const deleted: Record<string, any> = await sequelize.query(
+			`
+			DELETE FROM "messageLogs" 
+			WHERE "createdAt" < (now() - '30 days'::interval);
+			`,
+		);
+
+		return deleted[1].rowCount;
+	}
+
+	async purgeMessagesInGuild(guildId: Snowflake, days: string) {
+		await sequelize.query(
+			`
+			DELETE FROM "messageLogs"
+			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
+			AND "createdAt" < (now() - '${days} days'::interval);
+			`,
+			{
+				bind: { guildId },
+				type: QueryTypes.DELETE,
+			},
+		);
 	}
 }

@@ -4,6 +4,7 @@ import * as env from "dotenv";
 import { sequelize } from "./utils/database/connection";
 import { init, Integrations } from "@sentry/node"; // @ts-ignore
 import * as Tracing from "@sentry/tracing";
+import { startAllCrons } from "./utils/Crons";
 
 env.config({ path: `${__dirname}/../src/.env` });
 
@@ -61,6 +62,8 @@ sequelize
 	.then(() => client.log.database("[DATABASE] Connecting..."))
 	.catch((err: Error) => client.log.error(`[DATABASE] Connection error: ${err.name} | ${err.message} | ${err.stack}`))
 	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
+
+startAllCrons(client);
 
 init({
 	dsn: process.env.SENTRY_DSN,
