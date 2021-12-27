@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannels, MessageEmbed } from "discord.js";
+import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannel, MessageEmbed } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
@@ -19,7 +19,7 @@ export default class extends Event {
 	public async run(message: Message): Promise<void> {
 		if (!message.guild) return;
 		let msg: string = "";
-		let channel: TextBasedChannels;
+		let channel: TextBasedChannel;
 		let guild: Guild;
 		let author: User;
 		let content: string;
@@ -31,7 +31,7 @@ export default class extends Event {
 			const dbData = await getMessageFromDB(message.id);
 			if (dbData === undefined) return;
 			author = (await this.client.bulbfetch.getUser(dbData.authorId)) as User;
-			channel = (await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId)) as TextBasedChannels;
+			channel = (await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId)) as TextBasedChannel;
 			guild = this.client.guilds.cache.get(dbData.guildId) as Guild;
 			content = dbData.content;
 			sticker = dbData.sticker ? `**S:** ID: \`${dbData.sticker.id}\` | **Name:** ${dbData.sticker.name} | **Format:** ${dbData.sticker.format}\n` : "";
@@ -40,7 +40,7 @@ export default class extends Event {
 		} else {
 			if (message.author.id === this.client.user!.id) return;
 			author = message.author;
-			channel = message.channel as TextBasedChannels;
+			channel = message.channel as TextBasedChannel;
 			guild = message.guild;
 			content = message.content;
 			sticker = message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "";

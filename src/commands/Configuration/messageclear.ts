@@ -12,7 +12,7 @@ export default class extends Command {
 			name,
 			description: "clears X amount of messages from the database in the server",
 			category: "Configuration",
-			clearance: 10,
+			clearance: 100,
 			usage: "<days>",
 			examples: ["messageclear 5", "messageclear 10"],
 			argList: ["days:number"],
