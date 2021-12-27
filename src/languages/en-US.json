@@ -397,7 +397,7 @@
   "mute_rejoin": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
   "mute_rejoin_reason": "{{user.tag}} ({{user.id}}) has rejoined the server before their mute expired and has been automatically muted again.",
   "mute_already_muted": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is already muted!",
-  "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the muted role from them*",
+  "unmute_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the mute from them without creating an infraction*",
   "unmute_special": "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been unmuted for **{{reason}}** ",
 
   "infraction_not_found": "{{emote_fail}} Infraction **#{{infraction_id}}** could not be found!",

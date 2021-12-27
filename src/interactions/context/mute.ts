@@ -1,16 +1,11 @@
-import { ContextMenuInteraction, Guild, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction, Snowflake, User } from "discord.js";
+import { ContextMenuInteraction, Guild, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction, Snowflake } from "discord.js";
 import moment from "moment";
-import { MuteType } from "../../utils/types/MuteType";
 import BulbBotClient from "../../structures/BulbBotClient";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import MuteManger from "../../utils/managers/MuteManger";
-import { setTimeout } from "safe-timers";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
-
-const { createMute, deleteMute, getLatestMute }: MuteManger = new MuteManger();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
 	const muteRole = await databaseManager.getMuteRole(<Snowflake>interaction.guild?.id);
@@ -46,7 +41,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	collector?.on("collect", async (i: SelectMenuInteraction) => {
 		if (interaction.user.id !== i.user.id) return;
 
-		let infID = await infractionsManager.muteOld(
+		let infID = await infractionsManager.mute(
 			client,
 			<Guild>message.guild,
 			target,
@@ -60,7 +55,6 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			}),
 			reason,
 			muteRole,
-			Date.now() + 3600000,
 		);
 
 		await i.update({
@@ -75,32 +69,6 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			}),
 			components: [],
 		});
-
-		await createMute(target, reason, Date.now() + 3600000, message.guild!.id);
-		const mute: any = await getLatestMute(target, message.guild!.id);
-
-		setTimeout(async function () {
-			if ((await infractionsManager.isActive(<Snowflake>interaction.guild?.id, infID)) === false) return;
-			await infractionsManager.setActive(<Snowflake>interaction.guild?.id, infID, false);
-
-			infID = await infractionsManager.unmuteOld(
-				client,
-				<Guild>message.guild,
-				MuteType.AUTO,
-				target,
-				<User>client.user,
-				await client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
-					action: await client.bulbutils.translate("mod_action_types.unmute", interaction.guild?.id, {}),
-					moderator: client.user,
-					target: target.user,
-					reason: "Automatic unmute",
-				}),
-				"Automatic unmute",
-				muteRole,
-			);
-
-			await deleteMute(mute.id);
-		}, 3600000);
 
 		collector.stop();
 	});

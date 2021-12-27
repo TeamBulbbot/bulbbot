@@ -17,7 +17,7 @@ export default class extends Event {
 
 		let msg: string = "";
 		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
-			const logs: GuildAuditLogs = await channel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_CREATE" });
+			const logs: GuildAuditLogs<"CHANNEL_CREATE"> = await channel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_CREATE" });
 			const first = logs.entries.first();
 			if (first) {
 				const { executor, createdTimestamp } = first;

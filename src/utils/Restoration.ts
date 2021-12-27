@@ -1,20 +1,15 @@
 import ReminderManager from "./managers/ReminderManager";
-import MuteManger from "./managers/MuteManger";
 import InfractionsManager from "./managers/InfractionsManager";
-import DatabaseManager from "./managers/DatabaseManager";
 import TempbanManager from "./managers/TempbanManager";
-import { Guild, GuildMember, Message, Snowflake, User } from "discord.js";
+import { Guild, GuildMember, Message, User } from "discord.js";
 import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
-import { MuteType } from "./types/MuteType";
 import { BanType } from "./types/BanType";
 import { setTimeout } from "safe-timers";
 
 const { getAllReminders, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
-const { getAllMutes, deleteMute }: MuteManger = new MuteManger();
 const { getAllTemBans, deleteTempBan }: TempbanManager = new TempbanManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
-const { getMuteRole }: DatabaseManager = new DatabaseManager();
 
 export default class {
 	async loadReminders(client: BulbBotClient): Promise<void> {
@@ -71,63 +66,6 @@ export default class {
 		}
 
 		client.log.client(`[CLIENT - REMINDERS] Successfully handled ${reminders.length} reminder(s)`);
-	}
-
-	async loadMutes(client: BulbBotClient): Promise<void> {
-		client.log.client("[CLIENT - MUTES] Starting to restore mutes...");
-		const mutes: any = await getAllMutes();
-		for (let i = 0; i < mutes.length; i++) {
-			const mute: any = mutes[i];
-
-			let guild: Guild;
-
-			try {
-				guild = await client.guilds.fetch(mute.gId);
-			} catch (_) {
-				client.log.client(`[CLIENT - MUTES] [#${mute.id}] Bot was kicked from the guild cant restore the mute on user: ${mute.targetId}`);
-				await deleteMute(mute.id);
-				continue;
-			}
-
-			let target: GuildMember;
-			const muteRole: Snowflake = <Snowflake>await getMuteRole(<Snowflake>guild?.id);
-
-			try {
-				target = await guild?.members.fetch(mute.targetId);
-			} catch (_) {
-				client.log.client(`[CLIENT - MUTES] [#${mute.id}] Bot was was unable to find the user: ${mute.targetId} in guild: ${guild.id}`);
-				await deleteMute(mute.id);
-				continue;
-			}
-
-			if (!muteRole) {
-				await deleteMute(mute.id);
-				continue;
-			}
-
-			if (mute.expireTime - Date.now() < 0) client.log.client(`[CLIENT - MUTES] [#${mute.id}] Old mute, unmuting user ${mute.targetId}`);
-
-			setTimeout(async function () {
-				await infractionsManager.unmute(
-					client,
-					<Guild>guild,
-					MuteType.AUTO,
-					target,
-					<User>client.user,
-					await client.bulbutils.translate("global_mod_action_log", guild?.id, {
-						action: await client.bulbutils.translate("mod_action_types.unmute", guild?.id, {}),
-						moderator: client.user,
-						target: target.user,
-						reason: "Automatic unmute",
-					}),
-					"Automatic unmute",
-				);
-
-				await deleteMute(mute.id);
-			}, mute.expireTime - Date.now());
-		}
-
-		client.log.client(`[CLIENT - MUTES] Successfully handled ${mutes.length} mute(s)`);
 	}
 
 	async loadTempBans(client: BulbBotClient): Promise<void> {

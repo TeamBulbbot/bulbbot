@@ -17,7 +17,7 @@ export default class extends Event {
 		const guild: Guild = invite.guild;
 		if (!guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
-		const logs: GuildAuditLogs = await guild.fetchAuditLogs({ limit: 1, type: "INVITE_DELETE" });
+		const logs: GuildAuditLogs<"INVITE_DELETE"> = await guild.fetchAuditLogs({ limit: 1, type: "INVITE_DELETE" });
 		const first = logs.entries.first();
 		if (!first) return;
 

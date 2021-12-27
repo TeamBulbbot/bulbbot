@@ -44,7 +44,7 @@ export default class extends Event {
 
 		if (!member.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
-		const auditLogs: GuildAuditLogs = await member.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_KICK" });
+		const auditLogs: GuildAuditLogs<"MEMBER_KICK"> = await member.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_KICK" });
 		const kickLog = auditLogs.entries.first();
 		if (!kickLog) return;
 

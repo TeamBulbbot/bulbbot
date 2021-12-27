@@ -19,7 +19,7 @@ export default class extends Event {
 
 		let msg: string = "";
 		if (message.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
-			const logs: GuildAuditLogs = await message.guild.fetchAuditLogs({ limit: 1, type: "MESSAGE_DELETE" });
+			const logs: GuildAuditLogs<"MESSAGE_DELETE"> = await message.guild.fetchAuditLogs({ limit: 1, type: "MESSAGE_DELETE" });
 			const first = logs.entries.first();
 			if (first) {
 				const { executor, createdTimestamp } = first;
