@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Invite, MessageEmbed } from "discord.js";
+import { Invite, MessageEmbed, Widget } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -59,6 +59,7 @@ export default class extends Command {
 
 			desc += "\n**Inviter**\n" + inviter;
 		}
+
 		if (invite.channel) {
 			let inviteChannel = "";
 
@@ -69,6 +70,7 @@ export default class extends Command {
 			desc += "\n**Invite Channel**\n" + inviteChannel;
 		}
 
+		const embeds: MessageEmbed[] = [];
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setTitle(guild.description !== null ? `${guild.description}` : "")
@@ -84,7 +86,31 @@ export default class extends Command {
 				await this.client.bulbutils.userObject(true, context.member).avatarUrl,
 			)
 			.setTimestamp();
+		embeds.push(embed);
 
-		await context.channel.send({ embeds: [embed] });
+		let widget: Widget | null;
+		try {
+			widget = await this.client.fetchGuildWidget(guild.id);
+		} catch (error) {
+			widget = null;
+		}
+
+		if (widget) {
+			const widgetEmbed = new MessageEmbed()
+				.setColor(embedColor)
+				.setTitle("Widget Data")
+				.setFooter(
+					await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
+						user: context.author,
+					}),
+					await this.client.bulbutils.userObject(true, context.member).avatarUrl,
+				)
+				.setTimestamp()
+				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map(m => `\`${m.username}\``).join(" ")}`);
+
+			embeds.push(widgetEmbed);
+		}
+
+		await context.channel.send({ embeds });
 	}
 }

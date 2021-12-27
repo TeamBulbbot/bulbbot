@@ -66,7 +66,12 @@ export default class {
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${await this.betterActions(client, guild.id, "trash")} **${moderator.tag}** \`(${
 				moderator.id
 			})\` has removed **${amount}** messages in <#${channel.id}>`,
-			files: [file],
+			files: [
+				{
+					attachment: file,
+					name: `${action}.txt`,
+				},
+			],
 		});
 	}
 

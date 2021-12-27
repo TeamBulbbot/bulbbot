@@ -15,7 +15,7 @@ export default class extends Event {
 	public async run(newGuild: Guild): Promise<void> {
 		if (!newGuild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
-		const logs: GuildAuditLogs = await newGuild.fetchAuditLogs({ limit: 1, type: "GUILD_UPDATE" });
+		const logs: GuildAuditLogs<"GUILD_UPDATE"> = await newGuild.fetchAuditLogs({ limit: 1, type: "GUILD_UPDATE" });
 		const first = logs.entries.first();
 		if (!first) return;
 

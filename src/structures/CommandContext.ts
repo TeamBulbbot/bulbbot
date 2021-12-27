@@ -1,5 +1,5 @@
 import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
-import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannels, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
+import { ApplicationCommand, ApplicationCommandType, AwaitMessageComponentOptions, AwaitReactionsOptions, Client, ClientApplication, Collection, CommandInteraction, CommandInteractionOptionResolver, EmojiIdentifierResolvable, Guild, GuildMember, GuildResolvable, Interaction, InteractionCollector, InteractionCollectorOptions, InteractionDeferReplyOptions, InteractionDeferUpdateOptions, InteractionReplyOptions, InteractionType, InteractionUpdateOptions, InteractionWebhook, Message, MessageActionRow, MessageActionRowComponent, MessageActivity, MessageAttachment, MessageComponentInteraction, MessageComponentType, MessageEditOptions, MessageEmbed, MessageFlags, MessageInteraction, MessageMentions, MessagePayload, MessageReaction, MessageReference, ReactionCollector, ReactionCollectorOptions, ReactionManager, ReplyMessageOptions, SelectMenuInteraction, Snowflake, StartThreadOptions, Sticker, TextBasedChannel, ThreadChannel, ThreadCreateOptions, User, Webhook, WebhookEditMessageOptions, MessageOptions, MessageType } from "discord.js";
 import CommandContextException from "./exceptions/CommandContextException";
 import { logger } from "../utils/Logger";
 
@@ -16,7 +16,7 @@ abstract class BaseCommandContext {
 
 	// Common properties
 	public readonly client!: Client;
-	public readonly channel!: TextBasedChannels;
+	public readonly channel!: TextBasedChannel;
 	public channelId!: Snowflake;
 	public readonly guild!: Guild | null;
 	public guildId!: Snowflake | null;
@@ -173,7 +173,7 @@ class MessageCommandContext implements BaseCommandContext {
 
 	// Common properties
 	public readonly client: Client;
-	public readonly channel: TextBasedChannels;
+	public readonly channel: TextBasedChannel;
 	public channelId: Snowflake;
 	public readonly guild: Guild | null;
 	public guildId: Snowflake | null;
@@ -472,7 +472,7 @@ class InteractionCommandContext implements BaseCommandContext {
 
 	// Common properties
 	public readonly client: Client;
-	public readonly channel: TextBasedChannels;
+	public readonly channel: TextBasedChannel;
 	public channelId: Snowflake;
 	public readonly guild: Guild | null;
 	public guildId: Snowflake | null;

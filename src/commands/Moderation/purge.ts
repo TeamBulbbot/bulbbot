@@ -7,6 +7,7 @@ import emojis from "./purge/emojis";
 import user from "./purge/user";
 import contains from "./purge/contains";
 import between from "./purge/between";
+import until from "./purge/until";
 import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
@@ -16,7 +17,7 @@ export default class extends Command {
 			description: "Purges messages from a chat",
 			category: "Moderation",
 			aliases: ["clear", "clean"],
-			subCommands: [all, embeds, images, bots, emojis, user, contains, between],
+			subCommands: [all, embeds, images, bots, emojis, user, contains, between, until],
 			usage: "<type> [argument] <amount>",
 			examples: ["purge bots 30"],
 			argList: ["type:string"],

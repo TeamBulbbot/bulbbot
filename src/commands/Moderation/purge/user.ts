@@ -4,7 +4,7 @@ import CommandContext from "../../../structures/CommandContext";
 import { Collection, Guild, GuildMember, Message, Snowflake, TextChannel } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import moment from "moment";
-import * as fs from "fs";
+import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
@@ -37,8 +37,8 @@ export default class extends SubCommand {
 				}),
 			);
 
-		if (amount > 100) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
-		if (amount <= 1 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
+		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
+		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 
 		let deleteMsg: number[] = [];
 		let a: number = 0;
@@ -77,11 +77,9 @@ export default class extends SubCommand {
 
 		await (<TextChannel>context.channel).bulkDelete(messagesToPurge);
 
-		fs.writeFile(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs, function (err) {
-			if (err) console.error(err);
-		});
+		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
 
-		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "Purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
 		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
 	}

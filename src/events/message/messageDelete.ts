@@ -50,7 +50,7 @@ export default class extends Event {
 			embeds = message.embeds.length > 0 ? message.embeds : null;
 
 			if (guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
-				const logs: GuildAuditLogs = await guild.fetchAuditLogs({ limit: 1, type: "MESSAGE_DELETE" });
+				const logs: GuildAuditLogs<"MESSAGE_DELETE"> = await guild.fetchAuditLogs({ limit: 1, type: "MESSAGE_DELETE" });
 				const first = logs.entries.first();
 				if (first) {
 					const { executor, createdTimestamp } = first;
