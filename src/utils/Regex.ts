@@ -1,7 +1,10 @@
 export const NonDigits: RegExp = /\D/g;
 
+export const AnyId: RegExp = /[0-9]{17,20}/g;
 export const UserMention: RegExp = /<@!?(\d{17,20})>/g;
+export const ChannelMessage: RegExp = /[0-9]{17,20}-[0-9]{17,20}/gi;
 export const UserMentionAndID: RegExp = /(\d{17,20})|<@!?(\d{17,20})>/g;
+export const RoleMentionAndID: RegExp = /(\d{17,20})|<@&?(\d{17,20})>/g;
 export const RoleMention: RegExp = /<@&(\d+)>/g;
 export const ChannelMention: RegExp = /<#(\d+)>/g;
 export const EveryoneHereMention: RegExp = /@everyone|@here/g;

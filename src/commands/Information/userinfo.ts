@@ -1,10 +1,11 @@
 import Command from "../../structures/Command";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
+import axios from "axios";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
-import { embedColor } from "../../Config";
+import { discordApi, embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 
@@ -69,7 +70,7 @@ export default class extends Command {
 		if (!actionsOnInfo) components = [];
 		else if (!isGuildMember) components = [];
 		else if (!args[0]) components = [];
-		else if (user.id === context.author.id) components = [];
+		else if (user!.id === context.author.id) components = [];
 		else components = [row];
 
 		let description: string = "";
@@ -94,8 +95,41 @@ export default class extends Command {
 
 			if (user.roles !== undefined && user.roles)
 				description += await this.client.bulbutils.translate("userinfo_embed_roles", context.guild?.id, {
-					user_roles: user.roles.cache.map(r => `${r}`).join(", "),
+					user_roles: user.roles.cache.map((r: any) => `${r}`).join(" "),
 				});
+
+			if (user.bot) {
+				const { data } = await axios.get(`${discordApi}/applications/${target}/rpc`, {});
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_info", context.guild?.id, {});
+				if (data.summary !== "") description += `\n> ${data.summary.split("\n").join(" ")}`;
+				if (data.tags) description += await this.client.bulbutils.translate("userinfo_embed_bot_tags", context.guild?.id, { tags: data.tags.map((t: any) => `\`${t}\``).join(" ") });
+
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_public", context.guild?.id, { emoji: data.bot_public ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF });
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_requires_code", context.guild?.id, {
+					emoji: data.bot_require_code_grant ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+				});
+				const botflags = this.client.bulbutils.applicationFlags(data.flags);
+
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_presence_intent", context.guild?.id, {
+					emoji: botflags.includes("GATEWAY_PRESENCE") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+				});
+				description += await this.client.bulbutils.translate("userinfo_embed_server_memebers_intent", context.guild?.id, {
+					emoji: botflags.includes("GATEWAY_GUILD_MEMBERS") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+				});
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_message_content_intent", context.guild?.id, {
+					emoji: botflags.includes("GATEWAY_MESSAGE_CONTENT") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
+				});
+
+				const links: string[] = [];
+				if (data.privacy_policy_url) links.push(`[**Privacy Policy**](${data.privacy_policy_url})`);
+				if (data.terms_of_service_url) links.push(`[**Terms of Service**](${data.terms_of_service_url})`);
+				if (data.install_params)
+					links.push(`[**Add the bot**](https://discord.com/oauth2/authorize?client_id=${target}&permissions=${data.install_params.permissions}&scope=${data.install_params.scopes.join("+")})`);
+				if (data.custom_install_url) links.push(`[**Add the bot**](${data.custom_install_url})`);
+
+				if (links.length === 1) description += `\n${links[0]}`;
+				else if (links.length > 1) description += `\n${links.join(" **•** ")}`;
+			}
 
 			const infs = await infractionsManager.getOffenderInfractions(<string>context.guild?.id, user.id);
 			if (infs) {

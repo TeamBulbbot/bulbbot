@@ -3,7 +3,7 @@ import CommandContext from "../../structures/CommandContext";
 import { Emoji, Guild, GuildChannel, MessageEmbed, Role } from "discord.js";
 import { embedColor, supportInvite } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
-
+import * as Emotes from "../../emotes.json";
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
@@ -34,14 +34,30 @@ export default class extends Command {
 		serverStats += await this.client.bulbutils.translate("serverinfo_server_stats_total", guild.id, { guild });
 
 		let channelStats = "";
+		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_text", guild.id, {
+			// @ts-ignore
+			guild_text: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_TEXT").size,
+			emote_text: Emotes.channel.TEXT,
+		});
+		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_announcement", guild.id, {
+			// @ts-ignore
+			guild_announcement: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_NEWS").size,
+			emote_announcement: Emotes.channel.ANNOUNCEMENET,
+		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_voice", guild.id, {
 			// @ts-ignore
 			guild_voice: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_VOICE").size,
-		}); // @ts-ignore
-		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_text", guild.id, { guild_text: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_TEXT").size });
+			emote_voice: Emotes.channel.VOICE,
+		});
+		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_stage", guild.id, {
+			// @ts-ignore
+			guild_stage: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_STAGE_VOICE").size,
+			emote_stage: Emotes.channel.STAGE,
+		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_category", guild.id, {
 			// @ts-ignore
 			guild_category: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_CATEGORY").size,
+			emote_category: Emotes.channel.CATEGORY,
 		});
 
 		let boosterStats = "";
