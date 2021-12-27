@@ -61,7 +61,7 @@ export default class extends Command {
 				await purgeMessagesInGuild(context.guild!.id, days.toString());
 
 				return await interaction.update({
-					content: await this.client.bulbutils.translate("messageclear_success_delete", context.guild?.id, {}),
+					content: await this.client.bulbutils.translate("messageclear_success_delete", context.guild?.id, { messages: amountOfMessages }),
 					components: [],
 				});
 			} else {
