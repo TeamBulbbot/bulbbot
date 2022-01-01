@@ -157,7 +157,8 @@ abstract class BaseCommandContext {
 		return this instanceof InteractionCommandContext;
 	}
 }
-
+// remove when https://github.com/discordjs/discord.js/issues/7091 merges
+// @ts-ignore
 class MessageCommandContext implements BaseCommandContext {
 	// CommandContext
 	public readonly source: Message;
@@ -197,20 +198,6 @@ class MessageCommandContext implements BaseCommandContext {
 	public content: string;
 	public readonly crosspostable: boolean;
 	public readonly deletable: boolean;
-	public get deleted(): Promise<boolean> {
-		return (new Promise(async resolve => {
-			// if(this.source.deleted) {resolve(true); return} // This should work, would reduce api calls. It's possible it could have false positives though and cause some missed deletes
-			try {
-				const m = await this.channel?.messages.cache.get(this.id)?.fetch(true);
-				resolve(m?.deleted ?? true);
-			} catch (e:any) {
-				resolve(true);
-			}
-		}));
-	}
-	public set deleted(arg: Promise<boolean>) {
-		arg.then(a=>this.source.deleted=a);
-	}
 	public readonly editable: boolean;
 	public readonly editedAt: Date | null;
 	public editedTimestamp: number | null;
@@ -383,7 +370,6 @@ class MessageCommandContext implements BaseCommandContext {
 		this.components = source.components;
 		this.crosspostable = source.crosspostable;
 		this.deletable = source.deletable;
-		this.deleted = Promise.resolve(source.deleted);
 		this.editable = source.editable;
 		this.editedAt = source.editedAt;
 		this.editedTimestamp = source.editedTimestamp;
@@ -684,7 +670,6 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.components = [];
 		this.crosspostable = false;
 		this.deletable = false;
-		this.deleted = Promise.resolve(false);
 		this.editable = false;
 		this.editedAt = null;
 		this.editedTimestamp = null;
