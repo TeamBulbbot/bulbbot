@@ -35,11 +35,10 @@ export default class {
 				);
 				break;
 			case "KICK":
-				await infractionsManager.ban(
+				await infractionsManager.kick(
 					client,
-					<Guild>context.guild,
-					BanType.SOFT,
-					<User>target.user,
+					context.guild!.id,
+					<GuildMember>target,
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
