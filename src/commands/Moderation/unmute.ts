@@ -42,6 +42,7 @@ export default class extends Command {
 				}),
 			);
 
+		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 		if (target.communicationDisabledUntilTimestamp === null) return context.channel.send(await this.client.bulbutils.translate("mute_not_muted", context.guild?.id, { target: target.user }));
 
 		infID = await infractionsManager.unmute(
