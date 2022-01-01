@@ -1,10 +1,8 @@
-import { DMChannel, Guild, GuildAuditLogs, GuildChannel, Permissions, Snowflake } from "discord.js";
+import { DMChannel, GuildAuditLogs, GuildChannel, Permissions } from "discord.js";
 import Event from "../../../structures/Event";
 import LoggingManager from "../../../utils/managers/LoggingManager";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
-const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -35,9 +33,6 @@ export default class extends Event {
 				channel,
 				type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 			});
-
-		const muteRole = await databaseManager.getMuteRole(channel.guild.id);
-		if (muteRole) await this.client.bulbutils.updateChannelsWithMutedRole(<Guild>channel.guild, <Snowflake>muteRole);
 
 		await loggingManager.sendEventLog(this.client, channel.guild, "channel", msg);
 	}

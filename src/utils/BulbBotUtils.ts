@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, Guild, GuildChannel, GuildMember, MessageEmbed, Permissions, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -696,16 +696,6 @@ export default class {
 			}
 		}
 		return true;
-	}
-
-	public async updateChannelsWithMutedRole(guild: Guild, role: Snowflake): Promise<void> {
-		// await guild.channels.fetch();
-		guild.channels.cache.map(channel => {
-			if (!guild.me?.permissionsIn(channel).has(Permissions.FLAGS.VIEW_CHANNEL) || !guild.me?.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) return;
-
-			if (channel.type === "GUILD_TEXT") channel.permissionOverwrites.create(role, { SEND_MESSAGES: false });
-			else if (channel.type === "GUILD_VOICE") channel.permissionOverwrites.create(role, { CONNECT: false, SPEAK: false });
-		});
 	}
 
 	/** Deep equality check for objects */

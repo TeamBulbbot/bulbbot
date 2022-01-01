@@ -30,7 +30,6 @@ export default class extends Command {
 			`Prefix: \`${guildConfig.prefix}\` or [slash commands](https://docs.bulbbot.rocks/slash-commands/)`,
 			`Bot Language: \`${guildConfig.language}\``,
 			`Premium Server: ${guildConfig.premiumGuild ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Mute Role: ${guildConfig.muteRole !== null ? `<@&${guildConfig.muteRole}>` : Emotes.other.SWITCHOFF}`,
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
 			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
