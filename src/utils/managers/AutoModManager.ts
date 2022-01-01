@@ -16,6 +16,13 @@ export default class {
 			},
 		};
 
+		// action has been null in the past adding some safeguarding and just returning a LOG
+		// until we have valid repro for this
+		if (action === null) {
+			client.log.error(`[Auto Mod Manager] Action is null in ${context.guild?.id}, reason: ${reason}, target ${target.user.tag} (${target.user.id})`);
+			return "LOG";
+		}
+
 		switch (action.toUpperCase()) {
 			case "LOG":
 				break;
