@@ -19,7 +19,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(context.author.id)) return;
-	if (dbGuild.ignoreChannels.includes(context.channel.id) || (<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((<GuildChannel>context.channel).parent!.id)) return;
+	if (dbGuild.ignoreChannels.includes(context.channel.id) || ((<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((<GuildChannel>context.channel).parent!.id))) return;
 
 	if (!context.member?.roles.cache.values()) return;
 	for (const role of context.member.roles.cache.values()) {
@@ -106,7 +106,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	}
 
 	await set(client, context, context.guild.id, "messages", context.author.id, 1, dbGuild.timeoutMessages);
-	if (shouldDelete && !(await context.deleted)) await context.delete();
+	if (shouldDelete) await context.delete();
 }
 
 function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): string {

@@ -122,15 +122,6 @@ export default class {
 		});
 	}
 
-	async getMuteRole(guildID: Snowflake): Promise<Snowflake | null> {
-		const response: Record<string, any> = await sequelize.query('SELECT "muteRole" FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0]["muteRole"];
-	}
-
 	async setMuteRole(guildID: Snowflake, muteRoleID: Snowflake | null): Promise<void> {
 		await sequelize.query('UPDATE "guildConfigurations" SET "muteRole" = $MuteRole WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { MuteRole: muteRoleID, GuildID: guildID },
