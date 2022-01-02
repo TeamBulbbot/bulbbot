@@ -67,16 +67,17 @@ sequelize
 startAllCrons(client);
 if (process.env.ENABLE_LOGGING === "true") startPrometheus(client);
 
-init({
-	dsn: process.env.SENTRY_DSN,
-	tracesSampleRate: 1.0,
-	sampleRate: 1.0,
-	attachStacktrace: true,
-	autoSessionTracking: true,
-	debug: process.env.ENVIRONMENT === "dev",
-	maxBreadcrumbs: 100,
-	integrations: [new Integrations.Http({ tracing: true })],
-});
+if (process.env.ENABLE_SENTRY === "true")
+	init({
+		dsn: process.env.SENTRY_DSN,
+		tracesSampleRate: 1.0,
+		sampleRate: 1.0,
+		attachStacktrace: true,
+		autoSessionTracking: true,
+		debug: process.env.ENVIRONMENT === "dev",
+		maxBreadcrumbs: 100,
+		integrations: [new Integrations.Http({ tracing: true })],
+	});
 
 client.login().catch((err: Error) => {
 	client.log.error(`[CLIENT] Login error: ${err.name} | ${err.message} | ${err.stack}`);

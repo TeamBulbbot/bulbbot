@@ -16,6 +16,13 @@ export default class {
 			},
 		};
 
+		// action has been null in the past adding some safeguarding and just returning a LOG
+		// until we have valid repro for this
+		if (action === null) {
+			client.log.error(`[Auto Mod Manager] Action is null in ${context.guild?.id}, reason: ${reason}, target ${target.user.tag} (${target.user.id})`);
+			return "LOG";
+		}
+
 		switch (action.toUpperCase()) {
 			case "LOG":
 				break;
@@ -35,11 +42,10 @@ export default class {
 				);
 				break;
 			case "KICK":
-				await infractionsManager.ban(
+				await infractionsManager.kick(
 					client,
-					<Guild>context.guild,
-					BanType.SOFT,
-					<User>target.user,
+					context.guild!.id,
+					<GuildMember>target,
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),

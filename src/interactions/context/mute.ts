@@ -8,14 +8,9 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
-	const muteRole = await databaseManager.getMuteRole(<Snowflake>interaction.guild?.id);
 	const target: GuildMember = <GuildMember>message.member;
 	const timezone = client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>message.guild?.id)];
 	const reason = await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
-
-	if (!muteRole) return interaction.reply({ content: await client.bulbutils.translate("mute_muterole_not_found", interaction.guild?.id, {}), ephemeral: true });
-	if (target.roles.cache.get(muteRole))
-		return interaction.reply({ content: await client.bulbutils.translate("mute_already_muted", interaction.guild?.id, { target: message.author }), ephemeral: true });
 
 	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
@@ -54,7 +49,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 				until: Date.now() + 3600000,
 			}),
 			reason,
-			muteRole,
+			Date.now() + 3600000,
 		);
 
 		await i.update({
