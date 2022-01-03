@@ -75,6 +75,19 @@ export default class Command {
 		);
 	}
 
+	public getFullCommandName() {
+		let name = "";
+		let command = this;
+
+		for (let i = 0; i <= this.depth; i++) {
+			name = `${command.name} ${name}`;
+			// @ts-ignore
+			command = command.parent;
+		}
+
+		return name;
+	}
+
 	public async validate(context: CommandContext, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
 		let clearance = this.clearance;
 

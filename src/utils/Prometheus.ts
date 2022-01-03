@@ -1,6 +1,7 @@
 import prom from "prom-client";
 import http from "http";
 import url from "url";
+import Command from "../structures/Command";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
 const cachedUsers = new prom.Gauge({ name: "bulbbot_cached_users", help: "The amount of cached users in the memory" });
@@ -22,6 +23,15 @@ const guildMessages = new prom.Counter({
 	help: "Analytics regarding guild messages",
 	labelNames: ["guildId"],
 });
+const userCommandUsage = new prom.Counter({
+	name: "bulbbot_command_usage",
+	help: "Analytics regarding user commands",
+	labelNames: ["commandName"],
+});
+
+export function commandUsage(_: any, command: Command) {
+	userCommandUsage.inc({ commandName: command.getFullCommandName() });
+}
 
 export async function startPrometheus(client: any): Promise<void> {
 	client.log.info("[PROMETHEUS] Starting up the prometheus");
@@ -32,7 +42,7 @@ export async function startPrometheus(client: any): Promise<void> {
 
 	prom.collectDefaultMetrics({ register });
 
-	const metric = [latency, cachedUsers, websocket, userMessages, guildMessages, guildCount, guildMemberCount];
+	const metric = [latency, cachedUsers, websocket, userMessages, guildMessages, guildCount, guildMemberCount, userCommandUsage];
 	metric.forEach(metric => {
 		register.registerMetric(metric);
 	});
