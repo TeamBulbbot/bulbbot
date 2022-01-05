@@ -40,6 +40,12 @@ export default class extends Client {
 					}),
 				},
 			}),
+			allowedMentions: {
+				parse: [],
+				repliedUser: false,
+				roles: [],
+				users: [],
+			},
 		});
 		this.validate(options);
 
