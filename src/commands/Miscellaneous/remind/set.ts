@@ -2,7 +2,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { ButtonInteraction, Message, MessageActionRow, MessageButton, TextChannel, User } from "discord.js";
+import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageMentionOptions, TextChannel, User } from "discord.js";
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
@@ -84,23 +84,21 @@ export default class extends SubCommand {
 					// @ts-ignore
 					const channel: TextChannel = await this.client.bulbfetch.getChannel(this.client.channels, reminder.channelId);
 					let message: Message;
-					let options: any = {
-						allowedMentions: {
-							repliedUser: true,
-							users: [reminder.userId],
-						},
+					let options: MessageMentionOptions = {
+						repliedUser: true,
+						users: [reminder.userId],
 					};
 
 					try {
 						message = await channel.messages.fetch(reminder.messageId);
 						await message.reply({
 							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
-							options,
+							allowedMentions: options,
 						});
 					} catch (_) {
 						await channel.send({
 							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
-							options,
+							allowedMentions: options,
 						});
 					}
 				} else {
