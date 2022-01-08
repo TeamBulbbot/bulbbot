@@ -102,6 +102,7 @@ export default class extends Command {
 				let data;
 				try {
 					data = await axios.get(`${discordApi}/applications/${target}/rpc`, {});
+					data = data.data;
 				} catch (error) {
 					data = false;
 				}
