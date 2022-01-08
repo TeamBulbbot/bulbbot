@@ -157,14 +157,17 @@ export default class extends Command {
 			const embed: MessageEmbed = new MessageEmbed()
 				.setColor(color)
 				.setThumbnail(user.avatarUrl)
-				.setAuthor(`${user.username}#${user.discriminator}`, user.avatarUrl)
+				.setAuthor({
+					name: `${user.username}#${user.discriminator}`,
+					iconURL: user.avatarUrl,
+				})
 				.setDescription(description)
-				.setFooter(
-					await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+				.setFooter({
+					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 						user: context.author,
 					}),
-					<string>context.author.avatarURL({ dynamic: true }),
-				)
+					iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				})
 				.setTimestamp();
 
 			const msg = await context.channel.send({ embeds: [embed], components });
