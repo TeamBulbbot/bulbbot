@@ -54,6 +54,31 @@ export default class {
 			type: QueryTypes.DELETE,
 		});
 
+		await sequelize.query('DELETE FROM "messageLog" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID },
+			type: QueryTypes.DELETE,
+		});
+
+		await sequelize.query('DELETE FROM "banpools" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID },
+			type: QueryTypes.DELETE,
+		});
+
+		await sequelize.query('DELETE FROM "guildModerationRoles" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID },
+			type: QueryTypes.DELETE,
+		});
+
+		await sequelize.query('DELETE FROM "guildOverrideCommands" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID },
+			type: QueryTypes.DELETE,
+		});
+
+		await sequelize.query('DELETE FROM "tempbans" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID },
+			type: QueryTypes.DELETE,
+		});
+
 		await sequelize.query('DELETE FROM guilds WHERE "guildId" = $GuildID', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.DELETE,
@@ -89,7 +114,8 @@ export default class {
 				{ model: sequelize.models.automod },
 				{ model: sequelize.models.infraction },
 				{ model: sequelize.models.tempban },
-				{ model: sequelize.models.tempmute },
+				{ model: sequelize.models.banpools },
+				{ model: sequelize.models.messageLog },
 			],
 		});
 	}
