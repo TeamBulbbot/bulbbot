@@ -50,8 +50,8 @@ export default class extends Command {
 			`Channels: \`${this.client.channels.cache.size}\``,
 			`Emojis: \`${this.client.emojis.cache.size}\``,
 			`\n**PostreSQL Data**`,
-			`Stored Messages: \`${postgresData.amtMessages}\``,
-			`Stored Infractions: \`${postgresData.amtInfractions}\``,
+			`Stored Messages: \`${numberWithCommas(postgresData.amtMessages)}\``,
+			`Stored Infractions: \`${numberWithCommas(postgresData.amtInfractions)}\``,
 			`Size of database: \`${postgresData.databaseSize}\``,
 		];
 
