@@ -54,27 +54,26 @@ export default class {
 			type: QueryTypes.DELETE,
 		});
 
-		await sequelize.query('DELETE FROM "messageLog" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+		await sequelize.query('DELETE FROM "messageLogs" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.DELETE,
 		});
 
-		await sequelize.query('DELETE FROM "banpools" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+		await sequelize.query('DELETE FROM "banpools" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
+			bind: { GuildID: guildID },
+			type: QueryTypes.DELETE,
+		});
+		await sequelize.query('DELETE FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.DELETE,
 		});
 
-		await sequelize.query('DELETE FROM "guildModerationRoles" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+		await sequelize.query('DELETE FROM "guildOverrideCommands" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.DELETE,
 		});
 
-		await sequelize.query('DELETE FROM "guildOverrideCommands" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
-
-		await sequelize.query('DELETE FROM "tempbans" WHERE id = (SELECT "guildId" FROM guilds WHERE "guildId" = $GuildID)', {
+		await sequelize.query('DELETE FROM "tempbans" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID },
 			type: QueryTypes.DELETE,
 		});
