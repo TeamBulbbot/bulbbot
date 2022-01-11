@@ -28,6 +28,7 @@ export default class extends Event {
 		let executor: User | null = null;
 
 		if (oldMember.communicationDisabledUntilTimestamp !== newMember.communicationDisabledUntilTimestamp) {
+			if (!newMember.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 			audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
 			auditLog = audit.entries.first();
 			executor = auditLog ? auditLog.executor : null;
