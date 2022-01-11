@@ -33,7 +33,7 @@ export default function (sequelize: Sequelize): void {
 			allowNull: true,
 		},
 		attachments: {
-			type: DataTypes.ARRAY(DataTypes.STRING(400)),
+			type: DataTypes.ARRAY(DataTypes.STRING(800)),
 			allowNull: true,
 		},
 	});
