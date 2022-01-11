@@ -670,6 +670,7 @@ export default class {
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
 		for (const key of Object.keys(oldObj)) {
+			if (key === null || oldObj === null || oldObj[key] === null) continue;
 			if (oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
 		}
 		return diff;
