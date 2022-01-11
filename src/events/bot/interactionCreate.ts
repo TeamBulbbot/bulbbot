@@ -90,7 +90,7 @@ export default class extends Event {
 
 			await context.deferReply();
 			await command.run(context, args);
-			commandUsage(context, command);
+			commandUsage(context, command, true);
 		}
 	}
 }
