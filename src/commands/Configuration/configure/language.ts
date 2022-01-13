@@ -1,45 +1,102 @@
-import SubCommand from "../../../structures/SubCommand";
-import BulbBotClient from "../../../structures/BulbBotClient";
-import Command from "../../../structures/Command";
-import CommandContext from "../../../structures/CommandContext";
-import { Message, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "language",
-			clearance: 75,
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["language:string"],
-			usage: "<language>",
-			description: "Sets the language for the bot.",
-		});
-	}
+async function language(interaction: MessageComponentInteraction, client: BulbBotClient) {
+	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const language: string = args[0].toLowerCase();
-		const languageCode: string = this.client.bulbutils.languages[language];
+	const placeholderRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("placeholder")
+			.setPlaceholder(`Current language: ${config.language}`)
+			.setDisabled(true)
+			.addOptions([
+				{
+					label: "Placeholder",
+					value: "placeholder",
+				},
+			]),
+	);
 
-		if (!languageCode)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.lang", context.guild?.id, {}),
-					arg_expected: "language:string",
-					arg_provided: language,
-					usage: this.usage,
+	const selectRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("language")
+			.setPlaceholder(await client.bulbutils.translate("config_language_placeholder", interaction.guild?.id, {}))
+			.addOptions([
+				{
+					label: "English, US (English US)",
+					value: "en-us",
+				},
+				{
+					label: "Slovak (Slovenčina)",
+					value: "sk-sk",
+				},
+				{
+					label: "Swedish (Svenska)",
+					value: "sv-se",
+				},
+				{
+					label: "French (Français)",
+					value: "fr-fr",
+				},
+				{
+					label: "Portuguese (Português)",
+					value: "pt-br",
+				},
+				{
+					label: "Czech (Čeština)",
+					value: "cs-cz",
+				},
+				{
+					label: "Italian (Italiano)",
+					value: "it-it",
+				},
+				{
+					label: "Hindi (हिंदी)",
+					value: "hi-in",
+				},
+			]),
+	);
+
+	const buttonRow = new MessageActionRow().addComponents(
+		new MessageButton()
+			.setCustomId("back")
+			.setLabel(await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}))
+			.setStyle("DANGER"),
+	);
+
+	await interaction.update({
+		content: await client.bulbutils.translate("config_language_header", interaction.guild?.id, {}),
+		components: [placeholderRow, selectRow, buttonRow],
+	});
+
+	const filter = i => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isSelectMenu()) {
+			await databaseManager.setLanguage(i.guild?.id as Snowflake, i.values[0]);
+			await interaction.followUp({
+				content: await client.bulbutils.translate("config_language_success", interaction.guild?.id, {
+					language: i.values[0],
 				}),
-			);
+				ephemeral: true,
+			});
 
-		await databaseManager.setLanguage(<Snowflake>context.guild?.id, languageCode);
-		await context.channel.send(
-			await this.client.bulbutils.translate("config_generic_success", context.guild?.id, {
-				setting: "language",
-				value: languageCode,
-			}),
-		);
-	}
+			await language(i, client);
+			return;
+		} else {
+			if (i.isButton()) {
+				if (i.customId === "back") {
+					await require("./main").default(i, client);
+					return;
+				}
+			}
+		}
+	});
 }
+
+export default language;

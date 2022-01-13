@@ -1,41 +1,68 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "actions_on_info",
-			clearance: 75,
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["enabled:boolean"],
-			usage: "<true|false>",
-			description: "Sets whether or not to the info command should show moderation actions",
-		});
-	}
+async function actionsOnInfo(interaction: MessageComponentInteraction, client: BulbBotClient) {
+	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (args[0] !== "true" && args[0] !== "false")
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[0],
-					arg_expected: "enabled:boolean",
-					usage: this.usage,
-				}),
-			);
+	const selectRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("placeholder")
+			.setPlaceholder(`Currently ${config.actionsOnInfo ? "enabled" : "disabled"}`)
+			.setDisabled(true)
+			.addOptions([
+				{
+					label: "Placeholder",
+					value: "placeholder",
+				},
+			]),
+	);
 
-		await databaseManager.setActionsOnInfo(<Snowflake>context.guild?.id, args[0] === "true");
-		await context.channel.send(
-			await this.client.bulbutils.translate("config_generic_success", context.guild?.id, {
-				setting: "actions_on_info",
-				value: args[0],
-			}),
-		);
-	}
+	const [enable, disable, back] = [
+		await client.bulbutils.translate("config_button_enable", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_button_disable", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}),
+	];
+
+	const buttonRow = new MessageActionRow().addComponents([
+		new MessageButton().setCustomId("back").setStyle("DANGER").setLabel(back),
+		new MessageButton()
+			.setCustomId(config.actionsOnInfo ? "disable" : "enable")
+			.setStyle(config.actionsOnInfo ? "DANGER" : "SUCCESS")
+			.setLabel(config.actionsOnInfo ? disable : enable),
+	]);
+
+	await interaction.update({
+		content: await client.bulbutils.translate("config_actions_on_info_header", interaction.guild?.id, {}),
+		components: [selectRow, buttonRow],
+	});
+
+	const filter = i => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isButton()) {
+			switch (i.customId) {
+				case "back":
+					await require("./main").default(i, client);
+					break;
+				case "enable":
+					await databaseManager.setActionsOnInfo(i.guild?.id as Snowflake, true);
+					await actionsOnInfo(i, client);
+					break;
+				case "disable":
+					await databaseManager.setActionsOnInfo(i.guild?.id as Snowflake, false);
+					await actionsOnInfo(i, client);
+					break;
+				default:
+					await require("./main").default(i, client);
+					break;
+			}
+		}
+	});
 }
+
+export default actionsOnInfo;

@@ -1,32 +1,111 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message, Snowflake } from "discord.js";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "prefix",
-			clearance: 75,
-			minArgs: 1,
-			maxArgs: -1,
-			argList: ["prefix:string"],
-			usage: "<prefix>",
-			description: "Sets the prefix for the bot.",
-		});
-	}
+async function prefix(interaction: MessageComponentInteraction, client: BulbBotClient) {
+	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const prefix = args.join(" ");
+	const placeholderRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("placeholder")
+			.setPlaceholder(`Current prefix: ${config.prefix}`)
+			.setDisabled(true)
+			.addOptions([
+				{
+					label: "Placeholder",
+					value: "placeholder",
+				},
+			]),
+	);
 
-		if (prefix.length > 255) return context.channel.send(await this.client.bulbutils.translate("config_prefix_too_long", context.guild?.id, {}));
+	const [back, change, header, reset] = [
+		await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_prefix_button_change", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_prefix_header", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_prefix_button_reset", interaction.guild?.id, {}),
+	];
 
-		await databaseManager.setPrefix(<Snowflake>context.guild?.id, prefix);
+	const buttonRow = new MessageActionRow().addComponents([
+		new MessageButton().setCustomId("back").setLabel(back).setStyle("DANGER"),
+		new MessageButton().setCustomId("change").setLabel(change).setStyle("SUCCESS"),
+		new MessageButton()
+			.setCustomId("reset")
+			.setLabel(reset)
+			.setStyle("PRIMARY")
+			.setDisabled(config.prefix === "!"),
+	]);
 
-		await context.channel.send(await this.client.bulbutils.translate("config_prefix_success", context.guild?.id, { prefix }));
-	}
+	interaction.deferred
+		? await interaction.editReply({ content: header, components: [placeholderRow, buttonRow] })
+		: await interaction.update({ content: header, components: [placeholderRow, buttonRow] });
+
+	const filter = i => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isButton()) {
+			switch (i.customId) {
+				case "back":
+					await require("./main").default(i, client);
+					break;
+				case "reset":
+					await interaction.followUp({
+						content: await client.bulbutils.translate("config_prefix_reset", interaction.guild?.id, {}),
+						ephemeral: true,
+					});
+					await databaseManager.setPrefix(interaction.guild?.id as Snowflake, "!");
+					await prefix(i, client);
+					break;
+				case "change":
+					buttonRow.components[0].setDisabled(true);
+					buttonRow.components[1].setDisabled(true);
+					buttonRow.components[2].setDisabled(true);
+
+					await interaction.editReply({ components: [placeholderRow, buttonRow] });
+
+					const msgFilter = (m: Message) => m.author.id === interaction.user.id;
+					const msgCollector = i.channel?.createMessageCollector({ filter: msgFilter, time: 60000, max: 1 });
+					await interaction.followUp({
+						content: await client.bulbutils.translate("config_prefix_prompt", interaction.guild?.id, {}),
+						ephemeral: true,
+					});
+					await i.deferUpdate();
+
+					msgCollector?.on("collect", async (m: Message) => {
+						if (m.content.length >= 255) {
+							await m.delete();
+							await interaction.followUp({
+								content: await client.bulbutils.translate("config_prefix_too_long", interaction.guild?.id, {}),
+								ephemeral: true,
+							});
+
+							await prefix(i, client);
+							return;
+						}
+
+						await interaction.followUp({
+							content: await client.bulbutils.translate("config_prefix_success", interaction.guild?.id, {
+								prefix: m.content,
+							}),
+							ephemeral: true,
+						});
+						await m.delete();
+
+						await databaseManager.setPrefix(interaction.guild?.id as Snowflake, m.content);
+
+						await prefix(i, client);
+					});
+
+					break;
+				default:
+					await require("./main").default(i, client);
+					break;
+			}
+		}
+	});
 }
+
+export default prefix;
