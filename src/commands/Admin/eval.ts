@@ -23,12 +23,12 @@ export default class extends Command {
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		let embed = new MessageEmbed()
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				<string>context.author.avatarURL({ dynamic: true }),
-			)
+				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+			})
 			.setTimestamp();
 
 		const start: number = Date.now();
@@ -68,7 +68,7 @@ export default class extends Command {
 		const end: number = Date.now();
 
 		embed.setDescription(description);
-		embed.setAuthor(`Run time: ${end - start} ms`);
+		embed.setAuthor({ name: `Run time: ${end - start} ms` });
 
 		context.channel.send({
 			embeds: [embed],

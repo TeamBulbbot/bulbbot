@@ -18,7 +18,7 @@ export default class extends Command {
 			minArgs: 0,
 			argList: ["channel-message:Snowflake"],
 			clientPerms: ["EMBED_LINKS"],
-			overrides: ["message_info"]
+			overrides: ["message_info"],
 		});
 	}
 
@@ -86,12 +86,12 @@ export default class extends Command {
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setDescription(desc.join("\n"))
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				<string>context.author.avatarURL({ dynamic: true }),
-			)
+				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+			})
 			.setTimestamp();
 
 		context.channel.send({ embeds: [embed], components: [row] });

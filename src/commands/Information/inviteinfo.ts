@@ -74,7 +74,10 @@ export default class extends Command {
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setTitle(guild.description !== null ? `${guild.description}` : "")
-			.setAuthor(`${guild.name} (${guild.id})`, guild.iconURL({ dynamic: true })!)
+			.setAuthor({
+				name: `${guild.name} (${guild.id})`,
+				iconURL: guild.iconURL({ dynamic: true })!,
+			})
 			.setDescription(desc)
 			.addField("**Invite**", inviteInfo, true)
 			.setThumbnail(guild.iconURL({ dynamic: true, size: 4096 })!)
@@ -99,12 +102,12 @@ export default class extends Command {
 			const widgetEmbed = new MessageEmbed()
 				.setColor(embedColor)
 				.setTitle("Widget Data")
-				.setFooter(
-					await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
+				.setFooter({
+					text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
 						user: context.author,
 					}),
-					await this.client.bulbutils.userObject(true, context.member).avatarUrl,
-				)
+					iconURL: await this.client.bulbutils.userObject(true, context.member).avatarUrl,
+				})
 				.setTimestamp()
 				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map(m => `\`${m.username}\``).join(" ")}`);
 
