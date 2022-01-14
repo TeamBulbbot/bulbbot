@@ -35,12 +35,13 @@ export default class extends Client {
 				GuildInviteManager: 0,
 				GuildEmojiManager: 0,
 				GuildStickerManager: 0,
-				UserManager: {
+				/*UserManager: {
 					sweepInterval: 3600,
 				},
 				GuildMemberManager: {
 					sweepInterval: 3600,
 				},
+				*/
 				MessageManager: {
 					sweepInterval: 300,
 					sweepFilter: Sweepers.filterByLifetime({
