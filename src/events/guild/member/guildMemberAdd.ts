@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { GuildMember, Util } from "discord.js";
+import { GuildMember } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
