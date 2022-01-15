@@ -54,11 +54,11 @@ export default class extends Command {
 		let text: string = "";
 
 		for (let i = 0; i < chars.length; i++) {
-			// @ts-ignore
 			categories.forEach(cat => {
 				const Unicode = require(`unicode/category/${cat}`);
 				const charCode = Unicode[chars[i].charCodeAt(0)];
 				if (charCode !== undefined) return (text += `${chars[i]} - ${charCode.value} | ${charCode.name}\n`);
+				return "";
 			});
 		}
 		if (text === "") text = "Unable to find any data about the given character(s)";

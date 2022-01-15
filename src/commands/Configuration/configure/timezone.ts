@@ -25,9 +25,8 @@ export default class extends SubCommand {
 		const timezone: string = args[0].toUpperCase();
 
 		if (!this.client.bulbutils.timezones[timezone]) {
-			const timezones = [];
-			for (const [key, value] of Object.entries(this.client.bulbutils.timezones)) // @ts-ignore
-				timezones.push(`**${key}** ${value}`);
+			const timezones: string[] = [];
+			for (const [key, value] of Object.entries(this.client.bulbutils.timezones)) timezones.push(`**${key}** ${value}`);
 
 			return context.channel.send(
 				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {

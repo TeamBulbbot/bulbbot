@@ -44,12 +44,12 @@ export default class extends Command {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
 			.setDescription(desc)
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				<string>context.author.avatarURL({ dynamic: true }),
-			)
+				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+			})
 			.setTimestamp();
 
 		await context.channel.send({ embeds: [embed], components: [row] });

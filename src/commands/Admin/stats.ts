@@ -31,7 +31,10 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
-			.setFooter(await this.client.bulbutils.translate("global_executed_by", context.guild.id, { user: context.author }), <string>context.author.avatarURL({ dynamic: true }))
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, { user: context.author }),
+				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+			})
 			.setDescription(desc)
 			.addField("Shard Data", `${shardData.join("")}`, true)
 			.addField(
