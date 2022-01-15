@@ -2,7 +2,6 @@ import prom from "prom-client";
 import http from "http";
 import url from "url";
 import Command from "../structures/Command";
-import { APIRequest } from "discord.js";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
 const cachedUsers = new prom.Gauge({ name: "bulbbot_cached_users", help: "The amount of cached users in the memory" });
@@ -68,9 +67,9 @@ export async function startPrometheus(client: any): Promise<void> {
 		}
 	});
 
-	client.on("apiResponse", (request: APIRequest, response: Response) => {
-		api.inc({ route: request.route, method: request.method, status: response.status });
-	});
+	//client.on("apiResponse", (request: APIRequest, response: Response) => {
+	//	api.inc({ route: request.route, method: request.method, status: response.status });
+	//});
 
 	client.on("raw", (packet: any) => {
 		if (packet.t === null) return;
