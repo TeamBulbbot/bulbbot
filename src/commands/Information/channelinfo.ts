@@ -75,17 +75,15 @@ export default class extends Command {
 		const channelType: string = channel.type.replaceAll("_", " ").toLowerCase();
 
 		const embed = new MessageEmbed()
-			.setAuthor({
-				name: channelType.charAt(0).toUpperCase() + channelType.slice(1),
-			})
+			.setAuthor(channelType.charAt(0).toUpperCase() + channelType.slice(1))
 			.setColor(embedColor)
 			.setDescription(desc.join("\n"))
-			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter(
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
-			})
+				<string>context.author.avatarURL({ dynamic: true }),
+			)
 			.setTimestamp();
 
 		buttons.length > 0 ? context.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(buttons)] }) : context.channel.send({ embeds: [embed] });

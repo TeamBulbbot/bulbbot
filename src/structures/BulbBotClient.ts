@@ -1,4 +1,4 @@
-import { Client, Collection, Permissions, Intents, BitField, PermissionString, Options, Sweepers } from "discord.js";
+import { Client, Collection, Permissions, Intents, BitField, PermissionString, Options, LimitedCollection } from "discord.js";
 import ClientException from "./exceptions/ClientException";
 import Event from "./Event";
 import Util from "./Util";
@@ -32,19 +32,10 @@ export default class extends Client {
 			restGlobalRateLimit: 50,
 			makeCache: Options.cacheWithLimits({
 				...Options.defaultMakeCacheSettings,
-				GuildInviteManager: 0,
-				GuildEmojiManager: 0,
-				GuildStickerManager: 0,
-				/*UserManager: {
-					sweepInterval: 3600,
-				},
-				GuildMemberManager: {
-					sweepInterval: 3600,
-				},
 				*/
 				MessageManager: {
 					sweepInterval: 300,
-					sweepFilter: Sweepers.filterByLifetime({
+					sweepFilter: LimitedCollection.filterByLifetime({
 						lifetime: 600,
 						getComparisonTimestamp: e => e.editedTimestamp ?? e.createdTimestamp,
 					}),

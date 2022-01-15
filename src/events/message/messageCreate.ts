@@ -86,7 +86,7 @@ export default class extends Event {
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 
 		const serverOverrides: string[] = await getAllGuildExperiments(context.guild.id);
-		commandUsage(context, command, false);
+		commandUsage(context, command);
 
 		try {
 			if (command.overrides.length > 0) {

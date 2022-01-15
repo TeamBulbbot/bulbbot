@@ -37,20 +37,20 @@ export default class extends SubCommand {
 		}
 
 		const embed: MessageEmbed = new MessageEmbed()
-			.setAuthor({
-				name: await this.client.bulbutils.translate("banpool_info_top", context.guild?.id, {
+			.setAuthor(
+				await this.client.bulbutils.translate("banpool_info_top", context.guild?.id, {
 					name,
 					amountOfServers: data.length,
 				}),
-			})
+			)
 			.setColor(embedColor)
 			.setDescription(desc.join("\n\n"))
-			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter(
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
-			})
+				<string>context.author.avatarURL({ dynamic: true }),
+			)
 			.setTimestamp();
 
 		await context.channel.send({ embeds: [embed] });

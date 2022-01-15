@@ -2,7 +2,6 @@ import prom from "prom-client";
 import http from "http";
 import url from "url";
 import Command from "../structures/Command";
-import { APIRequest } from "discord.js";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
 const cachedUsers = new prom.Gauge({ name: "bulbbot_cached_users", help: "The amount of cached users in the memory" });
@@ -14,12 +13,11 @@ const websocket = new prom.Counter({
 	help: "Analytics regarding the websocket",
 	labelNames: ["event"],
 });
-const api = new prom.Counter({
-	name: "bulbbot_api_requests",
-	help: "Analytics regarding the communication between the Discord API and Bulbbot",
-	labelNames: ["route", "method", "status"],
+const userMessages = new prom.Counter({
+	name: "bulbbot_user_messages",
+	help: "Analytics regarding user messages",
+	labelNames: ["authorId"],
 });
-
 const guildMessages = new prom.Counter({
 	name: "bulbbot_guild_messages",
 	help: "Analytics regarding guild messages",
@@ -28,11 +26,11 @@ const guildMessages = new prom.Counter({
 const userCommandUsage = new prom.Counter({
 	name: "bulbbot_command_usage",
 	help: "Analytics regarding user commands",
-	labelNames: ["commandName", "isSlashCommand"],
+	labelNames: ["commandName"],
 });
 
-export function commandUsage(_: any, command: Command, isSlash: boolean) {
-	userCommandUsage.inc({ commandName: command.getFullCommandName(), isSlashCommand: isSlash.toString() });
+export function commandUsage(_: any, command: Command) {
+	userCommandUsage.inc({ commandName: command.getFullCommandName() });
 }
 
 export async function startPrometheus(client: any): Promise<void> {
@@ -44,7 +42,7 @@ export async function startPrometheus(client: any): Promise<void> {
 
 	prom.collectDefaultMetrics({ register });
 
-	const metric = [latency, cachedUsers, websocket, guildMessages, guildCount, guildMemberCount, userCommandUsage, api];
+	const metric = [latency, cachedUsers, websocket, userMessages, guildMessages, guildCount, guildMemberCount, userCommandUsage];
 	metric.forEach(metric => {
 		register.registerMetric(metric);
 	});
@@ -64,14 +62,14 @@ export async function startPrometheus(client: any): Promise<void> {
 		}
 	});
 
-	client.on("apiResponse", (request: APIRequest, response: Response) => {
-		api.inc({ route: request.route, method: request.method, status: response.status });
-	});
-
 	client.on("raw", (packet: any) => {
 		if (packet.t === null) return;
 		websocket.inc({ event: packet.t });
-		if (packet.t === "MESSAGE_CREATE") guildMessages.inc({ guildId: packet.d.guild_id });
+
+		if (packet.t === "MESSAGE_CREATE") {
+			userMessages.inc({ authorId: packet.d.author.id });
+			guildMessages.inc({ guildId: packet.d.guild_id });
+		}
 	});
 
 	server.listen(process.env.PORT || 8080);

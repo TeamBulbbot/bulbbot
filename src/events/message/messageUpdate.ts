@@ -40,7 +40,7 @@ export default class extends Event {
 		}
 
 		const msg: string = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
-			user_tag: newMessage.author.tag,
+			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 			user: newMessage.author,
 			message: newMessage,
 			channel: newMessage.channel,
@@ -55,7 +55,7 @@ export default class extends Event {
 				newMessage.guild,
 				"message",
 				await this.client.bulbutils.translate("event_message_edit_special", newMessage.guild.id, {
-					user_tag: newMessage.author.tag,
+					user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
 					user: newMessage.author,
 					message: newMessage,
 					channel: newMessage.channel,

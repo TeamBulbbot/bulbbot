@@ -11,7 +11,6 @@ import Command from "../../structures/Command";
 import reminders from "../../interactions/select/reminders";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import { commandUsage } from "../../utils/Prometheus";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 const loggingManager: LoggingManager = new LoggingManager();
@@ -38,7 +37,7 @@ export default class extends Event {
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 		if (!context.guild) return;
 		if (this.client.blacklist.get(context.guild.id)) return;
-		if (context.guildId !== null) context.prefix = (await databaseManager.getConfig(context.guildId)).prefix;
+		if(context.guildId !== null) context.prefix = (await databaseManager.getConfig(context.guildId)).prefix;
 
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
@@ -90,7 +89,6 @@ export default class extends Event {
 
 			await context.deferReply();
 			await command.run(context, args);
-			commandUsage(context, command, true);
 		}
 	}
 }

@@ -18,12 +18,12 @@ export default class extends Command {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
 			.setDescription(await this.client.bulbutils.translate("commands_help", context.guild?.id, {}))
-			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter(
+				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
-			})
+				<string>context.author.avatarURL({ dynamic: true }),
+			)
 			.setTimestamp();
 
 		await context.channel.send({ embeds: [embed] });

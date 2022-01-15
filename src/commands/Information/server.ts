@@ -87,10 +87,7 @@ export default class extends Command {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
 			.setThumbnail(<string>context.guild?.iconURL({ dynamic: true }))
-			.setAuthor({
-				name: context.guild!?.name,
-				iconURL: <string>context.guild?.iconURL({ dynamic: true }),
-			})
+			.setAuthor(context.guild!?.name, <string>context.guild?.iconURL({ dynamic: true }))
 			.addField(await this.client.bulbutils.translate("serverinfo_server_stats", guild.id, {}), serverStats, true)
 			.addField(await this.client.bulbutils.translate("serverinfo_channel_stats", guild.id, {}), channelStats, true)
 			.addField(await this.client.bulbutils.translate("serverinfo_booster_stats", guild.id, {}), boosterStats, true)
@@ -108,12 +105,12 @@ export default class extends Command {
 			)
 			.setDescription(description)
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
-			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", guild.id, {
+			.setFooter(
+				await this.client.bulbutils.translate("global_executed_by", guild.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
-			})
+				<string>context.author.avatarURL({ dynamic: true }),
+			)
 			.setTimestamp();
 
 		await context.channel.send({ embeds: [embed] });

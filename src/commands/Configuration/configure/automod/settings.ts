@@ -87,15 +87,9 @@ export default class extends SubCommand {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setAuthor({
-				name: await this.client.bulbutils.translate("automod_settings_header", context.guild?.id, { guild: context.guild }),
-				iconURL: context.guild!.iconURL({ dynamic: true }) ?? undefined,
-			})
+			.setAuthor(await this.client.bulbutils.translate("automod_settings_header", context.guild?.id, { guild: context.guild }), context.guild!.iconURL({ dynamic: true }) ?? undefined)
 			.setDescription(description.join("\n\n"))
-			.setFooter({
-				text: await this.client.bulbutils.translate("automod_settings_footer", context.guild?.id, {}),
-				iconURL: "https://cdn.discordapp.com/emojis/833770837575860305.png?v=1",
-			});
+			.setFooter(await this.client.bulbutils.translate("automod_settings_footer", context.guild?.id, {}), "https://cdn.discordapp.com/emojis/833770837575860305.png?v=1");
 
 		await context.channel.send({ embeds: [embed] });
 	}

@@ -26,16 +26,14 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 
 	const embed: MessageEmbed = new MessageEmbed()
 		.setColor(embedColor)
-		.setAuthor({
-			name: await client.bulbutils.translate("remind_desc_header", interaction.guild?.id, { reminder }),
-		})
+		.setAuthor(await client.bulbutils.translate("remind_desc_header", interaction.guild?.id, { reminder }))
 		.setDescription(desc)
-		.setFooter({
-			text: await client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+		.setFooter(
+			await client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
 				user: interaction.user,
 			}),
-			iconURL: <string>interaction.user.avatarURL({ dynamic: true }),
-		})
+			<string>interaction.user.avatarURL({ dynamic: true }),
+		)
 		.setTimestamp();
 
 	await interaction.reply({ embeds: [embed], ephemeral: true });

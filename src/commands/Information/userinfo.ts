@@ -102,7 +102,6 @@ export default class extends Command {
 				let data;
 				try {
 					data = await axios.get(`${discordApi}/applications/${target}/rpc`, {});
-					data = data.data;
 				} catch (error) {
 					data = false;
 				}
@@ -158,17 +157,14 @@ export default class extends Command {
 			const embed: MessageEmbed = new MessageEmbed()
 				.setColor(color)
 				.setThumbnail(user.avatarUrl)
-				.setAuthor({
-					name: `${user.username}#${user.discriminator}`,
-					iconURL: user.avatarUrl,
-				})
+				.setAuthor(`${user.username}#${user.discriminator}`, user.avatarUrl)
 				.setDescription(description)
-				.setFooter({
-					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+				.setFooter(
+					await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 						user: context.author,
 					}),
-					iconURL: <string>context.author.avatarURL({ dynamic: true }),
-				})
+					<string>context.author.avatarURL({ dynamic: true }),
+				)
 				.setTimestamp();
 
 			const msg = await context.channel.send({ embeds: [embed], components });
