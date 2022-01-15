@@ -32,7 +32,6 @@ export default class extends Client {
 			restGlobalRateLimit: 50,
 			makeCache: Options.cacheWithLimits({
 				...Options.defaultMakeCacheSettings,
-				*/
 				MessageManager: {
 					sweepInterval: 300,
 					sweepFilter: LimitedCollection.filterByLifetime({
