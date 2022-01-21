@@ -285,6 +285,7 @@
 	"purge_too_few": "{{emote_fail}} Vous ne pouvez pas purger moins de 2 messages",
 	"purge_success": "{{emote_success}} **{{count}}** messages purgés avec succès",
 	"purge_message_failed_to_delete": "{{emote_fail}} Le message que vous voulez supprimer est introuvable. Aucun message n'a été supprimé après ce point.",
+	"prune_invalid_time": "{{emote_fail}} The duration can only be a value between 1 and 30 (days)",
 	"prune_no_users": "{{emote_fail}} Il n'y a aucun utilisateur qui peut être congédié avec ces paramètres",
 	"prune_confirm_prune": "{{emote_warn}} Êtes-vous sûr(e) de vouloir congédier **{{prunesize}}** membres ?",
 	"prune_successful": "{{emote_success}} **{{prune}}** membres ont été congédiés avec succès",

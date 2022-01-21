@@ -285,6 +285,7 @@
 	"purge_too_few": "{{emote_fail}} Nemůžeš pročistit méně než 2 zprávy",
 	"purge_success": "{{emote_success}} **{{count}}** zpráv bylo úspěšně pročištěno",
 	"purge_message_failed_to_delete": "{{emote_fail}} Nemohu najít zprávu kterou jsi chtěl smazat. Od tohoto bodu nebyly smazány žádné zprávy.",
+	"prune_invalid_time": "{{emote_fail}} The duration can only be a value between 1 and 30 (days)",
 	"prune_no_users": "{{emote_fail}} Neexistují uživatelé kteří by mohli být odstraněni s daným nastavením",
 	"prune_confirm_prune": "{{emote_warn}} Jsi si jist že chceš odstranit **{{prunesize}}** členů?",
 	"prune_successful": "{{emote_success}} Úspěšně odstraněno **{{prune}}** členů",
