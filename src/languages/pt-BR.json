@@ -285,6 +285,7 @@
 	"purge_too_few": "{{emote_fail}} Você não pode apagar menos que 2 mensagens",
 	"purge_success": "{{emote_success}} Apagou com sucesso **{{count}}** mensagens",
 	"purge_message_failed_to_delete": "{{emote_fail}} Não foi possível encontrar a mensagem que você queria excluir. Nenhuma mensagem foi excluída até então.",
+	"prune_invalid_time": "{{emote_fail}} The duration can only be a value between 1 and 30 (days)",
 	"prune_no_users": "{{emote_fail}} Não há usuários que possam ser removidos com essas configurações",
 	"prune_confirm_prune": "{{emote_warn}} Você tem certeza que deseja remover **{{prunesize}}** membros?",
 	"prune_successful": "{{emote_success}} removeu com sucesso **{{prune}}** membros",

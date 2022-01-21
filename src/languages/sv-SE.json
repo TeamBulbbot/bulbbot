@@ -285,6 +285,7 @@
 	"purge_too_few": "{{emote_fail}} Du kan inte rensa mindre än 2 meddelanden",
 	"purge_success": "{{emote_success}} Rensade **{{count}}** meddelanden",
 	"purge_message_failed_to_delete": "{{emote_fail}} Kunde inte hitta meddelandet du ville ta bort. Inga meddelanden togs bort förbi denna punkt.",
+	"prune_invalid_time": "{{emote_fail}} The duration can only be a value between 1 and 30 (days)",
 	"prune_no_users": "{{emote_fail}} Det finns inga användare som kan med sparka med dessa inställningar",
 	"prune_confirm_prune": "{{emote_warn}} Är du säker på att du vill sparka **{{prunesize}}** medlemmar?",
 	"prune_successful": "{{emote_success}} Sparkade **{{prune}}** medlemmar",
