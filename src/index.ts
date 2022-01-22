@@ -5,6 +5,7 @@ import { sequelize } from "./utils/database/connection";
 import { init, Integrations } from "@sentry/node"; // @ts-ignore
 import * as Tracing from "@sentry/tracing";
 import { startAllCrons } from "./utils/Crons";
+import { startPrometheus } from "./utils/Prometheus";
 
 env.config({ path: `${__dirname}/../src/.env` });
 
@@ -64,6 +65,7 @@ sequelize
 	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
 
 startAllCrons(client);
+if (process.env.ENABLE_LOGGING === "true") startPrometheus(client);
 
 if (process.env.ENABLE_SENTRY === "true")
 	init({

@@ -21,6 +21,6 @@ export default class extends SubCommand {
 		cd(path);
 
 		await exec(`tsc --project tsconfig.json`);
-		context.reply("Successfully built TypeScript files");
+		context.channel.send("Successfully built TypeScript files");
 	}
 }

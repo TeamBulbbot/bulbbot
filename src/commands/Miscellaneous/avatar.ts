@@ -59,33 +59,40 @@ export default class extends Command {
 			// @ts-ignore
 			const normal = new MessageEmbed().setURL("https://bulbbot.rocks/").setImage(user.user.avatarURL({ dynamic: true }));
 			const guild = new MessageEmbed()
-				.setColor(embedColor) // @ts-ignore
-				.setAuthor(`${user.user.tag} (${user.user.id})`)
+				.setColor(embedColor)
+				.setAuthor({
+					// @ts-ignore
+					name: `${user.user.tag} (${user.user.id})`,
+				})
 				.setDescription(desc)
 				.setURL("https://bulbbot.rocks/") // @ts-ignore
 				.setImage(user.avatarURL({ dynamic: true, size: 4096 }))
-				.setFooter(
-					await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+				.setFooter({
+					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 						user: context.author,
 					}),
-					await this.client.bulbutils.userObject(false, context.author).avatarUrl,
-				)
+					iconURL: await this.client.bulbutils.userObject(false, context.author).avatarUrl,
+				})
 				.setTimestamp();
 
 			return context.channel.send({ embeds: [guild, normal] });
 		}
 
 		const embed = new MessageEmbed()
-			.setColor(embedColor) // @ts-ignore
-			.setAuthor(isGuildMember ? `${user.user.tag} (${user.user.id})` : `${user.tag} (${user.id})`, avatar)
+			.setColor(embedColor)
+			.setAuthor({
+				// @ts-ignore
+				name: isGuildMember ? `${user.user.tag} (${user.user.id})` : `${user.tag} (${user.id})`,
+				iconURL: avatar ?? undefined,
+			})
 			.setDescription(desc) // @ts-ignore
 			.setImage(avatar)
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				await this.client.bulbutils.userObject(false, context.author).avatarUrl,
-			)
+				iconURL: await this.client.bulbutils.userObject(false, context.author).avatarUrl,
+			})
 			.setTimestamp();
 
 		return context.channel.send({ embeds: [embed] });

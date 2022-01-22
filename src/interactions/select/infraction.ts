@@ -53,7 +53,10 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 		.setColor(embedColor)
 		.setImage(<string>(image ? image[0] : null))
 		.setThumbnail(user.avatarUrl)
-		.setFooter(await client.bulbutils.translate("global_executed_by", interaction.guild?.id, { user: interaction.user }), <string>interaction.user.avatarURL({ dynamic: true }))
+		.setFooter({
+			text: await client.bulbutils.translate("global_executed_by", interaction.guild?.id, { user: interaction.user }),
+			iconURL: <string>interaction.user.avatarURL({ dynamic: true }),
+		})
 		.setTimestamp();
 
 	await interaction.reply({ embeds: [embed], ephemeral: true });

@@ -26,11 +26,11 @@ export default class extends SubCommand {
 		const allowedToDelete: boolean = await deleteUserReminder(reminderId, context.author.id);
 
 		if (!allowedToDelete)
-			return context.reply(
+			return context.channel.send(
 				await this.client.bulbutils.translate("remind_remove_unable_to_find", context.guild?.id, {
 					reminderId,
 				}),
 			);
-		else context.reply(await this.client.bulbutils.translate("remind_remove_removed", context.guild?.id, { reminderId }));
+		else context.channel.send(await this.client.bulbutils.translate("remind_remove_removed", context.guild?.id, { reminderId }));
 	}
 }

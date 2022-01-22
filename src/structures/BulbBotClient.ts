@@ -1,4 +1,4 @@
-import { Client, Collection, Permissions, Intents, BitField, PermissionString, Options, LimitedCollection } from "discord.js";
+import { Client, Collection, Permissions, Intents, BitField, PermissionString, Options, Sweepers } from "discord.js";
 import ClientException from "./exceptions/ClientException";
 import Event from "./Event";
 import Util from "./Util";
@@ -34,12 +34,18 @@ export default class extends Client {
 				...Options.defaultMakeCacheSettings,
 				MessageManager: {
 					sweepInterval: 300,
-					sweepFilter: LimitedCollection.filterByLifetime({
+					sweepFilter: Sweepers.filterByLifetime({
 						lifetime: 600,
 						getComparisonTimestamp: e => e.editedTimestamp ?? e.createdTimestamp,
 					}),
 				},
 			}),
+			allowedMentions: {
+				parse: [],
+				repliedUser: false,
+				roles: [],
+				users: [],
+			},
 		});
 		this.validate(options);
 

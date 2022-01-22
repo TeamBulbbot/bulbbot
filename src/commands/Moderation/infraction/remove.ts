@@ -87,7 +87,7 @@ export default class extends SubCommand {
 			}
 		});
 
-		collector.on("end", async (interaction: ButtonInteraction, reason: string) => {
+		collector.on("end", async (_: ButtonInteraction, reason: string) => {
 			if (reason !== "time") return;
 
 			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });

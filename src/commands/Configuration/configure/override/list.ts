@@ -40,14 +40,17 @@ export default class extends SubCommand {
 		// needs translation
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setAuthor(`Overrides for ${context.guild?.name}`, context.guild?.iconURL({ dynamic: true }) ?? undefined)
+			.setAuthor({
+				name: `Overrides for ${context.guild?.name}`,
+				iconURL: context.guild?.iconURL({ dynamic: true }) ?? undefined,
+			})
 			.setDescription([...commands, ...roles].join("\n") || "*None*")
-			.setFooter(
-				await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				context.author.avatarURL({ dynamic: true }) ?? undefined,
-			);
+				iconURL: context.author.avatarURL({ dynamic: true }) ?? undefined,
+			});
 
 		await context.channel.send({ embeds: [embed] });
 	}

@@ -56,9 +56,15 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setAuthor(`Settings for ${context.guild!.name}`, context.guild?.iconURL({ dynamic: true }) ?? undefined)
+			.setAuthor({
+				name: `Settings for ${context.guild!.name}`,
+				iconURL: context.guild?.iconURL({ dynamic: true }) ?? undefined,
+			})
 			.setDescription(`${configs.join("\n")}\n\n${loggingModule.join("\n")}`)
-			.setFooter(await this.client.bulbutils.translate("global_executed_by", context.guild!.id, { user: context.author }), memberObj.avatarUrl)
+			.setFooter({
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild!.id, { user: context.author }),
+				iconURL: memberObj.avatarUrl,
+			})
 			.setTimestamp();
 
 		return context.channel.send({ embeds: [embed] });

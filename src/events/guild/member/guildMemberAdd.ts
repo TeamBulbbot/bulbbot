@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { GuildMember, Util } from "discord.js";
+import { GuildMember } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
@@ -18,12 +18,10 @@ export default class extends Event {
 			this.client,
 			member.guild,
 			"joinLeave",
-			Util.removeMentions(
-				await this.client.bulbutils.translate("event_member_joined", member.guild.id, {
-					user: member.user,
-					user_age: Math.floor(member.user.createdTimestamp / 1000),
-				}),
-			),
+			await this.client.bulbutils.translate("event_member_joined", member.guild.id, {
+				user: member.user,
+				user_age: Math.floor(member.user.createdTimestamp / 1000),
+			}),
 		);
 
 		if (member.pending) return;
