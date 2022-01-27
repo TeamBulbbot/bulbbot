@@ -29,7 +29,7 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
+		let infID: number | null;
 
 		//Checks if the reason or target is null and if the target is actionable
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
@@ -60,6 +60,8 @@ export default class extends Command {
 			}),
 			reason,
 		);
+
+		if (infID === null) return;
 
 		//Sends the respond context
 		await context.channel.send(

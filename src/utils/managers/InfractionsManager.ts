@@ -144,6 +144,7 @@ export default class {
 	}
 
 	public async kick(client: BulbBotClient, guildID: Snowflake, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
+		if (!target.kickable) return null;
 		await this.createInfraction(guildID, "Kick", true, reason, target.user, moderator.user);
 		await target.kick(reasonLog);
 		const infID: number = await this.getLatestInfraction(guildID, moderator.id, target.id, "Kick");
@@ -192,7 +193,8 @@ export default class {
 		}
 	}
 
-	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput): Promise<number> {
+	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput): Promise<number | null> {
+		if (!target.bannable) return null;
 		await target.ban({ reason: reasonLog });
 		await this.createInfraction(guild.id, "Tempban", <number>until, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Tempban");
@@ -203,7 +205,6 @@ export default class {
 
 	public async mute(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput) {
 		await target.timeout(moment(until).diff(moment(), "milliseconds"), reason);
-
 		await this.createInfraction(guild.id, "Mute", true, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Mute");
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.mute", guild.id, {}), target.user, moderator.user, reason, infID, until);
@@ -213,7 +214,6 @@ export default class {
 
 	public async unmute(client: BulbBotClient, guild: Guild, type: MuteType, target: GuildMember, moderator: User, reasonLog: string, reason: string) {
 		await target.timeout(null, reason);
-
 		await this.createInfraction(guild.id, "Unmute", true, reason, target.user, moderator);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.id, target.user.id, "Unmute");
 		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.unmute", guild.id, {}), target.user, moderator, reason, infID);
