@@ -48,7 +48,7 @@ export default class extends Command {
 			await context.channel.send(
 				await this.client.bulbutils.translate("already_banned", context.guild?.id, {
 					target: bannedUser.user,
-					reason: bannedUser.reason.split("Reason: ").pop(),
+					reason: bannedUser.reason ? bannedUser.reason.split("Reason: ").pop() : await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {}),
 				}),
 			);
 			return;
