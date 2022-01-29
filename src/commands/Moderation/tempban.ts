@@ -38,7 +38,7 @@ export default class extends Command {
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		const duration: number = <number>parse(args[1]);
 		let reason: string = args.slice(2).join(" ");
-		let infID: number;
+		let infID: number | null;
 
 		if (!target)
 			return context.channel.send(
@@ -71,6 +71,8 @@ export default class extends Command {
 			Date.now() + <number>parse(args[1]),
 		);
 
+		if (infID === null) return;
+
 		await createTempBan(target, reason, Date.now() + <number>parse(args[1]), context.guild!.id);
 		const tempban: any = await getLatestTempBan(target, context.guild!.id);
 
@@ -89,8 +91,8 @@ export default class extends Command {
 
 		const client: BulbBotClient = this.client;
 		setTimeout(async function () {
-			if ((await infractionsManager.isActive(<Snowflake>context.guild?.id, infID)) === false) return;
-			await infractionsManager.setActive(<Snowflake>context.guild?.id, infID, false);
+			if ((await infractionsManager.isActive(<Snowflake>context.guild?.id, infID!)) === false) return;
+			await infractionsManager.setActive(<Snowflake>context.guild?.id, infID!, false);
 
 			infID = await infractionsManager.unban(
 				client,

@@ -9,7 +9,7 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class {
 	async resolveAction(client: BulbBotClient, context: CommandContext, action: string, reason: string): Promise<string> {
-		const target = {
+		let target: any = {
 			user: {
 				tag: context.author.tag,
 				id: context.author.id,
@@ -42,10 +42,11 @@ export default class {
 				);
 				break;
 			case "KICK":
+				target = await client.bulbfetch.getGuildMember(context.guild?.members, context.author.id);
 				await infractionsManager.kick(
 					client,
 					context.guild!.id,
-					<GuildMember>target,
+					target,
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),

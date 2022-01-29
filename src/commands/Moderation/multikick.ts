@@ -61,7 +61,7 @@ export default class extends Command {
 
 			const t: string = targets[i].replace(NonDigits, "");
 			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
-			let infID: number;
+			let infID: number | null;
 
 			if (!target) {
 				await context.channel.send(
@@ -90,6 +90,7 @@ export default class extends Command {
 				reason,
 			);
 
+			if (infID === null) continue;
 			fullList += ` **${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``;
 		}
 

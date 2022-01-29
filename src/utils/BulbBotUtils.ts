@@ -56,6 +56,7 @@ export default class {
 	public badges(bitfield: number) {
 		let badges: string[] = [];
 
+		const verfiedBot: number = 1 << 16;
 		const staff: number = 1 << 0;
 		const partner: number = 1 << 1;
 		const certifiedMod = 1 << 18;
@@ -68,6 +69,7 @@ export default class {
 		const bughunter_gold: number = 1 << 14;
 		const botdeveloper: number = 1 << 17;
 
+		if ((bitfield & verfiedBot) === verfiedBot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
 		if ((bitfield & certifiedMod) === certifiedMod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
@@ -670,6 +672,7 @@ export default class {
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
 		for (const key of Object.keys(oldObj)) {
+			if (oldObj[key] === null) continue;
 			if (oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
 		}
 		return diff;
