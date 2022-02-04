@@ -12,7 +12,7 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Unutes the selected user",
+			description: "Unmutes the selected user",
 			category: "Moderation",
 			usage: "<member> [reason]",
 			examples: ["unmute 123456789012345678", "unmute 123456789012345678 nice user", "unmute @Wumpus#0000 nice user"],

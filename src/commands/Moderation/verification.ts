@@ -11,7 +11,7 @@ const levels = {
 	levelVeryHigh: 4,
 };
 
-const verficationLevel = {
+const verificationLevel = {
 	NONE: "levelNone",
 	LOW: "levelLow",
 	MEDIUM: "levelMedium",
@@ -32,7 +32,7 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let selected: string = verficationLevel[context.guild!?.verificationLevel];
+		let selected: string = verificationLevel[context.guild!?.verificationLevel];
 		let done: boolean = false;
 		let content: string = await this.client.bulbutils.translate("verification_level_select", context.guild?.id, {});
 

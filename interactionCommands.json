@@ -699,7 +699,7 @@
 					{
 						"name": "delete",
 						"type": 1,
-						"description": "Ddeletes the selected override",
+						"description": "Deletes the selected override",
 						"options": [
 							{
 								"name": "type",
