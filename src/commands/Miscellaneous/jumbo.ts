@@ -45,7 +45,7 @@ export default class extends Command {
 			}
 		}
 
-		if (realList.length > 1 && doesIncludeAnimatedEmoji) return startMessage.edit(await this.client.bulbutils.translate("jumbo_too_many_aniamted", context.guild?.id, {}));
+		if (realList.length > 1 && doesIncludeAnimatedEmoji) return startMessage.edit(await this.client.bulbutils.translate("jumbo_too_many_animated", context.guild?.id, {}));
 		if (realList.length > 10) return startMessage.edit(await this.client.bulbutils.translate("jumbo_too_many", context.guild?.id, {}));
 
 		try {
