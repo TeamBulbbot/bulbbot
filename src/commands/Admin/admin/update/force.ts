@@ -24,6 +24,6 @@ export default class extends SubCommand {
 		const resp: ShellString = exec(`git pull`);
 
 		if (resp.stderr) return context.channel.send(`Wow pal an error really?\n**Code:** ${resp.code.toString()}\n**Message:**\n\`\`\`${resp.stdout}\`\`\`**Error Message:**\n\`\`\`${resp.stderr}\`\`\``);
-		context.channel.send(`Successfully force pullled\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
+		context.channel.send(`Successfully force pulled\nCode: **${resp.code.toString()}**\n**Message:**\n\`\`\`${resp.stdout}\`\`\``);
 	}
 }

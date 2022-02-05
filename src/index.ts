@@ -60,7 +60,7 @@ client.login().catch((err: Error) => {
 });
 
 process.on("exit", () => {
-	client.log.info("Proccess was killed, terminating the client and database connection");
+	client.log.info("Process was killed, terminating the client and database connection");
 
 	client.destroy();
 	sequelize.close();

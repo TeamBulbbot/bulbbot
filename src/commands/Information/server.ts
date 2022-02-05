@@ -42,7 +42,7 @@ export default class extends Command {
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_announcement", guild.id, {
 			// @ts-ignore
 			guild_announcement: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_NEWS").size,
-			emote_announcement: Emotes.channel.ANNOUNCEMENET,
+			emote_announcement: Emotes.channel.ANNOUNCEMENT,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_voice", guild.id, {
 			// @ts-ignore

@@ -91,7 +91,7 @@ export default class {
 		guildFeatures.forEach(feature => {
 			let f: string = "";
 			let desc: string = "";
-			// this should be converted to a swtich case :sweat:
+			// this should be converted to a switch case :sweat:
 			// ur welcome lmao
 			switch (feature) {
 				case "ANIMATED_ICON":
@@ -161,7 +161,7 @@ export default class {
 					break;
 				case "VERIFIED":
 					f = Emotes.features.VERIFIED;
-					desc = "Shows the verfied checkmark next to the server name";
+					desc = "Shows the verified checkmark next to the server name";
 					break;
 				case "WELCOME_SCREEN_ENABLED":
 					f = Emotes.features.WELCOME_SCREEN_ENABLED;
