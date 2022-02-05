@@ -71,23 +71,23 @@ export default class extends Command {
 				let emoteName: string;
 
 				emote = <RegExpMatchArray>emote.match(CustomEmote);
-				const extension = emote[0].startsWith("<a:") ? "gif" : "png";
 
 				if (emote === null) {
 					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
+					if (!existsSync(join(PATH, `${emoteName}.png`)))
+						await DownloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, "png", emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
 
-					if (!existsSync(join(PATH, `${emoteName}.${extension}`)))
-						await DownloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
+					jumboList.push(`${emoteName}.png`);
 				} else {
+					const extension = emote[0].startsWith("<a:") ? "gif" : "png";
 					emote = emote[0].substring(1).slice(0, -1);
 					emote = <RegExpMatchArray>emote.match(GetEverythingAfterColon);
 					emoteName = emote[0];
 
 					if (!existsSync(join(PATH, `${emoteName}.${extension}`)))
 						await DownloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.${extension}?v=1&quality=lossless`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
+					jumboList.push(`${emoteName}.${extension}`);
 				}
-
-				jumboList.push(`${emoteName}.${extension}`);
 			}
 
 			if (doesIncludeAnimatedEmoji)
@@ -99,7 +99,7 @@ export default class extends Command {
 							description: `Jumbo created by ${context.author.tag} (${context.author.id})`,
 						},
 					],
-					content: "᲼",
+					content: null,
 				});
 			else {
 				for (let i = 1; i < jumboList.length; i++) {
@@ -122,7 +122,7 @@ export default class extends Command {
 							description: `Jumbo created by ${context.author.tag} (${context.author.id})`,
 						},
 					],
-					content: "᲼",
+					content: null,
 				});
 				unlinkSync(`${PATH}/final-${context.author!.id}-${context.guild!.id}.png`);
 			}
@@ -154,7 +154,7 @@ async function DownloadEmoji(url: string, extension: string, emote: any, emoteNa
 		url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/${twemojiVersion}/svg/${emoteName.split("-fe0f").join("")}.svg`;
 
 		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
-			return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${path}/${emoteName}.png`);
+			return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${path}/${emoteName}.${extension}`);
 		});
 	}
 }
