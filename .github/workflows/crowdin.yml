@@ -1,7 +1,6 @@
 name: Crowdin Action
 
 on:
-  on:
   push:
     branches:
       - master
