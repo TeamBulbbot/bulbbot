@@ -9,7 +9,7 @@ const bint0 = BigInt(0);
 const bint1 = BigInt(1);
 const bint2 = BigInt(2);
 // const PERM_STRINGS = Object.keys(Permissions.FLAGS);
-// New permssions currently missing from D.JS
+// New permissions currently missing from D.JS
 // Maybe I'll just make an automatic API endpoint for this later
 const PERM_STRINGS = [
 	"CREATE_INSTANT_INVITE",

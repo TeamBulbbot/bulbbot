@@ -25,8 +25,11 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		const startMessage = await context.channel.send(await this.client.bulbutils.translate("jumbo_start", context.guild?.id, {}));
+
 		const PATH: string = `${__dirname}/../../../files`;
 		const TWEMOJI_VERSION: string = "13.1.0";
+		let doesIncludeAnimatedEmoji = false;
 
 		const SIZE: number = 250;
 		const imgPath: any = [];
@@ -36,79 +39,114 @@ export default class extends Command {
 		for (let i = 0; i < args.length; i++) {
 			const customEmoji = <RegExpMatchArray>args[i].match(CustomEmote);
 			if (!customEmoji) realList.push(...args[i]);
-			else realList.push(...customEmoji);
+			else {
+				realList.push(...customEmoji);
+				if (customEmoji[0].startsWith("<a:")) doesIncludeAnimatedEmoji = true;
+			}
 		}
 
-		if (realList.length > 10) return context.channel.send(await this.client.bulbutils.translate("jumbo_too_many", context.guild?.id, {}));
+		if (realList.length > 1 && doesIncludeAnimatedEmoji) return startMessage.edit(await this.client.bulbutils.translate("jumbo_too_many_animated", context.guild?.id, {}));
+		if (realList.length > 10) return startMessage.edit(await this.client.bulbutils.translate("jumbo_too_many", context.guild?.id, {}));
 
 		try {
 			const jumboList: string[] = [];
 
-			// creat blank canvas
-			await sharp({
+			const sharpCanvas = sharp({
 				create: {
 					width: SIZE * realList.length + 1,
 					height: SIZE,
 					channels: 4,
 					background: { r: 0, g: 0, b: 0, alpha: 0 },
 				},
-			})
-				.png()
-				.toFile(`${PATH}/${context.author.id}-${context.guild?.id}.png`);
+				animated: doesIncludeAnimatedEmoji,
+			});
 
-			jumboList.push(`${context.author.id}-${context.guild?.id}.png`);
+			if (doesIncludeAnimatedEmoji) sharpCanvas.gif();
+			else sharpCanvas.png();
+			await sharpCanvas.toFile(`${PATH}/${context.author.id}-${context.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
+			jumboList.push(`${context.author.id}-${context.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 
 			for (let i = 0; i < realList.length; i++) {
 				let emote: RegExpMatchArray | string = realList[i];
 				let emoteName: string;
 
 				emote = <RegExpMatchArray>emote.match(CustomEmote);
+				const extension = emote[0].startsWith("<a:") ? "gif" : "png";
 
 				if (emote === null) {
 					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
 
-					if (!existsSync(join(PATH, `${emoteName}.png`)))
-						await DownloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
+					if (!existsSync(join(PATH, `${emoteName}.${extension}`)))
+						await DownloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
 				} else {
 					emote = emote[0].substring(1).slice(0, -1);
 					emote = <RegExpMatchArray>emote.match(GetEverythingAfterColon);
 					emoteName = emote[0];
 
-					if (!existsSync(join(PATH, `${emoteName}.png`))) await DownloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.png?v=1`, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
+					if (!existsSync(join(PATH, `${emoteName}.${extension}`)))
+						await DownloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.${extension}?v=1&quality=lossless`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
 				}
 
-				jumboList.push(`${emoteName}.png`);
+				jumboList.push(`${emoteName}.${extension}`);
 			}
 
-			for (let i = 1; i < jumboList.length; i++) {
-				imgPath.push({
-					input: `${PATH}/${jumboList[i]}`,
-					gravity: "southeast",
-					top: 0,
-					left: SIZE * (i - 1),
-					density: 2400,
-					premultiplied: true,
+			if (doesIncludeAnimatedEmoji)
+				await startMessage.edit({
+					files: [
+						{
+							attachment: `${PATH}/${jumboList[1]}`,
+							name: "jumbo.gif",
+							description: `Jumbo created by ${context.author.tag} (${context.author.id})`,
+						},
+					],
+					content: "᲼",
 				});
+			else {
+				for (let i = 1; i < jumboList.length; i++) {
+					imgPath.push({
+						input: `${PATH}/${jumboList[i]}`,
+						gravity: "southeast",
+						top: 0,
+						left: SIZE * (i - 1),
+						density: 2400,
+						premultiplied: true,
+					});
+				}
+
+				await sharp(`${PATH}/${jumboList[0]}`).composite(imgPath).png().toFile(`${PATH}/final-${context.author.id}-${context.guild?.id}.png`);
+				await startMessage.edit({
+					files: [
+						{
+							attachment: `${PATH}/final-${context.author.id}-${context.guild?.id}.png`,
+							name: "jumbo.png",
+							description: `Jumbo created by ${context.author.tag} (${context.author.id})`,
+						},
+					],
+					content: "᲼",
+				});
+				unlinkSync(`${PATH}/final-${context.author!.id}-${context.guild!.id}.png`);
 			}
 
-			await sharp(`${PATH}/${jumboList[0]}`).composite(imgPath).png().toFile(`${PATH}/final-${context.author.id}-${context.guild?.id}.png`);
-			await context.channel.send({
-				files: [`${PATH}/final-${context.author.id}-${context.guild?.id}.png`],
-			});
-
-			unlinkSync(`${PATH}/${context.author!.id}-${context.guild!.id}.png`);
-			unlinkSync(`${PATH}/final-${context.author!.id}-${context.guild!.id}.png`);
+			unlinkSync(`${PATH}/${context.author!.id}-${context.guild!.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 		} catch (err) {
 			this.client.log.error(`[JUMBO] ${context.author.tag} (${context.author.id}) had en error: `, err);
-			return context.channel.send(await this.client.bulbutils.translate("jumbo_invalid", context.guild?.id, {}));
+			return startMessage.edit(await this.client.bulbutils.translate("jumbo_invalid", context.guild?.id, {}));
 		}
 	}
 }
 
-async function DownloadEmoji(url: string, emote: any, emoteName: string, size: number, path: string, twemojiVersion: string): Promise<void> {
+async function DownloadEmoji(url: string, extension: string, emote: any, emoteName: string, size: number, path: string, twemojiVersion: string) {
 	try {
 		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
-			return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${path}/${emoteName}.png`);
+			const sharpEmoji = sharp(res.data, {
+				density: 2400,
+				animated: extension === "gif",
+			}).resize(size, size);
+			if (extension === "gif") sharpEmoji.gif();
+			else sharpEmoji.png();
+			await sharpEmoji.toFile(`${path}/${emoteName}.${extension}`);
+
+			return sharpEmoji;
 		});
 	} catch (error) {
 		if (CustomEmote.test(<string>(<unknown>emote))) throw error;

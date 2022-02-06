@@ -259,7 +259,9 @@
 	"automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
 	"automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
 
+	"jumbo_start": "{{emote_loading}} Generating emoji... This might take a while",
 	"jumbo_too_many": "{{emote_warn}} Too many emojis provided. The bot currently only supports a max of 10 emojis at a time.",
+	"jumbo_too_many_animated": "{{emote_warn}} You can only use 1 animated emoji at a time.",
 	"jumbo_invalid": "{{emote_fail}} Invalid emoji(s) provided. Please use a valid emoji.",
 
 	"userinfo_embed_id": "**ID:** {{user.id}}\n",

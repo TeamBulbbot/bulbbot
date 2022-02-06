@@ -117,7 +117,7 @@ export default class {
 	}
 
 	async isGuildInPool(guildId: Snowflake, poolname: string) {
-		let guids: string[] = [];
+		let guildsArray: string[] = [];
 		const guilds: any = await sequelize.query('SELECT "guildId" FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE "name" = $PoolName)', {
 			bind: {
 				PoolName: poolname,
@@ -125,9 +125,9 @@ export default class {
 			type: QueryTypes.SELECT,
 		});
 
-		for (let ii = 0; ii < guilds.length; ii++) guids.push(guilds[ii].guildId);
+		for (let ii = 0; ii < guilds.length; ii++) guildsArray.push(guilds[ii].guildId);
 
-		return guids.includes(guildId);
+		return guildsArray.includes(guildId);
 	}
 
 	async leavePool(guildId: Snowflake, poolname: string) {

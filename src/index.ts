@@ -6,18 +6,11 @@ import { init, Integrations } from "@sentry/node"; // @ts-ignore
 import * as Tracing from "@sentry/tracing";
 import { startAllCrons } from "./utils/Crons";
 import { startPrometheus } from "./utils/Prometheus";
+import fs from "fs";
 
 env.config({ path: `${__dirname}/../src/.env` });
 
 import i18next from "i18next";
-import enUS from "./languages/en-US.json";
-import skSK from "./languages/sk-SK.json";
-import svSE from "./languages/sv-SE.json";
-import csCZ from "./languages/cs-CZ.json";
-import ptBR from "./languages/pt-BR.json";
-import frFR from "./languages/fr-FR.json";
-import itIT from "./languages/it-IT.json";
-import hiIN from "./languages/hi-IN.json";
 
 const config = {
 	token: process.env.TOKEN,
@@ -26,36 +19,19 @@ const config = {
 };
 
 const client: BulbBotClient = new BulbBotClient(config);
+const languagesPath = require("path").join(__dirname, "languages");
 
+let resources = {};
+fs.readdirSync(languagesPath).map(file => {
+	const langName = file.split(".")[0];
+	resources[langName] = {
+		translation: require(`./languages/${langName}.json`),
+	};
+});
 i18next.init({
 	fallbackLng: "en-US",
 	debug: process.env.ENVIRONMENT === "dev",
-	resources: {
-		"en-US": {
-			translation: enUS,
-		},
-		"pt-BR": {
-			translation: ptBR,
-		},
-		"fr-FR": {
-			translation: frFR,
-		},
-		"sk-SK": {
-			translation: skSK,
-		},
-		"sv-SE": {
-			translation: svSE,
-		},
-		"cs-CZ": {
-			translation: csCZ,
-		},
-		"it-IT": {
-			translation: itIT,
-		},
-		"hi-IN": {
-			translation: hiIN,
-		},
-	},
+	resources,
 });
 
 sequelize
@@ -84,7 +60,7 @@ client.login().catch((err: Error) => {
 });
 
 process.on("exit", () => {
-	client.log.info("Proccess was killed, terminating the client and database connection");
+	client.log.info("Process was killed, terminating the client and database connection");
 
 	client.destroy();
 	sequelize.close();
