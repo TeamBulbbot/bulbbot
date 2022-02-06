@@ -13,7 +13,7 @@ export default class extends SubCommand {
 			name: "disable",
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["command:string"],
+			argList: ["command:String"],
 			usage: "<command>",
 			description: "Disables a command",
 		});

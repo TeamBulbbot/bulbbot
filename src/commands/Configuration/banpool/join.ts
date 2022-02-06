@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			name: "join",
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["code:string"],
+			argList: ["code:String"],
 			usage: "<code>",
 			clearance: 100,
 			description: "Join a banpool.",

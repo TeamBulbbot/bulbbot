@@ -65,7 +65,7 @@ export default class extends Command {
 			category: "Miscellaneous",
 			usage: "<permissions>",
 			examples: ["permissions 8", "permissions 12037"],
-			argList: ["permissions:integer"],
+			argList: ["permissions:Number"],
 			minArgs: 1,
 			maxArgs: 1,
 		});

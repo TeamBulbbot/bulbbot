@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["timezone:string"],
+			argList: ["timezone:String"],
 			usage: "<zone>",
 			description: "Sets the timezone for the server.",
 		});

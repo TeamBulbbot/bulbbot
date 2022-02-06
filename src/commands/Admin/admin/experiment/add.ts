@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			usage: "add <guildID> <experiment>",
 			minArgs: 2,
 			maxArgs: 2,
-			argList: ["guildID:snowflake", "experiment:string"],
+			argList: ["guildID:Snowflake", "experiment:String"],
 			description: "Add a experiment to a guild",
 		});
 	}

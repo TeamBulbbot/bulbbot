@@ -17,7 +17,7 @@ export default class extends Command {
 			aliases: ["cleankick"],
 			usage: "<member> [reason]",
 			examples: ["softban 123456789012345678", "softban 123456789012345678 rude user", "softban @Wumpus#0000 rude user"],
-			argList: ["member:Member"],
+			argList: ["member:Member", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["prefix:string"],
+			argList: ["prefix:String"],
 			usage: "<prefix>",
 			description: "Sets the prefix for the bot.",
 		});

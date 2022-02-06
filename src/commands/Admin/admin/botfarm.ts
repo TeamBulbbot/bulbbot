@@ -13,7 +13,7 @@ export default class extends SubCommand {
 			aliases: ["botfarms"],
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["percent:number"],
+			argList: ["percent:Number"],
 			usage: "<percent>",
 			description: "Shows the botfarms with the specified percentage of bots.",
 		});

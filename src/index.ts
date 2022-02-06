@@ -7,10 +7,9 @@ import * as Tracing from "@sentry/tracing";
 import { startAllCrons } from "./utils/Crons";
 import { startPrometheus } from "./utils/Prometheus";
 import fs from "fs";
+import i18next from "i18next";
 
 env.config({ path: `${__dirname}/../src/.env` });
-
-import i18next from "i18next";
 
 const config = {
 	token: process.env.TOKEN,

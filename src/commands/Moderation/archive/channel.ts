@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 2,
-			argList: ["channel:Channel", "amount:number"],
+			argList: ["channel:ChannelText", "amount:Number"],
 			usage: "<channel> [amount]",
 		});
 	}

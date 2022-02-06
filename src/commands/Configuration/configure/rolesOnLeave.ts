@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			aliases: ["rolesonleave"],
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["enabled:boolean"],
+			argList: ["enabled:Boolean"],
 			usage: "<true|false>",
 			description: "Enable or disable the if roles should be logged on the leave message",
 		});

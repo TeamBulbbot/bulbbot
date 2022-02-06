@@ -15,7 +15,7 @@ export default class extends Command {
 			category: "Moderation",
 			aliases: ["nick"],
 			usage: "<member> [nickname] [reason]",
-			argList: ["member:Member"],
+			argList: ["member:Member", "nickname:String", "reason:String"],
 			examples: ["nickname @Wumpus#0000 Nellys best friend"],
 			minArgs: 1,
 			maxArgs: -1,

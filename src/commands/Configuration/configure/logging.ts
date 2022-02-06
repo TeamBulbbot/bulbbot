@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 2,
 			maxArgs: 2,
-			argList: ["part:string", "channel:Channel"],
+			argList: ["part:String", "channel:ChannelText"],
 			usage: "<part> <channel>",
 			description: "Configure the logging of a part of the bot.",
 		});
@@ -38,7 +38,7 @@ export default class extends SubCommand {
 				return context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 						type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
-						arg_expected: "channel:Channel",
+						arg_expected: "channel:ChannelText",
 						arg_provided: args[1],
 						usage: this.usage,
 					}),

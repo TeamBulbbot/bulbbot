@@ -21,7 +21,7 @@ export default class extends Command {
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "<setting>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>"],
-			argList: ["setting:string"],
+			argList: ["setting:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 75,

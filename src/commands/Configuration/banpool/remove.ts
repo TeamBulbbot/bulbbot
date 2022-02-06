@@ -15,8 +15,8 @@ export default class extends SubCommand {
 			aliases: ["kick"],
 			minArgs: 2,
 			maxArgs: -1,
-			argList: ["guildId:snowflake", "pool name:string"],
-			usage: "<guildId> <poolname>",
+			argList: ["guildId:Snowflake", "pool-name:String"],
+			usage: "<guildId> <pool-name>",
 			clearance: 100,
 			description: "Removes a guild from a banpool.",
 		});

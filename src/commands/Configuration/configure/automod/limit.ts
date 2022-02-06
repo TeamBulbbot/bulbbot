@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 3,
 			maxArgs: 3,
-			argList: ["part:string", "limit:number", "timeout:number"],
+			argList: ["part:String", "limit:Number", "timeout:Number"],
 			usage: "<part> <limit> <timeout>",
 			description: "Sets the limit and timeout for a part of the automod system.",
 		});

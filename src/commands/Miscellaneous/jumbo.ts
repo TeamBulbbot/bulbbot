@@ -13,11 +13,11 @@ export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Sends a bigger version of the given emote(s)",
+			description: "Sends a bigger version of the given emoji(s)",
 			category: "Miscellaneous",
-			usage: "<emote>",
+			usage: "<emoji>",
 			examples: ["jumbo 🍰"],
-			argList: ["emote:Emote"],
+			argList: ["emoji:Emoji"],
 			minArgs: 1,
 			maxArgs: -1,
 			clientPerms: ["ATTACH_FILES"],

@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["infraction:int32"],
+			argList: ["infraction:Number"],
 			usage: "<infraction>",
 			description: "Delete an infraction.",
 		});
@@ -30,7 +30,7 @@ export default class extends SubCommand {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
-					arg_expected: "id:int32",
+					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),

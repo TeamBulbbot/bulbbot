@@ -16,8 +16,8 @@ export default class extends SubCommand {
 			aliases: ["inv"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["pool name:string"],
-			usage: "<pool name>",
+			argList: ["pool-name:String"],
+			usage: "<pool-name>",
 			clearance: 100,
 			description: "Generates an invite code for the specified ban pool.",
 		});

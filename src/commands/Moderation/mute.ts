@@ -20,7 +20,7 @@ export default class extends Command {
 			aliases: ["tempmute"],
 			usage: "<member> <duration> [reason]",
 			examples: ["mute 123456789012345678 5m", "mute 123456789012345678 1h rude user", "mute @Wumpus#0000 24h rude user"],
-			argList: ["member:Member", "duration:Duration"],
+			argList: ["member:Member", "duration:Time", "reason:String"],
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,

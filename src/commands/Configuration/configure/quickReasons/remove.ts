@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["reason:string"],
+			argList: ["reason:String"],
 			usage: "<reason>",
 			description: "Removes a quick reason from the list.",
 		});
