@@ -61,7 +61,7 @@ export default class extends Command {
 		super(client, {
 			name,
 			aliases: ["perms"],
-			description: "Gets permission names from a permission integer",
+			description: "Gets permission names from a permission number",
 			category: "Miscellaneous",
 			usage: "<permissions>",
 			examples: ["permissions 8", "permissions 12037"],
