@@ -7,21 +7,4 @@ api_token_env: CROWDIN_PERSONAL_TOKEN
 "pull_request_title": "New Crowdin Translations"
 "pull_request_labels": ["translation"]
 
-files:
-  [
-    {
-      "source": "/src/languages/en-US.json",
-      "translation": "/src/languages/%locale%.json",
-      "excluded_target_languages": [
-          "nl",     # Dutch
-          "de",     # German
-          "hu",     # Hungarian
-          "en-PT",  # Pirate English
-          "pl",     # Polish
-          "ru",     # Russian
-          "es-ES",  # Spanish
-          "tr",     # Turkish
-          "owo",    # OwO
-        ],
-    },
-  ]
+files: [{ "source": "/src/languages/en-US.json", "translation": "/src/languages/%locale%.json" }]
