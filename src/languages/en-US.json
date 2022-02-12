@@ -203,7 +203,8 @@
 	"automod_settings_invites": "**Invites:** {{enabled}}\n**Whitelisted invites:** {{invites_blacklist}}",
 	"automod_settings_words": "**Words:** {{enabled}}\n**Blacklisted words:** {{word_blacklist}}\n**Token words:** {{word_token_blacklist}}",
 	"automod_settings_mentions": "**Mentions:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
-	"automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
+	"automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s", 
+	"automod_settings_avatarbans": "**Banned avatars**: {{enabled}}\n**Blacklisted avatars:** {{avatar_blacklist}}",
 	"automod_settings_ignored": "**Immune roles:** {{roles}}\n**Immune channels:** {{channels}}\n**Immune users:** {{users}}",
 	"automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
 
@@ -217,6 +218,8 @@
 	"automod_violation_invites_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `DISCORD_INVITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
 	"automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
 	"automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
+	"automod_violation_avatar_reason": "Violated `BANNED_AVATARS` check",
+	"automod_violation_avatar_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has violated the `BANNED_AVATARS` check | Punishment: **{{punishment}}**",
 
 	"jumbo_start": "{{emote_loading}} Generating emoji... This might take a while",
 	"jumbo_too_many": "{{emote_warn}} Too many emojis provided. The bot currently only supports a max of 10 emojis at a time.",

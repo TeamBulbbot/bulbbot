@@ -32,6 +32,7 @@
 		"emoji-unicode": "^2.0.1",
 		"i18next": "^21.6.10",
 		"i18next-icu": "^2.0.3",
+		"imghash": "^0.0.9",
 		"install": "^0.13.0",
 		"intl-messageformat": "^9.11.3",
 		"js-yaml": "^4.1.0",

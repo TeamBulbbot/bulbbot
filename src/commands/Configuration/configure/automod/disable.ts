@@ -25,13 +25,13 @@ export default class extends SubCommand {
 			await databaseManager.enableAutomod(context.guild!.id, false);
 			await context.channel.send(await this.client.bulbutils.translate("automod_disabled", context.guild?.id, {}));
 		} else {
-			const partexec = /^(message|mention|website|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
+			const partexec = /^(message|mention|website|avatars|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
 			if (!partexec)
 				return context.channel.send(
 					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
 						argument: partArg,
 						arg_expected: "part:string",
-						argument_list: "`website`, `invites`, `words`, `word_tokens`, `mentions` or `messages`",
+						argument_list: "`website`, `invites`, `words`, `word_tokens`, `mentions`, `avatars` or `messages`",
 					}),
 				);
 			const partString = partexec[1] ?? partexec[2];

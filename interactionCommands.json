@@ -296,6 +296,10 @@
 										"value": "words"
 									},
 									{
+										"name": "avatars",
+										"value": "avatars"
+									},
+									{
 										"name": "words_token",
 										"value": "words_token"
 									},
@@ -349,6 +353,10 @@
 									{
 										"name": "words",
 										"value": "words"
+									},
+									{
+										"name": "avatars",
+										"value": "avatars"
 									},
 									{
 										"name": "words_token",
@@ -425,6 +433,10 @@
 										"value": "words"
 									},
 									{
+										"name": "avatars",
+										"value": "avatars"
+									},
+									{
 										"name": "words_token",
 										"value": "word_token"
 									},
@@ -486,6 +498,10 @@
 									{
 										"name": "words",
 										"value": "words"
+									},
+									{
+										"name": "avatars",
+										"value": "avatars"
 									},
 									{
 										"name": "words_token",
