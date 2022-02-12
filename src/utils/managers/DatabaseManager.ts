@@ -296,6 +296,8 @@ export default class {
 					return "ignoreRoles";
 				case AutoModPart.ignore_user:
 					return "ignoreUsers";
+				case AutoModPart.avatars:
+					return "avatarHashes";
 			}
 		})(part);
 		const result: AutoModListOperationResult = await operation(db[dbkey]);
@@ -387,6 +389,8 @@ export default class {
 					return "punishmentWords";
 				case AutoModPart.token:
 					return "punishmentWords";
+				case AutoModPart.avatars:
+					return "punishmentAvatarBans";
 				default:
 					return "";
 			}

@@ -27,13 +27,13 @@ export default class extends SubCommand {
 		const partArg = args[0];
 		const itemArg = args[1];
 
-		const partexec = /^(message|mention|website|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
+		const partexec = /^(message|mention|website|invite|word|avatars|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 			return context.channel.send(
 				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
 					argument: args[0],
 					arg_expected: "part:string",
-					argument_list: "`website`, `invites`, `words`, `word_tokens`, `mentions` or `messages`",
+					argument_list: "`website`, `invites`, `words`, `word_tokens`, `mentions`, `avatars` or `messages`",
 				}),
 			);
 		const partString = partexec[1];

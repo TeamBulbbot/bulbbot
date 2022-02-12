@@ -1,11 +1,13 @@
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
 import CommandContext from "../../../../structures/CommandContext";
-import { Invite, Message } from "discord.js";
+import { Invite, Message, User } from "discord.js";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import AutoModPart, { AutoModListPart } from "../../../../utils/types/AutoModPart";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import { NonDigits } from "../../../../utils/Regex";
+import imageHash from "imghash";
+import axios from "axios";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -26,13 +28,13 @@ export default class extends SubCommand {
 		const partArg: string = args[0];
 		let items: (string | undefined)[] = args.slice(1);
 
-		const partexec = /^(website|invite|word)s?$|^(?:words?_?)?(token)s?$|^(ignore)d?_?(channel|user|role)s?$/.exec(partArg.toLowerCase());
+		const partexec = /^(website|invite|word|avatars)s?$|^(?:words?_?)?(token)s?$|^(ignore)d?_?(channel|user|role)s?$/.exec(partArg.toLowerCase());
 		if (!partexec)
 			return context.channel.send(
 				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
 					argument: partArg,
 					arg_expected: this.argList[0],
-					argument_list: "`website`, `invites`, `words`, `words_token`, `ignore_channels`, `ignore_roles`, or `ignore_users`",
+					argument_list: "`website`, `invites`, `words`, `words_token`, `ignore_channels`, `ignore_roles`, `avatars` or `ignore_users`",
 				}),
 			);
 		const partString = partexec[1] ?? partexec[2] ?? `${partexec[3]}_${partexec[4]}`;
@@ -57,6 +59,21 @@ export default class extends SubCommand {
 
 		const part: AutoModListPart = AutoModPart[partString];
 		if (partString.includes("_")) items = items.map(item => item!.replace(NonDigits, ""));
+
+		if (partString === "avatars") {
+			const hash = await Promise.all(
+				items.map(async item => {
+					const user: User | undefined = await this.client.bulbfetch.getUser(item!.replace(NonDigits, ""));
+					if (!user) return undefined;
+					const buffer = await axios.get(user?.displayAvatarURL()!, {
+						responseType: "arraybuffer",
+					});
+					const avatarHash = await imageHash.hash(buffer.data, 8);
+					return avatarHash;
+				}),
+			);
+			items = hash.filter(h => h);
+		}
 
 		const result = await databaseManager.automodAppend(context.guild!.id, part, items);
 

@@ -42,14 +42,14 @@ export default class extends SubCommand {
 		description.push(
 			await this.client.bulbutils.translate("automod_settings_websites", context.guild?.id, {
 				enabled: dbGuild.punishmentWebsite !== null ? `\`${dbGuild.punishmentWebsite}\`` : Emotes.other.SWITCHOFF,
-				websites_blacklist: dbGuild.websiteWhitelist.length ? dbGuild.websiteWhitelist.join(" ") : "None",
+				websites_blacklist: dbGuild.websiteWhitelist.length ? dbGuild.websiteWhitelist.map(web => `\`${web}\``).join(" ") : "None",
 			}),
 		);
 
 		description.push(
 			await this.client.bulbutils.translate("automod_settings_invites", context.guild?.id, {
 				enabled: dbGuild.punishmentInvites !== null ? `\`${dbGuild.punishmentInvites}\`` : Emotes.other.SWITCHOFF,
-				invites_blacklist: dbGuild.inviteWhitelist.length ? dbGuild.inviteWhitelist.join(" ") : "None",
+				invites_blacklist: dbGuild.inviteWhitelist.length ? dbGuild.inviteWhitelist.map(i => `\`${i}\``).join(" ") : "None",
 			}),
 		);
 
@@ -57,7 +57,7 @@ export default class extends SubCommand {
 			await this.client.bulbutils.translate("automod_settings_words", context.guild?.id, {
 				enabled: dbGuild.punishmentWords !== null ? `\`${dbGuild.punishmentWords}\`` : Emotes.other.SWITCHOFF,
 				word_blacklist: dbGuild.wordBlacklist.length ? dbGuild.wordBlacklist.join(" ") : "None",
-				word_token_blacklist: dbGuild.wordBlacklistToken.length ? dbGuild.wordBlacklistToken.join(" ") : "None",
+				word_token_blacklist: dbGuild.wordBlacklistToken.length ? dbGuild.wordBlacklistToken.map(w => `\`${w}\``).join(" ") : "None",
 			}),
 		);
 
@@ -74,6 +74,13 @@ export default class extends SubCommand {
 				enabled: dbGuild.punishmentMessages ? `\`${dbGuild.punishmentMessages}\`` : Emotes.other.SWITCHOFF,
 				limit: dbGuild.limitMessages,
 				timeout: dbGuild.timeoutMessages / 1000,
+			}),
+		);
+
+		description.push(
+			await this.client.bulbutils.translate("automod_settings_avatarbans", context.guild?.id, {
+				enabled: dbGuild.punishmentAvatarBans !== null ? `\`${dbGuild.punishmentAvatarBans}\`` : Emotes.other.SWITCHOFF,
+				avatar_blacklist: dbGuild.avatarHashes.length ? dbGuild.avatarHashes.map(h => `\`${h}\``).join(" ") : "None",
 			}),
 		);
 
