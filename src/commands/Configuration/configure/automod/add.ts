@@ -64,21 +64,12 @@ export default class extends SubCommand {
 			const hash = await Promise.all(
 				items.map(async item => {
 					const user: User | undefined = await this.client.bulbfetch.getUser(item!.replace(NonDigits, ""));
-					if (user) {
-						const buffer = await axios.get(user?.displayAvatarURL()!, {
-							responseType: "arraybuffer",
-						});
-						const avatarHash = await imageHash.hash(buffer.data, 8);
-						return avatarHash;
-					} else {
-						try {
-							const buffer = await axios.get(item!, {
-								responseType: "arraybuffer",
-							});
-							const avatarHash = await imageHash.hash(buffer.data, 8);
-							return avatarHash;
-						} catch (error) {}
-					}
+					if (!user) return undefined;
+					const buffer = await axios.get(user?.displayAvatarURL()!, {
+						responseType: "arraybuffer",
+					});
+					const avatarHash = await imageHash.hash(buffer.data, 8);
+					return avatarHash;
 				}),
 			);
 			items = hash.filter(h => h);
