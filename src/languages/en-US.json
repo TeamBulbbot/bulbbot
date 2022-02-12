@@ -92,6 +92,7 @@
 	"event_update_role": "{{emote_wrench}} The <@&{{role}}> role has been updated. Changes:\n> {{changes}}",
 	"event_update_role_moderator": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the <@&{{role}}> role. Changes:\n> {{changes}}",
 	"event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
+	"event_update_scheduled_event": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the scheduled event **{{event.name}}**.\nChanges:\n> {{changes}}",
 
 	"event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
 	"event_channel_create_moderator": "{{emote_add}} A new **{{type}}** has been created by **{{moderator.tag}}** `({{moderator.id}})` <#{{channel.id}}> (`{{channel.id}}`).",
@@ -106,6 +107,17 @@
 
 	"event_role_create": "{{emote_add}} A new role has been created <@&{{role.id}}> (`{{role.id}}`)",
 	"event_role_delete": "{{emote_remove}} The **@{{role.name}}** (`{{role.id}}`) role has been deleted.",
+
+	"event_guild_scheduled_event_create_both": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_timestamp": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_description": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}",
+	"event_guild_scheduled_event_create_none": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)",
+	"event_guild_scheduled_event_create_moderator_both": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_moderator_timestamp": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_moderator_description": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}",
+	"event_guild_scheduled_event_create_moderator_none": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)",
+	"event_guild_scheduled_event_delete": "{{emote_remove}} The scheduled event **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`) has been deleted",
+	"event_guild_scheduled_event_delete_moderator": "{{emote_remove}} The scheduled event **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`) has been deleted by **{{moderator.tag}}** `({{moderator.id}})`",
 
 	"event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** <t:{{user_age}}:R>",
 	"event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>",
