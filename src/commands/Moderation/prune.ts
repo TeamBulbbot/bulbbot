@@ -14,7 +14,7 @@ export default class extends Command {
 			description: "Prune users from the server",
 			category: "Moderation",
 			usage: "<days> [roles]... [reason]",
-			argList: ["days:Number"],
+			argList: ["days:Number", "roles:Role", "reason:String"],
 			examples: ["prune 5", "prune 1 @members @sleepers", "prune 2 @members kicking after being afk for 2 days"],
 			minArgs: 1,
 			maxArgs: -1,

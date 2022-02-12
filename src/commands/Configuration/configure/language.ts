@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["language:string"],
+			argList: ["language:String"],
 			usage: "<language>",
 			description: "Sets the language for the bot.",
 		});

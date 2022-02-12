@@ -14,7 +14,7 @@ export default class extends Command {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["action:string"],
+			argList: ["action:String"],
 			clientPerms: ["EMBED_LINKS", "ADD_REACTIONS", "USE_EXTERNAL_EMOJIS"],
 		});
 	}

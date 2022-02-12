@@ -24,7 +24,7 @@ export default class extends Command {
 			aliases: ["tempyeet"],
 			usage: "<member> [reason]",
 			examples: ["tempban 123456789012345678 1h", "tempban 123456789012345678 1h rude user", "tempban @Wumpus#0000 1h rude user"],
-			argList: ["member:Member"],
+			argList: ["member:Member", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

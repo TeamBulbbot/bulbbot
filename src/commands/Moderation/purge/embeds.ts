@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["amount:int"],
+			argList: ["amount:Number"],
 			usage: "<number>",
 			description: "Purges messages with embeds.",
 		});

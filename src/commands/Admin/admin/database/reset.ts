@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			description: "Resets the database for a guild",
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 		});
 	}
 

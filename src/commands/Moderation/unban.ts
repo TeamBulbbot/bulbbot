@@ -17,7 +17,7 @@ export default class extends Command {
 			aliases: ["pardon"],
 			usage: "<user> [reason]",
 			examples: ["unban 123456789012345678", "unban 123456789012345678 nice user", "unban @Wumpus#0000 nice user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

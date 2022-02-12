@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			aliases: ["add"],
 			minArgs: 2,
 			maxArgs: -1,
-			argList: ["duration:Duration", "reason:String"],
+			argList: ["duration:Time", "reason:String"],
 			usage: "<duration> <reason>",
 			description: "Sets a reminder for the specified duration.",
 		});

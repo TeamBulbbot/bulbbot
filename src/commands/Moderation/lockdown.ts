@@ -12,7 +12,7 @@ export default class extends Command {
 			category: "Moderation",
 			usage: "<channel> <true|false>",
 			examples: ["lockdown 742095521962786858 true", "lockdown #general false"],
-			argList: ["channel:Channel", "lock:boolean"],
+			argList: ["channel:ChannelText", "lock:Boolean"],
 			minArgs: 2,
 			maxArgs: 2,
 			clearance: 50,
@@ -28,7 +28,7 @@ export default class extends Command {
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
 					arg_provided: args[0],
-					arg_expected: "channel:Channel",
+					arg_expected: "channel:ChannelText",
 					usage: this.usage,
 				}),
 			);
@@ -38,7 +38,7 @@ export default class extends Command {
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					arg_provided: args[1],
-					arg_expected: "lock:boolean",
+					arg_expected: "lock:Boolean",
 					usage: this.usage,
 				}),
 			);

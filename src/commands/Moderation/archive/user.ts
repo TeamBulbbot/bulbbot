@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 2,
-			argList: ["user:User", "amount:number"],
+			argList: ["user:User", "amount:Number"],
 			usage: "<user> [amount]",
 		});
 	}

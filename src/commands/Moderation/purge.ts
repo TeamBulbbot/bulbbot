@@ -20,7 +20,7 @@ export default class extends Command {
 			subCommands: [all, embeds, images, bots, emojis, user, contains, between, until],
 			usage: "<type> [argument] <amount>",
 			examples: ["purge bots 30"],
-			argList: ["type:string"],
+			argList: ["type:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

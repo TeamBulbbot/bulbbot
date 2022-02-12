@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			aliases: ["remove", "rm"],
 			minArgs: 2,
 			maxArgs: -1,
-			argList: ["part:string", "name:string"],
+			argList: ["part:String", "name:String"],
 			usage: "<part> <name>",
 			description: "Removes an override.",
 		});

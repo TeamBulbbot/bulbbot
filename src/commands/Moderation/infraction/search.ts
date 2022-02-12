@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 1,
 			maxArgs: 2,
-			argList: ["user:User", "page:number"],
+			argList: ["user:User", "page:Number"],
 			usage: "<user> [page]",
 			description: "Search for infractions of a user.",
 		});

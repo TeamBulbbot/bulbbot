@@ -20,7 +20,7 @@ export default class extends SubCommand {
 			aliases: ["am"],
 			usage: "<action>",
 			examples: ["configure automod enable", "configure automod edit", "configure automod punishment"],
-			argList: ["action:string"],
+			argList: ["action:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 75,

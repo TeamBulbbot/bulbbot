@@ -14,7 +14,7 @@ export default class extends SubCommand {
 			name: "create",
 			minArgs: 3,
 			maxArgs: -1,
-			argList: ["part:string", "name:string", "clearance:number"],
+			argList: ["part:String", "name:String", "clearance:Number"],
 			usage: "<part> <name> <clearance>",
 			description: "Creates a new override for the specified part.",
 		});

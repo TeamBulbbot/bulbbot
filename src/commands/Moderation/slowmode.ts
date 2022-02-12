@@ -13,7 +13,7 @@ export default class extends Command {
 			category: "Moderation",
 			usage: "<duration> [channel]",
 			examples: ["slowmode 60m", "slowmode 742095521962786858 30m", "slowmode #general 0s"],
-			argList: ["duration:Duration"],
+			argList: ["duration:Time", "channel:ChannelText"],
 			minArgs: 1,
 			maxArgs: 2,
 			clearance: 50,
@@ -33,7 +33,7 @@ export default class extends Command {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
-					arg_expected: "channel:Channel",
+					arg_expected: "channel:ChannelText",
 					arg_provided: args[1],
 					usage: this.usage,
 				}),

@@ -16,7 +16,7 @@ export default class extends Command {
 			examples: ["eval context.channel.send('hi')"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["code:string"],
+			argList: ["code:String"],
 			devOnly: true,
 		});
 	}

@@ -14,7 +14,7 @@ export default class extends SubCommand {
 		super(client, parent, {
 			name: "list",
 			maxArgs: 0,
-			argList: ["command:string"],
+			argList: ["command:String"],
 			description: "Lists all overrides for the current server.",
 		});
 	}

@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			minArgs: 2,
 			maxArgs: -1,
 			usage: "<part> <item> [items...]",
-			argList: ["part:string", "item:string"],
+			argList: ["part:String", "item:String"],
 			description: "Adds items to the specified part of the automod list.",
 		});
 	}

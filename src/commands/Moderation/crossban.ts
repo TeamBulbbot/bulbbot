@@ -21,7 +21,7 @@ export default class extends Command {
 			aliases: ["poolban"],
 			usage: "<user> <reason>",
 			examples: ["crossban 123456789012345678 rude user", "crossban 123456789012345678 rude user", "crossban @Wumpus#0000 rude user"],
-			argList: ["user:User", "reason:string"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 75,

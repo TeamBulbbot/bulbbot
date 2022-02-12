@@ -17,7 +17,7 @@ export default class extends Command {
 			aliases: ["mkick"],
 			usage: "<member> <member2>.... [reason]",
 			examples: ["multikick 123456789012345678 876543210987654321 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
-			argList: ["member:Member"],
+			argList: ["member:Member", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 2, // perhaps `!automod punishment <part>` could return the current setting
 			maxArgs: 2,
-			argList: ["part:string", "punishment:string"],
+			argList: ["part:String", "punishment:String"],
 			usage: "<part> <punishment>",
 			description: "Sets the punishment for a part of the automod system.",
 		});
