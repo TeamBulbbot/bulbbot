@@ -10,7 +10,7 @@ export default class extends Command {
 			description: "Gets useful information about a given command",
 			category: "Bot",
 			usage: "<command> [subcommand...]",
-			argList: ["command:string"],
+			argList: ["command:String"],
 			examples: ["help ping"],
 			minArgs: 1,
 			maxArgs: -1,
