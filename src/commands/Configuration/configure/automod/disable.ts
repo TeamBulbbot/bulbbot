@@ -15,6 +15,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			maxArgs: 1,
 			usage: "[part]",
+			argList: ["part:String"],
 			description: "Disables automod for a part of the message.",
 		});
 	}

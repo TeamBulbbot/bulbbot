@@ -18,7 +18,7 @@ export default class extends Command {
 			aliases: ["munban"],
 			usage: "<user> <user2>... [reason]",
 			examples: ["multiunban 123456789012345678 876543210987654321 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,

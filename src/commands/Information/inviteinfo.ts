@@ -14,7 +14,7 @@ export default class extends Command {
 			aliases: ["inv"],
 			usage: "<invitecode>",
 			examples: ["inviteinfo cacUmbQ", "inviteinfo https://discord.gg/cacUmbQ"],
-			argList: ["invitecode:string"],
+			argList: ["invitecode:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],

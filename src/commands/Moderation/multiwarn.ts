@@ -16,7 +16,7 @@ export default class extends Command {
 			aliases: ["mwarn"],
 			usage: "<member> <member2>... [reason]",
 			examples: ["multiwarn 123456789012345678 876543210987654321 rude user", "multiwarn @Wumpus#0000 @Nelly##0000 rude user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

@@ -17,7 +17,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 2,
 			maxArgs: 2,
-			argList: ["member:Member", "amount:int"],
+			argList: ["member:Member", "amount:Number"],
 			usage: "<member> <amount>",
 			description: "Purges a users messages from the current channel.",
 		});

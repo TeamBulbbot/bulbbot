@@ -11,7 +11,7 @@ export default class extends Command {
 			category: "Miscellaneous",
 			usage: "<text>",
 			examples: ["id asdasdasdasdasdas123456789012345678asdasdasd"],
-			argList: ["text:Text"],
+			argList: ["text:String"],
 			minArgs: 1,
 			maxArgs: -1,
 		});

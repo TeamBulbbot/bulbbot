@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			clearance: 50,
 			minArgs: 2,
 			maxArgs: 2,
-			argList: ["query:string", "amount:int"],
+			argList: ["query:String", "amount:Number"],
 			usage: "<query> <amount>",
 			description: "Purges messages containing the query.",
 		});

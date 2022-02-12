@@ -16,6 +16,7 @@ export default class extends Command {
 			clearance: 50,
 			maxArgs: 1,
 			clientPerms: ["EMBED_LINKS"],
+			argList: ["channel:Channel"],
 		});
 	}
 

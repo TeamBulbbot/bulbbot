@@ -15,7 +15,7 @@ export default class extends Command {
 			category: "Moderation",
 			usage: "<user> [reason]",
 			examples: ["deafen 123456789012345678", "deafen 123456789012345678 rude user", "deafen @Wumpus#0000 rude user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

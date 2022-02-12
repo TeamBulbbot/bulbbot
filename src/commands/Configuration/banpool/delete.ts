@@ -15,8 +15,8 @@ export default class extends SubCommand {
 			aliases: ["del"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["pool name:string"],
-			usage: "<pool name>",
+			argList: ["pool-name:String"],
+			usage: "<pool-name>",
 			clearance: 100,
 			description: "Delete a banpool.",
 		});

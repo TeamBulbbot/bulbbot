@@ -19,7 +19,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 2,
 			maxArgs: -1,
-			argList: ["part:string", "item:string"],
+			argList: ["part:String", "item:String"],
 			usage: "<part> <item> [items...]",
 			description: "Removes items from the specified part of the automod list.",
 		});

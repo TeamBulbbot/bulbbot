@@ -15,7 +15,7 @@ export default class extends Command {
 			clearance: 100,
 			usage: "<days>",
 			examples: ["messageclear 5", "messageclear 10"],
-			argList: ["days:number"],
+			argList: ["days:Number"],
 			minArgs: 1,
 			maxArgs: -1,
 		});

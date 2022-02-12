@@ -26,6 +26,7 @@ export default class extends Command {
 			clearance: 50,
 			maxArgs: 1,
 			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
+			argList: ["user:User"],
 		});
 	}
 

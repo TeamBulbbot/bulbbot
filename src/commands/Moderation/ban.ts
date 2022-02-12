@@ -17,7 +17,7 @@ export default class extends Command {
 			aliases: ["terminate", "yeet"],
 			usage: "<user> [reason]",
 			examples: ["ban 123456789012345678", "ban 123456789012345678 rude user", "ban @Wumpus#0000 rude user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,

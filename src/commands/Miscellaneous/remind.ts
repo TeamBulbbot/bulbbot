@@ -17,7 +17,7 @@ export default class extends Command {
 			usage: "<action>",
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["action:string"],
+			argList: ["action:String"],
 		});
 	}
 }

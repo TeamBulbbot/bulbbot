@@ -15,13 +15,11 @@ export default class extends SubCommand {
 			description: "Enables premium for a guild",
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 		});
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// enables the premium of a guild
-
 		let guild: Guild;
 
 		try {
