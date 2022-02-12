@@ -313,6 +313,10 @@ export const ChatInputCommand: ApplicationCommand[] = [
 										value: "words",
 									},
 									{
+										name: "avatars",
+										value: "avatars",
+									},
+									{
 										name: "words_token",
 										value: "words_token",
 									},
@@ -365,6 +369,10 @@ export const ChatInputCommand: ApplicationCommand[] = [
 									{
 										name: "words",
 										value: "words",
+									},
+									{
+										name: "avatars",
+										value: "avatars",
 									},
 									{
 										name: "words_token",
@@ -441,6 +449,10 @@ export const ChatInputCommand: ApplicationCommand[] = [
 										value: "words",
 									},
 									{
+										name: "avatars",
+										value: "avatars",
+									},
+									{
 										name: "words_token",
 										value: "word_token",
 									},
@@ -502,6 +514,10 @@ export const ChatInputCommand: ApplicationCommand[] = [
 									{
 										name: "words",
 										value: "words",
+									},
+									{
+										name: "avatars",
+										value: "avatars",
 									},
 									{
 										name: "words_token",
