@@ -1,7 +1,7 @@
 import Command from "../../../../structures/Command";
 import SubCommand from "../../../../structures/SubCommand";
 import CommandContext from "../../../../structures/CommandContext";
-import { Invite, Message } from "discord.js";
+import { Invite, Message, User } from "discord.js";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import AutoModPart, { AutoModListPart } from "../../../../utils/types/AutoModPart";
 import BulbBotClient from "../../../../structures/BulbBotClient";
@@ -63,7 +63,7 @@ export default class extends SubCommand {
 		if (partString === "avatars") {
 			const hash = await Promise.all(
 				items.map(async item => {
-					const user = await this.client.bulbfetch.getUser(item!.replace(NonDigits, ""));
+					const user: User | undefined = await this.client.bulbfetch.getUser(item!.replace(NonDigits, ""));
 					if (user) {
 						const buffer = await axios.get(user?.displayAvatarURL()!, {
 							responseType: "arraybuffer",
@@ -72,7 +72,7 @@ export default class extends SubCommand {
 						return avatarHash;
 					} else {
 						try {
-							let buffer = await axios.get(item!, {
+							const buffer = await axios.get(item!, {
 								responseType: "arraybuffer",
 							});
 							const avatarHash = await imageHash.hash(buffer.data, 8);
