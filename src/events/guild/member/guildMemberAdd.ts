@@ -37,7 +37,7 @@ export default class extends Event {
 			if (automod.avatarHashes.includes(avatarHash)) {
 				const automodManager: AutoModManager = new AutoModManager();
 
-				let punishment: string = await automodManager.resolveActionWithoutContext(
+				const punishment: string = await automodManager.resolveActionWithoutContext(
 					this.client,
 					member,
 					automod.punishmentAvatarBans,
