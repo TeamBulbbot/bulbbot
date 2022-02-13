@@ -50,7 +50,7 @@ export default class extends SubCommand {
 			const hash = await Promise.all(
 				items.map(async item => {
 					const user: User | undefined = await this.client.bulbfetch.getUser(item!.replace(NonDigits, ""));
-					if (!user) return undefined;
+					if (!user) return item;
 					const buffer = await axios.get(user?.displayAvatarURL()!, {
 						responseType: "arraybuffer",
 					});
