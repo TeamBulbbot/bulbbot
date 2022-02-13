@@ -198,6 +198,7 @@
 	"automod_already_in_database": "{{emote_warn}} Item(s) `{{item}}` is/are already in the AutoMod database.",
 	"automod_add_success": "{{emote_success}} Successfully added item(s) `{{item}}` to `{{category}}`.",
 	"automod_remove_success": "{{emote_success}} Successfully removed item(s) `{{item}}` from `{{category}}`",
+	"automod_invalid_input": "{{emote_warn}} Item `{{item}}` was not a valid input for that automod category",
 
 	"automod_updated_limit": "{{emote_success}} Successfully set the limit for `{{category}}` to `{{limit}}`",
 	"automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",

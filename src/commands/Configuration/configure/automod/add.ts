@@ -58,13 +58,17 @@ export default class extends SubCommand {
 		if (!items.length) return context.channel.send(await this.client.bulbutils.translate("global_error.automod_items_length_undefined", context.guild!.id, {}));
 
 		const part: AutoModListPart = AutoModPart[partString];
+		const errors: string[] = [];
 		if (partString.includes("_")) items = items.map(item => item!.replace(NonDigits, ""));
 
 		if (partString === "avatars") {
 			const hash = await Promise.all(
 				items.map(async item => {
 					const user: User | undefined = await this.client.bulbfetch.getUser(item!.replace(NonDigits, ""));
-					if (!user) return undefined;
+					if (!user) {
+						errors.push(await this.client.bulbutils.translate("automod_invalid_input", context.guild!.id, { item }));
+						return null;
+					}
 					const buffer = await axios.get(user?.displayAvatarURL()!, {
 						responseType: "arraybuffer",
 					});
@@ -74,6 +78,8 @@ export default class extends SubCommand {
 			);
 			items = hash.filter(h => h);
 		}
+
+		if (errors.length > 0) context.channel.send(errors.join("\n"));
 
 		const result = await databaseManager.automodAppend(context.guild!.id, part, items);
 
