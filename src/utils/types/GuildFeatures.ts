@@ -7,7 +7,7 @@ export enum GuildFeatures {
     ENABLED_DISCOVERABLE_BEFORE = "Enabled Sever Discovery before the Discovery Checklist was launched",
     FORCE_RELAY = "Shard the guild connections to different nodes that relay information between each other",
     INVITE_SPLASH = "Adds the ability to set a background image that will display on the invite links",
-    MEMBERS_LIST_DISABLED = "Hides the member list",
+    MEMBER_LIST_DISABLED = "Hides the member list",
     MEMBER_VERIFICATION_GATE_ENABLED = "Has member verification gate enabled, which requirers new users to pass verification gate before accessing the guild",
     MORE_EMOJI = "Adds 150 extra emote slots in each category (normal and animated)",
     NEWS = "Adds the ability to create announcement channels",
