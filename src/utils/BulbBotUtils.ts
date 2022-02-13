@@ -114,50 +114,6 @@ export default class {
 		return uptime;
 	}
 
-	guildRegion(region: string) {
-		region = region.charAt(0).toUpperCase() + region.slice(1);
-		switch (region) {
-			case "Brazil":
-				region = `:flag_br: ${region}`;
-				break;
-			case "Eu-central":
-			case "Europe":
-				region = `:flag_eu: ${region}`;
-				break;
-			case "Hongkong":
-				region = `:flag_hk: ${region}`;
-				break;
-			case "India":
-				region = `:flag_in: ${region}`;
-				break;
-			case "Japan":
-				region = `:flag_jp: ${region}`;
-				break;
-			case "Russia":
-				region = `:flag_ru: ${region}`;
-				break;
-			case "Singapore":
-				region = `:flag_sg: ${region}`;
-				break;
-			case "Southafrica":
-				region = `:flag_za: ${region}`;
-				break;
-			case "Sydney":
-				region = `:flag_au: ${region}`;
-				break;
-			case "Us-central":
-			case "Us-east":
-			case "Us-south":
-			case "Us-west":
-				region = `:flag_us: ${region}`;
-				break;
-			default:
-				break;
-		}
-
-		return region;
-	}
-
 	public async sleep(ms: number) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
