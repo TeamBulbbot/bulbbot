@@ -79,16 +79,18 @@ export default class extends SubCommand {
 			items = hash.filter(h => h);
 		}
 
-		if (errors.length > 0) context.channel.send(errors.join("\n"));
-
 		const result = await databaseManager.automodAppend(context.guild!.id, part, items);
 
 		if (!result.added.length) return context.channel.send(await this.client.bulbutils.translate("automod_already_in_database", context.guild!.id, { item: items.join("`, `") }));
-		await context.channel.send(
+
+		const msg = [
+			errors.length > 0 ? errors.join("\n") + "\n\n" : "",
 			await this.client.bulbutils.translate("automod_add_success", context.guild!.id, {
 				category: partArg,
 				item: result.added.join("`, `"),
 			}),
-		);
+		];
+
+		await context.channel.send(msg.join(""));
 	}
 }
