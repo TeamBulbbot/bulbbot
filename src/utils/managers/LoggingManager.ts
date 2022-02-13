@@ -1,5 +1,5 @@
 import BulbBotClient from "../../structures/BulbBotClient";
-import { Guild, MessageAttachment, MessageEmbed, NewsChannel, Snowflake, TextChannel, User } from "discord.js";
+import { Guild, MessageEmbed, NewsChannel, Snowflake, TextChannel, User } from "discord.js";
 import DatabaseManager from "./DatabaseManager";
 import * as Emotes from "../../emotes.json";
 import { defaultPerms } from "../../Config";
