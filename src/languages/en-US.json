@@ -232,7 +232,7 @@
 	"automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
 	"automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
 	"automod_violation_avatar_reason": "Violated `BANNED_AVATARS` check",
-	"automod_violation_avatar_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has violated the `BANNED_AVATARS` check | Punishment: **{{punishment}}**",
+	"automod_violation_avatar_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has violated the `BANNED_AVATARS` check | Punishment: **{{punishment}}**\n**Hash:** {{hash}}",
 
 	"jumbo_start": "{{emote_loading}} Generating emoji... This might take a while",
 	"jumbo_too_many": "{{emote_warn}} Too many emojis provided. The bot currently only supports a max of 10 emojis at a time.",
