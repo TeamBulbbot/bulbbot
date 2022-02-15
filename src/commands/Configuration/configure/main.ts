@@ -2,7 +2,7 @@ import { MessageActionRow, MessageComponentInteraction, MessageSelectMenu } from
 import BulbBotClient from "../../../structures/BulbBotClient";
 import * as Emotes from "../../../emotes.json";
 
-export default async function(interaction: MessageComponentInteraction, client: BulbBotClient) {
+export default async function (interaction: MessageComponentInteraction, client: BulbBotClient) {
 	const row = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("configure-main")
@@ -13,6 +13,12 @@ export default async function(interaction: MessageComponentInteraction, client: 
 					value: "actionsOnInfo",
 					description: "Configure the actions on info setting",
 					emoji: Emotes.configure.ACTIONS_ON_INFO,
+				},
+				{
+					label: "Automod",
+					value: "automod",
+					description: "Configure the Automod settings",
+					emoji: Emotes.configure.AUTOMOD,
 				},
 				{
 					label: "Autorole",
@@ -59,9 +65,12 @@ export default async function(interaction: MessageComponentInteraction, client: 
 			]),
 	);
 
-	await interaction.update({content: await client.bulbutils.translate("config_main_header", interaction.guild?.id, {
+	await interaction.update({
+		content: await client.bulbutils.translate("config_main_header", interaction.guild?.id, {
 			guild: interaction.guild,
-		}), components: [row]});
+		}),
+		components: [row],
+	});
 
 	const filter = i => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
@@ -71,6 +80,9 @@ export default async function(interaction: MessageComponentInteraction, client: 
 			switch (i.values[0]) {
 				case "actionsOnInfo":
 					await require("./actionsOnInfo").default(i, client);
+					break;
+				case "automod":
+					await require("./automod").default(i, client);
 					break;
 				case "autorole":
 					await require("./autorole").default(i, client);
@@ -95,5 +107,5 @@ export default async function(interaction: MessageComponentInteraction, client: 
 					break;
 			}
 		}
-	})
+	});
 }

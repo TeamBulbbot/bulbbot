@@ -13,12 +13,7 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 			.setCustomId("placeholder")
 			.setPlaceholder(`Current language: ${config.language}`)
 			.setDisabled(true)
-			.addOptions([
-				{
-					label: "Placeholder",
-					value: "placeholder",
-				},
-			]),
+			.addOptions([{ label: "Placeholder", value: "placeholder" }]),
 	);
 
 	const selectRow = new MessageActionRow().addComponents(
@@ -26,38 +21,14 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 			.setCustomId("language")
 			.setPlaceholder(await client.bulbutils.translate("config_language_placeholder", interaction.guild?.id, {}))
 			.addOptions([
-				{
-					label: "English, US (English US)",
-					value: "en-us",
-				},
-				{
-					label: "Slovak (Slovenčina)",
-					value: "sk-sk",
-				},
-				{
-					label: "Swedish (Svenska)",
-					value: "sv-se",
-				},
-				{
-					label: "French (Français)",
-					value: "fr-fr",
-				},
-				{
-					label: "Portuguese (Português)",
-					value: "pt-br",
-				},
-				{
-					label: "Czech (Čeština)",
-					value: "cs-cz",
-				},
-				{
-					label: "Italian (Italiano)",
-					value: "it-it",
-				},
-				{
-					label: "Hindi (हिंदी)",
-					value: "hi-in",
-				},
+				{ label: "English, US (English US)", value: "en-us" },
+				{ label: "Slovak (Slovenčina)", value: "sk-sk" },
+				{ label: "Swedish (Svenska)", value: "sv-se" },
+				{ label: "French (Français)", value: "fr-fr" },
+				{ label: "Portuguese (Português)", value: "pt-br" },
+				{ label: "Czech (Čeština)", value: "cs-cz" },
+				{ label: "Italian (Italiano)", value: "it-it" },
+				{ label: "Hindi (हिंदी)", value: "hi-in" },
 			]),
 	);
 

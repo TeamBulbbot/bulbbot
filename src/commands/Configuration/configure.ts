@@ -1,6 +1,5 @@
 import Command from "../../structures/Command";
 import override from "./configure/override";
-import automod from "./configure/automod";
 import BulbBotClient from "../../structures/BulbBotClient";
 import CommandContext from "../../structures/CommandContext";
 import { Message, MessageActionRow, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
@@ -12,7 +11,7 @@ export default class extends Command {
 			name,
 			description: "Configure the bot in your server",
 			category: "Configuration",
-			subCommands: [override, automod],
+			subCommands: [override],
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "<setting>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>"],
@@ -33,6 +32,12 @@ export default class extends Command {
 						value: "actionsOnInfo",
 						description: "Configure the actions on info setting",
 						emoji: Emotes.configure.ACTIONS_ON_INFO,
+					},
+					{
+						label: "Automod",
+						value: "automod",
+						description: "Configure the Automod settings",
+						emoji: Emotes.configure.AUTOMOD,
 					},
 					{
 						label: "Autorole",
@@ -91,6 +96,9 @@ export default class extends Command {
 				switch (i.values[0]) {
 					case "actionsOnInfo":
 						await require("./configure/actionsOnInfo").default(i, this.client);
+						break;
+					case "automod":
+						await require("./configure/automod").default(i, this.client);
 						break;
 					case "autorole":
 						await require("./configure/autorole").default(i, this.client);

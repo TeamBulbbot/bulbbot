@@ -185,6 +185,15 @@
 	"config_prefix_button_change": "Change Prefix",
 	"config_prefix_button_reset": "Reset Prefix",
 
+	"config_automod_add_remove_header": "{{emote_wrench}} **Automod Configuration**\n{{emote_edit}}*This setting allows you to add and remove items from the automod database.*",
+	"config_automod_add_remove_category_placeholder": "Select a category to modify",
+	"config_automod_add_remove_remove_success": "{{emote_success}} Successfully removed the selected Automod Item(s) from the database",
+	"config_automod_add_remove_add_success": "{{emote_success}} Successfully added the selected Automod Item to the database",
+	"config_automod_add_remove_add_prompt": "{{emote_wrench}} Please enter the new Automod Item",
+	"config_automod_add_remove_add_already_exists": "{{emote_fail}} The Automod Item `{{item}}` already exists in the database",
+	"config_automod_add_remove_button_add": "Add Items",
+	"config_automod_add_remove_button_remove": "Remove Items",
+
 	"config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
 	"config_generic_success_add": "{{emote_success}} Successfully added `{{value}}` to `{{setting}}`",
 	"config_generic_success_remove": "{{emote_success}} Successfully removed `{{value}}` from `{{setting}}`",
