@@ -55,7 +55,7 @@ export default class extends Command {
 			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
 				moderator: context.author,
-				target,
+				target: target.user,
 				reason,
 			}),
 			reason,
