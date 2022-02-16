@@ -135,6 +135,7 @@
 		"GUILD_STAGE_VOICE": "stage channel",
 		"UNKNOWN": "channel"
 	},
+	
 	"config_button_enable": "Enable",
 	"config_button_disable": "Disable",
 	"config_button_back": "Back",
@@ -193,6 +194,11 @@
 	"config_automod_add_remove_add_already_exists": "{{emote_fail}} The Automod Item `{{item}}` already exists in the database",
 	"config_automod_add_remove_button_add": "Add Items",
 	"config_automod_add_remove_button_remove": "Remove Items",
+
+	"config_enable_disable_header": "{{emote_wrench}} **Enable/Disable Configuration**\n{{emote_edit}}*This setting controls whether Automod and its corresponding checks are enabled or disabled.*",
+	"config_enable_disable_enable_success": "{{emote_success}} Successfully enabled the Automod",
+	"config_enable_disable_disable_generic_success": "{{emote_success}} Successfully disabled the Automod",
+	"config_enable_disable_disable_success": "{{emote_success}} Successfully disabled the selected Automod category.",
 
 	"config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
 	"config_generic_success_add": "{{emote_success}} Successfully added `{{value}}` to `{{setting}}`",

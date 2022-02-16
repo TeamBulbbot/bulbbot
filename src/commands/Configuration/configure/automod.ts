@@ -30,6 +30,9 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 				case "add_remove":
 					await require("./automod/add").default(i, client);
 					break;
+				case "enable_disable":
+					await require("./automod/enable").default(i, client);
+					break;
 			}
 		}
 	});
