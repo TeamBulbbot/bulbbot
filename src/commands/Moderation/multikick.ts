@@ -40,7 +40,7 @@ export default class extends Command {
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string = "";
+		let fullList: string[] = [];
 
 		if (targets!!.length <= 1) {
 			await context.channel.send(
@@ -91,13 +91,13 @@ export default class extends Command {
 			);
 
 			if (infID === null) continue;
-			fullList += ` **${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``;
+			fullList.push(`**${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``);
 		}
 
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-				full_list: fullList,
+				full_list: fullList.join(', '),
 				reason,
 			}),
 		);
