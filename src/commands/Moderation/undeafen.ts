@@ -62,7 +62,7 @@ export default class extends Command {
 				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
 				target: target.user,
 				reason,
-				infractionId: infID,
+				infraction_id: infID,
 			}),
 		);
 	}

@@ -198,6 +198,7 @@
 	"automod_already_in_database": "{{emote_warn}} Item(s) `{{item}}` is/are already in the AutoMod database.",
 	"automod_add_success": "{{emote_success}} Successfully added item(s) `{{item}}` to `{{category}}`.",
 	"automod_remove_success": "{{emote_success}} Successfully removed item(s) `{{item}}` from `{{category}}`",
+	"automod_invalid_input": "{{emote_warn}} Item `{{item}}` was not a valid input for that automod category",
 
 	"automod_updated_limit": "{{emote_success}} Successfully set the limit for `{{category}}` to `{{limit}}`",
 	"automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",
@@ -231,7 +232,7 @@
 	"automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
 	"automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
 	"automod_violation_avatar_reason": "Violated `BANNED_AVATARS` check",
-	"automod_violation_avatar_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has violated the `BANNED_AVATARS` check | Punishment: **{{punishment}}**",
+	"automod_violation_avatar_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has violated the `BANNED_AVATARS` check | Punishment: **{{punishment}}**\n**Hash:** {{hash}}",
 
 	"jumbo_start": "{{emote_loading}} Generating emoji... This might take a while",
 	"jumbo_too_many": "{{emote_warn}} Too many emojis provided. The bot currently only supports a max of 10 emojis at a time.",
