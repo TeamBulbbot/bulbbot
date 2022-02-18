@@ -90,7 +90,7 @@ export default class {
 		const features: string[] = [];
 
 		guildFeatures.forEach(feature => {
-			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeatures[feature]}')`);		
+			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeatures[feature]}')`);
 		});
 
 		features.sort();
@@ -211,10 +211,10 @@ export default class {
 	}
 
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
-		const resolvedHandle: string = handle.toString().replace(/UserHandle\./, "").toLowerCase();
+		if (handle == 0) return false;
 		// @ts-ignore
-		await context.channel.send(await this.translate(`global_${resolvedHandle}`, context.guild?.id, {}));
-		return resolvedHandle == "success" ? false : true;
+		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, {}))
+		return true;
 	}
 
 	/** @deprecated */
@@ -379,19 +379,17 @@ export default class {
 				if ((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
 				let additionalInfo =
 					typeof v === "object"
-						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${
-								(<any>v)?.member
-									? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">"
-									: (<any>v)?.user
-									? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
-									: ""
-						  }${
-								(<any>v)?.channel && (<any>v)?.channel?.name
-									? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
-									: v instanceof GuildChannel
-									? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
-									: ""
-						  }`
+						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${(<any>v)?.member
+							? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">"
+							: (<any>v)?.user
+								? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
+								: ""
+						}${(<any>v)?.channel && (<any>v)?.channel?.name
+							? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
+							: v instanceof GuildChannel
+								? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
+								: ""
+						}`
 						: "";
 				argsDesc.push(`**${k}:** ${typeof v === "object" ? "[object " + v?.constructor.name + "]" + additionalInfo.trimEnd() : v}`);
 			}
