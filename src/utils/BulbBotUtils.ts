@@ -385,13 +385,13 @@ export default class {
 									: (<any>v)?.user
 									? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
 									: ""
-						}${
+						  }${
 								(<any>v)?.channel && (<any>v)?.channel?.name
 									? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
 									: v instanceof GuildChannel
 									? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
 									: ""
-						}`
+						  }`
 						: "";
 				argsDesc.push(`**${k}:** ${typeof v === "object" ? "[object " + v?.constructor.name + "]" + additionalInfo.trimEnd() : v}`);
 			}
