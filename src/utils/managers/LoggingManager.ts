@@ -146,7 +146,7 @@ export default class {
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
-	public async sendAutoModLog(client: BulbBotClient, guild: Guild, log: string) {
+	public async sendAutoModLog(client: BulbBotClient, guild: Guild, log: string, buffer?: Buffer) {
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
@@ -154,8 +154,20 @@ export default class {
 
 		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.automod);
 		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		let files: any = null;
 
-		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
+		if (buffer)
+			files = [
+				{
+					attachment: buffer,
+					name: "avatar.png",
+				},
+			];
+
+		await modChannel.send({
+			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`,
+			files,
+		});
 	}
 
 	private async betterActions(client: BulbBotClient, guildID: Snowflake, action: string): Promise<string> {

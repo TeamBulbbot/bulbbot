@@ -29,7 +29,7 @@ export default class extends Event {
 		);
 
 		const automod: AutoModConfiguration = await databaseManager.getAutoModConfig(member.guild.id);
-		if (automod.avatarHashes.length > 0 && automod.punishmentAvatarBans) {
+		if (automod.enabled && automod.avatarHashes.length > 0 && automod.punishmentAvatarBans) {
 			const buffer = await axios.get(member?.displayAvatarURL()!, {
 				responseType: "arraybuffer",
 			});
@@ -50,7 +50,9 @@ export default class extends Event {
 					await this.client.bulbutils.translate("automod_violation_avatar_log", member.guild.id, {
 						user: member.user,
 						punishment,
+						hash: avatarHash,
 					}),
+					buffer.data,
 				);
 			}
 		}
