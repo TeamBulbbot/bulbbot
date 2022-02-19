@@ -213,7 +213,7 @@ export default class {
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
 		if (handle == 0) return false;
 		// @ts-ignore
-		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, {}));
+		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
 		return true;
 	}
 
