@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message } from "discord.js";
+import { Guild, GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -50,10 +50,10 @@ export default class extends Command {
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
 			await this.client.bulbutils.sleep(massCommandSleep);
+			const targetID: Snowflake = targets[i].replace(NonDigits, "")
 
-			let target;
 			let infID: number;
-			target = await this.client.bulbfetch.getUser(targets[i].replace(NonDigits, ""));
+			let target = await this.client.bulbfetch.getUser(targetID);
 			if (!target) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
@@ -63,6 +63,14 @@ export default class extends Command {
 						usage: this.usage,
 					}),
 				);
+				continue;
+			}
+
+			const banList = await context.guild?.bans.fetch();
+			const bannedUser = banList?.find(user => user.user.id === targetID);
+
+			if (!bannedUser) {
+				context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
 				continue;
 			}
 
