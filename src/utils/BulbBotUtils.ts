@@ -70,7 +70,7 @@ export default class {
 		const botdeveloper: number = 1 << 17;
 		const spammer: number = 1 << 20;
 
-		if ((spammer & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
+		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 		if ((bitfield & verfiedBot) === verfiedBot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
