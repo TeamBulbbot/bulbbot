@@ -27,16 +27,16 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		if (targets === null)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
+		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		targets = [...new Set(targets)];
+
+		if (!targets.length)
+		return context.channel.send(
+			await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
+				usage: this.usage,
+			}),
+		);
+
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
