@@ -53,7 +53,7 @@ export default class extends Command {
 			const targetID: Snowflake = targets[i].replace(NonDigits, "")
 
 			let infID: number;
-			let target = await this.client.bulbfetch.getUser(targetID);
+			const target = await this.client.bulbfetch.getUser(targetID);
 			if (!target) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
