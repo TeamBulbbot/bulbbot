@@ -8,6 +8,7 @@ import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
+import { GuildFeaturesDescriptions } from './types/GuildFeaturesDescriptions';
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -56,207 +57,42 @@ export default class {
 	public badges(bitfield: number) {
 		let badges: string[] = [];
 
-		const verfiedBot: number = 1 << 16;
 		const staff: number = 1 << 0;
 		const partner: number = 1 << 1;
-		const certifiedMod = 1 << 18;
 		const hypesquad_events: number = 1 << 2;
 		const bughunter_green: number = 1 << 3;
 		const hypesquad_bravery: number = 1 << 6;
 		const hypesquad_brilliance: number = 1 << 7;
 		const hypesquad_balance: number = 1 << 8;
-		const earlysupport: number = 1 << 9;
+		const early_support: number = 1 << 9;
 		const bughunter_gold: number = 1 << 14;
-		const botdeveloper: number = 1 << 17;
+		const verified_bot: number = 1 << 16;
+		const bot_developer: number = 1 << 17;
+		const certified_mod: number = 1 << 18;
 		const spammer: number = 1 << 20;
 
-		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
-		if ((bitfield & verfiedBot) === verfiedBot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
-		if ((bitfield & certifiedMod) === certifiedMod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
+		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.flags.HOUSE_BRILLIANCE);
 		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.flags.HOUSE_BALANCE);
-		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
+		if ((bitfield & early_support) === early_support) badges.push(Emotes.flags.EARLY_SUPPORTER);
 		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
-		if ((bitfield & botdeveloper) === botdeveloper) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
-		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.flags.EARLY_SUPPORTER);
+		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
+		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
+		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
+		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 
 		return badges.map(i => `${i}`).join(" ");
 	}
 
 	public guildFeatures(guildFeatures: string[]) {
-		let features: string[] = [];
+		const features: string[] = [];
 
 		guildFeatures.forEach(feature => {
-			let f: string = "";
-			let desc: string = "";
-			// this should be converted to a switch case :sweat:
-			// ur welcome lmao
-			switch (feature) {
-				case "ANIMATED_ICON":
-					f = Emotes.features.ANIMATED_ICON;
-					desc = "Adds the ability to upload a animated icon to the guild";
-					break;
-				case "BANNER":
-					f = Emotes.features.BANNER;
-					desc = "Adds the ability to set a banner image for the guild that will display above the channel list";
-					break;
-				case "COMMERCE":
-					f = Emotes.features.COMMERCE;
-					desc = "Adds the ability to create store channels";
-					break;
-				case "COMMUNITY":
-					f = Emotes.features.COMMUNITY;
-					desc = "Gives access to the Server Discovery, Insights, Community Server News and Announcement Channels";
-					break;
-				case "DISCOVERABLE":
-					f = Emotes.features.DISCOVERABLE;
-					desc = "Makes guild visible in Sever Discovery";
-					break;
-				case "ENABLED_DISCOVERABLE_BEFORE":
-					f = Emotes.features.ENABLED_DISCOVERABLE_BEFORE;
-					desc = "Enabled Sever Discovery before the Discovery Checklist was launched";
-					break;
-				case "FORCE_RELAY":
-					f = Emotes.features.FORCE_RELAY;
-					desc = "Shard the guild connections to different nodes that relay information between each other";
-					break;
-				case "INVITE_SPLASH":
-					f = Emotes.features.INVITE_SPLASH;
-					desc = "Adds the ability to set a background image that will display on the invite links";
-					break;
-				case "MEMBER_LIST_DISABLED":
-					f = Emotes.features.MEMBER_LIST_DISABLED;
-					desc = "Hides the member list";
-					break;
-				case "MEMBER_VERIFICATION_GATE_ENABLED":
-					f = Emotes.features.MEMBER_VERIFICATION_GATE_ENABLED;
-					desc = "Has member verification gate enabled, which requirers new users to pass verification gate before accessing the guild";
-					break;
-				case "MORE_EMOJI":
-					f = Emotes.features.MORE_EMOJI;
-					desc = "Adds 150 extra emote slots in each category (normal and animated)";
-					break;
-				case "NEWS":
-					f = Emotes.features.NEWS;
-					desc = "Adds the ability to create announcement channels";
-					break;
-				case "PARTNERED":
-					f = Emotes.features.PARTNERED;
-					desc = "Shows the partner badge next to the server name";
-					break;
-				case "PREVIEW_ENABLED":
-					f = Emotes.features.PREVIEW_ENABLED;
-					desc = "Enables lurking in the guild";
-					break;
-				case "RELAY_ENABLED":
-				case "RELAY_DISABLED":
-					f = Emotes.features.RELAY_ENABLED;
-					desc = "Shard the guild connections to different nodes that relay information between each other";
-					break;
-				case "VANITY_URL":
-					f = Emotes.features.VANITY_URL;
-					desc = "Adds the ability to set a custom invite link (discord.gg/CUSTOM_VANITY)";
-					break;
-				case "VERIFIED":
-					f = Emotes.features.VERIFIED;
-					desc = "Shows the verified checkmark next to the server name";
-					break;
-				case "WELCOME_SCREEN_ENABLED":
-					f = Emotes.features.WELCOME_SCREEN_ENABLED;
-					desc = "Has the welcome screen enabled enabled, which will show a model when new users join the guild";
-					break;
-				case "VIP_REGIONS":
-					f = Emotes.features.VIP_REGIONS;
-					desc = "Adds the ability to create voice channels with 384kbps max bitrate";
-					break;
-				case "PRIVATE_THREADS":
-					f = Emotes.features.PRIVATE_THREADS;
-					desc = "Grants the ability to create private threads";
-					break;
-				case "SEVEN_DAY_THREAD_ARCHIVE":
-					f = Emotes.features.SEVEN_DAY_THREAD_ARCHIVE;
-					desc = "Threads will archive in 7 days";
-					break;
-				case "THREADS_ENABLED":
-					f = Emotes.features.THREADS_ENABLED;
-					desc = "Grants the ability to create threads";
-					break;
-				case "THREE_DAY_THREAD_ARCHIVE":
-					f = Emotes.features.THREE_DAY_THREAD_ARCHIVE;
-					desc = "Threads will archive in 3 days";
-					break;
-				case "HUB":
-					f = Emotes.features.HUB;
-					desc = "Makes the server a school hub server";
-					break;
-				case "MORE_STICKERS":
-					f = Emotes.features.MORE_STICKERS;
-					desc = "Makes it possible to have 60 stickers in your server";
-					break;
-				case "ROLE_ICONS":
-					f = Emotes.features.ROLE_ICONS;
-					desc = "Adds the ability to add icons to roles (requires boost level 2)";
-					break;
-				case "ANIMATED_BANNER":
-					f = Emotes.features.ANIMATED_BANNER;
-					desc = "Adds the ability to set a animated banner (requires boost level 3)";
-					break;
-				case "FEATURABLE":
-					f = Emotes.features.FEATURABLE;
-					desc = "Deprecated";
-					break;
-				case "MEMBER_PROFILES":
-					f = Emotes.features.MEMBER_PROFILES;
-					desc = "Adds the ability to set a full custom member profiles.";
-					break;
-				case "PREMIUM_TIER_3_OVERRIDE":
-					f = Emotes.features.PREMIUM_TIER_3_OVERRIDE;
-					desc = "Forces the boost level to level 3";
-					break;
-				case "NEW_THREAD_PERMISSIONS":
-					f = Emotes.features.NEW_THREAD_PERMISSIONS;
-					desc = "Server has new thread permissions";
-					break;
-				case "THREADS_ENABLED_TESTING":
-					f = Emotes.features.THREADS_ENABLED_TESTING;
-					desc = "Used by bot developers to test threads in servers with less than 5 members";
-					break;
-				case "MONETIZATION_ENABLED":
-					f = Emotes.features.MONETIZATION_ENABLED;
-					desc = "Allows the server to configure a team (in the dev portal) to cash out ticketed stage events";
-					break;
-				case "TICKETED_EVENTS_ENABLED":
-					f = Emotes.features.TICKETED_EVENTS_ENABLED;
-					desc = "Adds the ability to view/create/manage ticketed stage events";
-					break;
-				case "TEXT_IN_VOICE_ENABLED":
-					f = Emotes.features.TEXT_IN_VOICE_ENABLED;
-					desc = "Adds the ability to use a dedicated text channel inside of the voice channel";
-					break;
-				case "INTERNAL_EMPLOYEE_ONLY":
-					f = Emotes.features.INTERNAL_EMPLOYEE_ONLY;
-					desc = "Server only accessible via the Developer badge";
-					break;
-				case "HAS_DIRECTORY_ENTRY":
-					f = Emotes.features.HAS_DIRECTORY_ENTRY;
-					desc = "Server is in a directory channel";
-					break;
-				case "CHANNEL_BANNER":
-					f = Emotes.features.CHANNEL_BANNER;
-					desc = "Adds a banner to channels";
-					break;
-				default:
-					f = "⭐";
-					desc = "";
-					break;
-			}
-
-			f += `[\`${feature}\`](https://bulbbot.rocks '${desc}')`;
-			features.push(f);
+			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeaturesDescriptions[feature]}')`);
 		});
 
 		features.sort();
@@ -278,50 +114,6 @@ export default class {
 		if (secs > 0) uptime += `${secs} second(s)`;
 
 		return uptime;
-	}
-
-	guildRegion(region: string) {
-		region = region.charAt(0).toUpperCase() + region.slice(1);
-		switch (region) {
-			case "Brazil":
-				region = `:flag_br: ${region}`;
-				break;
-			case "Eu-central":
-			case "Europe":
-				region = `:flag_eu: ${region}`;
-				break;
-			case "Hongkong":
-				region = `:flag_hk: ${region}`;
-				break;
-			case "India":
-				region = `:flag_in: ${region}`;
-				break;
-			case "Japan":
-				region = `:flag_jp: ${region}`;
-				break;
-			case "Russia":
-				region = `:flag_ru: ${region}`;
-				break;
-			case "Singapore":
-				region = `:flag_sg: ${region}`;
-				break;
-			case "Southafrica":
-				region = `:flag_za: ${region}`;
-				break;
-			case "Sydney":
-				region = `:flag_au: ${region}`;
-				break;
-			case "Us-central":
-			case "Us-east":
-			case "Us-south":
-			case "Us-west":
-				region = `:flag_us: ${region}`;
-				break;
-			default:
-				break;
-		}
-
-		return region;
 	}
 
 	public async sleep(ms: number) {
@@ -378,47 +170,20 @@ export default class {
 	}
 
 	public prettify(action: string): string {
-		let finalString = "";
-		switch (action) {
-			case "Ban":
-				finalString = `${Emotes.actions.BAN} Ban`;
-				break;
-			case "Manual Ban":
-				finalString = `${Emotes.actions.BAN} Manual Ban`;
-				break;
-			case "Force-ban":
-				finalString = `${Emotes.actions.BAN} Force-ban`;
-				break;
-			case "Kick":
-				finalString = `${Emotes.actions.KICK} Kick`;
-				break;
-			case "Manual Kick":
-				finalString = `${Emotes.actions.BAN} Manual Kick`;
-				break;
-			case "Mute":
-				finalString = `${Emotes.actions.MUTE} Mute`;
-				break;
-			case "Warn":
-				finalString = `${Emotes.actions.WARN} Warn`;
-				break;
-			case "Unmute":
-				finalString = `${Emotes.actions.UNBAN} Unmute`;
-				break;
-			case "Unban":
-				finalString = `${Emotes.actions.UNBAN} Unban`;
-				break;
-			case "true":
-				finalString = `${Emotes.status.ONLINE} True`;
-				break;
-			case "false":
-				finalString = `${Emotes.other.INF2} False`;
-				break;
-			case "Nickname":
-				finalString = `${Emotes.other.EDIT} Nickname`;
-				break;
-		}
-
-		return finalString;
+		return {
+			"Ban": Emotes.actions.BAN,
+			"Manual Ban": Emotes.actions.BAN,
+			"Force-ban": Emotes.actions.BAN,
+			"Kick": Emotes.actions.KICK,
+			"Manual Kick": Emotes.actions.KICK,
+			"Mute": Emotes.actions.MUTE,
+			"Warn": Emotes.actions.WARN,
+			"Unmute": Emotes.actions.UNBAN,
+			"Unban": Emotes.actions.UNBAN,
+			"true": Emotes.status.ONLINE,
+			"false": Emotes.other.INF1,
+			"Nickname": Emotes.other.EDIT,
+		}[action] + ` ${action}`;
 	}
 
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
@@ -448,41 +213,15 @@ export default class {
 	}
 
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
-		switch (handle) {
-			case UserHandle.CANNOT_ACTION_SELF:
-				await context.channel.send(await this.translate("global_cannot_action_self", context.guild?.id, {}));
-				return true;
+		if (handle == 0) return false;
 
-			case UserHandle.CANNOT_ACTION_OWNER:
-				await context.channel.send(await this.translate("global_cannot_action_owner", context.guild?.id, {}));
-				return true;
-
-			case UserHandle.CANNOT_ACTION_ROLE_EQUAL:
-				await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
-				return true;
-
-			case UserHandle.CANNOT_ACTION_BOT_SELF:
-				await context.channel.send(await this.translate("global_cannot_action_bot_self", context.guild?.id, {}));
-				return true;
-
-			case UserHandle.CANNOT_ACTION_ROLE_HIGHER:
-				await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
-				return true;
-
-			case UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT:
-				await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
-				return true;
-
-			case UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT:
-				await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
-				return true;
-
-			case UserHandle.SUCCESS:
-				return false;
-
-			default:
-				return false;
-		}
+		// here are two exclusive cases, that use the same message as the other ones
+		if (handle == 5) await context.channel.send(await this.translate('global_cannot_action_role_equal', context.guild?.id, { target: user }));
+		if (handle == 7) await context.channel.send(await this.translate('global_cannot_action_role_equal_bot', context.guild?.id, { target: user }));
+		
+		// @ts-ignore
+		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
+		return true;
 	}
 
 	/** @deprecated */
@@ -600,31 +339,21 @@ export default class {
 		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
 	);
 
-	public formatAction(action: string): string {
-		switch (action) {
-			case "Ban":
-				return Emotes.actions.BAN;
-			case "Manual Ban":
-				return Emotes.actions.BAN;
-			case "Force-ban":
-				return Emotes.actions.BAN;
-			case "Kick":
-				return Emotes.actions.KICK;
-			case "Manual Kick":
-				return Emotes.actions.KICK;
-			case "Mute":
-				return Emotes.actions.MUTE;
-			case "Warn":
-				return Emotes.actions.WARN;
-			case "Unmute":
-				return Emotes.actions.UNBAN;
-			case "Unban":
-				return Emotes.actions.UNBAN;
-			case "Nickname":
-				return Emotes.other.EDIT;
-		}
+	public formatAction(action: string): string | undefined {
+		if(!action) return Emotes.actions.WARN;
 
-		return Emotes.actions.WARN;
+		return {
+			"Ban": Emotes.actions.BAN,
+			"Manual Ban": Emotes.actions.BAN,
+			"Force-ban": Emotes.actions.BAN,
+			"Kick": Emotes.actions.KICK,
+			"Manual Kick": Emotes.actions.KICK,
+			"Mute": Emotes.actions.MUTE,
+			"Warn": Emotes.actions.WARN,
+			"Unmute": Emotes.actions.UNBAN,
+			"Unwarn": Emotes.actions.UNBAN,
+			"Nickname": Emotes.other.EDIT,
+		}[action];
 	}
 
 	public async logError(err: Error, context?: CommandContext, eventName?: string, runArgs?: any): Promise<void> {
