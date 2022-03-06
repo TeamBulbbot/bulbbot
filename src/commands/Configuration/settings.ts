@@ -27,7 +27,6 @@ export default class extends Command {
 
 		const configs: string[] = [
 			`**Configuration**`,
-			`Prefix: \`${guildConfig.prefix}\` or [slash commands](https://docs.bulbbot.rocks/slash-commands/)`,
 			`Bot Language: \`${guildConfig.language}\``,
 			`Premium Server: ${guildConfig.premiumGuild ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,

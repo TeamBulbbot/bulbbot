@@ -14,7 +14,6 @@ export const developerGuild: string = "784408056997216327";
 export const lib: string = "Discord.JS";
 
 // Configs
-export const prefix: string = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
 export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES", "GUILD_SCHEDULED_EVENTS"];

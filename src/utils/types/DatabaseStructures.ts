@@ -1,7 +1,6 @@
 import { Snowflake } from "discord.js";
 
 export interface GuildConfiguration {
-	prefix: string;
 	language: string;
 	timezone: string;
 	muteRole: Snowflake;

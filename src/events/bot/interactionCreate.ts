@@ -10,12 +10,10 @@ import { getCommandContext } from "../../structures/CommandContext";
 import Command from "../../structures/Command";
 import reminders from "../../interactions/select/reminders";
 import LoggingManager from "../../utils/managers/LoggingManager";
-import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { commandUsage } from "../../utils/Prometheus";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 const loggingManager: LoggingManager = new LoggingManager();
-const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -38,7 +36,6 @@ export default class extends Event {
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 		if (!context.guild) return;
 		if (this.client.blacklist.get(context.guild.id)) return;
-		if (context.guildId !== null) context.prefix = (await databaseManager.getConfig(context.guildId)).prefix;
 
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);

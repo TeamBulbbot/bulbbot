@@ -2,11 +2,6 @@ import { DataTypes, Sequelize } from "sequelize";
 
 export default function (sequelize: Sequelize): void {
 	sequelize.define("guildConfiguration", {
-		prefix: {
-			type: DataTypes.STRING,
-			defaultValue: "!",
-			allowNull: false,
-		},
 		language: {
 			type: DataTypes.STRING,
 			defaultValue: "en-US",

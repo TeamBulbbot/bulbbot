@@ -9,7 +9,6 @@ import { logger } from "../utils/Logger";
 import BulbBotFetch from "../utils/BulbBotFetch";
 
 export default class extends Client {
-	public prefix: string = Config.prefix;
 	public commands: Collection<string, Command>;
 	public aliases: Collection<string, string>;
 	public events: Collection<string, Event>;
@@ -71,9 +70,6 @@ export default class extends Client {
 
 		if (!options.token) throw new ClientException("Client cannot log in without token!");
 		this.token = options.token;
-
-		if (!options.prefix) throw new ClientException("Client cannot log in without prefix!");
-		this.prefix = options.prefix;
 
 		if (!options.defaultPerms) throw new ClientException("Default permissions cannot be null!");
 		this.defaultPerms = new Permissions(options.defaultPerms).freeze();

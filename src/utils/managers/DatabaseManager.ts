@@ -1,5 +1,4 @@
 import { sequelize } from "../database/connection";
-import * as Config from "../../Config";
 import { Guild, Message, MessageAttachment, Snowflake } from "discord.js";
 import { QueryTypes } from "sequelize";
 import moment from "moment";
@@ -20,7 +19,7 @@ export default class {
 			).length > 0
 		)
 			return;
-		const config = await sequelize.models.guildConfiguration.create({ prefix: Config.prefix });
+		const config = await sequelize.models.guildConfiguration.create();
 		const logging = await sequelize.models.guildLogging.create({});
 		const automod = await sequelize.models.automod.create({});
 
@@ -116,13 +115,6 @@ export default class {
 				{ model: sequelize.models.tempban },
 				{ model: sequelize.models.banpools },
 			],
-		});
-	}
-
-	async setPrefix(guildId: Snowflake, prefix: string): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET prefix = $Prefix WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { Prefix: prefix, GuildID: guildId },
-			type: QueryTypes.UPDATE,
 		});
 	}
 

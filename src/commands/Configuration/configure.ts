@@ -1,6 +1,5 @@
 import Command from "../../structures/Command";
 import timezone from "./configure/timezone";
-import prefix from "./configure/prefix";
 import logging from "./configure/logging";
 import autorole from "./configure/autorole";
 import override from "./configure/override";
@@ -17,10 +16,10 @@ export default class extends Command {
 			name,
 			description: "Configure the bot in your server",
 			category: "Configuration",
-			subCommands: [timezone, prefix, logging, autorole, override, automod, actionsOnInfo, language, rolesOnLeave, quickReasons],
+			subCommands: [timezone, logging, autorole, override, automod, actionsOnInfo, language, rolesOnLeave, quickReasons],
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "<setting>",
-			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>"],
+			examples: ["configure logging mod_action <channel>"],
 			argList: ["setting:String"],
 			minArgs: 1,
 			maxArgs: -1,

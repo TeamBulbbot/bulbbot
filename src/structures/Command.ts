@@ -135,7 +135,7 @@ export default class Command {
 				argument: args[this.maxArgs],
 				arg_expected: this.maxArgs,
 				arg_provided: args.length,
-				usage: `\`${this.client.prefix}${this.usage}\``,
+				usage: `\`/${this.usage}\``,
 			});
 		}
 
@@ -143,7 +143,7 @@ export default class Command {
 			return await this.client.bulbutils.translate("event_message_args_missing", context.guild?.id, {
 				argument: this.argList[args.length],
 				arg_expected: this.minArgs,
-				usage: `\`${this.client.prefix}${this.usage}\``,
+				usage: `\`/${this.usage}\``,
 			});
 		}
 

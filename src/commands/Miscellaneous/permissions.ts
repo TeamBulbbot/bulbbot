@@ -77,7 +77,7 @@ export default class extends Command {
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
 					arg_provided: args[0],
 					arg_expected: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
-					usage: `\`${this.client.prefix}${this.usage}\``,
+					usage: `\`/${this.usage}\``,
 				}),
 			);
 

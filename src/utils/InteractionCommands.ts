@@ -826,19 +826,6 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				],
 			},
 			{
-				name: "prefix",
-				type: ApplicationCommandOptionTypes.SUB_COMMAND,
-				description: "Configures the server prefix",
-				options: [
-					{
-						name: "prefix",
-						type: ApplicationCommandOptionTypes.STRING,
-						description: "The prefix the bot should listen to",
-						required: true,
-					},
-				],
-			},
-			{
 				name: "quick_reasons",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND_GROUP,
 				description: "Configures the quick reasons for context commands",

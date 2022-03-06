@@ -1,7 +1,10 @@
 enum ConfigPart {
-	language, prefix,
-	timezone, muterole,
-	automod, logging,
-	autorole, override,
+	language,
+	timezone,
+	muterole,
+	automod,
+	logging,
+	autorole,
+	override,
 }
 export default ConfigPart;
