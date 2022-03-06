@@ -249,6 +249,7 @@
 	"action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` è stato {{action}} fino al **{{until}}** per **{{reason}}** `[#{{infraction_id}}]`",
 	"action_success_multi": "{{emote_success}} {{full_list}} sono stati {{action}} per **{{reason}}**",
 	"action_multi_less_than_2": "{{emote_warn}} Hai selezionato meno di 2 bersagli. Sto eseguendo un {{action}} normale",
+	"action_multi_no_targets": "{{emote_fail}} No valid targets were found in your message.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	"action_multi_types": {
 		"ban": "ban",
 		"kick": "kick",

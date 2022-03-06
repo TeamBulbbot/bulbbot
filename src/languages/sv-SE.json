@@ -249,6 +249,7 @@
 	"action_success_temp": "{{emote_success}} **{{target.tag}}** `({{target.id}})` har varit {{action}} tills **{{until}}** för **{{reason}}** `[#{{infraction_id}}]`",
 	"action_success_multi": "{{emote_success}} {{full_list}} har varit {{action}} för **{{reason}}**",
 	"action_multi_less_than_2": "{{emote_warn}} Valda mindre än 2 mål. Utför normal {{action}} istället",
+	"action_multi_no_targets": "{{emote_fail}} No valid targets were found in your message.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	"action_multi_types": {
 		"ban": "förbud",
 		"kick": "sparka",
