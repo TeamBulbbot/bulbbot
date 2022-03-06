@@ -30,7 +30,7 @@ export default class extends Event {
 
 		let guildCfg = await databaseManager.getConfig(context.guild.id);
 
-		if (guildCfg === undefined) {
+		if (!guildCfg) {
 			await databaseManager.deleteGuild(context.guild.id);
 			await databaseManager.createGuild(context.guild);
 			if (!(guildCfg = await databaseManager.getConfig(context.guild.id)))
