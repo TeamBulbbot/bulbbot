@@ -1,72 +1,121 @@
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
-import Command from "../../../../structures/Command";
-import SubCommand from "../../../../structures/SubCommand";
-import CommandContext from "../../../../structures/CommandContext";
-import { Message } from "discord.js";
-import AutoModPart, { AutoModAntiSpamPart } from "../../../../utils/types/AutoModPart";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import AutoModPart from "../../../../utils/types/AutoModPart";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "limit",
-			clearance: 75,
-			minArgs: 3,
-			maxArgs: 3,
-			argList: ["part:string", "limit:number", "timeout:number"],
-			usage: "<part> <limit> <timeout>",
-			description: "Sets the limit and timeout for a part of the automod system.",
-		});
-	}
+async function limit(interaction: MessageComponentInteraction, client: BulbBotClient, category?: string) {
+	const selectRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("category")
+			.setPlaceholder(await client.bulbutils.translate("config_automod_add_remove_category_placeholder", interaction.guild?.id, {}))
+			.setOptions([
+				{ label: "Messages", value: "messages", default: category === "messages" },
+				{ label: "Mentions", value: "mentions", default: category === "mentions" },
+			]),
+	);
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const partArg = args[0];
-		const limit = Number(args[1]);
-		const timeout = Number(args[2]);
+	const [back, update, header] = [
+		await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_automod_limit_button_update", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_automod_limit_header", interaction.guild?.id, {}),
+	];
 
-		const partexec = /^(message|mention)s?$/.exec(partArg.toLowerCase());
-		if (!partexec)
-			return context.channel.send(
-				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
-					argument: args[0],
-					arg_expected: "part:string",
-					argument_list: "`messages` or `mentions`",
-				}),
-			);
-		const partString = partexec[1];
+	const buttonRow = new MessageActionRow().addComponents([
+		new MessageButton().setCustomId("back").setLabel(back).setStyle("DANGER"),
+		new MessageButton().setCustomId("update").setLabel(update).setStyle("PRIMARY").setDisabled(!category),
+	]);
 
-		if (isNaN(limit))
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild!.id, {
-					arg_provided: args[1],
-					arg_expected: "limit:int",
-					usage: this.usage,
-				}),
-			);
+	interaction.deferred ? await interaction.editReply({ content: header, components: [selectRow, buttonRow] }) : await interaction.update({ content: header, components: [selectRow, buttonRow] });
 
-		if (isNaN(timeout))
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[2],
-					arg_expected: "timeout:int",
-					usage: this.usage,
-				}),
-			);
+	const filter = i => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
 
-		if (timeout > 30) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_large", context.guild?.id, {}));
-		if (timeout < 3) return context.channel.send(await this.client.bulbutils.translate("automod_timeout_too_small", context.guild?.id, {}));
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isButton()) {
+			if (i.customId === "back") {
+				collector?.stop();
+				return require("../automod").default(i, client);
+			} else if (i.customId === "update") {
+				collector?.stop();
+				const messageFilter = (m: Message) => m.author.id === interaction.user.id;
+				const messageCollector = interaction.channel?.createMessageCollector({ filter: messageFilter, time: 60000, max: 1 });
+				await interaction.followUp({
+					content: await client.bulbutils.translate("config_automod_limit_update_prompt", interaction.guild?.id, {}),
+					ephemeral: true,
+				});
+				await i.deferUpdate();
 
-		const part: AutoModAntiSpamPart = AutoModPart[partString];
-		await databaseManager.automodSetLimit(context.guild!.id, part, limit);
-		await databaseManager.automodSetTimeout(context.guild!.id, part, timeout * 1000);
+				messageCollector?.on("collect", async (m: Message) => {
+					await m.delete();
+					const limits = m.content.split("/");
 
-		await context.channel.send(
-			await this.client.bulbutils.translate("automod_updated_limit", context.guild!.id, {
-				category: partArg,
-				limit: `${limit}/${timeout}s`,
-			}),
-		);
-	}
+					if (limits.length !== 2) {
+						await interaction.followUp({
+							content: await client.bulbutils.translate("config_automod_limit_update_invalid_format", interaction.guild?.id, {}),
+							ephemeral: true,
+						});
+						return limit(i, client, category);
+					}
+
+					const [items, seconds] = limits;
+
+					if (isNaN(parseInt(items))) {
+						await interaction.followUp({
+							content: await client.bulbutils.translate("global_cannot_convert_special", interaction.guild?.id, {
+								arg_provided: items,
+								arg_expected: "number",
+							}),
+							ephemeral: true,
+						});
+						return limit(i, client, category);
+					} else if (isNaN(parseInt(seconds))) {
+						await interaction.followUp({
+							content: await client.bulbutils.translate("global_cannot_convert_special", interaction.guild?.id, {
+								arg_provided: seconds,
+								arg_expected: "number",
+							}),
+							ephemeral: true,
+						});
+						return limit(i, client, category);
+					} else if (parseInt(items) <= 0) {
+						await interaction.followUp({
+							content: await client.bulbutils.translate("config_automod_limit_update_items_too_short", interaction.guild?.id, {}),
+							ephemeral: true,
+						});
+						return limit(i, client, category);
+					} else if (parseInt(seconds) <= 3) {
+						await interaction.followUp({
+							content: await client.bulbutils.translate("config_automod_limit_update_seconds_too_short", interaction.guild?.id, {}),
+							ephemeral: true,
+						});
+						return limit(i, client, category);
+					} else if (parseInt(seconds) > 30) {
+						await interaction.followUp({
+							content: await client.bulbutils.translate("config_automod_limit_update_seconds_too_long", interaction.guild?.id, {}),
+							ephemeral: true,
+						});
+						return limit(i, client, category);
+					}
+
+					await databaseManager.automodSetLimit(interaction.guild?.id as Snowflake, parts[category!!], parseInt(items));
+					await databaseManager.automodSetTimeout(interaction.guild?.id as Snowflake, parts[category!!], parseInt(seconds) * 1000);
+					await interaction.followUp({ content: `Updated to ${items}/${seconds}`, ephemeral: true });
+
+					return limit(i, client, category);
+				});
+			}
+		} else if (i.isSelectMenu()) {
+			collector?.stop();
+			return limit(i, client, i.values[0]);
+		}
+	});
 }
+
+const parts = {
+	messages: AutoModPart.message,
+	mentions: AutoModPart.mention,
+};
+
+export default limit;

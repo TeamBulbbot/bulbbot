@@ -195,6 +195,14 @@
 	"config_automod_add_remove_button_add": "Add Items",
 	"config_automod_add_remove_button_remove": "Remove Items",
 
+	"config_automod_limit_header": "{{emote_wrench}} **Automod Limit Configuration**\n{{emote_edit}}*This setting controls the limits and timeouts for AutoMod checks.*",
+	"config_automod_limit_update_prompt": "{{emote_wrench}} Please enter the new limit in the following format: `items/seconds`",
+	"config_automod_limit_update_invalid_format": "{{emote_fail}} The format of the limit is invalid. Please use the following format: `items/seconds`",
+	"config_automod_limit_update_seconds_too_short": "{{emote_fail}} The seconds value is too short. Please use a value greater than **3 seconds**",
+	"config_automod_limit_update_seconds_too_long": "{{emote_fail}} The seconds value is too long. Please use a value less than **30 seconds**",
+	"config_automod_limit_update_items_too_short": "{{emote_fail}} The items value is too short. Please use a value greater than **1 item**",
+	"config_automod_limit_button_update": "Update Limit",
+
 	"config_enable_disable_header": "{{emote_wrench}} **Enable/Disable Configuration**\n{{emote_edit}}*This setting controls whether Automod and its corresponding checks are enabled or disabled.*",
 	"config_enable_disable_enable_success": "{{emote_success}} Successfully enabled the Automod",
 	"config_enable_disable_disable_generic_success": "{{emote_success}} Successfully disabled the Automod",
