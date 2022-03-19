@@ -676,19 +676,6 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				],
 			},
 			{
-				name: "muterole",
-				type: ApplicationCommandOptionTypes.SUB_COMMAND,
-				description: "Configures the server mute role",
-				options: [
-					{
-						name: "role",
-						type: ApplicationCommandOptionTypes.ROLE,
-						description: "The role which should be used as mute role",
-						required: true,
-					},
-				],
-			},
-			{
 				name: "override",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND_GROUP,
 				description: "Configures the clearance overrides in the server",
