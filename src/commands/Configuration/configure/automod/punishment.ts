@@ -19,6 +19,7 @@ async function punishment(interaction: MessageComponentInteraction, client: Bulb
 				{ label: "Website filter", value: "punishmentWebsite", default: selectedCategory === "punishmentWebsite" },
 				{ label: "Invite filter", value: "punishmentInvites", default: selectedCategory === "punishmentInvites" },
 				{ label: "Word filter", value: "punishmentWords", default: selectedCategory === "punishmentWords" },
+				{ label: "Avatar hashes", value: "punishmentAvatarBans", default: selectedCategory === "punishmentAvatarBans" },
 				{ label: "Messages filter", value: "punishmentMessages", default: selectedCategory === "punishmentMessages" },
 				{ label: "Mentions filter", value: "punishmentMentions", default: selectedCategory === "punishmentMentions" },
 			]),
@@ -106,6 +107,7 @@ const categories = {
 	punishmentWords: AutoModPart.word,
 	punishmentMessages: AutoModPart.message,
 	punishmentMentions: AutoModPart.mention,
+	punishmentAvatarBans: AutoModPart.avatars,
 };
 
 export default punishment;

@@ -19,7 +19,7 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 
 	interaction.deferred
 		? await interaction.editReply({ content: "Automod Configure", components: [selectRow, backRow] })
-		: await interaction.update({ content: "Automod Configure", components: [selectRow, backRow] });
+		: await interaction.update({ content: "Automod Configure", components: [selectRow, backRow], embeds: [] });
 
 	const filter = i => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1, time: 60000 });
@@ -40,6 +40,9 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 					break;
 				case "punishment":
 					await require("./automod/punishment").default(i, client);
+					break;
+				case "overview":
+					await require("./automod/overview").default(i, client);
 					break;
 			}
 		}

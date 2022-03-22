@@ -198,6 +198,8 @@
 	"config_prefix_button_change": "Change Prefix",
 	"config_prefix_button_reset": "Reset Prefix",
 
+	"config_automod_main_header": "{{emote_wrench}} **Automod Configuration**\n{{emote_edit}}*This setting controls the AutoMod settings for the server.*",
+
 	"config_automod_add_remove_header": "{{emote_wrench}} **Automod Configuration**\n{{emote_edit}}*This setting allows you to add and remove items from the automod database.*",
 	"config_automod_add_remove_category_placeholder": "Select a category to modify",
 	"config_automod_add_remove_remove_success": "{{emote_success}} Successfully removed the selected Automod Item(s) from the database",
@@ -238,9 +240,6 @@
 	"configure_logging_banpool_with_still_pools": "{{emote_fail}} You are unable to disable the logging for banpools as you are still in **{{amount}}** banpool(s). Leave or delete them to remove the logging fully.",
 	"config_logging_all_confirm": "{{emote_warn}} Are you sure you want to add all logging types to <#{{channel}}>? This will begin to log all loggable actions in the selected channel.",
 	"config_logging_all_remove": "{{emote_warn}} Are you sure you want to remove all logging types from all channels in this server?",
-
-	"config_mute_success": "{{emote_success}} Successfully updated the mute role",
-	"config_mute_unable_to_manage": "{{emote_fail}} The bot is unable to manage the selected role. Move the bot's role higher than the selected role.",
 
 	"config_quick_reasons_already_in_list": "{{emote_fail}} The reason `{{reason}}` is already in the list.",
 	"config_quick_reasons_not_found": "{{emote_fail}} The reason `{{reason}}` was not found.",

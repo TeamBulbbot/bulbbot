@@ -44,6 +44,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 				{ label: "Invite filter", value: "inviteWhitelist", default: selectedCategory === "inviteWhitelist" },
 				{ label: "Word filter", value: "wordBlacklist", default: selectedCategory === "wordBlacklist" },
 				{ label: "Word_token filter", value: "wordBlacklistToken", default: selectedCategory === "wordBlacklistToken" },
+				{ label: "Avatar hashes", value: "avatarHashes", default: selectedCategory === "avatarHashes" },
 				{ label: "Ignore channels", value: "ignoreChannels", default: selectedCategory === "ignoreChannels" },
 				{ label: "Ignore roles", value: "ignoreRoles", default: selectedCategory === "ignoreRoles" },
 				{ label: "Ignore users", value: "ignoreUsers", default: selectedCategory === "ignoreUsers" },
@@ -157,6 +158,7 @@ const categories = {
 	ignoreChannels: AutoModPart.ignore_channel,
 	ignoreRoles: AutoModPart.ignore_role,
 	ignoreUsers: AutoModPart.ignore_user,
+	avatarHashes: AutoModPart.avatars,
 };
 
 export default add;
