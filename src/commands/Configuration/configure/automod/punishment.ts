@@ -14,7 +14,7 @@ async function punishment(interaction: MessageComponentInteraction, client: Bulb
 	const selectRow = new MessageActionRow().setComponents(
 		new MessageSelectMenu()
 			.setCustomId("category")
-			.setPlaceholder(await client.bulbutils.translate("config_automod_add_remove_category_placeholder", interaction.guild?.id, {}))
+			.setPlaceholder(await client.bulbutils.translate("config_main_placeholder", interaction.guild?.id, {}))
 			.setOptions([
 				{ label: "Website filter", value: "punishmentWebsite", default: selectedCategory === "punishmentWebsite" },
 				{ label: "Invite filter", value: "punishmentInvites", default: selectedCategory === "punishmentInvites" },

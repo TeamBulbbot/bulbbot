@@ -9,7 +9,7 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 	const selectRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("category")
-			.setPlaceholder(await client.bulbutils.translate("config_automod_add_remove_category_placeholder", interaction.guild?.id, {}))
+			.setPlaceholder(await client.bulbutils.translate("config_main_placeholder", interaction.guild?.id, {}))
 			.setOptions([
 				{ label: "Messages", value: "messages", default: category === "messages" },
 				{ label: "Mentions", value: "mentions", default: category === "mentions" },

@@ -2,24 +2,26 @@ import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSe
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 async function automod(interaction: MessageComponentInteraction, client: BulbBotClient) {
+	const [header, back] = [await client.bulbutils.translate("config_automod_main_header", interaction.guild?.id, {}), await client.bulbutils.translate("config_button_back", interaction.guild?.id, {})];
+
 	const selectRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("automod")
-			.setPlaceholder("Automod")
+			.setPlaceholder(await client.bulbutils.translate("config_main_placeholder", interaction.guild?.id, {}))
 			.setOptions([
-				{ label: "Add/remove", value: "add_remove", description: "Add or remove an item from the selected Automod category." },
-				{ label: "Enable/Disable", value: "enable_disable", description: "Disable/Disable the selected Automod category." },
-				{ label: "Limit", value: "limit", description: "Set the limit of the selected Automod category." },
-				{ label: "Punishment", value: "punishment", description: "Set the punishment of the selected Automod category." },
-				{ label: "Overview", value: "overview", description: "View the Automod categories and their settings." },
+				{ label: "Add/remove", value: "add_remove", description: await client.bulbutils.translate("config_automod_main_add_remove_description", interaction.guild?.id, {}) },
+				{ label: "Enable/Disable", value: "enable_disable", description: await client.bulbutils.translate("config_automod_main_enable_disable_description", interaction.guild?.id, {}) },
+				{ label: "Limit", value: "limit", description: await client.bulbutils.translate("config_automod_main_limit_description", interaction.guild?.id, {}) },
+				{ label: "Punishment", value: "punishment", description: await client.bulbutils.translate("config_automod_main_punishment_description", interaction.guild?.id, {}) },
+				{ label: "Overview", value: "overview", description: await client.bulbutils.translate("config_automod_main_overview_description", interaction.guild?.id, {}) },
 			]),
 	);
 
-	const backRow = new MessageActionRow().addComponents([new MessageButton().setCustomId("back").setLabel("Back").setStyle("DANGER")]);
+	const backRow = new MessageActionRow().addComponents([new MessageButton().setCustomId("back").setLabel(back).setStyle("DANGER")]);
 
 	interaction.deferred
-		? await interaction.editReply({ content: "Automod Configure", components: [selectRow, backRow] })
-		: await interaction.update({ content: "Automod Configure", components: [selectRow, backRow], embeds: [] });
+		? await interaction.editReply({ content: header, components: [selectRow, backRow] })
+		: await interaction.update({ content: header, components: [selectRow, backRow], embeds: [] });
 
 	const filter = i => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1, time: 60000 });

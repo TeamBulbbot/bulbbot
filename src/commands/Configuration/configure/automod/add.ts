@@ -38,7 +38,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 	const categoryRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("category")
-			.setPlaceholder(await client.bulbutils.translate("config_automod_add_remove_category_placeholder", interaction.guild?.id, {}))
+			.setPlaceholder(await client.bulbutils.translate("config_main_placeholder", interaction.guild?.id, {}))
 			.setOptions([
 				{ label: "Website filter", value: "websiteWhitelist", default: selectedCategory === "websiteWhitelist" },
 				{ label: "Invite filter", value: "inviteWhitelist", default: selectedCategory === "inviteWhitelist" },

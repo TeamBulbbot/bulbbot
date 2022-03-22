@@ -153,10 +153,28 @@
 	"config_button_back": "Back",
 
 	"config_main_header": "{{emote_wrench}} Bulbbot Configuration for **{{guild.name}}** `({{guild.id}})`",
-	"config_main_option_actions_on_info": "Actions on Info",
-	"config_main_option_language": "Language",
-	"config_main_option_prefix": "Prefix",
-	"config_main_option_roles_on_leave": "Roles on Leave",
+	"config_main_options": {
+		"language": "Language",
+		"actions_on_info": "Actions on Info",
+		"prefix": "Prefix",
+		"roles_on_leave": "Roles on Leave",
+		"automod": "Automod",
+		"autorole": "Autorole",
+		"logging": "Logging",
+		"quick_reasons": "Quick Reasons",
+		"timezone": "Timezone"
+	},
+	"config_main_options_descriptions": {
+		"language": "Change the language of the bot",
+		"actions_on_info": "Configure the actions on info setting",
+		"prefix": "Configure the prefix of the bot",
+		"roles_on_leave": "Configure the roles on leave setting",
+		"automod": "Configure the Automod settings",
+		"autorole": "Configure the autorole setting",
+		"logging": "Configure the logging modules",
+		"quick_reasons": "Add or remove quick reasons",
+		"timezone": "Configure the timezone for logging"
+	},
 	"config_main_placeholder": "Select a category to modify",
 
 	"config_actions_on_info_header": "{{emote_wrench}} **Actions on Info Configuration**\n{{emote_edit}}*This setting controls whether or not action buttons will be displayed when you info a user.*",
@@ -199,9 +217,13 @@
 	"config_prefix_button_reset": "Reset Prefix",
 
 	"config_automod_main_header": "{{emote_wrench}} **Automod Configuration**\n{{emote_edit}}*This setting controls the AutoMod settings for the server.*",
+	"config_automod_main_add_remove_description": "Add or remove an item from the selected Automod category.",
+	"config_automod_main_enable_disable_description": "Enable or disable the selected Automod category.",
+	"config_automod_main_limit_description": "Set the limit for the selected Automod category.",
+	"config_automod_main_punishment_description": "Set the punishment for the selected Automod category.",
+	"config_automod_main_overview_description": "View the current settings for the Automod.",
 
 	"config_automod_add_remove_header": "{{emote_wrench}} **Automod Configuration**\n{{emote_edit}}*This setting allows you to add and remove items from the automod database.*",
-	"config_automod_add_remove_category_placeholder": "Select a category to modify",
 	"config_automod_add_remove_remove_success": "{{emote_success}} Successfully removed the selected Automod Item(s) from the database",
 	"config_automod_add_remove_add_success": "{{emote_success}} Successfully added the selected Automod Item to the database",
 	"config_automod_add_remove_add_prompt": "{{emote_wrench}} Please enter the new Automod Item",
@@ -229,10 +251,6 @@
 	"config_punishment_description_kick": "Kicks the user whilst keeping all their messages.",
 	"config_punishment_description_ban": "Bans the user whilst removing all their messages.",
 
-	"config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
-	"config_generic_success_add": "{{emote_success}} Successfully added `{{value}}` to `{{setting}}`",
-	"config_generic_success_remove": "{{emote_success}} Successfully removed `{{value}}` from `{{setting}}`",
-
 	"config_logging_success": "{{emote_success}} Successfully started logging `{{logging_type}}` in <#{{channel}}>",
 	"config_logging_remove": "{{emote_success}} Successfully removed logging for `{{logging_type}}` from <#{{channel}}>",
 	"config_logging_remove_all": "{{emote_success}} Successfully removed all logging types from all channels",
@@ -240,10 +258,6 @@
 	"configure_logging_banpool_with_still_pools": "{{emote_fail}} You are unable to disable the logging for banpools as you are still in **{{amount}}** banpool(s). Leave or delete them to remove the logging fully.",
 	"config_logging_all_confirm": "{{emote_warn}} Are you sure you want to add all logging types to <#{{channel}}>? This will begin to log all loggable actions in the selected channel.",
 	"config_logging_all_remove": "{{emote_warn}} Are you sure you want to remove all logging types from all channels in this server?",
-
-	"config_quick_reasons_already_in_list": "{{emote_fail}} The reason `{{reason}}` is already in the list.",
-	"config_quick_reasons_not_found": "{{emote_fail}} The reason `{{reason}}` was not found.",
-	"config_quick_reasons_too_many_reasons": "{{emote_fail}} You cannot have more than 24 custom quick reasons. Please remove some before adding more.",
 
 	"override_clearance_more_than_100": "{{emote_warn}} Clearance level cannot be higher than **100**",
 	"override_clearance_0_confirmation": "{{emote_warn}} You're about to set a restricted command to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",
