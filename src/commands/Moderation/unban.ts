@@ -17,7 +17,7 @@ export default class extends Command {
 			aliases: ["pardon"],
 			usage: "<user> [reason]",
 			examples: ["unban 123456789012345678", "unban 123456789012345678 nice user", "unban @Wumpus#0000 nice user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -32,9 +32,6 @@ export default class extends Command {
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 
-		const banList = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find(user => user.user.id === targetID);
-
 		if (!target)
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
@@ -44,6 +41,10 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
+
+		const banList = await context.guild?.bans.fetch();
+		const bannedUser = banList?.find(user => user.user.id === targetID);
+
 		if (!bannedUser) return context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});

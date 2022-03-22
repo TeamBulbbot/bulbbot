@@ -55,6 +55,13 @@ export default function (sequelize: Sequelize): void {
 				type: DataTypes.INTEGER,
 				defaultValue: 10000,
 			},
+			avatarHashes: {
+				type: DataTypes.ARRAY(DataTypes.STRING),
+				defaultValue: [],
+			},
+			punishmentAvatarBans: {
+				type: DataTypes.STRING,
+			},
 			ignoreChannels: {
 				type: DataTypes.ARRAY(DataTypes.STRING),
 				defaultValue: [],

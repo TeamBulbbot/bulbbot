@@ -18,7 +18,7 @@ export default class extends Command {
 			aliases: ["mban"],
 			usage: "<user> <user2>.... [reason]",
 			examples: ["multiban 123456789012345678 876543210987654321 rude user", "multiban @Wumpus00000 @Nelly##0000 rude user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -28,11 +28,20 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = args.slice(0).join(" ").match(UserMentionAndID) ?? [];
+		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+
+		if (!targets.length)
+			return context.channel.send(
+				await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
+					usage: this.usage,
+				}),
+			);
+
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string = "";
+		let fullList: string[] = [];
 
 		if (targets.length <= 1) {
 			await context.channel.send(
@@ -106,13 +115,15 @@ export default class extends Command {
 				);
 			}
 
-			fullList += ` **${target.tag}** \`\`(${target.id})\`\` \`\`[#${infID}]\`\``;
+			fullList.push(`**${target.tag}** \`\`(${target.id})\`\` \`\`[#${infID}]\`\``);
 		}
+
+		if (!fullList.length) return;
 
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-				full_list: fullList,
+				full_list: fullList.join(', '),
 				reason,
 			}),
 		);

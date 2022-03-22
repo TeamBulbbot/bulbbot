@@ -15,7 +15,7 @@ export default class extends Command {
 			category: "Moderation",
 			usage: "<member> [reason]",
 			examples: ["kick 123456789012345678", "kick 123456789012345678 rude user", "kick @Wumpus#0000 rude user"],
-			argList: ["member:Member"],
+			argList: ["member:Member", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -55,7 +55,7 @@ export default class extends Command {
 			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
 				moderator: context.author,
-				target,
+				target: target.user,
 				reason,
 			}),
 			reason,

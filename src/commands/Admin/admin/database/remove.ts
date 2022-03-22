@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			aliases: ["delete", "yeet"],
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 		});
 	}
 

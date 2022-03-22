@@ -12,7 +12,7 @@ export default class extends SubCommand {
 			name: "leave",
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 			usage: "<guildID>",
 			description: "Force leaves a guild",
 		});

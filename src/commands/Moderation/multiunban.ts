@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message } from "discord.js";
+import { Guild, GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -18,7 +18,7 @@ export default class extends Command {
 			aliases: ["munban"],
 			usage: "<user> <user2>... [reason]",
 			examples: ["multiunban 123456789012345678 876543210987654321 nice user", "multiunban @Wumpus#0000 @Nelly##0000 nice user"],
-			argList: ["user:User"],
+			argList: ["user:User", "reason:String"],
 			minArgs: 2,
 			maxArgs: -1,
 			clearance: 50,
@@ -28,11 +28,20 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+
+		if (!targets.length)
+			return context.channel.send(
+				await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
+					usage: this.usage,
+				}),
+			);
+
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string = "";
+		let fullList: string[] = [];
 
 		if (targets!!.length <= 1) {
 			await context.channel.send(
@@ -50,10 +59,10 @@ export default class extends Command {
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
 			await this.client.bulbutils.sleep(massCommandSleep);
+			const targetID: Snowflake = targets[i].replace(NonDigits, "")
 
-			let target;
 			let infID: number;
-			target = await this.client.bulbfetch.getUser(targets[i].replace(NonDigits, ""));
+			const target = await this.client.bulbfetch.getUser(targetID);
 			if (!target) {
 				await context.channel.send(
 					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
@@ -63,6 +72,14 @@ export default class extends Command {
 						usage: this.usage,
 					}),
 				);
+				continue;
+			}
+
+			const banList = await context.guild?.bans.fetch();
+			const bannedUser = banList?.find(user => user.user.id === targetID);
+
+			if (!bannedUser) {
+				context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
 				continue;
 			}
 
@@ -81,13 +98,15 @@ export default class extends Command {
 				reason,
 			);
 
-			fullList += ` **${target.tag}** \`\`(${target.id})\`\` \`\`[#${infID}]\`\``;
+			fullList.push(`**${target.tag}** \`\`(${target.id})\`\` \`\`[#${infID}]\`\``);
 		}
+
+		if (!fullList.length) return;
 
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
-				full_list: fullList,
+				full_list: fullList.join(', '),
 				reason,
 			}),
 		);

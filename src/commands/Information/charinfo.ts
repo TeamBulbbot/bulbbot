@@ -11,7 +11,7 @@ export default class extends Command {
 			category: "Information",
 			usage: "<characters>",
 			examples: ["charinfo 🍰"],
-			argList: ["characters:string"],
+			argList: ["characters:String"],
 			minArgs: 1,
 			maxArgs: -1,
 		});

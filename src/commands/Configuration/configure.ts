@@ -84,9 +84,12 @@ export default class extends Command {
 				]),
 		);
 
-		await context.channel.send({content: await this.client.bulbutils.translate("config_main_header", context.guild?.id, {
+		await context.channel.send({
+			content: await this.client.bulbutils.translate("config_main_header", context.guild?.id, {
 				guild: context.guild,
-			}), components: [row]});
+			}),
+			components: [row],
+		});
 
 		const filter = i => i.user.id === context.user.id;
 		const collector = context.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
@@ -123,6 +126,6 @@ export default class extends Command {
 						break;
 				}
 			}
-		})
+		});
 	}
 }

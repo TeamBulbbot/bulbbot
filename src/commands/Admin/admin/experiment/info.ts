@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			aliases: ["check"],
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 			description: "Get list of experiments a guild has access to",
 		});
 	}

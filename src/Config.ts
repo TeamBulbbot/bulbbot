@@ -10,6 +10,7 @@ export const name: string = "Bulbbot";
 export const developers: string[] = ["190160914765316096", "439396770695479297", "193160566334947340"];
 export const subDevelopers: string[] = [];
 export const whitelistedGuilds: string[] = ["742094927403679816", "784408056997216327", "818176562901549066", "820945336327602186"];
+export const developerGuild: string = "784408056997216327";
 export const version: string = "1.0.0";
 export const lib: string = "Discord.JS";
 
@@ -17,7 +18,7 @@ export const lib: string = "Discord.JS";
 export const prefix: string = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep: number = 850;
-export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES"];
+export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES", "GUILD_SCHEDULED_EVENTS"];
 export const partials: PartialTypes[] = ["MESSAGE"];
 export const defaultPerms: PermissionString[] = ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"];
 

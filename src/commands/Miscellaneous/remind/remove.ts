@@ -15,7 +15,7 @@ export default class extends SubCommand {
 			aliases: ["yeet", "delete"],
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["id:number"],
+			argList: ["id:Number"],
 			usage: "<id>",
 			description: "Removes a reminder by its ID.",
 		});

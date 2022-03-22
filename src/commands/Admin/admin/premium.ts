@@ -11,7 +11,7 @@ export default class extends SubCommand {
 			subCommands: [enable, disable],
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["type:string"],
+			argList: ["type:String"],
 			usage: "<type>",
 		});
 	}

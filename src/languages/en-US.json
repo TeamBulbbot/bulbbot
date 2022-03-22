@@ -93,6 +93,7 @@
 	"event_update_role": "{{emote_wrench}} The <@&{{role}}> role has been updated. Changes:\n> {{changes}}",
 	"event_update_role_moderator": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the <@&{{role}}> role. Changes:\n> {{changes}}",
 	"event_update_channel": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the **{{type}}** <#{{channel.id}}>.\nChanges:\n> {{changes}}",
+	"event_update_scheduled_event": "{{emote_wrench}} **{{moderator.tag}}** `({{moderator.id}})` has updated the scheduled event **{{event.name}}**.\nChanges:\n> {{changes}}",
 
 	"event_channel_create": "{{emote_add}} A new **{{type}}** has been created <#{{channel.id}}> (`{{channel.id}}`).",
 	"event_channel_create_moderator": "{{emote_add}} A new **{{type}}** has been created by **{{moderator.tag}}** `({{moderator.id}})` <#{{channel.id}}> (`{{channel.id}}`).",
@@ -107,6 +108,17 @@
 
 	"event_role_create": "{{emote_add}} A new role has been created <@&{{role.id}}> (`{{role.id}}`)",
 	"event_role_delete": "{{emote_remove}} The **@{{role.name}}** (`{{role.id}}`) role has been deleted.",
+
+	"event_guild_scheduled_event_create_both": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_timestamp": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_description": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}",
+	"event_guild_scheduled_event_create_none": "{{emote_add}} A new scheduled event has been created **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)",
+	"event_guild_scheduled_event_create_moderator_both": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_moderator_timestamp": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nWill start <t:{{scheduledEvent.scheduledStartTimestamp}}> and end <t:{{scheduledEvent.scheduledEndTimestamp}}>",
+	"event_guild_scheduled_event_create_moderator_description": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)\nDescription: {{scheduledEvent.description}}",
+	"event_guild_scheduled_event_create_moderator_none": "{{emote_add}} A new scheduled event has been created by **{{moderator.tag}}** `({{moderator.id}})` **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`)",
+	"event_guild_scheduled_event_delete": "{{emote_remove}} The scheduled event **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`) has been deleted",
+	"event_guild_scheduled_event_delete_moderator": "{{emote_remove}} The scheduled event **{{scheduledEvent.name}}** (`{{scheduledEvent.id}}`) has been deleted by **{{moderator.tag}}** `({{moderator.id}})`",
 
 	"event_member_joined": "{{emote_join}} **{{user.tag}}** `({{user.id}})` has joined the server.\n**Account created:** <t:{{user_age}}:R>",
 	"event_member_leave": "{{emote_leave}} **{{user.tag}}** `({{user.id}})` has left the server.\n**Account joined:** <t:{{user_joined}}:f>",
@@ -257,6 +269,7 @@
 	"automod_already_in_database": "{{emote_warn}} Item(s) `{{item}}` is/are already in the AutoMod database.",
 	"automod_add_success": "{{emote_success}} Successfully added item(s) `{{item}}` to `{{category}}`.",
 	"automod_remove_success": "{{emote_success}} Successfully removed item(s) `{{item}}` from `{{category}}`",
+	"automod_invalid_input": "{{emote_warn}} Item `{{item}}` was not a valid input for that automod category",
 
 	"automod_updated_limit": "{{emote_success}} Successfully set the limit for `{{category}}` to `{{limit}}`",
 	"automod_updated_punishment": "{{emote_success}} Successfully updated the punishment for `{{category}}` to `{{punishment}}`",
@@ -274,7 +287,8 @@
 	"automod_settings_invites": "**Invites:** {{enabled}}\n**Whitelisted invites:** {{invites_blacklist}}",
 	"automod_settings_words": "**Words:** {{enabled}}\n**Blacklisted words:** {{word_blacklist}}\n**Token words:** {{word_token_blacklist}}",
 	"automod_settings_mentions": "**Mentions:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
-	"automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s",
+	"automod_settings_messages": "**Messages:** {{enabled}}\n**Limit:** {{limit}}\n**Timeout:** {{timeout}}s", 
+	"automod_settings_avatarbans": "**Banned avatars**: {{enabled}}\n**Blacklisted avatars:** {{avatar_blacklist}}",
 	"automod_settings_ignored": "**Immune roles:** {{roles}}\n**Immune channels:** {{channels}}\n**Immune users:** {{users}}",
 	"automod_settings_footer": "Administrators and roles with 25+ clearance are always immune to AutoMod checks",
 
@@ -288,6 +302,8 @@
 	"automod_violation_invites_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `DISCORD_INVITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
 	"automod_violation_website_reason": "Violated `FORBIDDEN_WEBSITE` check in #{{channel.name}}",
 	"automod_violation_website_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has violated the `FORBIDDEN_WEBSITE` check in <#{{channel.id}}> | Punishment: **{{punishment}}**\n```{{message}}```",
+	"automod_violation_avatar_reason": "Violated `BANNED_AVATARS` check",
+	"automod_violation_avatar_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has violated the `BANNED_AVATARS` check | Punishment: **{{punishment}}**\n**Hash:** {{hash}}",
 
 	"jumbo_start": "{{emote_loading}} Generating emoji... This might take a while",
 	"jumbo_too_many": "{{emote_warn}} Too many emojis provided. The bot currently only supports a max of 10 emojis at a time.",
@@ -346,6 +362,7 @@
 
 	"action_success_multi": "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
 	"action_multi_less_than_2": "{{emote_warn}} Selected less than 2 targets. Executing normal {{action}} instead",
+	"action_multi_no_targets": "{{emote_fail}} No valid targets were found in your message.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	"action_multi_types": {
 		"ban": "ban",
 		"kick": "kick",

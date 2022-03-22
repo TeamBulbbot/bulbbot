@@ -13,7 +13,7 @@ export default class extends Command {
 			examples: ["logs 0", "logs 5"],
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["daysAgo:number"],
+			argList: ["daysAgo:Number"],
 			devOnly: true,
 		});
 	}

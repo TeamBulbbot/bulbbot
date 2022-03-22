@@ -16,7 +16,7 @@ export default class extends SubCommand {
 			description: "Gets all of the database information for a guild",
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 		});
 	}
 

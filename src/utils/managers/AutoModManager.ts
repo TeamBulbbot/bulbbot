@@ -79,4 +79,66 @@ export default class {
 
 		return action.toUpperCase();
 	}
+
+	async resolveActionWithoutContext(client: BulbBotClient, member: GuildMember, action: string, reason: string): Promise<string> {
+		if (action === null) {
+			client.log.error(`[Auto Mod Manager] Action is null in ${member.guild?.id}, reason: ${reason}, target ${member.user.tag} (${member.user.id})`);
+			return "LOG";
+		}
+
+		switch (action.toUpperCase()) {
+			case "LOG":
+				break;
+			case "WARN":
+				await infractionsManager.warn(
+					client,
+					<Snowflake>member.guild?.id,
+					member.user,
+					<GuildMember>member.guild?.me,
+					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.warn", member.guild?.id, {}),
+						moderator: client.user,
+						target: member.user,
+						reason,
+					}),
+					reason,
+				);
+				break;
+			case "KICK":
+				await infractionsManager.kick(
+					client,
+					member.guild!.id,
+					member,
+					<GuildMember>member.guild?.me,
+					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.kick", member.guild?.id, {}),
+						moderator: client.user,
+						target: member.user,
+						reason,
+					}),
+					reason,
+				);
+				break;
+			case "BAN":
+				await infractionsManager.ban(
+					client,
+					<Guild>member.guild,
+					BanType.CLEAN,
+					<User>member.user,
+					<GuildMember>member.guild?.me,
+					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.ban", member.guild?.id, {}),
+						moderator: client.user,
+						target: member.user,
+						reason,
+					}),
+					reason,
+				);
+				break;
+			default:
+				throw new AutoModException(`${action.toUpperCase()} is not a valid resolvable AutoMod action!`);
+		}
+
+		return action.toUpperCase();
+	}
 }

@@ -15,7 +15,7 @@ export default class extends Command {
 			category: "Moderation",
 			usage: "<user> [reason]",
 			examples: ["undeafen 123456789012345678", "undeafen 123456789012345678 nice user", "undeafen @Wumpus#0000 nice user"],
-			argList: ["member:Member"],
+			argList: ["member:Member", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -62,7 +62,7 @@ export default class extends Command {
 				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
 				target: target.user,
 				reason,
-				infractionId: infID,
+				infraction_id: infID,
 			}),
 		);
 	}

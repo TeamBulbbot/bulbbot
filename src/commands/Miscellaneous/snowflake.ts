@@ -14,7 +14,7 @@ export default class extends Command {
 			category: "Miscellaneous",
 			usage: "<snowflake>",
 			examples: ["snowflake 123456789012345678"],
-			argList: ["snowflake:integer"],
+			argList: ["snowflake:Snowflake"],
 			minArgs: 1,
 			maxArgs: -1,
 			clientPerms: ["EMBED_LINKS"],

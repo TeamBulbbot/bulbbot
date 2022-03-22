@@ -17,7 +17,7 @@ export default class extends Command {
 			aliases: ["mkick"],
 			usage: "<member> <member2>.... [reason]",
 			examples: ["multikick 123456789012345678 876543210987654321 rude user", "multikick @Wumpus#0000 @Nelly##0000 rude user"],
-			argList: ["member:Member"],
+			argList: ["member:Member", "reason:String"],
 			minArgs: 1,
 			maxArgs: -1,
 			clearance: 50,
@@ -27,20 +27,20 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		if (targets === null)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
+		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+
+		if (!targets.length)
+		return context.channel.send(
+			await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
+				usage: this.usage,
+			}),
+		);
+
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string = "";
+		let fullList: string[] = [];
 
 		if (targets!!.length <= 1) {
 			await context.channel.send(
@@ -91,13 +91,15 @@ export default class extends Command {
 			);
 
 			if (infID === null) continue;
-			fullList += ` **${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``;
+			fullList.push(`**${target.user.tag}** \`\`(${target.user.id})\`\` \`\`[#${infID}]\`\``);
 		}
+
+		if (!fullList.length) return;
 
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-				full_list: fullList,
+				full_list: fullList.join(', '),
 				reason,
 			}),
 		);

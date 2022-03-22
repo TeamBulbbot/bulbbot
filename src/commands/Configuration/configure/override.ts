@@ -18,7 +18,7 @@ export default class extends SubCommand {
 			clearance: 75,
 			minArgs: 1,
 			maxArgs: -1,
-			argList: ["action:string"],
+			argList: ["action:String"],
 			usage: "<action>",
 			description: "Configure the override system.",
 		});

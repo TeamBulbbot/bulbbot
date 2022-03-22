@@ -59,6 +59,8 @@ export interface AutoModConfiguration {
 	punishmentMessages: string;
 	timeoutMentions: number;
 	timeoutMessages: number;
+	punishmentAvatarBans: string;
+	avatarHashes: string[];
 	ignoreChannels: string[];
 	ignoreRoles: string[];
 	ignoreUsers: string[];
@@ -77,7 +79,6 @@ export interface GuildRoleOverride {
 	roleId: string;
 	clearanceLevel: number;
 }
-
 
 export interface GuildCommandOverride {
 	enabled: boolean;

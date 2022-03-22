@@ -10,7 +10,7 @@ export default class extends SubCommand {
 			name: "join",
 			minArgs: 1,
 			maxArgs: 1,
-			argList: ["guildID:snowflake"],
+			argList: ["guildID:Snowflake"],
 			usage: "<guildID>",
 			description: "Creates an invite to the first text channel of the specified guild",
 		});

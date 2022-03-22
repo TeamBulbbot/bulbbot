@@ -17,7 +17,9 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 
 	const backRow = new MessageActionRow().addComponents([new MessageButton().setCustomId("back").setLabel("Back").setStyle("DANGER")]);
 
-	interaction.deferred ? await interaction.editReply({ content: "Automod Configure", components: [selectRow, backRow] }) : await interaction.update({ content: "Automod Configure", components: [selectRow, backRow] });
+	interaction.deferred
+		? await interaction.editReply({ content: "Automod Configure", components: [selectRow, backRow] })
+		: await interaction.update({ content: "Automod Configure", components: [selectRow, backRow] });
 
 	const filter = i => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1, time: 60000 });
