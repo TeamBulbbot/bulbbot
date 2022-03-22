@@ -36,6 +36,9 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 				case "limit":
 					await require("./automod/limit").default(i, client);
 					break;
+				case "punishment":
+					await require("./automod/punishment").default(i, client);
+					break;
 			}
 		}
 	});

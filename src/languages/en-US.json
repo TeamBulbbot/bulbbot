@@ -208,6 +208,13 @@
 	"config_enable_disable_disable_generic_success": "{{emote_success}} Successfully disabled the Automod",
 	"config_enable_disable_disable_success": "{{emote_success}} Successfully disabled the selected Automod category.",
 
+	"config_punishment_header": "{{emote_wrench}} **Punishment Configuration**\n{{emote_edit}}*This setting controls the punishment that the bot will use when an AutoMod check is violated.*",
+	"config_punishment_select_placeholder": "Select a punishment",
+	"config_punishment_description_log": "Sends an alert in the selected AutoMod logging channel.",
+	"config_punishment_description_warn": "Sends an alert in the logs and warns the user.",
+	"config_punishment_description_kick": "Kicks the user whilst keeping all their messages.",
+	"config_punishment_description_ban": "Bans the user whilst removing all their messages.",
+
 	"config_generic_success": "{{emote_success}} Successfully updated the `{{setting}}` setting to `{{value}}`",
 	"config_generic_success_add": "{{emote_success}} Successfully added `{{value}}` to `{{setting}}`",
 	"config_generic_success_remove": "{{emote_success}} Successfully removed `{{value}}` from `{{setting}}`",

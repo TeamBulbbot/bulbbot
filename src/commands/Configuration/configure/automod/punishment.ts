@@ -1,63 +1,111 @@
-import { Message } from "discord.js";
-import DatabaseManager from "../../../../utils/managers/DatabaseManager";
-import Command from "../../../../structures/Command";
-import SubCommand from "../../../../structures/SubCommand";
-import CommandContext from "../../../../structures/CommandContext";
-import AutoModPart from "../../../../utils/types/AutoModPart";
-import PunishmentType from "../../../../utils/types/PunishmentType";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
+import DatabaseManager from "../../../../utils/managers/DatabaseManager";
+import PunishmentType from "../../../../utils/types/PunishmentType";
+import AutoModPart from "../../../../utils/types/AutoModPart";
+import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
+import * as Emotes from "../../../../emotes.json";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "punishment",
-			aliases: ["punish"],
-			clearance: 75,
-			minArgs: 2, // perhaps `!automod punishment <part>` could return the current setting
-			maxArgs: 2,
-			argList: ["part:string", "punishment:string"],
-			usage: "<part> <punishment>",
-			description: "Sets the punishment for a part of the automod system.",
-		});
-	}
+async function punishment(interaction: MessageComponentInteraction, client: BulbBotClient, selectedCategory?: string) {
+	const config: AutoModConfiguration = await databaseManager.getAutoModConfig(interaction.guild?.id as Snowflake);
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const partArg = args[0];
-		const itemArg = args[1];
+	const selectRow = new MessageActionRow().setComponents(
+		new MessageSelectMenu()
+			.setCustomId("category")
+			.setPlaceholder(await client.bulbutils.translate("config_automod_add_remove_category_placeholder", interaction.guild?.id, {}))
+			.setOptions([
+				{ label: "Website filter", value: "punishmentWebsite", default: selectedCategory === "punishmentWebsite" },
+				{ label: "Invite filter", value: "punishmentInvites", default: selectedCategory === "punishmentInvites" },
+				{ label: "Word filter", value: "punishmentWords", default: selectedCategory === "punishmentWords" },
+				{ label: "Messages filter", value: "punishmentMessages", default: selectedCategory === "punishmentMessages" },
+				{ label: "Mentions filter", value: "punishmentMentions", default: selectedCategory === "punishmentMentions" },
+			]),
+	);
 
-		const partexec = /^(message|mention|website|invite|word|token)s?$|^word_?(token)s?$/.exec(partArg.toLowerCase());
-		if (!partexec)
-			return context.channel.send(
-				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
-					argument: args[0],
-					arg_expected: "part:string",
-					argument_list: "`website`, `invites`, `words`, `word_tokens`, `mentions` or `messages`",
-				}),
-			);
-		const partString = partexec[1];
+	const punishmentRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("punishment")
+			.setPlaceholder(await client.bulbutils.translate("config_punishment_select_placeholder", interaction.guild?.id, {}))
+			.setOptions([
+				{
+					label: "Log",
+					value: "log",
+					description: await client.bulbutils.translate("config_punishment_description_log", interaction.guild?.id, {}),
+					default: !!(selectedCategory && config[selectedCategory] === "LOG"),
+					emoji: selectedCategory && config[selectedCategory] === "LOG" ? Emotes.status.ONLINE : Emotes.status.DND,
+				},
+				{
+					label: "Warn",
+					value: "warn",
+					description: await client.bulbutils.translate("config_punishment_description_warn", interaction.guild?.id, {}),
+					default: !!(selectedCategory && config[selectedCategory] === "WARN"),
+					emoji: selectedCategory && config[selectedCategory] === "WARN" ? Emotes.status.ONLINE : Emotes.status.DND,
+				},
+				{
+					label: "Kick",
+					value: "kick",
+					description: await client.bulbutils.translate("config_punishment_description_kick", interaction.guild?.id, {}),
+					default: !!(selectedCategory && config[selectedCategory] === "KICK"),
+					emoji: selectedCategory && config[selectedCategory] === "KICK" ? Emotes.status.ONLINE : Emotes.status.DND,
+				},
+				{
+					label: "Ban",
+					value: "ban",
+					description: await client.bulbutils.translate("config_punishment_description_ban", interaction.guild?.id, {}),
+					default: !!(selectedCategory && config[selectedCategory] === "BAN"),
+					emoji: selectedCategory && config[selectedCategory] === "BAN" ? Emotes.status.ONLINE : Emotes.status.DND,
+				},
+			])
+			.setDisabled(!selectedCategory),
+	);
 
-		const itemexec = /^(NONE|LOG|WARN|KICK|BAN)$/.exec(itemArg.toUpperCase());
-		if (!itemexec)
-			return context.channel.send(
-				await this.client.bulbutils.translate("event_message_args_missing_list", context.guild!.id, {
-					argument: itemArg,
-					arg_expected: "punishment:string",
-					argument_list: "`LOG`, `WARN`, `KICK` or `BAN`", // include none ? or leave as undocumented QoL
-				}),
-			);
-		const itemString = itemexec[1];
+	const buttonRow = new MessageActionRow().setComponents(
+		new MessageButton()
+			.setCustomId("back")
+			.setLabel(await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}))
+			.setStyle("DANGER"),
+	);
 
-		const part: AutoModPart = AutoModPart[partString];
-		const item: PunishmentType | null = itemString !== "NONE" ? PunishmentType[itemString] : null;
-		await databaseManager.automodSetPunishment(context.guild!.id, part, item);
+	await interaction.update({
+		content: await client.bulbutils.translate("config_punishment_header", interaction.guild?.id, {}),
+		components: [selectRow, punishmentRow, buttonRow],
+	});
 
-		await context.channel.send(
-			await this.client.bulbutils.translate("automod_updated_punishment", context.guild!.id, {
-				category: partArg,
-				punishment: itemArg,
-			}),
-		);
-	}
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isButton()) {
+			collector.stop();
+			return require("../automod").default(i, client);
+		} else if (i.isSelectMenu()) {
+			if (i.customId === "category") {
+				collector.stop();
+				return punishment(i, client, i.values[0]);
+			} else if (i.customId === "punishment") {
+				collector.stop();
+				await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, categories[selectedCategory!!], punishmentTypes[i.values[0]]);
+				return punishment(i, client, selectedCategory);
+			}
+		}
+	});
 }
+
+const punishmentTypes = {
+	log: PunishmentType.LOG,
+	warn: PunishmentType.WARN,
+	kick: PunishmentType.KICK,
+	ban: PunishmentType.BAN,
+};
+
+const categories = {
+	punishmentWebsite: AutoModPart.website,
+	punishmentInvites: AutoModPart.invite,
+	punishmentWords: AutoModPart.word,
+	punishmentMessages: AutoModPart.message,
+	punishmentMentions: AutoModPart.mention,
+};
+
+export default punishment;
