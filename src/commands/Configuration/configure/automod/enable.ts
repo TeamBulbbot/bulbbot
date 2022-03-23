@@ -28,8 +28,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 		await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}),
 		await client.bulbutils.translate("config_button_enable", interaction.guild?.id, {}),
 		await client.bulbutils.translate("config_button_disable", interaction.guild?.id, {}),
-	]
-
+	];
 
 	const buttonRow = new MessageActionRow().addComponents([
 		new MessageButton().setCustomId("back").setLabel(backButton).setStyle("DANGER"),
@@ -50,7 +49,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 		components: [selectRow, buttonRow],
 	});
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {

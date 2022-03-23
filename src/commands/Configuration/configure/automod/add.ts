@@ -82,7 +82,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 		? await interaction.editReply({ content: header, components: [categoryRow, listRow, scrollRow, buttonRow] })
 		: await interaction.update({ content: header, components: [categoryRow, listRow, scrollRow, buttonRow] });
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {

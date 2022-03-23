@@ -19,7 +19,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext): Promise<void | Message> {
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
 				.setCustomId("configure-main")
@@ -89,7 +89,7 @@ export default class extends Command {
 			components: [row],
 		});
 
-		const filter = i => i.user.id === context.user.id;
+		const filter = (i: MessageComponentInteraction) => i.user.id === context.user.id;
 		const collector = context.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
 		collector?.on("collect", async (i: MessageComponentInteraction) => {

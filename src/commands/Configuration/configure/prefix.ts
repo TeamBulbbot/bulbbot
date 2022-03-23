@@ -42,7 +42,7 @@ async function prefix(interaction: MessageComponentInteraction, client: BulbBotC
 		? await interaction.editReply({ content: header, components: [placeholderRow, buttonRow] })
 		: await interaction.update({ content: header, components: [placeholderRow, buttonRow] });
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {

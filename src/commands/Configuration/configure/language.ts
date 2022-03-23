@@ -44,7 +44,7 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 		components: [placeholderRow, selectRow, buttonRow],
 	});
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {

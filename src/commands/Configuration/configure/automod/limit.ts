@@ -29,7 +29,7 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 
 	interaction.deferred ? await interaction.editReply({ content: header, components: [selectRow, buttonRow] }) : await interaction.update({ content: header, components: [selectRow, buttonRow] });
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {

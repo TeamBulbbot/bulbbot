@@ -74,7 +74,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 
 	await interaction.update({ content: "Logging Configuration", components: [channelRow, logsRow, pageRow, backRow] });
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {

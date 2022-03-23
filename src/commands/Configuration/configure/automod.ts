@@ -23,14 +23,14 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 		? await interaction.editReply({ content: header, components: [selectRow, backRow] })
 		: await interaction.update({ content: header, components: [selectRow, backRow], embeds: [] });
 
-	const filter = i => i.user.id === interaction.user.id;
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1, time: 60000 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
 		if (i.isButton()) {
 			await require("./main").default(i, client);
 		} else if (i.isSelectMenu()) {
-			const resolvedValue = i.values[0].split('_')[0];
+			const resolvedValue = i.values[0].split("_")[0];
 			await require(`./automod/${resolvedValue}`).default(i, client);
 		}
 	});
