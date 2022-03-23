@@ -67,9 +67,9 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 					await autorole(i, client);
 					break;
 				case "change":
-					buttonRow.components[0].setDisabled(true);
-					buttonRow.components[1].setDisabled(true);
-					buttonRow.components[2].setDisabled(true);
+					for (const component of buttonRow.components) {
+						component.setDisabled(true);
+					}
 
 					await interaction.editReply({ components: [placeholderRow, buttonRow] });
 
