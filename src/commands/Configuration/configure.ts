@@ -94,35 +94,7 @@ export default class extends Command {
 
 		collector?.on("collect", async (i: MessageComponentInteraction) => {
 			if (i.isSelectMenu()) {
-				switch (i.values[0]) {
-					case "actionsOnInfo":
-						await require("./configure/actionsOnInfo").default(i, this.client);
-						break;
-					case "automod":
-						await require("./configure/automod").default(i, this.client);
-						break;
-					case "autorole":
-						await require("./configure/autorole").default(i, this.client);
-						break;
-					case "language":
-						await require("./configure/language").default(i, this.client);
-						break;
-					case "logging":
-						await require("./configure/logging").default(i, this.client);
-						break;
-					case "prefix":
-						await require("./configure/prefix").default(i, this.client);
-						break;
-					case "quickReasons":
-						await require("./configure/quickReasons").default(i, this.client);
-						break;
-					case "rolesOnLeave":
-						await require("./configure/rolesOnLeave").default(i, this.client);
-						break;
-					case "timezone":
-						await require("./configure/timezone").default(i, this.client);
-						break;
-				}
+				await require(`./configure/${i.values[0]}`).default(i, this.client);
 			}
 		});
 	}

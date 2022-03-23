@@ -30,23 +30,8 @@ async function automod(interaction: MessageComponentInteraction, client: BulbBot
 		if (i.isButton()) {
 			await require("./main").default(i, client);
 		} else if (i.isSelectMenu()) {
-			switch (i.values[0]) {
-				case "add_remove":
-					await require("./automod/add").default(i, client);
-					break;
-				case "enable_disable":
-					await require("./automod/enable").default(i, client);
-					break;
-				case "limit":
-					await require("./automod/limit").default(i, client);
-					break;
-				case "punishment":
-					await require("./automod/punishment").default(i, client);
-					break;
-				case "overview":
-					await require("./automod/overview").default(i, client);
-					break;
-			}
+			const resolvedValue = i.values[0].split('_')[0];
+			await require(`./automod/${resolvedValue}`).default(i, client);
 		}
 	});
 }
