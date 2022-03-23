@@ -259,6 +259,8 @@
 	"config_logging_all_confirm": "{{emote_warn}} Are you sure you want to add all logging types to <#{{channel}}>? This will begin to log all loggable actions in the selected channel.",
 	"config_logging_all_remove": "{{emote_warn}} Are you sure you want to remove all logging types from all channels in this server?",
 
+	"config_automod_overview_header": "{{emote_wrench}} **Automod Overview**",
+
 	"override_clearance_more_than_100": "{{emote_warn}} Clearance level cannot be higher than **100**",
 	"override_clearance_0_confirmation": "{{emote_warn}} You're about to set a restricted command to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",
 	"override_clearance_higher_than_self": "{{emote_warn}} You cannot create an override with clearance level higher than your clearance level.",

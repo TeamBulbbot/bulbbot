@@ -77,35 +77,7 @@ export default async function (interaction: MessageComponentInteraction, client:
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
 		if (i.isSelectMenu()) {
-			switch (i.values[0]) {
-				case "actionsOnInfo":
-					await require("./actionsOnInfo").default(i, client);
-					break;
-				case "automod":
-					await require("./automod").default(i, client);
-					break;
-				case "autorole":
-					await require("./autorole").default(i, client);
-					break;
-				case "language":
-					await require("./language").default(i, client);
-					break;
-				case "logging":
-					await require("./logging").default(i, client);
-					break;
-				case "prefix":
-					await require("./prefix").default(i, client);
-					break;
-				case "quickReasons":
-					await require("./quickReasons").default(i, client);
-					break;
-				case "rolesOnLeave":
-					await require("./rolesOnLeave").default(i, client);
-					break;
-				case "timezone":
-					await require("./timezone").default(i, client);
-					break;
-			}
+			await require(`./${i.values[0]}`).default(i, client);
 		}
 	});
 }

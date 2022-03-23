@@ -98,7 +98,11 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 			.setStyle("DANGER"),
 	);
 
-	await interaction.update({ embeds: [embed], components: [buttonRow] });
+	await interaction.update({
+		content: await client.bulbutils.translate("config_automod_overview_header", interaction.guild?.id, {}),
+		embeds: [embed],
+		components: [buttonRow],
+	});
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1 });
