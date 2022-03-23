@@ -1,5 +1,4 @@
 import Command from "../../structures/Command";
-import override from "./configure/override";
 import BulbBotClient from "../../structures/BulbBotClient";
 import CommandContext from "../../structures/CommandContext";
 import { Message, MessageActionRow, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
@@ -11,7 +10,6 @@ export default class extends Command {
 			name,
 			description: "Configure the bot in your server",
 			category: "Configuration",
-			subCommands: [override],
 			aliases: ["cfg", "conf", "config", "setting"],
 			usage: "<setting>",
 			examples: ["configure prefix <prefix>", "configure logging mod_action <channel>"],

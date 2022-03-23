@@ -1,6 +1,5 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import BulbBotClient from "../../../structures/BulbBotClient";
+import Command from "../../structures/Command";
+import BulbBotClient from "../../structures/BulbBotClient";
 
 import create from "./override/create";
 import disable from "./override/disable";
@@ -9,10 +8,10 @@ import enable from "./override/enable";
 import list from "./override/list";
 import remove from "./override/delete";
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "override",
+export default class extends Command {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
 			aliases: ["overide"],
 			subCommands: [create, disable, edit, enable, list, remove],
 			clearance: 75,
