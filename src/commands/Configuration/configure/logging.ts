@@ -170,6 +170,12 @@ async function setLogging(interaction: MessageComponentInteraction, selectedChan
 			case "join_leave_logs":
 				await databaseManager.setJoinLeave(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
 				break;
+			case "thread_logs":
+				await databaseManager.setThread(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "other_logs":
+				await databaseManager.setOther(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
 		}
 	}
 }
@@ -185,6 +191,8 @@ function loggingTypes(config: LoggingConfiguration, channel?: TextChannel) {
 		{ label: "Channel Logs", value: "channel_logs", emoji: channel !== undefined && config.channel === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
 		{ label: "Invite Logs", value: "invite_logs", emoji: channel !== undefined && config.invite === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
 		{ label: "Join/Leave Logs", value: "join_leave_logs", emoji: channel !== undefined && config.joinLeave === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Thread Logs", value: "thread_logs", emoji: channel !== undefined && config.thread === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Other logs", value: "other_logs", emoji: channel !== undefined && config.other === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
 	];
 }
 
