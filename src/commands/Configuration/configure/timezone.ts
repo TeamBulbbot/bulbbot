@@ -89,6 +89,11 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 					break;
 			}
 		} else if (i.isSelectMenu()) {
+			if (client.bulbutils.timezones[i.values[0]] === undefined) {
+				collector.stop();
+				return;
+			}
+
 			await databaseManager.setTimezone(i.guild?.id as Snowflake, i.values[0]);
 			await interaction.followUp({
 				content: await client.bulbutils.translate("config_timezone_success", interaction.guild?.id, {
@@ -96,7 +101,6 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 				}),
 				ephemeral: true,
 			});
-			collector.stop();
 
 			await timezone(i, client);
 		}
