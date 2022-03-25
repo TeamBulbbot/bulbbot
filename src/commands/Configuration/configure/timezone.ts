@@ -13,9 +13,10 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 	for (let i = 0; i < 3; i++) {
 		let page: { label: string; value: string }[] = [];
 		for (let j = 0; j < 9; j++) {
+			const [code, name] = Object.entries(client.bulbutils.timezones)[i * 9 + j];
 			page.push({
-				label: Object.entries(client.bulbutils.timezones)[i * 9 + j][0],
-				value: Object.entries(client.bulbutils.timezones)[i * 9 + j][0],
+				label: `${code} (${name})`,
+				value: code,
 			});
 		}
 
@@ -27,7 +28,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			.setCustomId("quickReasons")
 			.setPlaceholder(
 				await client.bulbutils.translate("config_timezone_placeholder", interaction.guild?.id, {
-					timezone: Object.keys(client.bulbutils.timezones).find(key => client.bulbutils.timezones[key] === config.timezone),
+					timezone: `${config.timezone} (${client.bulbutils.timezones[config.timezone]})`,
 				}),
 			)
 			.setOptions(pages[currPage]),
@@ -88,10 +89,10 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 					break;
 			}
 		} else if (i.isSelectMenu()) {
-			await databaseManager.setTimezone(i.guild?.id as Snowflake, client.bulbutils.timezones[i.values[0]]);
+			await databaseManager.setTimezone(i.guild?.id as Snowflake, i.values[0]);
 			await interaction.followUp({
 				content: await client.bulbutils.translate("config_timezone_success", interaction.guild?.id, {
-					timezone: i.values[0],
+					timezone: `${i.values[0]} (${client.bulbutils.timezones[i.values[0]]})`,
 				}),
 				ephemeral: true,
 			});
