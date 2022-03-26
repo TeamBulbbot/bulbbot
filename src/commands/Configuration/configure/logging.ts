@@ -30,7 +30,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 			label: channel.name,
 			value: channel.id,
 			emoji: Emoji.channel.TEXT,
-			description: (channel as TextChannel).topic ? ((channel as TextChannel).topic?.substr(0, 100) as string) : undefined,
+			description: (channel as TextChannel).topic ? ((channel as TextChannel).topic?.slice(0, 100) as string) : undefined,
 		});
 	});
 
