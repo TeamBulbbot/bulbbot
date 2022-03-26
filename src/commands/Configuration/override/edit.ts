@@ -1,35 +1,35 @@
-import { NonDigits } from "../../../../utils/Regex";
+import { NonDigits } from "../../../utils/Regex";
 import { ButtonInteraction, Message, MessageActionRow, MessageButton, Snowflake } from "discord.js";
-import ClearanceManager from "../../../../utils/managers/ClearanceManager";
-import Command from "../../../../structures/Command";
-import SubCommand from "../../../../structures/SubCommand";
-import CommandContext from "../../../../structures/CommandContext";
-import BulbBotClient from "../../../../structures/BulbBotClient";
+import ClearanceManager from "../../../utils/managers/ClearanceManager";
+import Command from "../../../structures/Command";
+import SubCommand from "../../../structures/SubCommand";
+import CommandContext from "../../../structures/CommandContext";
+import BulbBotClient from "../../../structures/BulbBotClient";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default class extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
-			name: "create",
+			name: "edit",
 			minArgs: 3,
 			maxArgs: -1,
 			argList: ["part:String", "name:String", "clearance:Number"],
 			usage: "<part> <name> <clearance>",
-			description: "Creates a new override for the specified part.",
+			description: "Updates a clearance level.",
 		});
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const part: string = args[0];
-		const name: string[] = args.slice(1, -1);
-		let clearance: number = Number(args.at(-1));
+		const part = args[0];
+		let clearance = Number(args.at(-1));
 
 		if (isNaN(clearance))
 			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: clearance,
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
 					arg_expected: "clearance:int",
+					arg_provided: args[2],
 					usage: this.usage,
 				}),
 			);
@@ -38,38 +38,45 @@ export default class extends SubCommand {
 		if (clearance > this.client.userClearance) return context.channel.send(await this.client.bulbutils.translate("override_clearance_higher_than_self", context.guild?.id, {}));
 
 		switch (part) {
-			case "role":
-				if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, name[0])) !== undefined)
-					return await context.channel.send(await this.client.bulbutils.translate("override_already_exists", context.guild?.id, {}));
-				const rTemp = context.guild?.roles.cache.get(name[0].replace(NonDigits, ""));
+			case "role": {
+				const name = args[1];
+				const roleID = name.replace(NonDigits, "");
+				const rTemp = context.guild?.roles.cache.get(roleID);
 				if (rTemp === undefined)
 					return context.channel.send(
 						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.role", context.guild?.id, {}),
-							arg_provided: args[1],
 							arg_expected: "role:Role",
+							arg_provided: args[1],
 							usage: this.usage,
 						}),
 					);
 
-				await clearanceManager.createRoleOverride(<Snowflake>context.guild?.id, name[0].replace(NonDigits, ""), clearance);
-				await context.channel.send(await this.client.bulbutils.translate("override_create_success", context.guild?.id, { clearance }));
+				if ((await clearanceManager.getRoleOverride(<Snowflake>context.guild?.id, rTemp.id)) === undefined)
+					return context.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", context.guild?.id, { role: rTemp.name }));
+				await clearanceManager.editRoleOverride(<Snowflake>context.guild?.id, roleID, clearance);
+				await context.channel.send(await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }));
 				break;
-			case "command":
+			}
+			case "command": {
+				const name = args.slice(1, -1);
 				const command = Command.resolve(this.client, name);
-
-				if (command === undefined || command.name === undefined)
+				if (command === undefined)
 					return context.channel.send(
 						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 							type: await this.client.bulbutils.translate("global_not_found_types.cmd", context.guild?.id, {}),
-							arg_provided: args[1],
 							arg_expected: "command:string",
+							arg_provided: name.join(" "),
 							usage: this.usage,
 						}),
 					);
 
-				if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)) !== undefined)
-					return await context.channel.send(await this.client.bulbutils.translate("override_already_exists", context.guild?.id, {}));
+				if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)) === undefined)
+					return context.channel.send(
+						await this.client.bulbutils.translate("override_nonexistent_command", context.guild?.id, {
+							command: command.qualifiedName,
+						}),
+					);
 
 				if (clearance === 0 && (command.category === "Moderation" || command.category === "Configuration")) {
 					const rowDisabled = new MessageActionRow().addComponents([
@@ -94,7 +101,7 @@ export default class extends SubCommand {
 						}
 
 						if (interaction.customId === "confirm") {
-							await interaction.update({ content: await this.client.bulbutils.translate("override_create_success", context.guild?.id, { clearance }), components: [] });
+							await interaction.update({ content: await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }), components: [] });
 							collector.stop("clicked");
 							return clearanceManager.createCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, true, clearance);
 						} else {
@@ -103,17 +110,18 @@ export default class extends SubCommand {
 						}
 					});
 
-					collector.on("end", async (_: ButtonInteraction, reason: string) => {
+					collector.on("end", async (interaction: ButtonInteraction, reason: string) => {
 						if (reason !== "time") return;
 
 						await msg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
 						return;
 					});
 				} else {
-					await clearanceManager.createCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, true, clearance);
-					await context.channel.send(await this.client.bulbutils.translate("override_create_success", context.guild?.id, { clearance }));
+					await clearanceManager.editCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, clearance);
+					await context.channel.send(await this.client.bulbutils.translate("override_edit_success", context.guild?.id, { clearance }));
 				}
 				break;
+			}
 			default:
 				return context.channel.send(
 					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {

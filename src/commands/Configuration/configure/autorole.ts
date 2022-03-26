@@ -1,52 +1,113 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message, Role, Snowflake } from "discord.js";
-import { NonDigits } from "../../../utils/Regex";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Role, Snowflake } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
+import { NonDigits } from "../../../utils/Regex";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "auto_role",
-			aliases: ["autorole"],
-			clearance: 75,
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["role:Role"],
-			usage: "<role>",
-			description: "Sets the role that will be given to users when they join the server.",
-		});
-	}
+async function autorole(interaction: MessageComponentInteraction, client: BulbBotClient) {
+	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
+	const role: Role | null = config.autorole !== null ? ((await client.bulbfetch.getRole(interaction.guild?.roles, config.autorole)) as Role) : null;
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targetRole = args[0].replace(NonDigits, "");
-		const role: Role | null | undefined = await this.client.bulbfetch.getRole(context.guild?.roles, targetRole);
+	const placeholderRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("placeholder")
+			.setPlaceholder(
+				config.autorole !== null
+					? await client.bulbutils.translate("config_autorole_placeholder", interaction.guild?.id, { role })
+					: await client.bulbutils.translate("config_autorole_placeholder_disabled", interaction.guild?.id, {}),
+			)
+			.setDisabled(true)
+			.addOptions([
+				{
+					label: "Placeholder",
+					value: "placeholder",
+				},
+			]),
+	);
 
-		if (!role && args[0] !== "disable")
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.role", context.guild?.id, {}),
-					arg_provided: args[0],
-					arg_expected: "role:Role",
-					usage: this.usage,
-				}),
-			);
+	const [back, change, disable, header] = [
+		await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_autorole_button_change", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_autorole_button_disable", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_autorole_header", interaction.guild?.id, {}),
+	];
 
-		if (args[0] !== "disable") {
-			if (context.guild?.me?.roles.highest && context.guild?.me.roles.highest.rawPosition < role!!.rawPosition)
-				return context.channel.send(await this.client.bulbutils.translate("config_mute_unable_to_manage", context.guild.id, {}));
+	const buttonRow = new MessageActionRow().addComponents([
+		new MessageButton().setCustomId("back").setLabel(back).setStyle("DANGER"),
+		new MessageButton().setCustomId("change").setLabel(change).setStyle("SUCCESS"),
+		new MessageButton()
+			.setCustomId("disable")
+			.setLabel(disable)
+			.setStyle("PRIMARY")
+			.setDisabled(config.autorole === null),
+	]);
+
+	interaction.deferred
+		? await interaction.editReply({ content: header, components: [placeholderRow, buttonRow] })
+		: await interaction.update({ content: header, components: [placeholderRow, buttonRow] });
+
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isButton()) {
+			switch (i.customId) {
+				case "back":
+					await require("./main").default(i, client);
+					break;
+				case "disable":
+					await databaseManager.setAutoRole(interaction.guild?.id as Snowflake, null);
+					await interaction.followUp({
+						content: await client.bulbutils.translate("config_autorole_disable", interaction.guild?.id, {}),
+						ephemeral: true,
+					});
+
+					await autorole(i, client);
+					break;
+				case "change":
+					for (const component of buttonRow.components) {
+						component.setDisabled(true);
+					}
+
+					await interaction.editReply({ components: [placeholderRow, buttonRow] });
+
+					const msgFilter = (m: Message) => m.author.id === interaction.user.id;
+					const msgCollector = interaction.channel?.createMessageCollector({ filter: msgFilter, time: 60000, max: 1 });
+					await interaction.followUp({
+						content: await client.bulbutils.translate("config_autorole_prompt", interaction.guild?.id, {}),
+						ephemeral: true,
+					});
+					await i.deferUpdate();
+
+					msgCollector?.on("collect", async (m: Message) => {
+						const roleId = m.content.replace(NonDigits, "");
+						const role = await client.bulbfetch.getRole(interaction.guild?.roles, roleId);
+						await m.delete();
+
+						if (!role) {
+							await interaction.followUp({
+								content: await client.bulbutils.translate("global_cannot_convert_special", interaction.guild?.id, {
+									arg_provided: m.content,
+									arg_expected: "role:Role",
+								}),
+								ephemeral: true,
+							});
+							await autorole(i, client);
+							return;
+						}
+
+						await databaseManager.setAutoRole(interaction.guild?.id as Snowflake, role.id);
+						await interaction.followUp({
+							content: await client.bulbutils.translate("config_autorole_success", interaction.guild?.id, { role }),
+							ephemeral: true,
+						});
+						await autorole(i, client);
+					});
+			}
 		}
-
-		if (role !== undefined && role !== null) {
-			await databaseManager.setAutoRole(<Snowflake>context.guild?.id, role!!.id);
-			return context.channel.send(await this.client.bulbutils.translate("config_autorole_success", context.guild?.id, { role: role!!.name }));
-		} else {
-			await databaseManager.setAutoRole(<Snowflake>context.guild?.id, null);
-			return context.channel.send(await this.client.bulbutils.translate("config_autorole_disable", context.guild?.id, {}));
-		}
-	}
+	});
 }
+
+export default autorole;
