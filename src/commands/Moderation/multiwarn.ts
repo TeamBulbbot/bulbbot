@@ -24,7 +24,7 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		let targets: RegExpMatchArray = args.slice(0).join(" ").match(UserMentionAndID) || [];
 		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
@@ -39,19 +39,19 @@ export default class extends Command {
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		const fullList: string[] = [];
 
-		if (targets!.length <= 1) {
+		if (targets.length <= 1) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_multi_less_than_2", context.guild?.id, {
 					action: await this.client.bulbutils.translate("action_multi_types.warn", context.guild?.id, {}),
 				}),
 			);
-			return await this.client.commands.get("warn")!.run(context, args);
+			return await this.client.commands.get("warn")?.run(context, args);
 		}
 
-		for (let i = 0; i < targets!.length; i++) {
-			if (targets![i] === undefined) continue;
+		for (let i = 0; i < targets.length; i++) {
+			if (targets[i] === undefined) continue;
 
-			const t: string = targets![i].replace(NonDigits, "");
+			const t: string = targets[i].replace(NonDigits, "");
 			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
 
 			if (!target) {

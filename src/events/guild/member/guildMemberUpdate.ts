@@ -57,24 +57,24 @@ export default class extends Event {
 					);
 				}
 			} else {
-				if (executor?.id === this.client.user?.id) return;
+				if (!executor?.id || executor?.id === this.client.user?.id) return;
 
 				await infractionsManager.createInfraction(
 					newMember.guild.id,
 					"Mute",
-					<number>newMember.communicationDisabledUntilTimestamp!,
+					newMember.communicationDisabledUntilTimestamp,
 					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					newMember.user,
-					<User>executor,
+					executor,
 				);
-				const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, <Snowflake>executor?.id, newMember.user.id, "Mute");
+				const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Mute");
 				await loggingManager.sendModActionTemp(
 					this.client,
 					newMember.guild,
 					await this.client.bulbutils.translate("mod_action_types.mute", newMember.guild.id, {}),
 					newMember.user,
-					<User>executor,
-					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+					executor,
+					auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					infID,
 					newMember.communicationDisabledUntilTimestamp,
 				);
@@ -107,20 +107,20 @@ export default class extends Event {
 		switch (change) {
 			case "nickname":
 				part = "member";
-				if (auditLog?.changes && auditLog!.changes[0].key === "nick") {
+				if (auditLog?.changes && auditLog.changes[0].key === "nick") {
 					executor = auditLog.executor;
-					if (executor?.id === this.client.user!.id) return;
+					if (!executor?.id || executor.id === this.client.user?.id) return;
 
 					const reason = auditLog.reason ?? (await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}));
-					if (!executor?.bot && executor?.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
+					if (!executor.bot && executor.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor);
 					const infID: number =
-						!executor?.bot && executor?.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.user.id, "Manual Nickname") : -1;
+						!executor.bot && executor.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Manual Nickname") : -1;
 					const translateKey =
 						executor === null || executor.id === newMember.id
 							? newMember.nickname
 								? "event_member_update_nickname"
 								: "event_member_remove_nickname"
-							: executor?.bot
+							: executor.bot
 							? newMember.nickname
 								? "event_member_update_nickname_moderator"
 								: "event_member_remove_nickname_moderator"
@@ -173,6 +173,6 @@ export default class extends Event {
 				break;
 		}
 
-		await loggingManager.sendEventLog(this.client, newMember.guild, part!, message);
+		await loggingManager.sendEventLog(this.client, newMember.guild, part, message);
 	}
 }

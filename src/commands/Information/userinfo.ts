@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
-import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake } from "discord.js";
+import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
 import axios from "axios";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -8,6 +8,7 @@ import * as Emotes from "../../emotes.json";
 import { discordApi, embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
+import type { UserObject } from "../../utils/BulbBotUtils";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -35,7 +36,7 @@ export default class extends Command {
 		if (args[0] === undefined) target = context.author.id;
 		else target = args[0].replace(NonDigits, "");
 
-		let user: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, target);
+		let user: Optional<User | GuildMember | UserObject> = await this.client.bulbfetch.getGuildMember(context.guild?.members, target);
 		const isGuildMember = true;
 
 		if (!user) user = await this.client.bulbfetch.getUser(target);
@@ -69,7 +70,7 @@ export default class extends Command {
 		if (!actionsOnInfo) components = [];
 		else if (!isGuildMember) components = [];
 		else if (!args[0]) components = [];
-		else if (user!.id === context.author.id) components = [];
+		else if (user?.id === context.author.id) components = [];
 		else components = [row];
 
 		let description = "";
@@ -156,10 +157,10 @@ export default class extends Command {
 
 			const embed: MessageEmbed = new MessageEmbed()
 				.setColor(color)
-				.setThumbnail(user.avatarUrl)
+				.setThumbnail(user.avatarUrl || "")
 				.setAuthor({
 					name: `${user.username}#${user.discriminator}`,
-					iconURL: user.avatarUrl,
+					iconURL: user.avatarUrl || "",
 				})
 				.setDescription(description)
 				.setFooter({
@@ -178,18 +179,18 @@ export default class extends Command {
 			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
 				if (interaction.user.id !== context.author.id)
 					return void (await interaction.reply({
-						content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId!, {}),
+						content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId, {}),
 						ephemeral: true,
 					}));
 
 				const command = Command.resolve(this.client, interaction.customId);
 				if (!command)
 					return void (await interaction.reply({
-						content: await this.client.bulbutils.translate("global_error.unknown", context.guildId!, {}),
+						content: await this.client.bulbutils.translate("global_error.unknown", context.guildId, {}),
 						ephemeral: true,
 					}));
 
-				const reason = await command.validate(await getCommandContext(interaction), [user.id, ""]);
+				const reason = await command.validate(await getCommandContext(interaction), [user?.id || "", ""]);
 				if (reason !== undefined) {
 					if (reason) await interaction.reply({ content: reason, ephemeral: true });
 					return;
@@ -207,7 +208,7 @@ export default class extends Command {
 				const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
 
 				collector?.on("collect", async (m) => {
-					const cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
+					const cArgs: string[] = [user?.id || "", ...m.content.split(/ +/g)];
 					await command.run(context, cArgs);
 					await m.delete();
 				});
@@ -221,7 +222,7 @@ export default class extends Command {
 				if (!actionsOnInfo) return;
 				else if (!isGuildMember) return;
 				else if (!args[0]) return;
-				else if (user.id === context.author.id) return;
+				else if (user?.id === context.author.id) return;
 				msg.edit({ components: [rowDisabled] });
 			});
 		}

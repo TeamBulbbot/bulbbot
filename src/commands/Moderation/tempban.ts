@@ -71,15 +71,15 @@ export default class extends Command {
 			Date.now() + <number>parse(args[1]),
 		);
 
-		if (infID === null) return;
+		if (infID === null || !context.guild?.id) return;
 
-		await createTempBan(target, reason, Date.now() + <number>parse(args[1]), context.guild!.id);
-		const tempban: any = await getLatestTempBan(target, context.guild!.id);
+		await createTempBan(target, reason, Date.now() + <number>parse(args[1]), context.guild.id);
+		const tempban: any = await getLatestTempBan(target, context.guild.id);
 
-		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>context.guild?.id)];
+		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(context.guild.id)];
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success_temp", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_temp", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,
@@ -91,17 +91,17 @@ export default class extends Command {
 
 		const client: BulbBotClient = this.client;
 		setTimeout(async function () {
-			if ((await infractionsManager.isActive(<Snowflake>context.guild?.id, infID!)) === false) return;
-			await infractionsManager.setActive(<Snowflake>context.guild?.id, infID!, false);
+			if (!context.guild?.id || !context.guild.me || (await infractionsManager.isActive(context.guild.id, infID)) === false) return;
+			await infractionsManager.setActive(context.guild.id, infID, false);
 
 			infID = await infractionsManager.unban(
 				client,
-				<Guild>context.guild,
+				context.guild,
 				BanType.TEMP,
 				target.user,
-				<GuildMember>context.guild?.me,
-				await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await client.bulbutils.translate("mod_action_types.auto_unban", context.guild?.id, {}),
+				context.guild.me,
+				await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await client.bulbutils.translate("mod_action_types.auto_unban", context.guild.id, {}),
 					moderator: client.user,
 					target: target.user,
 					reason: "Automatic unban",

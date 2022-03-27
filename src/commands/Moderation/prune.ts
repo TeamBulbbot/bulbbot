@@ -77,7 +77,7 @@ export default class extends Command {
 				});
 				await sendModActionPreformatted(
 					this.client,
-					context.guild!,
+					context.guild,
 					await this.client.bulbutils.translate("prune_log", context.guild?.id, {
 						user: context.author,
 						prune,

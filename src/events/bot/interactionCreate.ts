@@ -80,13 +80,14 @@ export default class extends Event {
 			if (!command) return;
 			const invalidReason = await command.validate(context, args);
 			if (invalidReason !== undefined) {
+				// CommandContext#reply is safe here - deferReply has not yet been called
 				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
 
 			let used = `/${command.qualifiedName}`;
 			args.forEach((arg) => (used += ` ${arg}`));
-			await loggingManager.sendCommandLog(this.client, interaction.guild!, context.author, context.channel.id, used);
+			await loggingManager.sendCommandLog(this.client, interaction.guild, context.author, context.channel.id, used);
 
 			await context.deferReply();
 			await command.run(context, args);

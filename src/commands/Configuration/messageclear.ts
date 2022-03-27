@@ -34,16 +34,18 @@ export default class extends Command {
 		if (days < 0) return context.channel.send(await this.client.bulbutils.translate("messageclear_few_than_0days", context.guild?.id, {}));
 		if (days > 30) return context.channel.send(await this.client.bulbutils.translate("messageclear_more_than_30days", context.guild?.id, {}));
 
-		const amountOfMessages = (await getServerArchive(context.guild!.id, days.toString())).length;
+		if (!context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, {}));
+
+		const amountOfMessages = (await getServerArchive(context.guild.id, days.toString())).length;
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
 			new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 		]);
 
-		if (amountOfMessages === 0) return context.channel.send(await this.client.bulbutils.translate("messageclear_found_no_message", context.guild?.id, {}));
+		if (amountOfMessages === 0) return context.channel.send(await this.client.bulbutils.translate("messageclear_found_no_message", context.guild.id, {}));
 
 		const confirmMsg = await context.channel.send({
-			content: await this.client.bulbutils.translate("messageclear_about_to_clear", context.guild?.id, {
+			content: await this.client.bulbutils.translate("messageclear_about_to_clear", context.guild.id, {
 				messages: amountOfMessages,
 			}),
 			components: [row],
@@ -58,7 +60,7 @@ export default class extends Command {
 
 			if (interaction.customId === "confirm") {
 				collector.stop("clicked");
-				await purgeMessagesInGuild(context.guild!.id, days.toString());
+				if (context.guild?.id) await purgeMessagesInGuild(context.guild.id, days.toString());
 
 				return await interaction.update({
 					content: await this.client.bulbutils.translate("messageclear_success_delete", context.guild?.id, { messages: amountOfMessages }),

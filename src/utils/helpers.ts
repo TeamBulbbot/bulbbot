@@ -12,3 +12,7 @@ export function tryIgnore<T extends (...args: any[]) => any>(cb: T, ...args: Par
 	} catch {}
 	return undefined;
 }
+
+export function clone<T extends object | null>(obj: T): T {
+	return Object.assign(Object.create(obj), obj);
+}

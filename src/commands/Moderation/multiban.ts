@@ -28,7 +28,7 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		let targets: RegExpMatchArray = args.slice(0).join(" ").match(UserMentionAndID) || [];
 		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
@@ -49,7 +49,7 @@ export default class extends Command {
 					action: await this.client.bulbutils.translate("action_multi_types.ban", context.guild?.id, {}),
 				}),
 			);
-			return await this.client.commands.get("ban")!.run(context, args);
+			return await this.client.commands.get("ban")?.run(context, args);
 		}
 
 		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {

@@ -97,7 +97,8 @@ export default class {
 		);
 	}
 
-	public async sendCommandLog(client: BulbBotClient, guild: Guild, moderator: User, channelID: Snowflake, command: string): Promise<void> {
+	public async sendCommandLog(client: BulbBotClient, guild: Maybe<Guild>, moderator: User, channelID: Snowflake, command: string): Promise<void> {
+		if (!guild) return;
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (!dbGuild || dbGuild.other === null) return;
@@ -115,7 +116,8 @@ export default class {
 		);
 	}
 
-	public async sendEventLog(client: BulbBotClient, guild: Guild, part: LoggingPartString, log: string, extra: string | MessageEmbed[] | null = null): Promise<void> {
+	public async sendEventLog(client: BulbBotClient, guild: Maybe<Guild>, part: LoggingPartString, log: string, extra: string | MessageEmbed[] | null = null): Promise<void> {
+		if (!guild) return;
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
@@ -134,7 +136,8 @@ export default class {
 		});
 	}
 
-	public async sendModActionPreformatted(client: BulbBotClient, guild: Guild, log: string) {
+	public async sendModActionPreformatted(client: BulbBotClient, guild: Maybe<Guild>, log: string) {
+		if (!guild) return;
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 

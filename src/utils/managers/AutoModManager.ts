@@ -16,10 +16,15 @@ export default class {
 			},
 		};
 
+		if (!context.guild?.id) {
+			client.log.error(`[Auto Mod Manager] Guild ID is null, reason: ${reason}, target ${target.user.tag} (${target.user.id})`);
+			return "LOG";
+		}
+
 		// action has been null in the past adding some safeguarding and just returning a LOG
 		// until we have valid repro for this
 		if (action === null) {
-			client.log.error(`[Auto Mod Manager] Action is null in ${context.guild?.id}, reason: ${reason}, target ${target.user.tag} (${target.user.id})`);
+			client.log.error(`[Auto Mod Manager] Action is null in ${context.guild.id}, reason: ${reason}, target ${target.user.tag} (${target.user.id})`);
 			return "LOG";
 		}
 
@@ -29,11 +34,11 @@ export default class {
 			case "WARN":
 				await infractionsManager.warn(
 					client,
-					<Snowflake>context.guild?.id,
+					<Snowflake>context.guild.id,
 					<User>target.user,
-					<GuildMember>context.guild?.me,
-					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
+					<GuildMember>context.guild.me,
+					await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
 						moderator: client.user,
 						target: target.user,
 						reason,
@@ -42,14 +47,14 @@ export default class {
 				);
 				break;
 			case "KICK":
-				target = await client.bulbfetch.getGuildMember(context.guild?.members, context.author.id);
+				target = await client.bulbfetch.getGuildMember(context.guild.members, context.author.id);
 				await infractionsManager.kick(
 					client,
-					context.guild!.id,
+					context.guild.id,
 					target,
-					<GuildMember>context.guild?.me,
-					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+					<GuildMember>context.guild.me,
+					await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await client.bulbutils.translate("mod_action_types.kick", context.guild.id, {}),
 						moderator: client.user,
 						target: target.user,
 						reason,
@@ -63,9 +68,9 @@ export default class {
 					<Guild>context.guild,
 					BanType.CLEAN,
 					<User>target.user,
-					<GuildMember>context.guild?.me,
-					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+					<GuildMember>context.guild.me,
+					await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 						moderator: client.user,
 						target: target.user,
 						reason,
@@ -107,7 +112,7 @@ export default class {
 			case "KICK":
 				await infractionsManager.kick(
 					client,
-					member.guild!.id,
+					member.guild.id,
 					member,
 					<GuildMember>member.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {

@@ -47,7 +47,7 @@ export default class extends Command {
 			description += `\n**Type:** ${typeof evaled}`;
 			if (typeof evaled !== "string") evaled = inspect(evaled);
 
-			evaled = evaled.replace(new RegExp(this.client.token!, "g"), `${Buffer.from(this.client.user?.id || "").toString("base64")}.${genString(7)}.${genString(27)}`);
+			evaled = this.client.token ? evaled.replace(new RegExp(this.client.token, "g"), `${Buffer.from(this.client.user?.id || "").toString("base64")}.${genString(7)}.${genString(27)}`) : evaled;
 
 			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {

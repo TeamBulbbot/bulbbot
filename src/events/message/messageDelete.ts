@@ -38,7 +38,7 @@ export default class extends Event {
 			attachment = dbData.attachments.length > 0 ? `**A**: ${dbData.attachments.join("\n")}` : "";
 			embeds = dbData.embeds;
 		} else {
-			if (message.author.id === this.client.user!.id) return;
+			if (message.author.id === this.client.user?.id) return;
 			author = message.author;
 			channel = message.channel as TextBasedChannel;
 			guild = message.guild;

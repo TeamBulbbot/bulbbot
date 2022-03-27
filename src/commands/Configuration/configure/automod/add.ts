@@ -95,7 +95,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 				case "remove":
 					collector.stop();
 
-					await databaseManager.automodRemove(interaction.guild?.id as Snowflake, categories[selectedCategory!], selectedItems as string[]);
+					if (selectedCategory) await databaseManager.automodRemove(interaction.guild?.id as Snowflake, categories[selectedCategory], selectedItems as string[]);
 					await interaction.followUp({
 						content: await client.bulbutils.translate("config_automod_add_remove_remove_success", interaction.guild?.id, {}),
 						ephemeral: true,
@@ -117,7 +117,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 
 					msgCollector?.on("collect", async (m: Message) => {
 						await m.delete();
-						if (config[selectedCategory!].includes(m.content)) {
+						if (selectedCategory && config[selectedCategory].includes(m.content)) {
 							await interaction.followUp({
 								content: await client.bulbutils.translate("config_automod_add_remove_add_already_exists", interaction.guild?.id, {
 									item: m.content,
@@ -127,7 +127,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							return add(i, client, selectedCategory);
 						}
 
-						await databaseManager.automodAppend(interaction.guild?.id as Snowflake, categories[selectedCategory!], [m.content]);
+						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id as Snowflake, categories[selectedCategory], [m.content]);
 
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_automod_add_remove_add_success", interaction.guild?.id, {}),

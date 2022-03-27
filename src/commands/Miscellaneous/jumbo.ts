@@ -124,10 +124,10 @@ export default class extends Command {
 					],
 					content: null,
 				});
-				unlinkSync(`${PATH}/final-${context.author!.id}-${context.guild!.id}.png`);
+				unlinkSync(`${PATH}/final-${context.author.id}-${context.guild?.id}.png`);
 			}
 
-			unlinkSync(`${PATH}/${context.author!.id}-${context.guild!.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
+			unlinkSync(`${PATH}/${context.author.id}-${context.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 		} catch (err) {
 			this.client.log.error(`[JUMBO] ${context.author.tag} (${context.author.id}) had en error: `, err);
 			return startMessage.edit(await this.client.bulbutils.translate("jumbo_invalid", context.guild?.id, {}));

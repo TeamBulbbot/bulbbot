@@ -81,7 +81,9 @@ export default class {
 		);
 	}
 
-	public async isActive(guildID: Snowflake, infractionID: number): Promise<boolean | undefined> {
+	public async isActive(guildID: Snowflake, infractionID: Maybe<number>): Promise<boolean | undefined> {
+		if (typeof infractionID !== "number") return;
+
 		const response: Record<string, any> = await sequelize.query('SELECT active FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND id = $InfractionID', {
 			bind: { GuildID: guildID, InfractionID: infractionID },
 			type: QueryTypes.SELECT,
@@ -90,7 +92,9 @@ export default class {
 		return JSON.parse(response[0]["active"]);
 	}
 
-	public async setActive(guildID: Snowflake, infractionID: number, active: boolean | number): Promise<void> {
+	public async setActive(guildID: Snowflake, infractionID: Maybe<number>, active: boolean | number): Promise<void> {
+		if (typeof infractionID !== "number") return;
+
 		await sequelize.query('UPDATE infractions SET active = $Active WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND id = $InfractionID', {
 			bind: { GuildID: guildID, InfractionID: infractionID, Active: active },
 			type: QueryTypes.UPDATE,

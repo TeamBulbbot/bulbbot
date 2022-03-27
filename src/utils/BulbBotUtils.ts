@@ -14,6 +14,9 @@ import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
+export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
+	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };
+
 export default class {
 	private readonly client: BulbBotClient;
 
@@ -21,9 +24,12 @@ export default class {
 		this.client = client;
 	}
 
-	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		const language = (await databaseManager.getConfig(guildID))["language"];
-		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+	public async translate(string: TranslateString, guildID: Maybe<Snowflake>, options: TOptions): Promise<string> {
+		// Default parameter initialization does not occur if you pass null, but half of the the DJS API return null instead of undefined.
+		// Doing this makes this function easier to call
+		const guild = guildID ?? "742094927403679816";
+		const language = (await databaseManager.getConfig(guild))["language"];
+		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guild))["language"]);
 
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
@@ -150,8 +156,9 @@ export default class {
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} day(s) ago)\`\``;
 	}
 
-	public userObject(isGuildMember: boolean, userObject: User | GuildMember) {
-		let user;
+	public userObject(isGuildMember: boolean, userObject: Maybe<User | GuildMember>) {
+		if (!userObject) return;
+		let user: UserObject;
 
 		if (isGuildMember && userObject instanceof GuildMember) {
 			user = {
@@ -163,13 +170,13 @@ export default class {
 				avatar: userObject.user.avatar,
 				avatarUrl: userObject.user.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.user.bot,
-
-				roles: userObject.roles,
-				nickname: userObject.nickname,
-				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
-				joinedTimestamp: userObject.joinedTimestamp,
 				createdAt: userObject.user.createdAt,
 				createdTimestamp: userObject.user.createdTimestamp,
+				nickname: userObject.nickname,
+
+				roles: userObject.roles,
+				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
+				joinedTimestamp: userObject.joinedTimestamp,
 			};
 		} else if (userObject instanceof User) {
 			user = {
@@ -185,8 +192,10 @@ export default class {
 				createdTimestamp: userObject.createdTimestamp,
 				nickname: null,
 			};
+		} else {
+			return undefined;
 		}
-		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
+		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${~~user.discriminator % 5}.png`;
 
 		return user;
 	}

@@ -19,7 +19,9 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(context.author.id)) return;
-	if (dbGuild.ignoreChannels.includes(context.channel.id) || ((<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((<GuildChannel>context.channel).parent!.id))) return;
+	// We are checking for undefined before using this value, but due to the typecast the type doesn't get narrowed
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	if (dbGuild.ignoreChannels.includes(context.channel.id) || ((<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((context.channel as GuildChannel).parent!.id))) return;
 
 	if (!context.member?.roles.cache.values()) return;
 	for (const role of context.member.roles.cache.values()) {

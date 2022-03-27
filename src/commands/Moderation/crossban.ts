@@ -87,19 +87,20 @@ export default class extends Command {
 				if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
 
 				const banList = await guild.bans.fetch();
-				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target!.id);
+				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
 
 				if (bannedUser) continue;
 				else {
-					const guildTarget: GuildMember | undefined = await tryIgnore(() => this.client.bulbfetch.getGuildMember(guild?.members, target!.id));
+					if (!context.guild) continue;
+					const guildTarget: GuildMember | undefined = await tryIgnore(() => this.client.bulbfetch.getGuildMember(guild.members, target.id));
 
 					if (!guildTarget) {
 						totalBans++;
-						banUser(this.client, target!, context.author, guild, context.guild!, reason);
+						banUser(this.client, target, context.author, guild, context.guild, reason);
 					} else {
 						if (guildTarget.bannable) {
 							totalBans++;
-							banUser(this.client, target!, context.author, guild, context.guild!, reason);
+							banUser(this.client, target, context.author, guild, context.guild, reason);
 						} else continue;
 					}
 				}

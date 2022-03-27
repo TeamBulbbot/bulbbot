@@ -15,7 +15,7 @@ export default class extends Event {
 	async run(newScheduledEvent: GuildScheduledEvent) {
 		if (!newScheduledEvent.guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
-		const logs: GuildAuditLogs<"GUILD_SCHEDULED_EVENT_CREATE"> = await newScheduledEvent.guild?.fetchAuditLogs({ limit: 1, type: "GUILD_SCHEDULED_EVENT_CREATE" });
+		const logs: GuildAuditLogs<"GUILD_SCHEDULED_EVENT_CREATE"> = await newScheduledEvent.guild.fetchAuditLogs({ limit: 1, type: "GUILD_SCHEDULED_EVENT_CREATE" });
 		const first = logs.entries.first();
 		if (!first) return;
 
@@ -27,7 +27,7 @@ export default class extends Event {
 
 		for (const change of changes) {
 			log.push(
-				await this.client.bulbutils.translate("event_change", newScheduledEvent.guild?.id, {
+				await this.client.bulbutils.translate("event_change", newScheduledEvent.guild.id, {
 					part: change.key,
 					before: change.old ? change.old : "none",
 					after: change.new ? change.new : "none",
@@ -37,9 +37,9 @@ export default class extends Event {
 
 		await loggingManager.sendEventLog(
 			this.client,
-			newScheduledEvent.guild!,
+			newScheduledEvent.guild,
 			"other",
-			await this.client.bulbutils.translate("event_update_scheduled_event", newScheduledEvent.guild?.id, {
+			await this.client.bulbutils.translate("event_update_scheduled_event", newScheduledEvent.guild.id, {
 				moderator: executor,
 				event: newScheduledEvent,
 				changes: log.join("\n> "),

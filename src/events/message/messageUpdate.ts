@@ -28,7 +28,7 @@ export default class extends Event {
 			if (dbData === undefined) return;
 			oldMessageContent = dbData.content;
 		} else {
-			if (newMessage.author.id === this.client.user!.id) return;
+			if (newMessage.author.id === this.client.user?.id) return;
 			if (oldMessage.content === newMessage.content) return;
 
 			const context: CommandContext = await getCommandContext(newMessage);
