@@ -11,9 +11,10 @@ export default class extends Event {
 	}
 
 	async run(thread: ThreadChannel) {
+		const autoArchiveDuration = this.client.bulbutils.resolveThreadArchiveDuration(thread.autoArchiveDuration, thread);
 		const log: string = await this.client.bulbutils.translate("event_thread_create", thread.guild.id, {
-			thread, // @ts-expect-error
-			thread_archive: `<t:${Math.round(Date.now() / 1000) + thread.autoArchiveDuration! * 60}:f>`,
+			thread,
+			thread_archive: `<t:${Math.round(Date.now() / 1000) + autoArchiveDuration * 60}:f>`,
 		});
 
 		await loggingManager.sendEventLog(this.client, thread.guild, "thread", log);

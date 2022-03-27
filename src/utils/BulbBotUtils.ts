@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -9,6 +9,8 @@ import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
+import { isBaseGuildTextChannel } from "./typechecks";
+import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -98,6 +100,26 @@ export default class {
 		features.sort();
 
 		return features.map((i) => `${i}`).join("\n");
+	}
+
+	public resolveThreadArchiveDuration(duration: Maybe<ThreadAutoArchiveDuration>, channel: Maybe<ThreadChannel>): Exclude<ThreadAutoArchiveDuration, "MAX"> {
+		if (!duration) {
+			// Duration is unavailable for whatever reason, try to fallback to default
+			if (isBaseGuildTextChannel(channel)) return this.resolveThreadArchiveDuration(channel.defaultAutoArchiveDuration, channel);
+			// Else fall back to minimum 60 minutes
+			return 60; // 60 * 1 hour * 1 day
+		}
+
+		if (duration === "MAX") {
+			if (!channel?.guild.features) return 1440; // 60 * 24 hours * 1 day
+			const features = channel.guild.features.filter((feature) => feature.endsWith("DAY_THREAD_ARCHIVE")) as Include<GuildFeature, `${string}DAY_THREAD_ARCHIVE`>[];
+			if (features.find((feature) => feature.startsWith("THREE"))) return 4320; // 60 * 24 hours * 3 days
+			if (features.find((feature) => feature.startsWith("SEVEN"))) return 10080; // 60 * 24 hours * 7 days
+			return 1440; // 60 * 24 hours * 1 day
+		}
+
+		// Duration is already a number
+		return duration;
 	}
 
 	public getUptime(timestamp: number | null) {
