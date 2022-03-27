@@ -26,7 +26,7 @@ export default class extends SubCommand {
 			return;
 		}
 
-		// @ts-ignore
+		// @ts-expect-error
 		const channel: TextChannel = guild.channels.cache.map((c: GuildChannel) => {
 			if (c.type === "GUILD_TEXT") return c;
 		});

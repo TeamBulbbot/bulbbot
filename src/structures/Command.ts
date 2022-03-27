@@ -80,7 +80,7 @@ export default class Command {
 
 		for (let i = 0; i <= this.depth; i++) {
 			name = `${command.name} ${name}`;
-			// @ts-ignore
+			// @ts-expect-error
 			command = command.parent;
 		}
 

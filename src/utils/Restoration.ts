@@ -23,7 +23,7 @@ export default class {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
 
 				if (reminder.channelId !== "") {
-					// @ts-ignore
+					// @ts-expect-error
 					let channel: TextChannel;
 
 					try {

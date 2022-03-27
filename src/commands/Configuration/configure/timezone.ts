@@ -67,7 +67,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			switch (i.customId) {
 				case "page-next":
 					currPage++;
-					// @ts-ignore
+					// @ts-expect-error
 					selectRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === 2);
@@ -76,7 +76,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 					break;
 				case "page-back":
 					currPage--;
-					// @ts-ignore
+					// @ts-expect-error
 					selectRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === 2);

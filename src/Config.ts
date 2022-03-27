@@ -1,7 +1,7 @@
 import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData, IntentsString, PermissionString, PartialTypes } from "discord.js";
 import * as Emotes from "./emotes.json";
 
-// @ts-ignore
+// @ts-expect-error
 function ArrayLiteralType<K extends string, T extends { [I: number]: K }>(arr: T): T {
 	return arr;
 }

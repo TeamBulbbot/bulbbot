@@ -9,7 +9,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {});
 	}
 

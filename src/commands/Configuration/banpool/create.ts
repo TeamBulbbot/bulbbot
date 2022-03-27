@@ -25,17 +25,17 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name: string = args[0];
 
-		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!(context.guild?.id && await hasBanpoolLog(context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 		if (await doesbanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild?.id, {}));
 
-		await createBanpool(context.guild?.id, name);
+		await createBanpool(context.guild.id, name);
 		!(await joinBanpool(
 			{
 				banpool: {
 					name,
 				},
 			},
-			context.guild?.id,
+			context.guild.id,
 		));
 
 		await sendEventLog(

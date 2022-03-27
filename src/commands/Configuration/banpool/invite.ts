@@ -26,8 +26,8 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name: string = args[0];
 
-		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (!(await haveAccessToPool(context.guild?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
+		if (!(context.guild?.id && await hasBanpoolLog(context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!(await haveAccessToPool(context.guild.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild.id, {}));
 
 		const filter = (i: any) => i.user.id === context.author.id;
 
@@ -35,7 +35,7 @@ export default class extends SubCommand {
 		const rowDisabled = new MessageActionRow().addComponents([new MessageButton().setCustomId("generate-ban-pool-code").setLabel("Generate code").setStyle("SUCCESS").setDisabled(true)]);
 
 		const msg: Message = await context.channel.send({
-			content: await this.client.bulbutils.translate("banpool_invite_message", context.guild?.id, {}),
+			content: await this.client.bulbutils.translate("banpool_invite_message", context.guild.id, {}),
 			components: [row],
 		});
 

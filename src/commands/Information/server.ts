@@ -35,27 +35,27 @@ export default class extends Command {
 
 		let channelStats = "";
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_text", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_text: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_TEXT").size,
 			emote_text: Emotes.channel.TEXT,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_announcement", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_announcement: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_NEWS").size,
 			emote_announcement: Emotes.channel.ANNOUNCEMENT,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_voice", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_voice: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_VOICE").size,
 			emote_voice: Emotes.channel.VOICE,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_stage", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_stage: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_STAGE_VOICE").size,
 			emote_stage: Emotes.channel.STAGE,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_category", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_category: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_CATEGORY").size,
 			emote_category: Emotes.channel.CATEGORY,
 		});
@@ -86,10 +86,10 @@ export default class extends Command {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setThumbnail(<string>context.guild?.iconURL({ dynamic: true }))
+			.setThumbnail(context.guild?.iconURL({ dynamic: true }) || '')
 			.setAuthor({
-				name: context.guild?.name,
-				iconURL: <string>context.guild?.iconURL({ dynamic: true }),
+				name: context.guild?.name || '',
+				iconURL: context.guild?.iconURL({ dynamic: true }) ?? undefined,
 			})
 			.addField(await this.client.bulbutils.translate("serverinfo_server_stats", guild.id, {}), serverStats, true)
 			.addField(await this.client.bulbutils.translate("serverinfo_channel_stats", guild.id, {}), channelStats, true)

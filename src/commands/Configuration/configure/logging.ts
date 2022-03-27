@@ -94,7 +94,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 					};
 				});
 
-				// @ts-ignore
+				// @ts-expect-error
 				logsRow.components[0].setOptions(logs);
 
 				await i.update({ components: [channelRow, logsRow, pageRow, backRow] });
@@ -107,7 +107,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 					break;
 				case "page-next":
 					currPage++;
-					// @ts-ignore
+					// @ts-expect-error
 					channelRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === pages.length - 1);
@@ -116,7 +116,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 					break;
 				case "page-back":
 					currPage--;
-					// @ts-ignore
+					// @ts-expect-error
 					channelRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === pages.length);

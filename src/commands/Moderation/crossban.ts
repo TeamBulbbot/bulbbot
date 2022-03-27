@@ -7,6 +7,7 @@ import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as Emotes from "../../emotes.json";
+import { tryIgnore } from "../../utils/helpers";
 
 const { createInfraction }: InfractionsManager = new InfractionsManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
@@ -35,7 +36,7 @@ export default class extends Command {
 		let reason: string = args.slice(1).join(" ");
 		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 
-		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!context.guild?.id || !(await hasBanpoolLog(context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 
 		if (!target)
 			return await context.channel.send(
@@ -90,10 +91,7 @@ export default class extends Command {
 
 				if (bannedUser) continue;
 				else {
-					let guildTarget: GuildMember | undefined = undefined;
-					try {
-						guildTarget = await this.client.bulbfetch.getGuildMember(guild?.members, target!.id);
-					} catch (_) {}
+					const guildTarget: GuildMember | undefined = await tryIgnore(() => this.client.bulbfetch.getGuildMember(guild?.members, target!.id));
 
 					if (!guildTarget) {
 						totalBans++;

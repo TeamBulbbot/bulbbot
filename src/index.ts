@@ -2,7 +2,7 @@ import * as Config from "./Config";
 import BulbBotClient from "./structures/BulbBotClient";
 import * as env from "dotenv";
 import { sequelize } from "./utils/database/connection";
-import { init, Integrations } from "@sentry/node"; // @ts-ignore
+import { init, Integrations } from "@sentry/node"; // @ts-expect-error
 import * as Tracing from "@sentry/tracing";
 import { startAllCrons } from "./utils/Crons";
 import { startPrometheus } from "./utils/Prometheus";

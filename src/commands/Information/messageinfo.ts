@@ -2,7 +2,7 @@ import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { ChannelMessage } from "../../utils/Regex";
-import { Message, MessageActionRow, MessageButton, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 
 export default class extends Command {
@@ -22,7 +22,8 @@ export default class extends Command {
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
+	async run(_context: CommandContext, _args: string[]): Promise<void> {
+		// Why does this exist
 		return;
 	}
 
@@ -41,8 +42,7 @@ export default class extends Command {
 			messageId = input[input.length - 1];
 		}
 
-		// @ts-ignore
-		const channel: TextChannel | NewsChannel | undefined = context.guild?.channels.cache.get(channelId);
+		const channel = context.guild?.channels.cache.get(channelId);
 		if (channel?.type !== "GUILD_TEXT" && channel?.type !== "GUILD_NEWS" && !channel?.permissionsFor(context.member!)?.has("VIEW_CHANNEL", true)) {
 			context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
@@ -56,6 +56,7 @@ export default class extends Command {
 		}
 		let message: Message;
 		try {
+			// @ts-expect-error It's a try-catch it's fine
 			message = await channel.messages.fetch(messageId);
 		} catch (error) {
 			context.channel.send(

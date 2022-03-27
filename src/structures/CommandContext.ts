@@ -158,7 +158,7 @@ abstract class BaseCommandContext {
 	}
 }
 // remove when https://github.com/discordjs/discord.js/issues/7091 merges
-// @ts-ignore
+// @ts-expect-error
 class MessageCommandContext implements BaseCommandContext {
 	// CommandContext
 	public readonly source: Message;
@@ -229,7 +229,6 @@ class MessageCommandContext implements BaseCommandContext {
 	public replied: false;
 	public webhook: null;
 	public get ephemeral(): null {
-		// @ts-ignore
 		return null;
 	}
 	public set ephemeral(e: boolean | null) {}
@@ -258,7 +257,7 @@ class MessageCommandContext implements BaseCommandContext {
 
 
 	// Methods
-	private readonly _toJSON: Function;
+	private readonly _toJSON: Callable;
 	public toJSON(): unknown {return this._toJSON()}
 
 	// Interaction
@@ -270,67 +269,67 @@ class MessageCommandContext implements BaseCommandContext {
 	public inGuild(): boolean {return !!this.guild}
 
 	// Common-ish
-	private readonly _reply: Function;
+	private readonly _reply: Callable;
 	/** @deprecated */ public reply(options: string | MessagePayload | ReplyMessageOptions): Promise<Message> {logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead"); return this._reply(options)}
-	private readonly _startThread: Function;
+	private readonly _startThread: Callable;
 	public startThread(options: StartThreadOptions): Promise<ThreadChannel> {return this._startThread(options)}
 
 	// Message
-	private readonly _awaitMessageComponent: Function;
+	private readonly _awaitMessageComponent: Callable;
 	public awaitMessageComponent<T extends MessageComponentInteraction = MessageComponentInteraction> (
 		options?: AwaitMessageComponentOptions<T>,
 	): Promise<T> {return this._awaitMessageComponent(options)};
-	private readonly _awaitReactions: Function;
+	private readonly _awaitReactions: Callable;
 	public awaitReactions(options?: AwaitReactionsOptions): Promise<Collection<Snowflake | string, MessageReaction>> {return this._awaitReactions(options)};
-	private readonly _createReactionCollector: Function;
+	private readonly _createReactionCollector: Callable;
 	public createReactionCollector(options?: ReactionCollectorOptions): ReactionCollector {return this._createReactionCollector(options)};
-	private readonly _createMessageComponentCollector: Function;
+	private readonly _createMessageComponentCollector: Callable;
 	public createMessageComponentCollector<T extends MessageComponentInteraction = MessageComponentInteraction> (
 		options?: InteractionCollectorOptions<T>,
 	): InteractionCollector<T> {return this._createMessageComponentCollector(options)};
-	private readonly _delete: Function;
+	private readonly _delete: Callable;
 	public delete(): Promise<Message> {return this._delete()};
-	private readonly _edit: Function;
+	private readonly _edit: Callable;
 	public edit(content: string | MessageEditOptions | MessagePayload): Promise<Message> {return this._edit(content)};
-	private readonly _equals: Function;
+	private readonly _equals: Callable;
 	public equals(message: Message, rawData: unknown): boolean {return this._equals(message, rawData)};
-	private readonly _fetchReference: Function;
+	private readonly _fetchReference: Callable;
 	public fetchReference(): Promise<Message> {return this._fetchReference()};
-	private readonly _fetchWebhook: Function;
+	private readonly _fetchWebhook: Callable;
 	public fetchWebhook(): Promise<Webhook> {return this._fetchWebhook()};
-	private readonly _crosspost: Function;
+	private readonly _crosspost: Callable;
 	public crosspost(): Promise<Message> {return this._crosspost()};
-	private readonly _fetch: Function;
+	private readonly _fetch: Callable;
 	public fetch(force?: boolean): Promise<Message> {return this._fetch(force)};
-	private readonly _pin: Function;
+	private readonly _pin: Callable;
 	public pin(): Promise<Message> {return this._pin()};
-	private readonly _react: Function;
+	private readonly _react: Callable;
 	public react(emoji: EmojiIdentifierResolvable): Promise<MessageReaction> {return this._react(emoji)};
-	private readonly _removeAttachments: Function;
+	private readonly _removeAttachments: Callable;
 	public removeAttachments(): Promise<Message> {return this._removeAttachments()};
-	private readonly _suppressEmbeds: Function;
+	private readonly _suppressEmbeds: Callable;
 	public suppressEmbeds(suppress?: boolean): Promise<Message> {return this._suppressEmbeds(suppress)};
-	private readonly _unpin: Function;
+	private readonly _unpin: Callable;
 	public unpin(): Promise<Message> {return this._unpin()};
 
 	// MessageComponentInteraction
-	private readonly _deferReply: Function;
+	private readonly _deferReply: Callable;
 	public deferReply(options: InteractionDeferReplyOptions & { fetchReply: true }): Promise<Message | APIMessage>;
 	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply?: any }): Promise<void>;
 	public deferReply(options?: InteractionDeferReplyOptions): Promise<void | Message | APIMessage> {return this._deferReply(options)}
-	private readonly _deferUpdate: Function;
+	private readonly _deferUpdate: Callable;
 	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
 	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public deferUpdate(options?: InteractionDeferUpdateOptions): Promise<void | Message | APIMessage> {return this._deferUpdate(options)}
-	private readonly _deleteReply: Function;
+	private readonly _deleteReply: Callable;
 	public deleteReply(): Promise<void> {return this._deleteReply()}
-	private readonly _editReply: Function;
+	private readonly _editReply: Callable;
 	public editReply(options: string | MessagePayload | WebhookEditMessageOptions): Promise<Message | APIMessage> {return this._editReply(options)}
-	private readonly _fetchReply: Function;
+	private readonly _fetchReply: Callable;
 	public fetchReply(): Promise<Message | APIMessage> {return this._fetchReply()}
-	private readonly _followUp: Function;
+	private readonly _followUp: Callable;
 	public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message | APIMessage> {return this._followUp(options)}
-	private readonly _update: Function;
+	private readonly _update: Callable;
 	public update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
 	public update(options: InteractionUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage> {return this._update(options)}
@@ -417,7 +416,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this.replied = false;
 		this.webhook = null;
 		this.customId = null;
-		// @ts-ignore
+		// @ts-expect-error
 		this.options = new CommandInteractionOptionResolver(this.client, []);
 		this.targetId = null;
 		this.targetType = null;
@@ -517,11 +516,11 @@ class InteractionCommandContext implements BaseCommandContext {
 	public replied: boolean;
 	public webhook: InteractionWebhook | null;
 	public get ephemeral(): boolean | null {
-		// @ts-ignore
+		// @ts-expect-error
 		return this.source?.ephemeral ?? null;
 	}
 	public set ephemeral(e: boolean | null) {
-		// @ts-ignore
+		// @ts-expect-error
 		if("ephemeral" in this.source) this.source.ephemeral = e;
 	}
 
@@ -549,85 +548,85 @@ class InteractionCommandContext implements BaseCommandContext {
 
 
 	// Methods
-	private readonly _toJSON: Function;
+	private readonly _toJSON: Callable;
 	public toJSON(): unknown {return this._toJSON()}
 
 	// Interaction
-	private readonly _isButton: Function;
+	private readonly _isButton: Callable;
 	public isButton(): false {return this._isButton()}
-	private readonly _isCommand: Function;
+	private readonly _isCommand: Callable;
 	public isCommand(): false {return this._isCommand()}
-	private readonly _isContextMenu: Function;
+	private readonly _isContextMenu: Callable;
 	public isContextMenu(): false {return this._isContextMenu()}
-	private readonly _isMessageComponent: Function;
+	private readonly _isMessageComponent: Callable;
 	public isMessageComponent(): false {return this._isMessageComponent()}
-	private readonly _isSelectMenu: Function;
+	private readonly _isSelectMenu: Callable;
 	public isSelectMenu(): boolean {return this._isSelectMenu()}
-	private readonly _inGuild: Function;
+	private readonly _inGuild: Callable;
 	public inGuild(): boolean {return this._inGuild()}
 
 	// Common-ish
-	private readonly _reply: Function;
+	private readonly _reply: Callable;
 	/** @deprecated */ public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead"); return this._reply(options)}
-	private readonly _startThread: Function;
+	private readonly _startThread: Callable;
 	public startThread<T>(options: StartThreadOptions | ThreadCreateOptions<T>): Promise<ThreadChannel | never> {return this._startThread(options)}
 
 	// Message
-	private readonly _awaitMessageComponent: Function;
+	private readonly _awaitMessageComponent: Callable;
 	public awaitMessageComponent<T extends MessageComponentInteraction = MessageComponentInteraction> (
 		options?: AwaitMessageComponentOptions<T>,
 	): Promise<T> {return this._awaitMessageComponent(options)};
-	private readonly _awaitReactions: Function;
+	private readonly _awaitReactions: Callable;
 	public awaitReactions(options?: AwaitReactionsOptions): Promise<Collection<Snowflake | string, MessageReaction>> {return this._awaitReactions(options)};
-	private readonly _createReactionCollector: Function;
+	private readonly _createReactionCollector: Callable;
 	public createReactionCollector(options?: ReactionCollectorOptions): ReactionCollector {return this._createReactionCollector(options)};
-	private readonly _createMessageComponentCollector: Function;
+	private readonly _createMessageComponentCollector: Callable;
 	public createMessageComponentCollector<T extends MessageComponentInteraction = MessageComponentInteraction> (
 		options?: InteractionCollectorOptions<T>,
 	): InteractionCollector<T> {return this._createMessageComponentCollector(options)};
-	private readonly _delete: Function;
+	private readonly _delete: Callable;
 	public delete(): Promise<Message> {return this._delete()};
-	private readonly _edit: Function;
+	private readonly _edit: Callable;
 	public edit(content: string | MessageEditOptions | MessagePayload): Promise<Message> {return this._edit(content)};
-	private readonly _equals: Function;
+	private readonly _equals: Callable;
 	public equals(message: Message, rawData: unknown): boolean {return this._equals(message, rawData)};
-	private readonly _fetchReference: Function;
+	private readonly _fetchReference: Callable;
 	public fetchReference(): Promise<Message> {return this._fetchReference()};
-	private readonly _fetchWebhook: Function;
+	private readonly _fetchWebhook: Callable;
 	public fetchWebhook(): Promise<Webhook> {return this._fetchWebhook()};
-	private readonly _crosspost: Function;
+	private readonly _crosspost: Callable;
 	public crosspost(): Promise<Message> {return this._crosspost()};
-	private readonly _fetch: Function;
+	private readonly _fetch: Callable;
 	public fetch(force?: boolean): Promise<Message> {return this._fetch(force)};
-	private readonly _pin: Function;
+	private readonly _pin: Callable;
 	public pin(): Promise<Message> {return this._pin()};
-	private readonly _react: Function;
+	private readonly _react: Callable;
 	public react(emoji: EmojiIdentifierResolvable): Promise<MessageReaction> {return this._react(emoji)};
-	private readonly _removeAttachments: Function;
+	private readonly _removeAttachments: Callable;
 	public removeAttachments(): Promise<Message> {return this._removeAttachments()};
-	private readonly _suppressEmbeds: Function;
+	private readonly _suppressEmbeds: Callable;
 	public suppressEmbeds(suppress?: boolean): Promise<Message> {return this._suppressEmbeds(suppress)};
-	private readonly _unpin: Function;
+	private readonly _unpin: Callable;
 	public unpin(): Promise<Message> {return this._unpin()};
 
 	// MessageComponentInteraction
-	private readonly _deferReply: Function;
+	private readonly _deferReply: Callable;
 	public deferReply(options: InteractionDeferReplyOptions & { fetchReply: true }): Promise<Message | APIMessage>;
 	public deferReply(options?: InteractionDeferReplyOptions & { fetchReply?: any }): Promise<void>;
 	public deferReply(options?: InteractionDeferReplyOptions): Promise<void | Message | APIMessage> {return this._deferReply(options)}
-	private readonly _deferUpdate: Function;
+	private readonly _deferUpdate: Callable;
 	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
 	public deferUpdate(options: InteractionDeferUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public deferUpdate(options?: InteractionDeferUpdateOptions): Promise<void | Message | APIMessage> {return this._deferUpdate(options)}
-	private readonly _deleteReply: Function;
+	private readonly _deleteReply: Callable;
 	public deleteReply(): Promise<void> {return this._deleteReply()}
-	private readonly _editReply: Function;
+	private readonly _editReply: Callable;
 	public editReply(options: string | MessagePayload | WebhookEditMessageOptions): Promise<Message | APIMessage> {return this._editReply(options)}
-	private readonly _fetchReply: Function;
+	private readonly _fetchReply: Callable;
 	public fetchReply(): Promise<Message | APIMessage> {return this._fetchReply()}
-	private readonly _followUp: Function;
+	private readonly _followUp: Callable;
 	public followUp(options: string | MessagePayload | InteractionReplyOptions): Promise<Message | APIMessage> {return this._followUp(options)}
-	private readonly _update: Function;
+	private readonly _update: Callable;
 	public update(options: InteractionUpdateOptions & { fetchReply: true }): Promise<Message | APIMessage>;
 	public update(options: InteractionUpdateOptions & { fetchReply?: any }): Promise<void>;
 	public update(options: string | MessagePayload | InteractionUpdateOptions): Promise<void | Message | APIMessage> {return this._update(options)}
@@ -658,7 +657,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		this._user = source.user;
 		const mockApiAuthor: APIUser = {id: this.user.id, username: this.user.username, discriminator: this.user.discriminator, avatar: this.user.avatar};
 		const mockApiClient: APIUser = {id: this.client.user!.id, username: this.client.user!.username, discriminator: this.client.user!.discriminator, avatar: this.client.user!.avatar};
-		// @ts-ignore
+		// @ts-expect-error
 		const mockMessage = new Message(this.client, {content: "", id: "", channel_id: this.channelId ?? "", author: mockApiAuthor, timestamp: `${this.createdTimestamp}`, edited_timestamp: null, tts: false, mention_everyone: false, mentions: [mockApiClient], mention_roles: [], attachments: [], embeds: [], pinned: false, type: APIMessageType.Default});
 		this.token = source.token;
 		this.version = source.version;
@@ -677,13 +676,13 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.groupActivityApplication = null;
 		this.hasThread = false;
 		this.interaction = (source.isCommand() || source.isContextMenu()) ? source : null;
-		// @ts-ignore
+		// @ts-expect-error
 		this.mentions = new MessageMentions(mockMessage, [mockApiClient], new Collection, false); // Long way of saying "mentions the bot"
 		this.nonce = null;
 		this.partial = false;
 		this.pinnable = false;
 		this.pinned = false;
-		// @ts-ignore
+		// @ts-expect-error
 		this.reactions = new ReactionManager(mockMessage);
 		this.stickers = new Collection;
 		this.system = false;
@@ -735,7 +734,7 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.componentType = source.componentType;
 				this.customId = source.customId;
 				this.values = source instanceof SelectMenuInteraction ? source.values : [];
-				// @ts-ignore
+				// @ts-expect-error
 				this.options = new CommandInteractionOptionResolver(this.client, []);
 				this.targetId = null;
 				this.targetType = null;
@@ -753,17 +752,17 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.values = [];
 
 				if(source instanceof CommandInteraction) {
-					// @ts-ignore
+					// @ts-expect-error
 					this.options = source.options;
 					this.targetId = null;
 					this.targetType = null;
-				} else if(source.isContextMenu()) { 	
-					// @ts-ignore
+				} else if(source.isContextMenu()) {
+					// @ts-expect-error
 					this.options = source.options;
 					this.targetId = source.targetId;
 					this.targetType = source.targetType;
 				} else {
-					// @ts-ignore
+					// @ts-expect-error
 					this.options = new CommandInteractionOptionResolver(this.client, []);
 					this.targetId = null;
 					this.targetType = null;
@@ -781,7 +780,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			this.customId = null;
 			this.values = [];
 
-			// @ts-ignore
+			// @ts-expect-error
 			this.options = new CommandInteractionOptionResolver(this.client, []);
 			this.targetId = null;
 			this.targetType = null;
@@ -796,7 +795,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			if(this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
 					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : {...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true});
-					// @ts-ignore
+					// @ts-expect-error
 					const msg = r instanceof Message ? clone(r) : new Message(this.client, r);
 					msg.edit = async (content: string | MessageEditOptions | MessagePayload): Promise<Message> => {
 						let e: Message | APIMessage;
@@ -805,7 +804,7 @@ class InteractionCommandContext implements BaseCommandContext {
 						} else {
 							e = await this.editReply(<string | MessagePayload>content);
 						}
-						// @ts-ignore
+						// @ts-expect-error
 						return e instanceof Message ? e : new Message(this.client, e);
 					}
 					return msg;
@@ -849,7 +848,7 @@ export async function resolveMember(client: Client, member: GuildMember | APIInt
 			return null;
 		}
 	}
-	// @ts-ignore
+	// @ts-expect-error
 	return new GuildMember(client, member, guild);
 }
 

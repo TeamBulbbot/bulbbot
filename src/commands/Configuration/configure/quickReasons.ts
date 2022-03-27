@@ -65,7 +65,7 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 				});
 			});
 
-			// @ts-ignore
+			// @ts-expect-error
 			selectRow.components[0].setOptions(reasons);
 			buttonRow.components[2].setDisabled(selected.length === 0);
 

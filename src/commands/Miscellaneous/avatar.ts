@@ -45,27 +45,27 @@ export default class extends Command {
 
 		if (isGuildMember) {
 			if (user.avatar) avatar = user.avatarURL({ dynamic: true, size: 4096 });
-			// @ts-ignore
+			// @ts-expect-error
 			else if (user.user.avatar === null) avatar = `https://cdn.discordapp.com/embed/avatars/${Number(user.user.discriminator) % 5}.png`;
-			// @ts-ignore
+			// @ts-expect-error
 			else avatar = user.user.avatarURL({ dynamic: true, size: 4096 });
 		} else {
 			if (user.avatar) avatar = user.avatarURL({ dynamic: true, size: 4096 });
-			// @ts-ignore
+			// @ts-expect-error
 			else avatar = `https://cdn.discordapp.com/embed/avatars/${Number(user.user.discriminator) % 5}.png`;
 		}
 
 		if (isGuildMember && user.avatar) {
-			// @ts-ignore
+			// @ts-expect-error
 			const normal = new MessageEmbed().setURL("https://bulbbot.rocks/").setImage(user.user.avatarURL({ dynamic: true }));
 			const guild = new MessageEmbed()
 				.setColor(embedColor)
 				.setAuthor({
-					// @ts-ignore
+					// @ts-expect-error
 					name: `${user.user.tag} (${user.user.id})`,
 				})
 				.setDescription(desc)
-				.setURL("https://bulbbot.rocks/") // @ts-ignore
+				.setURL("https://bulbbot.rocks/") // @ts-expect-error
 				.setImage(user.avatarURL({ dynamic: true, size: 4096 }))
 				.setFooter({
 					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
@@ -81,11 +81,11 @@ export default class extends Command {
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setAuthor({
-				// @ts-ignore
+				// @ts-expect-error
 				name: isGuildMember ? `${user.user.tag} (${user.user.id})` : `${user.tag} (${user.id})`,
 				iconURL: avatar ?? undefined,
 			})
-			.setDescription(desc) // @ts-ignore
+			.setDescription(desc) // @ts-expect-error
 			.setImage(avatar)
 			.setFooter({
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {

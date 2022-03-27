@@ -18,7 +18,7 @@ const { getAllGuildExperiments }: ExperimentManager = new ExperimentManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});

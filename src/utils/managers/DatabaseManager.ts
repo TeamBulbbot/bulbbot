@@ -472,7 +472,7 @@ export default class {
 					authorTag: message.author.tag,
 					content: message.content,
 					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
-					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-ignore
+					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-expect-error
 					attachments: message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`),
 					createdAt: moment(message.createdAt).format(),
 					updatedAt: moment(message.createdAt).format(),
@@ -485,9 +485,9 @@ export default class {
 	async getMessageFromDB(messageId: Snowflake) {
 		const response: Record<string, any> = await sequelize.query(
 			`
-		SELECT * FROM "messageLogs" 
+		SELECT * FROM "messageLogs"
 		JOIN guilds ON "messageLogs"."guildId" = guilds.id
-		WHERE ("messageId" = $messageId) 
+		WHERE ("messageId" = $messageId)
 		`,
 			{
 				bind: { messageId },
@@ -561,7 +561,7 @@ export default class {
 	async purgeAllMessagesOlderThan30Days() {
 		const deleted: Record<string, any> = await sequelize.query(
 			`
-			DELETE FROM "messageLogs" 
+			DELETE FROM "messageLogs"
 			WHERE "createdAt" < (now() - '30 days'::interval);
 			`,
 		);

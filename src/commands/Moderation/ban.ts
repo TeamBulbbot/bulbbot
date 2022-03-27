@@ -39,7 +39,7 @@ export default class extends Command {
 		}
 
 		//Fetches the ban list
-		//@ts-ignore
+		// @ts-expect-error
 		const banList: Collection<string, { user: User; reason: string }> | undefined = await context.guild?.bans.fetch();
 		const bannedUser = banList?.find(user => user.user.id === targetID);
 

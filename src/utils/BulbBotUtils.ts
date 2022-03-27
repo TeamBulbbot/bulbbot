@@ -218,8 +218,8 @@ export default class {
 		// here are two exclusive cases, that use the same message as the other ones
 		if (handle == 5) await context.channel.send(await this.translate('global_cannot_action_role_equal', context.guild?.id, { target: user }));
 		if (handle == 7) await context.channel.send(await this.translate('global_cannot_action_role_equal_bot', context.guild?.id, { target: user }));
-		
-		// @ts-ignore
+
+		// @ts-expect-error
 		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
 		return true;
 	}
@@ -335,7 +335,7 @@ export default class {
 			"cs-cz|czech|čeština": "cs-CZ",
 			"it-it|italian|italiano": "it-IT",
 			"hi-in|hindi|हिंदी": "hi-IN",
-		}, // @ts-ignore
+		}, // @ts-expect-error
 		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
 	);
 
@@ -414,7 +414,7 @@ export default class {
 		if (typeof firstArray !== typeof secondArray) return false;
 		if (firstArray instanceof Array !== secondArray instanceof Array) return false;
 		if (typeof firstArray !== "object") return firstArray === secondArray;
-		// @ts-ignore
+		// @ts-expect-error
 		if ("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
 		if (firstArray.length != secondArray.length) return false;
 		const len = firstArray.length;
@@ -437,9 +437,9 @@ export default class {
 		if (typeof firstObject !== "object" && typeof secondObject !== "object") {
 			return firstObject === secondObject;
 		}
-		// @ts-ignore
+		// @ts-expect-error
 		if ("equals" in firstObject && typeof firstObject.equals === "function") {
-			// @ts-ignore
+			// @ts-expect-error
 			return firstObject.equals(secondObject);
 		}
 		for (const propertyName of Object.keys(firstObject)) {

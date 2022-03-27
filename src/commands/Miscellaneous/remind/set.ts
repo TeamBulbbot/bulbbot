@@ -81,7 +81,7 @@ export default class extends SubCommand {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
 
 				if (reminder.channelId !== "") {
-					// @ts-ignore
+					// @ts-expect-error
 					const channel: TextChannel = await this.client.bulbfetch.getChannel(this.client.channels, reminder.channelId);
 					let message: Message;
 					const options: MessageMentionOptions = {

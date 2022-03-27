@@ -15,8 +15,8 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const data: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild?.id);
+	public async run(context: CommandContext, _args: string[]): Promise<void | Message> {
+		const data: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = context.guild?.id ? await getPools(context.guild.id) : [];
 		const desc: string[] = [];
 
 		for (let i = 0; i < data.length; i++) {

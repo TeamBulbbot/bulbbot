@@ -31,8 +31,8 @@ export default class extends Command {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let selected: string = verificationLevel[context.guild?.verificationLevel];
+	public async run(context: CommandContext, _args: string[]): Promise<void | Message> {
+		let selected: string = verificationLevel[context.guild?.verificationLevel || 'NONE'];
 		let done = false;
 		let content: string = await this.client.bulbutils.translate("verification_level_select", context.guild?.id, {});
 

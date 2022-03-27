@@ -26,10 +26,10 @@ export default class extends SubCommand {
 		const code: string = args[0];
 		const invite = this.client.banpoolInvites.get(code);
 
-		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (!invite) return context.channel.send(await this.client.bulbutils.translate("banpool_join_unable_to_find", context.guild?.id, {}));
-		if (invite.guild.id === context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("banpool_join_own_guild", context.guild?.id, {}));
-		if (!(await joinBanpool(invite, context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_join_error", context.guild?.id, {}));
+		if (!(context.guild?.id && await hasBanpoolLog(context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!invite) return context.channel.send(await this.client.bulbutils.translate("banpool_join_unable_to_find", context.guild.id, {}));
+		if (invite.guild.id === context.guild.id) return context.channel.send(await this.client.bulbutils.translate("banpool_join_own_guild", context.guild.id, {}));
+		if (!(await joinBanpool(invite, context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_join_error", context.guild.id, {}));
 
 		const poolguild: Guild = await this.client.guilds.fetch(invite.guild.id);
 
@@ -37,7 +37,7 @@ export default class extends SubCommand {
 			this.client,
 			poolguild,
 			"banpool",
-			await this.client.bulbutils.translate("banpool_join_log_og", context.guild?.id, {
+			await this.client.bulbutils.translate("banpool_join_log_og", context.guild.id, {
 				user: context.user,
 				invite,
 				guild: context.guild,
@@ -47,13 +47,13 @@ export default class extends SubCommand {
 			this.client,
 			context.guild!,
 			"banpool",
-			await this.client.bulbutils.translate("banpool_join_log", context.guild?.id, {
+			await this.client.bulbutils.translate("banpool_join_log", context.guild.id, {
 				user: context.user,
 				invite,
 			}),
 		);
 
-		context.channel.send(await this.client.bulbutils.translate("banpool_join_success", context.guild?.id, {}));
+		context.channel.send(await this.client.bulbutils.translate("banpool_join_success", context.guild.id, {}));
 
 		this.client.banpoolInvites.delete(invite.banpool.code);
 	}

@@ -30,7 +30,7 @@ export default class extends SubCommand {
 
 		let archive: string = await this.client.bulbutils.translate("archive_header_format", context.guild?.id, {});
 		let temp: string;
-		const archiveUserData = await getUserArchive(user, context.guild?.id, AMOUNT);
+		const archiveUserData = context.guild?.id ? await getUserArchive(user, context.guild.id, AMOUNT) : [];
 		if (archiveUserData.length === 0) return startMessage.edit(await this.client.bulbutils.translate("archive_no_data_found", context.guild?.id, {}));
 		archiveUserData.forEach(
 			(message: { updatedAt: string; channelId: any; messageId: any; authorTag: any; authorId: any; content: any; sticker: any; embed: any; embeds: any; attachments: any[] }) => {
