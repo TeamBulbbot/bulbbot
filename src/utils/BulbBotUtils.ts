@@ -8,7 +8,7 @@ import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
-import { GuildFeatures } from './types/GuildFeatures';
+import { GuildFeaturesDescriptions } from './types/GuildFeaturesDescriptions';
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -57,31 +57,33 @@ export default class {
 	public badges(bitfield: number) {
 		let badges: string[] = [];
 
-		const verfiedBot: number = 1 << 16;
 		const staff: number = 1 << 0;
 		const partner: number = 1 << 1;
-		const certifiedMod = 1 << 18;
 		const hypesquad_events: number = 1 << 2;
 		const bughunter_green: number = 1 << 3;
 		const hypesquad_bravery: number = 1 << 6;
 		const hypesquad_brilliance: number = 1 << 7;
 		const hypesquad_balance: number = 1 << 8;
-		const earlysupport: number = 1 << 9;
+		const early_support: number = 1 << 9;
 		const bughunter_gold: number = 1 << 14;
-		const botdeveloper: number = 1 << 17;
+		const verified_bot: number = 1 << 16;
+		const bot_developer: number = 1 << 17;
+		const certified_mod: number = 1 << 18;
+		const spammer: number = 1 << 20;
 
-		if ((bitfield & verfiedBot) === verfiedBot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
-		if ((bitfield & certifiedMod) === certifiedMod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
+		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.flags.HOUSE_BRILLIANCE);
 		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.flags.HOUSE_BALANCE);
-		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
+		if ((bitfield & early_support) === early_support) badges.push(Emotes.flags.EARLY_SUPPORTER);
 		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
-		if ((bitfield & botdeveloper) === botdeveloper) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
-		if ((bitfield & earlysupport) === earlysupport) badges.push(Emotes.flags.EARLY_SUPPORTER);
+		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
+		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
+		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
+		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 
 		return badges.map(i => `${i}`).join(" ");
 	}
@@ -90,7 +92,7 @@ export default class {
 		const features: string[] = [];
 
 		guildFeatures.forEach(feature => {
-			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeatures[feature]}')`);
+			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeaturesDescriptions[feature]}')`);
 		});
 
 		features.sort();
@@ -212,6 +214,11 @@ export default class {
 
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
 		if (handle == 0) return false;
+
+		// here are two exclusive cases, that use the same message as the other ones
+		if (handle == 5) await context.channel.send(await this.translate('global_cannot_action_role_equal', context.guild?.id, { target: user }));
+		if (handle == 7) await context.channel.send(await this.translate('global_cannot_action_role_equal_bot', context.guild?.id, { target: user }));
+		
 		// @ts-ignore
 		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
 		return true;
@@ -287,33 +294,33 @@ export default class {
 
 	// Supported timezones
 	public readonly timezones: Record<string, string> = {
-		ANAT: "Asia/Anadyr",
 		AEDT: "Australia/Melbourne",
 		AEST: "Australia/Brisbane",
-		JST: "Asia/Tokyo",
-		AWST: "Asia/Shanghai",
-		WIB: "Asia/Jakarta",
-		BTT: "Asia/Dhaka",
-		UZT: "Asia/Tashkent",
-		GST: "Asia/Dubai",
-		IST: "Asia/Kolkata",
-		MSK: "Europe/Moscow",
-		CEST: "Europe/Brussels",
-		BST: "Europe/London",
-		GMT: "Africa/Accra",
-		CVT: "Atlantic/Cape_Verde",
-		WGST: "America/Nuuk",
-		ART: "America/Buenos_Aires",
-		EDT: "America/New_York",
-		CDT: "America/Chicago",
-		CST: "America/Mexico_City",
-		PDT: "America/Los_Angeles",
 		AKDT: "America/Anchorage",
+		ANAT: "Asia/Anadyr",
+		ART: "America/Buenos_Aires",
+		AWST: "Asia/Shanghai",
+		AoE: "Pacific/Wallis",
+		BST: "Europe/London",
+		BTT: "Asia/Dhaka",
+		CDT: "America/Chicago",
+		CEST: "Europe/Brussels",
+		CST: "America/Mexico_City",
+		CVT: "Atlantic/Cape_Verde",
+		EDT: "America/New_York",
+		GMT: "Africa/Accra",
+		GST: "Asia/Dubai",
 		HDT: "America/Adak",
 		HST: "Pacific/Honolulu",
+		IST: "Asia/Kolkata",
+		JST: "Asia/Tokyo",
+		MSK: "Europe/Moscow",
 		NUT: "Pacific/Fiji",
-		AoE: "Pacific/Wallis",
+		PDT: "America/Los_Angeles",
 		UTC: "UTC",
+		UZT: "Asia/Tashkent",
+		WGST: "America/Nuuk",
+		WIB: "Asia/Jakarta",
 	};
 
 	// Supported languages
@@ -332,31 +339,21 @@ export default class {
 		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
 	);
 
-	public formatAction(action: string): string {
-		switch (action) {
-			case "Ban":
-				return Emotes.actions.BAN;
-			case "Manual Ban":
-				return Emotes.actions.BAN;
-			case "Force-ban":
-				return Emotes.actions.BAN;
-			case "Kick":
-				return Emotes.actions.KICK;
-			case "Manual Kick":
-				return Emotes.actions.KICK;
-			case "Mute":
-				return Emotes.actions.MUTE;
-			case "Warn":
-				return Emotes.actions.WARN;
-			case "Unmute":
-				return Emotes.actions.UNBAN;
-			case "Unban":
-				return Emotes.actions.UNBAN;
-			case "Nickname":
-				return Emotes.other.EDIT;
-		}
+	public formatAction(action: string): string | undefined {
+		if(!action) return Emotes.actions.WARN;
 
-		return Emotes.actions.WARN;
+		return {
+			"Ban": Emotes.actions.BAN,
+			"Manual Ban": Emotes.actions.BAN,
+			"Force-ban": Emotes.actions.BAN,
+			"Kick": Emotes.actions.KICK,
+			"Manual Kick": Emotes.actions.KICK,
+			"Mute": Emotes.actions.MUTE,
+			"Warn": Emotes.actions.WARN,
+			"Unmute": Emotes.actions.UNBAN,
+			"Unwarn": Emotes.actions.UNBAN,
+			"Nickname": Emotes.other.EDIT,
+		}[action];
 	}
 
 	public async logError(err: Error, context?: CommandContext, eventName?: string, runArgs?: any): Promise<void> {

@@ -1,4 +1,4 @@
-export enum GuildFeatures {
+export enum GuildFeaturesDescriptions {
     ANIMATED_ICON = "Adds the ability to upload a animated icon to the guild",
     BANNER = "Adds the ability to set a banner image for the guild that will display above the channel list",
     COMMERCE = "Adds the ability to create store channels",

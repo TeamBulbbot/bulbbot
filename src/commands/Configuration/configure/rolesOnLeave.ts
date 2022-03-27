@@ -1,42 +1,68 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "roles_on_leave",
-			aliases: ["rolesonleave"],
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["enabled:Boolean"],
-			usage: "<true|false>",
-			description: "Enable or disable the if roles should be logged on the leave message",
-		});
-	}
+async function rolesOnLeave(interaction: MessageComponentInteraction, client: BulbBotClient) {
+	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const enabled = args[0].toLowerCase();
-		if (enabled !== "true" && enabled !== "false")
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[0],
-					arg_expected: "enabled:boolean",
-					usage: this.usage,
-				}),
-			);
+	const selectRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("placeholder")
+			.setPlaceholder(`Currently ${config.rolesOnLeave ? "enabled" : "disabled"}`)
+			.setDisabled(true)
+			.addOptions([
+				{
+					label: "Placeholder",
+					value: "placeholder",
+				},
+			]),
+	);
 
-		await databaseManager.setRolesOnLeave(<Snowflake>context.guild?.id, enabled === "true");
-		await context.channel.send(
-			await this.client.bulbutils.translate("config_generic_success", context.guild?.id, {
-				setting: "roles_on_leave",
-				value: enabled,
-			}),
-		);
-	}
+	const [enable, disable, back] = [
+		await client.bulbutils.translate("config_button_enable", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_button_disable", interaction.guild?.id, {}),
+		await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}),
+	];
+
+	const buttonRow = new MessageActionRow().addComponents([
+		new MessageButton().setCustomId("back").setStyle("DANGER").setLabel(back),
+		new MessageButton()
+			.setCustomId(config.rolesOnLeave ? "disable" : "enable")
+			.setStyle(config.rolesOnLeave ? "DANGER" : "SUCCESS")
+			.setLabel(config.rolesOnLeave ? disable : enable),
+	]);
+
+	await interaction.update({
+		content: await client.bulbutils.translate("config_roles_on_leave_header", interaction.guild?.id, {}),
+		components: [selectRow, buttonRow],
+	});
+
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isButton()) {
+			switch (i.customId) {
+				case "back":
+					await require("./main").default(i, client);
+					break;
+				case "enable":
+					await databaseManager.setRolesOnLeave(i.guild?.id as Snowflake, true);
+					await rolesOnLeave(i, client);
+					break;
+				case "disable":
+					await databaseManager.setRolesOnLeave(i.guild?.id as Snowflake, false);
+					await rolesOnLeave(i, client);
+					break;
+				default:
+					await require("./main").default(i, client);
+					break;
+			}
+		}
+	});
 }
+
+export default rolesOnLeave;

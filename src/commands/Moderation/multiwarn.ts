@@ -24,7 +24,16 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
+		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+
+		if (!targets.length)
+			return context.channel.send(
+				await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
+					usage: this.usage,
+				}),
+			);
+
 		let reason: string = args.slice(targets?.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
@@ -57,7 +66,7 @@ export default class extends Command {
 				);
 				continue;
 			}
-			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) continue;
+			if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) continue;
 
 			infID = await infractionsManager.warn(
 				this.client,

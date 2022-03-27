@@ -1,179 +1,199 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { GuildChannel, GuildMember, Message, MessageActionRow, MessageButton, MessageComponentInteraction, Snowflake } from "discord.js";
-import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { NonDigits } from "../../../utils/Regex";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, MessageSelectOptionData, Snowflake, TextChannel } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import BanpoolManager from "../../../utils/managers/BanpoolManager";
+import * as Emoji from "../../../emotes.json";
+import DatabaseManager from "../../../utils/managers/DatabaseManager";
+import { LoggingConfiguration } from "../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
-const { getPools }: BanpoolManager = new BanpoolManager();
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
-		super(client, parent, {
-			name: "logging",
-			aliases: ["log", "logs"],
-			clearance: 75,
-			minArgs: 2,
-			maxArgs: 2,
-			argList: ["part:String", "channel:ChannelText"],
-			usage: "<part> <channel>",
-			description: "Configure the logging of a part of the bot.",
+
+async function logging(interaction: MessageComponentInteraction, client: BulbBotClient, channel?: TextChannel) {
+	const config: LoggingConfiguration = await databaseManager.getLoggingConfig(interaction.guild?.id as Snowflake);
+	let currPage: number = 0;
+	let selectedChannel: TextChannel | undefined = channel;
+	let selectedLogs: string[] = [];
+
+	let channels: MessageSelectOptionData[] = [];
+	if (selectedChannel)
+		channels.push({
+			label: selectedChannel.name,
+			value: selectedChannel.id,
+			default: true,
+			emoji: Emoji.channel.TEXT,
 		});
-	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const part: string = args[0];
-		let channel: string | null = args[1];
-		let original: string = "";
-		const loggingConfig: Record<string, any> = await databaseManager.getLoggingConfig(<Snowflake>context.guild?.id);
-		let confirmMsg: Message;
+	await interaction.guild?.channels.fetch();
+	interaction.guild?.channels.cache.map(channel => {
+		if (channel.type !== "GUILD_TEXT") return;
+		if (selectedChannel && selectedChannel.id === channel.id) return;
 
-		if (channel === "remove" || channel === "disable") channel = null;
-		else {
-			channel = channel.replace(NonDigits, "");
-			const cTemp: GuildChannel = <GuildChannel>context.guild?.channels.cache.get(channel);
-			if (cTemp === undefined) {
-				return context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
-						arg_expected: "channel:ChannelText",
-						arg_provided: args[1],
-						usage: this.usage,
-					}),
-				);
-			}
+		channels.push({
+			label: channel.name,
+			value: channel.id,
+			emoji: Emoji.channel.TEXT,
+			description: (channel as TextChannel).topic ? ((channel as TextChannel).topic?.slice(0, 100) as string) : undefined,
+		});
+	});
 
-			if (!cTemp.permissionsFor(<GuildMember>context.guild?.me)?.has(["SEND_MESSAGES", "VIEW_CHANNEL"])) {
-				return await context.channel.send(await this.client.bulbutils.translate("config_logging_unable_to_send_messages", context.guild?.id, { channel: cTemp }));
-			}
+	let pages: MessageSelectOptionData[][] = channels.reduce((resultArray: any[], item: any, index: number) => {
+		const chunkIndex = Math.floor(index / 25);
+
+		if (!resultArray[chunkIndex]) {
+			resultArray[chunkIndex] = []; // start a new chunk
 		}
 
-		const amtOfPools = (await getPools(context.guild!?.id)).length;
-		if (channel === null && amtOfPools > 0 && (part === "banpoollogs" || part === "banpool_logs"))
-			return await context.channel.send(await this.client.bulbutils.translate("configure_logging_banpool_with_still_pools", context.guild?.id, { amount: amtOfPools }));
+		resultArray[chunkIndex].push(item);
 
-		switch (part) {
-			case "mod_actions":
-			case "mod_logs":
-			case "modlogs":
-			case "modactions":
-				await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["modAction"];
-				break;
-			case "banpoollogs":
-			case "banpool_logs":
-				await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
-				break;
-			case "automod":
-			case "auto_mod":
-				await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["automod"];
-				break;
-			case "messagelogs":
-			case "message_logs":
-				await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["message"];
-				break;
-			case "rolelogs":
-			case "role_logs":
-				await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["role"];
-				break;
-			case "memberlogs":
-			case "member_logs":
-				await databaseManager.setMember(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["member"];
-				break;
-			case "channellogs":
-			case "channel_logs":
-				await databaseManager.setChannel(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["channel"];
-				break;
-			case "threadlogs":
-			case "thread_logs":
-				await databaseManager.setThread(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["thread"];
-				break;
-			case "invitelogs":
-			case "invite_logs":
-				await databaseManager.setInvite(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["invite"];
-				break;
-			case "joinleave":
-			case "join_leave":
-				await databaseManager.setJoinLeave(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["joinLeave"];
-				break;
-			case "other":
-				await databaseManager.setOther(<Snowflake>context.guild?.id, channel);
-				original = loggingConfig["other"];
-				break;
-			case "all":
-				const row = new MessageActionRow().addComponents([
-					new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
-					new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
-				]);
+		return resultArray;
+	}, []);
 
-				confirmMsg = await context.channel.send({
-					content: await this.client.bulbutils.translate(channel === null ? "config_logging_all_remove" : "config_logging_all_confirm", context.guild?.id, { channel }),
-					components: [row],
+	const channelRow = new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId("channel").setPlaceholder("Select a channel").setOptions(pages[currPage]));
+	const logsRow = new MessageActionRow().addComponents(
+		new MessageSelectMenu()
+			.setCustomId("logs")
+			.setPlaceholder("Select a logging type")
+			.setOptions(loggingTypes(config, selectedChannel !== null ? selectedChannel : undefined))
+			.setDisabled(!selectedChannel)
+			.setMinValues(1),
+	);
+	let pageRow = new MessageActionRow().addComponents([
+		new MessageButton()
+			.setCustomId("page-back")
+			.setLabel("<")
+			.setStyle("PRIMARY")
+			.setDisabled(currPage === 0),
+		new MessageButton()
+			.setCustomId("page-next")
+			.setLabel(">")
+			.setStyle("PRIMARY")
+			.setDisabled(currPage === pages.length - 1),
+		new MessageButton().setCustomId("enable").setLabel("Enable").setStyle("SUCCESS").setDisabled(!selectedChannel),
+		new MessageButton().setCustomId("disable").setLabel("Disable").setStyle("DANGER").setDisabled(!selectedChannel),
+	]);
+
+	const backRow = new MessageActionRow().addComponents(new MessageButton().setCustomId("back").setLabel("Back").setStyle("DANGER"));
+
+	await interaction.update({ content: "Logging Configuration", components: [channelRow, logsRow, pageRow, backRow] });
+
+	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
+	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
+
+	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (i.isSelectMenu()) {
+			if (i.customId === "channel") {
+				collector.stop();
+				await logging(i, client, (await client.bulbfetch.getChannel(interaction.guild?.channels, i.values[0])) as TextChannel);
+			} else {
+				const logs: MessageSelectOptionData[] = loggingTypes(config, selectedChannel).map(type => {
+					if (i.values.includes(type.value)) selectedLogs.push(type.value);
+
+					return {
+						label: type.label,
+						value: type.value,
+						emoji: type.emoji,
+						default: i.values.includes(type.value),
+					};
 				});
 
-				const filter = (i: MessageComponentInteraction) => i.isButton() && i.user.id === context.author.id;
-				let interaction: MessageComponentInteraction;
+				// @ts-ignore
+				logsRow.components[0].setOptions(logs);
 
-				try {
-					interaction = await confirmMsg.awaitMessageComponent({ filter, time: 15000 });
-				} catch (_) {
-					await confirmMsg.delete();
-					return await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
-				}
+				await i.update({ components: [channelRow, logsRow, pageRow, backRow] });
+			}
+		} else if (i.isButton()) {
+			switch (i.customId) {
+				case "back":
+					collector.stop();
+					await require("./main").default(i, client);
+					break;
+				case "page-next":
+					currPage++;
+					// @ts-ignore
+					channelRow.components[0].setOptions(pages[currPage]);
+					pageRow.components[0].setDisabled(currPage === 0);
+					pageRow.components[1].setDisabled(currPage === pages.length - 1);
 
-				if (interaction.customId === "confirm") {
-					await databaseManager.setModAction(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setBanpool(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setAutoMod(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setMessage(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setRole(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setMember(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setChannel(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setThread(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setInvite(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setJoinLeave(<Snowflake>context.guild?.id, channel);
-					await databaseManager.setOther(<Snowflake>context.guild?.id, channel);
-					await confirmMsg.delete();
-				} else {
-					await confirmMsg.delete();
-					await context.channel.send(await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}));
-					return;
-				}
-				break;
-			default:
-				return await context.channel.send(
-					await this.client.bulbutils.translate("event_message_args_missing_list", context.guild?.id, {
-						argument: args[0].toLowerCase(),
-						arg_expected: "part:string",
-						argument_list: "`mod_logs`, `automod`, `banpool_logs`, `message_logs`, `role_logs`, `member_logs`, `channel_logs`, `thread_logs`, `invite_logs` ,`join_leave`, `other`, `all`",
-					}),
-				);
+					await i.update({ components: [channelRow, logsRow, pageRow, backRow] });
+					break;
+				case "page-back":
+					currPage--;
+					// @ts-ignore
+					channelRow.components[0].setOptions(pages[currPage]);
+					pageRow.components[0].setDisabled(currPage === 0);
+					pageRow.components[1].setDisabled(currPage === pages.length);
+
+					await i.update({ components: [channelRow, logsRow, pageRow, backRow] });
+					break;
+				case "enable":
+					collector.stop();
+					await setLogging(i, selectedChannel as TextChannel, selectedLogs, "enable");
+					await interaction.followUp({ content: "Logging Enabled", ephemeral: true });
+					await logging(i, client);
+					break;
+				case "disable":
+					collector.stop();
+					await setLogging(i, selectedChannel as TextChannel, selectedLogs, "disable");
+					await interaction.followUp({ content: "Logging Disabled", ephemeral: true });
+					await logging(i, client);
+					break;
+			}
 		}
+	});
+}
 
-		if (channel === null) {
-			return await context.channel.send(
-				await this.client.bulbutils.translate(part === "all" ? "config_logging_remove_all" : "config_logging_remove", context.guild?.id, {
-					logging_type: part,
-					channel: original,
-				}),
-			);
-		} else {
-			return await context.channel.send(
-				await this.client.bulbutils.translate("config_logging_success", context.guild?.id, {
-					logging_type: part,
-					channel: context.guild?.channels.cache.get(channel),
-				}),
-			);
+async function setLogging(interaction: MessageComponentInteraction, selectedChannel: TextChannel, values: string[], action: "enable" | "disable") {
+	for (const value of values) {
+		switch (value) {
+			case "mod_actions":
+				await databaseManager.setModAction(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "banpool_logs":
+				await databaseManager.setBanpool(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "automod":
+				await databaseManager.setAutoMod(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "message_logs":
+				await databaseManager.setMessage(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "role_logs":
+				await databaseManager.setRole(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "member_logs":
+				await databaseManager.setMember(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "channel_logs":
+				await databaseManager.setChannel(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "invite_logs":
+				await databaseManager.setInvite(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "join_leave_logs":
+				await databaseManager.setJoinLeave(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "thread_logs":
+				await databaseManager.setThread(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
+			case "other_logs":
+				await databaseManager.setOther(interaction.guild?.id as Snowflake, action === "enable" ? selectedChannel.id : null);
+				break;
 		}
 	}
 }
+
+function loggingTypes(config: LoggingConfiguration, channel?: TextChannel) {
+	return [
+		{ label: "Mod Actions", value: "mod_actions", emoji: channel !== undefined && config.modAction === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Banpool Logs", value: "banpool_logs", emoji: channel !== undefined && config.banpool === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Automod", value: "automod", emoji: channel !== undefined && config.automod === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Message Logs", value: "message_logs", emoji: channel !== undefined && config.message === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Role Logs", value: "role_logs", emoji: channel !== undefined && config.role === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Member Logs", value: "member_logs", emoji: channel !== undefined && config.member === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Channel Logs", value: "channel_logs", emoji: channel !== undefined && config.channel === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Invite Logs", value: "invite_logs", emoji: channel !== undefined && config.invite === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Join/Leave Logs", value: "join_leave_logs", emoji: channel !== undefined && config.joinLeave === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Thread Logs", value: "thread_logs", emoji: channel !== undefined && config.thread === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+		{ label: "Other logs", value: "other_logs", emoji: channel !== undefined && config.other === channel.id ? Emoji.status.ONLINE : Emoji.other.INF2 },
+	];
+}
+
+export default logging;
