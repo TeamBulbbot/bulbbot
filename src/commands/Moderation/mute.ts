@@ -34,7 +34,6 @@ export default class extends Command {
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		const duration: number = <number>parse(args[1]);
 		let reason: string = args.slice(2).join(" ");
-		let infID: number;
 
 		if (!target)
 			return context.channel.send(
@@ -52,7 +51,7 @@ export default class extends Command {
 		if (duration > <number>parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild?.id, {}));
 		if (target.communicationDisabledUntilTimestamp !== null) return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
 
-		infID = await infractionsManager.mute(
+		const infID = await infractionsManager.mute(
 			this.client,
 			<Guild>context.guild,
 			target,

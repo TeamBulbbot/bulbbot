@@ -61,7 +61,6 @@ export default class extends Command {
 			await this.client.bulbutils.sleep(massCommandSleep);
 			const targetID: Snowflake = targets[i].replace(NonDigits, "")
 
-			let infID: number;
 			const target = await this.client.bulbfetch.getUser(targetID);
 			if (!target) {
 				await context.channel.send(
@@ -83,7 +82,7 @@ export default class extends Command {
 				continue;
 			}
 
-			infID = await infractionsManager.unban(
+			const infID = await infractionsManager.unban(
 				this.client,
 				<Guild>context.guild,
 				BanType.MANUAL,

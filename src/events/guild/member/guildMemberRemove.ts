@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, GuildMember, User, Permissions } from "discord.js";
+import { GuildAuditLogs, GuildMember, Permissions } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
@@ -48,10 +48,10 @@ export default class extends Event {
 		const kickLog = auditLogs.entries.first();
 		if (!kickLog) return;
 
-		let { executor, reason, target, createdTimestamp } = kickLog;
-		target = <User>target;
+		const { executor, createdTimestamp, target } = kickLog;
+		let { reason } = kickLog;
 		if (createdTimestamp + 3000 < Date.now()) return;
-		if (target.id !== member.user.id) return;
+		if (target?.id !== member.user.id) return;
 
 		if (executor!.id === this.client.user!.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});

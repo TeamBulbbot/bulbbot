@@ -10,7 +10,7 @@ export const ChannelMention = /<#(\d+)>/g;
 export const EveryoneHereMention = /@everyone|@here/g;
 export const Emoji = /(\p{ExtPict}(?:\p{EComp}(?:\p{ExtPict}|\p{EMod}|\p{EBase}))*\p{EComp}?|\d\u{FE0F}\u{20E3}|[\u{1F1E6}-\u{1F1FF}][\u{1F1E6}-\u{1F1FF}]?)/gu; // Matches all Unicode emoji, shouldn't match anything else
 export const CustomEmote = /<(?:a)?:([a-zA-Z0-9_]{2,32}):(\d{17,})>/g; // Matches custom emotes
-export const GetEverythingAfterColon = /(?<=\:)[^:]*$/;
+export const GetEverythingAfterColon = /(?<=:)[^:]*$/;
 export const ReasonImage = /((?:https?:\/\/)[a-z0-9]+(?:[-.][a-z0-9]+)*\.[a-z]{2,5}(?::[0-9]{1,5})?(?:\/[^ \n<>]*)\.(?:png|apng|jpg|gif))/g;
 export const QuoteMarked = /"(.*?)"/;
 

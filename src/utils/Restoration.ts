@@ -6,6 +6,7 @@ import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { BanType } from "./types/BanType";
 import { setTimeout } from "safe-timers";
+import { tryIgnore } from "./helpers";
 
 const { getAllReminders, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 const { getAllTemBans, deleteTempBan }: TempbanManager = new TempbanManager();
@@ -92,22 +93,21 @@ export default class {
 			}
 
 			setTimeout(async function () {
-				try {
-					await infractionsManager.unban(
-						client,
-						<Guild>guild,
-						BanType.TEMP,
-						target,
-						<GuildMember>guild?.me,
-						await client.bulbutils.translate("global_mod_action_log", guild?.id, {
-							action: await client.bulbutils.translate("mod_action_types.auto_unban", guild?.id, {}),
-							moderator: client.user,
-							target: target,
-							reason: "Automatic unban",
-						}),
-						"Automatic unban",
-					);
-				} catch (error) {}
+				await tryIgnore(
+					infractionsManager.unban,
+					client,
+					<Guild>guild,
+					BanType.TEMP,
+					target,
+					<GuildMember>guild?.me,
+					await client.bulbutils.translate("global_mod_action_log", guild?.id, {
+						action: await client.bulbutils.translate("mod_action_types.auto_unban", guild?.id, {}),
+						moderator: client.user,
+						target: target,
+						reason: "Automatic unban",
+					}),
+					"Automatic unban",
+				);
 
 				await deleteTempBan(tempban.id);
 			}, tempban.expireTime - Date.now());

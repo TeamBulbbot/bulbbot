@@ -30,7 +30,6 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
 
 		if (!target) {
 			await context.channel.send(
@@ -60,7 +59,7 @@ export default class extends Command {
 			return;
 		}
 
-		infID = await infractionsManager.ban(
+		const infID = await infractionsManager.ban(
 			this.client,
 			<Guild>context.guild,
 			BanType.SOFT,

@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { GuildAuditLogs, GuildBan, Permissions, User } from "discord.js";
+import { GuildAuditLogs, GuildBan, Permissions } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import LoggingManager from "../../utils/managers/LoggingManager";
 
@@ -22,10 +22,11 @@ export default class extends Event {
 
 		if (!banLog) return;
 
-		let { executor, reason, target: logTarget } = banLog;
-		logTarget = <User>logTarget;
+		const { executor, target: logTarget } = banLog;
+		let { reason } = banLog;
+
 		if (executor!.id === this.client.user!.id) return;
-		if (ban.user.id !== logTarget.id) return;
+		if (ban.user.id !== logTarget?.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", ban.guild.id, {});
 
 		await infractionsManager.createInfraction(ban.guild.id, "Manual Ban", true, reason, ban.user, executor!);

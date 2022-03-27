@@ -53,7 +53,6 @@ export default class extends Command {
 
 			const t: string = targets![i].replace(NonDigits, "");
 			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
-			let infID: number;
 
 			if (!target) {
 				await context.channel.send(
@@ -68,7 +67,7 @@ export default class extends Command {
 			}
 			if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) continue;
 
-			infID = await infractionsManager.warn(
+			const infID = await infractionsManager.warn(
 				this.client,
 				<Snowflake>context.guild?.id,
 				target.user,

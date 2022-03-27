@@ -29,7 +29,7 @@ export default class extends Event {
 
 		let executor: GuildMember | null = null;
 		let changes: any[] | null = null;
-		let createdTimestamp: number | null = null;
+		// let createdTimestamp: number | null = null;
 		const log: string[] = [];
 		try {
 			const logs: GuildAuditLogs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
@@ -37,7 +37,7 @@ export default class extends Event {
 			if (!first) return;
 
 			executor = first.executor;
-			createdTimestamp = first.createdTimestamp;
+			// createdTimestamp = first.createdTimestamp;
 			changes = first.changes;
 			// if (createdTimestamp + 3000 < Date.now()) return;
 		} catch (_) {

@@ -76,6 +76,7 @@ export default class Command {
 
 	public getFullCommandName() {
 		let name = "";
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let command = this;
 
 		for (let i = 0; i <= this.depth; i++) {
@@ -116,7 +117,7 @@ export default class Command {
 
 		const clientPermCheck: BitField<PermissionString, bigint> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
 		if (clientPermCheck) {
-			let missing: PermissionString[] = context.guild?.me?.permissions.missing(clientPermCheck)!;
+			let missing: PermissionString[] | undefined = context.guild?.me?.permissions.missing(clientPermCheck);
 			if (!missing) return "";
 			if (!missing.length) missing = context.guild!.me!.permissionsIn(<GuildChannelResolvable>context.channel).missing(clientPermCheck);
 

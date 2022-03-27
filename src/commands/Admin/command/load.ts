@@ -47,7 +47,7 @@ export default class extends SubCommand {
 			mainLoop: for (const commandFile of commands) {
 				if (args.length > 1) {
 					let currCommand: Command | SubCommand = command!;
-					const cmdChain: string[] = new RegExp(`${process.cwd().replace(/\\/g, "/")}/build/commands/(.+)/${cmdFile}\.js`).exec(commandFile)![1].split("/").reverse();
+					const cmdChain: string[] = new RegExp(`${process.cwd().replace(/\\/g, "/")}/build/commands/(.+)/${cmdFile}\\.js`).exec(commandFile)![1].split("/").reverse();
 					for (const parent of cmdChain.slice(0, -1)) {
 						if (currCommand instanceof SubCommand) {
 							if (currCommand.name !== parent) continue mainLoop;
