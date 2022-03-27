@@ -28,13 +28,13 @@ export default class extends SubCommand {
 		if (!command) return;
 		if (command instanceof SubCommand) {
 			command.parent.subCommands.splice(
-				command.parent.subCommands.findIndex(sc => sc === command),
+				command.parent.subCommands.findIndex((sc) => sc === command),
 				1,
 			);
 		} else {
 			this.client.commands.delete(command.name);
 		}
-		command.aliases.forEach(alias => this.client.aliases.delete(alias));
+		command.aliases.forEach((alias) => this.client.aliases.delete(alias));
 
 		const cmdPath = `${command.category}\\${command.qualifiedName.replace(/ /g, "\\")}`;
 		const commandFile = `${process.cwd()}/build/commands/${cmdPath}.js`;

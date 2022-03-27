@@ -41,7 +41,7 @@ export default class extends Command {
 		//Fetches the ban list
 		// @ts-expect-error
 		const banList: Collection<string, { user: User; reason: string }> | undefined = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find(user => user.user.id === targetID);
+		const bannedUser = banList?.find((user) => user.user.id === targetID);
 
 		//If the user is already banned return with a context
 		if (bannedUser) {

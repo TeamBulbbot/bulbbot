@@ -23,16 +23,16 @@ export default class extends SubCommand {
 		const botfarms: any = [];
 		let isFile = false;
 
-		this.client.guilds.cache.map(g => {
-			if (Math.round((g.members.cache.filter(u => u.user.bot).size / g.members.cache.size) * 100) < parseInt(args[0])) return;
+		this.client.guilds.cache.map((g) => {
+			if (Math.round((g.members.cache.filter((u) => u.user.bot).size / g.members.cache.size) * 100) < parseInt(args[0])) return;
 			if (whitelistedGuilds.includes(g.id)) return;
 
 			botfarms.push({
 				id: g.id,
 				name: g.name,
-				members: g.members.cache.filter(u => !u.user.bot).size,
-				bots: g.members.cache.filter(u => u.user.bot).size,
-				botP: Math.round((g.members.cache.filter(u => u.user.bot).size / g.members.cache.size) * 100),
+				members: g.members.cache.filter((u) => !u.user.bot).size,
+				bots: g.members.cache.filter((u) => u.user.bot).size,
+				botP: Math.round((g.members.cache.filter((u) => u.user.bot).size / g.members.cache.size) * 100),
 			});
 		});
 

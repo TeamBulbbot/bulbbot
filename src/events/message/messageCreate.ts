@@ -82,7 +82,7 @@ export default class extends Event {
 		command = resolved;
 
 		let used = `${prefix}${command.qualifiedName}`;
-		options.args.forEach(arg => (used += ` ${arg}`));
+		options.args.forEach((arg) => (used += ` ${arg}`));
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 
 		const serverOverrides: string[] = await getAllGuildExperiments(context.guild.id);

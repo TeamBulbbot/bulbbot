@@ -36,7 +36,7 @@ export default class extends Client {
 					sweepInterval: 300,
 					sweepFilter: Sweepers.filterByLifetime({
 						lifetime: 600,
-						getComparisonTimestamp: e => e.editedTimestamp ?? e.createdTimestamp,
+						getComparisonTimestamp: (e) => e.editedTimestamp ?? e.createdTimestamp,
 					}),
 				},
 			}),

@@ -41,7 +41,7 @@ export const logger = createLogger({
 		colorize(),
 		padLevels({ levels: levels.levels }),
 		timestamp(),
-		printf(info => `${info.timestamp} ${info.level}: ${info.message}`),
+		printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
 	),
 
 	exitOnError: false,

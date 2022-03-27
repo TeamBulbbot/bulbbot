@@ -8,7 +8,7 @@ import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
-import { GuildFeaturesDescriptions } from './types/GuildFeaturesDescriptions';
+import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -85,19 +85,19 @@ export default class {
 		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 
-		return badges.map(i => `${i}`).join(" ");
+		return badges.map((i) => `${i}`).join(" ");
 	}
 
 	public guildFeatures(guildFeatures: string[]) {
 		const features: string[] = [];
 
-		guildFeatures.forEach(feature => {
+		guildFeatures.forEach((feature) => {
 			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeaturesDescriptions[feature]}')`);
 		});
 
 		features.sort();
 
-		return features.map(i => `${i}`).join("\n");
+		return features.map((i) => `${i}`).join("\n");
 	}
 
 	public getUptime(timestamp: number | null) {
@@ -117,7 +117,7 @@ export default class {
 	}
 
 	public async sleep(ms: number) {
-		return new Promise(resolve => setTimeout(resolve, ms));
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	public formatDays(start: Date) {
@@ -170,20 +170,22 @@ export default class {
 	}
 
 	public prettify(action: string): string {
-		return {
-			"Ban": Emotes.actions.BAN,
-			"Manual Ban": Emotes.actions.BAN,
-			"Force-ban": Emotes.actions.BAN,
-			"Kick": Emotes.actions.KICK,
-			"Manual Kick": Emotes.actions.KICK,
-			"Mute": Emotes.actions.MUTE,
-			"Warn": Emotes.actions.WARN,
-			"Unmute": Emotes.actions.UNBAN,
-			"Unban": Emotes.actions.UNBAN,
-			"true": Emotes.status.ONLINE,
-			"false": Emotes.other.INF1,
-			"Nickname": Emotes.other.EDIT,
-		}[action] + ` ${action}`;
+		return (
+			{
+				Ban: Emotes.actions.BAN,
+				"Manual Ban": Emotes.actions.BAN,
+				"Force-ban": Emotes.actions.BAN,
+				Kick: Emotes.actions.KICK,
+				"Manual Kick": Emotes.actions.KICK,
+				Mute: Emotes.actions.MUTE,
+				Warn: Emotes.actions.WARN,
+				Unmute: Emotes.actions.UNBAN,
+				Unban: Emotes.actions.UNBAN,
+				true: Emotes.status.ONLINE,
+				false: Emotes.other.INF1,
+				Nickname: Emotes.other.EDIT,
+			}[action] + ` ${action}`
+		);
 	}
 
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
@@ -216,8 +218,8 @@ export default class {
 		if (handle == 0) return false;
 
 		// here are two exclusive cases, that use the same message as the other ones
-		if (handle == 5) await context.channel.send(await this.translate('global_cannot_action_role_equal', context.guild?.id, { target: user }));
-		if (handle == 7) await context.channel.send(await this.translate('global_cannot_action_role_equal_bot', context.guild?.id, { target: user }));
+		if (handle == 5) await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
+		if (handle == 7) await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
 
 		// @ts-expect-error
 		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
@@ -340,19 +342,19 @@ export default class {
 	);
 
 	public formatAction(action: string): string | undefined {
-		if(!action) return Emotes.actions.WARN;
+		if (!action) return Emotes.actions.WARN;
 
 		return {
-			"Ban": Emotes.actions.BAN,
+			Ban: Emotes.actions.BAN,
 			"Manual Ban": Emotes.actions.BAN,
 			"Force-ban": Emotes.actions.BAN,
-			"Kick": Emotes.actions.KICK,
+			Kick: Emotes.actions.KICK,
 			"Manual Kick": Emotes.actions.KICK,
-			"Mute": Emotes.actions.MUTE,
-			"Warn": Emotes.actions.WARN,
-			"Unmute": Emotes.actions.UNBAN,
-			"Unwarn": Emotes.actions.UNBAN,
-			"Nickname": Emotes.other.EDIT,
+			Mute: Emotes.actions.MUTE,
+			Warn: Emotes.actions.WARN,
+			Unmute: Emotes.actions.UNBAN,
+			Unwarn: Emotes.actions.UNBAN,
+			Nickname: Emotes.other.EDIT,
 		}[action];
 	}
 

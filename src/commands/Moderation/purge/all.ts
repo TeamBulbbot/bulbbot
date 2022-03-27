@@ -48,7 +48,7 @@ export default class extends SubCommand {
 				limit: deleteMsg[i],
 			});
 
-			msgs.map(m => {
+			msgs.map((m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 			});

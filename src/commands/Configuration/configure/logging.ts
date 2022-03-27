@@ -22,7 +22,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 		});
 
 	await interaction.guild?.channels.fetch();
-	interaction.guild?.channels.cache.map(channel => {
+	interaction.guild?.channels.cache.map((channel) => {
 		if (channel.type !== "GUILD_TEXT") return;
 		if (selectedChannel && selectedChannel.id === channel.id) return;
 
@@ -83,7 +83,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 				collector.stop();
 				await logging(i, client, (await client.bulbfetch.getChannel(interaction.guild?.channels, i.values[0])) as TextChannel);
 			} else {
-				const logs: MessageSelectOptionData[] = loggingTypes(config, selectedChannel).map(type => {
+				const logs: MessageSelectOptionData[] = loggingTypes(config, selectedChannel).map((type) => {
 					if (i.values.includes(type.value)) selectedLogs.push(type.value);
 
 					return {

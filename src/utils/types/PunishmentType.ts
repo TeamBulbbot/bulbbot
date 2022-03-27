@@ -1,5 +1,7 @@
 enum PunishmentType {
-	LOG, WARN,
-	KICK, BAN,
+	LOG,
+	WARN,
+	KICK,
+	BAN,
 }
 export default PunishmentType;

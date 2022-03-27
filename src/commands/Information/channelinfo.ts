@@ -55,7 +55,7 @@ export default class extends Command {
 					`\n**Your permissions:** ${textChannels
 						.permissionsFor(context.author)
 						?.toArray()
-						.map(p => `\`${p}\``)
+						.map((p) => `\`${p}\``)
 						.join(" ")}`,
 				);
 			}
@@ -68,7 +68,7 @@ export default class extends Command {
 				`\n**Your permissions:** ${channel
 					.permissionsFor(context.author)
 					?.toArray()
-					.map(p => `\`${p}\``)
+					.map((p) => `\`${p}\``)
 					.join(" ")}`,
 			);
 		}

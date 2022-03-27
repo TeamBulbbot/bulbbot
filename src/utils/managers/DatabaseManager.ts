@@ -332,12 +332,12 @@ export default class {
 			}
 			if (items.length === 1) {
 				dblist.splice(
-					dblist.findIndex(i => i === items[0]),
+					dblist.findIndex((i) => i === items[0]),
 					1,
 				);
 			} else {
 				dblist.sort((a, b) => +items.includes(b) - +items.includes(a));
-				dblist = dblist.slice(dblist.findIndex(i => !items.includes(i)));
+				dblist = dblist.slice(dblist.findIndex((i) => !items.includes(i)));
 			}
 			return { list: dblist, added: [], removed: removed, other: notPresent };
 		});
@@ -396,7 +396,7 @@ export default class {
 			}
 		})(part);
 		if (!dbkey) return;
-		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find(n => PunishmentType[n] === punishment) ?? null;
+		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find((n) => PunishmentType[n] === punishment) ?? null;
 		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Punishment WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
 			bind: { GuildID: guildID, Punishment: punishmentkey },
 			type: QueryTypes.UPDATE,

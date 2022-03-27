@@ -8,10 +8,10 @@ export default interface AutoModSetup {
 	punishmentWords?: string;
 	limitMentions?: number;
 	punishmentMentions?: string;
-	timeoutMentions?: number,
+	timeoutMentions?: number;
 	limitMessages?: number;
 	punishmentMessages?: string;
-	timeoutMessages?: number,
+	timeoutMessages?: number;
 	ignoreChannels?: string[];
 	ignoreRoles?: string[];
 	ignoreUsers?: string[];

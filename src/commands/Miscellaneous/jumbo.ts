@@ -137,7 +137,7 @@ export default class extends Command {
 
 async function DownloadEmoji(url: string, extension: string, emote: any, emoteName: string, size: number, path: string, twemojiVersion: string) {
 	try {
-		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+		await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
 			const sharpEmoji = sharp(res.data, {
 				density: 2400,
 				animated: extension === "gif",
@@ -153,7 +153,7 @@ async function DownloadEmoji(url: string, extension: string, emote: any, emoteNa
 
 		url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/${twemojiVersion}/svg/${emoteName.split("-fe0f").join("")}.svg`;
 
-		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+		await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
 			return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${path}/${emoteName}.${extension}`);
 		});
 	}

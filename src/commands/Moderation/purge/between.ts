@@ -24,7 +24,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
-		const allMessages: Message[] = msgs.map(m => m).reverse();
+		const allMessages: Message[] = msgs.map((m) => m).reverse();
 		const messages: Snowflake[] = [];
 		let delMsgs = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",

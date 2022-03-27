@@ -13,7 +13,8 @@ export default class SubCommand extends Command {
 	}
 
 	constructor(client: BulbBotClient, parent: Command, options: CommandOptions = { name: "missing name" }) {
-		super(client, { // inherit some metadata if none provided
+		super(client, {
+			// inherit some metadata if none provided
 			name: options.name,
 			aliases: options.aliases,
 			usage: options.usage,

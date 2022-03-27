@@ -22,7 +22,7 @@ export default class extends Command {
 		if (context.guild === null || context.member === null) return;
 		//this.client.guilds.cache.map(g => g.members.fetch());
 
-		const shardData: string[] = this.client.ws.shards.map(shard => `${selectEmoji(shard.ping)} Shard ID: ${shard.id} \`${shard.ping} ms\`\n`);
+		const shardData: string[] = this.client.ws.shards.map((shard) => `${selectEmoji(shard.ping)} Shard ID: ${shard.id} \`${shard.ping} ms\`\n`);
 		const { data } = await axios.get<any>("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
 
 		const amtMessages: any = await sequelize.query('SELECT COUNT(*) FROM "messageLogs"', {

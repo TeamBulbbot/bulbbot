@@ -118,7 +118,7 @@ function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): st
 		if (regex.test(context.content)) return word;
 	}
 
-	const wordBlacklistToken: string[] = guild.wordBlacklistToken.map(t => t.toLowerCase());
+	const wordBlacklistToken: string[] = guild.wordBlacklistToken.map((t) => t.toLowerCase());
 	const content: string = context.content.toLowerCase();
 
 	for (const token of wordBlacklistToken) {

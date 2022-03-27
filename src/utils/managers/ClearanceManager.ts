@@ -121,8 +121,8 @@ export default class {
 		});
 
 		let clearance = 0;
-		response.forEach(entry => {
-			if (entry.clearanceLevel > clearance && context.member?.roles.cache.find(r => r.id === entry.roleId)) clearance = entry.clearanceLevel;
+		response.forEach((entry) => {
+			if (entry.clearanceLevel > clearance && context.member?.roles.cache.find((r) => r.id === entry.roleId)) clearance = entry.clearanceLevel;
 		});
 
 		return clearance;
@@ -139,7 +139,7 @@ export default class {
 		});
 
 		let clearance = 0;
-		response.forEach(entry => {
+		response.forEach((entry) => {
 			if (entry.clearanceLevel > clearance && interaction.member?.roles["member"]["_roles"].includes(entry.roleId)) clearance = entry.clearanceLevel;
 		});
 

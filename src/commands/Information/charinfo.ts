@@ -54,7 +54,7 @@ export default class extends Command {
 		let text = "";
 
 		for (let i = 0; i < chars.length; i++) {
-			categories.forEach(cat => {
+			categories.forEach((cat) => {
 				const Unicode = require(`unicode/category/${cat}`);
 				const charCode = Unicode[chars[i].charCodeAt(0)];
 				if (charCode !== undefined) return (text += `${chars[i]} - ${charCode.value} | ${charCode.name}\n`);

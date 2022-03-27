@@ -11,7 +11,7 @@ export default class extends Event {
 	}
 
 	async run(role: Role) {
-        // TODO: attempt to fetch executor from audit log
+		// TODO: attempt to fetch executor from audit log
 		await loggingManager.sendEventLog(this.client, role.guild, "role", await this.client.bulbutils.translate("event_role_create", role.guild.id, { role: role }));
 	}
 }

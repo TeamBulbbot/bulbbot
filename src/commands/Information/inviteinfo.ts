@@ -109,7 +109,7 @@ export default class extends Command {
 					iconURL: await this.client.bulbutils.userObject(true, context.member).avatarUrl,
 				})
 				.setTimestamp()
-				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map(m => `\`${m.username}\``).join(" ")}`);
+				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map((m) => `\`${m.username}\``).join(" ")}`);
 
 			embeds.push(widgetEmbed);
 		}

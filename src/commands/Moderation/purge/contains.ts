@@ -53,7 +53,7 @@ export default class extends SubCommand {
 			});
 
 			const regex = new RegExp(`(?:^|\\W)${args[0]}(?:$|\\W)`, "gi");
-			msgs.map(async m => {
+			msgs.map(async (m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.content.match(regex)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;

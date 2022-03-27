@@ -85,7 +85,7 @@ export default class extends Event {
 			}
 
 			let used = `/${command.qualifiedName}`;
-			args.forEach(arg => (used += ` ${arg}`));
+			args.forEach((arg) => (used += ` ${arg}`));
 			await loggingManager.sendCommandLog(this.client, interaction.guild!, context.author, context.channel.id, used);
 
 			await context.deferReply();

@@ -48,7 +48,7 @@ export async function startPrometheus(client: any): Promise<void> {
 	prom.collectDefaultMetrics({ register });
 
 	const metric = [latency, cachedUsers, websocket, userMessages, guildMessages, guildCount, guildMemberCount, userCommandUsage, api];
-	metric.forEach(metric => {
+	metric.forEach((metric) => {
 		register.registerMetric(metric);
 	});
 

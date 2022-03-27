@@ -1,5 +1,5 @@
 module.exports = {
-	'*.{js,ts}': 'yarn lint',
+	'*.{js,ts}': 'yarn eslint',
 	'*.{js,ts,md}': 'prettier --write',
 	'*.ts': () => 'yarn typecheck',
 }

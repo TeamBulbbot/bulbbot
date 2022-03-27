@@ -203,10 +203,10 @@ export default class extends Command {
 					}),
 				});
 
-				const filter = m => m.content && m.author.id === context.author.id;
+				const filter = (m) => m.content && m.author.id === context.author.id;
 				const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
 
-				collector?.on("collect", async m => {
+				collector?.on("collect", async (m) => {
 					const cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
 					await command.run(context, cArgs);
 					await m.delete();

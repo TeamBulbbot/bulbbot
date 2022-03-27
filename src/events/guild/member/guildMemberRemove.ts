@@ -27,7 +27,10 @@ export default class extends Event {
 				await this.client.bulbutils.translate("event_member_leave_roles", member.guild.id, {
 					user: member.user,
 					user_joined: Math.floor(member.joinedTimestamp / 1000),
-					user_roles: member.roles.cache.filter(role => role.id !== member.guild.id).map(role => `${role}`).join(", "),
+					user_roles: member.roles.cache
+						.filter((role) => role.id !== member.guild.id)
+						.map((role) => `${role}`)
+						.join(", "),
 				}),
 			);
 		} else {
@@ -35,10 +38,10 @@ export default class extends Event {
 				this.client,
 				member.guild,
 				"joinLeave",
-					await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
-						user: member.user,
-						user_joined: Math.floor(member.joinedTimestamp / 1000),
-					}),
+				await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
+					user: member.user,
+					user_joined: Math.floor(member.joinedTimestamp / 1000),
+				}),
 			);
 		}
 

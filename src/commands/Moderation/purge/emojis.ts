@@ -53,7 +53,7 @@ export default class extends SubCommand {
 				limit: deleteMsg[i],
 			});
 
-			msgs.map(async m => {
+			msgs.map(async (m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.content.match(CustomEmote) || m.content.match(Emoji)) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;

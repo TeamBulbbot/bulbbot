@@ -73,12 +73,12 @@ export default class extends Command {
 		let amountOfRoles = 0;
 		let emotesLeft = 0;
 		let amountOfEmotes = 0;
-		guild.roles.cache.forEach(role => {
+		guild.roles.cache.forEach((role) => {
 			amountOfRoles++;
 			if (guildRoles.join(" ").length <= 400) guildRoles.push(role);
 			else rolesLeft++;
 		});
-		guild.emojis.cache.forEach(emote => {
+		guild.emojis.cache.forEach((emote) => {
 			amountOfEmotes++;
 			if (guildEmotes.join(" ").length <= 800) guildEmotes.push(emote);
 			else emotesLeft++;
@@ -86,9 +86,9 @@ export default class extends Command {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setThumbnail(context.guild?.iconURL({ dynamic: true }) || '')
+			.setThumbnail(context.guild?.iconURL({ dynamic: true }) || "")
 			.setAuthor({
-				name: context.guild?.name || '',
+				name: context.guild?.name || "",
 				iconURL: context.guild?.iconURL({ dynamic: true }) ?? undefined,
 			})
 			.addField(await this.client.bulbutils.translate("serverinfo_server_stats", guild.id, {}), serverStats, true)

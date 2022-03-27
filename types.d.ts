@@ -1,1 +1,1 @@
-type Callable = (...args: any[]) => any
+type Callable = (...args: any[]) => any;

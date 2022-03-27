@@ -49,7 +49,7 @@ export default class extends Command {
 			);
 
 		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild?.id);
-		const options: Promise<MessageSelectOptionData>[] = pools.map(async pool => {
+		const options: Promise<MessageSelectOptionData>[] = pools.map(async (pool) => {
 			const data = await getPoolData(pool.name);
 
 			return {
@@ -73,7 +73,7 @@ export default class extends Command {
 			if (interaction.user.id !== context.author.id) return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 
 			const poolGuilds: any[] = await getGuildsFromPools(
-				interaction.values.map(value => {
+				interaction.values.map((value) => {
 					return value.split(":")[0];
 				}),
 			);
@@ -111,7 +111,7 @@ export default class extends Command {
 					totalBans,
 					totalPossible: poolGuilds.length,
 					usedPools: interaction.values
-						.map(value => {
+						.map((value) => {
 							return `\`${value.split(":")[1]}\``;
 						})
 						.join(" "),

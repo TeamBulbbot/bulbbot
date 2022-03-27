@@ -22,7 +22,7 @@ const client: BulbBotClient = new BulbBotClient(config);
 const languagesPath = require("path").join(__dirname, "languages");
 
 const resources = {};
-fs.readdirSync(languagesPath).map(file => {
+fs.readdirSync(languagesPath).map((file) => {
 	const langName = file.split(".")[0];
 	resources[langName] = {
 		translation: require(`./languages/${langName}.json`),

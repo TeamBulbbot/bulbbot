@@ -29,7 +29,7 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
 			return context.channel.send(
@@ -52,7 +52,7 @@ export default class extends Command {
 			return await this.client.commands.get("ban")!.run(context, args);
 		}
 
-		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
+		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {
 			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
@@ -123,7 +123,7 @@ export default class extends Command {
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-				full_list: fullList.join(', '),
+				full_list: fullList.join(", "),
 				reason,
 			}),
 		);

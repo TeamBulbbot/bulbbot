@@ -29,7 +29,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			limit: deleteMsg[i],
 		});
 
-		msgs.map(async m => {
+		msgs.map(async (m) => {
 			if (message.author.id === m.author.id) {
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 				messagesToPurge.push(m.id);

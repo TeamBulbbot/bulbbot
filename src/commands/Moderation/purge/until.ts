@@ -53,7 +53,7 @@ export default class extends SubCommand {
 				limit: 100,
 			});
 
-			const found = msgs.find(m => {
+			const found = msgs.find((m) => {
 				temp++;
 				return m.id === msg.id;
 			});
@@ -65,7 +65,7 @@ export default class extends SubCommand {
 				deletedAmount += temp;
 				amount = 500;
 			} else deletedAmount += 100;
-			msgs.map(m => {
+			msgs.map((m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 			});

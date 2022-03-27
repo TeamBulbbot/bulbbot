@@ -57,7 +57,7 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 			selected = [...i.values];
 
 			reasons = [];
-			config.quickReasons.map(reason => {
+			config.quickReasons.map((reason) => {
 				reasons.push({
 					label: reason,
 					value: reason,
