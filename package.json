@@ -6,6 +6,7 @@
 	"scripts": {
 		"watch": "tsc -w",
 		"lint": "eslint .",
+		"typecheck": "tsc --noEmit",
 		"prestart": "tsc",
 		"start": "node build/index.js",
 		"nobuild": "node build/index.js",
