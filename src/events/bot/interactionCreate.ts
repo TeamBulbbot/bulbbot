@@ -65,7 +65,7 @@ export default class extends Event {
 		} else if (interaction.isCommand()) {
 			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
 			const subCommand: string = <string>context.options.getSubcommand(false);
-			let args: string[] = [];
+			const args: string[] = [];
 			let cmd: string = <string>context.commandName;
 
 			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
@@ -84,7 +84,7 @@ export default class extends Event {
 				return;
 			}
 
-			let used: string = `/${command.qualifiedName}`;
+			let used = `/${command.qualifiedName}`;
 			args.forEach(arg => (used += ` ${arg}`));
 			await loggingManager.sendCommandLog(this.client, interaction.guild!, context.author, context.channel.id, used);
 

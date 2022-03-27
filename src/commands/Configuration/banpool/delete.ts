@@ -25,8 +25,8 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name = args[0];
 
-		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
+		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!(await haveAccessToPool(context.guild?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),

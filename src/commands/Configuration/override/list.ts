@@ -22,8 +22,8 @@ export default class extends SubCommand {
 	async run(context: CommandContext): Promise<void | Message> {
 		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>context.guild?.id);
 
-		let roles: string[] = [];
-		let commands: string[] = [];
+		const roles: string[] = [];
+		const commands: string[] = [];
 
 		if (data[0] !== undefined) {
 			data[0].forEach(command => {

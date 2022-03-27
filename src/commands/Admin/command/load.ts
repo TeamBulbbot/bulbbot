@@ -28,7 +28,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const cmd: string = args[0].toLowerCase();
-		let cmdFile: string = "";
+		let cmdFile = "";
 		let command: Command | undefined = Command.resolve(this.client, args);
 		let dirPath: string;
 
@@ -60,8 +60,8 @@ export default class extends SubCommand {
 					// Validated path with command parent chain
 
 					delete require.cache[require.resolve(commandFile)];
-					let { name } = path.parse(commandFile);
-					let File = require(commandFile);
+					const { name } = path.parse(commandFile);
+					const File = require(commandFile);
 					if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 					const loadedCommand = new File.default(this.client, command);
@@ -71,8 +71,8 @@ export default class extends SubCommand {
 					command = loadedCommand;
 				} else {
 					delete require.cache[require.resolve(commandFile)];
-					let { name } = path.parse(commandFile);
-					let File = require(commandFile);
+					const { name } = path.parse(commandFile);
+					const File = require(commandFile);
 					if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 					const loadedCommand = new File.default(this.client, name);

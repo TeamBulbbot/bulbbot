@@ -21,7 +21,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const botfarms: any = [];
-		let isFile: boolean = false;
+		let isFile = false;
 
 		this.client.guilds.cache.map(g => {
 			if (Math.round((g.members.cache.filter(u => u.user.bot).size / g.members.cache.size) * 100) < parseInt(args[0])) return;
@@ -58,13 +58,13 @@ export default class extends SubCommand {
 }
 
 function dynamicSort(property: any) {
-	var sortOrder = 1;
+	let sortOrder = 1;
 	if (property[0] === "-") {
 		sortOrder = -1;
 		property = property.slice(1);
 	}
 	return function (a: any, b: any) {
-		var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+		const result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
 		return result * sortOrder;
 	};
 }

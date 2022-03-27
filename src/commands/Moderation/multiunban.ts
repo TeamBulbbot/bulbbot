@@ -41,9 +41,9 @@ export default class extends Command {
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
-		if (targets!!.length <= 1) {
+		if (targets!.length <= 1) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_multi_less_than_2", context.guild?.id, {
 					action: await this.client.bulbutils.translate("action_multi_types.unban", context.guild?.id, {}),

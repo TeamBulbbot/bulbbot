@@ -23,12 +23,12 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[0]);
+		let amount = Number(args[0]);
 		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
 		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 
-		let deleteMsg: number[] = [];
-		let a: number = 0;
+		const deleteMsg: number[] = [];
+		let a = 0;
 
 		for (let i = 1; i <= amount; i++) {
 			if (i % 100 === 0) {
@@ -38,11 +38,11 @@ export default class extends SubCommand {
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
+		let delMsgs = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
-		let messagesToPurge: Snowflake[] = [];
+		const messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
 		const twoWeeksAgo = moment().subtract(14, "days").unix();

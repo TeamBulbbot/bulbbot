@@ -26,10 +26,10 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 		if (dbGuild.ignoreRoles.includes(role.id)) return;
 	}
 
-	let shouldDelete: boolean = false;
+	let shouldDelete = false;
 
 	if (hasWebsite(context, dbGuild)) {
-		let punishment: string = await automodManager.resolveAction(
+		const punishment: string = await automodManager.resolveAction(
 			client,
 			context,
 			dbGuild.punishmentWebsite,
@@ -52,7 +52,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	}
 
 	if (hasInvite(context, dbGuild)) {
-		let punishment: string = await automodManager.resolveAction(
+		const punishment: string = await automodManager.resolveAction(
 			client,
 			context,
 			dbGuild.punishmentInvites,
@@ -76,7 +76,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 
 	let word: string;
 	if ((word = hasSwearWords(context, dbGuild))) {
-		let punishment: string = await automodManager.resolveAction(
+		const punishment: string = await automodManager.resolveAction(
 			client,
 			context,
 			dbGuild.punishmentWords,
@@ -114,7 +114,7 @@ function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): st
 	const wordBlacklist: string[] = guild.wordBlacklist;
 
 	for (const word of wordBlacklist) {
-		const regex: RegExp = new RegExp(`(?:^|\\s)${word}(?:$|\\s)`, "i");
+		const regex = new RegExp(`(?:^|\\s)${word}(?:$|\\s)`, "i");
 		if (regex.test(context.content)) return word;
 	}
 

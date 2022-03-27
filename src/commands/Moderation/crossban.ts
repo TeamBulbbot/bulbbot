@@ -33,9 +33,9 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let reason: string = args.slice(1).join(" ");
-		let target: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 
-		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 
 		if (!target)
 			return await context.channel.send(
@@ -47,7 +47,7 @@ export default class extends Command {
 				}),
 			);
 
-		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild!?.id);
+		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild?.id);
 		const options: Promise<MessageSelectOptionData>[] = pools.map(async pool => {
 			const data = await getPoolData(pool.name);
 
@@ -76,7 +76,7 @@ export default class extends Command {
 					return value.split(":")[0];
 				}),
 			);
-			let totalBans: number = 0;
+			let totalBans = 0;
 
 			for (let i = 0; i < poolGuilds.length; i++) {
 				const guildId = poolGuilds[i];

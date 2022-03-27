@@ -8,11 +8,11 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function logging(interaction: MessageComponentInteraction, client: BulbBotClient, channel?: TextChannel) {
 	const config: LoggingConfiguration = await databaseManager.getLoggingConfig(interaction.guild?.id as Snowflake);
-	let currPage: number = 0;
-	let selectedChannel: TextChannel | undefined = channel;
-	let selectedLogs: string[] = [];
+	let currPage = 0;
+	const selectedChannel: TextChannel | undefined = channel;
+	const selectedLogs: string[] = [];
 
-	let channels: MessageSelectOptionData[] = [];
+	const channels: MessageSelectOptionData[] = [];
 	if (selectedChannel)
 		channels.push({
 			label: selectedChannel.name,
@@ -34,7 +34,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 		});
 	});
 
-	let pages: MessageSelectOptionData[][] = channels.reduce((resultArray: any[], item: any, index: number) => {
+	const pages: MessageSelectOptionData[][] = channels.reduce((resultArray: any[], item: any, index: number) => {
 		const chunkIndex = Math.floor(index / 25);
 
 		if (!resultArray[chunkIndex]) {
@@ -55,7 +55,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 			.setDisabled(!selectedChannel)
 			.setMinValues(1),
 	);
-	let pageRow = new MessageActionRow().addComponents([
+	const pageRow = new MessageActionRow().addComponents([
 		new MessageButton()
 			.setCustomId("page-back")
 			.setLabel("<")

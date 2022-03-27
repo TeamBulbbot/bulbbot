@@ -28,7 +28,7 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 		let reason: string = args.slice(1).join(" ");
 		let infID: number;
 

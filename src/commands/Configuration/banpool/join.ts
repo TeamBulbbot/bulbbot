@@ -26,10 +26,10 @@ export default class extends SubCommand {
 		const code: string = args[0];
 		const invite = this.client.banpoolInvites.get(code);
 
-		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!(await hasBanpoolLog(context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 		if (!invite) return context.channel.send(await this.client.bulbutils.translate("banpool_join_unable_to_find", context.guild?.id, {}));
 		if (invite.guild.id === context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("banpool_join_own_guild", context.guild?.id, {}));
-		if (!(await joinBanpool(invite, context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_join_error", context.guild?.id, {}));
+		if (!(await joinBanpool(invite, context.guild?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_join_error", context.guild?.id, {}));
 
 		const poolguild: Guild = await this.client.guilds.fetch(invite.guild.id);
 

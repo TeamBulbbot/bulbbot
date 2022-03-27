@@ -36,7 +36,7 @@ export default class extends Command {
 		else target = args[0].replace(NonDigits, "");
 
 		let user: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, target);
-		let isGuildMember = true;
+		const isGuildMember = true;
 
 		if (!user) user = await this.client.bulbfetch.getUser(target);
 		if (!user)
@@ -72,7 +72,7 @@ export default class extends Command {
 		else if (user!.id === context.author.id) components = [];
 		else components = [row];
 
-		let description: string = "";
+		let description = "";
 
 		if (user !== undefined && user) {
 			if (user.flags !== null) description += this.client.bulbutils.badges(user.flags.bitfield) + "\n";
@@ -207,7 +207,7 @@ export default class extends Command {
 				const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
 
 				collector?.on("collect", async m => {
-					let cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
+					const cArgs: string[] = [user.id, ...m.content.split(/ +/g)];
 					await command.run(context, cArgs);
 					await m.delete();
 				});

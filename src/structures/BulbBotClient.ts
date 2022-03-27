@@ -17,7 +17,7 @@ export default class extends Client {
 	private readonly utils: Util;
 	public readonly bulbutils: BulbBotUtils;
 	public readonly bulbfetch: BulbBotFetch;
-	public userClearance: number = 0;
+	public userClearance = 0;
 	public blacklist: Collection<string, Record<string, any>>;
 	public banpoolInvites: Collection<string, Record<string, any>>;
 	public log: any;

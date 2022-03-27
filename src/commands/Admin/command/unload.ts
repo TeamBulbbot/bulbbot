@@ -18,7 +18,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let command: Command | undefined = Command.resolve(this.client, args);
+		const command: Command | undefined = Command.resolve(this.client, args);
 
 		if (!command) return;
 		if (command instanceof SubCommand) {

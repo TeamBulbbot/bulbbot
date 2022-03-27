@@ -20,7 +20,7 @@ const config = {
 const client: BulbBotClient = new BulbBotClient(config);
 const languagesPath = require("path").join(__dirname, "languages");
 
-let resources = {};
+const resources = {};
 fs.readdirSync(languagesPath).map(file => {
 	const langName = file.split(".")[0];
 	resources[langName] = {

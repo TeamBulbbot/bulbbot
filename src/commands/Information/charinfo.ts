@@ -51,7 +51,7 @@ export default class extends Command {
 		];
 
 		const chars: string = args.join(" ");
-		let text: string = "";
+		let text = "";
 
 		for (let i = 0; i < chars.length; i++) {
 			categories.forEach(cat => {

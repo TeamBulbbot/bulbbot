@@ -11,8 +11,8 @@ export function startAllCrons(client: BulbBotClient) {
 	schedule("0 0 * * *", async () => {
 		client.log.info("[CRONS] Starting to clear up messages");
 		const count = await purgeAllMessagesOlderThan30Days();
-		let fileCount: number = 0;
-		const path: string = `${__dirname}/../../files`;
+		let fileCount = 0;
+		const path = `${__dirname}/../../files`;
 		const files: string[] = readdirSync(path);
 		for (const file of files) {
 			if (file.endsWith(".gitignore")) continue;

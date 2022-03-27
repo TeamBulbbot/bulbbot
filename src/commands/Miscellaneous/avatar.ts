@@ -40,7 +40,7 @@ export default class extends Command {
 				);
 		}
 
-		let desc: string = "";
+		const desc = "";
 		let avatar: string | null = "";
 
 		if (isGuildMember) {

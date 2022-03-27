@@ -25,7 +25,7 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		switch (args[0].toLowerCase()) {
 			case "add":
-				let name: string | String;
+				let name: string | string;
 				try {
 					if (args[1] === "guild") name = (await this.client.guilds.fetch(args[2])).name;
 					else name = (await this.client.users.fetch(args[2])).tag;

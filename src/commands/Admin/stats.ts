@@ -80,7 +80,7 @@ function numberWithCommas(x: any): string {
 }
 
 function selectEmoji(ping: number): string {
-	let emoji: string = "";
+	let emoji = "";
 	if (ping >= 0 && ping <= 150) emoji = Emotes.other.GOOD;
 	else if (ping > 150 && ping <= 300) emoji = Emotes.other.MEDIUM;
 	else emoji = Emotes.other.BAD;

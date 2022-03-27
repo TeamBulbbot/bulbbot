@@ -42,8 +42,8 @@ export default class extends Command {
 		}
 
 		// @ts-ignore
-		let channel: TextChannel | NewsChannel | undefined = context.guild?.channels.cache.get(channelId);
-		if (channel?.type !== "GUILD_TEXT" && channel?.type !== "GUILD_NEWS" && !channel!?.permissionsFor(context.member!)?.has("VIEW_CHANNEL", true)) {
+		const channel: TextChannel | NewsChannel | undefined = context.guild?.channels.cache.get(channelId);
+		if (channel?.type !== "GUILD_TEXT" && channel?.type !== "GUILD_NEWS" && !channel?.permissionsFor(context.member!)?.has("VIEW_CHANNEL", true)) {
 			context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild!.id, {}),
@@ -69,7 +69,7 @@ export default class extends Command {
 			return;
 		}
 
-		const desc: String[] = [
+		const desc: string[] = [
 			`**ID:** ${message.id}`,
 			`**Author:** ${message.author.tag} \`(${message.author.id})\``,
 			`**Pinned:** ${message.pinned}`,

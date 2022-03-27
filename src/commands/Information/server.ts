@@ -67,12 +67,12 @@ export default class extends Command {
 		else if (guild.premiumTier === "TIER_2") boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_2", guild.id, { guild });
 		else if (guild.premiumTier === "TIER_3") boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_3", guild.id, { guild });
 
-		let guildRoles: Role[] = [];
-		let guildEmotes: Emoji[] = [];
-		let rolesLeft: number = 0;
-		let amountOfRoles: number = 0;
-		let emotesLeft: number = 0;
-		let amountOfEmotes: number = 0;
+		const guildRoles: Role[] = [];
+		const guildEmotes: Emoji[] = [];
+		let rolesLeft = 0;
+		let amountOfRoles = 0;
+		let emotesLeft = 0;
+		let amountOfEmotes = 0;
 		guild.roles.cache.forEach(role => {
 			amountOfRoles++;
 			if (guildRoles.join(" ").length <= 400) guildRoles.push(role);
@@ -88,7 +88,7 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setThumbnail(<string>context.guild?.iconURL({ dynamic: true }))
 			.setAuthor({
-				name: context.guild!?.name,
+				name: context.guild?.name,
 				iconURL: <string>context.guild?.iconURL({ dynamic: true }),
 			})
 			.addField(await this.client.bulbutils.translate("serverinfo_server_stats", guild.id, {}), serverStats, true)

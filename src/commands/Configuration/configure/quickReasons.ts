@@ -24,7 +24,7 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 		await client.bulbutils.translate("config_quick_reason_button_remove", interaction.guild?.id, {}),
 	];
 
-	let selectRow = new MessageActionRow().addComponents([
+	const selectRow = new MessageActionRow().addComponents([
 		new MessageSelectMenu()
 			.setCustomId("quickReasons")
 			.setPlaceholder(
@@ -37,7 +37,7 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 			.setDisabled(reasons.length === 0),
 	]);
 
-	let buttonRow = new MessageActionRow().addComponents([
+	const buttonRow = new MessageActionRow().addComponents([
 		new MessageButton().setCustomId("back").setLabel(back).setStyle("DANGER"),
 		new MessageButton()
 			.setCustomId("add")

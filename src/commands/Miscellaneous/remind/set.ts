@@ -84,7 +84,7 @@ export default class extends SubCommand {
 					// @ts-ignore
 					const channel: TextChannel = await this.client.bulbfetch.getChannel(this.client.channels, reminder.channelId);
 					let message: Message;
-					let options: MessageMentionOptions = {
+					const options: MessageMentionOptions = {
 						repliedUser: true,
 						users: [reminder.userId],
 					};

@@ -37,9 +37,9 @@ export default class extends Command {
 		let reason: string = args.slice(targets?.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
-		if (targets!!.length <= 1) {
+		if (targets!.length <= 1) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_multi_less_than_2", context.guild?.id, {
 					action: await this.client.bulbutils.translate("action_multi_types.warn", context.guild?.id, {}),
@@ -48,10 +48,10 @@ export default class extends Command {
 			return await this.client.commands.get("warn")!.run(context, args);
 		}
 
-		for (let i = 0; i < targets!!.length; i++) {
-			if (targets!![i] === undefined) continue;
+		for (let i = 0; i < targets!.length; i++) {
+			if (targets![i] === undefined) continue;
 
-			const t: string = targets!![i].replace(NonDigits, "");
+			const t: string = targets![i].replace(NonDigits, "");
 			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
 			let infID: number;
 

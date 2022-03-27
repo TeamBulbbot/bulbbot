@@ -13,7 +13,7 @@ export default class extends Event {
     async run(scheduledEvent: GuildScheduledEvent) {
         if(!scheduledEvent.guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
-        let msg: string = "";
+        let msg = "";
         const logs: GuildAuditLogs<"GUILD_SCHEDULED_EVENT_CREATE"> = await scheduledEvent.guild?.fetchAuditLogs({ limit: 1, type: "GUILD_SCHEDULED_EVENT_CREATE" });
         const first = logs.entries.first();
         if(!first) return;

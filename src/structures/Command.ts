@@ -1,7 +1,6 @@
 import BulbBotClient from "./BulbBotClient";
-import { BitField, GuildMember, PermissionString, GuildChannelResolvable } from "discord.js";
+import { BitField, GuildMember, PermissionString, GuildChannelResolvable , Permissions } from "discord.js";
 import CommandException from "./exceptions/CommandException";
-import { Permissions } from "discord.js";
 import SubCommand from "./SubCommand";
 import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
@@ -191,7 +190,7 @@ export default class Command {
 		if (!command) return;
 
 		for (let i = 1; i < commandPath.length; ++i) {
-			let currCommand = command;
+			const currCommand = command;
 			command = command!.resolveSubcommand(commandPath.slice(i));
 			if (command === currCommand) break;
 		}

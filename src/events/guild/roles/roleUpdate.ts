@@ -19,7 +19,7 @@ export default class extends Event {
 
 	public async run(oldRole: Role, newRole: Role): Promise<void> {
 		const config: GuildConfiguration = await databaseManager.getConfig(newRole.guild.id);
-		if (newRole.rawPosition > newRole.guild.me!!.roles.highest.rawPosition) {
+		if (newRole.rawPosition > newRole.guild.me!.roles.highest.rawPosition) {
 			if (newRole.id === config.muteRole) await databaseManager.setMuteRole(newRole.guild.id, null)
 			else if (newRole.id === config.autorole) await databaseManager.setAutoRole(newRole.guild.id, null)
 		}
@@ -58,7 +58,7 @@ export default class extends Event {
 			);
 		}
 
-		if (!!executor) {
+		if (executor) {
 			await loggingManager.sendEventLog(
 				this.client,
 				newRole.guild,

@@ -34,7 +34,7 @@ export default class {
 					}
 
 					let message: Message;
-					let options: any = {
+					const options: any = {
 						allowedMentions: {
 							repliedUser: true,
 							users: [reminder.userId],

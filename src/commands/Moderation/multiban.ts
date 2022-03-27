@@ -41,7 +41,7 @@ export default class extends Command {
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
 		if (targets.length <= 1) {
 			await context.channel.send(
@@ -63,7 +63,7 @@ export default class extends Command {
 			const t: Snowflake = targets[i].replace(NonDigits, "");
 			let infID: number;
 			let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
-			const notInGuild: boolean = !target;
+			const notInGuild = !target;
 
 			if (!notInGuild) {
 				if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;

@@ -23,7 +23,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let command: Command | undefined = Command.resolve(this.client, args);
+		const command: Command | undefined = Command.resolve(this.client, args);
 
 		if (!command) return;
 		if (command instanceof SubCommand) {
@@ -36,11 +36,11 @@ export default class extends SubCommand {
 		}
 		command.aliases.forEach(alias => this.client.aliases.delete(alias));
 
-		const cmdPath: string = `${command.category}\\${command.qualifiedName.replace(/ /g, "\\")}`;
-		const commandFile: string = `${process.cwd()}/build/commands/${cmdPath}.js`;
+		const cmdPath = `${command.category}\\${command.qualifiedName.replace(/ /g, "\\")}`;
+		const commandFile = `${process.cwd()}/build/commands/${cmdPath}.js`;
 		delete require.cache[require.resolve(commandFile)];
-		let { name } = path.parse(commandFile);
-		let File = require(commandFile);
+		const { name } = path.parse(commandFile);
+		const File = require(commandFile);
 		if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 		const loadedCommand = new File.default(this.client, command instanceof SubCommand ? command.parent : name);

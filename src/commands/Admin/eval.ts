@@ -22,7 +22,7 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
-		let embed = new MessageEmbed()
+		const embed = new MessageEmbed()
 			.setFooter({
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
@@ -35,11 +35,11 @@ export default class extends Command {
 		const code: string = args.join(" ");
 		let evaled: any;
 		let output: any;
-		let isFile: boolean = false;
+		let isFile = false;
 
 		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) ran eval with the code: ${code}`);
 
-		let description: string = `**Input**\n\`\`\`js\n${code}\n\`\`\``;
+		let description = `**Input**\n\`\`\`js\n${code}\n\`\`\``;
 
 		try {
 			evaled = await eval(code);
@@ -47,7 +47,7 @@ export default class extends Command {
 			description += `\n**Type:** ${typeof evaled}`;
 			if (typeof evaled !== "string") evaled = inspect(evaled);
 
-			evaled = evaled.replace(new RegExp(this.client.token!, "g"), `${Buffer.from(this.client.user!?.id).toString("base64")}.${genString(7)}.${genString(27)}`);
+			evaled = evaled.replace(new RegExp(this.client.token!, "g"), `${Buffer.from(this.client.user?.id).toString("base64")}.${genString(7)}.${genString(27)}`);
 
 			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {
@@ -88,9 +88,9 @@ export default class extends Command {
 }
 
 function genString(l: number) {
-	var res = "";
+	let res = "";
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (var i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+	for (let i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
 
 	return Buffer.from(res).toString("base64").substring(0, l);
 }

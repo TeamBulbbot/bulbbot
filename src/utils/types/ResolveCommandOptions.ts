@@ -24,7 +24,7 @@ export default class ResolveCommandOptions {
 	public isSubDev: boolean;
 
 	static async create(command: Command, context: CommandContext, args: string[], options: ResolveCommandOptionsOptions = {}): Promise<ResolveCommandOptions> {
-		let instance = new ResolveCommandOptions(command, context, args, options);
+		const instance = new ResolveCommandOptions(command, context, args, options);
 		instance.clearance = await clearanceManager.getUserClearance(context);
 		instance.premiumGuild = (await databaseManager.getConfig(context.guild!.id)).premiumGuild;
 		return instance;

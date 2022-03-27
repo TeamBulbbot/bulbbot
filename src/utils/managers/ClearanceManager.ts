@@ -27,7 +27,7 @@ export default class {
 		});
 	}
 
-	async setEnabled(guildID: Snowflake, name: string, enabled: boolean = true): Promise<void> {
+	async setEnabled(guildID: Snowflake, name: string, enabled = true): Promise<void> {
 		await sequelize.query('UPDATE "guildOverrideCommands" SET "enabled" = $Enabled WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID, CommandName: name, Enabled: enabled },
 			type: QueryTypes.UPDATE,
@@ -41,7 +41,7 @@ export default class {
 		});
 	}
 
-	async createCommandOverride(guildID: Snowflake, name: string, enabled: boolean = true, clearance: number): Promise<void> {
+	async createCommandOverride(guildID: Snowflake, name: string, enabled = true, clearance: number): Promise<void> {
 		await sequelize.query(
 			'INSERT INTO "guildOverrideCommands" (enabled, "commandName", "clearanceLevel", "createdAt", "updatedAt", "guildId") VALUES ($Enabled, $CommandName, $Clearance, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID))',
 			{
@@ -120,7 +120,7 @@ export default class {
 			type: QueryTypes.SELECT,
 		});
 
-		let clearance: number = 0;
+		let clearance = 0;
 		response.forEach(entry => {
 			if (entry.clearanceLevel > clearance && context.member?.roles.cache.find(r => r.id === entry.roleId)) clearance = entry.clearanceLevel;
 		});
@@ -131,14 +131,14 @@ export default class {
 	/** @deprecated */
 	async getUserClearanceFromInteraction(interaction: Interaction): Promise<number> {
 		if (interaction.guild?.ownerId === interaction.user.id) return 100;
-		if (!!(interaction.member?.permissions["bitfield"] & BigInt(8))) return 75;
+		if (interaction.member?.permissions["bitfield"] & BigInt(8)) return 75;
 
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: interaction.guild?.id },
 			type: QueryTypes.SELECT,
 		});
 
-		let clearance: number = 0;
+		let clearance = 0;
 		response.forEach(entry => {
 			if (entry.clearanceLevel > clearance && interaction.member?.roles["member"]["_roles"].includes(entry.roleId)) clearance = entry.clearanceLevel;
 		});

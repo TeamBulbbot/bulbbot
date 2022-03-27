@@ -24,7 +24,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[1]);
+		let amount = Number(args[1]);
 		const user: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, args[0].replace(NonDigits, ""));
 
 		if (!user)
@@ -40,8 +40,8 @@ export default class extends SubCommand {
 		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
 		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 
-		let deleteMsg: number[] = [];
-		let a: number = 0;
+		const deleteMsg: number[] = [];
+		let a = 0;
 
 		for (let i = 1; i <= amount; i++) {
 			if (i % 100 === 0) {
@@ -55,7 +55,7 @@ export default class extends SubCommand {
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
-		let messagesToPurge: Snowflake[] = [];
+		const messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
 		const twoWeeksAgo = moment().subtract(14, "days").unix();

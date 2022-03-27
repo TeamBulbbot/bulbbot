@@ -22,9 +22,9 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name: string = args[0];
-		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
+		if (!(await haveAccessToPool(context.guild?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
 		const data = await getPoolData(name);
-		let desc: string[] = [];
+		const desc: string[] = [];
 
 		for (let i = 0; i < data.length; i++) {
 			const guild = data[i];

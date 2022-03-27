@@ -31,8 +31,8 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let notInGuild: boolean = !target;
-		let infID: number = 0;
+		const notInGuild = !target;
+		let infID = 0;
 
 		if (!notInGuild) {
 			if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;

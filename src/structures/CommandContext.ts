@@ -797,7 +797,7 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
 					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : {...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true});
 					// @ts-ignore
-					let msg = r instanceof Message ? clone(r) : new Message(this.client, r);
+					const msg = r instanceof Message ? clone(r) : new Message(this.client, r);
 					msg.edit = async (content: string | MessageEditOptions | MessagePayload): Promise<Message> => {
 						let e: Message | APIMessage;
 						if(typeof content === "object" && "embeds" in content) {
@@ -864,7 +864,7 @@ export async function getCommandContext<T extends CommandContext, K extends T["c
 export async function getCommandContext<T extends ContextSource, K extends (T extends Message ? "message" : "interaction")>(source: T): Promise<Extract<InteractionCommandContext, { contextType: K; }> | Extract<MessageCommandContext, { contextType: K; }>>;
 export async function getCommandContext(source: ContextSource | CommandContext): Promise<CommandContext> {
 	if(isCommandContext(source)) return await getCommandContext(source.source);
-	let instance = source instanceof Message ? new MessageCommandContext(source) : new InteractionCommandContext(source);
+	const instance = source instanceof Message ? new MessageCommandContext(source) : new InteractionCommandContext(source);
 	instance.member = await resolveMember(instance.client, source.member ?? instance.user, instance.guild);
 	return instance;
 }

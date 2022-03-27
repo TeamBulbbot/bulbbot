@@ -27,11 +27,11 @@ export default class extends Command {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const startMessage = await context.channel.send(await this.client.bulbutils.translate("jumbo_start", context.guild?.id, {}));
 
-		const PATH: string = `${__dirname}/../../../files`;
-		const TWEMOJI_VERSION: string = "13.1.0";
+		const PATH = `${__dirname}/../../../files`;
+		const TWEMOJI_VERSION = "13.1.0";
 		let doesIncludeAnimatedEmoji = false;
 
-		const SIZE: number = 250;
+		const SIZE = 250;
 		const imgPath: any = [];
 		sharp.cache({ files: 0 });
 

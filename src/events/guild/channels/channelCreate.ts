@@ -13,7 +13,7 @@ export default class extends Event {
 	async run(channel: DMChannel | GuildChannel) {
 		if (!(channel instanceof GuildChannel)) return;
 
-		let msg: string = "";
+		let msg = "";
 		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
 			const logs: GuildAuditLogs<"CHANNEL_CREATE"> = await channel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_CREATE" });
 			const first = logs.entries.first();

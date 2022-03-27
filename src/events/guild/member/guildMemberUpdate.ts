@@ -62,7 +62,7 @@ export default class extends Event {
 				await infractionsManager.createInfraction(
 					newMember.guild.id,
 					"Mute",
-					<number>newMember.communicationDisabledUntilTimestamp!!,
+					<number>newMember.communicationDisabledUntilTimestamp!,
 					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					newMember.user,
 					<User>executor,
@@ -107,7 +107,7 @@ export default class extends Event {
 		switch (change) {
 			case "nickname":
 				part = "member";
-				if (auditLog?.changes && auditLog!!.changes[0].key === "nick") {
+				if (auditLog?.changes && auditLog!.changes[0].key === "nick") {
 					executor = auditLog.executor;
 					if (executor?.id === this.client.user!.id) return;
 

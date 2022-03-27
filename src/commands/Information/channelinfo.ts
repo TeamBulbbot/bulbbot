@@ -39,7 +39,7 @@ export default class extends Command {
 		}
 		const desc: string[] = [`**ID:** ${channel.id}`, `**Name:** ${channel.name}`, `**Mention:** <#${channel.id}>`];
 		channel.parentId !== null ? desc.push(`**Parent:** ${channel.parent?.name}`) : "";
-		let buttons: MessageButton[] = [];
+		const buttons: MessageButton[] = [];
 
 		if (channel.isText()) {
 			channel.lastMessageId !== null

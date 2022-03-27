@@ -415,7 +415,7 @@ export default class {
 		return response[0];
 	}
 
-	async addBlacklist(isGuild: boolean, name: String, snowflakeId: Snowflake, reason: String, developerId: Snowflake): Promise<void> {
+	async addBlacklist(isGuild: boolean, name: string, snowflakeId: Snowflake, reason: string, developerId: Snowflake): Promise<void> {
 		await sequelize.query(
 			'INSERT INTO blacklists ("isGuild", name, "snowflakeId", reason, "developerId", "createdAt", "updatedAt") VALUES ($isGuild, $name, $snowflakeId, $reason, $developerId, $createdAt, $updatedAt)',
 			{

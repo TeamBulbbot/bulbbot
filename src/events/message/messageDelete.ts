@@ -18,7 +18,7 @@ export default class extends Event {
 
 	public async run(message: Message): Promise<void> {
 		if (!message.guild) return;
-		let msg: string = "";
+		let msg = "";
 		let channel: TextBasedChannel;
 		let guild: Guild;
 		let author: User;

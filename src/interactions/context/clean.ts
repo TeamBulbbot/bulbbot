@@ -8,8 +8,8 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
 	let amount = 100;
-	let deleteMsg: number[] = [];
-	let a: number = 0;
+	const deleteMsg: number[] = [];
+	let a = 0;
 
 	for (let i = 1; i <= amount; i++) {
 		if (i % 100 === 0) {
@@ -21,7 +21,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 
 	let delMsgs = `Message purge in #${(<TextChannel>message.channel).name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
 
-	let messagesToPurge: Snowflake[] = [];
+	const messagesToPurge: Snowflake[] = [];
 	amount = 0;
 
 	for (let i = 0; i < deleteMsg.length; i++) {
