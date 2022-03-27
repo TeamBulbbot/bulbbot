@@ -1,3 +1,37 @@
+type LocalCode =
+	| "da"
+	| "de"
+	| "en-GB"
+	| "en-US"
+	| "es-ES"
+	| "fr"
+	| "hr"
+	| "it"
+	| "lt"
+	| "hu"
+	| "nl"
+	| "no"
+	| "pl"
+	| "pt-BR "
+	| "ro"
+	| "fi"
+	| "sv-SE"
+	| "vi"
+	| "tr"
+	| "cs"
+	| "el"
+	| "bg"
+	| "ru"
+	| "uk"
+	| "hi"
+	| "th"
+	| "zh-CN"
+	| "ja"
+	| "zh-TW"
+	| "ko";
+
+type Localization = { [key in LocalCode]?: string };
+
 export enum ApplicationCommandType {
 	CHAT_INPUT = 1,
 	USER = 2,
@@ -47,6 +81,8 @@ interface ApplicationCommandOptions {
 	min_value?: number;
 	max_value?: number;
 	autocomplete?: boolean;
+	name_localizations?: Localization;
+	description_localizations?: Localization;
 }
 
 export interface ApplicationCommand {
@@ -55,4 +91,6 @@ export interface ApplicationCommand {
 	options?: ApplicationCommandOptions[];
 	default_permission?: boolean;
 	type?: ApplicationCommandType;
+	name_localizations?: Localization;
+	description_localizations?: Localization;
 }

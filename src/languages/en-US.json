@@ -557,5 +557,19 @@
 
 	"commands_help": "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
 
-	"help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>"
+	"help_unable_to_find_command": "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>",
+
+	"slashcommand_about_name":"about", 
+	"slashcommand_about_description":"Returns more information about the bot",
+
+	"slashcommand_commands_name":"commands", 
+	"slashcommand_commands_description":"Return a list of all available commands for Bulbbot",
+
+	"slashcommand_github_name":"github", 
+	"slashcommand_github_description":"Returns the GitHub repository link",
+
+	"slashcommand_help_name":"help", 
+	"slashcommand_help_description":"Gets useful information about the provided command",
+	"slashcommand_help_command_name":"command",
+	"slashcommand_help_command_description":"The command you want to get more information for"
 }
