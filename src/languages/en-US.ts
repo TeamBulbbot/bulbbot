@@ -1,3 +1,7 @@
+// en-US source of truth
+// Edits to en-US should only be made to this file. The JSON file will be overwritten with
+// the contents of this file during compilation and pre-commit
+
 export default {
 	"global_executed_by": "Executed by {{user.tag}}",
 	"global_execution_cancel": "{{emote_fail}} Command execution cancelled",

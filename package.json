@@ -5,7 +5,7 @@
 	"main": "src/index.ts",
 	"scripts": {
 		"watch": "tsc -w",
-		"prestart": "tsc",
+		"prestart": "tsc && node ./scripts/writeEnUsJson.js",
 		"start": "node build/index.js",
 		"nobuild": "node build/index.js",
 		"dev": "nodemon build/index.js --ignore ./files",
