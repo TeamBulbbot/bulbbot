@@ -101,7 +101,7 @@ export default class {
 						<GuildMember>guild?.me,
 						await client.bulbutils.translate("global_mod_action_log", guild?.id, {
 							action: await client.bulbutils.translate("mod_action_types.auto_unban", guild?.id, {}),
-							moderator: client.user,
+							moderator: client.user!,
 							target: target,
 							reason: "Automatic unban",
 						}),

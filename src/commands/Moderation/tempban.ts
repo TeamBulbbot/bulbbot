@@ -65,7 +65,6 @@ export default class extends Command {
 				moderator: context.author,
 				target: target.user,
 				reason,
-				until: Date.now() + <number>parse(args[1]),
 			}),
 			reason,
 			Date.now() + <number>parse(args[1]),
@@ -102,7 +101,7 @@ export default class extends Command {
 				<GuildMember>context.guild?.me,
 				await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 					action: await client.bulbutils.translate("mod_action_types.auto_unban", context.guild?.id, {}),
-					moderator: client.user,
+					moderator: client.user!,
 					target: target.user,
 					reason: "Automatic unban",
 				}),

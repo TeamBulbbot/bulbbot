@@ -62,7 +62,6 @@ export default class extends Command {
 				moderator: context.author,
 				target: target.user,
 				reason,
-				until: Date.now() + <number>parse(args[1]),
 			}),
 			reason,
 			Date.now() + <number>parse(args[1]),

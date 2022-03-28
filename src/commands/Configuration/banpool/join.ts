@@ -24,7 +24,7 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const code: string = args[0];
-		const invite = this.client.banpoolInvites.get(code);
+		const invite = this.client.banpoolInvites.get(code) as { guild: any, banpool: any, inviter: any } & Record<string, any>;
 
 		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 		if (!invite) return context.channel.send(await this.client.bulbutils.translate("banpool_join_unable_to_find", context.guild?.id, {}));
@@ -40,7 +40,7 @@ export default class extends SubCommand {
 			await this.client.bulbutils.translate("banpool_join_log_og", context.guild?.id, {
 				user: context.user,
 				invite,
-				guild: context.guild,
+				guild: context.guild!,
 			}),
 		);
 		await sendEventLog(

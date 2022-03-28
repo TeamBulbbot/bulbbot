@@ -31,7 +31,6 @@ export default class extends SubCommand {
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -49,8 +48,8 @@ export default class extends SubCommand {
 		}
 
 		const user = await this.client.bulbfetch.getUser(inf.targetId);
-		const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
-		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
+		const target = { tag: inf.target, id: inf.targetId };
+		const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
 		let description: string = "";
 		description += await this.client.bulbutils.translate("infraction_info_inf_id", context.guild?.id, { infraction_id: args[0] });

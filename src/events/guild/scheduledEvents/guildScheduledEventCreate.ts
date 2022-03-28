@@ -17,7 +17,7 @@ export default class extends Event {
         const logs: GuildAuditLogs<"GUILD_SCHEDULED_EVENT_CREATE"> = await scheduledEvent.guild?.fetchAuditLogs({ limit: 1, type: "GUILD_SCHEDULED_EVENT_CREATE" });
         const first = logs.entries.first();
         if(!first) return;
-        
+
         const { executor, createdTimestamp } = first;
         const doesIncludeStartAndEnd = scheduledEvent.scheduledStartTimestamp && scheduledEvent.scheduledEndTimestamp;
         const doesIncludeDescription = scheduledEvent.description;
@@ -25,22 +25,22 @@ export default class extends Event {
 
         if(Date.now() < createdTimestamp + 3000) {
             msg = await this.client.bulbutils.translate(
-                doesIncludeBoth ? "event_guild_scheduled_event_create_moderator_both" : doesIncludeStartAndEnd 
-                ? "event_guild_scheduled_event_create_moderator_timestamp" : doesIncludeDescription 
+                doesIncludeBoth ? "event_guild_scheduled_event_create_moderator_both" : doesIncludeStartAndEnd
+                ? "event_guild_scheduled_event_create_moderator_timestamp" : doesIncludeDescription
                 ? "event_guild_scheduled_event_create_moderator_description" : "event_guild_scheduled_event_create_moderator_none",
                 scheduledEvent.guild?.id,
-                { scheduledEvent, moderator: executor },
+                { scheduledEvent, moderator: executor! },
             );
         }
 
         if(!msg) {
             msg = await this.client.bulbutils.translate(
-                doesIncludeBoth ? "event_guild_scheduled_event_create_both" : doesIncludeStartAndEnd 
-                ? "event_guild_scheduled_event_create_timestamp" : doesIncludeDescription 
+                doesIncludeBoth ? "event_guild_scheduled_event_create_both" : doesIncludeStartAndEnd
+                ? "event_guild_scheduled_event_create_timestamp" : doesIncludeDescription
                 ? "event_guild_scheduled_event_create_description" : "event_guild_scheduled_event_create_none",
                 scheduledEvent.guild?.id,
                 { scheduledEvent }
-            );   
+            );
         }
 
         await loggingManager.sendEventLog(this.client, scheduledEvent.guild!, "other", msg);

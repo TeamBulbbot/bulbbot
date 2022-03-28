@@ -78,6 +78,8 @@ export default class extends Command {
 			);
 			let totalBans: number = 0;
 
+			if(!target) return;
+
 			for (let i = 0; i < poolGuilds.length; i++) {
 				const guildId = poolGuilds[i];
 				const guild: Guild = await this.client.guilds.fetch(guildId);

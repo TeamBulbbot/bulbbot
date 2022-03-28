@@ -4,9 +4,10 @@ import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
-import i18next, { TOptions } from "i18next";
+import i18next from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
+import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
 import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from './types/GuildFeaturesDescriptions';
 
@@ -19,7 +20,7 @@ export default class {
 		this.client = client;
 	}
 
-	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
+	public async translate<T extends TranslateString>(string: T, guildID: Snowflake = "742094927403679816", options: DeepAccess<TranslateOptions, T> = {} as any): Promise<string> {
 		const language = (await databaseManager.getConfig(guildID))["language"];
 		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
 
@@ -218,7 +219,7 @@ export default class {
 		// here are two exclusive cases, that use the same message as the other ones
 		if (handle == 5) await context.channel.send(await this.translate('global_cannot_action_role_equal', context.guild?.id, { target: user }));
 		if (handle == 7) await context.channel.send(await this.translate('global_cannot_action_role_equal_bot', context.guild?.id, { target: user }));
-		
+
 		// @ts-ignore
 		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
 		return true;

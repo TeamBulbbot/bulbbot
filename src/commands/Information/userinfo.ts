@@ -5,7 +5,7 @@ import axios from "axios";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
-import { discordApi, embedColor } from "../../Config";
+import { discordApi, embedColor, supportInvite } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 
@@ -141,13 +141,13 @@ export default class extends Command {
 
 			const infs = await infractionsManager.getOffenderInfractions(<string>context.guild?.id, user.id);
 			if (infs) {
-				let inf_emoji;
+				let inf_emote;
 
-				if (infs.length <= 1) inf_emoji = Emotes.status.ONLINE;
-				else if (infs.length === 2) inf_emoji = Emotes.other.INF1;
-				else inf_emoji = Emotes.other.INF2;
+				if (infs.length <= 1) inf_emote = Emotes.status.ONLINE;
+				else if (infs.length === 2) inf_emote = Emotes.other.INF1;
+				else inf_emote = Emotes.other.INF2;
 
-				description += await this.client.bulbutils.translate("userinfo_embed_infractions", context.guild?.id, { emote_inf: inf_emoji, user_infractions: infs.length });
+				description += await this.client.bulbutils.translate("userinfo_embed_infractions", context.guild?.id, { inf_emote, user_infractions: infs.length });
 			}
 
 			let color;
@@ -178,14 +178,14 @@ export default class extends Command {
 			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
 				if (interaction.user.id !== context.author.id)
 					return void (await interaction.reply({
-						content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId!, {}),
+						content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId!, { abc: 1 }),
 						ephemeral: true,
 					}));
 
 				const command = Command.resolve(this.client, interaction.customId);
 				if (!command)
 					return void (await interaction.reply({
-						content: await this.client.bulbutils.translate("global_error.unknown", context.guildId!, {}),
+						content: await this.client.bulbutils.translate("global_error.unknown", context.guildId!, { discord_invite: supportInvite }),
 						ephemeral: true,
 					}));
 

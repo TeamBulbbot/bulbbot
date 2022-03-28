@@ -52,7 +52,7 @@ export default class extends Command {
 		if (bannedUser) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("already_banned", context.guild?.id, {
-					target,
+					target: target.user,
 					reason: bannedUser.reason,
 				}),
 			);
@@ -68,7 +68,7 @@ export default class extends Command {
 			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
 				moderator: context.author,
-				target,
+				target: target.user,
 				reason,
 			}),
 			reason,

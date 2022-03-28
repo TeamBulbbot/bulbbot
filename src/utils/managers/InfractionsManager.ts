@@ -268,7 +268,6 @@ export default class {
 				moderator: moderator.user,
 				reason: reason,
 				infraction_id: infID,
-				client: client,
 			}),
 		);
 
