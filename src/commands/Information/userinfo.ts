@@ -178,7 +178,7 @@ export default class extends Command {
 			collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
 				if (interaction.user.id !== context.author.id)
 					return void (await interaction.reply({
-						content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId!, { abc: 1 }),
+						content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId!, {}),
 						ephemeral: true,
 					}));
 

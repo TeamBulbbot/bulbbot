@@ -1,11 +1,13 @@
 // This file is JS rather than TS so that we don't have to compile it
 const fs = require("fs");
+// This is the TS source file, after passing through the compiler (which shouldn't modify it other than removing types)
 const { default: en_US } = require("../build/languages/en-US.js");
+// This is the current "en-US.json", which may be out of sync with en-US.ts
 const current = require("../build/languages/en-US.json");
 const prettier = require('prettier');
 const path = require("path");
 
-if(typeof en_US === "undefined" || !en_US) throw new Error("Cannot find en-US source file");
+if(!en_US) throw new Error("Cannot find en-US source file");
 
 const prettierOptions = {
 	printWidth: 200,
