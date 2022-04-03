@@ -19,7 +19,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod", guildID, {
@@ -41,7 +41,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_unban_auto", guild.id, {
@@ -64,7 +64,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send({
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${await this.betterActions(client, guild.id, "trash")} **${moderator.tag}** \`(${
@@ -86,7 +86,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_temp", guild.id, {
@@ -109,7 +109,7 @@ export default class {
 		if (!dbGuild || dbGuild.other === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.other) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_command", guild.id, {
@@ -151,7 +151,7 @@ export default class {
 		if (dbGuild.modAction === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
@@ -164,7 +164,7 @@ export default class {
 		if (dbGuild.automod === null) return;
 
 		const modChannel = client.channels.cache.get(dbGuild.automod) as Channel;
-		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		let files: any = null;
 

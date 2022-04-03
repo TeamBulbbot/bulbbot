@@ -90,9 +90,9 @@ export default class extends Command {
 		});
 
 		const filter = (i: MessageComponentInteraction) => i.user.id === context.user.id;
-		const collector = context.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+		const collector = context.channel.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
-		collector?.on("collect", async (i: MessageComponentInteraction) => {
+		collector.on("collect", async (i: MessageComponentInteraction) => {
 			if (i.isSelectMenu()) {
 				await require(`./configure/${i.values[0]}`).default(i, this.client);
 			}

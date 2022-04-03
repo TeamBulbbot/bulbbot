@@ -25,8 +25,8 @@ export default class extends Event {
 			guild: inv.guild,
 			code: inv.code,
 			inviter: {
-				tag: inv.inviter !== null ? inv.inviter?.tag : "Server Widget",
-				id: inv.inviter !== null ? inv.inviter?.id : "N/A",
+				tag: inv.inviter !== null ? inv.inviter.tag : "Server Widget",
+				id: inv.inviter !== null ? inv.inviter.id : "N/A",
 			},
 		};
 

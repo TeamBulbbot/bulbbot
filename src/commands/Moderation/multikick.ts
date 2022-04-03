@@ -62,12 +62,12 @@ export default class extends Command {
 			await this.client.bulbutils.sleep(massCommandSleep);
 
 			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
+			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild.members, t);
 
 			if (!target) {
 				await context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
+					await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+						type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild.id, {}),
 						arg_provided: t,
 						arg_expected: "member:Member",
 						usage: this.usage,
@@ -79,11 +79,11 @@ export default class extends Command {
 
 			const infID = await infractionsManager.kick(
 				this.client,
-				context.guild?.id,
+				context.guild.id,
 				target,
 				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild.id, {}),
 					moderator: context.author,
 					target: target.user,
 					reason,
@@ -98,8 +98,8 @@ export default class extends Command {
 		if (!fullList.length) return;
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_multi", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild.id, {}),
 				full_list: fullList.join(", "),
 				reason,
 			}),

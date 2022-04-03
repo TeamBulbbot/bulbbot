@@ -41,12 +41,12 @@ export default class extends Command {
 				}),
 			);
 
-		const banList = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find((user) => user.user.id === targetID);
+		const banList = await context.guild.bans.fetch();
+		const bannedUser = banList.find((user) => user.user.id === targetID);
 
-		if (!bannedUser) return context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
+		if (!bannedUser) return context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild.id, { target }));
 
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild.id, {});
 
 		const infID = await infractionsManager.unban(
 			this.client,
@@ -54,8 +54,8 @@ export default class extends Command {
 			BanType.MANUAL,
 			target,
 			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild.id, {}),
 				moderator: context.author,
 				target,
 				reason,
@@ -64,8 +64,8 @@ export default class extends Command {
 		);
 
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild.id, {}),
 				target,
 				reason,
 				infraction_id: infID,

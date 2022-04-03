@@ -40,15 +40,15 @@ export default class extends Command {
 
 		if (!target)
 			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 					arg_expected: "user:User",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
 			);
 
-		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild?.id);
+		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild.id);
 		const options: Promise<MessageSelectOptionData>[] = pools.map(async (pool) => {
 			const data = await getPoolData(pool.name);
 
@@ -66,7 +66,7 @@ export default class extends Command {
 				.addOptions(await Promise.all(options))
 				.setMinValues(1),
 		);
-		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild?.id, {}) });
+		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild.id, {}) });
 		const compCollector = banpoolSelect.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 60_000 });
 
 		compCollector.on("collect", async (interaction: SelectMenuInteraction) => {
@@ -82,7 +82,7 @@ export default class extends Command {
 			for (let i = 0; i < poolGuilds.length; i++) {
 				const guildId = poolGuilds[i];
 				const guild: Guild = await this.client.guilds.fetch(guildId);
-				if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild?.id, {});
+				if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild.id, {});
 
 				if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
 
@@ -129,7 +129,7 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 		client,
 		guild,
 		"banpool",
-		await client.bulbutils.translate("crossban_reason", guild?.id, {
+		await client.bulbutils.translate("crossban_reason", guild.id, {
 			emoji: Emotes.actions.BAN,
 			target,
 			startedGuild,
@@ -140,7 +140,7 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 	);
 
 	guild.members.ban(target, {
-		reason: await client.bulbutils.translate("crossban_reason_audit", guild?.id, {
+		reason: await client.bulbutils.translate("crossban_reason_audit", guild.id, {
 			startedGuild,
 			moderator,
 			reason,

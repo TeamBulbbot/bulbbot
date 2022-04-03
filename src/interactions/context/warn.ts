@@ -35,7 +35,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 
 		const infID = await infractionsManager.warn(
 			client,
-			interaction.guild?.id,
+			interaction.guild.id,
 			target.user,
 			interaction.member as GuildMember,
 			await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
@@ -48,8 +48,8 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 		);
 
 		await i.update({
-			content: await client.bulbutils.translate("action_success", interaction.guild?.id, {
-				action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild?.id, {}),
+			content: await client.bulbutils.translate("action_success", interaction.guild.id, {
+				action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild.id, {}),
 				target: message.author,
 				moderator: interaction.user,
 				reason: i.values[0],

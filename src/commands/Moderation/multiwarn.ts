@@ -34,7 +34,7 @@ export default class extends Command {
 				}),
 			);
 
-		let reason: string = args.slice(targets?.length).join(" ").replace(UserMentionAndID, "");
+		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		const fullList: string[] = [];
@@ -54,12 +54,12 @@ export default class extends Command {
 			if (targets[i] === undefined) continue;
 
 			const t: string = targets[i].replace(NonDigits, "");
-			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
+			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild.members, t);
 
 			if (!target) {
 				await context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
+					await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+						type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild.id, {}),
 						arg_expected: "member:Member",
 						arg_provided: t,
 						usage: this.usage,
@@ -71,11 +71,11 @@ export default class extends Command {
 
 			const infID = await infractionsManager.warn(
 				this.client,
-				context.guild?.id,
+				context.guild.id,
 				target.user,
 				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
 					moderator: context.author,
 					target: target.user,
 					reason,
@@ -89,8 +89,8 @@ export default class extends Command {
 		if (!fullList.length) return;
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_multi", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
 				full_list: fullList.join(", "),
 				reason,
 			}),

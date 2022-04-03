@@ -48,14 +48,14 @@ export default class extends Event {
 				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));
 
 			const channel = this.client.guilds.cache.get(context.guild.id)?.channels.cache.get(context.channelId);
-			const message = channel?.isText() && (await channel.messages?.fetch(interaction.targetId));
+			const message = channel?.isText() && (await channel.messages.fetch(interaction.targetId));
 
 			if (
 				!message ||
 				!interaction.guild ||
 				(await this.client.bulbutils.resolveUserHandleFromInteraction(
 					interaction,
-					await this.client.bulbutils.checkUserFromInteraction(interaction, await interaction.guild?.members.fetch(message.author.id)),
+					await this.client.bulbutils.checkUserFromInteraction(interaction, await interaction.guild.members.fetch(message.author.id)),
 					message.author,
 				))
 			)

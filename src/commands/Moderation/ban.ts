@@ -95,8 +95,8 @@ export default class extends Command {
 						BanType.FORCE,
 						target,
 						context.member,
-						await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
+						await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild.id, {}),
 							moderator: context.author,
 							target,
 							reason,
@@ -105,8 +105,8 @@ export default class extends Command {
 					);
 
 					return await interaction.update({
-						content: await this.client.bulbutils.translate("action_success", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+						content: await this.client.bulbutils.translate("action_success", context.guild.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 							target,
 							reason,
 							infraction_id: infID,
@@ -115,7 +115,7 @@ export default class extends Command {
 					});
 				} else {
 					collector.stop("clicked");
-					return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+					return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
 				}
 			});
 
@@ -135,8 +135,8 @@ export default class extends Command {
 				BanType.NORMAL,
 				target,
 				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 					moderator: context.author,
 					target,
 					reason,
@@ -145,8 +145,8 @@ export default class extends Command {
 			);
 
 			await context.channel.send(
-				await this.client.bulbutils.translate("action_success", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+				await this.client.bulbutils.translate("action_success", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 					target,
 					reason,
 					infraction_id: infID,

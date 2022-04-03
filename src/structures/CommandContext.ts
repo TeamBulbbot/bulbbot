@@ -451,7 +451,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this._prefix = null;
 		this.client = source.client;
 		this.channel = clone(source.channel);
-		this.channelId = this.channel?.id ?? null;
+		this.channelId = this.channel.id ?? null;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
 		this.createdAt = source.createdAt;
@@ -628,7 +628,7 @@ class InteractionCommandContext implements BaseCommandContext {
 	public webhook: InteractionWebhook | null;
 	public get ephemeral(): boolean | null {
 		// @ts-expect-error
-		return this.source?.ephemeral ?? null;
+		return this.source.ephemeral ?? null;
 	}
 	public set ephemeral(e: boolean | null) {
 		// @ts-expect-error
@@ -821,7 +821,7 @@ class InteractionCommandContext implements BaseCommandContext {
 		// Nah this is funny
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.channel = source.channel ? clone(source.channel) : null!;
-		this.channelId = this.channel?.id ?? source.channelId;
+		this.channelId = this.channel.id ?? source.channelId;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
 		this.createdAt = source.createdAt;

@@ -86,13 +86,13 @@ export default class {
 	}
 
 	async resolveActionWithoutContext(client: BulbBotClient, member: GuildMember, action: string, reason: string): Promise<string> {
-		if (!member.guild?.id || !member.guild.me) {
+		if (!member.guild.id || !member.guild.me) {
 			client.log.error(`[Auto Mod Manager] Guild is null, reason: ${reason}, target ${member.user.tag} (${member.user.id})`);
 			return "LOG";
 		}
 
 		if (action === null) {
-			client.log.error(`[Auto Mod Manager] Action is null in ${member.guild?.id}, reason: ${reason}, target ${member.user.tag} (${member.user.id})`);
+			client.log.error(`[Auto Mod Manager] Action is null in ${member.guild.id}, reason: ${reason}, target ${member.user.tag} (${member.user.id})`);
 			return "LOG";
 		}
 

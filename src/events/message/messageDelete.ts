@@ -83,7 +83,7 @@ export default class extends Event {
 			});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`, content);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`, content);
 			await loggingManager.sendEventLog(
 				this.client,
 				guild,
@@ -94,7 +94,7 @@ export default class extends Event {
 					message,
 					channel,
 				}),
-				`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
 	}

@@ -49,7 +49,7 @@ export default class extends Event {
 		});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
 			await loggingManager.sendEventLog(
 				this.client,
 				newMessage.guild,
@@ -60,7 +60,7 @@ export default class extends Event {
 					message: newMessage,
 					channel: newMessage.channel,
 				}),
-				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
 

@@ -28,8 +28,8 @@ export default class extends SubCommand {
 
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild.id, {}),
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -38,7 +38,7 @@ export default class extends SubCommand {
 
 		if (!(await infractionsManager.getInfraction(context.guild.id, Number(args[0].replace(NonDigits, ""))))) {
 			return context.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", context.guild?.id, {
+				await this.client.bulbutils.translate("infraction_not_found", context.guild.id, {
 					infraction_id: args[0],
 				}),
 			);
@@ -46,6 +46,6 @@ export default class extends SubCommand {
 
 		const reason = args.slice(1).join(" ");
 		await infractionsManager.updateReason(context.guild.id, Number(args[0]), reason);
-		return context.channel.send(await this.client.bulbutils.translate("infraction_update_success", context.guild?.id, { infraction_id: args[0] }));
+		return context.channel.send(await this.client.bulbutils.translate("infraction_update_success", context.guild.id, { infraction_id: args[0] }));
 	}
 }

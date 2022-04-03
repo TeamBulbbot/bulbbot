@@ -36,7 +36,7 @@ export default class extends Event {
 			// If newMember is muted check if the executor is bot. If not, log as manual mute
 			// If newMember is not muted check if the executor is bot. If not, log as manual unmute, else log as auto mute
 			if (newMember.communicationDisabledUntilTimestamp === null && executor) {
-				if (executor?.id !== this.client.user?.id) {
+				if (executor.id !== this.client.user?.id) {
 					await infractionsManager.createInfraction(
 						newMember.guild.id,
 						"Unmute",
@@ -48,7 +48,7 @@ export default class extends Event {
 					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Unmute");
 					await loggingManager.sendModAction(
 						this.client,
-						newMember.guild?.id,
+						newMember.guild.id,
 						await this.client.bulbutils.translate("mod_action_types.unmute", newMember.guild.id, {}),
 						newMember.user,
 						executor,
@@ -57,7 +57,7 @@ export default class extends Event {
 					);
 				}
 			} else {
-				if (!executor?.id || executor?.id === this.client.user?.id || newMember.communicationDisabledUntilTimestamp === null) return;
+				if (!executor?.id || executor.id === this.client.user?.id || newMember.communicationDisabledUntilTimestamp === null) return;
 
 				await infractionsManager.createInfraction(
 					newMember.guild.id,

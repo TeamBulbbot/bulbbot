@@ -49,8 +49,8 @@ export default class extends Command {
 			context.guild,
 			target,
 			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.deafen", context.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.deafen", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
@@ -59,8 +59,8 @@ export default class extends Command {
 		);
 
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.deafen", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.deafen", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

@@ -40,7 +40,7 @@ export default class extends Command {
 		const targetID: Snowflake = match[1] ?? match[2];
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		const nickmatch = QuoteMarked.exec(argString);
-		const nickname: string = (nickmatch ? nickmatch[1] : args[1])?.trim() ?? "";
+		const nickname: string = (nickmatch ? nickmatch[1] : args[1]).trim() ?? "";
 		const reason: string =
 			args
 				.slice(1 + nickname.split(" ").length)
@@ -72,7 +72,7 @@ export default class extends Command {
 				context.guild,
 				target,
 				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
 					action: nickname ? "Nickname changed" : "Nickname removed",
 					moderator: context.author,
 					target: target.user,
@@ -84,11 +84,11 @@ export default class extends Command {
 			);
 		} catch (e: any) {
 			console.error(e.stack);
-			return context.channel.send(await this.client.bulbutils.translate("nickname_fail", context.guild?.id, { target: target.user }));
+			return context.channel.send(await this.client.bulbutils.translate("nickname_fail", context.guild.id, { target: target.user }));
 		}
 
 		return context.channel.send(
-			await this.client.bulbutils.translate(nickname ? "nickname_success" : "nickname_remove_success", context.guild?.id, {
+			await this.client.bulbutils.translate(nickname ? "nickname_success" : "nickname_remove_success", context.guild.id, {
 				target: target.user,
 				nick_old: nickOld,
 				nick_new: nickname,

@@ -27,8 +27,8 @@ export default class extends SubCommand {
 		const name: string = args[1];
 
 		if (!(context.guild?.id && (await hasBanpoolLog(context.guild.id)))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (!(await haveAccessToPool(context.guild.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
-		if (!(await isGuildInPool(guildId, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_remove_not_found", context.guild?.id, {}));
+		if (!(await haveAccessToPool(context.guild.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild.id, {}));
+		if (!(await isGuildInPool(guildId, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_remove_not_found", context.guild.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
@@ -36,7 +36,7 @@ export default class extends SubCommand {
 		]);
 
 		const confirmMsg = await context.channel.send({
-			content: await this.client.bulbutils.translate("banpool_remove_message", context.guild?.id, {}),
+			content: await this.client.bulbutils.translate("banpool_remove_message", context.guild.id, {}),
 			components: [row],
 		});
 

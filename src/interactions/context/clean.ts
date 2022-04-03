@@ -20,7 +20,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	if (amount - a !== 0) deleteMsg.push(amount - a);
 
 	if (!("name" in message.channel) || !message.guild) return;
-	let delMsgs = `Message purge in #${message.channel?.name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
+	let delMsgs = `Message purge in #${message.channel.name} (${message.channel.id}) by ${message.author.tag} (${message.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
 
 	const messagesToPurge: Snowflake[] = [];
 	amount = 0;
@@ -41,11 +41,11 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 
 	await message.channel.bulkDelete(messagesToPurge);
 
-	fs.writeFile(`${__dirname}/../../../files/PURGE-${message.guild?.id}.txt`, delMsgs, function (err) {
+	fs.writeFile(`${__dirname}/../../../files/PURGE-${message.guild.id}.txt`, delMsgs, function (err) {
 		if (err) console.error(err);
 	});
 
-	await loggingManager.sendModActionFile(client, message.guild, "Purge", amount, `${__dirname}/../../../files/PURGE-${message.guild?.id}.txt`, message.channel, message.author);
+	await loggingManager.sendModActionFile(client, message.guild, "Purge", amount, `${__dirname}/../../../files/PURGE-${message.guild.id}.txt`, message.channel, message.author);
 
-	await interaction.reply({ content: await client.bulbutils.translate("purge_success", message.guild?.id, { count: amount }), ephemeral: true });
+	await interaction.reply({ content: await client.bulbutils.translate("purge_success", message.guild.id, { count: amount }), ephemeral: true });
 }

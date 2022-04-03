@@ -127,7 +127,7 @@ export default class {
 		if (context.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return 75;
 
 		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: context.guild?.id },
+			bind: { GuildID: context.guild.id },
 			type: QueryTypes.SELECT,
 		});
 

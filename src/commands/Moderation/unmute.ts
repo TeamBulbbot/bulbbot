@@ -42,7 +42,7 @@ export default class extends Command {
 			);
 
 		if (!context.guild || (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user))) return;
-		if (target.communicationDisabledUntilTimestamp === null) return context.channel.send(await this.client.bulbutils.translate("mute_not_muted", context.guild?.id, { target: target.user }));
+		if (target.communicationDisabledUntilTimestamp === null) return context.channel.send(await this.client.bulbutils.translate("mute_not_muted", context.guild.id, { target: target.user }));
 
 		const infID = await infractionsManager.unmute(
 			this.client,
@@ -50,8 +50,8 @@ export default class extends Command {
 			MuteType.MANUAL,
 			target,
 			context.author,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unmute", context.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unmute", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason: reason,
@@ -60,8 +60,8 @@ export default class extends Command {
 		);
 
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unmute", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unmute", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

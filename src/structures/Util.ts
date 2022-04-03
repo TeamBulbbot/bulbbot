@@ -69,7 +69,7 @@ export default class {
 					try {
 						await event.run(...args);
 					} catch (err: any) {
-						await this.client.bulbutils.logError(err, undefined, event?.name ?? name ?? eventFile ?? "Unknown Event", args);
+						await this.client.bulbutils.logError(err, undefined, event.name ?? name ?? eventFile ?? "Unknown Event", args);
 					}
 				});
 			}

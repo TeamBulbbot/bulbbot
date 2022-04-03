@@ -15,7 +15,7 @@ export default class extends Event {
 	public async run(invite: Invite): Promise<void> {
 		// @ts-expect-error
 		const guild: Guild = invite.guild;
-		if (!guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
+		if (!guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
 		const logs: GuildAuditLogs<"INVITE_DELETE"> = await guild.fetchAuditLogs({ limit: 1, type: "INVITE_DELETE" });
 		const first = logs.entries.first();

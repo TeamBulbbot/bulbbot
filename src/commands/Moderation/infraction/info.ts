@@ -30,8 +30,8 @@ export default class extends SubCommand {
 
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild.id, {}),
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -42,7 +42,7 @@ export default class extends SubCommand {
 
 		if (!inf) {
 			return context.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", context.guild?.id, {
+				await this.client.bulbutils.translate("infraction_not_found", context.guild.id, {
 					infraction_id: args[0].replace(NonDigits, ""),
 				}),
 			);
@@ -53,24 +53,24 @@ export default class extends SubCommand {
 		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
 
 		let description = "";
-		description += await this.client.bulbutils.translate("infraction_info_inf_id", context.guild?.id, { infraction_id: args[0] });
-		description += await this.client.bulbutils.translate("infraction_info_target", context.guild?.id, { target });
-		description += await this.client.bulbutils.translate("infraction_info_moderator", context.guild?.id, { moderator });
-		description += await this.client.bulbutils.translate("infraction_info_created", context.guild?.id, {
+		description += await this.client.bulbutils.translate("infraction_info_inf_id", context.guild.id, { infraction_id: args[0] });
+		description += await this.client.bulbutils.translate("infraction_info_target", context.guild.id, { target });
+		description += await this.client.bulbutils.translate("infraction_info_moderator", context.guild.id, { moderator });
+		description += await this.client.bulbutils.translate("infraction_info_created", context.guild.id, {
 			created: moment(Date.parse(inf.createdAt)).format("MMM Do YYYY, h:mm:ss a"),
 		});
 
 		if (inf.active !== "false" && inf.active !== "true") {
-			description += await this.client.bulbutils.translate("infraction_info_expires", context.guild?.id, {
+			description += await this.client.bulbutils.translate("infraction_info_expires", context.guild.id, {
 				expires: `${Emotes.status.ONLINE} ${moment(parseInt(inf.active)).format("MMM Do YYYY, h:mm:ss a")}`,
 			});
 		} else {
-			description += await this.client.bulbutils.translate("infraction_info_active", context.guild?.id, {
+			description += await this.client.bulbutils.translate("infraction_info_active", context.guild.id, {
 				active: this.client.bulbutils.prettify(inf.active),
 			});
 		}
 
-		description += await this.client.bulbutils.translate("infraction_info_reason", context.guild?.id, { reason: inf.reason });
+		description += await this.client.bulbutils.translate("infraction_info_reason", context.guild.id, { reason: inf.reason });
 
 		const image = inf.reason.match(ReasonImage);
 
@@ -82,7 +82,7 @@ export default class extends SubCommand {
 			.setImage(image ? image[0] : "")
 			.setThumbnail(user?.avatarURL({ dynamic: true }) || "")
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, { user: context.author }),
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, { user: context.author }),
 				iconURL: context.author.avatarURL() || "",
 			})
 			.setTimestamp();

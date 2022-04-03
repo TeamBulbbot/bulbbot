@@ -39,16 +39,16 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild?.id, { target: target.user }));
-		if (!target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("undeafen_not_deaf", context.guild?.id, { target: target.user }));
+		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild.id, { target: target.user }));
+		if (!target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("undeafen_not_deaf", context.guild.id, { target: target.user }));
 
 		const infID = await infractionsManager.undeafen(
 			this.client,
 			context.guild,
 			target,
 			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
@@ -57,8 +57,8 @@ export default class extends Command {
 		);
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

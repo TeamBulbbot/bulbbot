@@ -35,10 +35,10 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
 		if (i.isButton()) {
 			if (i.customId === "back") {
-				collector?.stop();
+				collector.stop();
 				return require("../automod").default(i, client);
 			} else if (i.customId === "update") {
-				collector?.stop();
+				collector.stop();
 				const messageFilter = (m: Message) => m.author.id === interaction.user.id;
 				const messageCollector = interaction.channel?.createMessageCollector({ filter: messageFilter, time: 60000, max: 1 });
 				await interaction.followUp({
@@ -107,7 +107,7 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 				});
 			}
 		} else if (i.isSelectMenu()) {
-			collector?.stop();
+			collector.stop();
 			return limit(i, client, i.values[0]);
 		}
 	});

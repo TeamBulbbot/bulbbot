@@ -48,9 +48,9 @@ export default class extends Command {
 
 		if (args[1] === "true") {
 			await context.channel.send(await this.client.bulbutils.translate("lockdown_locked", context.guild.id, { channel }));
-			return channel?.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: false });
+			return channel.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: false });
 		} else {
-			await channel?.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: null });
+			await channel.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: null });
 			return await context.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", context.guild.id, { channel }));
 		}
 	}

@@ -43,14 +43,14 @@ export default class extends SubCommand {
 		const options: any[] = [];
 		const infs: Infraction[] = (await infractionManager.getAllUserInfractions(context.guild.id, user.id, page)) || [];
 
-		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild?.id, { target: user }));
+		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild.id, { target: user }));
 
 		for (let i = 0; i < 25; i++) {
-			if (infs?.[i] === undefined) continue;
+			if (infs[i] === undefined) continue;
 
 			options.push({
 				label: `${infs[i].action} (#${infs[i].id})`,
-				description: await this.client.bulbutils.translate("infraction_interaction_description", context.guild?.id, {}),
+				description: await this.client.bulbutils.translate("infraction_interaction_description", context.guild.id, {}),
 				value: `inf_${infs[i].id}`,
 				emoji: this.client.bulbutils.formatAction(infs[i].action),
 			});
@@ -58,13 +58,13 @@ export default class extends SubCommand {
 
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
-				.setPlaceholder(await this.client.bulbutils.translate("infraction_interaction_placeholder", context.guild?.id, {}))
+				.setPlaceholder(await this.client.bulbutils.translate("infraction_interaction_placeholder", context.guild.id, {}))
 				.setCustomId("infraction")
 				.addOptions(options),
 		);
 
 		return await context.channel.send({
-			content: await this.client.bulbutils.translate("infraction_interaction_reply", context.guild?.id, {
+			content: await this.client.bulbutils.translate("infraction_interaction_reply", context.guild.id, {
 				target: user,
 			}),
 			components: [row],

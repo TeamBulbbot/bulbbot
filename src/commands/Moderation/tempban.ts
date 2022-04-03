@@ -62,8 +62,8 @@ export default class extends Command {
 			context.guild,
 			target,
 			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,

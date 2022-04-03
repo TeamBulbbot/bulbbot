@@ -43,7 +43,7 @@ export default class extends Command {
 		}
 
 		const channel = context.guild?.channels.cache.get(channelId);
-		if (!channel || !context.member || (channel?.type !== "GUILD_TEXT" && channel?.type !== "GUILD_NEWS" && !channel?.permissionsFor(context.member)?.has("VIEW_CHANNEL", true))) {
+		if (!channel || !context.member || (channel.type !== "GUILD_TEXT" && channel.type !== "GUILD_NEWS" && !channel.permissionsFor(context.member).has("VIEW_CHANNEL", true))) {
 			context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),

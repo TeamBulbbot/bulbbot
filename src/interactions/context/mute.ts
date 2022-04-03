@@ -42,8 +42,8 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			message.guild,
 			target,
 			interaction.member as GuildMember,
-			await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-				action: await client.bulbutils.translate("mod_action_types.mute", message.guild?.id, {}),
+			await client.bulbutils.translate("global_mod_action_log", message.guild.id, {
+				action: await client.bulbutils.translate("mod_action_types.mute", message.guild.id, {}),
 				moderator: message.author,
 				target: target.user,
 				reason,

@@ -66,8 +66,8 @@ export default class extends Command {
 			const target = await this.client.bulbfetch.getUser(targetID);
 			if (!target) {
 				await context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+					await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 						arg_expected: "user:User",
 						arg_provided: targets[i],
 						usage: this.usage,
@@ -76,11 +76,11 @@ export default class extends Command {
 				continue;
 			}
 
-			const banList = await context.guild?.bans.fetch();
-			const bannedUser = banList?.find((user) => user.user.id === targetID);
+			const banList = await context.guild.bans.fetch();
+			const bannedUser = banList.find((user) => user.user.id === targetID);
 
 			if (!bannedUser) {
-				context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
+				context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild.id, { target }));
 				continue;
 			}
 
@@ -90,8 +90,8 @@ export default class extends Command {
 				BanType.MANUAL,
 				target,
 				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild.id, {}),
 					moderator: context.author,
 					target,
 					reason,
@@ -105,8 +105,8 @@ export default class extends Command {
 		if (!fullList.length) return;
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_multi", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild.id, {}),
 				full_list: fullList.join(", "),
 				reason,
 			}),

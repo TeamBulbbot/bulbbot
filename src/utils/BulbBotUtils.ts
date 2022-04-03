@@ -222,9 +222,9 @@ export default class {
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
 		if (
 			context.author.id === context.guild?.ownerId &&
-			context.guild?.me &&
-			context.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < context.guild?.me.roles.highest.rawPosition
+			context.guild.me &&
+			context.guild.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < context.guild.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
@@ -236,11 +236,11 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (context.member?.roles && user.roles.highest.rawPosition >= context.member?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (context.member?.roles && user.roles.highest.rawPosition >= context.member.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (context.guild?.me && context.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (context.guild?.me && context.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild?.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
@@ -267,9 +267,9 @@ export default class {
 
 		if (
 			interaction.user.id === interaction.guild?.ownerId &&
-			interaction.guild?.me &&
-			interaction.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < interaction.guild?.me.roles.highest.rawPosition
+			interaction.guild.me &&
+			interaction.guild.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < interaction.guild.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
@@ -277,11 +277,11 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (author?.roles && user.roles.highest.rawPosition >= author?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (author?.roles && user.roles.highest.rawPosition >= author.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (interaction.guild?.me && interaction.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (interaction.guild?.me && interaction.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild?.me?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
@@ -400,7 +400,7 @@ export default class {
 			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
 
 		if (context) {
-			embed.addField("Guild ID", `${context?.guild?.id}`, true);
+			embed.addField("Guild ID", `${context.guild?.id}`, true);
 			embed.addField("User", context.author.id, true);
 			embed.addField("Message Content", context.content, true);
 		} else if (runArgs) {
@@ -415,7 +415,7 @@ export default class {
 								v?.channel && v?.channel?.name
 									? "\n*Channel:* " + v?.channel.name + " <#" + v?.channel.id + "> (`" + v?.channel.id + ")`"
 									: v instanceof GuildChannel
-									? "\n*Channel:* <#" + v?.id + "> #" + v?.name + " (`" + v?.id + ")`"
+									? "\n*Channel:* <#" + v.id + "> #" + v.name + " (`" + v.id + ")`"
 									: ""
 						  }`
 						: "";

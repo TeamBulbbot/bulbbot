@@ -64,7 +64,7 @@ export default class extends Command {
 
 			const t: Snowflake = targets[i].replace(NonDigits, "");
 			let infID: number;
-			let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
+			let target: any = await this.client.bulbfetch.getGuildMember(context.guild.members, t);
 			const notInGuild = !target;
 
 			if (!notInGuild) {
@@ -75,8 +75,8 @@ export default class extends Command {
 				target = await this.client.bulbfetch.getUser(t);
 				if (!target) {
 					await context.channel.send(
-						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-							type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+						await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+							type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 							arg_expected: "user:User",
 							arg_provided: t,
 							usage: this.usage,
@@ -91,8 +91,8 @@ export default class extends Command {
 					BanType.FORCE,
 					target,
 					context.member,
-					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
+					await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild.id, {}),
 						moderator: context.author,
 						target,
 						reason,
@@ -107,8 +107,8 @@ export default class extends Command {
 					BanType.NORMAL,
 					target,
 					context.member,
-					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+					await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 						moderator: context.author,
 						target,
 						reason,
@@ -123,8 +123,8 @@ export default class extends Command {
 		if (!fullList.length) return;
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_multi", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 				full_list: fullList.join(", "),
 				reason,
 			}),
