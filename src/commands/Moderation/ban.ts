@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { ButtonInteraction, Collection, Guild, GuildMember, Message, MessageActionRow, MessageButton, Snowflake, User } from "discord.js";
+import { ButtonInteraction, Collection, Message, MessageActionRow, MessageButton, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
@@ -84,15 +84,17 @@ export default class extends Command {
 					return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 				}
 
+				if (!context.guild?.id || !context.member) return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, {}), ephemeral: true });
+
 				if (interaction.customId === "confirm") {
 					collector.stop("clicked");
 
 					infID = await infractionsManager.ban(
 						this.client,
-						<Guild>context.guild,
+						context.guild,
 						BanType.FORCE,
-						<User>target,
-						<GuildMember>context.member,
+						target,
+						context.member,
 						await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
 							moderator: context.author,
@@ -124,14 +126,15 @@ export default class extends Command {
 				return;
 			});
 		} else {
+			if (!context.guild?.id || !context.member) return;
 			//Else execute a normal ban
 			target = target.user;
 			infID = await infractionsManager.ban(
 				this.client,
-				<Guild>context.guild,
+				context.guild,
 				BanType.NORMAL,
 				target,
-				<GuildMember>context.member,
+				context.member,
 				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
 					moderator: context.author,

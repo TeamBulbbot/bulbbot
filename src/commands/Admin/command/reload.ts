@@ -47,7 +47,7 @@ export default class extends SubCommand {
 		// any SubCommand is-a Command
 		if (!(loadedCommand instanceof Command)) return context.channel.send(`Event ${name} doesn't belong in commands!`);
 		if (command instanceof SubCommand) {
-			command.parent.subCommands.push(<SubCommand>loadedCommand);
+			command.parent.subCommands.push(loadedCommand as SubCommand);
 		} else {
 			this.client.commands.set(loadedCommand.name, loadedCommand);
 			if (loadedCommand.aliases.length) {

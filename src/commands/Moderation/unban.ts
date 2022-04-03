@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message, Snowflake, User } from "discord.js";
+import { Message, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -31,7 +31,7 @@ export default class extends Command {
 		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 		let reason: string = args.slice(1).join(" ");
 
-		if (!target)
+		if (!target || !context.guild || !context.member)
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
@@ -50,10 +50,10 @@ export default class extends Command {
 
 		const infID = await infractionsManager.unban(
 			this.client,
-			<Guild>context.guild,
+			context.guild,
 			BanType.MANUAL,
 			target,
-			<GuildMember>context.member,
+			context.member,
 			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
 				moderator: context.author,

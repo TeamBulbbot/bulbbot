@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
-import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
+import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, User } from "discord.js";
 import axios from "axios";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -32,6 +32,7 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		if (!context.guild) return;
 		let target: string;
 		if (args[0] === undefined) target = context.author.id;
 		else target = args[0].replace(NonDigits, "");
@@ -65,7 +66,7 @@ export default class extends Command {
 		]);
 
 		let components: MessageActionRow[];
-		const actionsOnInfo: boolean = (await databaseManager.getConfig(<Snowflake>context.guild?.id)).actionsOnInfo;
+		const actionsOnInfo: boolean = (await databaseManager.getConfig(context.guild.id)).actionsOnInfo;
 
 		if (!actionsOnInfo) components = [];
 		else if (!isGuildMember) components = [];
@@ -140,7 +141,7 @@ export default class extends Command {
 				}
 			}
 
-			const infs = await infractionsManager.getOffenderInfractions(<string>context.guild?.id, user.id);
+			const infs = await infractionsManager.getOffenderInfractions(context.guild.id, user.id);
 			if (infs) {
 				let inf_emoji;
 
@@ -167,7 +168,7 @@ export default class extends Command {
 					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 						user: context.author,
 					}),
-					iconURL: <string>context.author.avatarURL({ dynamic: true }),
+					iconURL: context.author.avatarURL({ dynamic: true }) || "",
 				})
 				.setTimestamp();
 
@@ -199,7 +200,7 @@ export default class extends Command {
 				msg.edit({ components: [rowDisabled] });
 				await interaction.reply({
 					content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
-						action: await this.client.bulbutils.translate(`mod_action_types.${<ButtonActionType>interaction.customId}`, context.guild?.id, {}),
+						action: await this.client.bulbutils.translate(`mod_action_types.${interaction.customId as ButtonActionType}`, context.guild?.id, {}),
 						target: user,
 					}),
 				});

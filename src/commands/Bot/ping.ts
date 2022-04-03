@@ -1,7 +1,7 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import * as Config from "../../Config";
-import { ColorResolvable, Message, MessageEmbed } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 
 export default class extends Command {
@@ -20,7 +20,7 @@ export default class extends Command {
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const embed: MessageEmbed = new MessageEmbed()
-			.setColor(<ColorResolvable>Config.embedColor)
+			.setColor(Config.embedColor)
 			.setDescription(
 				await this.client.bulbutils.translate("ping_latency", context.guild?.id, {
 					latency_bot: latency,
@@ -31,7 +31,7 @@ export default class extends Command {
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				iconURL: context.author.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 

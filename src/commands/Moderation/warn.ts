@@ -42,17 +42,18 @@ export default class extends Command {
 			return;
 		}
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
+		if (!context.guild || !context.member) return;
 
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		//Executes the action
 		const infID = await infractionsManager.warn(
 			this.client,
-			<string>context.guild?.id,
+			context.guild.id,
 			target.user,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
@@ -62,8 +63,8 @@ export default class extends Command {
 
 		//Sends the respond context
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

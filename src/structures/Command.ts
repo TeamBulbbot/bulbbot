@@ -1,5 +1,5 @@
 import BulbBotClient from "./BulbBotClient";
-import { BitField, PermissionString, GuildChannelResolvable, Permissions } from "discord.js";
+import { BitField, PermissionString, Permissions } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import SubCommand from "./SubCommand";
 import ClearanceManager from "../utils/managers/ClearanceManager";
@@ -8,6 +8,7 @@ import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
 import { developers, subDevelopers } from "../Config";
 import { GuildCommandOverride } from "../utils/types/DatabaseStructures";
+import { isGuildChannel } from "../utils/typechecks";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -107,12 +108,14 @@ export default class Command {
 			clearance = commandOverride.clearanceLevel;
 		}
 
+		if (!isGuildChannel(context.channel)) return;
+
 		this.client.userClearance = options.clearance;
 		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
 
 		let missing: boolean = clearance > options.clearance;
 		if (missing && ~~userPermCheck) {
-			missing = !(context.member?.permissions.has(userPermCheck) && context.member.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // (!x || !y) === !(x && y) by DeMorgan's Law
+			missing = !(context.member?.permissions.has(userPermCheck) && context.member.permissionsIn(context.channel).has(userPermCheck)); // (!x || !y) === !(x && y) by DeMorgan's Law
 		}
 		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
 
@@ -120,7 +123,7 @@ export default class Command {
 		if (clientPermCheck) {
 			let missing: PermissionString[] | undefined = context.guild?.me?.permissions.missing(clientPermCheck);
 			if (!missing) return "";
-			if (!missing.length) missing = context.guild?.me?.permissionsIn(<GuildChannelResolvable>context.channel).missing(clientPermCheck);
+			if (!missing.length) missing = context.guild?.me?.permissionsIn(context.channel).missing(clientPermCheck);
 
 			if (missing === undefined || missing.length)
 				return await this.client.bulbutils.translate("global_missing_permissions_bot", context.guild?.id, {
@@ -170,7 +173,7 @@ export default class Command {
 
 		let missing: boolean = clearance > userClearance;
 		if (missing && ~~userPermCheck) {
-			missing = !(context.member?.permissions.has(userPermCheck) && context.member.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
+			missing = !(context.member?.permissions.has(userPermCheck) && isGuildChannel(context.channel) && context.member.permissionsIn(context.channel).has(userPermCheck)); // !x || !y === !(x && y)
 		}
 		return !missing;
 	}

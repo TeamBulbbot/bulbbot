@@ -1007,7 +1007,7 @@ class InteractionCommandContext implements BaseCommandContext {
 						if (typeof content === "object" && "embeds" in content) {
 							e = await this.editReply({ ...content, embeds: content.embeds ?? undefined });
 						} else {
-							e = await this.editReply(<string | MessagePayload>content);
+							e = await this.editReply(content as string | MessagePayload);
 						}
 						// @ts-expect-error
 						return e instanceof Message ? e : new Message(this.client, e);

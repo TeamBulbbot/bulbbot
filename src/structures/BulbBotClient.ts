@@ -85,6 +85,6 @@ export default class extends Client {
 		await this.utils.loadBlacklist();
 		await this.utils.loadAbout();
 
-		await super.login(<string>token);
+		await super.login(token as string);
 	}
 }

@@ -36,6 +36,7 @@ export default class extends Event {
 			max_uses: invite.maxUses === 0 ? "unlimited" : invite.maxUses,
 		});
 
-		await loggingManager.sendEventLog(this.client, <Guild>invite.guild, "invite", log);
+		// The difference between Guild and InviteGuild doesn't matter here. TODO: maybe widen the parameter type
+		await loggingManager.sendEventLog(this.client, invite.guild as Guild, "invite", log);
 	}
 }

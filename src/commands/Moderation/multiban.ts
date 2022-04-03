@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
+import { Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -56,6 +56,8 @@ export default class extends Command {
 			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
+		if (!context.guild?.id || !context.member) return;
+
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
 			await this.client.bulbutils.sleep(massCommandSleep);
@@ -85,10 +87,10 @@ export default class extends Command {
 
 				infID = await infractionsManager.ban(
 					this.client,
-					<Guild>context.guild,
+					context.guild,
 					BanType.FORCE,
 					target,
-					<GuildMember>context.member,
+					context.member,
 					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
 						moderator: context.author,
@@ -101,10 +103,10 @@ export default class extends Command {
 				target = target.user;
 				infID = await infractionsManager.ban(
 					this.client,
-					<Guild>context.guild,
+					context.guild,
 					BanType.NORMAL,
 					target,
-					<GuildMember>context.member,
+					context.member,
 					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
 						moderator: context.author,

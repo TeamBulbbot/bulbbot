@@ -23,6 +23,8 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		if (!context.guild) return;
+
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const user: User | undefined = await this.client.bulbfetch.getUser(targetID);
 		let page = Number(args[1]);
@@ -30,8 +32,8 @@ export default class extends SubCommand {
 
 		if (!user)
 			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
@@ -39,7 +41,7 @@ export default class extends SubCommand {
 			);
 
 		const options: any[] = [];
-		const infs: Infraction[] = <Infraction[]>await infractionManager.getAllUserInfractions(<string>context.guild?.id, user.id, page);
+		const infs: Infraction[] = (await infractionManager.getAllUserInfractions(context.guild.id, user.id, page)) || [];
 
 		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild?.id, { target: user }));
 

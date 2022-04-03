@@ -1,5 +1,5 @@
 import BulbBotClient from "../structures/BulbBotClient";
-import { GuildChannel, Permissions, TextChannel } from "discord.js";
+import { Permissions } from "discord.js";
 import DatabaseManager from "./managers/DatabaseManager";
 import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
@@ -7,6 +7,7 @@ import AutoModManager from "./managers/AutoModManager";
 import LoggingManager from "./managers/LoggingManager";
 import CommandContext from "../structures/CommandContext";
 import { AutoModConfiguration } from "./types/DatabaseStructures";
+import { isGuildChannel } from "./typechecks";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const automodManager: AutoModManager = new AutoModManager();
@@ -19,9 +20,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(context.author.id)) return;
-	// We are checking for undefined before using this value, but due to the typecast the type doesn't get narrowed
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	if (dbGuild.ignoreChannels.includes(context.channel.id) || ((<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((context.channel as GuildChannel).parent!.id))) return;
+	if (dbGuild.ignoreChannels.includes(context.channel.id) || (isGuildChannel(context.channel) && context.channel.parent && dbGuild.ignoreChannels.includes(context.channel.parent.id))) return;
 
 	if (!context.member?.roles.cache.values()) return;
 	for (const role of context.member.roles.cache.values()) {
@@ -36,7 +35,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 			context,
 			dbGuild.punishmentWebsite,
 			await client.bulbutils.translate("automod_violation_website_reason", context.guild.id, {
-				channel: <TextChannel>context.channel,
+				channel: context.channel,
 			}),
 		);
 
@@ -59,7 +58,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 			context,
 			dbGuild.punishmentInvites,
 			await client.bulbutils.translate("automod_violation_invites_reason", context.guild.id, {
-				channel: <TextChannel>context.channel,
+				channel: context.channel,
 			}),
 		);
 
@@ -83,7 +82,7 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 			context,
 			dbGuild.punishmentWords,
 			await client.bulbutils.translate("automod_violation_words_reason", context.guild.id, {
-				channel: <TextChannel>context.channel,
+				channel: context.channel,
 			}),
 		);
 

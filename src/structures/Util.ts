@@ -26,7 +26,7 @@ export default class {
 	}
 
 	get directory(): string {
-		return `${path.dirname(<string>require.main?.filename)}${path.sep}`;
+		return `${path.dirname(require.main?.filename || ".")}${path.sep}`;
 	}
 
 	async loadCommands(): Promise<void> {

@@ -3,7 +3,11 @@ import * as env from "dotenv";
 import applyExtra from "./applyExtra";
 env.config({ path: `${__dirname}/../../../src/.env` });
 
-export const sequelize: Sequelize = new Sequelize(<string>process.env.DB_NAME, <string>process.env.DB_USER, <string>process.env.DB_PASSWORD, {
+if (typeof process.env.DB_NAME !== "string" || typeof process.env.DB_USER !== "string" || typeof process.env.DB_PASSWORD !== "string") {
+	throw new Error("process.env is missing required DB environment variables (is your .env configured correctly?)");
+}
+
+export const sequelize: Sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
 	host: process.env.DB_HOST,
 	dialect: "postgres",
 	logging: false,

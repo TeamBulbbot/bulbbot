@@ -2,13 +2,12 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Message, MessageEmbed, Snowflake } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { NonDigits, ReasonImage } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import moment from "moment";
 import * as Emotes from "../../../emotes.json";
 import { embedColor } from "../../../Config";
-import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -26,6 +25,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		if (!context.guild) return;
 		const infID = Number(args[0].replace(NonDigits, ""));
 
 		if (!infID || infID >= 2147483647 || infID <= 0)
@@ -38,7 +38,7 @@ export default class extends SubCommand {
 				}),
 			);
 
-		const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>context.guild?.id, Number(args[0].replace(NonDigits, "")));
+		const inf = await infractionsManager.getInfraction(context.guild.id, Number(args[0].replace(NonDigits, "")));
 
 		if (!inf) {
 			return context.channel.send(
@@ -78,11 +78,12 @@ export default class extends SubCommand {
 			.setTitle(this.client.bulbutils.prettify(inf.action))
 			.setDescription(description)
 			.setColor(embedColor)
-			.setImage(<string>(image ? image[0] : null))
-			.setThumbnail(<string>user?.avatarURL({ dynamic: true }))
+			// We should probably just not call this if `image` is null
+			.setImage(image ? image[0] : "")
+			.setThumbnail(user?.avatarURL({ dynamic: true }) || "")
 			.setFooter({
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, { user: context.author }),
-				iconURL: <string>context.author.avatarURL(),
+				iconURL: context.author.avatarURL() || "",
 			})
 			.setTimestamp();
 

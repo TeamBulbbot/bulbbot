@@ -198,9 +198,9 @@ export default class {
 	}
 
 	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput): Promise<number | null> {
-		if (!target.bannable) return null;
+		if (!target.bannable || (typeof until !== "number" && typeof until !== "boolean")) return null;
 		await target.ban({ reason: reasonLog });
-		await this.createInfraction(guild.id, "Tempban", <number>until, reason, target.user, moderator.user);
+		await this.createInfraction(guild.id, "Tempban", until, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Tempban");
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.temp_ban", guild.id, {}), target.user, moderator.user, reason, infID, until);
 

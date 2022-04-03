@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Permissions, Snowflake, User } from "discord.js";
+import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Permissions, User } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
@@ -35,35 +35,35 @@ export default class extends Event {
 
 			// If newMember is muted check if the executor is bot. If not, log as manual mute
 			// If newMember is not muted check if the executor is bot. If not, log as manual unmute, else log as auto mute
-			if (newMember.communicationDisabledUntilTimestamp === null) {
+			if (newMember.communicationDisabledUntilTimestamp === null && executor) {
 				if (executor?.id !== this.client.user?.id) {
 					await infractionsManager.createInfraction(
 						newMember.guild.id,
 						"Unmute",
 						false,
-						auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+						auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 						newMember.user,
-						<User>executor,
+						executor,
 					);
-					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, <Snowflake>executor?.id, newMember.user.id, "Unmute");
+					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Unmute");
 					await loggingManager.sendModAction(
 						this.client,
 						newMember.guild?.id,
 						await this.client.bulbutils.translate("mod_action_types.unmute", newMember.guild.id, {}),
 						newMember.user,
-						<User>executor,
-						auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+						executor,
+						auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 						infID,
 					);
 				}
 			} else {
-				if (!executor?.id || executor?.id === this.client.user?.id) return;
+				if (!executor?.id || executor?.id === this.client.user?.id || newMember.communicationDisabledUntilTimestamp === null) return;
 
 				await infractionsManager.createInfraction(
 					newMember.guild.id,
 					"Mute",
 					newMember.communicationDisabledUntilTimestamp,
-					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+					auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					newMember.user,
 					executor,
 				);
@@ -98,7 +98,9 @@ export default class extends Event {
 						break;
 				}
 				auditLog = audit.entries.first();
-				if (<number>auditLog?.createdTimestamp + 3000 < Date.now()) auditLog = undefined;
+				// @ts-expect-error This is a safe corecion
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				if ((~~auditLog?.createdTimestamp)! + 3000 < Date.now()) auditLog = undefined;
 				if (!auditLog?.executor) auditLog = undefined;
 			} catch (e) {
 				if (!(e instanceof DiscordAPIError)) throw e;
@@ -157,7 +159,7 @@ export default class extends Event {
 
 				if (auditLog) {
 					const translateKey = change === "newrole" ? "event_member_update_role_add_moderator" : "event_member_update_role_remove_moderator";
-					executor = <User>auditLog.executor;
+					executor = auditLog.executor;
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,

@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -400,26 +400,22 @@ export default class {
 			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
 
 		if (context) {
-			embed.addField("Guild ID", <string>context?.guild?.id, true);
-			embed.addField("User", <string>context.author.id, true);
-			embed.addField("Message Content", <string>context.content, true);
+			embed.addField("Guild ID", `${context?.guild?.id}`, true);
+			embed.addField("User", context.author.id, true);
+			embed.addField("Message Content", context.content, true);
 		} else if (runArgs) {
 			const argsDesc: string[] = [];
-			for (const [k, v] of Object.entries(runArgs)) {
-				if ((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
+			for (const [k, v] of Object.entries<any>(runArgs)) {
+				if (v?.inviter) v.user = v.inviter;
 				const additionalInfo =
 					typeof v === "object"
-						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${
-								(<any>v)?.member
-									? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">"
-									: (<any>v)?.user
-									? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
-									: ""
+						? `${v?.guild.name ? "\n*Guild:* " + v?.guild.name + " (`" + v?.guild.id + "`)" : ""}${
+								v?.member ? "\n*Member*: " + v?.member.user.tag + " <@" + v?.member.id + ">" : v?.user ? "\n*User:* " + v?.user.tag + " <@" + v?.user.id + ">" : ""
 						  }${
-								(<any>v)?.channel && (<any>v)?.channel?.name
-									? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
+								v?.channel && v?.channel?.name
+									? "\n*Channel:* " + v?.channel.name + " <#" + v?.channel.id + "> (`" + v?.channel.id + ")`"
 									: v instanceof GuildChannel
-									? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
+									? "\n*Channel:* <#" + v?.id + "> #" + v?.name + " (`" + v?.id + ")`"
 									: ""
 						  }`
 						: "";
@@ -429,7 +425,8 @@ export default class {
 			embed.addField("Event Arguments", argsDesc.join("\n").slice(0, 1024));
 		}
 
-		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
+		const errorChannel = this.client.channels.cache.get(error);
+		errorChannel?.isText() && (await errorChannel.send({ embeds: [embed] }));
 	}
 
 	/** Return a list of property keys where the values differ between the two objects */

@@ -1,5 +1,5 @@
 import BulbBotClient from "../../structures/BulbBotClient";
-import { Guild, MessageEmbed, NewsChannel, Snowflake, TextChannel, User } from "discord.js";
+import { Channel, FileOptions, Guild, MessageEmbed, NewsChannel, Snowflake, TextChannel, User } from "discord.js";
 import DatabaseManager from "./DatabaseManager";
 import * as Emotes from "../../emotes.json";
 import { defaultPerms } from "../../Config";
@@ -7,6 +7,7 @@ import moment, { MomentInput } from "moment";
 import "moment-timezone";
 import { LoggingPartString } from "../types/LoggingPart";
 import { LoggingConfiguration } from "../types/DatabaseStructures";
+import { isGuildChannel } from "../typechecks";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -17,8 +18,8 @@ export default class {
 
 		if (dbGuild.modAction === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod", guildID, {
@@ -33,13 +34,14 @@ export default class {
 		);
 	}
 
-	public async sendAutoUnban(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
+	public async sendAutoUnban(client: BulbBotClient, guild: Maybe<Guild>, action: string, target: User, moderator: User, log: string, infID: number): Promise<void> {
+		if (!guild) return;
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild.modAction === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_unban_auto", guild.id, {
@@ -54,13 +56,15 @@ export default class {
 		);
 	}
 
-	public async sendModActionFile(client: BulbBotClient, guild: Guild, action, amount, file, channel, moderator) {
+	// TODO: This is tightly coupled to the purge command, ideally it wouldn't need to be (or else would be named different)
+	public async sendModActionFile(client: BulbBotClient, guild: Maybe<Guild>, action: string, amount: number, file: FileOptions["attachment"], channel: Channel, moderator: User): Promise<void> {
+		if (!guild) return;
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild.modAction === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send({
 			content: `\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${await this.betterActions(client, guild.id, "trash")} **${moderator.tag}** \`(${
@@ -75,13 +79,14 @@ export default class {
 		});
 	}
 
-	public async sendModActionTemp(client: BulbBotClient, guild: Guild, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
+	public async sendModActionTemp(client: BulbBotClient, guild: Maybe<Guild>, action: string, target: User, moderator: User, log: string, infID: number, until: MomentInput): Promise<void> {
+		if (!guild) return;
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (dbGuild.modAction === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_mod_temp", guild.id, {
@@ -103,8 +108,8 @@ export default class {
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 		if (!dbGuild || dbGuild.other === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.other);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.other) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(
 			await client.bulbutils.translate("global_logging_command", guild.id, {
@@ -117,6 +122,8 @@ export default class {
 	}
 
 	public async sendEventLog(client: BulbBotClient, guild: Maybe<Guild>, part: LoggingPartString, log: string, extra: string | MessageEmbed[] | null = null): Promise<void> {
+		// Really, we should probably be narrowing these types at the CommandContext level or something, e.g. we know in our usage that we don't
+		// operate with DM commands so we already will have returned unless `guild`, `me`, etc. are defined
 		if (!guild) return;
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
@@ -143,20 +150,22 @@ export default class {
 
 		if (dbGuild.modAction === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.modAction);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.modAction) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
 
 		await modChannel.send(`\`[${moment().tz(zone).format("hh:mm:ssa z")}]\` ${log}`);
 	}
 
-	public async sendAutoModLog(client: BulbBotClient, guild: Guild, log: string, buffer?: Buffer) {
+	public async sendAutoModLog(client: BulbBotClient, guild: Maybe<Guild>, log: string, buffer?: Buffer) {
+		if (!guild) return;
 		const dbGuild: LoggingConfiguration = await databaseManager.getLoggingConfig(guild.id);
 		const zone: string = client.bulbutils.timezones[await databaseManager.getTimezone(guild.id)];
 
 		if (dbGuild.automod === null) return;
 
-		const modChannel: TextChannel = <TextChannel>client.channels.cache.get(dbGuild.automod);
-		if (!modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms)) return;
+		const modChannel = client.channels.cache.get(dbGuild.automod) as Channel;
+		if (!(isGuildChannel(modChannel) && modChannel.isText() && modChannel?.guild.me?.permissionsIn(modChannel).has(defaultPerms))) return;
+
 		let files: any = null;
 
 		if (buffer)
@@ -173,7 +182,7 @@ export default class {
 		});
 	}
 
-	private async betterActions(client: BulbBotClient, guildID: Snowflake, action: string): Promise<string> {
+	private async betterActions(client: BulbBotClient, guildID: Maybe<Snowflake>, action: string): Promise<string> {
 		switch (action) {
 			case await client.bulbutils.translate("mod_action_types.pool_ban", guildID, {}):
 			case await client.bulbutils.translate("mod_action_types.soft_ban", guildID, {}):

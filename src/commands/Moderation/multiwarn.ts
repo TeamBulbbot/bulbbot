@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { GuildMember, Message, Snowflake } from "discord.js";
+import { GuildMember, Message } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -48,6 +48,8 @@ export default class extends Command {
 			return await this.client.commands.get("warn")?.run(context, args);
 		}
 
+		if (!context.guild?.id || !context.member) return;
+
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
 
@@ -69,9 +71,9 @@ export default class extends Command {
 
 			const infID = await infractionsManager.warn(
 				this.client,
-				<Snowflake>context.guild?.id,
+				context.guild?.id,
 				target.user,
-				<GuildMember>context.member,
+				context.member,
 				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 					action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
 					moderator: context.author,
