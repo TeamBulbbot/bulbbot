@@ -23,7 +23,7 @@ export default class extends SubCommand {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const part: string = args[0];
 		const name: string[] = args.slice(1, -1);
-		let clearance: number = Number(args.at(-1));
+		let clearance = Number(args.at(-1));
 
 		if (isNaN(clearance))
 			return context.channel.send(

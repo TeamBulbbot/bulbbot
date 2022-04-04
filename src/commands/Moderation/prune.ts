@@ -28,7 +28,7 @@ export default class extends Command {
 		if (isNaN(days) || days <= 0 || days > 30) return context.channel.send(await this.client.bulbutils.translate("prune_invalid_time", context.guild?.id, {}));
 		let roles: RegExpMatchArray = <RegExpMatchArray>args.slice(1).join(" ").match(RoleMentionAndID);
 		if (roles === null) roles = [];
-		else roles = roles.map(r => r.replace(NonDigits, ""));
+		else roles = roles.map((r) => r.replace(NonDigits, ""));
 
 		let reason: string = args
 			.slice(roles.length + 1)
@@ -83,7 +83,7 @@ export default class extends Command {
 						prune,
 						reason,
 						days,
-						roles: roles.map(r => `<@&${r}>`).join(" "),
+						roles: roles.map((r) => `<@&${r}>`).join(" "),
 					}),
 				);
 

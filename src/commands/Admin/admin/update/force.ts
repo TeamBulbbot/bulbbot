@@ -15,7 +15,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, _args: string[]): Promise<void | Message> {
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);
 

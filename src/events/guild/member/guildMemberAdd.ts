@@ -11,7 +11,7 @@ const loggingManager: LoggingManager = new LoggingManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -30,7 +30,7 @@ export default class extends Event {
 
 		const automod: AutoModConfiguration = await databaseManager.getAutoModConfig(member.guild.id);
 		if (automod.enabled && automod.avatarHashes.length > 0 && automod.punishmentAvatarBans) {
-			const buffer = await axios.get(member?.displayAvatarURL()!, {
+			const buffer = await axios.get(member?.displayAvatarURL(), {
 				responseType: "arraybuffer",
 			});
 			const avatarHash = await imageHash.hash(buffer.data, 8);

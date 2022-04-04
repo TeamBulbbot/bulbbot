@@ -18,18 +18,18 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let command: Command | undefined = Command.resolve(this.client, args);
+		const command: Command | undefined = Command.resolve(this.client, args);
 
 		if (!command) return;
 		if (command instanceof SubCommand) {
 			command.parent.subCommands.splice(
-				command.parent.subCommands.findIndex(sc => sc === command),
+				command.parent.subCommands.findIndex((sc) => sc === command),
 				1,
 			);
 		} else {
 			this.client.commands.delete(command.name);
 		}
-		command.aliases.forEach(alias => this.client.aliases.delete(alias));
+		command.aliases.forEach((alias) => this.client.aliases.delete(alias));
 
 		this.client.log.client(`[CLIENT - COMMANDS] Unloaded command "${command.qualifiedName}"`);
 		await context.channel.send(`Unloaded command \`${command.qualifiedName}\``); // needs TL?

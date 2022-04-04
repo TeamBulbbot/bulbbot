@@ -24,16 +24,16 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
-		const allMessages: Message[] = msgs.map(m => m).reverse();
+		const allMessages: Message[] = msgs.map((m) => m).reverse();
 		const messages: Snowflake[] = [];
-		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
+		let delMsgs = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
-		let counting: boolean = false;
+		let counting = false;
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
-		for (let msg of allMessages) {
+		for (const msg of allMessages) {
 			if (msg.id === args[0]) {
 				counting = true;
 			}

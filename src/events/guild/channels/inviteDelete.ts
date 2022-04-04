@@ -6,14 +6,14 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
 	}
 
 	public async run(invite: Invite): Promise<void> {
-		// @ts-ignore
+		// @ts-expect-error
 		const guild: Guild = invite.guild;
 		if (!guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 

@@ -29,7 +29,6 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		if (!target)
@@ -45,7 +44,7 @@ export default class extends Command {
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 		if (target.communicationDisabledUntilTimestamp === null) return context.channel.send(await this.client.bulbutils.translate("mute_not_muted", context.guild?.id, { target: target.user }));
 
-		infID = await infractionsManager.unmute(
+		const infID = await infractionsManager.unmute(
 			this.client,
 			<Guild>context.guild,
 			MuteType.MANUAL,

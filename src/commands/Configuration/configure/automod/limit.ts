@@ -99,8 +99,8 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 						return limit(i, client, category);
 					}
 
-					await databaseManager.automodSetLimit(interaction.guild?.id as Snowflake, parts[category!!], parseInt(items));
-					await databaseManager.automodSetTimeout(interaction.guild?.id as Snowflake, parts[category!!], parseInt(seconds) * 1000);
+					await databaseManager.automodSetLimit(interaction.guild?.id as Snowflake, parts[category!], parseInt(items));
+					await databaseManager.automodSetTimeout(interaction.guild?.id as Snowflake, parts[category!], parseInt(seconds) * 1000);
 					await interaction.followUp({ content: `Updated to ${items}/${seconds}`, ephemeral: true });
 
 					return limit(i, client, category);

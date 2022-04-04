@@ -23,11 +23,11 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[0]);
+		let amount = Number(args[0]);
 		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
 		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
 
-		let deleteMsg: number[] = [];
+		const deleteMsg: number[] = [];
 		let a = 0;
 
 		for (let i = 1; i <= amount; i++) {
@@ -42,7 +42,7 @@ export default class extends SubCommand {
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 
-		let messagesToPurge: Snowflake[] = [];
+		const messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
@@ -52,7 +52,7 @@ export default class extends SubCommand {
 				limit: deleteMsg[i],
 			});
 
-			msgs.map(async m => {
+			msgs.map(async (m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.author.bot) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;

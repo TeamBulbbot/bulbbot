@@ -29,7 +29,7 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
 			return context.channel.send(
@@ -41,7 +41,7 @@ export default class extends Command {
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
 		if (targets.length <= 1) {
 			await context.channel.send(
@@ -52,7 +52,7 @@ export default class extends Command {
 			return await this.client.commands.get("ban")!.run(context, args);
 		}
 
-		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
+		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {
 			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
@@ -63,7 +63,7 @@ export default class extends Command {
 			const t: Snowflake = targets[i].replace(NonDigits, "");
 			let infID: number;
 			let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
-			const notInGuild: boolean = !target;
+			const notInGuild = !target;
 
 			if (!notInGuild) {
 				if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
@@ -123,7 +123,7 @@ export default class extends Command {
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-				full_list: fullList.join(', '),
+				full_list: fullList.join(", "),
 				reason,
 			}),
 		);

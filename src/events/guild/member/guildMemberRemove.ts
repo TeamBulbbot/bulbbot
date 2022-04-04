@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, GuildMember, User, Permissions } from "discord.js";
+import { GuildAuditLogs, GuildMember, Permissions } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
@@ -10,7 +10,7 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -27,7 +27,10 @@ export default class extends Event {
 				await this.client.bulbutils.translate("event_member_leave_roles", member.guild.id, {
 					user: member.user,
 					user_joined: Math.floor(member.joinedTimestamp / 1000),
-					user_roles: member.roles.cache.filter(role => role.id !== member.guild.id).map(role => `${role}`).join(", "),
+					user_roles: member.roles.cache
+						.filter((role) => role.id !== member.guild.id)
+						.map((role) => `${role}`)
+						.join(", "),
 				}),
 			);
 		} else {
@@ -35,10 +38,10 @@ export default class extends Event {
 				this.client,
 				member.guild,
 				"joinLeave",
-					await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
-						user: member.user,
-						user_joined: Math.floor(member.joinedTimestamp / 1000),
-					}),
+				await this.client.bulbutils.translate("event_member_leave", member.guild.id, {
+					user: member.user,
+					user_joined: Math.floor(member.joinedTimestamp / 1000),
+				}),
 			);
 		}
 
@@ -48,10 +51,10 @@ export default class extends Event {
 		const kickLog = auditLogs.entries.first();
 		if (!kickLog) return;
 
-		let { executor, reason, target, createdTimestamp } = kickLog;
-		target = <User>target;
+		const { executor, createdTimestamp, target } = kickLog;
+		let { reason } = kickLog;
 		if (createdTimestamp + 3000 < Date.now()) return;
-		if (target.id !== member.user.id) return;
+		if (target?.id !== member.user.id) return;
 
 		if (executor!.id === this.client.user!.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});

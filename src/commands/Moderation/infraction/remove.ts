@@ -47,14 +47,12 @@ export default class extends SubCommand {
 		const target = { tag: inf.target, id: inf.targetId };
 		const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
-		let confirmMsg: Message;
-
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setLabel("Confirm").setStyle("SUCCESS").setCustomId("confirm"),
 			new MessageButton().setLabel("Cancel").setStyle("DANGER").setCustomId("cancel"),
 		]);
 
-		confirmMsg = await context.channel.send({
+		const confirmMsg = await context.channel.send({
 			content: await this.client.bulbutils.translate("infraction_delete_confirm", context.guild?.id, {
 				infraction_id: inf.id,
 				moderator,

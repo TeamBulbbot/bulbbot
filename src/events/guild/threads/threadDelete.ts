@@ -6,7 +6,7 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {});
 	}
 
@@ -14,7 +14,7 @@ export default class extends Event {
 		await loggingManager.sendEventLog(
 			this.client,
 			thread.guild,
-			"thread", // @ts-ignore, ????
+			"thread",
 			await this.client.bulbutils.translate("event_thread_delete", thread.guild.id, {
 				thread,
 			}),

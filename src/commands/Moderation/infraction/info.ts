@@ -51,7 +51,7 @@ export default class extends SubCommand {
 		const target = { tag: inf.target, id: inf.targetId };
 		const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
-		let description: string = "";
+		let description = "";
 		description += await this.client.bulbutils.translate("infraction_info_inf_id", context.guild?.id, { infraction_id: args[0] });
 		description += await this.client.bulbutils.translate("infraction_info_target", context.guild?.id, { target });
 		description += await this.client.bulbutils.translate("infraction_info_moderator", context.guild?.id, { moderator });

@@ -1,44 +1,39 @@
 import { Snowflake, ColorResolvable, ActivityType, PresenceStatusData, IntentsString, PermissionString, PartialTypes } from "discord.js";
 import * as Emotes from "./emotes.json";
 
-// @ts-ignore
-function ArrayLiteralType<K extends string, T extends { [I: number]: K }>(arr: T): T {
-	return arr;
-}
-
-export const name: string = "Bulbbot";
+export const name = "Bulbbot";
 export const developers: string[] = ["190160914765316096", "439396770695479297", "193160566334947340"];
 export const subDevelopers: string[] = [];
 export const whitelistedGuilds: string[] = ["742094927403679816", "784408056997216327", "818176562901549066", "820945336327602186"];
-export const developerGuild: string = "784408056997216327";
-export const version: string = "1.0.0";
-export const lib: string = "Discord.JS";
+export const developerGuild = "784408056997216327";
+export const version = "1.0.0";
+export const lib = "Discord.JS";
 
 // Configs
-export const prefix: string = "!";
+export const prefix = "!";
 export const embedColor: ColorResolvable = "#5865F2";
-export const massCommandSleep: number = 850;
+export const massCommandSleep = 850;
 export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES", "GUILD_SCHEDULED_EVENTS"];
 export const partials: PartialTypes[] = ["MESSAGE"];
 export const defaultPerms: PermissionString[] = ["SEND_MESSAGES", "VIEW_CHANNEL", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"];
 
 // pm2 configs
-export const pm2Name: string = "bulbbot";
+export const pm2Name = "bulbbot";
 
 // Client
-export const tag: string = "Bulbbot#1439";
+export const tag = "Bulbbot#1439";
 export const id: Snowflake = "868821693571932191";
-export const activityName: string = "the light shine";
+export const activityName = "the light shine";
 export const type: Exclude<ActivityType, "CUSTOM"> = "WATCHING";
 export const status: PresenceStatusData = "online";
-export const supportInvite: string = "https://discord.com/invite/WgEtVqyNFZ";
-export const botInvite: string = "https://discord.com/oauth2/authorize?client_id=868821693571932191&permissions=1636345249015&scope=bot+applications.commands";
+export const supportInvite = "https://discord.com/invite/WgEtVqyNFZ";
+export const botInvite = "https://discord.com/oauth2/authorize?client_id=868821693571932191&permissions=1636345249015&scope=bot+applications.commands";
 
 export const discordApi = "https://discord.com/api/v9";
 
 // Server
-export const prometheusHost: string = "localhost";
-export const prometheusPort: number = 7070;
+export const prometheusHost = "localhost";
+export const prometheusPort = 7070;
 
 // Logs
 export const botDM: Snowflake = "822864336028565534";

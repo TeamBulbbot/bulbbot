@@ -15,7 +15,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
-	let options: MessageSelectOptionData[] = [];
+	const options: MessageSelectOptionData[] = [];
 	for (const reason of reasons) {
 		options.push({ label: reason, value: reason });
 	}
@@ -36,7 +36,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	collector?.on("collect", async (i: SelectMenuInteraction) => {
 		if (interaction.user.id !== i.user.id) return;
 
-		let infID = await infractionsManager.mute(
+		const infID = await infractionsManager.mute(
 			client,
 			<Guild>message.guild,
 			target,

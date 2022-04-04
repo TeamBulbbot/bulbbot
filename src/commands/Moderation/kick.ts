@@ -29,7 +29,6 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number | null;
 
 		//Checks if the reason or target is null and if the target is actionable
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
@@ -47,7 +46,7 @@ export default class extends Command {
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		//Executes the action
-		infID = await infractionsManager.kick(
+		const infID = await infractionsManager.kick(
 			this.client,
 			<string>context.guild?.id,
 			target,

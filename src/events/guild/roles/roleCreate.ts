@@ -6,12 +6,12 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {});
 	}
 
 	async run(role: Role) {
-        // TODO: attempt to fetch executor from audit log
+		// TODO: attempt to fetch executor from audit log
 		await loggingManager.sendEventLog(this.client, role.guild, "role", await this.client.bulbutils.translate("event_role_create", role.guild.id, { role: role }));
 	}
 }

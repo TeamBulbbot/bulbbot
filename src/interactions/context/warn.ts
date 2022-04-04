@@ -11,7 +11,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
-	let options: MessageSelectOptionData[] = [];
+	const options: MessageSelectOptionData[] = [];
 	for (const reason of reasons) {
 		options.push({ label: reason, value: reason });
 	}

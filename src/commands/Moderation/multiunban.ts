@@ -29,7 +29,7 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
 			return context.channel.send(
@@ -41,9 +41,9 @@ export default class extends Command {
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
-		if (targets!!.length <= 1) {
+		if (targets!.length <= 1) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_multi_less_than_2", context.guild?.id, {
 					action: await this.client.bulbutils.translate("action_multi_types.unban", context.guild?.id, {}),
@@ -52,16 +52,15 @@ export default class extends Command {
 			return await this.client.commands.get("unban")!.run(context, args);
 		}
 
-		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
+		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {
 			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
 			await this.client.bulbutils.sleep(massCommandSleep);
-			const targetID: Snowflake = targets[i].replace(NonDigits, "")
+			const targetID: Snowflake = targets[i].replace(NonDigits, "");
 
-			let infID: number;
 			const target = await this.client.bulbfetch.getUser(targetID);
 			if (!target) {
 				await context.channel.send(
@@ -76,14 +75,14 @@ export default class extends Command {
 			}
 
 			const banList = await context.guild?.bans.fetch();
-			const bannedUser = banList?.find(user => user.user.id === targetID);
+			const bannedUser = banList?.find((user) => user.user.id === targetID);
 
 			if (!bannedUser) {
 				context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
 				continue;
 			}
 
-			infID = await infractionsManager.unban(
+			const infID = await infractionsManager.unban(
 				this.client,
 				<Guild>context.guild,
 				BanType.MANUAL,
@@ -106,7 +105,7 @@ export default class extends Command {
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild?.id, {}),
-				full_list: fullList.join(', '),
+				full_list: fullList.join(", "),
 				reason,
 			}),
 		);
