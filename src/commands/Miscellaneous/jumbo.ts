@@ -27,11 +27,11 @@ export default class extends Command {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const startMessage = await context.channel.send(await this.client.bulbutils.translate("jumbo_start", context.guild?.id, {}));
 
-		const PATH: string = `${__dirname}/../../../files`;
-		const TWEMOJI_VERSION: string = "13.1.0";
+		const PATH = `${__dirname}/../../../files`;
+		const TWEMOJI_VERSION = "13.1.0";
 		let doesIncludeAnimatedEmoji = false;
 
-		const SIZE: number = 250;
+		const SIZE = 250;
 		const imgPath: any = [];
 		sharp.cache({ files: 0 });
 
@@ -137,7 +137,7 @@ export default class extends Command {
 
 async function DownloadEmoji(url: string, extension: string, emote: any, emoteName: string, size: number, path: string, twemojiVersion: string) {
 	try {
-		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+		await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
 			const sharpEmoji = sharp(res.data, {
 				density: 2400,
 				animated: extension === "gif",
@@ -153,7 +153,7 @@ async function DownloadEmoji(url: string, extension: string, emote: any, emoteNa
 
 		url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/${twemojiVersion}/svg/${emoteName.split("-fe0f").join("")}.svg`;
 
-		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+		await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
 			return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${path}/${emoteName}.${extension}`);
 		});
 	}

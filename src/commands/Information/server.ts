@@ -35,27 +35,27 @@ export default class extends Command {
 
 		let channelStats = "";
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_text", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_text: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_TEXT").size,
 			emote_text: Emotes.channel.TEXT,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_announcement", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_announcement: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_NEWS").size,
 			emote_announcement: Emotes.channel.ANNOUNCEMENT,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_voice", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_voice: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_VOICE").size,
 			emote_voice: Emotes.channel.VOICE,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_stage", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_stage: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_STAGE_VOICE").size,
 			emote_stage: Emotes.channel.STAGE,
 		});
 		channelStats += await this.client.bulbutils.translate("serverinfo_channel_stats_category", guild.id, {
-			// @ts-ignore
+			// @ts-expect-error
 			guild_category: guild.channels.cache.filter((ch: GuildChannel) => ch.type === "GUILD_CATEGORY").size,
 			emote_category: Emotes.channel.CATEGORY,
 		});
@@ -67,18 +67,18 @@ export default class extends Command {
 		else if (guild.premiumTier === "TIER_2") boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_2", guild.id, { guild });
 		else if (guild.premiumTier === "TIER_3") boosterStats += await this.client.bulbutils.translate("serverinfo_booster_tier_3", guild.id, { guild });
 
-		let guildRoles: Role[] = [];
-		let guildEmotes: Emoji[] = [];
-		let rolesLeft: number = 0;
-		let amountOfRoles: number = 0;
-		let emotesLeft: number = 0;
-		let amountOfEmotes: number = 0;
-		guild.roles.cache.forEach(role => {
+		const guildRoles: Role[] = [];
+		const guildEmotes: Emoji[] = [];
+		let rolesLeft = 0;
+		let amountOfRoles = 0;
+		let emotesLeft = 0;
+		let amountOfEmotes = 0;
+		guild.roles.cache.forEach((role) => {
 			amountOfRoles++;
 			if (guildRoles.join(" ").length <= 400) guildRoles.push(role);
 			else rolesLeft++;
 		});
-		guild.emojis.cache.forEach(emote => {
+		guild.emojis.cache.forEach((emote) => {
 			amountOfEmotes++;
 			if (guildEmotes.join(" ").length <= 800) guildEmotes.push(emote);
 			else emotesLeft++;
@@ -86,10 +86,10 @@ export default class extends Command {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(embedColor)
-			.setThumbnail(<string>context.guild?.iconURL({ dynamic: true }))
+			.setThumbnail(context.guild?.iconURL({ dynamic: true }) || "")
 			.setAuthor({
-				name: context.guild!?.name,
-				iconURL: <string>context.guild?.iconURL({ dynamic: true }),
+				name: context.guild?.name || "",
+				iconURL: context.guild?.iconURL({ dynamic: true }) ?? undefined,
 			})
 			.addField(await this.client.bulbutils.translate("serverinfo_server_stats", guild.id, {}), serverStats, true)
 			.addField(await this.client.bulbutils.translate("serverinfo_channel_stats", guild.id, {}), channelStats, true)

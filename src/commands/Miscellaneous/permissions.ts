@@ -83,7 +83,7 @@ export default class extends Command {
 
 		// Decimal-to-Binary conversion algorithm
 		// This is closely based on the algorithm taught for doing written conversions
-		let permsInt: bigint = BigInt(args[0]);
+		let permsInt = BigInt(args[0]);
 		const permissionStrings: string[] = [];
 		for (let i = 0; permsInt > bint0 && i < PERM_STRINGS.length; permsInt >>= bint1, ++i) {
 			const val = permsInt % bint2;

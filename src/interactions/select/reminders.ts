@@ -7,7 +7,7 @@ import moment from "moment";
 const { getReminder } = new ReminderManager();
 
 export default async function (client: BulbBotClient, interaction: SelectMenuInteraction): Promise<void> {
-	const ID: number = Number(interaction.values[0].split("_")[1]);
+	const ID = Number(interaction.values[0].split("_")[1]);
 	const user: string = interaction.values[0].split("_")[0];
 	const reminder: Record<string, any> = await getReminder(ID);
 
@@ -16,7 +16,7 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 	if (user !== interaction.user.id) return await interaction.reply({ content: await client.bulbutils.translate("remind_no_permissions", interaction.guild?.id, {}), ephemeral: true });
 	if (!reminder) return await interaction.reply({ content: await client.bulbutils.translate("remind_not_found", interaction.guild?.id, {}), ephemeral: true });
 
-	let desc: string = "";
+	let desc = "";
 	desc += await client.bulbutils.translate("remind_desc_reason", interaction.guild?.id, { reminder });
 	desc += await client.bulbutils.translate("remind_desc_expire", interaction.guild?.id, { reminder });
 	desc += await client.bulbutils.translate("remind_desc_created", interaction.guild?.id, {

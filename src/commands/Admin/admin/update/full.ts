@@ -18,7 +18,7 @@ export default class extends SubCommand {
 	public async run(context: CommandContext): Promise<void | Message> {
 		await context.channel.send("Okay, starting to pull the latest code!");
 		const path: string = join(__dirname, "/../../../../../");
-		const PM2_PROCESS: String = "bulbbot";
+		const PM2_PROCESS = "bulbbot";
 
 		await cd(path);
 

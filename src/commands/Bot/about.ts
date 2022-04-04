@@ -31,7 +31,7 @@ export default class extends Command {
 
 		const version = Number(this.client.about.buildId.replace("\n", "")) - 782;
 
-		let desc: string = `**__Bulbbot Information__**\n`;
+		let desc = `**__Bulbbot Information__**\n`;
 		desc += `**Version:** TS ${(Math.floor(version / 100) + 1 + "" + version).replace(/\B(?=(\d)+(?!\d))/g, ".")} (${this.client.about.build.hash.replace("\n", "")})\n\n`;
 		desc += `**Last Commit:**\n**Hash:** \`${this.client.about.build.hash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;

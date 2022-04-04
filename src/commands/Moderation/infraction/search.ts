@@ -24,8 +24,8 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let user: User | undefined = await this.client.bulbfetch.getUser(targetID);
-		let page: number = Number(args[1]);
+		const user: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		let page = Number(args[1]);
 		if (!page) page = 0;
 
 		if (!user)
@@ -38,7 +38,7 @@ export default class extends SubCommand {
 				}),
 			);
 
-		let options: any[] = [];
+		const options: any[] = [];
 		const infs: Infraction[] = <Infraction[]>await infractionManager.getAllUserInfractions(<string>context.guild?.id, user.id, page);
 
 		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild?.id, { target: user }));

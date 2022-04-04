@@ -17,7 +17,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
-		let options: any[] = [];
+		const options: any[] = [];
 		const reminders: any = await listUserReminders(context.author.id);
 		if (!reminders.length) return await context.channel.send(await this.client.bulbutils.translate("remind_list_none", context.guild?.id, {}));
 

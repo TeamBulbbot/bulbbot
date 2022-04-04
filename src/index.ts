@@ -2,7 +2,8 @@ import * as Config from "./Config";
 import BulbBotClient from "./structures/BulbBotClient";
 import * as env from "dotenv";
 import { sequelize } from "./utils/database/connection";
-import { init, Integrations } from "@sentry/node"; // @ts-ignore
+import { init, Integrations } from "@sentry/node"; // @ts-expect-error
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as Tracing from "@sentry/tracing";
 import { startAllCrons } from "./utils/Crons";
 import { startPrometheus } from "./utils/Prometheus";
@@ -20,8 +21,8 @@ const config = {
 const client: BulbBotClient = new BulbBotClient(config);
 const languagesPath = require("path").join(__dirname, "languages");
 
-let resources = {};
-fs.readdirSync(languagesPath).map(file => {
+const resources = {};
+fs.readdirSync(languagesPath).map((file) => {
 	const langName = file.split(".")[0];
 	resources[langName] = {
 		translation: require(`./languages/${langName}.json`),

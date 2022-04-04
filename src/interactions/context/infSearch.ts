@@ -8,7 +8,7 @@ const infractionManager: InfractionsManager = new InfractionsManager();
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
 	const user: User = message.author;
 
-	let options: any[] = [];
+	const options: any[] = [];
 	const infs: Infraction[] = <Infraction[]>await infractionManager.getAllUserInfractions(<Snowflake>interaction.guild?.id, user.id, 0);
 
 	if (!infs.length) return interaction.reply({ content: await client.bulbutils.translate("infraction_search_not_found", interaction.guild?.id, { target: user }), ephemeral: true });

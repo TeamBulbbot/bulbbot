@@ -39,7 +39,7 @@ export default class extends Command {
 		}
 		const desc: string[] = [`**ID:** ${channel.id}`, `**Name:** ${channel.name}`, `**Mention:** <#${channel.id}>`];
 		channel.parentId !== null ? desc.push(`**Parent:** ${channel.parent?.name}`) : "";
-		let buttons: MessageButton[] = [];
+		const buttons: MessageButton[] = [];
 
 		if (channel.isText()) {
 			channel.lastMessageId !== null
@@ -55,7 +55,7 @@ export default class extends Command {
 					`\n**Your permissions:** ${textChannels
 						.permissionsFor(context.author)
 						?.toArray()
-						.map(p => `\`${p}\``)
+						.map((p) => `\`${p}\``)
 						.join(" ")}`,
 				);
 			}
@@ -68,7 +68,7 @@ export default class extends Command {
 				`\n**Your permissions:** ${channel
 					.permissionsFor(context.author)
 					?.toArray()
-					.map(p => `\`${p}\``)
+					.map((p) => `\`${p}\``)
 					.join(" ")}`,
 			);
 		}

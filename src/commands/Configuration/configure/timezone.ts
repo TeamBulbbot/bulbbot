@@ -8,10 +8,10 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 async function timezone(interaction: MessageComponentInteraction, client: BulbBotClient) {
 	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
 	const pages: { label: string; value: string }[][] = [];
-	let currPage: number = 0;
+	let currPage = 0;
 
 	for (let i = 0; i < 3; i++) {
-		let page: { label: string; value: string }[] = [];
+		const page: { label: string; value: string }[] = [];
 		for (let j = 0; j < 9; j++) {
 			const [code, name] = Object.entries(client.bulbutils.timezones)[i * 9 + j];
 			page.push({
@@ -23,7 +23,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 		pages.push(page);
 	}
 
-	let selectRow = new MessageActionRow().addComponents([
+	const selectRow = new MessageActionRow().addComponents([
 		new MessageSelectMenu()
 			.setCustomId("quickReasons")
 			.setPlaceholder(
@@ -34,7 +34,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			.setOptions(pages[currPage]),
 	]);
 
-	let pageRow = new MessageActionRow().addComponents([
+	const pageRow = new MessageActionRow().addComponents([
 		new MessageButton()
 			.setCustomId("page-back")
 			.setLabel("<")
@@ -47,7 +47,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			.setDisabled(currPage === 2),
 	]);
 
-	let buttonRow = new MessageActionRow().addComponents([
+	const buttonRow = new MessageActionRow().addComponents([
 		new MessageButton()
 			.setCustomId("back")
 			.setLabel(await client.bulbutils.translate("config_button_back", interaction.guild?.id, {}))
@@ -67,7 +67,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			switch (i.customId) {
 				case "page-next":
 					currPage++;
-					// @ts-ignore
+					// @ts-expect-error
 					selectRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === 2);
@@ -76,7 +76,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 					break;
 				case "page-back":
 					currPage--;
-					// @ts-ignore
+					// @ts-expect-error
 					selectRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === 2);

@@ -15,8 +15,8 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
-		let count: number = 0;
-		const path: string = `${__dirname}/../../../../files`;
+		let count = 0;
+		const path = `${__dirname}/../../../../files`;
 		const files: string[] = readdirSync(path);
 		for (const file of files) {
 			if (file.endsWith(".gitignore")) continue;

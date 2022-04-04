@@ -23,13 +23,13 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount: number = 0;
-		let deletedAmount: number = 0;
+		let amount = 0;
+		let deletedAmount = 0;
 		let msg: Message;
-		let deletedMessage: boolean = false;
+		let deletedMessage = false;
 		let temp: number;
 
-		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
+		let delMsgs = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
 			"MMMM Do YYYY, h:mm:ss a",
 		)} \n`;
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
@@ -53,7 +53,7 @@ export default class extends SubCommand {
 				limit: 100,
 			});
 
-			const found = msgs.find(m => {
+			const found = msgs.find((m) => {
 				temp++;
 				return m.id === msg.id;
 			});
@@ -65,7 +65,7 @@ export default class extends SubCommand {
 				deletedAmount += temp;
 				amount = 500;
 			} else deletedAmount += 100;
-			msgs.map(m => {
+			msgs.map((m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 			});

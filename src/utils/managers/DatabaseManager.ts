@@ -332,12 +332,12 @@ export default class {
 			}
 			if (items.length === 1) {
 				dblist.splice(
-					dblist.findIndex(i => i === items[0]),
+					dblist.findIndex((i) => i === items[0]),
 					1,
 				);
 			} else {
 				dblist.sort((a, b) => +items.includes(b) - +items.includes(a));
-				dblist = dblist.slice(dblist.findIndex(i => !items.includes(i)));
+				dblist = dblist.slice(dblist.findIndex((i) => !items.includes(i)));
 			}
 			return { list: dblist, added: [], removed: removed, other: notPresent };
 		});
@@ -396,7 +396,7 @@ export default class {
 			}
 		})(part);
 		if (!dbkey) return;
-		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find(n => PunishmentType[n] === punishment) ?? null;
+		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find((n) => PunishmentType[n] === punishment) ?? null;
 		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Punishment WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
 			bind: { GuildID: guildID, Punishment: punishmentkey },
 			type: QueryTypes.UPDATE,
@@ -415,7 +415,7 @@ export default class {
 		return response[0];
 	}
 
-	async addBlacklist(isGuild: boolean, name: String, snowflakeId: Snowflake, reason: String, developerId: Snowflake): Promise<void> {
+	async addBlacklist(isGuild: boolean, name: string, snowflakeId: Snowflake, reason: string, developerId: Snowflake): Promise<void> {
 		await sequelize.query(
 			'INSERT INTO blacklists ("isGuild", name, "snowflakeId", reason, "developerId", "createdAt", "updatedAt") VALUES ($isGuild, $name, $snowflakeId, $reason, $developerId, $createdAt, $updatedAt)',
 			{
@@ -472,7 +472,7 @@ export default class {
 					authorTag: message.author.tag,
 					content: message.content,
 					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
-					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-ignore
+					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-expect-error
 					attachments: message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`),
 					createdAt: moment(message.createdAt).format(),
 					updatedAt: moment(message.createdAt).format(),
@@ -485,9 +485,9 @@ export default class {
 	async getMessageFromDB(messageId: Snowflake) {
 		const response: Record<string, any> = await sequelize.query(
 			`
-		SELECT * FROM "messageLogs" 
+		SELECT * FROM "messageLogs"
 		JOIN guilds ON "messageLogs"."guildId" = guilds.id
-		WHERE ("messageId" = $messageId) 
+		WHERE ("messageId" = $messageId)
 		`,
 			{
 				bind: { messageId },
@@ -561,7 +561,7 @@ export default class {
 	async purgeAllMessagesOlderThan30Days() {
 		const deleted: Record<string, any> = await sequelize.query(
 			`
-			DELETE FROM "messageLogs" 
+			DELETE FROM "messageLogs"
 			WHERE "createdAt" < (now() - '30 days'::interval);
 			`,
 		);

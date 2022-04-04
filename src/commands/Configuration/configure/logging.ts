@@ -8,11 +8,11 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function logging(interaction: MessageComponentInteraction, client: BulbBotClient, channel?: TextChannel) {
 	const config: LoggingConfiguration = await databaseManager.getLoggingConfig(interaction.guild?.id as Snowflake);
-	let currPage: number = 0;
-	let selectedChannel: TextChannel | undefined = channel;
-	let selectedLogs: string[] = [];
+	let currPage = 0;
+	const selectedChannel: TextChannel | undefined = channel;
+	const selectedLogs: string[] = [];
 
-	let channels: MessageSelectOptionData[] = [];
+	const channels: MessageSelectOptionData[] = [];
 	if (selectedChannel)
 		channels.push({
 			label: selectedChannel.name,
@@ -22,7 +22,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 		});
 
 	await interaction.guild?.channels.fetch();
-	interaction.guild?.channels.cache.map(channel => {
+	interaction.guild?.channels.cache.map((channel) => {
 		if (channel.type !== "GUILD_TEXT") return;
 		if (selectedChannel && selectedChannel.id === channel.id) return;
 
@@ -34,7 +34,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 		});
 	});
 
-	let pages: MessageSelectOptionData[][] = channels.reduce((resultArray: any[], item: any, index: number) => {
+	const pages: MessageSelectOptionData[][] = channels.reduce((resultArray: any[], item: any, index: number) => {
 		const chunkIndex = Math.floor(index / 25);
 
 		if (!resultArray[chunkIndex]) {
@@ -55,7 +55,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 			.setDisabled(!selectedChannel)
 			.setMinValues(1),
 	);
-	let pageRow = new MessageActionRow().addComponents([
+	const pageRow = new MessageActionRow().addComponents([
 		new MessageButton()
 			.setCustomId("page-back")
 			.setLabel("<")
@@ -83,7 +83,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 				collector.stop();
 				await logging(i, client, (await client.bulbfetch.getChannel(interaction.guild?.channels, i.values[0])) as TextChannel);
 			} else {
-				const logs: MessageSelectOptionData[] = loggingTypes(config, selectedChannel).map(type => {
+				const logs: MessageSelectOptionData[] = loggingTypes(config, selectedChannel).map((type) => {
 					if (i.values.includes(type.value)) selectedLogs.push(type.value);
 
 					return {
@@ -94,7 +94,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 					};
 				});
 
-				// @ts-ignore
+				// @ts-expect-error
 				logsRow.components[0].setOptions(logs);
 
 				await i.update({ components: [channelRow, logsRow, pageRow, backRow] });
@@ -107,7 +107,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 					break;
 				case "page-next":
 					currPage++;
-					// @ts-ignore
+					// @ts-expect-error
 					channelRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === pages.length - 1);
@@ -116,7 +116,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 					break;
 				case "page-back":
 					currPage--;
-					// @ts-ignore
+					// @ts-expect-error
 					channelRow.components[0].setOptions(pages[currPage]);
 					pageRow.components[0].setDisabled(currPage === 0);
 					pageRow.components[1].setDisabled(currPage === pages.length);
