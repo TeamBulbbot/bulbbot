@@ -9,9 +9,9 @@ const automodManager: AutoModManager = new AutoModManager();
 const loggingManager: LoggingManager = new LoggingManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-let cache = {};
+const cache = {};
 
-export async function set(client: BulbBotClient, context: CommandContext, guild: Snowflake, category: "mentions" | "messages", user: Snowflake, value: number, timeout: number = 10000): Promise<void> {
+export async function set(client: BulbBotClient, context: CommandContext, guild: Snowflake, category: "mentions" | "messages", user: Snowflake, value: number, timeout = 10000): Promise<void> {
 	if (cache[guild] === undefined) cache[guild] = { mentions: {}, messages: {} };
 
 	if (!cache[guild][category][user]) cache[guild][category][user] = { count: value, time: Date.now() };

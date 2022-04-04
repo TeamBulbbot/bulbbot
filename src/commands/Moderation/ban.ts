@@ -31,17 +31,17 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let notInGuild: boolean = !target;
-		let infID: number = 0;
+		const notInGuild = !target;
+		let infID = 0;
 
 		if (!notInGuild) {
 			if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 		}
 
 		//Fetches the ban list
-		//@ts-ignore
+		// @ts-expect-error
 		const banList: Collection<string, { user: User; reason: string }> | undefined = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find(user => user.user.id === targetID);
+		const bannedUser = banList?.find((user) => user.user.id === targetID);
 
 		//If the user is already banned return with a context
 		if (bannedUser) {

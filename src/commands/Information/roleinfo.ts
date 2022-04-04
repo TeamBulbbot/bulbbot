@@ -53,7 +53,7 @@ export default class extends Command {
 			`**Mentionable:** ${role.mentionable}`,
 			`\n**Permissions:** ${role.permissions
 				.toArray()
-				.map(p => `\`${p}\``)
+				.map((p) => `\`${p}\``)
 				.join(" ")}`,
 		];
 

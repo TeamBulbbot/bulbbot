@@ -19,7 +19,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			once: true,
 		});
@@ -65,7 +65,7 @@ export default class extends Event {
 		} else if (interaction.isCommand()) {
 			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
 			const subCommand: string = <string>context.options.getSubcommand(false);
-			let args: string[] = [];
+			const args: string[] = [];
 			let cmd: string = <string>context.commandName;
 
 			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
@@ -84,8 +84,8 @@ export default class extends Event {
 				return;
 			}
 
-			let used: string = `/${command.qualifiedName}`;
-			args.forEach(arg => (used += ` ${arg}`));
+			let used = `/${command.qualifiedName}`;
+			args.forEach((arg) => (used += ` ${arg}`));
 			await loggingManager.sendCommandLog(this.client, interaction.guild!, context.author, context.channel.id, used);
 
 			await context.deferReply();

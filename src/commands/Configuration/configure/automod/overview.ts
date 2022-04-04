@@ -14,9 +14,9 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 	const channels: string[] = [];
 	const users: string[] = [];
 
-	dbGuild.ignoreRoles.length ? dbGuild.ignoreRoles.forEach(role => roles.push(`<@&${role}>`)) : roles.push("None");
-	dbGuild.ignoreChannels.length ? dbGuild.ignoreChannels.forEach(channel => channels.push(`<#${channel}>`)) : channels.push("None");
-	dbGuild.ignoreUsers.length ? dbGuild.ignoreUsers.forEach(user => users.push(`<@${user}>`)) : users.push("None");
+	dbGuild.ignoreRoles.length ? dbGuild.ignoreRoles.forEach((role) => roles.push(`<@&${role}>`)) : roles.push("None");
+	dbGuild.ignoreChannels.length ? dbGuild.ignoreChannels.forEach((channel) => channels.push(`<#${channel}>`)) : channels.push("None");
+	dbGuild.ignoreUsers.length ? dbGuild.ignoreUsers.forEach((user) => users.push(`<@${user}>`)) : users.push("None");
 
 	const description: string[] = [];
 
@@ -29,14 +29,14 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 	description.push(
 		await client.bulbutils.translate("automod_settings_websites", interaction.guild?.id, {
 			enabled: dbGuild.punishmentWebsite !== null ? `\`${dbGuild.punishmentWebsite}\`` : Emotes.other.SWITCHOFF,
-			websites_blacklist: dbGuild.websiteWhitelist.length ? dbGuild.websiteWhitelist.map(web => `\`${web}\``).join(" ") : "None",
+			websites_blacklist: dbGuild.websiteWhitelist.length ? dbGuild.websiteWhitelist.map((web) => `\`${web}\``).join(" ") : "None",
 		}),
 	);
 
 	description.push(
 		await client.bulbutils.translate("automod_settings_invites", interaction.guild?.id, {
 			enabled: dbGuild.punishmentInvites !== null ? `\`${dbGuild.punishmentInvites}\`` : Emotes.other.SWITCHOFF,
-			invites_blacklist: dbGuild.inviteWhitelist.length ? dbGuild.inviteWhitelist.map(i => `\`${i}\``).join(" ") : "None",
+			invites_blacklist: dbGuild.inviteWhitelist.length ? dbGuild.inviteWhitelist.map((i) => `\`${i}\``).join(" ") : "None",
 		}),
 	);
 
@@ -44,7 +44,7 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 		await client.bulbutils.translate("automod_settings_words", interaction.guild?.id, {
 			enabled: dbGuild.punishmentWords !== null ? `\`${dbGuild.punishmentWords}\`` : Emotes.other.SWITCHOFF,
 			word_blacklist: dbGuild.wordBlacklist.length ? dbGuild.wordBlacklist.join(" ") : "None",
-			word_token_blacklist: dbGuild.wordBlacklistToken.length ? dbGuild.wordBlacklistToken.map(w => `\`${w}\``).join(" ") : "None",
+			word_token_blacklist: dbGuild.wordBlacklistToken.length ? dbGuild.wordBlacklistToken.map((w) => `\`${w}\``).join(" ") : "None",
 		}),
 	);
 
@@ -67,7 +67,7 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 	description.push(
 		await client.bulbutils.translate("automod_settings_avatarbans", interaction.guild?.id, {
 			enabled: dbGuild.punishmentAvatarBans !== null ? `\`${dbGuild.punishmentAvatarBans}\`` : Emotes.other.SWITCHOFF,
-			avatar_blacklist: dbGuild.avatarHashes.length ? dbGuild.avatarHashes.map(h => `\`${h}\``).join(" ") : "None",
+			avatar_blacklist: dbGuild.avatarHashes.length ? dbGuild.avatarHashes.map((h) => `\`${h}\``).join(" ") : "None",
 		}),
 	);
 

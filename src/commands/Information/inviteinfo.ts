@@ -40,8 +40,8 @@ export default class extends Command {
 		const guild = invite!.guild;
 		if (guild === null || context.guild === null || context.member === null) return;
 
-		let desc: string = "";
-		let inviteInfo: string = "";
+		let desc = "";
+		let inviteInfo = "";
 
 		desc += `${this.client.bulbutils.guildFeatures(guild.features)}\n\n`;
 		desc += await this.client.bulbutils.translate("inviteinfo_verification_level", context.guild.id, { guild });
@@ -109,7 +109,7 @@ export default class extends Command {
 					iconURL: await this.client.bulbutils.userObject(true, context.member).avatarUrl,
 				})
 				.setTimestamp()
-				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map(m => `\`${m.username}\``).join(" ")}`);
+				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map((m) => `\`${m.username}\``).join(" ")}`);
 
 			embeds.push(widgetEmbed);
 		}

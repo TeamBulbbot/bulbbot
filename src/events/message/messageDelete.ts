@@ -10,7 +10,7 @@ const { getMessageFromDB }: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -18,7 +18,7 @@ export default class extends Event {
 
 	public async run(message: Message): Promise<void> {
 		if (!message.guild) return;
-		let msg: string = "";
+		let msg = "";
 		let channel: TextBasedChannel;
 		let guild: Guild;
 		let author: User;
@@ -44,7 +44,7 @@ export default class extends Event {
 			guild = message.guild;
 			content = message.content;
 			sticker = message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "";
-			attachment = message.attachments.first() // @ts-ignore
+			attachment = message.attachments.first() // @ts-expect-error
 				? `**A**: ${message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`).join("\n")}\n`
 				: "";
 			embeds = message.embeds.length > 0 ? message.embeds : null;

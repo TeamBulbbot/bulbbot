@@ -22,7 +22,7 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const reminderId: number = Number(args[0].replace(NonDigits, ""));
+		const reminderId = Number(args[0].replace(NonDigits, ""));
 		const allowedToDelete: boolean = await deleteUserReminder(reminderId, context.author.id);
 
 		if (!allowedToDelete)

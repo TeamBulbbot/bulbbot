@@ -21,18 +21,16 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<Message> {
 		const command = Command.resolve(this.client, args);
 
-		if (!command || !await command.validateUserPerms(context))
-			return context.channel.send(
-				await this.client.bulbutils.translate("help_unable_to_find_command", context.guild!.id, { commandName: args[0] })
-			);
+		if (!command || !(await command.validateUserPerms(context)))
+			return context.channel.send(await this.client.bulbutils.translate("help_unable_to_find_command", context.guild!.id, { commandName: args[0] }));
 
-		let msg = `**${Util.escapeMarkdown(context.prefix)}${command.qualifiedName}** ${command.aliases.length !== 0 ? `(${command.aliases.map(alias => `**${alias}**`).join(", ")})` : ""}\n`;
+		let msg = `**${Util.escapeMarkdown(context.prefix)}${command.qualifiedName}** ${command.aliases.length !== 0 ? `(${command.aliases.map((alias) => `**${alias}**`).join(", ")})` : ""}\n`;
 		msg += `> ${command.description}\n\n`;
 		msg += `**Usage:** \`${context.prefix}${command.usage}\`\n`;
 
 		if (command.examples.length !== 0) {
 			msg += `**Examples:**\n`;
-			command.examples.forEach(ex => (msg += `\`${context.prefix}${ex}\`\n`));
+			command.examples.forEach((ex) => (msg += `\`${context.prefix}${ex}\`\n`));
 		}
 
 		return context.channel.send(msg);

@@ -3,3 +3,17 @@ build
 
 # Files
 *.json
+
+node_modules
+.env
+.env.example
+.*ignore
+.*rc
+yarn.lock
+.husky
+*.yml
+logs
+files
+assets
+.github
+.lintstagedrc.js

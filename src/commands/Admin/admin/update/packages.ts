@@ -15,7 +15,7 @@ export default class extends SubCommand {
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+	public async run(context: CommandContext, _args: string[]): Promise<void | Message> {
 		// npm install -g npm-check-updates (before, used to update the packages globally use with caution :pleading:)
 		const path: string = join(__dirname, "/../../../../../");
 		cd(path);

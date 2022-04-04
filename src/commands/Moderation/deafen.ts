@@ -28,7 +28,6 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		if (!target)
@@ -44,7 +43,7 @@ export default class extends Command {
 		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild?.id, { target: target.user }));
 		if (target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("deafen_already_deaf", context.guild?.id, { target: target.user }));
 
-		infID = await infractionsManager.deafen(
+		const infID = await infractionsManager.deafen(
 			this.client,
 			<Guild>context.guild,
 			target,

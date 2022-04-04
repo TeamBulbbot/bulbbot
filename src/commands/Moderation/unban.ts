@@ -28,9 +28,8 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
 
 		if (!target)
 			return await context.channel.send(
@@ -43,13 +42,13 @@ export default class extends Command {
 			);
 
 		const banList = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find(user => user.user.id === targetID);
+		const bannedUser = banList?.find((user) => user.user.id === targetID);
 
 		if (!bannedUser) return context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild?.id, { target }));
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 
-		infID = await infractionsManager.unban(
+		const infID = await infractionsManager.unban(
 			this.client,
 			<Guild>context.guild,
 			BanType.MANUAL,

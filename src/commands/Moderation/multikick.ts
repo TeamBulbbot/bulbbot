@@ -28,21 +28,21 @@ export default class extends Command {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
-		return context.channel.send(
-			await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
-				usage: this.usage,
-			}),
-		);
+			return context.channel.send(
+				await this.client.bulbutils.translate("action_multi_no_targets", context.guild?.id, {
+					usage: this.usage,
+				}),
+			);
 
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
-		if (targets!!.length <= 1) {
+		if (targets!.length <= 1) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("action_multi_less_than_2", context.guild?.id, {
 					action: await this.client.bulbutils.translate("action_multi_types.kick", context.guild?.id, {}),
@@ -51,7 +51,7 @@ export default class extends Command {
 			return await this.client.commands.get("kick")!.run(context, args);
 		}
 
-		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
+		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {
 			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
 
@@ -61,7 +61,6 @@ export default class extends Command {
 
 			const t: string = targets[i].replace(NonDigits, "");
 			const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
-			let infID: number | null;
 
 			if (!target) {
 				await context.channel.send(
@@ -76,7 +75,7 @@ export default class extends Command {
 			}
 			if (await this.client.bulbutils.resolveUserHandle(context, await this.client.bulbutils.checkUser(context, target), target.user)) return;
 
-			infID = await infractionsManager.kick(
+			const infID = await infractionsManager.kick(
 				this.client,
 				<Snowflake>context.guild?.id,
 				target,
@@ -99,7 +98,7 @@ export default class extends Command {
 		return context.channel.send(
 			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-				full_list: fullList.join(', '),
+				full_list: fullList.join(", "),
 				reason,
 			}),
 		);

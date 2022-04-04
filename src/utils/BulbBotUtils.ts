@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -8,7 +8,9 @@ import i18next, { TOptions } from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import DatabaseManager from "./managers/DatabaseManager";
-import { GuildFeaturesDescriptions } from './types/GuildFeaturesDescriptions';
+import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
+import { isBaseGuildTextChannel } from "./typechecks";
+import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -32,7 +34,7 @@ export default class {
 	}
 
 	public applicationFlags(flag: number) {
-		let flags: string[] = [];
+		const flags: string[] = [];
 		const GATEWAY_PRESENCE: number = 1 << 12;
 		const GATEWAY_PRESENCE_LIMITED: number = 1 << 13;
 		const GATEWAY_GUILD_MEMBERS: number = 1 << 14;
@@ -55,7 +57,7 @@ export default class {
 	}
 
 	public badges(bitfield: number) {
-		let badges: string[] = [];
+		const badges: string[] = [];
 
 		const staff: number = 1 << 0;
 		const partner: number = 1 << 1;
@@ -85,19 +87,39 @@ export default class {
 		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 
-		return badges.map(i => `${i}`).join(" ");
+		return badges.map((i) => `${i}`).join(" ");
 	}
 
 	public guildFeatures(guildFeatures: string[]) {
 		const features: string[] = [];
 
-		guildFeatures.forEach(feature => {
+		guildFeatures.forEach((feature) => {
 			features.push(`${Emotes.features[feature]} [\`${feature}\`](https://bulbbot.rocks '${GuildFeaturesDescriptions[feature]}')`);
 		});
 
 		features.sort();
 
-		return features.map(i => `${i}`).join("\n");
+		return features.map((i) => `${i}`).join("\n");
+	}
+
+	public resolveThreadArchiveDuration(duration: Maybe<ThreadAutoArchiveDuration>, channel: Maybe<ThreadChannel>): Exclude<ThreadAutoArchiveDuration, "MAX"> {
+		if (!duration) {
+			// Duration is unavailable for whatever reason, try to fallback to default
+			if (isBaseGuildTextChannel(channel)) return this.resolveThreadArchiveDuration(channel.defaultAutoArchiveDuration, channel);
+			// Else fall back to minimum 60 minutes
+			return 60; // 60 * 1 hour * 1 day
+		}
+
+		if (duration === "MAX") {
+			if (!channel?.guild.features) return 1440; // 60 * 24 hours * 1 day
+			const features = channel.guild.features.filter((feature) => feature.endsWith("DAY_THREAD_ARCHIVE")) as Include<GuildFeature, `${string}DAY_THREAD_ARCHIVE`>[];
+			if (features.find((feature) => feature.startsWith("THREE"))) return 4320; // 60 * 24 hours * 3 days
+			if (features.find((feature) => feature.startsWith("SEVEN"))) return 10080; // 60 * 24 hours * 7 days
+			return 1440; // 60 * 24 hours * 1 day
+		}
+
+		// Duration is already a number
+		return duration;
 	}
 
 	public getUptime(timestamp: number | null) {
@@ -107,7 +129,7 @@ export default class {
 		const mins: number = Math.floor(time.asMinutes() - days * 24 * 60 - hours * 60);
 		const secs: number = Math.floor(time.asSeconds() - days * 24 * 60 * 60 - hours * 60 * 60 - mins * 60);
 
-		let uptime: string = "";
+		let uptime = "";
 		if (days > 0) uptime += `${days} day(s), `;
 		if (hours > 0) uptime += `${hours} hour(s), `;
 		if (mins > 0) uptime += `${mins} minute(s), `;
@@ -117,7 +139,7 @@ export default class {
 	}
 
 	public async sleep(ms: number) {
-		return new Promise(resolve => setTimeout(resolve, ms));
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	public formatDays(start: Date) {
@@ -170,20 +192,22 @@ export default class {
 	}
 
 	public prettify(action: string): string {
-		return {
-			"Ban": Emotes.actions.BAN,
-			"Manual Ban": Emotes.actions.BAN,
-			"Force-ban": Emotes.actions.BAN,
-			"Kick": Emotes.actions.KICK,
-			"Manual Kick": Emotes.actions.KICK,
-			"Mute": Emotes.actions.MUTE,
-			"Warn": Emotes.actions.WARN,
-			"Unmute": Emotes.actions.UNBAN,
-			"Unban": Emotes.actions.UNBAN,
-			"true": Emotes.status.ONLINE,
-			"false": Emotes.other.INF1,
-			"Nickname": Emotes.other.EDIT,
-		}[action] + ` ${action}`;
+		return (
+			{
+				Ban: Emotes.actions.BAN,
+				"Manual Ban": Emotes.actions.BAN,
+				"Force-ban": Emotes.actions.BAN,
+				Kick: Emotes.actions.KICK,
+				"Manual Kick": Emotes.actions.KICK,
+				Mute: Emotes.actions.MUTE,
+				Warn: Emotes.actions.WARN,
+				Unmute: Emotes.actions.UNBAN,
+				Unban: Emotes.actions.UNBAN,
+				true: Emotes.status.ONLINE,
+				false: Emotes.other.INF1,
+				Nickname: Emotes.other.EDIT,
+			}[action] + ` ${action}`
+		);
 	}
 
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
@@ -216,10 +240,10 @@ export default class {
 		if (handle == 0) return false;
 
 		// here are two exclusive cases, that use the same message as the other ones
-		if (handle == 5) await context.channel.send(await this.translate('global_cannot_action_role_equal', context.guild?.id, { target: user }));
-		if (handle == 7) await context.channel.send(await this.translate('global_cannot_action_role_equal_bot', context.guild?.id, { target: user }));
-		
-		// @ts-ignore
+		if (handle == 5) await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
+		if (handle == 7) await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
+
+		// @ts-expect-error
 		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
 		return true;
 	}
@@ -335,24 +359,24 @@ export default class {
 			"cs-cz|czech|čeština": "cs-CZ",
 			"it-it|italian|italiano": "it-IT",
 			"hi-in|hindi|हिंदी": "hi-IN",
-		}, // @ts-ignore
+		}, // @ts-expect-error
 		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
 	);
 
 	public formatAction(action: string): string | undefined {
-		if(!action) return Emotes.actions.WARN;
+		if (!action) return Emotes.actions.WARN;
 
 		return {
-			"Ban": Emotes.actions.BAN,
+			Ban: Emotes.actions.BAN,
 			"Manual Ban": Emotes.actions.BAN,
 			"Force-ban": Emotes.actions.BAN,
-			"Kick": Emotes.actions.KICK,
+			Kick: Emotes.actions.KICK,
 			"Manual Kick": Emotes.actions.KICK,
-			"Mute": Emotes.actions.MUTE,
-			"Warn": Emotes.actions.WARN,
-			"Unmute": Emotes.actions.UNBAN,
-			"Unwarn": Emotes.actions.UNBAN,
-			"Nickname": Emotes.other.EDIT,
+			Mute: Emotes.actions.MUTE,
+			Warn: Emotes.actions.WARN,
+			Unmute: Emotes.actions.UNBAN,
+			Unwarn: Emotes.actions.UNBAN,
+			Nickname: Emotes.other.EDIT,
 		}[action];
 	}
 
@@ -374,7 +398,7 @@ export default class {
 			const argsDesc: string[] = [];
 			for (const [k, v] of Object.entries(runArgs)) {
 				if ((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
-				let additionalInfo =
+				const additionalInfo =
 					typeof v === "object"
 						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${
 								(<any>v)?.member
@@ -414,7 +438,7 @@ export default class {
 		if (typeof firstArray !== typeof secondArray) return false;
 		if (firstArray instanceof Array !== secondArray instanceof Array) return false;
 		if (typeof firstArray !== "object") return firstArray === secondArray;
-		// @ts-ignore
+		// @ts-expect-error
 		if ("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
 		if (firstArray.length != secondArray.length) return false;
 		const len = firstArray.length;
@@ -437,9 +461,9 @@ export default class {
 		if (typeof firstObject !== "object" && typeof secondObject !== "object") {
 			return firstObject === secondObject;
 		}
-		// @ts-ignore
+		// @ts-expect-error
 		if ("equals" in firstObject && typeof firstObject.equals === "function") {
-			// @ts-ignore
+			// @ts-expect-error
 			return firstObject.equals(secondObject);
 		}
 		for (const propertyName of Object.keys(firstObject)) {

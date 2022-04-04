@@ -11,7 +11,7 @@ const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {});
 	}
 

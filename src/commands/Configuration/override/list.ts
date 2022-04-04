@@ -22,17 +22,17 @@ export default class extends SubCommand {
 	async run(context: CommandContext): Promise<void | Message> {
 		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>context.guild?.id);
 
-		let roles: string[] = [];
-		let commands: string[] = [];
+		const roles: string[] = [];
+		const commands: string[] = [];
 
 		if (data[0] !== undefined) {
-			data[0].forEach(command => {
+			data[0].forEach((command) => {
 				commands.push(`\`${command.commandName}\` → \`${command.clearanceLevel}\`  ${command.enabled !== false ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`);
 			});
 		}
 
 		if (data[1] !== undefined) {
-			data[1].forEach(role => {
+			data[1].forEach((role) => {
 				roles.push(`<@&${role.roleId}> \`(${role.roleId})\` → \`${role.clearanceLevel}\``);
 			});
 		}
