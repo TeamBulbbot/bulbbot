@@ -138,7 +138,7 @@ export default class extends Event {
 						reason,
 						action: await this.client.bulbutils.translate(newMember.nickname ? "mod_action_types.nick_change" : "mod_action_types.nick_remove", newMember.guild.id, {}),
 						target: newMember.user,
-						moderator: executor,
+						moderator: executor!,
 					});
 				} else {
 					message = await this.client.bulbutils.translate(`event_member_${newMember.nickname ? "update" : "remove"}_nickname`, newMember.guild.id, {

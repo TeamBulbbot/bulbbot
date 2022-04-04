@@ -37,7 +37,7 @@ export default class extends SubCommand {
 			await this.client.bulbutils.translate("banpool_leave_log_og", context.guild.id, {
 				user: context.user,
 				name,
-				guild: context.guild,
+				guild: context.guild!,
 			}),
 		);
 		await sendEventLog(
@@ -47,7 +47,6 @@ export default class extends SubCommand {
 			await this.client.bulbutils.translate("banpool_leave_log", context.guild.id, {
 				user: context.user,
 				name,
-				guild: context.guild,
 			}),
 		);
 

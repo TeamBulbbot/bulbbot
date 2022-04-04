@@ -29,7 +29,6 @@ export default class extends SubCommand {
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -45,8 +44,8 @@ export default class extends SubCommand {
 		}
 
 		const inf: Infraction = <Infraction>await infractionsManager.getInfraction(<Snowflake>context.guild?.id, infID);
-		const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
-		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
+		const target = { tag: inf.target, id: inf.targetId };
+		const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setLabel("Confirm").setStyle("SUCCESS").setCustomId("confirm"),

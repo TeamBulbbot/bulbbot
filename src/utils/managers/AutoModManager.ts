@@ -34,7 +34,7 @@ export default class {
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.warn", context.guild?.id, {}),
-						moderator: client.user,
+						moderator: client.user!,
 						target: target.user,
 						reason,
 					}),
@@ -50,7 +50,7 @@ export default class {
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
-						moderator: client.user,
+						moderator: client.user!,
 						target: target.user,
 						reason,
 					}),
@@ -66,7 +66,7 @@ export default class {
 					<GuildMember>context.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-						moderator: client.user,
+						moderator: client.user!,
 						target: target.user,
 						reason,
 					}),
@@ -97,7 +97,7 @@ export default class {
 					<GuildMember>member.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.warn", member.guild?.id, {}),
-						moderator: client.user,
+						moderator: client.user!,
 						target: member.user,
 						reason,
 					}),
@@ -112,7 +112,7 @@ export default class {
 					<GuildMember>member.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.kick", member.guild?.id, {}),
-						moderator: client.user,
+						moderator: client.user!,
 						target: member.user,
 						reason,
 					}),
@@ -128,7 +128,7 @@ export default class {
 					<GuildMember>member.guild?.me,
 					await client.bulbutils.translate("global_mod_action_log", member.guild?.id, {
 						action: await client.bulbutils.translate("mod_action_types.ban", member.guild?.id, {}),
-						moderator: client.user,
+						moderator: client.user!,
 						target: member.user,
 						reason,
 					}),

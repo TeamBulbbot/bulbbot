@@ -90,7 +90,6 @@ export default class extends Command {
 				target: target.user,
 				nick_old: nickOld,
 				nick_new: nickname,
-				moderator: context.author,
 				reason,
 				infraction_id: infID,
 			}),

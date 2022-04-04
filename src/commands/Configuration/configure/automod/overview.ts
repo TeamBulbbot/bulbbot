@@ -82,7 +82,7 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 	const embed: MessageEmbed = new MessageEmbed()
 		.setColor(embedColor)
 		.setAuthor({
-			name: await client.bulbutils.translate("automod_settings_header", interaction.guild?.id, { guild: interaction.guild }),
+			name: await client.bulbutils.translate("automod_settings_header", interaction.guild?.id, { guild: interaction.guild! }),
 			iconURL: interaction.guild!.iconURL({ dynamic: true }) ?? undefined,
 		})
 		.setDescription(description.join("\n\n"))

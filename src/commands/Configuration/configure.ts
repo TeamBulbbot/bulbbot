@@ -84,7 +84,7 @@ export default class extends Command {
 
 		await context.channel.send({
 			content: await this.client.bulbutils.translate("config_main_header", context.guild?.id, {
-				guild: context.guild,
+				guild: context.guild!,
 			}),
 			components: [row],
 		});

@@ -46,7 +46,6 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 				moderator: message.author,
 				target: target.user,
 				reason,
-				until: Date.now() + 3600000,
 			}),
 			reason,
 			Date.now() + 3600000,

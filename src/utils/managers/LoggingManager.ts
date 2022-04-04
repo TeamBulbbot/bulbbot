@@ -46,7 +46,6 @@ export default class {
 				timestamp: moment().tz(zone).format("hh:mm:ssa z"),
 				target,
 				moderator,
-				reason: log,
 				infraction_id: infID,
 				action: action,
 				emoji: await this.betterActions(client, guild.id, action),

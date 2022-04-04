@@ -4,15 +4,20 @@ import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
-import i18next, { TOptions } from "i18next";
+import i18next from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
+import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
 import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 import { isBaseGuildTextChannel } from "./typechecks";
 import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
+
+type LowercaseUserHandle = Lowercase<
+	Exclude<keyof typeof UserHandle, "SUCCESS" | "CANNOT_ACTION_ROLE_EQUAL" | "CANNOT_ACTION_ROLE_HIGHER" | "CANNOT_ACTION_USER_ROLE_EQUAL_BOT" | "CANNOT_ACTION_USER_ROLE_HIGHER_BOT">
+>;
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -21,7 +26,7 @@ export default class {
 		this.client = client;
 	}
 
-	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
+	public async translate<T extends TranslateString>(string: T, guildID: Snowflake = "742094927403679816", options: DeepAccess<TranslateOptions, T> = {} as any): Promise<string> {
 		const language = (await databaseManager.getConfig(guildID))["language"];
 		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
 
@@ -237,14 +242,16 @@ export default class {
 	}
 
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
-		if (handle == 0) return false;
+		if (handle === UserHandle.SUCCESS) return false;
 
 		// here are two exclusive cases, that use the same message as the other ones
-		if (handle == 5) await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
-		if (handle == 7) await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
+		if (handle === UserHandle.CANNOT_ACTION_ROLE_EQUAL || handle === UserHandle.CANNOT_ACTION_ROLE_HIGHER)
+			await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
+		if (handle === UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT || handle === UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT)
+			await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
 
-		// @ts-expect-error
-		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
+		const userHandle = UserHandle[handle].toLocaleLowerCase() as LowercaseUserHandle;
+		await context.channel.send(await this.translate(`global_${userHandle}`, context.guild?.id, { target: user }));
 		return true;
 	}
 
