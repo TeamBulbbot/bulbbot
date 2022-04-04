@@ -427,29 +427,35 @@ export default class {
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
 		for (const key of Object.keys(oldObj)) {
-			if (oldObj[key] === null) continue;
-			if (oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
+			if (!this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
 		}
 		return diff;
 	}
 
 	/** Deep equality check for arrays */
-	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T) {
+	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T, depth = Infinity) {
+		// Allows limiting how deep we drill down to check equality. Passing depth as 1 will
+		// only check the first layer of values and not drill into any objects
+		if (depth <= 0) return true;
+		// If we can pass strict equality then they're equal
+		if (firstArray === secondArray) return true;
 		if (typeof firstArray !== typeof secondArray) return false;
+		// If these are equal, it should be because both are true
 		if (firstArray instanceof Array !== secondArray instanceof Array) return false;
-		if (typeof firstArray !== "object") return firstArray === secondArray;
+		// Don't call this function if you can't guarantee at least one of the arguments is an Array
+		// if (typeof firstArray !== "object") return firstArray === secondArray;
 		// @ts-expect-error
 		if ("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
-		if (firstArray.length != secondArray.length) return false;
+		if (firstArray.length !== secondArray.length) return false;
 		const len = firstArray.length;
 		for (let i = 0; i < len; i++) {
 			if (firstArray[i] !== secondArray[i]) {
-				if (firstArray[i] instanceof Array && secondArray[i] instanceof Array) {
-					if (!this.arrayEquals(firstArray[i], secondArray[i])) return false;
-				} else if (typeof firstArray[i] === "object" && typeof secondArray[i] === "object") {
-					if (!this.objectEquals(firstArray[i], secondArray[i])) return false;
+				if (firstArray[i] instanceof Array) {
+					if (!this.arrayEquals(firstArray[i], secondArray[i], depth - 1)) return false;
 				} else {
-					return false;
+					// This will handle objects as well as things like NaN,
+					// which could be both values here as NaN !== NaN
+					if (!this.objectEquals(firstArray[i], secondArray[i], depth - 1)) return false;
 				}
 			}
 		}
@@ -457,34 +463,57 @@ export default class {
 	}
 
 	/** Deep equality check for objects */
-	public objectEquals<T>(firstObject: T, secondObject: T) {
-		if (typeof firstObject !== "object" && typeof secondObject !== "object") {
-			return firstObject === secondObject;
+	public objectEquals<T>(firstObject: T, secondObject: T, depth = Infinity) {
+		// Allows limiting how deep we drill down to check equality. Passing depth as 1 will
+		// only check the first layer of properties and not drill into any objects
+		if (depth <= 0) return true;
+		// If we can pass strict equality then they're equal
+		if (firstObject === secondObject) return true;
+		if (typeof firstObject !== typeof secondObject) return false;
+		if (typeof firstObject !== "object" || !firstObject || !secondObject) {
+			if (typeof firstObject === "number") {
+				// isNaN will coerce anything to a number, so isNaN({}) is true apparently.
+				// NaN !== NaN so they would fail strict equality
+				if (isNaN(firstObject)) return isNaN(secondObject as unknown as number);
+			}
+			return false;
 		}
-		// @ts-expect-error
+		// ASSERTION: These should be guaranteed known at this point
+		// typeof firstObject === "object" && typeof secondObject === "object"
+		// firstObject !== null && secondObject !== null
+
+		// @ts-expect-error This allows a .equals function to be provided to customize behavior
 		if ("equals" in firstObject && typeof firstObject.equals === "function") {
 			// @ts-expect-error
 			return firstObject.equals(secondObject);
 		}
 		for (const propertyName of Object.keys(firstObject)) {
+			// Ensure every key in firstObject is in secondObject
 			if (!(propertyName in secondObject)) {
 				return false;
-			} /*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
-				return false;
-			} */
+			}
 		}
 		for (const propertyName of Object.keys(secondObject)) {
+			// Ensure every key in secondObject is in firstObject
 			if (!(propertyName in firstObject)) {
 				return false;
-			} /*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
-				return false;
-			} */
+			}
+			// Functions of the same name from the same prototype (i.e. the same function)
+			// but on different objects are strictly equal, so they will pass this check
 			if (firstObject[propertyName] !== secondObject[propertyName]) {
-				if (firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array) {
-					if (!this.arrayEquals(firstObject[propertyName], secondObject[propertyName])) return false;
-				} else if (typeof firstObject[propertyName] === "object" && typeof secondObject[propertyName] === "object") {
-					if (!this.objectEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				// If any property mismatch, we will consider the objects not equal
+				if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+					return false;
+				} else if (firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array) {
+					if (!this.arrayEquals(firstObject[propertyName], secondObject[propertyName], depth - 1)) return false;
+				} else if (typeof firstObject[propertyName] === "object") {
+					if (!this.objectEquals(firstObject[propertyName], secondObject[propertyName], depth - 1)) return false;
 				} else {
+					if (typeof firstObject[propertyName] === "number") {
+						// We know their typeof values match but they fail strict equality,
+						// so if either is typeof "number", both must be NaN or else they cannot be equal
+						if (isNaN(firstObject[propertyName])) return isNaN(secondObject[propertyName]);
+					}
 					return false;
 				}
 			}
