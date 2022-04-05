@@ -46,10 +46,11 @@ export default class extends Command {
 			);
 		if (!context.guild || !context.member || (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user))) return;
 
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild.id, {});
-		if ((duration && duration <= parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild.id, {}));
-		if (duration > parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild.id, {}));
-		if (target.communicationDisabledUntilTimestamp !== null) return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild.id, { target: target.user }));
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
+		if ((duration && duration <= <number>parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
+		if (duration > <number>parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild?.id, {}));
+		if (target.communicationDisabledUntilTimestamp !== null && Date.now() < target.communicationDisabledUntilTimestamp!)
+			return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
 
 		const infID = await infractionsManager.mute(
 			this.client,
