@@ -5,10 +5,10 @@
 	"main": "src/index.ts",
 	"scripts": {
 		"watch": "tsc -w",
+		"prestart": "tsc && node ./scripts/writeEnUsJson.js",
 		"lint": "eslint .",
 		"format": "prettier --write .",
 		"typecheck": "tsc --noEmit",
-		"prestart": "tsc",
 		"start": "node build/index.js",
 		"nobuild": "node build/index.js",
 		"dev": "nodemon build/index.js --ignore ./files",
@@ -19,7 +19,7 @@
 	},
 	"repository": "git+https://github.com/TeamBulbbot//Bulbbot.git",
 	"author": "Team Bulbbot",
-	"license": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License",
+	"license": "CC-BY-NC-ND-4.0",
 	"bugs": {
 		"url": "https://github.com/TeamBulbbot//Bulbbot/issues"
 	},

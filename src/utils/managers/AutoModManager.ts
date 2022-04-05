@@ -16,7 +16,7 @@ export default class {
 			},
 		};
 
-		if (!context.guild?.id || !context.guild.me) {
+		if (!context.guild?.id || !context.guild.me || !client.user) {
 			client.log.error(`[Auto Mod Manager] Guild is null, reason: ${reason}, target ${target.user.tag} (${target.user.id})`);
 			return "LOG";
 		}
@@ -86,7 +86,7 @@ export default class {
 	}
 
 	async resolveActionWithoutContext(client: BulbBotClient, member: GuildMember, action: string, reason: string): Promise<string> {
-		if (!member.guild.id || !member.guild.me) {
+		if (!member.guild.id || !member.guild.me || !client.user) {
 			client.log.error(`[Auto Mod Manager] Guild is null, reason: ${reason}, target ${member.user.tag} (${member.user.id})`);
 			return "LOG";
 		}

@@ -93,7 +93,7 @@ export default class {
 			}
 
 			setTimeout(async function () {
-				if (!guild.me) return;
+				if (!guild.me || !client.user) return;
 
 				await tryIgnore(
 					infractionsManager.unban,
@@ -103,7 +103,7 @@ export default class {
 					target,
 					guild.me,
 					await client.bulbutils.translate("global_mod_action_log", guild.id, {
-						action: await client.bulbutils.translate("mod_action_types.auto_unban", guild.id, {}),
+						action: await client.bulbutils.translate("mod_action_types.auto_unban", guild.id),
 						moderator: client.user,
 						target: target,
 						reason: "Automatic unban",

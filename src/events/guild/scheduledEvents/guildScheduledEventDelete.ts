@@ -22,7 +22,7 @@ export default class extends Event {
 		if (Date.now() < createdTimestamp + 3000) {
 			msg = await this.client.bulbutils.translate("event_guild_scheduled_event_delete_moderator", scheduledEvent.guild.id, {
 				scheduledEvent,
-				moderator: executor,
+				moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 			});
 		}
 

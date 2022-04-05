@@ -140,7 +140,7 @@ export default class extends Event {
 						reason,
 						action: await this.client.bulbutils.translate(newMember.nickname ? "mod_action_types.nick_change" : "mod_action_types.nick_remove", newMember.guild.id, {}),
 						target: newMember.user,
-						moderator: executor,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 					});
 				} else {
 					message = await this.client.bulbutils.translate(`event_member_${newMember.nickname ? "update" : "remove"}_nickname`, newMember.guild.id, {
@@ -163,7 +163,7 @@ export default class extends Event {
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
-						moderator: executor,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 					});
 				} else {
 					const translateKey = change === "newrole" ? "event_member_update_role_add" : "event_member_update_role_remove";

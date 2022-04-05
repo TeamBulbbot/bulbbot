@@ -26,7 +26,7 @@ export default class extends Event {
 
 		const log: string = await this.client.bulbutils.translate("event_invite_delete", guild.id, {
 			invite,
-			moderator: executor,
+			moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 		});
 
 		await loggingManager.sendEventLog(this.client, guild, "invite", log);

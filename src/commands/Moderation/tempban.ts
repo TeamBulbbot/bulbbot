@@ -67,7 +67,6 @@ export default class extends Command {
 				moderator: context.author,
 				target: target.user,
 				reason,
-				until: Date.now() + parse(args[1]),
 			}),
 			reason,
 			Date.now() + parse(args[1]),
@@ -93,7 +92,7 @@ export default class extends Command {
 
 		const client: BulbBotClient = this.client;
 		setTimeout(async function () {
-			if (!context.guild?.id || !context.guild.me || (await infractionsManager.isActive(context.guild.id, infID)) === false) return;
+			if (!context.guild?.id || !context.guild.me || !client.user || (await infractionsManager.isActive(context.guild.id, infID)) === false) return;
 			await infractionsManager.setActive(context.guild.id, infID, false);
 
 			infID = await infractionsManager.unban(

@@ -22,8 +22,8 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 		});
 
 	const user = await client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
-	const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
-	const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
+	const target = { tag: inf.target, id: inf.targetId };
+	const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
 	let description = "";
 	description += await client.bulbutils.translate("infraction_info_inf_id", interaction.guild.id, { infraction_id: inf.id });

@@ -24,7 +24,7 @@ export async function set(client: BulbBotClient, context: CommandContext, guild:
 	const mentionsLimit = dbGuild.limitMentions;
 
 	if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
-		if (!(context.channel instanceof DMChannel)) {
+		if (!(context.channel instanceof DMChannel) && "name" in context.channel) {
 			await automodManager.resolveAction(
 				client,
 				context,
@@ -49,7 +49,7 @@ export async function set(client: BulbBotClient, context: CommandContext, guild:
 		delete cache[guild]["messages"][user];
 	}
 	if (cache[guild]["mentions"][user] && cache[guild]["mentions"][user]["count"] >= mentionsLimit && mentionsLimit !== 0) {
-		if (!(context.channel instanceof DMChannel)) {
+		if (!(context.channel instanceof DMChannel) && "name" in context.channel) {
 			await automodManager.resolveAction(
 				client,
 				context,

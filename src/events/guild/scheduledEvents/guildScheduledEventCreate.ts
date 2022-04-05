@@ -33,7 +33,7 @@ export default class extends Event {
 					? "event_guild_scheduled_event_create_moderator_description"
 					: "event_guild_scheduled_event_create_moderator_none",
 				scheduledEvent.guild.id,
-				{ scheduledEvent, moderator: executor },
+				{ scheduledEvent, moderator: executor || { id: "Unknown ID", tag: "Unknown User" } },
 			);
 		}
 

@@ -5,6 +5,7 @@ import { ButtonInteraction, Message, MessageActionRow, MessageButton } from "dis
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import { NonDigits } from "../../../utils/Regex";
+import { supportInvite } from "../../../Config";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -29,7 +30,6 @@ export default class extends SubCommand {
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild.id, {}),
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -47,8 +47,8 @@ export default class extends SubCommand {
 		const inf = await infractionsManager.getInfraction(context.guild.id, infID);
 		// TODO: send a not_found message
 		if (!inf) return;
-		const target: Record<string, string> = { tag: inf.target, id: inf.targetId };
-		const moderator: Record<string, string> = { tag: inf.moderator, id: inf.moderatorId };
+		const target = { tag: inf.target, id: inf.targetId };
+		const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setLabel("Confirm").setStyle("SUCCESS").setCustomId("confirm"),
@@ -71,7 +71,7 @@ export default class extends SubCommand {
 			if (interaction.user.id !== context.author.id) {
 				return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 			}
-			if (!context.guild) return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, {}), ephemeral: true });
+			if (!context.guild) return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }), ephemeral: true });
 			if (interaction.customId === "confirm") {
 				await interaction.update({
 					content: await this.client.bulbutils.translate("infraction_delete_success", context.guild.id, {
@@ -89,7 +89,7 @@ export default class extends SubCommand {
 
 		collector.on("end", async (_: ButtonInteraction, reason: string) => {
 			if (reason !== "time") return;
-			if (!context.guild) return void (await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, {}) }));
+			if (!context.guild) return void (await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }) }));
 
 			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
 			return;

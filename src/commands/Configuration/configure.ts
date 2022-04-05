@@ -20,6 +20,8 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
+		if (!context.guild) return;
+
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
 				.setCustomId("configure-main")

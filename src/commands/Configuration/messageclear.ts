@@ -3,6 +3,7 @@ import CommandContext from "../../structures/CommandContext";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { MessageActionRow, MessageButton, ButtonInteraction } from "discord.js";
+import { supportInvite } from "../../Config";
 
 const { purgeMessagesInGuild, getServerArchive } = new DatabaseManager();
 
@@ -34,7 +35,7 @@ export default class extends Command {
 		if (days < 0) return context.channel.send(await this.client.bulbutils.translate("messageclear_few_than_0days", context.guild?.id, {}));
 		if (days > 30) return context.channel.send(await this.client.bulbutils.translate("messageclear_more_than_30days", context.guild?.id, {}));
 
-		if (!context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, {}));
+		if (!context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, { discord_invite: supportInvite }));
 
 		const amountOfMessages = (await getServerArchive(context.guild.id, days.toString())).length;
 		const row = new MessageActionRow().addComponents([

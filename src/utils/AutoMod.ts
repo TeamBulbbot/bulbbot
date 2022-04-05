@@ -14,13 +14,13 @@ const automodManager: AutoModManager = new AutoModManager();
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default async function (client: BulbBotClient, context: CommandContext): Promise<void> {
-	if (!context.guild?.available) return;
+	if (!context.guild?.available || !isGuildChannel(context.channel)) return;
 	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(context.guild.id);
 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(context.author.id)) return;
-	if (dbGuild.ignoreChannels.includes(context.channel.id) || (isGuildChannel(context.channel) && context.channel.parent && dbGuild.ignoreChannels.includes(context.channel.parent.id))) return;
+	if (dbGuild.ignoreChannels.includes(context.channel.id) || (context.channel.parent && dbGuild.ignoreChannels.includes(context.channel.parent.id))) return;
 
 	if (!context.member?.roles.cache.values()) return;
 	for (const role of context.member.roles.cache.values()) {

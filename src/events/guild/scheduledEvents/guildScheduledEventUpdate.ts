@@ -40,7 +40,7 @@ export default class extends Event {
 			newScheduledEvent.guild,
 			"other",
 			await this.client.bulbutils.translate("event_update_scheduled_event", newScheduledEvent.guild.id, {
-				moderator: executor,
+				moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 				event: newScheduledEvent,
 				changes: log.join("\n> "),
 			}),

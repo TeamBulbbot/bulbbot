@@ -26,7 +26,7 @@ export default class extends Command {
 		if (!channel || channel.type !== "GUILD_TEXT") {
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
+					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id),
 					arg_provided: args[0],
 					arg_expected: "channel:ChannelText",
 					usage: this.usage,

@@ -28,7 +28,6 @@ export default class extends SubCommand {
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.int", context.guild.id, {}),
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,

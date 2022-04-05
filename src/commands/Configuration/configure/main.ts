@@ -3,6 +3,8 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import * as Emotes from "../../../emotes.json";
 
 export default async function (interaction: MessageComponentInteraction, client: BulbBotClient) {
+	if (!interaction.guild) return;
+
 	const row = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("configure-main")

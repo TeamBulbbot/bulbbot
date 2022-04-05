@@ -51,7 +51,6 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 			content: await client.bulbutils.translate("action_success", interaction.guild.id, {
 				action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild.id, {}),
 				target: message.author,
-				moderator: interaction.user,
 				reason: i.values[0],
 				infraction_id: infID,
 			}),

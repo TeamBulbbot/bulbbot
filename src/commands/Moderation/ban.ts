@@ -5,6 +5,7 @@ import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { supportInvite } from "../../Config";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -84,7 +85,8 @@ export default class extends Command {
 					return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 				}
 
-				if (!context.guild?.id || !context.member) return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, {}), ephemeral: true });
+				if (!context.guild?.id || !context.member)
+					return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, { discord_invite: supportInvite }), ephemeral: true });
 
 				if (interaction.customId === "confirm") {
 					collector.stop("clicked");

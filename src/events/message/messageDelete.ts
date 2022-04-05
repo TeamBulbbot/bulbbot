@@ -57,8 +57,9 @@ export default class extends Event {
 					if (Date.now() < createdTimestamp + 3000)
 						msg = await this.client.bulbutils.translate("event_message_delete_moderator", guild.id, {
 							user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-							user: author,
-							moderator: executor,
+							// This cast changes the type of the `id` property from optional to required
+							user: author as typeof author & Required<Pick<typeof author, "id">>,
+							moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 							message,
 							channel,
 							content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
@@ -73,7 +74,7 @@ export default class extends Event {
 		if (!msg)
 			msg = await this.client.bulbutils.translate("event_message_delete", guild.id, {
 				user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-				user: author,
+				user: author as typeof author & Required<Pick<typeof author, "id">>,
 				message,
 				channel,
 				content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
@@ -90,7 +91,7 @@ export default class extends Event {
 				"message",
 				await this.client.bulbutils.translate("event_message_delete_special", guild.id, {
 					user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-					user: author,
+					user: author as typeof author & Required<Pick<typeof author, "id">>,
 					message,
 					channel,
 				}),
