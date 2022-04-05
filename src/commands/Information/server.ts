@@ -112,7 +112,7 @@ export default class extends Command {
 				text: await this.client.bulbutils.translate("global_executed_by", guild.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				iconURL: context.author.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 

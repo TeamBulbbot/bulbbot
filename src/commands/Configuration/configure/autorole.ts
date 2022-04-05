@@ -10,6 +10,8 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
 	const role: Role | null = config.autorole !== null ? ((await client.bulbfetch.getRole(interaction.guild?.roles, config.autorole)) as Role) : null;
 
+	if (!role) return;
+
 	const placeholderRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("placeholder")

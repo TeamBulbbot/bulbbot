@@ -58,7 +58,7 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setFooter({
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, { user: context.author }),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				iconURL: context.author.avatarURL({ dynamic: true }) || "",
 			})
 			.setDescription(desc.join("\n"))
 			.addField("Shard Data", `Recommended number of shards: \`${data.shards}\`\n${shardData.join("")}`, true)

@@ -42,12 +42,11 @@ export default class extends SubCommand {
 		);
 		await sendEventLog(
 			this.client,
-			context.guild!,
+			context.guild,
 			"banpool",
 			await this.client.bulbutils.translate("banpool_leave_log", context.guild.id, {
 				user: context.user,
 				name,
-				guild: context.guild,
 			}),
 		);
 

@@ -1,5 +1,5 @@
 import BulbBotClient from "./BulbBotClient";
-import { BitField, GuildMember, PermissionString, GuildChannelResolvable, Permissions } from "discord.js";
+import { BitField, PermissionString, Permissions } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import SubCommand from "./SubCommand";
 import ClearanceManager from "../utils/managers/ClearanceManager";
@@ -8,6 +8,7 @@ import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
 import { developers, subDevelopers } from "../Config";
 import { GuildCommandOverride } from "../utils/types/DatabaseStructures";
+import { isGuildChannel } from "../utils/typechecks";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
@@ -49,6 +50,8 @@ export default class Command {
 		this.category = options.category || "Miscellaneous";
 		this._usage = options.usage || "";
 		this.examples = options.examples || [];
+		// This just shouldn't have a problem with the possible undefined. `~~` will coerce it to 0
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.depth = ~~options.depth!;
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();
@@ -79,7 +82,7 @@ export default class Command {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let command = this;
 
-		for (let i = 0; i <= this.depth; i++) {
+		for (let i = 0; i <= this.depth && command; i++) {
 			name = `${command.name} ${name}`;
 			// @ts-expect-error
 			command = command.parent;
@@ -96,7 +99,7 @@ export default class Command {
 		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
 
-		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild?.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride.enabled) {
 				if (context.isMessageContext()) return "";
@@ -105,13 +108,14 @@ export default class Command {
 			clearance = commandOverride.clearanceLevel;
 		}
 
+		if (!isGuildChannel(context.channel)) return;
+
 		this.client.userClearance = options.clearance;
 		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
 
 		let missing: boolean = clearance > options.clearance;
 		if (missing && ~~userPermCheck) {
-			const userMember: GuildMember = context.member!;
-			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
+			missing = !(context.member?.permissions.has(userPermCheck) && context.member.permissionsIn(context.channel).has(userPermCheck)); // (!x || !y) === !(x && y) by DeMorgan's Law
 		}
 		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
 
@@ -119,11 +123,11 @@ export default class Command {
 		if (clientPermCheck) {
 			let missing: PermissionString[] | undefined = context.guild?.me?.permissions.missing(clientPermCheck);
 			if (!missing) return "";
-			if (!missing.length) missing = context.guild!.me!.permissionsIn(<GuildChannelResolvable>context.channel).missing(clientPermCheck);
+			if (!missing.length) missing = context.guild?.me?.permissionsIn(context.channel).missing(clientPermCheck);
 
-			if (missing.length)
+			if (missing === undefined || missing.length)
 				return await this.client.bulbutils.translate("global_missing_permissions_bot", context.guild?.id, {
-					missing: missing.map((perm) => `\`${perm}\``).join(", "),
+					missing: missing?.map((perm) => `\`${perm}\``).join(", "),
 				});
 		}
 
@@ -158,7 +162,7 @@ export default class Command {
 		if (this.devOnly && !isDev) return false;
 		if (this.subDevOnly && !(isDev || isSubDev)) return false;
 
-		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild!.id, this.qualifiedName);
+		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild?.id, this.qualifiedName);
 		if (commandOverride !== undefined) {
 			if (!commandOverride.enabled) return false;
 			clearance = commandOverride["clearanceLevel"];
@@ -169,8 +173,7 @@ export default class Command {
 
 		let missing: boolean = clearance > userClearance;
 		if (missing && ~~userPermCheck) {
-			const userMember: GuildMember = context.member!;
-			missing = !(userMember.permissions.has(userPermCheck) && userMember.permissionsIn(<GuildChannelResolvable>context.channel).has(userPermCheck)); // !x || !y === !(x && y)
+			missing = !(context.member?.permissions.has(userPermCheck) && isGuildChannel(context.channel) && context.member.permissionsIn(context.channel).has(userPermCheck)); // !x || !y === !(x && y)
 		}
 		return !missing;
 	}
@@ -187,12 +190,12 @@ export default class Command {
 		if (typeof commandPath === "string") commandPath = commandPath.split(" ");
 		if (!commandPath.length) return;
 		const cmd: string = commandPath[0];
-		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase())!);
+		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase()) || "");
 		if (!command) return;
 
 		for (let i = 1; i < commandPath.length; ++i) {
 			const currCommand = command;
-			command = command!.resolveSubcommand(commandPath.slice(i));
+			command = command.resolveSubcommand(commandPath.slice(i));
 			if (command === currCommand) break;
 		}
 

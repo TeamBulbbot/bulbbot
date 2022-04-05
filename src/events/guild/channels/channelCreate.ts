@@ -22,7 +22,7 @@ export default class extends Event {
 				if (Date.now() < createdTimestamp + 3000)
 					msg = await this.client.bulbutils.translate("event_channel_create_moderator", channel.guild.id, {
 						channel,
-						moderator: executor,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 						type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 					});
 			}

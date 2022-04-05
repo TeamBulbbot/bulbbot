@@ -1,11 +1,12 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Collection, Guild, Message, TextChannel } from "discord.js";
+import { Collection, Message } from "discord.js";
 import moment from "moment";
 import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isGuildChannel } from "../../../utils/typechecks";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -26,6 +27,8 @@ export default class extends SubCommand {
 		let amount = Number(args[0]);
 		if (Number(amount) >= 500) return await context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
 		if (Number(amount) < 2 || isNaN(amount)) return await context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
+		if (!isGuildChannel(context.channel)) return;
+
 		const deleteMsg: number[] = [];
 		let a = 0;
 
@@ -37,9 +40,7 @@ export default class extends SubCommand {
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		let delMsgs = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
-			"MMMM Do YYYY, h:mm:ss a",
-		)} \n`;
+		let delMsgs = `Message purge in #${context.channel.name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
 
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
@@ -55,11 +56,11 @@ export default class extends SubCommand {
 
 			amount = msgs.size;
 
-			await (<TextChannel>context.channel).bulkDelete(msgs);
+			await context.channel.bulkDelete(msgs);
 		}
 
 		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
-		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(this.client, context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
 		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
 	}

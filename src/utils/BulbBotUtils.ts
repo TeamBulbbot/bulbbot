@@ -1,18 +1,25 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
-import i18next, { TOptions } from "i18next";
+import i18next from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
+import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
 import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 import { isBaseGuildTextChannel } from "./typechecks";
 import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
+
+export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
+	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };
+type LowercaseUserHandle = Lowercase<
+	Exclude<keyof typeof UserHandle, "SUCCESS" | "CANNOT_ACTION_ROLE_EQUAL" | "CANNOT_ACTION_ROLE_HIGHER" | "CANNOT_ACTION_USER_ROLE_EQUAL_BOT" | "CANNOT_ACTION_USER_ROLE_HIGHER_BOT">
+>;
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -21,9 +28,12 @@ export default class {
 		this.client = client;
 	}
 
-	public async translate(string: TranslateString, guildID: Snowflake = "742094927403679816", options: TOptions): Promise<string> {
-		const language = (await databaseManager.getConfig(guildID))["language"];
-		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+	public async translate<T extends TranslateString>(string: T, guildID: Maybe<Snowflake>, options: DeepAccess<TranslateOptions, T> = {} as any): Promise<string> {
+		// Default parameter initialization does not occur if you pass null, but half of the the DJS API return null instead of undefined.
+		// Doing this makes this function easier to call
+		const guild = guildID ?? "742094927403679816";
+		const language = (await databaseManager.getConfig(guild))["language"];
+		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guild))["language"]);
 
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
@@ -150,8 +160,9 @@ export default class {
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} day(s) ago)\`\``;
 	}
 
-	public userObject(isGuildMember: boolean, userObject: User | GuildMember) {
-		let user;
+	public userObject(isGuildMember: boolean, userObject: Maybe<User | GuildMember>) {
+		if (!userObject) return;
+		let user: UserObject;
 
 		if (isGuildMember && userObject instanceof GuildMember) {
 			user = {
@@ -163,13 +174,13 @@ export default class {
 				avatar: userObject.user.avatar,
 				avatarUrl: userObject.user.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.user.bot,
-
-				roles: userObject.roles,
-				nickname: userObject.nickname,
-				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
-				joinedTimestamp: userObject.joinedTimestamp,
 				createdAt: userObject.user.createdAt,
 				createdTimestamp: userObject.user.createdTimestamp,
+				nickname: userObject.nickname,
+
+				roles: userObject.roles,
+				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
+				joinedTimestamp: userObject.joinedTimestamp,
 			};
 		} else if (userObject instanceof User) {
 			user = {
@@ -185,8 +196,10 @@ export default class {
 				createdTimestamp: userObject.createdTimestamp,
 				nickname: null,
 			};
+		} else {
+			return undefined;
 		}
-		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
+		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${~~user.discriminator % 5}.png`;
 
 		return user;
 	}
@@ -213,9 +226,9 @@ export default class {
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
 		if (
 			context.author.id === context.guild?.ownerId &&
-			context.guild?.me &&
-			context.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < context.guild?.me.roles.highest.rawPosition
+			context.guild.me &&
+			context.guild.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < context.guild.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
@@ -227,24 +240,26 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (context.member?.roles && user.roles.highest.rawPosition >= context.member?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (context.member?.roles && user.roles.highest.rawPosition >= context.member.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (context.guild?.me && context.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (context.guild?.me && context.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild?.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
 
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
-		if (handle == 0) return false;
+		if (handle === UserHandle.SUCCESS) return false;
 
 		// here are two exclusive cases, that use the same message as the other ones
-		if (handle == 5) await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
-		if (handle == 7) await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
+		if (handle === UserHandle.CANNOT_ACTION_ROLE_EQUAL || handle === UserHandle.CANNOT_ACTION_ROLE_HIGHER)
+			await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
+		if (handle === UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT || handle === UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT)
+			await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
 
-		// @ts-expect-error
-		await context.channel.send(await this.translate(`global_${UserHandle[handle].toLocaleLowerCase()}`, context.guild?.id, { target: user }));
+		const userHandle = UserHandle[handle].toLocaleLowerCase() as LowercaseUserHandle;
+		await context.channel.send(await this.translate(`global_${userHandle}`, context.guild?.id, { target: user }));
 		return true;
 	}
 
@@ -258,9 +273,9 @@ export default class {
 
 		if (
 			interaction.user.id === interaction.guild?.ownerId &&
-			interaction.guild?.me &&
-			interaction.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < interaction.guild?.me.roles.highest.rawPosition
+			interaction.guild.me &&
+			interaction.guild.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < interaction.guild.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
@@ -268,11 +283,11 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (author?.roles && user.roles.highest.rawPosition >= author?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (author?.roles && user.roles.highest.rawPosition >= author.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (interaction.guild?.me && interaction.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (interaction.guild?.me && interaction.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild?.me?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
@@ -391,26 +406,22 @@ export default class {
 			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
 
 		if (context) {
-			embed.addField("Guild ID", <string>context?.guild?.id, true);
-			embed.addField("User", <string>context.author.id, true);
-			embed.addField("Message Content", <string>context.content, true);
+			embed.addField("Guild ID", `${context.guild?.id}`, true);
+			embed.addField("User", context.author.id, true);
+			embed.addField("Message Content", context.content, true);
 		} else if (runArgs) {
 			const argsDesc: string[] = [];
-			for (const [k, v] of Object.entries(runArgs)) {
-				if ((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
+			for (const [k, v] of Object.entries<any>(runArgs)) {
+				if (v?.inviter) v.user = v.inviter;
 				const additionalInfo =
 					typeof v === "object"
-						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${
-								(<any>v)?.member
-									? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">"
-									: (<any>v)?.user
-									? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
-									: ""
+						? `${v?.guild.name ? "\n*Guild:* " + v?.guild.name + " (`" + v?.guild.id + "`)" : ""}${
+								v?.member ? "\n*Member*: " + v?.member.user.tag + " <@" + v?.member.id + ">" : v?.user ? "\n*User:* " + v?.user.tag + " <@" + v?.user.id + ">" : ""
 						  }${
-								(<any>v)?.channel && (<any>v)?.channel?.name
-									? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
+								v?.channel && v?.channel?.name
+									? "\n*Channel:* " + v?.channel.name + " <#" + v?.channel.id + "> (`" + v?.channel.id + ")`"
 									: v instanceof GuildChannel
-									? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
+									? "\n*Channel:* <#" + v.id + "> #" + v.name + " (`" + v.id + ")`"
 									: ""
 						  }`
 						: "";
@@ -420,36 +431,43 @@ export default class {
 			embed.addField("Event Arguments", argsDesc.join("\n").slice(0, 1024));
 		}
 
-		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
+		const errorChannel = this.client.channels.cache.get(error);
+		errorChannel?.isText() && (await errorChannel.send({ embeds: [embed] }));
 	}
 
 	/** Return a list of property keys where the values differ between the two objects */
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
 		for (const key of Object.keys(oldObj)) {
-			if (oldObj[key] === null) continue;
-			if (oldObj[key] !== newObj[key] && oldObj[key].valueOf() !== newObj[key].valueOf() && !this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
+			if (!this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
 		}
 		return diff;
 	}
 
 	/** Deep equality check for arrays */
-	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T) {
+	public arrayEquals<T extends any[]>(firstArray: T, secondArray: T, depth = Infinity) {
+		// Allows limiting how deep we drill down to check equality. Passing depth as 1 will
+		// only check the first layer of values and not drill into any objects
+		if (depth <= 0) return true;
+		// If we can pass strict equality then they're equal
+		if (firstArray === secondArray) return true;
 		if (typeof firstArray !== typeof secondArray) return false;
+		// If these are equal, it should be because both are true
 		if (firstArray instanceof Array !== secondArray instanceof Array) return false;
-		if (typeof firstArray !== "object") return firstArray === secondArray;
+		// Don't call this function if you can't guarantee at least one of the arguments is an Array
+		// if (typeof firstArray !== "object") return firstArray === secondArray;
 		// @ts-expect-error
 		if ("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
-		if (firstArray.length != secondArray.length) return false;
+		if (firstArray.length !== secondArray.length) return false;
 		const len = firstArray.length;
 		for (let i = 0; i < len; i++) {
 			if (firstArray[i] !== secondArray[i]) {
-				if (firstArray[i] instanceof Array && secondArray[i] instanceof Array) {
-					if (!this.arrayEquals(firstArray[i], secondArray[i])) return false;
-				} else if (typeof firstArray[i] === "object" && typeof secondArray[i] === "object") {
-					if (!this.objectEquals(firstArray[i], secondArray[i])) return false;
+				if (firstArray[i] instanceof Array) {
+					if (!this.arrayEquals(firstArray[i], secondArray[i], depth - 1)) return false;
 				} else {
-					return false;
+					// This will handle objects as well as things like NaN,
+					// which could be both values here as NaN !== NaN
+					if (!this.objectEquals(firstArray[i], secondArray[i], depth - 1)) return false;
 				}
 			}
 		}
@@ -457,34 +475,57 @@ export default class {
 	}
 
 	/** Deep equality check for objects */
-	public objectEquals<T>(firstObject: T, secondObject: T) {
-		if (typeof firstObject !== "object" && typeof secondObject !== "object") {
-			return firstObject === secondObject;
+	public objectEquals<T>(firstObject: T, secondObject: T, depth = Infinity) {
+		// Allows limiting how deep we drill down to check equality. Passing depth as 1 will
+		// only check the first layer of properties and not drill into any objects
+		if (depth <= 0) return true;
+		// If we can pass strict equality then they're equal
+		if (firstObject === secondObject) return true;
+		if (typeof firstObject !== typeof secondObject) return false;
+		if (typeof firstObject !== "object" || !firstObject || !secondObject) {
+			if (typeof firstObject === "number") {
+				// isNaN will coerce anything to a number, so isNaN({}) is true apparently.
+				// NaN !== NaN so they would fail strict equality
+				if (isNaN(firstObject)) return isNaN(secondObject as unknown as number);
+			}
+			return false;
 		}
-		// @ts-expect-error
+		// ASSERTION: These should be guaranteed known at this point
+		// typeof firstObject === "object" && typeof secondObject === "object"
+		// firstObject !== null && secondObject !== null
+
+		// @ts-expect-error This allows a .equals function to be provided to customize behavior
 		if ("equals" in firstObject && typeof firstObject.equals === "function") {
 			// @ts-expect-error
 			return firstObject.equals(secondObject);
 		}
 		for (const propertyName of Object.keys(firstObject)) {
+			// Ensure every key in firstObject is in secondObject
 			if (!(propertyName in secondObject)) {
 				return false;
-			} /*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
-				return false;
-			} */
+			}
 		}
 		for (const propertyName of Object.keys(secondObject)) {
+			// Ensure every key in secondObject is in firstObject
 			if (!(propertyName in firstObject)) {
 				return false;
-			} /*  else if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
-				return false;
-			} */
+			}
+			// Functions of the same name from the same prototype (i.e. the same function)
+			// but on different objects are strictly equal, so they will pass this check
 			if (firstObject[propertyName] !== secondObject[propertyName]) {
-				if (firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array) {
-					if (!this.arrayEquals(firstObject[propertyName], secondObject[propertyName])) return false;
-				} else if (typeof firstObject[propertyName] === "object" && typeof secondObject[propertyName] === "object") {
-					if (!this.objectEquals(firstObject[propertyName], secondObject[propertyName])) return false;
+				// If any property mismatch, we will consider the objects not equal
+				if (typeof firstObject[propertyName] !== typeof secondObject[propertyName]) {
+					return false;
+				} else if (firstObject[propertyName] instanceof Array && secondObject[propertyName] instanceof Array) {
+					if (!this.arrayEquals(firstObject[propertyName], secondObject[propertyName], depth - 1)) return false;
+				} else if (typeof firstObject[propertyName] === "object") {
+					if (!this.objectEquals(firstObject[propertyName], secondObject[propertyName], depth - 1)) return false;
 				} else {
+					if (typeof firstObject[propertyName] === "number") {
+						// We know their typeof values match but they fail strict equality,
+						// so if either is typeof "number", both must be NaN or else they cannot be equal
+						if (isNaN(firstObject[propertyName])) return isNaN(secondObject[propertyName]);
+					}
 					return false;
 				}
 			}

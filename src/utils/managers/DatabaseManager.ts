@@ -315,8 +315,9 @@ export default class {
 			const duplicateSet: Set<string> = new Set();
 			const addedSet: Set<string> = new Set();
 			for (const item of itemSet) {
-				if (dbSet.has(item!)) duplicateSet.add(item!);
-				else dbSet.add(item!), addedSet.add(item!);
+				if (item === undefined) continue;
+				if (dbSet.has(item)) duplicateSet.add(item);
+				else dbSet.add(item), addedSet.add(item);
 			}
 			return { list: [...dbSet], added: [...addedSet], removed: [], other: [...duplicateSet] };
 		});

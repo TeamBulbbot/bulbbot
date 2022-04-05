@@ -1,7 +1,7 @@
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
+import { GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import parse from "parse-duration";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -36,7 +36,7 @@ export default class extends Command {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		const duration: number = <number>parse(args[1]);
+		const duration: number = parse(args[1]);
 		let reason: string = args.slice(2).join(" ");
 		let infID: number | null;
 
@@ -52,38 +52,39 @@ export default class extends Command {
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if ((duration && duration <= <number>parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > <number>parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
+		if ((duration && duration <= parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
+		if (duration > parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
+
+		if (!context.guild?.id || !context.member) return;
 
 		infID = await infractionsManager.tempban(
 			this.client,
-			<Guild>context.guild,
+			context.guild,
 			target,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
-				until: Date.now() + <number>parse(args[1]),
 			}),
 			reason,
-			Date.now() + <number>parse(args[1]),
+			Date.now() + parse(args[1]),
 		);
 
 		if (infID === null) return;
 
-		await createTempBan(target, reason, Date.now() + <number>parse(args[1]), context.guild!.id);
-		const tempban: any = await getLatestTempBan(target, context.guild!.id);
+		await createTempBan(target, reason, Date.now() + parse(args[1]), context.guild.id);
+		const tempban: any = await getLatestTempBan(target, context.guild.id);
 
-		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>context.guild?.id)];
+		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(context.guild.id)];
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success_temp", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_temp", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,
-				until: moment(Date.now() + <number>parse(args[1]))
+				until: moment(Date.now() + parse(args[1]))
 					.tz(timezone)
 					.format("MMM Do YYYY, h:mm:ssa z"),
 			}),
@@ -91,17 +92,17 @@ export default class extends Command {
 
 		const client: BulbBotClient = this.client;
 		setTimeout(async function () {
-			if ((await infractionsManager.isActive(<Snowflake>context.guild?.id, infID!)) === false) return;
-			await infractionsManager.setActive(<Snowflake>context.guild?.id, infID!, false);
+			if (!context.guild?.id || !context.guild.me || !client.user || (await infractionsManager.isActive(context.guild.id, infID)) === false) return;
+			await infractionsManager.setActive(context.guild.id, infID, false);
 
 			infID = await infractionsManager.unban(
 				client,
-				<Guild>context.guild,
+				context.guild,
 				BanType.TEMP,
 				target.user,
-				<GuildMember>context.guild?.me,
-				await client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await client.bulbutils.translate("mod_action_types.auto_unban", context.guild?.id, {}),
+				context.guild.me,
+				await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await client.bulbutils.translate("mod_action_types.auto_unban", context.guild.id, {}),
 					moderator: client.user,
 					target: target.user,
 					reason: "Automatic unban",

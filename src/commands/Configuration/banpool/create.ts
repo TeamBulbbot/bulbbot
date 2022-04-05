@@ -26,7 +26,7 @@ export default class extends SubCommand {
 		const name: string = args[0];
 
 		if (!(context.guild?.id && (await hasBanpoolLog(context.guild.id)))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (await doesbanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild?.id, {}));
+		if (await doesbanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild.id, {}));
 
 		await createBanpool(context.guild.id, name);
 		!(await joinBanpool(
@@ -40,16 +40,16 @@ export default class extends SubCommand {
 
 		await sendEventLog(
 			this.client,
-			context.guild!,
+			context.guild,
 			"banpool",
-			await this.client.bulbutils.translate("banpool_create_log", context.guild?.id, {
+			await this.client.bulbutils.translate("banpool_create_log", context.guild.id, {
 				user: context.user,
 				name,
 			}),
 		);
 
 		context.channel.send(
-			await this.client.bulbutils.translate("banpool_create_success", context.guild?.id, {
+			await this.client.bulbutils.translate("banpool_create_success", context.guild.id, {
 				name,
 			}),
 		);

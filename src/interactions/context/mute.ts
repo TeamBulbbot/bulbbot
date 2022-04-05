@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, Guild, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction, Snowflake } from "discord.js";
+import { ContextMenuInteraction, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction } from "discord.js";
 import moment from "moment";
 import BulbBotClient from "../../structures/BulbBotClient";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -8,8 +8,9 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
-	const target: GuildMember = <GuildMember>message.member;
-	const timezone = client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>message.guild?.id)];
+	if (!message.member || !message.guild || !interaction.member) return;
+	const target = message.member;
+	const timezone = client.bulbutils.timezones[await databaseManager.getTimezone(message.guild.id)];
 	const reason = await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
 
 	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
@@ -34,19 +35,18 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	const collector = interaction.channel?.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 30000 });
 
 	collector?.on("collect", async (i: SelectMenuInteraction) => {
-		if (interaction.user.id !== i.user.id) return;
+		if (interaction.user.id !== i.user.id || !message.guild || !interaction.member) return;
 
 		const infID = await infractionsManager.mute(
 			client,
-			<Guild>message.guild,
+			message.guild,
 			target,
-			<GuildMember>interaction.member,
-			await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
-				action: await client.bulbutils.translate("mod_action_types.mute", message.guild?.id, {}),
+			interaction.member as GuildMember,
+			await client.bulbutils.translate("global_mod_action_log", message.guild.id, {
+				action: await client.bulbutils.translate("mod_action_types.mute", message.guild.id, {}),
 				moderator: message.author,
 				target: target.user,
 				reason,
-				until: Date.now() + 3600000,
 			}),
 			reason,
 			Date.now() + 3600000,

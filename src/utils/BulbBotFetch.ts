@@ -16,9 +16,9 @@ export default class {
 		return user;
 	}
 
-	public async getGuildMember(members: GuildMemberManager | undefined, userId: Snowflake): Promise<GuildMember | undefined> {
+	public async getGuildMember(members: GuildMemberManager | undefined, userId: Snowflake | undefined): Promise<GuildMember | undefined> {
+		if (!userId) return undefined;
 		let member: GuildMember | undefined = members?.cache.get(userId);
-		if (!userId.length) return undefined;
 		if (!member) member = await members?.fetch(userId).catch((_) => undefined);
 
 		return member;

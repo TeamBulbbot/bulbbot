@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Channel, GuildChannel, Message, Role, ThreadChannel } from "discord.js";
+import { Channel, GuildChannel, Message, ThreadChannel } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
 
@@ -26,7 +26,7 @@ export default class extends Command {
 		if (!channel || channel.type !== "GUILD_TEXT") {
 			return await context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
+					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id),
 					arg_provided: args[0],
 					arg_expected: "channel:ChannelText",
 					usage: this.usage,
@@ -44,12 +44,14 @@ export default class extends Command {
 			);
 		}
 
+		if (!context.guild) return;
+
 		if (args[1] === "true") {
-			await context.channel.send(await this.client.bulbutils.translate("lockdown_locked", context.guild?.id, { channel }));
-			return channel?.permissionOverwrites.edit(<Role>context.guild?.roles.everyone, { SEND_MESSAGES: false });
+			await context.channel.send(await this.client.bulbutils.translate("lockdown_locked", context.guild.id, { channel }));
+			return channel.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: false });
 		} else {
-			await channel?.permissionOverwrites.edit(<Role>context.guild?.roles.everyone, { SEND_MESSAGES: null });
-			return await context.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", context.guild?.id, { channel }));
+			await channel.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: null });
+			return await context.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", context.guild.id, { channel }));
 		}
 	}
 }

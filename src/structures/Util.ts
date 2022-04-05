@@ -26,7 +26,7 @@ export default class {
 	}
 
 	get directory(): string {
-		return `${path.dirname(<string>require.main?.filename)}${path.sep}`;
+		return `${path.dirname(require.main?.filename || ".")}${path.sep}`;
 	}
 
 	async loadCommands(): Promise<void> {
@@ -69,7 +69,7 @@ export default class {
 					try {
 						await event.run(...args);
 					} catch (err: any) {
-						await this.client.bulbutils.logError(err, undefined, event?.name ?? name ?? eventFile ?? "Unknown Event", args);
+						await this.client.bulbutils.logError(err, undefined, event.name ?? name ?? eventFile ?? "Unknown Event", args);
 					}
 				});
 			}

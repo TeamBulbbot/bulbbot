@@ -81,7 +81,9 @@ export default class {
 		);
 	}
 
-	public async isActive(guildID: Snowflake, infractionID: number): Promise<boolean | undefined> {
+	public async isActive(guildID: Snowflake, infractionID: Maybe<number>): Promise<boolean | undefined> {
+		if (typeof infractionID !== "number") return;
+
 		const response: Record<string, any> = await sequelize.query('SELECT active FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND id = $InfractionID', {
 			bind: { GuildID: guildID, InfractionID: infractionID },
 			type: QueryTypes.SELECT,
@@ -90,7 +92,9 @@ export default class {
 		return JSON.parse(response[0]["active"]);
 	}
 
-	public async setActive(guildID: Snowflake, infractionID: number, active: boolean | number): Promise<void> {
+	public async setActive(guildID: Snowflake, infractionID: Maybe<number>, active: boolean | number): Promise<void> {
+		if (typeof infractionID !== "number") return;
+
 		await sequelize.query('UPDATE infractions SET active = $Active WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID) AND id = $InfractionID', {
 			bind: { GuildID: guildID, InfractionID: infractionID, Active: active },
 			type: QueryTypes.UPDATE,
@@ -194,9 +198,9 @@ export default class {
 	}
 
 	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput): Promise<number | null> {
-		if (!target.bannable) return null;
+		if (!target.bannable || (typeof until !== "number" && typeof until !== "boolean")) return null;
 		await target.ban({ reason: reasonLog });
-		await this.createInfraction(guild.id, "Tempban", <number>until, reason, target.user, moderator.user);
+		await this.createInfraction(guild.id, "Tempban", until, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.user.id, "Tempban");
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.temp_ban", guild.id, {}), target.user, moderator.user, reason, infID, until);
 
@@ -268,7 +272,6 @@ export default class {
 				moderator: moderator.user,
 				reason: reason,
 				infraction_id: infID,
-				client: client,
 			}),
 		);
 

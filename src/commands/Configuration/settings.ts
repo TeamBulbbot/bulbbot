@@ -22,8 +22,12 @@ export default class extends Command {
 	}
 
 	async run(context: CommandContext) {
-		const guildConfig: GuildConfiguration = await databaseManager.getConfig(context.guild!.id);
-		const loggingConfig: LoggingConfiguration = await databaseManager.getLoggingConfig(context.guild!.id);
+		if (!context.guild?.id) {
+			console.error("Guild/GuildID is not defined (in commands/Configuration/settings)");
+			return;
+		}
+		const guildConfig: GuildConfiguration = await databaseManager.getConfig(context.guild.id);
+		const loggingConfig: LoggingConfiguration = await databaseManager.getLoggingConfig(context.guild.id);
 
 		const configs: string[] = [
 			`**Configuration**`,
@@ -52,18 +56,18 @@ export default class extends Command {
 			`Other: ${loggingConfig.other !== null ? `<#${loggingConfig.other}>` : Emotes.other.SWITCHOFF}`,
 		];
 
-		const memberObj = await this.client.bulbutils.userObject(true, context.member!);
+		const memberObj = this.client.bulbutils.userObject(true, context.member);
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
 			.setAuthor({
-				name: `Settings for ${context.guild!.name}`,
-				iconURL: context.guild?.iconURL({ dynamic: true }) ?? undefined,
+				name: `Settings for ${context.guild.name}`,
+				iconURL: context.guild.iconURL({ dynamic: true }) ?? undefined,
 			})
 			.setDescription(`${configs.join("\n")}\n\n${loggingModule.join("\n")}`)
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild!.id, { user: context.author }),
-				iconURL: memberObj.avatarUrl,
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, { user: context.author }),
+				iconURL: memberObj?.avatarUrl ?? "",
 			})
 			.setTimestamp();
 

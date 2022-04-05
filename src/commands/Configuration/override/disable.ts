@@ -1,4 +1,4 @@
-import { Message, Snowflake } from "discord.js";
+import { Message } from "discord.js";
 import ClearanceManager from "../../../utils/managers/ClearanceManager";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
@@ -31,10 +31,10 @@ export default class extends SubCommand {
 				}),
 			);
 
-		if ((await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)) !== undefined) {
-			await clearanceManager.setEnabled(<Snowflake>context.guild?.id, command.qualifiedName, false);
+		if ((await clearanceManager.getCommandOverride(context.guild?.id, command.qualifiedName)) !== undefined) {
+			await clearanceManager.setEnabled(context.guild?.id, command.qualifiedName, false);
 		} else {
-			await clearanceManager.createCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName, false, command.clearance);
+			await clearanceManager.createCommandOverride(context.guild?.id, command.qualifiedName, false, command.clearance);
 		}
 
 		await context.channel.send(await this.client.bulbutils.translate("override_disable_success", context.guild?.id, { command: command.qualifiedName }));

@@ -56,10 +56,7 @@ import {
 } from "discord.js";
 import CommandContextException from "./exceptions/CommandContextException";
 import { logger } from "../utils/Logger";
-
-function clone<T extends object | null>(obj: T): T {
-	return Object.assign(Object.create(obj), obj);
-}
+import { clone } from "../utils/helpers";
 
 abstract class BaseCommandContext {
 	// CommandContext
@@ -454,7 +451,7 @@ class MessageCommandContext implements BaseCommandContext {
 		this._prefix = null;
 		this.client = source.client;
 		this.channel = clone(source.channel);
-		this.channelId = this.channel?.id ?? null;
+		this.channelId = this.channel.id ?? null;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
 		this.createdAt = source.createdAt;
@@ -631,7 +628,7 @@ class InteractionCommandContext implements BaseCommandContext {
 	public webhook: InteractionWebhook | null;
 	public get ephemeral(): boolean | null {
 		// @ts-expect-error
-		return this.source?.ephemeral ?? null;
+		return this.source.ephemeral ?? null;
 	}
 	public set ephemeral(e: boolean | null) {
 		// @ts-expect-error
@@ -702,7 +699,10 @@ class InteractionCommandContext implements BaseCommandContext {
 
 	// Common-ish
 	private readonly _reply: Callable;
-	/** @deprecated */ public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {
+	/**
+	 * @deprecated `CommandContext#reply` is deprecated. Use `CommandContext#followUp` instead
+	 */
+	public reply(options: string | MessagePayload | InteractionReplyOptions): Promise<void | Message | never> {
 		logger.warn("[DEPRECATED] CommandContext#reply is deprecated. Use CommandContext#followUp instead");
 		return this._reply(options);
 	}
@@ -818,8 +818,10 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.source = source;
 		this._prefix = null;
 		this.client = source.client;
+		// Nah this is funny
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.channel = source.channel ? clone(source.channel) : null!;
-		this.channelId = this.channel?.id ?? source.channelId;
+		this.channelId = this.channel.id ?? source.channelId;
 		this.guild = source.guild;
 		this.guildId = source.guildId;
 		this.createdAt = source.createdAt;
@@ -838,7 +840,12 @@ class InteractionCommandContext implements BaseCommandContext {
 		this.contextType = "interaction";
 		this._user = source.user;
 		const mockApiAuthor: APIUser = { id: this.user.id, username: this.user.username, discriminator: this.user.discriminator, avatar: this.user.avatar };
-		const mockApiClient: APIUser = { id: this.client.user!.id, username: this.client.user!.username, discriminator: this.client.user!.discriminator, avatar: this.client.user!.avatar };
+		const mockApiClient: APIUser = {
+			id: this.client.user?.id || "fake",
+			username: this.client.user?.username || "fake",
+			discriminator: this.client.user?.discriminator || "0000",
+			avatar: this.client.user?.avatar ?? null,
+		};
 		// @ts-expect-error
 		const mockMessage = new Message(this.client, {
 			content: "",
@@ -1000,7 +1007,7 @@ class InteractionCommandContext implements BaseCommandContext {
 						if (typeof content === "object" && "embeds" in content) {
 							e = await this.editReply({ ...content, embeds: content.embeds ?? undefined });
 						} else {
-							e = await this.editReply(<string | MessagePayload>content);
+							e = await this.editReply(content as string | MessagePayload);
 						}
 						// @ts-expect-error
 						return e instanceof Message ? e : new Message(this.client, e);

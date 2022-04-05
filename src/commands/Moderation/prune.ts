@@ -26,9 +26,12 @@ export default class extends Command {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const days = parseInt(args[0]);
 		if (isNaN(days) || days <= 0 || days > 30) return context.channel.send(await this.client.bulbutils.translate("prune_invalid_time", context.guild?.id, {}));
-		let roles: RegExpMatchArray = <RegExpMatchArray>args.slice(1).join(" ").match(RoleMentionAndID);
-		if (roles === null) roles = [];
-		else roles = roles.map((r) => r.replace(NonDigits, ""));
+		const roles =
+			args
+				.slice(1)
+				.join(" ")
+				.match(RoleMentionAndID)
+				?.map((r) => r.replace(NonDigits, "")) ?? [];
 
 		let reason: string = args
 			.slice(roles.length + 1)
@@ -77,7 +80,7 @@ export default class extends Command {
 				});
 				await sendModActionPreformatted(
 					this.client,
-					context.guild!,
+					context.guild,
 					await this.client.bulbutils.translate("prune_log", context.guild?.id, {
 						user: context.author,
 						prune,

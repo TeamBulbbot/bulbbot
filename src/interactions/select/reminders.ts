@@ -9,7 +9,7 @@ const { getReminder } = new ReminderManager();
 export default async function (client: BulbBotClient, interaction: SelectMenuInteraction): Promise<void> {
 	const ID = Number(interaction.values[0].split("_")[1]);
 	const user: string = interaction.values[0].split("_")[0];
-	const reminder: Record<string, any> = await getReminder(ID);
+	const reminder = await getReminder(ID);
 
 	if (!reminder) return interaction.reply({ content: await client.bulbutils.translate("remind_not_found", interaction.guild?.id, {}), ephemeral: true });
 
@@ -34,7 +34,7 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 			text: await client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
 				user: interaction.user,
 			}),
-			iconURL: <string>interaction.user.avatarURL({ dynamic: true }),
+			iconURL: interaction.user.avatarURL({ dynamic: true }) ?? undefined,
 		})
 		.setTimestamp();
 

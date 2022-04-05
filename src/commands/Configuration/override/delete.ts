@@ -1,5 +1,5 @@
 import { NonDigits } from "../../../utils/Regex";
-import { Message, Snowflake } from "discord.js";
+import { Message } from "discord.js";
 import ClearanceManager from "../../../utils/managers/ClearanceManager";
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
@@ -27,19 +27,19 @@ export default class extends SubCommand {
 		switch (part) {
 			case "role": {
 				const name = args[1];
-				if (!(await clearanceManager.getRoleOverride(<Snowflake>context.guild?.id, name.replace(NonDigits, ""))))
+				if (!(await clearanceManager.getRoleOverride(context.guild?.id, name.replace(NonDigits, ""))))
 					return context.channel.send(await this.client.bulbutils.translate("override_nonexistent_role", context.guild?.id, { role: name }));
 
-				await clearanceManager.deleteRoleOverride(<Snowflake>context.guild?.id, name.replace(NonDigits, ""));
+				await clearanceManager.deleteRoleOverride(context.guild?.id, name.replace(NonDigits, ""));
 				break;
 			}
 			case "command": {
 				const name = args.slice(1);
 				const command = Command.resolve(this.client, name);
-				if (!command || command.name === undefined || !(await clearanceManager.getCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName)))
+				if (!command || command.name === undefined || !(await clearanceManager.getCommandOverride(context.guild?.id, command.qualifiedName)))
 					return context.channel.send(await this.client.bulbutils.translate("override_nonexistent_command", context.guild?.id, { command: name.join(" ") }));
 
-				await clearanceManager.deleteCommandOverride(<Snowflake>context.guild?.id, command.qualifiedName);
+				await clearanceManager.deleteCommandOverride(context.guild?.id, command.qualifiedName);
 				break;
 			}
 			default:

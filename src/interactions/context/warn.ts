@@ -1,5 +1,5 @@
 import BulbBotClient from "../../structures/BulbBotClient";
-import { ContextMenuInteraction, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction, Snowflake } from "discord.js";
+import { ContextMenuInteraction, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, SelectMenuInteraction } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 
@@ -7,9 +7,10 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
-	const target: GuildMember = <GuildMember>message.member;
+	const target = message.member;
+	if (!target || !interaction.guild) return;
 	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
-	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
+	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild.id, {}));
 
 	const options: MessageSelectOptionData[] = [];
 	for (const reason of reasons) {
@@ -19,9 +20,9 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	const row: MessageActionRow = new MessageActionRow().addComponents(new MessageSelectMenu().setPlaceholder("Select a reason").setCustomId("warn").addOptions(options));
 
 	await interaction.reply({
-		content: await client.bulbutils.translate("userinfo_interaction_confirm", interaction.guild?.id, {
+		content: await client.bulbutils.translate("userinfo_interaction_confirm", interaction.guild.id, {
 			target: target.user,
-			action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild?.id, {}),
+			action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild.id, {}),
 		}),
 		components: [row],
 		ephemeral: true,
@@ -30,13 +31,13 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 	const collector = interaction.channel?.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 30000 });
 
 	collector?.on("collect", async (i: SelectMenuInteraction) => {
-		if (interaction.user.id !== i.user.id) return;
+		if (interaction.user.id !== i.user.id || !interaction.guild || !interaction.member) return;
 
 		const infID = await infractionsManager.warn(
 			client,
-			<Snowflake>interaction.guild?.id,
+			interaction.guild.id,
 			target.user,
-			<GuildMember>interaction.member,
+			interaction.member as GuildMember,
 			await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {
 				action: await client.bulbutils.translate("mod_action_types.warn", message.guild?.id, {}),
 				moderator: interaction.user,
@@ -47,10 +48,9 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 		);
 
 		await i.update({
-			content: await client.bulbutils.translate("action_success", interaction.guild?.id, {
-				action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild?.id, {}),
+			content: await client.bulbutils.translate("action_success", interaction.guild.id, {
+				action: await client.bulbutils.translate("mod_action_types.warn", interaction.guild.id, {}),
 				target: message.author,
-				moderator: interaction.user,
 				reason: i.values[0],
 				infraction_id: infID,
 			}),

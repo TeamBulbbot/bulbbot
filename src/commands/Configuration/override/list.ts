@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, Snowflake } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { embedColor } from "../../../Config";
 import * as Emotes from "../../../emotes.json";
 import BulbBotClient from "../../../structures/BulbBotClient";
@@ -20,7 +20,8 @@ export default class extends SubCommand {
 	}
 
 	async run(context: CommandContext): Promise<void | Message> {
-		const data: Record<string, any> = await clearanceManager.getClearanceList(<Snowflake>context.guild?.id);
+		const data = await clearanceManager.getClearanceList(context.guild?.id);
+		if (!data) return;
 
 		const roles: string[] = [];
 		const commands: string[] = [];

@@ -38,7 +38,7 @@ export default class extends Event {
 			attachment = dbData.attachments.length > 0 ? `**A**: ${dbData.attachments.join("\n")}` : "";
 			embeds = dbData.embeds;
 		} else {
-			if (message.author.id === this.client.user!.id) return;
+			if (message.author.id === this.client.user?.id) return;
 			author = message.author;
 			channel = message.channel as TextBasedChannel;
 			guild = message.guild;
@@ -57,8 +57,9 @@ export default class extends Event {
 					if (Date.now() < createdTimestamp + 3000)
 						msg = await this.client.bulbutils.translate("event_message_delete_moderator", guild.id, {
 							user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-							user: author,
-							moderator: executor,
+							// This cast changes the type of the `id` property from optional to required
+							user: author as typeof author & Required<Pick<typeof author, "id">>,
+							moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 							message,
 							channel,
 							content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
@@ -73,7 +74,7 @@ export default class extends Event {
 		if (!msg)
 			msg = await this.client.bulbutils.translate("event_message_delete", guild.id, {
 				user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-				user: author,
+				user: author as typeof author & Required<Pick<typeof author, "id">>,
 				message,
 				channel,
 				content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
@@ -83,18 +84,18 @@ export default class extends Event {
 			});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`, content);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`, content);
 			await loggingManager.sendEventLog(
 				this.client,
 				guild,
 				"message",
 				await this.client.bulbutils.translate("event_message_delete_special", guild.id, {
 					user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-					user: author,
+					user: author as typeof author & Required<Pick<typeof author, "id">>,
 					message,
 					channel,
 				}),
-				`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
 	}
