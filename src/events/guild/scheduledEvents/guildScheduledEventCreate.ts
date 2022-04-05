@@ -14,7 +14,7 @@ export default class extends Event {
 		if (!scheduledEvent.guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
 		let msg = "";
-		const logs: GuildAuditLogs<"GUILD_SCHEDULED_EVENT_CREATE"> = await scheduledEvent.guild?.fetchAuditLogs({ limit: 1, type: "GUILD_SCHEDULED_EVENT_CREATE" });
+		const logs: GuildAuditLogs<"GUILD_SCHEDULED_EVENT_CREATE"> = await scheduledEvent.guild.fetchAuditLogs({ limit: 1, type: "GUILD_SCHEDULED_EVENT_CREATE" });
 		const first = logs.entries.first();
 		if (!first) return;
 
@@ -32,7 +32,7 @@ export default class extends Event {
 					: doesIncludeDescription
 					? "event_guild_scheduled_event_create_moderator_description"
 					: "event_guild_scheduled_event_create_moderator_none",
-				scheduledEvent.guild?.id,
+				scheduledEvent.guild.id,
 				{ scheduledEvent, moderator: executor || { id: "Unknown ID", tag: "Unknown User" } },
 			);
 		}
@@ -46,11 +46,11 @@ export default class extends Event {
 					: doesIncludeDescription
 					? "event_guild_scheduled_event_create_description"
 					: "event_guild_scheduled_event_create_none",
-				scheduledEvent.guild?.id,
+				scheduledEvent.guild.id,
 				{ scheduledEvent },
 			);
 		}
 
-		await loggingManager.sendEventLog(this.client, scheduledEvent.guild!, "other", msg);
+		await loggingManager.sendEventLog(this.client, scheduledEvent.guild, "other", msg);
 	}
 }

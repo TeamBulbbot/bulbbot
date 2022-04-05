@@ -44,15 +44,16 @@ export default class extends Command {
 			return;
 		}
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
+		if (!context.guild?.id || !context.member) return;
 
 		//Executes the action
 		const infID = await infractionsManager.kick(
 			this.client,
-			<string>context.guild?.id,
+			context.guild.id,
 			target,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
@@ -64,8 +65,8 @@ export default class extends Command {
 
 		//Sends the respond context
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.kick", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

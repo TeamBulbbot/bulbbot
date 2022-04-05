@@ -22,7 +22,7 @@ export default class extends Command {
 		const command = Command.resolve(this.client, args);
 
 		if (!command || !(await command.validateUserPerms(context)))
-			return context.channel.send(await this.client.bulbutils.translate("help_unable_to_find_command", context.guild!.id, { commandName: args[0] }));
+			return context.channel.send(await this.client.bulbutils.translate("help_unable_to_find_command", context.guild?.id, { commandName: args[0] }));
 
 		let msg = `**${Util.escapeMarkdown(context.prefix)}${command.qualifiedName}** ${command.aliases.length !== 0 ? `(${command.aliases.map((alias) => `**${alias}**`).join(", ")})` : ""}\n`;
 		msg += `> ${command.description}\n\n`;

@@ -1,10 +1,11 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { ButtonInteraction, Collection, Guild, GuildMember, Message, MessageActionRow, MessageButton, Snowflake, User } from "discord.js";
+import { ButtonInteraction, Collection, Message, MessageActionRow, MessageButton, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { supportInvite } from "../../Config";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -84,17 +85,20 @@ export default class extends Command {
 					return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 				}
 
+				if (!context.guild?.id || !context.member)
+					return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, { discord_invite: supportInvite }), ephemeral: true });
+
 				if (interaction.customId === "confirm") {
 					collector.stop("clicked");
 
 					infID = await infractionsManager.ban(
 						this.client,
-						<Guild>context.guild,
+						context.guild,
 						BanType.FORCE,
-						<User>target,
-						<GuildMember>context.member,
-						await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
+						target,
+						context.member,
+						await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild.id, {}),
 							moderator: context.author,
 							target,
 							reason,
@@ -103,8 +107,8 @@ export default class extends Command {
 					);
 
 					return await interaction.update({
-						content: await this.client.bulbutils.translate("action_success", context.guild?.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+						content: await this.client.bulbutils.translate("action_success", context.guild.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 							target,
 							reason,
 							infraction_id: infID,
@@ -113,7 +117,7 @@ export default class extends Command {
 					});
 				} else {
 					collector.stop("clicked");
-					return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+					return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
 				}
 			});
 
@@ -124,16 +128,17 @@ export default class extends Command {
 				return;
 			});
 		} else {
+			if (!context.guild?.id || !context.member) return;
 			//Else execute a normal ban
 			target = target.user;
 			infID = await infractionsManager.ban(
 				this.client,
-				<Guild>context.guild,
+				context.guild,
 				BanType.NORMAL,
 				target,
-				<GuildMember>context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+				context.member,
+				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 					moderator: context.author,
 					target,
 					reason,
@@ -142,8 +147,8 @@ export default class extends Command {
 			);
 
 			await context.channel.send(
-				await this.client.bulbutils.translate("action_success", context.guild?.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+				await this.client.bulbutils.translate("action_success", context.guild.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 					target,
 					reason,
 					infraction_id: infID,

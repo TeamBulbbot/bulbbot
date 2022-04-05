@@ -29,14 +29,14 @@ export default class extends Event {
 
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
-		if (!context.guild || context.author.bot) return;
+		if (!context.guild || context.author.bot || !this.client.user?.id) return;
 
 		// checks if the guild is in the blacklist
 		if (this.client.blacklist.get(context.guild.id)) return;
 
 		await databaseManager.addToMessageToDB(message);
 
-		const mentionRegex = RegExp(`^<@!?${this.client.user!.id}>`);
+		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 		let guildCfg = await databaseManager.getConfig(context.guild.id);
 
 		if ((guildCfg === undefined || guildCfg.prefix === undefined) && (context.content.startsWith(Config.prefix) || mentionRegex.test(context.content))) {
@@ -123,7 +123,7 @@ export default class extends Event {
 	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
 		const { context, baseCommand, args } = options;
 		const command = baseCommand;
-		if (!context.guild?.me) await this.client.bulbfetch.getGuildMember(context.guild?.members, this.client.user!.id);
+		if (!context.guild?.me) await this.client.bulbfetch.getGuildMember(context.guild?.members, this.client.user?.id);
 		if (!context.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		const invalidReason = await command.validate(context, args, options);
 		if (invalidReason !== undefined) {

@@ -34,7 +34,7 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 			text: await client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
 				user: interaction.user,
 			}),
-			iconURL: <string>interaction.user.avatarURL({ dynamic: true }),
+			iconURL: interaction.user.avatarURL({ dynamic: true }) ?? undefined,
 		})
 		.setTimestamp();
 

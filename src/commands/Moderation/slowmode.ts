@@ -1,9 +1,10 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Message, Snowflake, TextChannel } from "discord.js";
+import { Message, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import parse from "parse-duration";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { isTextChannel } from "../../utils/typechecks";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -27,9 +28,9 @@ export default class extends Command {
 		let targetChannel: Snowflake;
 		if (!args[1]) targetChannel = context.channel.id;
 		else targetChannel = args[1].replace(NonDigits, "");
-		const channel: TextChannel = <TextChannel>await this.client.bulbfetch.getChannel(context.guild?.channels, targetChannel);
+		const channel = await this.client.bulbfetch.getChannel(context.guild?.channels, targetChannel);
 
-		if (!channel || channel.type !== "GUILD_TEXT") {
+		if (!channel || channel.type !== "GUILD_TEXT" || !isTextChannel(channel)) {
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
@@ -39,11 +40,11 @@ export default class extends Command {
 				}),
 			);
 		}
-		if (args.length === 1) duration = <number>parse(args[0]);
-		else duration = <number>parse(args[0]);
+		if (args.length === 1) duration = parse(args[0]);
+		else duration = parse(args[0]);
 
-		if (duration < <number>parse("0s") || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > <number>parse("6h")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_6h", context.guild?.id, {}));
+		if (duration < parse("0s") || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
+		if (duration > parse("6h")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_6h", context.guild?.id, {}));
 
 		try {
 			await channel.setRateLimitPerUser(duration / 1000);

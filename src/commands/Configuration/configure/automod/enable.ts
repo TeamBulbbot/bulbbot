@@ -70,7 +70,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 
 						await enable(i, client);
 					} else {
-						await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, parts[selectedCategory!], null);
+						await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, parts[selectedCategory], null);
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_enable_disable_disable_success", interaction.guild?.id, {}),
 							ephemeral: true,

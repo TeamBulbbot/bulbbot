@@ -1,7 +1,8 @@
 import prom from "prom-client";
 import http from "http";
-import url from "url";
+import { URL } from "url";
 import Command from "../structures/Command";
+import { tryIgnore } from "./helpers";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
 const cachedUsers = new prom.Gauge({ name: "bulbbot_cached_users", help: "The amount of cached users in the memory" });
@@ -53,7 +54,7 @@ export async function startPrometheus(client: any): Promise<void> {
 	});
 
 	const server = http.createServer(async (req, res) => {
-		const route = url.parse(req.url!).pathname;
+		const route = tryIgnore(() => new URL(req.url || "").pathname);
 
 		if (route === "/metrics") {
 			res.setHeader("Content-Type", register.contentType);

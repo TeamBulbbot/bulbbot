@@ -14,3 +14,7 @@ type Optional<T> = T | undefined;
 type Maybe<T> = T | null | undefined;
 /** Inverse of TypeScript built-in utility type `Exclude<T, U>` */
 type Include<T, U> = T extends U ? T : never;
+/** Generic interface for anything with an id field. Can be used for mixins, type annotations, etc. */
+interface Identifiable {
+	id: string;
+}

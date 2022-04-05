@@ -38,7 +38,7 @@ export default class extends Event {
 			attachment = dbData.attachments.length > 0 ? `**A**: ${dbData.attachments.join("\n")}` : "";
 			embeds = dbData.embeds;
 		} else {
-			if (message.author.id === this.client.user!.id) return;
+			if (message.author.id === this.client.user?.id) return;
 			author = message.author;
 			channel = message.channel as TextBasedChannel;
 			guild = message.guild;
@@ -59,7 +59,7 @@ export default class extends Event {
 							user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
 							// This cast changes the type of the `id` property from optional to required
 							user: author as typeof author & Required<Pick<typeof author, "id">>,
-							moderator: executor!,
+							moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 							message,
 							channel,
 							content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
@@ -84,7 +84,7 @@ export default class extends Event {
 			});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`, content);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`, content);
 			await loggingManager.sendEventLog(
 				this.client,
 				guild,
@@ -95,7 +95,7 @@ export default class extends Event {
 					message,
 					channel,
 				}),
-				`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
 	}

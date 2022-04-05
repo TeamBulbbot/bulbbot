@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, TextChannel, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -15,6 +15,8 @@ import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
+export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
+	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };
 type LowercaseUserHandle = Lowercase<
 	Exclude<keyof typeof UserHandle, "SUCCESS" | "CANNOT_ACTION_ROLE_EQUAL" | "CANNOT_ACTION_ROLE_HIGHER" | "CANNOT_ACTION_USER_ROLE_EQUAL_BOT" | "CANNOT_ACTION_USER_ROLE_HIGHER_BOT">
 >;
@@ -26,9 +28,12 @@ export default class {
 		this.client = client;
 	}
 
-	public async translate<T extends TranslateString>(string: T, guildID: Snowflake = "742094927403679816", options: DeepAccess<TranslateOptions, T> = {} as any): Promise<string> {
-		const language = (await databaseManager.getConfig(guildID))["language"];
-		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guildID))["language"]);
+	public async translate<T extends TranslateString>(string: T, guildID: Maybe<Snowflake>, options: DeepAccess<TranslateOptions, T> = {} as any): Promise<string> {
+		// Default parameter initialization does not occur if you pass null, but half of the the DJS API return null instead of undefined.
+		// Doing this makes this function easier to call
+		const guild = guildID ?? "742094927403679816";
+		const language = (await databaseManager.getConfig(guild))["language"];
+		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guild))["language"]);
 
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
@@ -155,8 +160,9 @@ export default class {
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} day(s) ago)\`\``;
 	}
 
-	public userObject(isGuildMember: boolean, userObject: User | GuildMember) {
-		let user;
+	public userObject(isGuildMember: boolean, userObject: Maybe<User | GuildMember>) {
+		if (!userObject) return;
+		let user: UserObject;
 
 		if (isGuildMember && userObject instanceof GuildMember) {
 			user = {
@@ -168,13 +174,13 @@ export default class {
 				avatar: userObject.user.avatar,
 				avatarUrl: userObject.user.avatarURL({ dynamic: true, size: 4096 }),
 				bot: userObject.user.bot,
-
-				roles: userObject.roles,
-				nickname: userObject.nickname,
-				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
-				joinedTimestamp: userObject.joinedTimestamp,
 				createdAt: userObject.user.createdAt,
 				createdTimestamp: userObject.user.createdTimestamp,
+				nickname: userObject.nickname,
+
+				roles: userObject.roles,
+				premiumSinceTimestamp: userObject.premiumSinceTimestamp,
+				joinedTimestamp: userObject.joinedTimestamp,
 			};
 		} else if (userObject instanceof User) {
 			user = {
@@ -190,8 +196,10 @@ export default class {
 				createdTimestamp: userObject.createdTimestamp,
 				nickname: null,
 			};
+		} else {
+			return undefined;
 		}
-		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
+		if (user.avatarUrl === null) user.avatarUrl = `https://cdn.discordapp.com/embed/avatars/${~~user.discriminator % 5}.png`;
 
 		return user;
 	}
@@ -218,9 +226,9 @@ export default class {
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
 		if (
 			context.author.id === context.guild?.ownerId &&
-			context.guild?.me &&
-			context.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < context.guild?.me.roles.highest.rawPosition
+			context.guild.me &&
+			context.guild.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < context.guild.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
@@ -232,11 +240,11 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (context.member?.roles && user.roles.highest.rawPosition >= context.member?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (context.member?.roles && user.roles.highest.rawPosition >= context.member.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (context.guild?.me && context.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (context.guild?.me && context.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild?.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
@@ -265,9 +273,9 @@ export default class {
 
 		if (
 			interaction.user.id === interaction.guild?.ownerId &&
-			interaction.guild?.me &&
-			interaction.guild?.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < interaction.guild?.me.roles.highest.rawPosition
+			interaction.guild.me &&
+			interaction.guild.me.roles.highest.id !== user.roles.highest.id &&
+			user.roles.highest.rawPosition < interaction.guild.me.roles.highest.rawPosition
 		)
 			return UserHandle.SUCCESS;
 
@@ -275,11 +283,11 @@ export default class {
 
 		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
 
-		if (author?.roles && user.roles.highest.rawPosition >= author?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
+		if (author?.roles && user.roles.highest.rawPosition >= author.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
 
-		if (interaction.guild?.me && interaction.guild?.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
+		if (interaction.guild?.me && interaction.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
 
-		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild?.me?.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
+		if (interaction.guild?.me && user.roles.highest.rawPosition >= interaction.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
 
 		return UserHandle.SUCCESS;
 	}
@@ -398,26 +406,22 @@ export default class {
 			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
 
 		if (context) {
-			embed.addField("Guild ID", <string>context?.guild?.id, true);
-			embed.addField("User", <string>context.author.id, true);
-			embed.addField("Message Content", <string>context.content, true);
+			embed.addField("Guild ID", `${context.guild?.id}`, true);
+			embed.addField("User", context.author.id, true);
+			embed.addField("Message Content", context.content, true);
 		} else if (runArgs) {
 			const argsDesc: string[] = [];
-			for (const [k, v] of Object.entries(runArgs)) {
-				if ((<any>v)?.inviter) (<any>v).user = (<any>v).inviter;
+			for (const [k, v] of Object.entries<any>(runArgs)) {
+				if (v?.inviter) v.user = v.inviter;
 				const additionalInfo =
 					typeof v === "object"
-						? `${(<any>v)?.guild.name ? "\n*Guild:* " + (<any>v)?.guild.name + " (`" + (<any>v)?.guild.id + "`)" : ""}${
-								(<any>v)?.member
-									? "\n*Member*: " + (<any>v)?.member.user.tag + " <@" + (<any>v)?.member.id + ">"
-									: (<any>v)?.user
-									? "\n*User:* " + (<any>v)?.user.tag + " <@" + (<any>v)?.user.id + ">"
-									: ""
+						? `${v?.guild.name ? "\n*Guild:* " + v?.guild.name + " (`" + v?.guild.id + "`)" : ""}${
+								v?.member ? "\n*Member*: " + v?.member.user.tag + " <@" + v?.member.id + ">" : v?.user ? "\n*User:* " + v?.user.tag + " <@" + v?.user.id + ">" : ""
 						  }${
-								(<any>v)?.channel && (<any>v)?.channel?.name
-									? "\n*Channel:* " + (<any>v)?.channel.name + " <#" + (<any>v)?.channel.id + "> (`" + (<any>v)?.channel.id + ")`"
+								v?.channel && v?.channel?.name
+									? "\n*Channel:* " + v?.channel.name + " <#" + v?.channel.id + "> (`" + v?.channel.id + ")`"
 									: v instanceof GuildChannel
-									? "\n*Channel:* <#" + (<any>v)?.id + "> #" + (<any>v)?.name + " (`" + (<any>v)?.id + ")`"
+									? "\n*Channel:* <#" + v.id + "> #" + v.name + " (`" + v.id + ")`"
 									: ""
 						  }`
 						: "";
@@ -427,7 +431,8 @@ export default class {
 			embed.addField("Event Arguments", argsDesc.join("\n").slice(0, 1024));
 		}
 
-		await (<TextChannel>this.client.channels.cache.get(error)).send({ embeds: [embed] });
+		const errorChannel = this.client.channels.cache.get(error);
+		errorChannel?.isText() && (await errorChannel.send({ embeds: [embed] }));
 	}
 
 	/** Return a list of property keys where the values differ between the two objects */

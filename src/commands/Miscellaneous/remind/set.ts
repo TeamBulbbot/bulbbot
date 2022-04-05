@@ -24,11 +24,11 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let duration: number = <number>parse(args[0]);
+		let duration: number = parse(args[0]);
 		const reason: string = args.slice(1).join(" ");
 
 		if (duration <= 0) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > <number>parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
+		if (duration > parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton()
@@ -111,7 +111,7 @@ export default class extends SubCommand {
 				}
 
 				await deleteReminder(reminder.id);
-			}, <number>parse(args[0]));
+			}, parse(args[0]));
 		});
 	}
 }

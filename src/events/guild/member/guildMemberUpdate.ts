@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Permissions, Snowflake, User } from "discord.js";
+import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Permissions, User } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
@@ -35,46 +35,46 @@ export default class extends Event {
 
 			// If newMember is muted check if the executor is bot. If not, log as manual mute
 			// If newMember is not muted check if the executor is bot. If not, log as manual unmute, else log as auto mute
-			if (newMember.communicationDisabledUntilTimestamp === null) {
-				if (executor?.id !== this.client.user?.id) {
+			if (newMember.communicationDisabledUntilTimestamp === null && executor) {
+				if (executor.id !== this.client.user?.id) {
 					await infractionsManager.createInfraction(
 						newMember.guild.id,
 						"Unmute",
 						false,
-						auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+						auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 						newMember.user,
-						<User>executor,
+						executor,
 					);
-					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, <Snowflake>executor?.id, newMember.user.id, "Unmute");
+					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Unmute");
 					await loggingManager.sendModAction(
 						this.client,
-						newMember.guild?.id,
+						newMember.guild.id,
 						await this.client.bulbutils.translate("mod_action_types.unmute", newMember.guild.id, {}),
 						newMember.user,
-						<User>executor,
-						auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+						executor,
+						auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 						infID,
 					);
 				}
 			} else {
-				if (executor?.id === this.client.user?.id) return;
+				if (!executor?.id || executor.id === this.client.user?.id || newMember.communicationDisabledUntilTimestamp === null) return;
 
 				await infractionsManager.createInfraction(
 					newMember.guild.id,
 					"Mute",
-					<number>newMember.communicationDisabledUntilTimestamp!,
-					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+					newMember.communicationDisabledUntilTimestamp,
+					auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					newMember.user,
-					<User>executor,
+					executor,
 				);
-				const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, <Snowflake>executor?.id, newMember.user.id, "Mute");
+				const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Mute");
 				await loggingManager.sendModActionTemp(
 					this.client,
 					newMember.guild,
 					await this.client.bulbutils.translate("mod_action_types.mute", newMember.guild.id, {}),
 					newMember.user,
-					<User>executor,
-					auditLog?.reason ? <string>auditLog?.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
+					executor,
+					auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					infID,
 					newMember.communicationDisabledUntilTimestamp,
 				);
@@ -98,7 +98,9 @@ export default class extends Event {
 						break;
 				}
 				auditLog = audit.entries.first();
-				if (<number>auditLog?.createdTimestamp + 3000 < Date.now()) auditLog = undefined;
+				// @ts-expect-error This is a safe corecion
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				if ((~~auditLog?.createdTimestamp)! + 3000 < Date.now()) auditLog = undefined;
 				if (!auditLog?.executor) auditLog = undefined;
 			} catch (e) {
 				if (!(e instanceof DiscordAPIError)) throw e;
@@ -107,20 +109,20 @@ export default class extends Event {
 		switch (change) {
 			case "nickname":
 				part = "member";
-				if (auditLog?.changes && auditLog!.changes[0].key === "nick") {
+				if (auditLog?.changes && auditLog.changes[0].key === "nick") {
 					executor = auditLog.executor;
-					if (executor?.id === this.client.user!.id) return;
+					if (!executor?.id || executor.id === this.client.user?.id) return;
 
 					const reason = auditLog.reason ?? (await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}));
-					if (!executor?.bot && executor?.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor!);
+					if (!executor.bot && executor.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor);
 					const infID: number =
-						!executor?.bot && executor?.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor!.id, newMember.user.id, "Manual Nickname") : -1;
+						!executor.bot && executor.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Manual Nickname") : -1;
 					const translateKey =
 						executor === null || executor.id === newMember.id
 							? newMember.nickname
 								? "event_member_update_nickname"
 								: "event_member_remove_nickname"
-							: executor?.bot
+							: executor.bot
 							? newMember.nickname
 								? "event_member_update_nickname_moderator"
 								: "event_member_remove_nickname_moderator"
@@ -138,7 +140,7 @@ export default class extends Event {
 						reason,
 						action: await this.client.bulbutils.translate(newMember.nickname ? "mod_action_types.nick_change" : "mod_action_types.nick_remove", newMember.guild.id, {}),
 						target: newMember.user,
-						moderator: executor!,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 					});
 				} else {
 					message = await this.client.bulbutils.translate(`event_member_${newMember.nickname ? "update" : "remove"}_nickname`, newMember.guild.id, {
@@ -157,11 +159,11 @@ export default class extends Event {
 
 				if (auditLog) {
 					const translateKey = change === "newrole" ? "event_member_update_role_add_moderator" : "event_member_update_role_remove_moderator";
-					executor = <User>auditLog.executor;
+					executor = auditLog.executor;
 					message = await this.client.bulbutils.translate(translateKey, newMember.guild.id, {
 						user: newMember.user,
 						role,
-						moderator: executor,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 					});
 				} else {
 					const translateKey = change === "newrole" ? "event_member_update_role_add" : "event_member_update_role_remove";
@@ -173,6 +175,6 @@ export default class extends Event {
 				break;
 		}
 
-		await loggingManager.sendEventLog(this.client, newMember.guild, part!, message);
+		await loggingManager.sendEventLog(this.client, newMember.guild, part, message);
 	}
 }

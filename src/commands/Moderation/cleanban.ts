@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Snowflake } from "discord.js";
+import { GuildMember, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
@@ -58,14 +58,16 @@ export default class extends Command {
 			return;
 		}
 
+		if (!context.guild?.id || !context.member) return;
+
 		const infID = await infractionsManager.ban(
 			this.client,
-			<Guild>context.guild,
+			context.guild,
 			BanType.CLEAN,
 			target.user,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
@@ -74,8 +76,8 @@ export default class extends Command {
 		);
 
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

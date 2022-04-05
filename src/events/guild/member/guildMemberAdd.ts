@@ -30,10 +30,11 @@ export default class extends Event {
 
 		const automod: AutoModConfiguration = await databaseManager.getAutoModConfig(member.guild.id);
 		if (automod.enabled && automod.avatarHashes.length > 0 && automod.punishmentAvatarBans) {
-			const buffer = await axios.get(member?.displayAvatarURL(), {
+			const buffer = await axios.get(member.displayAvatarURL(), {
 				responseType: "arraybuffer",
 			});
-			const avatarHash = await imageHash.hash(buffer.data, 8);
+			// Type inferred manually from the source code
+			const avatarHash = await (imageHash.hash(buffer.data, 8) as Promise<string>);
 			if (automod.avatarHashes.includes(avatarHash)) {
 				const automodManager: AutoModManager = new AutoModManager();
 

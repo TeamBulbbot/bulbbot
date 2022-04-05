@@ -40,7 +40,7 @@ export default class extends Event {
 			newChannel.guild,
 			"channel",
 			await this.client.bulbutils.translate("event_update_channel", newChannel.guild.id, {
-				moderator: executor!,
+				moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 				channel: newChannel,
 				type: await this.client.bulbutils.translate(`channel_types.${newChannel.type}`, newChannel.guild.id, {}),
 				changes: log.join("\n> "),

@@ -71,7 +71,7 @@ export default class extends Command {
 					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 						user: context.author,
 					}),
-					iconURL: await this.client.bulbutils.userObject(false, context.author).avatarUrl,
+					iconURL: this.client.bulbutils.userObject(false, context.author)?.avatarUrl ?? undefined,
 				})
 				.setTimestamp();
 
@@ -91,7 +91,7 @@ export default class extends Command {
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: await this.client.bulbutils.userObject(false, context.author).avatarUrl,
+				iconURL: (await this.client.bulbutils.userObject(false, context.author)?.avatarUrl) ?? undefined,
 			})
 			.setTimestamp();
 

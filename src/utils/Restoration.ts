@@ -1,7 +1,7 @@
 import ReminderManager from "./managers/ReminderManager";
 import InfractionsManager from "./managers/InfractionsManager";
 import TempbanManager from "./managers/TempbanManager";
-import { Guild, GuildMember, Message, User } from "discord.js";
+import { Guild, Message, User } from "discord.js";
 import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { BanType } from "./types/BanType";
@@ -78,7 +78,7 @@ export default class {
 			try {
 				guild = await client.guilds.fetch(tempban.gId);
 			} catch (_) {
-				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was kicked from the guild cant unban the user: ${tempban.targetId}`);
+				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was kicked from the guild, can't unban the user: ${tempban.targetId}`);
 				await deleteTempBan(tempban.id);
 				continue;
 			}
@@ -93,16 +93,18 @@ export default class {
 			}
 
 			setTimeout(async function () {
+				if (!guild.me || !client.user) return;
+
 				await tryIgnore(
 					infractionsManager.unban,
 					client,
-					<Guild>guild,
+					guild,
 					BanType.TEMP,
 					target,
-					<GuildMember>guild?.me,
-					await client.bulbutils.translate("global_mod_action_log", guild?.id, {
-						action: await client.bulbutils.translate("mod_action_types.auto_unban", guild?.id, {}),
-						moderator: client.user || { id: "Unknown ID", tag: "Unknown User" },
+					guild.me,
+					await client.bulbutils.translate("global_mod_action_log", guild.id, {
+						action: await client.bulbutils.translate("mod_action_types.auto_unban", guild.id),
+						moderator: client.user,
 						target: target,
 						reason: "Automatic unban",
 					}),

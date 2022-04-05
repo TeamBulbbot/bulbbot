@@ -1,7 +1,7 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Message, Snowflake } from "discord.js";
+import { Message } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
@@ -22,27 +22,29 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		if (!context.guild) return;
+
 		const infID = Number(args[0].replace(NonDigits, ""));
 
 		if (!infID || infID >= 2147483647 || infID <= 0)
 			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
+				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
 					arg_expected: "id:Number",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
 			);
 
-		if (!(await infractionsManager.getInfraction(<Snowflake>context.guild?.id, Number(args[0].replace(NonDigits, ""))))) {
+		if (!(await infractionsManager.getInfraction(context.guild.id, Number(args[0].replace(NonDigits, ""))))) {
 			return context.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", context.guild?.id, {
+				await this.client.bulbutils.translate("infraction_not_found", context.guild.id, {
 					infraction_id: args[0],
 				}),
 			);
 		}
 
 		const reason = args.slice(1).join(" ");
-		await infractionsManager.updateReason(<Snowflake>context.guild?.id, Number(args[0]), reason);
-		return context.channel.send(await this.client.bulbutils.translate("infraction_update_success", context.guild?.id, { infraction_id: args[0] }));
+		await infractionsManager.updateReason(context.guild.id, Number(args[0]), reason);
+		return context.channel.send(await this.client.bulbutils.translate("infraction_update_success", context.guild.id, { infraction_id: args[0] }));
 	}
 }
