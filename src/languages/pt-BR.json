@@ -264,7 +264,7 @@
 	"automod_settings_avatarbans": "**Avatares banidos**: {{enabled}}\n**Avatares proibidos:** {{avatar_blacklist}}",
 	"automod_settings_ignored": "**Cargos imunes:** {{roles}}\n**Canais imunes:** {{channels}}\n**Usuários imunes:** {{users}}",
 	"automod_settings_footer": "Administradores e cargos com autorização +25 são sempre imunes às verificações do AutoMod",
-	"automod_violation_max_messages_reason": "Violou `MAX_MESSAGES` veja em #{{channel.name}} ({amount}/{limit}s)",
+	"automod_violation_max_messages_reason": "Verificação de 'MAX_MESSAGES' violada em #{{channel.name}} ({{amount}}/{{limit}}s)",
 	"automod_violation_max_messages_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` violou `MAX_MESSAGES` veja em <#{{channel.id}}>. Mensagens ({{amount}}/{{limit}}s)",
 	"automod_violation_max_mentions_reason": "Violou `MAX_MESSAGES` veja em #{{channel.name}} ({{amount}}/{{limit}}s)",
 	"automod_violation_max_mentions_log": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` violou `MAX_MENTIONS` veja em <#{{channel.id}}>. Menções ({{amount}}/{{limit}}s)",
