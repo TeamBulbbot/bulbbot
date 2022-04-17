@@ -1,8 +1,6 @@
 import prom from "prom-client";
-import http from "http";
-import { URL } from "url";
 import Command from "../structures/Command";
-import { tryIgnore } from "./helpers";
+import express, { Request } from "express";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
 const cachedUsers = new prom.Gauge({ name: "bulbbot_cached_users", help: "The amount of cached users in the memory" });
@@ -42,6 +40,9 @@ export function commandUsage(_: any, command: Command, isSlash: boolean) {
 export async function startPrometheus(client: any): Promise<void> {
 	client.log.info("[PROMETHEUS] Starting up the prometheus");
 	const register = new prom.Registry();
+	const PORT = process.env.PORT || 8080;
+	const app = express();
+
 	register.setDefaultLabels({
 		app: "bulbbot",
 	});
@@ -53,19 +54,15 @@ export async function startPrometheus(client: any): Promise<void> {
 		register.registerMetric(metric);
 	});
 
-	const server = http.createServer(async (req, res) => {
-		const route = tryIgnore(() => new URL(req.url || "").pathname);
+	app.get("/metrics", async (_: Request, res: any) => {
+		res.set("Content-Type", prom.register.contentType);
+		latency.set(client.ws.ping);
+		cachedUsers.set(client.users.cache.size);
+		guildCount.set(client.guilds.cache.size);
+		guildMemberCount.set(client.guilds.cache.reduce((a: any, g: { memberCount: any }) => a + g.memberCount, 0));
 
-		if (route === "/metrics") {
-			res.setHeader("Content-Type", register.contentType);
-			latency.set(client.ws.ping);
-			cachedUsers.set(client.users.cache.size);
-			guildCount.set(client.guilds.cache.size);
-			guildMemberCount.set(client.guilds.cache.reduce((a: any, g: { memberCount: any }) => a + g.memberCount, 0));
-
-			res.write(await register.metrics());
-			res.end();
-		}
+		res.write(await register.metrics());
+		res.end();
 	});
 
 	//client.on("apiResponse", (request: APIRequest, response: Response) => {
@@ -79,5 +76,7 @@ export async function startPrometheus(client: any): Promise<void> {
 		if (packet.t === "MESSAGE_CREATE") guildMessages.inc({ guildId: packet.d.guild_id });
 	});
 
-	server.listen(process.env.PORT || 8080);
+	app.listen(PORT, () => {
+		client.log.info(`[PROMETHEUS] Running server on port ${PORT}`);
+	});
 }
