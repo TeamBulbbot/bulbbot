@@ -1,14 +1,12 @@
 import BulbBotClient from "../../structures/BulbBotClient";
 import Command from "../../structures/Command";
 import botfarm from "./admin/botfarm";
-import clearfiles from "./admin/clearfiles";
 import database from "./admin/database";
 import experiment from "./admin/experiment";
 import join from "./admin/join";
 import leave from "./admin/leave";
 import premium from "./admin/premium";
 import restart from "./admin/restart";
-import update from "./admin/update";
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -16,7 +14,7 @@ export default class extends Command {
 			name,
 			description: "Admin commands",
 			category: "Admin",
-			subCommands: [clearfiles, leave, join, database, update, restart, premium, botfarm, experiment],
+			subCommands: [leave, join, database, restart, premium, botfarm, experiment],
 			usage: "<action>",
 			minArgs: 1,
 			maxArgs: -1,
