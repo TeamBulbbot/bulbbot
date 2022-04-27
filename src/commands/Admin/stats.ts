@@ -41,14 +41,27 @@ export default class extends Command {
 			databaseSize: sizeOfDB[0].pg_size_pretty,
 		};
 
+		let banCache = 0,
+			memberCache = 0,
+			roleCache = 0;
+		for (const [_, guild] of this.client.guilds.cache) {
+			banCache += guild.bans.cache.size;
+			memberCache += guild.members.cache.size;
+			roleCache += guild.roles.cache.size;
+		}
+
 		const desc: string[] = [
 			`Guild Count: \`${numberWithCommas(this.client.guilds.cache.size)}\``,
 			`Users: \`${numberWithCommas(this.client.guilds.cache.reduce((a: any, g: { memberCount: any }) => a + g.memberCount, 0))}\``,
-			`\n**Cache**`,
+			`\n**__Cache__**`,
+			`Guilds: \`${this.client.guilds.cache.size}\``,
+			`Members: \`${memberCache}\``,
 			`Users: \`${this.client.users.cache.size}\``,
 			`Channels: \`${this.client.channels.cache.size}\``,
+			`Roles: \`${roleCache}\``,
 			`Emojis: \`${this.client.emojis.cache.size}\``,
-			`\n**PostreSQL Data**`,
+			`Bans: \`${banCache}\``,
+			`\n**__PostreSQL Data__**`,
 			`Stored Messages: \`${numberWithCommas(postgresData.amtMessages)}\``,
 			`Stored Infractions: \`${numberWithCommas(postgresData.amtInfractions)}\``,
 			`Size of database: \`${postgresData.databaseSize}\``,
