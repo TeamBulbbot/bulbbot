@@ -247,6 +247,11 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				],
 			},
 			{
+				name: "list",
+				type: ApplicationCommandOptionTypes.SUB_COMMAND,
+				description: "Gets a list of bannpools the server is connected to",
+			},
+			{
 				name: "kick",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Kicks the selected server from the selected banpool",
