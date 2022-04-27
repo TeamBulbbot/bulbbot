@@ -22,12 +22,7 @@ export default class extends Command {
 		});
 	}
 
-	async run(_context: CommandContext, _args: string[]): Promise<void> {
-		// Why does this exist
-		return;
-	}
-
-	public async _message_info(context: CommandContext, args: string[]): Promise<void> {
+	public async run(context: CommandContext, args: string[]): Promise<void> {
 		let channelId: string;
 		let messageId: string;
 		let input: string | string[] = args[0];
