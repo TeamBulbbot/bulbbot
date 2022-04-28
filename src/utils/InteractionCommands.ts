@@ -1078,36 +1078,6 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "verification",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Changes the server verification level",
-		options: [
-			{
-				name: "level",
-				type: ApplicationCommandOptionTypes.INTEGER,
-				description: "The desired verification level",
-				choices: [
-					{
-						name: "NONE",
-						value: 0,
-					},
-					{
-						name: "LOW",
-						value: 1,
-					},
-					{
-						name: "MEDIUM",
-						value: 2,
-					},
-					{
-						name: "HIGH",
-						value: 3,
-					},
-					{
-						name: "VERY_HIGH",
-						value: 4,
-					},
-				],
-				required: true,
-			},
-		],
 	},
 	{
 		name: "warn",
