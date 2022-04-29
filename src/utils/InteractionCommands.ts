@@ -1128,6 +1128,19 @@ export const ChatInputCommand: ApplicationCommand[] = [
 			},
 		],
 	},
+	{
+		name: "snowflake",
+		type: ApplicationCommandType.CHAT_INPUT,
+		description: "Gets information about a given snowflake",
+		options: [
+			{
+				name: "id",
+				type: ApplicationCommandOptionTypes.STRING,
+				description: "The snowflake you want to check",
+				required: true,
+			},
+		],
+	},
 ];
 
 export const UserCommand: ApplicationCommand[] = [];
