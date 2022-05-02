@@ -76,6 +76,12 @@ export default class extends Command {
 						emoji: Emotes.features.HUB,
 					},
 					{
+						label: await this.client.bulbutils.translate("config_main_options.manuel_nickname_inf", context.guild?.id, {}),
+						value: "manuelNicknameInf",
+						description: await this.client.bulbutils.translate("config_main_options_descriptions.manuel_nickname_inf", context.guild?.id, {}),
+						emoji: Emotes.features.MEMBER_LIST_DISABLED,
+					},
+					{
 						label: await this.client.bulbutils.translate("config_main_options.timezone", context.guild?.id, {}),
 						value: "timezone",
 						description: await this.client.bulbutils.translate("config_main_options_descriptions.timezone", context.guild?.id, {}),
