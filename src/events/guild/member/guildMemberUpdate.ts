@@ -109,7 +109,7 @@ export default class extends Event {
 		switch (change) {
 			case "nickname":
 				part = "member";
-				if (!auditLog) {
+				if (!auditLog && newMember.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
 					audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
 					auditLog = audit.entries.first();
 				}
