@@ -9,6 +9,7 @@ export interface GuildConfiguration {
 	autorole: Snowflake;
 	actionsOnInfo: boolean;
 	rolesOnLeave: boolean;
+	manuelNicknameInf: boolean;
 	quickReasons: string[];
 }
 

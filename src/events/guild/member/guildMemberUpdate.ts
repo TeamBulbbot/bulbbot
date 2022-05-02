@@ -109,7 +109,12 @@ export default class extends Event {
 		switch (change) {
 			case "nickname":
 				part = "member";
-				if (auditLog?.changes && auditLog.changes[0].key === "nick") {
+				if (!auditLog) {
+					audit = await newMember.guild.fetchAuditLogs({ limit: 1, type: "MEMBER_UPDATE" });
+					auditLog = audit.entries.first();
+				}
+
+				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild.id)).manuelNicknameInf) {
 					executor = auditLog.executor;
 					if (!executor?.id || executor.id === this.client.user?.id) return;
 

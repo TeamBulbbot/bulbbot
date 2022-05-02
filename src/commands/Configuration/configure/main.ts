@@ -59,6 +59,12 @@ export default async function (interaction: MessageComponentInteraction, client:
 					emoji: Emotes.features.HUB,
 				},
 				{
+					label: await client.bulbutils.translate("config_main_options.manuel_nickname_inf", interaction.guild?.id, {}),
+					value: "manuelNicknameInf",
+					description: await client.bulbutils.translate("config_main_options_descriptions.manuel_nickname_inf", interaction.guild?.id, {}),
+					emoji: Emotes.features.MEMBER_LIST_DISABLED,
+				},
+				{
 					label: await client.bulbutils.translate("config_main_options.timezone", interaction.guild?.id, {}),
 					value: "timezone",
 					description: await client.bulbutils.translate("config_main_options_descriptions.timezone", interaction.guild?.id, {}),
