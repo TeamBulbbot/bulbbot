@@ -3,15 +3,15 @@ import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 import BulbBotClient from "../../../structures/BulbBotClient";
 
-const { getConfig, setManuelNicknameInf } = new DatabaseManager();
+const { getConfig, setManualNicknameInf } = new DatabaseManager();
 
-async function manuelNicknameInf(interaction: MessageComponentInteraction, client: BulbBotClient) {
+async function manualNicknameInf(interaction: MessageComponentInteraction, client: BulbBotClient) {
 	const config: GuildConfiguration = await getConfig(interaction.guild?.id as Snowflake);
 
 	const selectRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("placeholder")
-			.setPlaceholder(`Currently ${config.manuelNicknameInf ? "enabled" : "disabled"}`)
+			.setPlaceholder(`Currently ${config.manualNicknameInf ? "enabled" : "disabled"}`)
 			.setDisabled(true)
 			.addOptions([
 				{
@@ -30,13 +30,13 @@ async function manuelNicknameInf(interaction: MessageComponentInteraction, clien
 	const buttonRow = new MessageActionRow().addComponents([
 		new MessageButton().setCustomId("back").setStyle("DANGER").setLabel(back),
 		new MessageButton()
-			.setCustomId(config.manuelNicknameInf ? "disable" : "enable")
-			.setStyle(config.manuelNicknameInf ? "DANGER" : "SUCCESS")
-			.setLabel(config.manuelNicknameInf ? disable : enable),
+			.setCustomId(config.manualNicknameInf ? "disable" : "enable")
+			.setStyle(config.manualNicknameInf ? "DANGER" : "SUCCESS")
+			.setLabel(config.manualNicknameInf ? disable : enable),
 	]);
 
 	await interaction.update({
-		content: await client.bulbutils.translate("config_manuel_nickname_infractions", interaction.guild?.id, {}),
+		content: await client.bulbutils.translate("config_manual_nickname_infractions", interaction.guild?.id, {}),
 		components: [selectRow, buttonRow],
 	});
 
@@ -50,12 +50,12 @@ async function manuelNicknameInf(interaction: MessageComponentInteraction, clien
 					await require("./main").default(i, client);
 					break;
 				case "enable":
-					await setManuelNicknameInf(i.guild?.id as Snowflake, true);
-					await manuelNicknameInf(i, client);
+					await setManualNicknameInf(i.guild?.id as Snowflake, true);
+					await manualNicknameInf(i, client);
 					break;
 				case "disable":
-					await setManuelNicknameInf(i.guild?.id as Snowflake, false);
-					await manuelNicknameInf(i, client);
+					await setManualNicknameInf(i.guild?.id as Snowflake, false);
+					await manualNicknameInf(i, client);
 					break;
 				default:
 					await require("./main").default(i, client);
@@ -65,4 +65,4 @@ async function manuelNicknameInf(interaction: MessageComponentInteraction, clien
 	});
 }
 
-export default manuelNicknameInf;
+export default manualNicknameInf;

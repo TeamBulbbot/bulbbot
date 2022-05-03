@@ -59,9 +59,9 @@ export default async function (interaction: MessageComponentInteraction, client:
 					emoji: Emotes.features.HUB,
 				},
 				{
-					label: await client.bulbutils.translate("config_main_options.manuel_nickname_inf", interaction.guild?.id, {}),
-					value: "manuelNicknameInf",
-					description: await client.bulbutils.translate("config_main_options_descriptions.manuel_nickname_inf", interaction.guild?.id, {}),
+					label: await client.bulbutils.translate("config_main_options.manual_nickname_inf", interaction.guild?.id, {}),
+					value: "manualNicknameInf",
+					description: await client.bulbutils.translate("config_main_options_descriptions.manual_nickname_inf", interaction.guild?.id, {}),
 					emoji: Emotes.features.MEMBER_LIST_DISABLED,
 				},
 				{

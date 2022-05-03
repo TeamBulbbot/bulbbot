@@ -140,8 +140,8 @@ export default class {
 		});
 	}
 
-	async setManuelNicknameInf(guildID: Snowflake, enabled: boolean): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "manuelNicknameInf" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
+	async setManualNicknameInf(guildID: Snowflake, enabled: boolean): Promise<void> {
+		await sequelize.query('UPDATE "guildConfigurations" SET "manualNicknameInf" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
 			bind: { GuildID: guildID, Enabled: enabled },
 			type: QueryTypes.UPDATE,
 		});
