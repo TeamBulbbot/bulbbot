@@ -76,9 +76,9 @@ export default class extends Command {
 						emoji: Emotes.features.HUB,
 					},
 					{
-						label: await this.client.bulbutils.translate("config_main_options.manuel_nickname_inf", context.guild?.id, {}),
-						value: "manuelNicknameInf",
-						description: await this.client.bulbutils.translate("config_main_options_descriptions.manuel_nickname_inf", context.guild?.id, {}),
+						label: await this.client.bulbutils.translate("config_main_options.manual_nickname_inf", context.guild?.id, {}),
+						value: "manualNicknameInf",
+						description: await this.client.bulbutils.translate("config_main_options_descriptions.manual_nickname_inf", context.guild?.id, {}),
 						emoji: Emotes.features.MEMBER_LIST_DISABLED,
 					},
 					{

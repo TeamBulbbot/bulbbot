@@ -114,7 +114,7 @@ export default class extends Event {
 					auditLog = audit.entries.first();
 				}
 
-				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild.id)).manuelNicknameInf) {
+				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild.id)).manualNicknameInf) {
 					executor = auditLog.executor;
 					if (!executor?.id || executor.id === this.client.user?.id) return;
 
