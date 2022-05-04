@@ -139,6 +139,7 @@
 	"config_main_options": {
 		"language": "Idioma",
 		"actions_on_info": "Ações em informação",
+		"manual_nickname_inf": "Manual nickname infractions",
 		"prefix": "Prefixo",
 		"roles_on_leave": "Cargos na saída",
 		"automod": "Automod",
@@ -150,6 +151,7 @@
 	"config_main_options_descriptions": {
 		"language": "Altere o idioma do bot",
 		"actions_on_info": "Configure as ações de informações",
+		"manual_nickname_inf": "Changing a users nickname results in a infraction",
 		"prefix": "Configure o prefixo do bot",
 		"roles_on_leave": "Configure os cargos em caso de saída",
 		"automod": "Configure o automod",
@@ -161,6 +163,7 @@
 	"config_main_placeholder": "Selecione uma categoria para modificar",
 	"config_actions_on_info_header": "{{emote_wrench}} **Ações na Configuração de Informação**\n{{emote_edit}}*Essa configuração controla se os botões de ação serão exibidos quando você procurar sobre um usuário.*",
 	"config_roles_on_leave_header": "{{emote_wrench}} **Configuração de cargos na saída**\n{{emote_edit}}*Esta configuração controla se o bot irá registrar os cargos do usuário quando ele sair do servidor.*",
+	"config_manual_nickname_infractions": "{{emote_wrench}} **Manual nickname infractions Configuration**\n{{emote_edit}}*This settings controls wheter or not the bot will track infractions on users when a mod gives them an nickname*",
 	"config_language_header": "{{emote_wrench}} **Configuração de idioma**\n{{emote_edit}}*Esta configuração controla o idioma que o bot usará ao responder aos comandos.*",
 	"config_language_placeholder": "Selecione um idioma",
 	"config_language_success": "{{emote_success}} O idioma do servidor foi alterado com sucesso para `{{language}}`",
