@@ -374,6 +374,8 @@ export default class {
 			"cs-cz|czech|čeština": "cs-CZ",
 			"it-it|italian|italiano": "it-IT",
 			"hi-in|hindi|हिंदी": "hi-IN",
+			"hu-hu|hungarian|Magyar": "hu-HU",
+			"es-es|spanish|Español": "es-ES",
 		}, // @ts-expect-error
 		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
 	);
