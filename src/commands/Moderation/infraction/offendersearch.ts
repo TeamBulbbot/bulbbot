@@ -24,30 +24,32 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		if (!context.guild) return;
+
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let user: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		const user: User | undefined = await this.client.bulbfetch.getUser(targetID);
 
 		if (!user)
 			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 					arg_provided: args[0],
 					arg_expected: "user:User",
 					usage: this.usage,
 				}),
 			);
 
-		let options: any[] = [];
-		const infs: Infraction[] = <Infraction[]>await infractionsManager.getOffenderInfractions(<Snowflake>context.guild?.id, user.id);
+		const options: any[] = [];
+		const infs: Infraction[] = (await infractionsManager.getOffenderInfractions(context.guild.id, user.id)) || [];
 
-		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild?.id, { target: user }));
+		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild.id, { target: user }));
 
 		for (let i = 0; i < 25; i++) {
 			if (infs[i] === undefined) continue;
 
 			options.push({
 				label: `${infs[i].action} (#${infs[i].id})`,
-				description: await this.client.bulbutils.translate("infraction_interaction_description", context.guild?.id, {}),
+				description: await this.client.bulbutils.translate("infraction_interaction_description", context.guild.id, {}),
 				value: `inf_${infs[i].id}`,
 				emoji: this.client.bulbutils.formatAction(infs[i].action),
 			});
@@ -55,13 +57,13 @@ export default class extends SubCommand {
 
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
-				.setPlaceholder(await this.client.bulbutils.translate("infraction_interaction_placeholder", context.guild?.id, {}))
+				.setPlaceholder(await this.client.bulbutils.translate("infraction_interaction_placeholder", context.guild.id, {}))
 				.setCustomId("infraction")
 				.addOptions(options),
 		);
 
 		return await context.channel.send({
-			content: await this.client.bulbutils.translate("infraction_interaction_reply", context.guild?.id, {
+			content: await this.client.bulbutils.translate("infraction_interaction_reply", context.guild.id, {
 				target: user,
 			}),
 			components: [row],

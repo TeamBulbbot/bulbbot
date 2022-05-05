@@ -2,7 +2,7 @@ import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { ChannelMessage } from "../../utils/Regex";
-import { Message, MessageActionRow, MessageButton, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 
 export default class extends Command {
@@ -22,11 +22,7 @@ export default class extends Command {
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
-		return;
-	}
-
-	public async _message_info(context: CommandContext, args: string[]): Promise<void> {
+	public async run(context: CommandContext, args: string[]): Promise<void> {
 		let channelId: string;
 		let messageId: string;
 		let input: string | string[] = args[0];
@@ -41,12 +37,11 @@ export default class extends Command {
 			messageId = input[input.length - 1];
 		}
 
-		// @ts-ignore
-		let channel: TextChannel | NewsChannel | undefined = context.guild?.channels.cache.get(channelId);
-		if (channel?.type !== "GUILD_TEXT" && channel?.type !== "GUILD_NEWS" && !channel!?.permissionsFor(context.member!)?.has("VIEW_CHANNEL", true)) {
+		const channel = context.guild?.channels.cache.get(channelId);
+		if (!channel || !context.member || (channel.type !== "GUILD_TEXT" && channel.type !== "GUILD_NEWS" && !channel.permissionsFor(context.member).has("VIEW_CHANNEL", true))) {
 			context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild!.id, {}),
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),
 					arg_expected: "message:Message",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -56,11 +51,12 @@ export default class extends Command {
 		}
 		let message: Message;
 		try {
+			// @ts-expect-error It's a try-catch it's fine
 			message = await channel.messages.fetch(messageId);
 		} catch (error) {
 			context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild!.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild!.id, {}),
+				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),
 					arg_expected: "message:Message",
 					arg_provided: args[0],
 					usage: this.usage,
@@ -69,7 +65,7 @@ export default class extends Command {
 			return;
 		}
 
-		const desc: String[] = [
+		const desc: string[] = [
 			`**ID:** ${message.id}`,
 			`**Author:** ${message.author.tag} \`(${message.author.id})\``,
 			`**Pinned:** ${message.pinned}`,
@@ -90,7 +86,7 @@ export default class extends Command {
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				iconURL: context.author.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 

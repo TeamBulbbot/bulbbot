@@ -1,0 +1,44 @@
+{
+    "env": {
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "import"
+    ],
+    "rules": {
+        "no-case-declarations": "off",
+        "no-fallthrough": "error",
+        "no-empty": "error",
+        "import/no-named-as-default-member": "off",
+        "import/no-unresolved": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "^_",
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/prefer-ts-expect-error": "error",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-non-null-assertion": "error",
+        "@typescript-eslint/no-inferrable-types": "error",
+        "@typescript-eslint/consistent-type-assertions": "error"
+    }
+}

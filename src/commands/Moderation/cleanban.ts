@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Snowflake } from "discord.js";
+import { GuildMember, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
@@ -29,7 +29,6 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
 
 		if (!target) {
 			await context.channel.send(
@@ -45,38 +44,40 @@ export default class extends Command {
 		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
 
 		const banList = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find(user => user.user.id === targetID);
+		const bannedUser = banList?.find((user) => user.user.id === targetID);
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 
 		if (bannedUser) {
 			await context.channel.send(
 				await this.client.bulbutils.translate("already_banned", context.guild?.id, {
-					target,
+					target: target.user,
 					reason: bannedUser.reason,
 				}),
 			);
 			return;
 		}
 
-		infID = await infractionsManager.ban(
+		if (!context.guild?.id || !context.member) return;
+
+		const infID = await infractionsManager.ban(
 			this.client,
-			<Guild>context.guild,
+			context.guild,
 			BanType.CLEAN,
 			target.user,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 				moderator: context.author,
-				target,
+				target: target.user,
 				reason,
 			}),
 			reason,
 		);
 
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

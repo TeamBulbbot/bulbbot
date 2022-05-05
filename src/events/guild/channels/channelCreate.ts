@@ -6,14 +6,14 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {});
 	}
 
 	async run(channel: DMChannel | GuildChannel) {
 		if (!(channel instanceof GuildChannel)) return;
 
-		let msg: string = "";
+		let msg = "";
 		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
 			const logs: GuildAuditLogs<"CHANNEL_CREATE"> = await channel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_CREATE" });
 			const first = logs.entries.first();
@@ -22,7 +22,7 @@ export default class extends Event {
 				if (Date.now() < createdTimestamp + 3000)
 					msg = await this.client.bulbutils.translate("event_channel_create_moderator", channel.guild.id, {
 						channel,
-						moderator: executor,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 						type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 					});
 			}

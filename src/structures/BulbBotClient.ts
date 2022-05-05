@@ -17,7 +17,7 @@ export default class extends Client {
 	private readonly utils: Util;
 	public readonly bulbutils: BulbBotUtils;
 	public readonly bulbfetch: BulbBotFetch;
-	public userClearance: number = 0;
+	public userClearance = 0;
 	public blacklist: Collection<string, Record<string, any>>;
 	public banpoolInvites: Collection<string, Record<string, any>>;
 	public log: any;
@@ -36,7 +36,7 @@ export default class extends Client {
 					sweepInterval: 300,
 					sweepFilter: Sweepers.filterByLifetime({
 						lifetime: 600,
-						getComparisonTimestamp: e => e.editedTimestamp ?? e.createdTimestamp,
+						getComparisonTimestamp: (e) => e.editedTimestamp ?? e.createdTimestamp,
 					}),
 				},
 			}),
@@ -85,6 +85,6 @@ export default class extends Client {
 		await this.utils.loadBlacklist();
 		await this.utils.loadAbout();
 
-		await super.login(<string>token);
+		await super.login(token as string);
 	}
 }

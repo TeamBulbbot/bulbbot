@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
+import { GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -28,10 +28,9 @@ export default class extends Command {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
 		let reason: string = args.slice(1).join(" ");
-		let infID: number;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if (!target)
+		if (!target || !context.guild || !context.member)
 			return context.channel.send(
 				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
 					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
@@ -40,16 +39,16 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild?.id, { target: target.user }));
-		if (!target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("undeafen_not_deaf", context.guild?.id, { target: target.user }));
+		if (!target.voice.channel) return context.channel.send(await this.client.bulbutils.translate("global_not_in_voice", context.guild.id, { target: target.user }));
+		if (!target.voice.serverDeaf) return context.channel.send(await this.client.bulbutils.translate("undeafen_not_deaf", context.guild.id, { target: target.user }));
 
-		infID = await infractionsManager.undeafen(
+		const infID = await infractionsManager.undeafen(
 			this.client,
-			<Guild>context.guild,
+			context.guild,
 			target,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
@@ -58,8 +57,8 @@ export default class extends Command {
 		);
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.undeafen", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,

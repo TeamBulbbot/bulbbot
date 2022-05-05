@@ -25,8 +25,8 @@ export default class extends SubCommand {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name = args[0];
 
-		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
+		if (!(context.guild?.id && (await hasBanpoolLog(context.guild.id)))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!(await haveAccessToPool(context.guild.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
@@ -34,7 +34,7 @@ export default class extends SubCommand {
 		]);
 
 		const confirmMsg = await context.channel.send({
-			content: await this.client.bulbutils.translate("banpool_delete_message", context.guild?.id, {}),
+			content: await this.client.bulbutils.translate("banpool_delete_message", context.guild.id, {}),
 			components: [row],
 		});
 
@@ -50,7 +50,7 @@ export default class extends SubCommand {
 
 				await sendEventLog(
 					this.client,
-					context.guild!,
+					context.guild,
 					"banpool",
 					await this.client.bulbutils.translate("banpool_delete_success_log", context.guild?.id, {
 						user: context.user,

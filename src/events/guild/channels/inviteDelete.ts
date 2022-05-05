@@ -6,16 +6,16 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
 	}
 
 	public async run(invite: Invite): Promise<void> {
-		// @ts-ignore
+		// @ts-expect-error
 		const guild: Guild = invite.guild;
-		if (!guild?.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
+		if (!guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) return;
 
 		const logs: GuildAuditLogs<"INVITE_DELETE"> = await guild.fetchAuditLogs({ limit: 1, type: "INVITE_DELETE" });
 		const first = logs.entries.first();
@@ -26,7 +26,7 @@ export default class extends Event {
 
 		const log: string = await this.client.bulbutils.translate("event_invite_delete", guild.id, {
 			invite,
-			moderator: executor,
+			moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 		});
 
 		await loggingManager.sendEventLog(this.client, guild, "invite", log);

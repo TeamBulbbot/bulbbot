@@ -20,6 +20,8 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext): Promise<void | Message> {
+		if (!context.guild) return;
+
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
 				.setCustomId("configure-main")
@@ -74,6 +76,12 @@ export default class extends Command {
 						emoji: Emotes.features.HUB,
 					},
 					{
+						label: await this.client.bulbutils.translate("config_main_options.manual_nickname_inf", context.guild?.id, {}),
+						value: "manualNicknameInf",
+						description: await this.client.bulbutils.translate("config_main_options_descriptions.manual_nickname_inf", context.guild?.id, {}),
+						emoji: Emotes.features.MEMBER_LIST_DISABLED,
+					},
+					{
 						label: await this.client.bulbutils.translate("config_main_options.timezone", context.guild?.id, {}),
 						value: "timezone",
 						description: await this.client.bulbutils.translate("config_main_options_descriptions.timezone", context.guild?.id, {}),
@@ -90,9 +98,9 @@ export default class extends Command {
 		});
 
 		const filter = (i: MessageComponentInteraction) => i.user.id === context.user.id;
-		const collector = context.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
+		const collector = context.channel.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
-		collector?.on("collect", async (i: MessageComponentInteraction) => {
+		collector.on("collect", async (i: MessageComponentInteraction) => {
 			if (i.isSelectMenu()) {
 				await require(`./configure/${i.values[0]}`).default(i, this.client);
 			}

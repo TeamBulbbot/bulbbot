@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { GuildAuditLogs, GuildBan, Permissions, User } from "discord.js";
+import { GuildAuditLogs, GuildBan, Permissions } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import LoggingManager from "../../utils/managers/LoggingManager";
 
@@ -8,7 +8,7 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -22,14 +22,14 @@ export default class extends Event {
 
 		if (!banLog) return;
 
-		let { executor, reason, target: logTarget } = banLog;
-		logTarget = <User>logTarget;
-		if (executor!.id === this.client.user!.id) return;
-		if (ban.user.id !== logTarget.id) return;
+		const { executor, target: logTarget } = banLog;
+		let { reason } = banLog;
+		if (!executor?.id || executor.id === this.client.user?.id) return;
+		if (ban.user.id !== logTarget?.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", ban.guild.id, {});
 
-		await infractionsManager.createInfraction(ban.guild.id, "Manual Unban", true, reason, ban.user, executor!);
-		const infID: number = await infractionsManager.getLatestInfraction(ban.guild.id, executor!.id, ban.user.id, "Manual Unban");
-		await loggingManager.sendModAction(this.client, ban.guild.id, "manually unbanned", ban.user, executor!, reason, infID);
+		await infractionsManager.createInfraction(ban.guild.id, "Manual Unban", true, reason, ban.user, executor);
+		const infID: number = await infractionsManager.getLatestInfraction(ban.guild.id, executor.id, ban.user.id, "Manual Unban");
+		await loggingManager.sendModAction(this.client, ban.guild.id, "manually unbanned", ban.user, executor, reason, infID);
 	}
 }

@@ -1,11 +1,12 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
+import { Collection, Message, Snowflake } from "discord.js";
 import moment from "moment";
 import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isGuildChannel } from "../../../utils/typechecks";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -23,17 +24,17 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
-		const allMessages: Message[] = msgs.map(m => m).reverse();
-		const messages: Snowflake[] = [];
-		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
-			"MMMM Do YYYY, h:mm:ss a",
-		)} \n`;
+		if (!isGuildChannel(context.channel)) return;
 
-		let counting: boolean = false;
+		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
+		const allMessages: Message[] = msgs.map((m) => m).reverse();
+		const messages: Snowflake[] = [];
+		let delMsgs = `Message purge in #${context.channel.name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
+
+		let counting = false;
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
-		for (let msg of allMessages) {
+		for (const msg of allMessages) {
 			if (msg.id === args[0]) {
 				counting = true;
 			}
@@ -47,19 +48,11 @@ export default class extends SubCommand {
 			if (msg.id === args[1]) counting = false;
 		}
 
-		await (<TextChannel>context.channel).bulkDelete(messages);
+		await context.channel.bulkDelete(messages);
 
 		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
 
-		await loggingManager.sendModActionFile(
-			this.client,
-			<Guild>context.guild,
-			"purge",
-			messages.length,
-			`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`,
-			context.channel,
-			context.author,
-		);
+		await loggingManager.sendModActionFile(this.client, context.guild, "purge", messages.length, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
 		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: messages.length }));
 	}

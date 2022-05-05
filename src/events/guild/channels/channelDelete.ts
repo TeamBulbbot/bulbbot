@@ -9,7 +9,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {});
 	}
 
@@ -53,7 +53,7 @@ export default class extends Event {
 				break;
 		}
 
-		let log: string = "";
+		let log = "";
 		if (channel.guild.me?.permissions.has(Permissions.FLAGS.VIEW_AUDIT_LOG)) {
 			const logs: GuildAuditLogs<"CHANNEL_DELETE"> = await channel.guild.fetchAuditLogs({ limit: 1, type: "CHANNEL_DELETE" });
 			const first = logs.entries.first();
@@ -62,7 +62,7 @@ export default class extends Event {
 				if (Date.now() < createdTimestamp + 3000)
 					log = await this.client.bulbutils.translate("event_channel_delete_moderator", channel.guild.id, {
 						channel,
-						moderator: executor,
+						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
 						type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 					});
 			}

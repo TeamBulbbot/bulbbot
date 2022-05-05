@@ -12,7 +12,7 @@ const clearanceManager: ClearanceManager = new ClearanceManager();
 const { getMessageFromDB, updateMessageContent }: DatabaseManager = new DatabaseManager();
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -28,7 +28,7 @@ export default class extends Event {
 			if (dbData === undefined) return;
 			oldMessageContent = dbData.content;
 		} else {
-			if (newMessage.author.id === this.client.user!.id) return;
+			if (newMessage.author.id === this.client.user?.id) return;
 			if (oldMessage.content === newMessage.content) return;
 
 			const context: CommandContext = await getCommandContext(newMessage);
@@ -49,7 +49,7 @@ export default class extends Event {
 		});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
 			await loggingManager.sendEventLog(
 				this.client,
 				newMessage.guild,
@@ -60,7 +60,7 @@ export default class extends Event {
 					message: newMessage,
 					channel: newMessage.channel,
 				}),
-				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild?.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
 

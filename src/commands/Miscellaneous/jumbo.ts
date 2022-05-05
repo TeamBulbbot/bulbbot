@@ -27,17 +27,17 @@ export default class extends Command {
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const startMessage = await context.channel.send(await this.client.bulbutils.translate("jumbo_start", context.guild?.id, {}));
 
-		const PATH: string = `${__dirname}/../../../files`;
-		const TWEMOJI_VERSION: string = "13.1.0";
+		const PATH = `${__dirname}/../../../files`;
+		const TWEMOJI_VERSION = "13.1.0";
 		let doesIncludeAnimatedEmoji = false;
 
-		const SIZE: number = 250;
+		const SIZE = 250;
 		const imgPath: any = [];
 		sharp.cache({ files: 0 });
 
 		const realList: string[] = [];
 		for (let i = 0; i < args.length; i++) {
-			const customEmoji = <RegExpMatchArray>args[i].match(CustomEmote);
+			const customEmoji = args[i].match(CustomEmote);
 			if (!customEmoji) realList.push(...args[i]);
 			else {
 				realList.push(...customEmoji);
@@ -67,10 +67,10 @@ export default class extends Command {
 			jumboList.push(`${context.author.id}-${context.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 
 			for (let i = 0; i < realList.length; i++) {
-				let emote: RegExpMatchArray | string = realList[i];
+				let emote: Nullable<RegExpMatchArray | string> = realList[i];
 				let emoteName: string;
 
-				emote = <RegExpMatchArray>emote.match(CustomEmote);
+				emote = emote.match(CustomEmote);
 
 				if (emote === null) {
 					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
@@ -81,8 +81,9 @@ export default class extends Command {
 				} else {
 					const extension = emote[0].startsWith("<a:") ? "gif" : "png";
 					emote = emote[0].substring(1).slice(0, -1);
-					emote = <RegExpMatchArray>emote.match(GetEverythingAfterColon);
+					emote = emote.match(GetEverythingAfterColon) || [];
 					emoteName = emote[0];
+					if (!emoteName) continue;
 
 					if (!existsSync(join(PATH, `${emoteName}.${extension}`)))
 						await DownloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.${extension}?v=1&quality=lossless`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
@@ -124,10 +125,10 @@ export default class extends Command {
 					],
 					content: null,
 				});
-				unlinkSync(`${PATH}/final-${context.author!.id}-${context.guild!.id}.png`);
+				unlinkSync(`${PATH}/final-${context.author.id}-${context.guild?.id}.png`);
 			}
 
-			unlinkSync(`${PATH}/${context.author!.id}-${context.guild!.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
+			unlinkSync(`${PATH}/${context.author.id}-${context.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 		} catch (err) {
 			this.client.log.error(`[JUMBO] ${context.author.tag} (${context.author.id}) had en error: `, err);
 			return startMessage.edit(await this.client.bulbutils.translate("jumbo_invalid", context.guild?.id, {}));
@@ -137,7 +138,7 @@ export default class extends Command {
 
 async function DownloadEmoji(url: string, extension: string, emote: any, emoteName: string, size: number, path: string, twemojiVersion: string) {
 	try {
-		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+		await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
 			const sharpEmoji = sharp(res.data, {
 				density: 2400,
 				animated: extension === "gif",
@@ -149,11 +150,11 @@ async function DownloadEmoji(url: string, extension: string, emote: any, emoteNa
 			return sharpEmoji;
 		});
 	} catch (error) {
-		if (CustomEmote.test(<string>(<unknown>emote))) throw error;
+		if (CustomEmote.test(emote)) throw error;
 
 		url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/${twemojiVersion}/svg/${emoteName.split("-fe0f").join("")}.svg`;
 
-		await axios.get(url, { responseType: "arraybuffer" }).then(async res => {
+		await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
 			return await sharp(res.data, { density: 2400 }).png().resize(size, size).toFile(`${path}/${emoteName}.${extension}`);
 		});
 	}

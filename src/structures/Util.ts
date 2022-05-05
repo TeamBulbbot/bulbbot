@@ -26,7 +26,7 @@ export default class {
 	}
 
 	get directory(): string {
-		return `${path.dirname(<string>require.main?.filename)}${path.sep}`;
+		return `${path.dirname(require.main?.filename || ".")}${path.sep}`;
 	}
 
 	async loadCommands(): Promise<void> {
@@ -34,8 +34,8 @@ export default class {
 		return globAsync(`${this.directory}commands/*/*.js`).then((commands: any) => {
 			for (const commandFile of commands) {
 				delete require.cache[commandFile];
-				let { name } = path.parse(commandFile);
-				let File = require(commandFile);
+				const { name } = path.parse(commandFile);
+				const File = require(commandFile);
 				if (!this.isClass(File.default)) throw new CommandException(`Command ${name} is not an instance of Command`);
 
 				const command = new File.default(this.client, name);
@@ -69,7 +69,7 @@ export default class {
 					try {
 						await event.run(...args);
 					} catch (err: any) {
-						await this.client.bulbutils.logError(err, undefined, event?.name ?? name ?? eventFile ?? "Unknown Event", args);
+						await this.client.bulbutils.logError(err, undefined, event.name ?? name ?? eventFile ?? "Unknown Event", args);
 					}
 				});
 			}

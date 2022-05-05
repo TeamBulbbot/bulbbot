@@ -7,6 +7,7 @@ import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as Emotes from "../../emotes.json";
+import { tryIgnore } from "../../utils/helpers";
 
 const { createInfraction }: InfractionsManager = new InfractionsManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
@@ -33,22 +34,22 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		let reason: string = args.slice(1).join(" ");
-		let target: User | undefined = await this.client.bulbfetch.getUser(targetID);
+		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
 
-		if (!(await hasBanpoolLog(context.guild!?.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
+		if (!context.guild?.id || !(await hasBanpoolLog(context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
 
 		if (!target)
 			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 					arg_expected: "user:User",
 					arg_provided: args[0],
 					usage: this.usage,
 				}),
 			);
 
-		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild!?.id);
-		const options: Promise<MessageSelectOptionData>[] = pools.map(async pool => {
+		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild.id);
+		const options: Promise<MessageSelectOptionData>[] = pools.map(async (pool) => {
 			const data = await getPoolData(pool.name);
 
 			return {
@@ -65,43 +66,43 @@ export default class extends Command {
 				.addOptions(await Promise.all(options))
 				.setMinValues(1),
 		);
-		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild?.id, {}) });
+		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild.id, {}) });
 		const compCollector = banpoolSelect.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 60_000 });
 
 		compCollector.on("collect", async (interaction: SelectMenuInteraction) => {
 			if (interaction.user.id !== context.author.id) return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 
 			const poolGuilds: any[] = await getGuildsFromPools(
-				interaction.values.map(value => {
+				interaction.values.map((value) => {
 					return value.split(":")[0];
 				}),
 			);
-			let totalBans: number = 0;
+			let totalBans = 0;
+
+			if (!target) return;
 
 			for (let i = 0; i < poolGuilds.length; i++) {
 				const guildId = poolGuilds[i];
 				const guild: Guild = await this.client.guilds.fetch(guildId);
-				if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild?.id, {});
+				if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", guild.id, {});
 
 				if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
 
 				const banList = await guild.bans.fetch();
-				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target!.id);
+				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
 
 				if (bannedUser) continue;
 				else {
-					let guildTarget: GuildMember | undefined = undefined;
-					try {
-						guildTarget = await this.client.bulbfetch.getGuildMember(guild?.members, target!.id);
-					} catch (_) {}
+					if (!context.guild) continue;
+					const guildTarget: GuildMember | undefined = await tryIgnore(() => this.client.bulbfetch.getGuildMember(guild.members, target.id));
 
 					if (!guildTarget) {
 						totalBans++;
-						banUser(this.client, target!, context.author, guild, context.guild!, reason);
+						banUser(this.client, target, context.author, guild, context.guild, reason);
 					} else {
 						if (guildTarget.bannable) {
 							totalBans++;
-							banUser(this.client, target!, context.author, guild, context.guild!, reason);
+							banUser(this.client, target, context.author, guild, context.guild, reason);
 						} else continue;
 					}
 				}
@@ -113,7 +114,7 @@ export default class extends Command {
 					totalBans,
 					totalPossible: poolGuilds.length,
 					usedPools: interaction.values
-						.map(value => {
+						.map((value) => {
 							return `\`${value.split(":")[1]}\``;
 						})
 						.join(" "),
@@ -130,7 +131,7 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 		client,
 		guild,
 		"banpool",
-		await client.bulbutils.translate("crossban_reason", guild?.id, {
+		await client.bulbutils.translate("crossban_reason", guild.id, {
 			emoji: Emotes.actions.BAN,
 			target,
 			startedGuild,
@@ -141,7 +142,7 @@ async function banUser(client: BulbBotClient, target: User, moderator: User, gui
 	);
 
 	guild.members.ban(target, {
-		reason: await client.bulbutils.translate("crossban_reason_audit", guild?.id, {
+		reason: await client.bulbutils.translate("crossban_reason_audit", guild.id, {
 			startedGuild,
 			moderator,
 			reason,

@@ -14,7 +14,7 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 		new MessageSelectMenu()
 			.setCustomId("placeholder")
 			.setPlaceholder(
-				config.autorole !== null
+				role !== null
 					? await client.bulbutils.translate("config_autorole_placeholder", interaction.guild?.id, { role })
 					: await client.bulbutils.translate("config_autorole_placeholder_disabled", interaction.guild?.id, {}),
 			)

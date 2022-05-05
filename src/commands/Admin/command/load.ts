@@ -28,26 +28,33 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const cmd: string = args[0].toLowerCase();
-		let cmdFile: string = "";
-		let command: Command | undefined = Command.resolve(this.client, args);
+		let cmdFile = "";
+		const resolvedCommand: Command | undefined = Command.resolve(this.client, args);
 		let dirPath: string;
 
 		if (args.length > 1) {
-			if (!command) return context.channel.send(`Cannot load command \`${args[0]}\``);
-			if (command.name === args[args.length - 1]) return await context.channel.send(`Already have command \`${command.qualifiedName}\` loaded (did you mean to use \`reload\` instead?)`);
+			if (!resolvedCommand) return context.channel.send(`Cannot load command \`${args[0]}\``);
+			if (resolvedCommand.name === args[args.length - 1])
+				return await context.channel.send(`Already have command \`${resolvedCommand.qualifiedName}\` loaded (did you mean to use \`reload\` instead?)`);
 			// TODO: Internally call load command (this command) to attempt to load missing command first
-			if (command.name !== args[args.length - 2]) return await context.channel.send(`Cannot load command \`${args.slice(0, command.qualifiedName.split(" ").length + 1).join(" ")}\``);
+			if (resolvedCommand.name !== args[args.length - 2]) return await context.channel.send(`Cannot load command \`${args.slice(0, resolvedCommand.qualifiedName.split(" ").length + 1).join(" ")}\``);
 			cmdFile = args[args.length - 1];
-			dirPath = `${process.cwd()}/build/commands/*/${command.qualifiedName.replace(/ /g, "/")}/${cmdFile}.js`;
+			dirPath = `${process.cwd()}/build/commands/*/${resolvedCommand.qualifiedName.replace(/ /g, "/")}/${cmdFile}.js`;
 		} else {
 			cmdFile = cmd;
 			dirPath = `${process.cwd()}/build/commands/*/${cmdFile}.js`;
 		}
+
+		if (!resolvedCommand) return context.channel.send(`Cannot load command`);
+		let command = resolvedCommand;
+
 		return await globAsync(dirPath).then((commands: any) => {
 			mainLoop: for (const commandFile of commands) {
 				if (args.length > 1) {
-					let currCommand: Command | SubCommand = command!;
-					const cmdChain: string[] = new RegExp(`${process.cwd().replace(/\\/g, "/")}/build/commands/(.+)/${cmdFile}\.js`).exec(commandFile)![1].split("/").reverse();
+					let currCommand: Command | SubCommand = command;
+					const match = new RegExp(`${process.cwd().replace(/\\/g, "/")}/build/commands/(.+)/${cmdFile}\\.js`).exec(commandFile);
+					if (!match) continue;
+					const cmdChain: string[] = match[1].split("/").reverse();
 					for (const parent of cmdChain.slice(0, -1)) {
 						if (currCommand instanceof SubCommand) {
 							if (currCommand.name !== parent) continue mainLoop;
@@ -60,19 +67,19 @@ export default class extends SubCommand {
 					// Validated path with command parent chain
 
 					delete require.cache[require.resolve(commandFile)];
-					let { name } = path.parse(commandFile);
-					let File = require(commandFile);
+					const { name } = path.parse(commandFile);
+					const File = require(commandFile);
 					if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 					const loadedCommand = new File.default(this.client, command);
 					// any SubCommand is-a Command
 					if (!(loadedCommand instanceof SubCommand)) return context.channel.send(`Event ${name} doesn't belong in commands!`);
-					command!.subCommands.push(loadedCommand);
+					command.subCommands.push(loadedCommand);
 					command = loadedCommand;
 				} else {
 					delete require.cache[require.resolve(commandFile)];
-					let { name } = path.parse(commandFile);
-					let File = require(commandFile);
+					const { name } = path.parse(commandFile);
+					const File = require(commandFile);
 					if (!this.isClass(File.default)) return context.channel.send(`Command ${name} is not an instance of Command`);
 
 					const loadedCommand = new File.default(this.client, name);

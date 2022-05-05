@@ -1,11 +1,12 @@
 import ReminderManager from "./managers/ReminderManager";
 import InfractionsManager from "./managers/InfractionsManager";
 import TempbanManager from "./managers/TempbanManager";
-import { Guild, GuildMember, Message, User } from "discord.js";
+import { Guild, Message, User } from "discord.js";
 import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { BanType } from "./types/BanType";
 import { setTimeout } from "safe-timers";
+import { tryIgnore } from "./helpers";
 
 const { getAllReminders, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 const { getAllTemBans, deleteTempBan }: TempbanManager = new TempbanManager();
@@ -23,7 +24,7 @@ export default class {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
 
 				if (reminder.channelId !== "") {
-					// @ts-ignore
+					// @ts-expect-error
 					let channel: TextChannel;
 
 					try {
@@ -34,7 +35,7 @@ export default class {
 					}
 
 					let message: Message;
-					let options: any = {
+					const options: any = {
 						allowedMentions: {
 							repliedUser: true,
 							users: [reminder.userId],
@@ -56,7 +57,7 @@ export default class {
 				} else {
 					const user: User = await client.users.fetch(reminder.userId);
 
-					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch(_ => {
+					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch((_) => {
 						client.log.info(`[REMIND - DM] Unable to dm ${user.tag} (${user.id}) with the reminder of ${reminder.reason}`);
 					});
 				}
@@ -77,7 +78,7 @@ export default class {
 			try {
 				guild = await client.guilds.fetch(tempban.gId);
 			} catch (_) {
-				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was kicked from the guild cant unban the user: ${tempban.targetId}`);
+				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was kicked from the guild, can't unban the user: ${tempban.targetId}`);
 				await deleteTempBan(tempban.id);
 				continue;
 			}
@@ -92,22 +93,23 @@ export default class {
 			}
 
 			setTimeout(async function () {
-				try {
-					await infractionsManager.unban(
-						client,
-						<Guild>guild,
-						BanType.TEMP,
-						target,
-						<GuildMember>guild?.me,
-						await client.bulbutils.translate("global_mod_action_log", guild?.id, {
-							action: await client.bulbutils.translate("mod_action_types.auto_unban", guild?.id, {}),
-							moderator: client.user,
-							target: target,
-							reason: "Automatic unban",
-						}),
-						"Automatic unban",
-					);
-				} catch (error) {}
+				if (!guild.me || !client.user) return;
+
+				await tryIgnore(
+					infractionsManager.unban,
+					client,
+					guild,
+					BanType.TEMP,
+					target,
+					guild.me,
+					await client.bulbutils.translate("global_mod_action_log", guild.id, {
+						action: await client.bulbutils.translate("mod_action_types.auto_unban", guild.id),
+						moderator: client.user,
+						target: target,
+						reason: "Automatic unban",
+					}),
+					"Automatic unban",
+				);
 
 				await deleteTempBan(tempban.id);
 			}, tempban.expireTime - Date.now());

@@ -247,6 +247,11 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				],
 			},
 			{
+				name: "list",
+				type: ApplicationCommandOptionTypes.SUB_COMMAND,
+				description: "Gets a list of bannpools the server is connected to",
+			},
+			{
 				name: "kick",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Kicks the selected server from the selected banpool",
@@ -1078,36 +1083,6 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "verification",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Changes the server verification level",
-		options: [
-			{
-				name: "level",
-				type: ApplicationCommandOptionTypes.INTEGER,
-				description: "The desired verification level",
-				choices: [
-					{
-						name: "NONE",
-						value: 0,
-					},
-					{
-						name: "LOW",
-						value: 1,
-					},
-					{
-						name: "MEDIUM",
-						value: 2,
-					},
-					{
-						name: "HIGH",
-						value: 3,
-					},
-					{
-						name: "VERY_HIGH",
-						value: 4,
-					},
-				],
-				required: true,
-			},
-		],
 	},
 	{
 		name: "warn",
@@ -1125,6 +1100,19 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the warning",
 				required: false,
+			},
+		],
+	},
+	{
+		name: "snowflake",
+		type: ApplicationCommandType.CHAT_INPUT,
+		description: "Gets information about a given snowflake",
+		options: [
+			{
+				name: "id",
+				type: ApplicationCommandOptionTypes.STRING,
+				description: "The snowflake you want to check",
+				required: true,
 			},
 		],
 	},

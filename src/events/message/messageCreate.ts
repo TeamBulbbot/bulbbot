@@ -18,7 +18,7 @@ const { getAllGuildExperiments }: ExperimentManager = new ExperimentManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -29,14 +29,14 @@ export default class extends Event {
 
 		// checks if the user is in the blacklist
 		if (this.client.blacklist.get(context.author.id) !== undefined) return;
-		if (!context.guild || context.author.bot) return;
+		if (!context.guild || context.author.bot || !this.client.user?.id) return;
 
 		// checks if the guild is in the blacklist
 		if (this.client.blacklist.get(context.guild.id)) return;
 
 		await databaseManager.addToMessageToDB(message);
 
-		const mentionRegex: RegExp = RegExp(`^<@!?${this.client.user!.id}>`);
+		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
 		let guildCfg = await databaseManager.getConfig(context.guild.id);
 
 		if ((guildCfg === undefined || guildCfg.prefix === undefined) && (context.content.startsWith(Config.prefix) || mentionRegex.test(context.content))) {
@@ -81,8 +81,8 @@ export default class extends Event {
 		if (resolved instanceof Message) return resolved;
 		command = resolved;
 
-		let used: string = `${prefix}${command.qualifiedName}`;
-		options.args.forEach(arg => (used += ` ${arg}`));
+		let used = `${prefix}${command.qualifiedName}`;
+		options.args.forEach((arg) => (used += ` ${arg}`));
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 
 		const serverOverrides: string[] = await getAllGuildExperiments(context.guild.id);
@@ -122,8 +122,8 @@ export default class extends Event {
 
 	private async resolveCommand(options: ResolveCommandOptions): Promise<Command | Message | undefined> {
 		const { context, baseCommand, args } = options;
-		let command = baseCommand;
-		if (!context.guild?.me) await this.client.bulbfetch.getGuildMember(context.guild?.members, this.client.user!.id);
+		const command = baseCommand;
+		if (!context.guild?.me) await this.client.bulbfetch.getGuildMember(context.guild?.members, this.client.user?.id);
 		if (!context.guild?.me) return; // Shouldn't be possible to return here. Narrows the type
 		const invalidReason = await command.validate(context, args, options);
 		if (invalidReason !== undefined) {

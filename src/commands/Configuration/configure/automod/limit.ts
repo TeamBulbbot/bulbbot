@@ -35,10 +35,10 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
 		if (i.isButton()) {
 			if (i.customId === "back") {
-				collector?.stop();
+				collector.stop();
 				return require("../automod").default(i, client);
 			} else if (i.customId === "update") {
-				collector?.stop();
+				collector.stop();
 				const messageFilter = (m: Message) => m.author.id === interaction.user.id;
 				const messageCollector = interaction.channel?.createMessageCollector({ filter: messageFilter, time: 60000, max: 1 });
 				await interaction.followUp({
@@ -99,15 +99,15 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 						return limit(i, client, category);
 					}
 
-					await databaseManager.automodSetLimit(interaction.guild?.id as Snowflake, parts[category!!], parseInt(items));
-					await databaseManager.automodSetTimeout(interaction.guild?.id as Snowflake, parts[category!!], parseInt(seconds) * 1000);
+					if (category !== undefined) await databaseManager.automodSetLimit(interaction.guild?.id as Snowflake, parts[category], parseInt(items));
+					if (category !== undefined) await databaseManager.automodSetTimeout(interaction.guild?.id as Snowflake, parts[category], parseInt(seconds) * 1000);
 					await interaction.followUp({ content: `Updated to ${items}/${seconds}`, ephemeral: true });
 
 					return limit(i, client, category);
 				});
 			}
 		} else if (i.isSelectMenu()) {
-			collector?.stop();
+			collector.stop();
 			return limit(i, client, i.values[0]);
 		}
 	});

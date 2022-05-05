@@ -3,6 +3,8 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import * as Emotes from "../../../emotes.json";
 
 export default async function (interaction: MessageComponentInteraction, client: BulbBotClient) {
+	if (!interaction.guild) return;
+
 	const row = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
 			.setCustomId("configure-main")
@@ -55,6 +57,12 @@ export default async function (interaction: MessageComponentInteraction, client:
 					value: "rolesOnLeave",
 					description: await client.bulbutils.translate("config_main_options_descriptions.roles_on_leave", interaction.guild?.id, {}),
 					emoji: Emotes.features.HUB,
+				},
+				{
+					label: await client.bulbutils.translate("config_main_options.manual_nickname_inf", interaction.guild?.id, {}),
+					value: "manualNicknameInf",
+					description: await client.bulbutils.translate("config_main_options_descriptions.manual_nickname_inf", interaction.guild?.id, {}),
+					emoji: Emotes.features.MEMBER_LIST_DISABLED,
 				},
 				{
 					label: await client.bulbutils.translate("config_main_options.timezone", interaction.guild?.id, {}),

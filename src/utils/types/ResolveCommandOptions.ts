@@ -8,10 +8,10 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
 
 interface ResolveCommandOptionsOptions {
-	clearance?: number,
-	premiumGuild?: boolean,
-	isDev?: boolean,
-	isSubDev?: boolean,
+	clearance?: number;
+	premiumGuild?: boolean;
+	isDev?: boolean;
+	isSubDev?: boolean;
 }
 
 export default class ResolveCommandOptions {
@@ -24,9 +24,9 @@ export default class ResolveCommandOptions {
 	public isSubDev: boolean;
 
 	static async create(command: Command, context: CommandContext, args: string[], options: ResolveCommandOptionsOptions = {}): Promise<ResolveCommandOptions> {
-		let instance = new ResolveCommandOptions(command, context, args, options);
+		const instance = new ResolveCommandOptions(command, context, args, options);
 		instance.clearance = await clearanceManager.getUserClearance(context);
-		instance.premiumGuild = (await databaseManager.getConfig(context.guild!.id)).premiumGuild;
+		instance.premiumGuild = !!context.guild?.id && (await databaseManager.getConfig(context.guild.id)).premiumGuild;
 		return instance;
 	}
 
@@ -35,16 +35,16 @@ export default class ResolveCommandOptions {
 		this.context = context;
 		this.args = args;
 
-		if(options.clearance !== undefined) this.clearance = options.clearance;
+		if (options.clearance !== undefined) this.clearance = options.clearance;
 		else this.clearance = 0;
 
-		if(options.premiumGuild !== undefined) this.premiumGuild = options.premiumGuild;
+		if (options.premiumGuild !== undefined) this.premiumGuild = options.premiumGuild;
 		else this.premiumGuild = false;
 
-		if(options.isDev !== undefined) this.isDev = options.isDev;
+		if (options.isDev !== undefined) this.isDev = options.isDev;
 		else this.isDev = Config.developers.includes(context.author.id);
 
-		if(options.isSubDev !== undefined) this.isSubDev = options.isSubDev;
+		if (options.isSubDev !== undefined) this.isSubDev = options.isSubDev;
 		else this.isSubDev = Config.developers.includes(context.author.id) || Config.subDevelopers.includes(context.author.id);
 	}
 }

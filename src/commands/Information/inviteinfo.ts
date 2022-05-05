@@ -23,25 +23,25 @@ export default class extends Command {
 
 	async run(context: CommandContext, args: string[]): Promise<void> {
 		const code: string = args[0];
-		let invite!: Invite;
+		let invite: Invite;
 
 		try {
 			invite = await this.client.fetchInvite(code);
 		} catch (error) {
-			await context.channel.send(await this.client.bulbutils.translate("inviteinfo_error", context.guild!.id, {}));
+			await context.channel.send(await this.client.bulbutils.translate("inviteinfo_error", context.guild?.id, {}));
 			return;
 		}
 
 		if (invite.channel.type === "GROUP_DM") {
-			context.channel.send(await this.client.bulbutils.translate("inviteinfo_groupdm", context.guild!.id, {}));
+			context.channel.send(await this.client.bulbutils.translate("inviteinfo_groupdm", context.guild?.id, {}));
 			return;
 		}
 
-		const guild = invite!.guild;
+		const guild = invite.guild;
 		if (guild === null || context.guild === null || context.member === null) return;
 
-		let desc: string = "";
-		let inviteInfo: string = "";
+		let desc = "";
+		let inviteInfo = "";
 
 		desc += `${this.client.bulbutils.guildFeatures(guild.features)}\n\n`;
 		desc += await this.client.bulbutils.translate("inviteinfo_verification_level", context.guild.id, { guild });
@@ -73,20 +73,20 @@ export default class extends Command {
 		const embeds: MessageEmbed[] = [];
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
-			.setTitle(guild.description !== null ? `${guild.description}` : "")
+			.setTitle(guild.description || "")
 			.setAuthor({
 				name: `${guild.name} (${guild.id})`,
 				iconURL: guild.iconURL({ dynamic: true }) ?? undefined,
 			})
 			.setDescription(desc)
 			.addField("**Invite**", inviteInfo, true)
-			.setThumbnail(guild.iconURL({ dynamic: true, size: 4096 })!)
+			.setThumbnail(guild.iconURL({ dynamic: true, size: 4096 }) || "")
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
 			.setFooter({
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
 					user: context.author,
 				}),
-				iconURL: await this.client.bulbutils.userObject(true, context.member).avatarUrl,
+				iconURL: this.client.bulbutils.userObject(true, context.member)?.avatarUrl ?? undefined,
 			})
 			.setTimestamp();
 		embeds.push(embed);
@@ -106,10 +106,10 @@ export default class extends Command {
 					text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
 						user: context.author,
 					}),
-					iconURL: await this.client.bulbutils.userObject(true, context.member).avatarUrl,
+					iconURL: this.client.bulbutils.userObject(true, context.member)?.avatarUrl ?? undefined,
 				})
 				.setTimestamp()
-				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map(m => `\`${m.username}\``).join(" ")}`);
+				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map((m) => `\`${m.username}\``).join(" ")}`);
 
 			embeds.push(widgetEmbed);
 		}

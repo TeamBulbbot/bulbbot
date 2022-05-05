@@ -53,7 +53,7 @@ export default class extends Command {
 			`**Mentionable:** ${role.mentionable}`,
 			`\n**Permissions:** ${role.permissions
 				.toArray()
-				.map(p => `\`${p}\``)
+				.map((p) => `\`${p}\``)
 				.join(" ")}`,
 		];
 
@@ -64,7 +64,7 @@ export default class extends Command {
 				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				iconURL: context.author.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 

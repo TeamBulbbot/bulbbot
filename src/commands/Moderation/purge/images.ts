@@ -1,11 +1,12 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Collection, Guild, Message, Snowflake, TextChannel } from "discord.js";
+import { Collection, Message, Snowflake } from "discord.js";
 import moment from "moment";
 import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isGuildChannel } from "../../../utils/typechecks";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -23,12 +24,13 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount: number = Number(args[0]);
+		let amount = Number(args[0]);
 		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
 		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
+		if (!isGuildChannel(context.channel)) return;
 
-		let deleteMsg: number[] = [];
-		let a: number = 0;
+		const deleteMsg: number[] = [];
+		let a = 0;
 
 		for (let i = 1; i <= amount; i++) {
 			if (i % 100 === 0) {
@@ -38,11 +40,9 @@ export default class extends SubCommand {
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		let delMsgs: string = `Message purge in #${(<TextChannel>context.channel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
-			"MMMM Do YYYY, h:mm:ss a",
-		)} \n`;
+		let delMsgs = `Message purge in #${context.channel.name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
 
-		let messagesToPurge: Snowflake[] = [];
+		const messagesToPurge: Snowflake[] = [];
 		amount = 0;
 
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
@@ -52,7 +52,7 @@ export default class extends SubCommand {
 				limit: deleteMsg[i],
 			});
 
-			msgs.map(async m => {
+			msgs.map(async (m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				if (m.attachments.size !== 0) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.attachments.first()?.url} |\n`;
@@ -62,11 +62,11 @@ export default class extends SubCommand {
 			});
 		}
 
-		await (<TextChannel>context.channel).bulkDelete(messagesToPurge);
+		await context.channel.bulkDelete(messagesToPurge);
 
 		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
 
-		await loggingManager.sendModActionFile(this.client, <Guild>context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(this.client, context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
 		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
 	}

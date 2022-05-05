@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
+import { GuildMember, Message, Snowflake } from "discord.js";
 import { NonDigits } from "../../utils/Regex";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import parse from "parse-duration";
@@ -32,9 +32,8 @@ export default class extends Command {
 	async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const targetID: Snowflake = args[0].replace(NonDigits, "");
 		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		const duration: number = <number>parse(args[1]);
+		const duration: number = parse(args[1]);
 		let reason: string = args.slice(2).join(" ");
-		let infID: number;
 
 		if (!target)
 			return context.channel.send(
@@ -45,37 +44,37 @@ export default class extends Command {
 					usage: this.usage,
 				}),
 			);
-		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
+		if (!context.guild || !context.member || (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user))) return;
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
 		if ((duration && duration <= <number>parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
 		if (duration > <number>parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild?.id, {}));
-		if (target.communicationDisabledUntilTimestamp !== null) return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
+		if (target.communicationDisabledUntilTimestamp !== null && Date.now() < target.communicationDisabledUntilTimestamp!)
+			return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
 
-		infID = await infractionsManager.mute(
+		const infID = await infractionsManager.mute(
 			this.client,
-			<Guild>context.guild,
+			context.guild,
 			target,
-			<GuildMember>context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild?.id, {}),
+			context.member,
+			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild.id, {}),
 				moderator: context.author,
 				target: target.user,
 				reason,
-				until: Date.now() + <number>parse(args[1]),
 			}),
 			reason,
-			Date.now() + <number>parse(args[1]),
+			Date.now() + parse(args[1]),
 		);
 
-		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(<Snowflake>context.guild?.id)];
+		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(context.guild.id)];
 		await context.channel.send(
-			await this.client.bulbutils.translate("action_success_temp", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild?.id, {}),
+			await this.client.bulbutils.translate("action_success_temp", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild.id, {}),
 				target: target.user,
 				reason,
 				infraction_id: infID,
-				until: moment(Date.now() + <number>parse(args[1]))
+				until: moment(Date.now() + parse(args[1]))
 					.tz(timezone)
 					.format("MMM Do YYYY, h:mm:ssa z"),
 			}),

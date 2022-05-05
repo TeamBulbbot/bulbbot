@@ -1,6 +1,6 @@
 import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildMember, Message, Snowflake } from "discord.js";
+import { Message, Snowflake } from "discord.js";
 import { NonDigits, UserMentionAndID } from "../../utils/Regex";
 import { massCommandSleep } from "../../Config";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -28,8 +28,8 @@ export default class extends Command {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let targets: RegExpMatchArray = <RegExpMatchArray>args.slice(0).join(" ").match(UserMentionAndID);
-		targets = [...new Set(targets.map(target => target.replace(NonDigits, "")))];
+		let targets: RegExpMatchArray = args.slice(0).join(" ").match(UserMentionAndID) || [];
+		targets = [...new Set(targets.map((target) => target.replace(NonDigits, "")))];
 
 		if (!targets.length)
 			return context.channel.send(
@@ -41,7 +41,7 @@ export default class extends Command {
 		let reason: string = args.slice(targets.length).join(" ").replace(UserMentionAndID, "");
 
 		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		let fullList: string[] = [];
+		const fullList: string[] = [];
 
 		if (targets.length <= 1) {
 			await context.channel.send(
@@ -49,12 +49,14 @@ export default class extends Command {
 					action: await this.client.bulbutils.translate("action_multi_types.ban", context.guild?.id, {}),
 				}),
 			);
-			return await this.client.commands.get("ban")!.run(context, args);
+			return await this.client.commands.get("ban")?.run(context, args);
 		}
 
-		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then(msg => {
+		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {
 			setTimeout(() => msg.delete(), (args.length - 0.5) * massCommandSleep);
 		});
+
+		if (!context.guild?.id || !context.member) return;
 
 		for (let i = 0; i < targets.length; i++) {
 			if (targets[i] === undefined) continue;
@@ -62,8 +64,8 @@ export default class extends Command {
 
 			const t: Snowflake = targets[i].replace(NonDigits, "");
 			let infID: number;
-			let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, t);
-			const notInGuild: boolean = !target;
+			let target: any = await this.client.bulbfetch.getGuildMember(context.guild.members, t);
+			const notInGuild = !target;
 
 			if (!notInGuild) {
 				if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
@@ -73,8 +75,8 @@ export default class extends Command {
 				target = await this.client.bulbfetch.getUser(t);
 				if (!target) {
 					await context.channel.send(
-						await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-							type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
+						await this.client.bulbutils.translate("global_not_found", context.guild.id, {
+							type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
 							arg_expected: "user:User",
 							arg_provided: t,
 							usage: this.usage,
@@ -85,12 +87,12 @@ export default class extends Command {
 
 				infID = await infractionsManager.ban(
 					this.client,
-					<Guild>context.guild,
+					context.guild,
 					BanType.FORCE,
 					target,
-					<GuildMember>context.member,
-					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild?.id, {}),
+					context.member,
+					await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild.id, {}),
 						moderator: context.author,
 						target,
 						reason,
@@ -101,12 +103,12 @@ export default class extends Command {
 				target = target.user;
 				infID = await infractionsManager.ban(
 					this.client,
-					<Guild>context.guild,
+					context.guild,
 					BanType.NORMAL,
 					target,
-					<GuildMember>context.member,
-					await this.client.bulbutils.translate("global_mod_action_log", context.guild?.id, {
-						action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
+					context.member,
+					await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+						action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
 						moderator: context.author,
 						target,
 						reason,
@@ -121,9 +123,9 @@ export default class extends Command {
 		if (!fullList.length) return;
 
 		return context.channel.send(
-			await this.client.bulbutils.translate("action_success_multi", context.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild?.id, {}),
-				full_list: fullList.join(', '),
+			await this.client.bulbutils.translate("action_success_multi", context.guild.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
+				full_list: fullList.join(", "),
 				reason,
 			}),
 		);

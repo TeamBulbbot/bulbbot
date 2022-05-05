@@ -33,6 +33,10 @@ export default function (sequelize: Sequelize): void {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
+		manualNicknameInf: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
 		quickReasons: {
 			type: DataTypes.ARRAY(DataTypes.STRING),
 			defaultValue: ["Spam", "Swearing", "Toxic behavior", "Advertising"],

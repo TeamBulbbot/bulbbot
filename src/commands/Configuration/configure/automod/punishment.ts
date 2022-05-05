@@ -87,7 +87,7 @@ async function punishment(interaction: MessageComponentInteraction, client: Bulb
 				return punishment(i, client, i.values[0]);
 			} else if (i.customId === "punishment") {
 				collector.stop();
-				await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, categories[selectedCategory!!], punishmentTypes[i.values[0]]);
+				selectedCategory && (await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, categories[selectedCategory], punishmentTypes[i.values[0]]));
 				return punishment(i, client, selectedCategory);
 			}
 		}

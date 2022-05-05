@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { GuildMember, Interaction, Message, Snowflake, TextChannel } from "discord.js";
+import { Interaction } from "discord.js";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import warn from "../../interactions/context/warn";
 import infSearch from "../../interactions/context/infSearch";
@@ -19,7 +19,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			once: true,
 		});
@@ -46,14 +46,18 @@ export default class extends Event {
 		} else if (interaction.isContextMenu()) {
 			if ((await clearanceManager.getUserClearance(context)) < 50)
 				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));
-			const message: Message = <Message>await (<TextChannel>this.client.guilds.cache.get(<Snowflake>context.guildId)?.channels.cache.get(context.channelId)).messages.fetch(interaction.targetId);
+
+			const channel = this.client.guilds.cache.get(context.guild.id)?.channels.cache.get(context.channelId);
+			const message = channel?.isText() && (await channel.messages.fetch(interaction.targetId));
 
 			if (
-				await this.client.bulbutils.resolveUserHandleFromInteraction(
+				!message ||
+				!interaction.guild ||
+				(await this.client.bulbutils.resolveUserHandleFromInteraction(
 					interaction,
-					await this.client.bulbutils.checkUserFromInteraction(interaction, <GuildMember>await interaction.guild?.members.fetch(message.author.id)),
+					await this.client.bulbutils.checkUserFromInteraction(interaction, await interaction.guild.members.fetch(message.author.id)),
 					message.author,
-				)
+				))
 			)
 				return;
 
@@ -63,10 +67,10 @@ export default class extends Event {
 			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
-			const subCommandGroup: string = <string>context.options.getSubcommandGroup(false);
-			const subCommand: string = <string>context.options.getSubcommand(false);
-			let args: string[] = [];
-			let cmd: string = <string>context.commandName;
+			const subCommandGroup: string = context.options.getSubcommandGroup(false) || "";
+			const subCommand: string = context.options.getSubcommand(false) || "";
+			const args: string[] = [];
+			let cmd: string = context.commandName || "";
 
 			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
 			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
@@ -80,13 +84,14 @@ export default class extends Event {
 			if (!command) return;
 			const invalidReason = await command.validate(context, args);
 			if (invalidReason !== undefined) {
+				// CommandContext#reply is safe here - deferReply has not yet been called
 				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
 				return;
 			}
 
-			let used: string = `/${command.qualifiedName}`;
-			args.forEach(arg => (used += ` ${arg}`));
-			await loggingManager.sendCommandLog(this.client, interaction.guild!, context.author, context.channel.id, used);
+			let used = `/${command.qualifiedName}`;
+			args.forEach((arg) => (used += ` ${arg}`));
+			await loggingManager.sendCommandLog(this.client, interaction.guild, context.author, context.channel.id, used);
 
 			await context.deferReply();
 			await command.run(context, args);

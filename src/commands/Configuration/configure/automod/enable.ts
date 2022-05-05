@@ -8,7 +8,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function enable(interaction: MessageComponentInteraction, client: BulbBotClient, category?: string): Promise<void> {
 	const config: AutoModConfiguration = await databaseManager.getAutoModConfig(interaction.guild?.id as Snowflake);
-	let selectedCategory: string | undefined = category;
+	const selectedCategory: string | undefined = category;
 
 	const selectRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
@@ -70,7 +70,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 
 						await enable(i, client);
 					} else {
-						await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, parts[selectedCategory!!], null);
+						await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, parts[selectedCategory], null);
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_enable_disable_disable_success", interaction.guild?.id, {}),
 							ephemeral: true,

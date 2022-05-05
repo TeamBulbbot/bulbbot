@@ -30,7 +30,7 @@ export default class extends SubCommand {
 
 		let archive: string = await this.client.bulbutils.translate("archive_header_format", context.guild?.id, {});
 		let temp: string;
-		const archiveChannelData = await getChannelArchive(channel, context.guild!?.id, AMOUNT);
+		const archiveChannelData = context.guild?.id ? await getChannelArchive(channel, context.guild.id, AMOUNT) : [];
 		if (archiveChannelData.length === 0) return startMessage.edit(await this.client.bulbutils.translate("archive_no_data_found", context.guild?.id, {}));
 
 		archiveChannelData.forEach(

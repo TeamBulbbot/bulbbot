@@ -1,5 +1,5 @@
 import BulbBotClient from "../structures/BulbBotClient";
-import { GuildChannel, Permissions, TextChannel } from "discord.js";
+import { Permissions } from "discord.js";
 import DatabaseManager from "./managers/DatabaseManager";
 import { AutoMod_INVITE, AutoMod_WEBSITE, UserMention } from "./Regex";
 import { set } from "../structures/AutoModCache";
@@ -7,34 +7,35 @@ import AutoModManager from "./managers/AutoModManager";
 import LoggingManager from "./managers/LoggingManager";
 import CommandContext from "../structures/CommandContext";
 import { AutoModConfiguration } from "./types/DatabaseStructures";
+import { isGuildChannel } from "./typechecks";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const automodManager: AutoModManager = new AutoModManager();
 const loggingManager: LoggingManager = new LoggingManager();
 
 export default async function (client: BulbBotClient, context: CommandContext): Promise<void> {
-	if (!context.guild?.available) return;
+	if (!context.guild?.available || !isGuildChannel(context.channel)) return;
 	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(context.guild.id);
 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
 	if (dbGuild.ignoreUsers.includes(context.author.id)) return;
-	if (dbGuild.ignoreChannels.includes(context.channel.id) || ((<GuildChannel>context.channel).parent && dbGuild.ignoreChannels.includes((<GuildChannel>context.channel).parent!.id))) return;
+	if (dbGuild.ignoreChannels.includes(context.channel.id) || (context.channel.parent && dbGuild.ignoreChannels.includes(context.channel.parent.id))) return;
 
 	if (!context.member?.roles.cache.values()) return;
 	for (const role of context.member.roles.cache.values()) {
 		if (dbGuild.ignoreRoles.includes(role.id)) return;
 	}
 
-	let shouldDelete: boolean = false;
+	let shouldDelete = false;
 
 	if (hasWebsite(context, dbGuild)) {
-		let punishment: string = await automodManager.resolveAction(
+		const punishment: string = await automodManager.resolveAction(
 			client,
 			context,
 			dbGuild.punishmentWebsite,
 			await client.bulbutils.translate("automod_violation_website_reason", context.guild.id, {
-				channel: <TextChannel>context.channel,
+				channel: context.channel,
 			}),
 		);
 
@@ -52,12 +53,12 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 	}
 
 	if (hasInvite(context, dbGuild)) {
-		let punishment: string = await automodManager.resolveAction(
+		const punishment: string = await automodManager.resolveAction(
 			client,
 			context,
 			dbGuild.punishmentInvites,
 			await client.bulbutils.translate("automod_violation_invites_reason", context.guild.id, {
-				channel: <TextChannel>context.channel,
+				channel: context.channel,
 			}),
 		);
 
@@ -76,12 +77,12 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 
 	let word: string;
 	if ((word = hasSwearWords(context, dbGuild))) {
-		let punishment: string = await automodManager.resolveAction(
+		const punishment: string = await automodManager.resolveAction(
 			client,
 			context,
 			dbGuild.punishmentWords,
 			await client.bulbutils.translate("automod_violation_words_reason", context.guild.id, {
-				channel: <TextChannel>context.channel,
+				channel: context.channel,
 			}),
 		);
 
@@ -114,11 +115,11 @@ function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): st
 	const wordBlacklist: string[] = guild.wordBlacklist;
 
 	for (const word of wordBlacklist) {
-		const regex: RegExp = new RegExp(`(?:^|\\s)${word}(?:$|\\s)`, "i");
+		const regex = new RegExp(`(?:^|\\s)${word}(?:$|\\s)`, "i");
 		if (regex.test(context.content)) return word;
 	}
 
-	const wordBlacklistToken: string[] = guild.wordBlacklistToken.map(t => t.toLowerCase());
+	const wordBlacklistToken: string[] = guild.wordBlacklistToken.map((t) => t.toLowerCase());
 	const content: string = context.content.toLowerCase();
 
 	for (const token of wordBlacklistToken) {

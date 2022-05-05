@@ -28,7 +28,7 @@ export default class extends SubCommand {
 			return;
 		}
 
-		let msg = context.channel.send(`Are you sure you want the bot to leave **${guild.name}**?`);
+		const msg = context.channel.send(`Are you sure you want the bot to leave **${guild.name}**?`);
 		(await msg).react(Emotes.other.SUCCESS.replace(NonDigits, ""));
 		(await msg).react(Emotes.other.FAIL.replace(NonDigits, ""));
 

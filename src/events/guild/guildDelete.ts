@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Guild, TextChannel } from "discord.js";
+import { Guild } from "discord.js";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { invite } from "../../Config";
 import * as Emotes from "../../emotes.json";
@@ -8,7 +8,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			on: true,
 		});
@@ -18,8 +18,7 @@ export default class extends Event {
 		this.client.log.info(`[GUILD] Left a guild ${guild.name} (${guild.id})`);
 
 		await databaseManager.deleteGuild(guild.id);
-		(<TextChannel | undefined>this.client.channels.cache.get(invite))?.send(
-			`${Emotes.other.LEAVE} Left guild: **${guild.name}** \`(${guild.id})\` owned by <@${guild.ownerId}> \`(${guild.ownerId})\`\nMembers: **${guild.memberCount}**`,
-		);
+		const channel = this.client.channels.cache.get(invite);
+		channel?.isText() && channel.send(`${Emotes.other.LEAVE} Left guild: **${guild.name}** \`(${guild.id})\` owned by <@${guild.ownerId}> \`(${guild.ownerId})\`\nMembers: **${guild.memberCount}**`);
 	}
 }

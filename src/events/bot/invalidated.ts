@@ -5,7 +5,7 @@ import { sequelize } from "../../utils/database/connection";
 
 export default class extends Event {
 	constructor(...args: any[]) {
-		// @ts-ignore
+		// @ts-expect-error
 		super(...args, {
 			once: true,
 		});

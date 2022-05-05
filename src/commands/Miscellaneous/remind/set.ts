@@ -24,11 +24,11 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let duration: number = <number>parse(args[0]);
+		let duration: number = parse(args[0]);
 		const reason: string = args.slice(1).join(" ");
 
 		if (duration <= 0) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > <number>parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
+		if (duration > parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton()
@@ -81,10 +81,10 @@ export default class extends SubCommand {
 				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
 
 				if (reminder.channelId !== "") {
-					// @ts-ignore
+					// @ts-expect-error
 					const channel: TextChannel = await this.client.bulbfetch.getChannel(this.client.channels, reminder.channelId);
 					let message: Message;
-					let options: MessageMentionOptions = {
+					const options: MessageMentionOptions = {
 						repliedUser: true,
 						users: [reminder.userId],
 					};
@@ -105,13 +105,13 @@ export default class extends SubCommand {
 					const user: User | undefined = await this.client.bulbfetch.getUser(reminder.userId);
 					if (!user) return;
 
-					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch(_ => {
+					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch((_) => {
 						this.client.log.info(`[REMIND - DM] Unable to dm ${user.tag} (${user.id}) with the reminder of ${reminder.reason}`);
 					});
 				}
 
 				await deleteReminder(reminder.id);
-			}, <number>parse(args[0]));
+			}, parse(args[0]));
 		});
 	}
 }

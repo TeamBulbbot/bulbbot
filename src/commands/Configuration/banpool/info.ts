@@ -22,14 +22,15 @@ export default class extends SubCommand {
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
 		const name: string = args[0];
-		if (!(await haveAccessToPool(context.guild!?.id, name))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
+		if (!(context.guild?.id && (await haveAccessToPool(context.guild.id, name))))
+			return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
 		const data = await getPoolData(name);
-		let desc: string[] = [];
+		const desc: string[] = [];
 
 		for (let i = 0; i < data.length; i++) {
 			const guild = data[i];
 			desc.push(
-				await this.client.bulbutils.translate("banpool_info_desc", context.guild?.id, {
+				await this.client.bulbutils.translate("banpool_info_desc", context.guild.id, {
 					guildId: guild.guildId,
 					createdAt: new Date(guild.createdAt).getTime() / 1000,
 				}),
@@ -38,7 +39,7 @@ export default class extends SubCommand {
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setAuthor({
-				name: await this.client.bulbutils.translate("banpool_info_top", context.guild?.id, {
+				name: await this.client.bulbutils.translate("banpool_info_top", context.guild.id, {
 					name,
 					amountOfServers: data.length,
 				}),
@@ -46,10 +47,10 @@ export default class extends SubCommand {
 			.setColor(embedColor)
 			.setDescription(desc.join("\n\n"))
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
+				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
 					user: context.author,
 				}),
-				iconURL: <string>context.author.avatarURL({ dynamic: true }),
+				iconURL: context.author.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
