@@ -36,7 +36,7 @@ interface ApplicationCommandOptionChoices {
 	value: string | number;
 }
 
-interface ApplicationCommandOptions {
+export interface ApplicationCommandOptions {
 	type: ApplicationCommandOptionTypes;
 	name: string;
 	description: string;

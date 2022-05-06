@@ -6,9 +6,9 @@ import glob from "glob";
 import Event from "./Event";
 import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
-import Command from "./Command";
 import DatabaseManager from "../utils/managers/DatabaseManager";
 import { Blacklist } from "../utils/types/DatabaseStructures";
+import ApplicationCommand from "./ApplicationCommand";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -39,14 +39,9 @@ export default class {
 				if (!this.isClass(File.default)) throw new CommandException(`Command ${name} is not an instance of Command`);
 
 				const command = new File.default(this.client, name);
-				if (!(command instanceof Command)) throw new CommandException(`Event ${name} doesn't belong in commands!`);
+				if (!(command instanceof ApplicationCommand)) continue; //throw new CommandException(`Command ${name} doesn't belong in commands!`);
 
 				this.client.commands.set(command.name, command);
-				if (command.aliases.length) {
-					for (const alias of command.aliases) {
-						this.client.aliases.set(alias, command.name);
-					}
-				}
 			}
 			this.client.log.client("[CLIENT - COMMANDS] Successfully registered all commands");
 		});

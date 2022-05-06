@@ -1,25 +1,23 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { MessageEmbed, MessageActionRow, MessageButton } from "discord.js";
+import { MessageEmbed, MessageActionRow, MessageButton, CommandInteraction } from "discord.js";
 import { botInvite, embedColor, supportInvite } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import * as Emotes from "../../emotes.json";
 import { NonDigits } from "../../utils/Regex";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Returns some useful information about the bot",
-			category: "Bot",
-			aliases: ["bot"],
-			clientPerms: ["EMBED_LINKS"],
+			type: ApplicationCommandType.CHAT_INPUT,
 		});
 	}
 
-	async run(context: CommandContext): Promise<void> {
+	public async run(interaction: CommandInteraction): Promise<void> {
 		const realCommitTime: string = this.client.bulbutils.formatDays(new Date(this.client.about.build.time.slice(0, -7)));
-		const latency: number = Math.floor(new Date().getTime() - context.createdTimestamp);
+		const latency: number = Math.floor(new Date().getTime() - interaction.createdTimestamp);
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const row = new MessageActionRow().addComponents([
@@ -36,7 +34,7 @@ export default class extends Command {
 		desc += `**Last Commit:**\n**Hash:** \`${this.client.about.build.hash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;
 		desc +=
-			(await this.client.bulbutils.translate("uptime_uptime", context.guild?.id, {
+			(await this.client.bulbutils.translate("uptime_uptime", interaction.guild?.id, {
 				uptime: this.client.bulbutils.getUptime(this.client.uptime),
 			})) + "\n\n";
 		desc += `**Supporters**\n`;
@@ -45,13 +43,13 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setDescription(desc)
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		await context.channel.send({ embeds: [embed], components: [row] });
+		await interaction.reply({ embeds: [embed], components: [row] });
 	}
 }

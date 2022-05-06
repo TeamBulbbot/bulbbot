@@ -7,14 +7,10 @@ import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
 import { getCommandContext } from "../../structures/CommandContext";
-import Command from "../../structures/Command";
 import reminders from "../../interactions/select/reminders";
-import LoggingManager from "../../utils/managers/LoggingManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import { commandUsage } from "../../utils/Prometheus";
 
 const clearanceManager: ClearanceManager = new ClearanceManager();
-const loggingManager: LoggingManager = new LoggingManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
@@ -67,35 +63,7 @@ export default class extends Event {
 			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
-			const subCommandGroup: string = context.options.getSubcommandGroup(false) || "";
-			const subCommand: string = context.options.getSubcommand(false) || "";
-			const args: string[] = [];
-			let cmd: string = context.commandName || "";
-
-			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
-			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
-
-			for (const option of context.options["_hoistedOptions"]) {
-				if (option.type === "STRING") args.push(...`${option.value}`.split(" "));
-				else args.push(`${option.value}`);
-			}
-
-			const command = Command.resolve(this.client, cmd);
-			if (!command) return;
-			const invalidReason = await command.validate(context, args);
-			if (invalidReason !== undefined) {
-				// CommandContext#reply is safe here - deferReply has not yet been called
-				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
-				return;
-			}
-
-			let used = `/${command.qualifiedName}`;
-			args.forEach((arg) => (used += ` ${arg}`));
-			await loggingManager.sendCommandLog(this.client, interaction.guild, context.author, context.channel.id, used);
-
-			await context.deferReply();
-			await command.run(context, args);
-			commandUsage(context, command, true);
+			await this.client.commands.get(interaction.commandName)?.run(interaction);
 		}
 	}
 }

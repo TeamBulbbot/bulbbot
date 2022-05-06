@@ -49,7 +49,7 @@ export default class extends Command {
 					action: await this.client.bulbutils.translate("action_multi_types.unban", context.guild?.id, {}),
 				}),
 			);
-			return await this.client.commands.get("unban")?.run(context, args);
+			//return await this.client.commands.get("unban")?.run(context, args);
 		}
 
 		context.channel.send(await this.client.bulbutils.translate("global_loading", context.guild?.id, {})).then((msg) => {

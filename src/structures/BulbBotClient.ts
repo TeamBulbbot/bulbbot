@@ -2,15 +2,15 @@ import { Client, Collection, Permissions, Intents, BitField, PermissionString, O
 import ClientException from "./exceptions/ClientException";
 import Event from "./Event";
 import Util from "./Util";
-import Command from "./Command";
 import BulbBotUtils from "../utils/BulbBotUtils";
 import * as Config from "../Config";
 import { logger } from "../utils/Logger";
 import BulbBotFetch from "../utils/BulbBotFetch";
+import ApplicationCommand from "./ApplicationCommand";
 
 export default class extends Client {
 	public prefix: string = Config.prefix;
-	public commands: Collection<string, Command>;
+	public commands: Collection<string, ApplicationCommand>;
 	public aliases: Collection<string, string>;
 	public events: Collection<string, Event>;
 	public defaultPerms!: Readonly<BitField<PermissionString, bigint>>;

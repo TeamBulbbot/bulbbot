@@ -186,19 +186,20 @@ export default class Command {
 		return this;
 	}
 
-	static resolve(client: BulbBotClient, commandPath: string | string[]): undefined | Command {
-		if (typeof commandPath === "string") commandPath = commandPath.split(" ");
-		if (!commandPath.length) return;
-		const cmd: string = commandPath[0];
-		let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase()) || "");
-		if (!command) return;
-
-		for (let i = 1; i < commandPath.length; ++i) {
-			const currCommand = command;
-			command = command.resolveSubcommand(commandPath.slice(i));
-			if (command === currCommand) break;
-		}
-
-		return command;
+	static resolve(_client: BulbBotClient, _commandPath: string | string[]): undefined | Command {
+		return undefined;
+		// if (typeof commandPath === "string") commandPath = commandPath.split(" ");
+		// if (!commandPath.length) return;
+		// const cmd: string = commandPath[0];
+		// let command: Command | undefined = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase()) || "");
+		// if (!command) return;
+		//
+		// for (let i = 1; i < commandPath.length; ++i) {
+		// 	const currCommand = command;
+		// 	command = command.resolveSubcommand(commandPath.slice(i));
+		// 	if (command === currCommand) break;
+		// }
+		//
+		// return command;
 	}
 }

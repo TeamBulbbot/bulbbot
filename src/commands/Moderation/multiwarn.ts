@@ -45,7 +45,7 @@ export default class extends Command {
 					action: await this.client.bulbutils.translate("action_multi_types.warn", context.guild?.id, {}),
 				}),
 			);
-			return await this.client.commands.get("warn")?.run(context, args);
+			//return await this.client.commands.get("warn")?.run(context, args);
 		}
 
 		if (!context.guild?.id || !context.member) return;
