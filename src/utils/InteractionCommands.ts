@@ -1,5 +1,5 @@
 import BulbBotClient from "../structures/BulbBotClient";
-import { ApplicationCommand, ApplicationCommandOptionTypes, ApplicationCommandOptionsChannelTypes, ApplicationCommandType } from "./types/ApplicationCommands";
+import { ApplicationCommand, ApplicationCommandOptionTypes, ApplicationCommandOptionsChannelTypes, ApplicationCommandType, LocalCode } from "./types/ApplicationCommands";
 import { discordApi, developerGuild } from "../Config";
 import axios from "axios";
 
@@ -20,8 +20,31 @@ export async function registerSlashCommands(client: BulbBotClient) {
 		const response = await axios.request(options);
 		client.log.info(`[APPLICATION COMMANDS] Registered all of the slash commands, amount: ${response.data.length}`);
 	} catch (err: any) {
-		client.log.error(`[APPLICATION COMMANDS] Failed to register slash commands: ${err}`);
+		client.log.error(`[APPLICATION COMMANDS] Failed to register slash commands: ${err.response.statusText} (${err})`);
 	}
+}
+
+function makeid(length) {
+	let result = "";
+	const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+	const charactersLength = characters.length;
+	for (let i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+}
+
+function translate(_key: string) {
+	const TRANSLATED_LANGS: LocalCode[] = ["es-ES", "hu", "fr", "cs", "sv-SE", "hi"];
+	const obj = {};
+
+	for (let i = 0; i < TRANSLATED_LANGS.length; i++) {
+		/*obj[TRANSLATED_LANGS[i]] = i18next.t(key, {
+			lng: TRANSLATED_LANGS[i],
+		});*/
+		obj[TRANSLATED_LANGS[i]] = makeid(32);
+	}
+	return obj;
 }
 
 export const ChatInputCommand: ApplicationCommand[] = [
@@ -29,25 +52,35 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "about",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns more information about the bot",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "commands",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Return a list of all available commands for Bulbbot",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "github",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns the GitHub repository link",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "help",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Gets useful information about the provided command",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "command",
 				description: "The command you want to get more information for",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				type: ApplicationCommandOptionTypes.STRING,
 				required: true,
 			},
@@ -57,36 +90,50 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "invite",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns the invite link for the bot and the support server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "license",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns the license file for the Github repo for the bot",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "ping",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns the API and WebSocket latency",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "privacypolicy",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns the Privacy Policy for the bot",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "uptime",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns the current uptime of the bot",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 
 	{
 		name: "channelinfo",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns information about the channel",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "channel",
 				description: "The channel you want to get information about",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				type: ApplicationCommandOptionTypes.CHANNEL,
 				required: true,
 			},
@@ -96,11 +143,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "charinfo",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns information about the characters provided",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "string",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The characters you want to info",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -109,11 +160,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "inviteinfo",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns some useful info about a server from the invite link",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "invite",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The invite link of the server you want to info",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -122,11 +177,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "messageinfo",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns information about the message provided",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "message",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The message you want to get info about",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -135,11 +194,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "roleinfo",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns information about the role provided",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "role",
 				type: ApplicationCommandOptionTypes.ROLE,
 				description: "The role you want to get info about",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -148,6 +211,8 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "server",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Returns some useful information about the current server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "userinfo",
@@ -167,16 +232,22 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "banpool",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Banpool main command",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "create",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Creates a banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "name",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The banpool name",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -185,11 +256,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "delete",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Deletes the selected banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "name",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The name of the banpool that should be deleted",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -198,11 +273,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "info",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Returns information about the selected banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "name",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The name of the banpool that should be info'd",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -211,11 +290,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "invite",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Creates a one-time invite for the selected banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "name",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "Name of the selected banpool",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -224,11 +307,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "join",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Joins the selected banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "code",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The invite code of that banpool that you want to join",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -237,11 +324,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "leave",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Leaves the selected banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "name",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "Name of the banpool that you want to leave",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -250,22 +341,30 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "list",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Gets a list of bannpools the server is connected to",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 			},
 			{
 				name: "kick",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Kicks the selected server from the selected banpool",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "guild_id",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "ID of the selected server",
+						description_localizations: translate("slashcommand_about_description"),
+
 						required: true,
 					},
 					{
 						name: "name",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The name of the selected banpool",
+						description_localizations: translate("slashcommand_about_description"),
+
 						required: true,
 					},
 				],
@@ -276,21 +375,28 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "configure",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Configure main command",
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "settings",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Get the settings for the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "messageclear",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Clears X amount of messages from the database in the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "days",
 				type: ApplicationCommandOptionTypes.INTEGER,
 				description: "The amount of days of messages to clear",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -300,11 +406,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "avatar",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Gets a users avatar picture",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "user",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The user who's avatar you want to retrieve",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -313,11 +423,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "id",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Parses Discord IDs from the provided text",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "text",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The text you want to parse Discord IDs from",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -326,21 +440,29 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "remind",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Reminder main command",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "list",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Returns a list of all your current active reminders",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 			},
 			{
 				name: "remove",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Removes the selected reminder",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "reminder",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The ID of the reminder you want to remove",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -349,17 +471,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "set",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Sets a reminder",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "duration",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The duration after which you should receive the reminder",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 					{
 						name: "reminder",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The reminder message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -370,11 +498,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "jumbo",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Sends a bigger version of the given emote(s)",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "emojis",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The emoji(s) you want to return in their jumbo version",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -383,11 +515,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "permissions",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Gets permission names from a permission number",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "permissions",
 				type: ApplicationCommandOptionTypes.INTEGER,
 				description: "The permission number",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -397,16 +533,22 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "archive",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Archive commands",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "channel",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Archive a channel",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "channel",
 						type: ApplicationCommandOptionTypes.CHANNEL,
 						description: "The channel to archive",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 						channel_types: [
 							ApplicationCommandOptionsChannelTypes.GUILD_NEWS,
@@ -422,11 +564,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "user",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Archive a user",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "user",
 						type: ApplicationCommandOptionTypes.USER,
 						description: "The user to archive",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -438,17 +584,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "ban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Bans or forcebans a user from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "user",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The user that should be banned",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the ban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -457,17 +609,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "cleanban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Bans a user and removes all their contexts from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be banned",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the ban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -476,17 +634,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "crossban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Cross-bans the selected user from all connected banpools",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The user that should be cross-banned from all connected banpools",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason for the ban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -495,17 +659,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "deafen",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Deafens a member from a Voice Channel they're connected to",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be deafened",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the deafen",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -514,16 +684,22 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "infraction",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Manages a given users infractions",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "claim",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Claim responsibility over the provided infraction",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "infraction",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The infraction ID",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -532,11 +708,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "info",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Returns more information about the provided information",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "infraction",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The infraction ID",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -545,11 +725,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "modsearch",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Searches the database for any infractions where the provided user is the moderator",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "user",
 						type: ApplicationCommandOptionTypes.USER,
 						description: "The user that should be used as a query",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -558,11 +742,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "offendersearch",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Searches the database for infractions where the selected user is marked as the offender",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "user",
 						type: ApplicationCommandOptionTypes.USER,
 						description: "The user that should be used as a query",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -571,11 +759,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "remove",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Removes the selected infraction from the database",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "infraction",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The infraction ID",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -584,11 +776,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "search",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Searches the database for any infractions where the selected user is the moderator or offender",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "user",
 						type: ApplicationCommandOptionTypes.USER,
 						description: "The user that should be used as the query",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -597,17 +793,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "update",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Updates the selected infraction with the new provided reason",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "infraction",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The ID of the infraction that should be updated",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 					{
 						name: "reason",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The new updated reason behind the infraction",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -618,17 +820,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "kick",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Kicks the selected member from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be kicked",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the kick",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -637,11 +845,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "lockdown",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Locks/unlocks a selected channel",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "channel",
 				type: ApplicationCommandOptionTypes.CHANNEL,
 				description: "The channel that should be locked/unlocked",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 				channel_types: [
 					ApplicationCommandOptionsChannelTypes.GUILD_NEWS,
@@ -655,6 +867,8 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "locked",
 				type: ApplicationCommandOptionTypes.BOOLEAN,
 				description: "Whether the channel should be locked or not",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],
@@ -663,17 +877,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "multiban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Bans or forcebans multiple people from a server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "users",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The users that should be banned separated by a space",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the ban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -682,17 +902,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "multikick",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Kicks multiple people from a server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "users",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The users that should be kicked separated by a space",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the kick",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -701,17 +927,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "multiunban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Unbans multiple people from a server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "users",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The users that should be unbanned separated by a space",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the unban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -720,17 +952,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "multiwarn",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Warns multiple selected users",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "users",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The users that should be warned separated by a space",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the warn",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -739,23 +977,31 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "mute",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Mutes the selected user for the specified amount of time",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be muted",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "duration",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The duration for which the should be muted for",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the mute",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -764,23 +1010,31 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "nickname",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Nicknames a user from the current server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be nicknamed",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "nickname",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The selected user's new nickname",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the nickname change",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -789,23 +1043,31 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "prune",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Prune users from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "days",
 				type: ApplicationCommandOptionTypes.NUMBER,
 				description: "How many days to prune from",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "roles",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "Roles to include in the prune",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "Reason for the prune",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -814,16 +1076,22 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "purge",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Purge main command",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "all",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages in the given channel",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -832,17 +1100,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "between",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges all messages between the two given messages",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "message1",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The first message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 					{
 						name: "message2",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The second message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -851,11 +1125,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "bots",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages sent from bot users",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -864,17 +1142,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "contains",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages containing the provided query",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "query",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The query that the fetched messages must have",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -883,11 +1167,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "embeds",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages if the message contains an embed",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -896,11 +1184,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "emojis",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages if the message contains an emoji",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -909,11 +1201,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "images",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages if the message contains an image",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -922,11 +1218,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "until",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges messages until a message",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "message",
 						type: ApplicationCommandOptionTypes.STRING,
 						description: "The message to purge until",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -935,17 +1235,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 				name: "user",
 				type: ApplicationCommandOptionTypes.SUB_COMMAND,
 				description: "Purges the selected amount of messages from the selected member",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				options: [
 					{
 						name: "member",
 						type: ApplicationCommandOptionTypes.USER,
 						description: "The user who's messages should be purged",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 					{
 						name: "amount",
 						type: ApplicationCommandOptionTypes.INTEGER,
 						description: "The amount of messages that should be fetched from the last sent message",
+						name_localizations: translate("slashcommand_about_name"),
+						description_localizations: translate("slashcommand_about_description"),
 						required: true,
 					},
 				],
@@ -956,17 +1262,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "slowmode",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Sets a slowmode to the selected channel",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "duration",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The duration the slowmode should be set to",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "channel",
 				type: ApplicationCommandOptionTypes.CHANNEL,
 				description: "The channel where the slowmode should be edited",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 				channel_types: [
 					ApplicationCommandOptionsChannelTypes.GUILD_NEWS,
@@ -982,17 +1294,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "softban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Bans and immediately unbans the selected member from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The user that should be soft-banned",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the soft-ban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -1001,23 +1319,31 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "tempban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Temporarily bans the selected member from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be temp-banned",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "duration",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The duration the selected user should be banned for",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the tempban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -1026,17 +1352,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "unban",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Unban a user from the server",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "user",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The user that should be unbanned",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the unban",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -1045,17 +1377,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "undeafen",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Undeafens a member from a Voice Channel they're connected to",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be undeafened",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the undeafen",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -1064,17 +1402,23 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "unmute",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Unmutes the selected member",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be unmuted",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the unmute",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -1083,22 +1427,30 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "verification",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Changes the server verification level",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 	},
 	{
 		name: "warn",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Warns the selected server member",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "member",
 				type: ApplicationCommandOptionTypes.USER,
 				description: "The member that should be warned",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 			{
 				name: "reason",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The reason behind the warning",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: false,
 			},
 		],
@@ -1107,11 +1459,15 @@ export const ChatInputCommand: ApplicationCommand[] = [
 		name: "snowflake",
 		type: ApplicationCommandType.CHAT_INPUT,
 		description: "Gets information about a given snowflake",
+		name_localizations: translate("slashcommand_about_name"),
+		description_localizations: translate("slashcommand_about_description"),
 		options: [
 			{
 				name: "id",
 				type: ApplicationCommandOptionTypes.STRING,
 				description: "The snowflake you want to check",
+				name_localizations: translate("slashcommand_about_name"),
+				description_localizations: translate("slashcommand_about_description"),
 				required: true,
 			},
 		],

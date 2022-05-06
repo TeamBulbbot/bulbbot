@@ -1,4 +1,4 @@
-type LocalCode =
+export type LocalCode =
 	| "da"
 	| "de"
 	| "en-GB"
