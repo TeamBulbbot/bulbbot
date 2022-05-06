@@ -1,6 +1,6 @@
 import BulbBotClient from "./BulbBotClient";
-import { ApplicationCommandType, CommandInteraction, Permissions, PermissionString } from "discord.js";
-import { ApplicationCommandOptions } from "../utils/types/ApplicationCommands";
+import { CommandInteraction, Permissions, PermissionString } from "discord.js";
+import { ApplicationCommandOptions, ApplicationCommandType } from "../utils/types/ApplicationCommands";
 
 export default class ApplicationCommand {
 	public readonly client: BulbBotClient;
@@ -16,7 +16,7 @@ export default class ApplicationCommand {
 		this.client = client;
 		this.type = options.type;
 		this.name = options.name;
-		this.description = options.description || "No description provided.";
+		this.description = options.description;
 		this.dm_permissions = options.dm_permissions || false;
 		this.command_permissions = options.command_permissions || [];
 		this.default_member_permissions = this._computePermissions();
