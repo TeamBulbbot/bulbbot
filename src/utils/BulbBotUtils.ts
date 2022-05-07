@@ -363,7 +363,6 @@ export default class {
 	};
 
 	// Supported languages
-	// dont ask me how this works found it on stackoverflow
 	public readonly languages = new Proxy(
 		{
 			"en-us|english": "en-US",
@@ -376,8 +375,28 @@ export default class {
 			"hi-in|hindi|हिंदी": "hi-IN",
 			"hu-hu|hungarian|Magyar": "hu-HU",
 			"es-es|spanish|Español": "es-ES",
-		}, // @ts-expect-error
-		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
+		},
+		{
+			// This handler is used when performing property accesses for the |languages|
+			// Proxy instance, e.g. code like `languages.value` or `languages[value]`.
+			// |target| is the first argument to the constructor (the map of languages codes above),
+			// and |key| is the property key that is being called. The |key| does not have
+			// to exist on the |target|, in which case JavaScript would normally return |undefined|
+			get: (target, key) => {
+				// Constrain type. You could legally pass a |symbol| to
+				// this "get" function, but not to .includes
+				if (typeof key !== "string") return undefined;
+				// Get all keys of |target| as an array, call Array.find with a predicate
+				// that looks for the first property key that includes the key, after splitting
+				// on '|' to separate the distinct values and avoid false positive. Array.find
+				// will short-circuit as soon as it finds a match, or will return |undefined|
+				// if there is none
+				const fullKey = Object.keys(target).find((property) => property.split("|").includes(key));
+				// If we found a match, return the language code. Otherwise, undefined will be returned
+				// by the `&&` operator short-circuiting
+				return fullKey && target[fullKey];
+			},
+		},
 	);
 
 	public formatAction(action: string): string | undefined {
