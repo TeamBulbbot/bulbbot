@@ -12,7 +12,7 @@ export type LocalCode =
 	| "nl"
 	| "no"
 	| "pl"
-	| "pt-BR "
+	| "pt-BR"
 	| "ro"
 	| "fi"
 	| "sv-SE"
