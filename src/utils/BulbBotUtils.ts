@@ -204,6 +204,7 @@ export default class {
 		return user;
 	}
 
+	/** Consider deprecating */
 	public prettify(action: string): string {
 		return (
 			{
