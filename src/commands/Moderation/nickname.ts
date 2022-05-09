@@ -43,7 +43,8 @@ export default class extends Command {
 		const nickname: string = (nickmatch ? nickmatch[1] : args[1]).trim() ?? "";
 		const reason: string =
 			args
-				.slice(1 + nickname.split(" ").length)
+				// Interaction commands will pass multi-word nicknames as a single argument (unless it is quoted, in which case it'll split the argument)
+				.slice(1 + (nickmatch ? nickname.split(" ").length : 1))
 				.join(" ")
 				.trim() || (await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {}));
 		if (!target)
