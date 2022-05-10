@@ -17,7 +17,7 @@ export default class extends ApplicationCommand {
 
 	public async run(interaction: CommandInteraction): Promise<void> {
 		const realCommitTime: string = this.client.bulbutils.formatDays(new Date(this.client.about.build.time.slice(0, -7)));
-		const latency: number = Math.floor(new Date().getTime() - interaction.createdTimestamp);
+		const latency: number = Math.floor(Date.now() - interaction.createdTimestamp);
 		const apiLatency: number = Math.round(this.client.ws.ping);
 
 		const row = new MessageActionRow().addComponents([
