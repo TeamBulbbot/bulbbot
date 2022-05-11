@@ -6,7 +6,14 @@ import i18next from "i18next";
 
 export function translateSlashCommands(key: string) {
 	const TRANSLATED_LANGS: LocalCode[] = ["es-ES", "hu", "fr", "cs", "sv-SE", "hi"];
-	const obj: Localization = {};
+	const obj: Localization = {
+		"es-ES": "",
+		fr: "",
+		hu: "",
+		"sv-SE": "",
+		cs: "",
+		hi: "",
+	};
 
 	for (let i = 0; i < TRANSLATED_LANGS.length; i++) {
 		obj[TRANSLATED_LANGS[i]] = i18next.t(key, {
