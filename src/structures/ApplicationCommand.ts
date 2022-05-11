@@ -34,7 +34,6 @@ export default class ApplicationCommand {
 
 			if (optionCommand.options) this.applyTranslation(optionCommand.options, `${name}_${optionCommand.name}`);
 		}
-		return true;
 	}
 
 	private appendTranslation(options: ApplicationCommandOptions[]): ApplicationCommandOptions[] {
