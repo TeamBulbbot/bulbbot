@@ -25,8 +25,7 @@ export default class ApplicationCommand {
 	}
 
 	private applyTranslation(options: ApplicationCommandOptions[], name: string) {
-		for (let i = 0; i < options.length; i++) {
-			const optionCommand = options[i];
+		for (const optionCommand of options) {
 			optionCommand.name_localizations = translateSlashCommands(`${name}_${optionCommand.name}_name`);
 			optionCommand.description_localizations = translateSlashCommands(`${name}_${optionCommand.name}_desc`);
 
