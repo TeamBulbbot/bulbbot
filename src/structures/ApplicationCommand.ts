@@ -1,6 +1,7 @@
 import BulbBotClient from "./BulbBotClient";
 import { CommandInteraction, Permissions, PermissionString } from "discord.js";
 import { ApplicationCommandOptions, ApplicationCommandType } from "../utils/types/ApplicationCommands";
+import { translateSlashCommands } from "../utils/InteractionCommands";
 
 export default class ApplicationCommand {
 	public readonly client: BulbBotClient;
@@ -12,15 +13,35 @@ export default class ApplicationCommand {
 	public readonly command_permissions: PermissionString[];
 	public readonly options: ApplicationCommandOptions[];
 
-	constructor(client: BulbBotClient, options: any) {
+	constructor(client: BulbBotClient, { type, name, description, dm_permissions, command_permissions, options }: any) {
 		this.client = client;
-		this.type = options.type;
-		this.name = options.name;
-		this.description = options.description;
-		this.dm_permissions = options.dm_permissions || false;
-		this.command_permissions = options.command_permissions || [];
+		this.type = type;
+		this.name = name;
+		this.description = description;
+		this.dm_permissions = dm_permissions || false;
+		this.command_permissions = command_permissions || [];
 		this.default_member_permissions = this._computePermissions();
-		this.options = options.options || [];
+		this.options = this.appendTranslation(options) || [];
+	}
+
+	private applyTranslation(options: ApplicationCommandOptions[], name: string) {
+		for (let i = 0; i < options.length; i++) {
+			const optionCommand = options[i];
+			optionCommand.name_localizations = translateSlashCommands(`${name}_${optionCommand.name}_name`);
+			optionCommand.description_localizations = translateSlashCommands(`${name}_${optionCommand.name}_desc`);
+
+			if (`${name}_${optionCommand.name}_name`.length > 32 || `${name}_${optionCommand.name}_desc`.length > 32)
+				throw Error(`Too long of a name for slash commands: ${optionCommand.name} is too long for the slashcommand to register (over 32 characters)`);
+
+			if (optionCommand.options) this.applyTranslation(optionCommand.options, `${name}_${optionCommand.name}`);
+		}
+		return true;
+	}
+
+	private appendTranslation(options: ApplicationCommandOptions[]): ApplicationCommandOptions[] {
+		if (!options) return [];
+		this.applyTranslation(options ?? [], `sc_${this.name}`);
+		return options;
 	}
 
 	private _computePermissions(): string | null {

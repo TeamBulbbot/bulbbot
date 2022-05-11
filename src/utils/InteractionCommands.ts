@@ -4,7 +4,7 @@ import axios from "axios";
 import { LocalCode, Localization, ApplicationCommand } from "./types/ApplicationCommands";
 import i18next from "i18next";
 
-function translate(key: string) {
+export function translateSlashCommands(key: string) {
 	const TRANSLATED_LANGS: LocalCode[] = ["es-ES", "hu", "fr", "cs", "sv-SE", "hi"];
 	const obj: Localization = {};
 
@@ -26,8 +26,8 @@ export async function registerSlashCommands(client: BulbBotClient) {
 				name: command.name,
 				type: command.type,
 				description: command.description,
-				name_localizations: translate(`slashcommand_${command.name}_name`),
-				description_localizations: translate(`slashcommand_${command.name}_description`),
+				name_localizations: translateSlashCommands(`sc_${command.name}_name`),
+				description_localizations: translateSlashCommands(`sc_${command.name}_desc`),
 				default_permissions: command.default_member_permissions,
 				options: command.options,
 			});
