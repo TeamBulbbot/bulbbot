@@ -90,6 +90,16 @@ export default class extends Event {
 			}
 
 			let used = `/${command.qualifiedName}`;
+			if (command.name === "nickname") {
+				// This fix is temporary, until we remove the text-commands
+				// TODO(@wakfi): Move this into the nickname handler directly, once we officially drop text-based commands
+				args.splice(0, args.length);
+				const member = context.options.getUser("member", true);
+				const nickname = context.options.getString("nickname") ?? "";
+				const reason = context.options.getString("reason") ?? "";
+				// Pass in the arguments without splitting, to behave nicely with the text parsing done in the nickname command
+				args.push(`${member}`, ...(nickname.startsWith('"') && nickname.endsWith('"') ? `${nickname}`.split(" ") : [`${nickname}`]), ...`${reason}`.split(" "));
+			}
 			args.forEach((arg) => (used += ` ${arg}`));
 			await loggingManager.sendCommandLog(this.client, interaction.guild, context.author, context.channel.id, used);
 
