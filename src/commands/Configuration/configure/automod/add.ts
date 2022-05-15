@@ -3,6 +3,7 @@ import BulbBotClient from "../../../../structures/BulbBotClient";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import AutoModPart from "../../../../utils/types/AutoModPart";
+import { NonDigits } from "../../../../utils/Regex";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -117,17 +118,56 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 
 					msgCollector?.on("collect", async (m: Message) => {
 						await m.delete();
-						if (selectedCategory && config[selectedCategory].includes(m.content)) {
+						let appendContent = m.content;
+						if (selectedCategory && config[selectedCategory].includes(appendContent)) {
 							await interaction.followUp({
 								content: await client.bulbutils.translate("config_automod_add_remove_add_already_exists", interaction.guild?.id, {
-									item: m.content,
+									item: appendContent,
 								}),
 								ephemeral: true,
 							});
 							return add(i, client, selectedCategory);
 						}
 
-						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id as Snowflake, categories[selectedCategory], [m.content]);
+						// parsing of objects being done
+
+						// whitelist roles should only allow roles
+						if (selectedCategory === "ignoreRoles") {
+							const roles = appendContent.replace(NonDigits, "");
+							if (!i.guild?.roles.cache.get(roles)) {
+								await interaction.followUp({
+									content: "no invalid role",
+									ephemeral: true,
+								});
+								return add(i, client, selectedCategory);
+							} else appendContent = roles;
+						}
+
+						// whitelist channels only allow channels
+						if (selectedCategory === "ignoreChannels") {
+							const channels = appendContent.replace(NonDigits, "");
+							if (!i.guild?.channels.cache.get(channels)) {
+								await interaction.followUp({
+									content: "no invalid channel",
+									ephemeral: true,
+								});
+								return add(i, client, selectedCategory);
+							} else appendContent = channels;
+						}
+
+						// whitelist users only allow users ids
+						if (selectedCategory === "ignoreUsers") {
+							const users = appendContent.replace(NonDigits, "");
+							if (!i.guild?.members.cache.get(users)) {
+								await interaction.followUp({
+									content: "no invalid user",
+									ephemeral: true,
+								});
+								return add(i, client, selectedCategory);
+							} else appendContent = users;
+						}
+
+						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id as Snowflake, categories[selectedCategory], [appendContent]);
 
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_automod_add_remove_add_success", interaction.guild?.id, {}),
