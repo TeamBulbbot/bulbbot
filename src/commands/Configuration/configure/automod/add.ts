@@ -136,7 +136,9 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							const roles = appendContent.replace(NonDigits, "");
 							if (!i.guild?.roles.cache.get(roles)) {
 								await interaction.followUp({
-									content: "no invalid role",
+									content: await client.bulbutils.translate("config_automod_add_remove_add_invalid_role", interaction.guild?.id, {
+										item: appendContent,
+									}),
 									ephemeral: true,
 								});
 								return add(i, client, selectedCategory);
@@ -148,7 +150,9 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							const channels = appendContent.replace(NonDigits, "");
 							if (!i.guild?.channels.cache.get(channels)) {
 								await interaction.followUp({
-									content: "no invalid channel",
+									content: await client.bulbutils.translate("config_automod_add_remove_add_invalid_channel", interaction.guild?.id, {
+										item: appendContent,
+									}),
 									ephemeral: true,
 								});
 								return add(i, client, selectedCategory);
@@ -160,7 +164,9 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							const users = appendContent.replace(NonDigits, "");
 							if (!i.guild?.members.cache.get(users)) {
 								await interaction.followUp({
-									content: "no invalid user",
+									content: await client.bulbutils.translate("config_automod_add_remove_add_invalid_user", interaction.guild?.id, {
+										item: appendContent,
+									}),
 									ephemeral: true,
 								});
 								return add(i, client, selectedCategory);
