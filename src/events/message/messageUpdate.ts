@@ -19,6 +19,10 @@ export default class extends Event {
 	}
 
 	public async run(oldMessage: Message, newMessage: Message): Promise<void> {
+		if (newMessage.partial) {
+			newMessage = await newMessage.fetch(true);
+		}
+
 		if (!newMessage.guild) return;
 
 		let oldMessageContent: string;
@@ -28,7 +32,7 @@ export default class extends Event {
 			if (dbData === undefined) return;
 			oldMessageContent = dbData.content;
 		} else {
-			if (newMessage.author.id === this.client.user?.id) return;
+			if (newMessage.author?.id === this.client.user?.id) return;
 			if (oldMessage.content === newMessage.content) return;
 
 			const context: CommandContext = await getCommandContext(newMessage);
@@ -40,7 +44,7 @@ export default class extends Event {
 		}
 
 		const msg: string = await this.client.bulbutils.translate("event_message_edit", newMessage.guild.id, {
-			user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
+			user_tag: newMessage.author?.bot ? `${newMessage.author?.tag} :robot:` : newMessage.author?.tag,
 			user: newMessage.author,
 			message: newMessage,
 			channel: newMessage.channel,
@@ -55,7 +59,7 @@ export default class extends Event {
 				newMessage.guild,
 				"message",
 				await this.client.bulbutils.translate("event_message_edit_special", newMessage.guild.id, {
-					user_tag: newMessage.author.bot ? `${newMessage.author.tag} :robot:` : newMessage.author.tag,
+					user_tag: newMessage.author?.bot ? `${newMessage.author?.tag} :robot:` : newMessage.author?.tag,
 					user: newMessage.author,
 					message: newMessage,
 					channel: newMessage.channel,
