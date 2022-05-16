@@ -173,7 +173,8 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							} else appendContent = users;
 						}
 
-						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id as Snowflake, categories[selectedCategory], [appendContent]);
+						if (!interaction.guild?.id) return;
+						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id, categories[selectedCategory], [appendContent]);
 
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_automod_add_remove_add_success", interaction.guild?.id, {}),
