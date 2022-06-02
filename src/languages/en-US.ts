@@ -252,6 +252,9 @@ export default {
 	config_automod_add_remove_add_success: "{{emote_success}} Successfully added the selected Automod Item to the database",
 	config_automod_add_remove_add_prompt: "{{emote_wrench}} Please enter the new Automod Item",
 	config_automod_add_remove_add_already_exists: "{{emote_fail}} The Automod Item `{{item}}` already exists in the database",
+	config_automod_add_remove_add_invalid_channel: "{{emote_fail}} Invalid automod item `{{item}}` for immune channels",
+	config_automod_add_remove_add_invalid_user: "{{emote_fail}} Invalid automod item `{{item}}` for immune users",
+	config_automod_add_remove_add_invalid_role: "{{emote_fail}} Invalid automod item `{{item}}` for immune roles",
 	config_automod_add_remove_button_add: "Add Items",
 	config_automod_add_remove_button_remove: "Remove Items",
 
