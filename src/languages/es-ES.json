@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "hilo",
 		"GUILD_PRIVATE_THREAD": "hilo privado",
 		"GUILD_STAGE_VOICE": "canal del escenario",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "canal"
 	},
 	"config_button_enable": "Habilitar",

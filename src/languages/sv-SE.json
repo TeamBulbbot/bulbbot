@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "tråd",
 		"GUILD_PRIVATE_THREAD": "privat tråd",
 		"GUILD_STAGE_VOICE": "scen kanal",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "kanal"
 	},
 	"config_button_enable": "Enable",

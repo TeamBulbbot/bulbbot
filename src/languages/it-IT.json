@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "argomento",
 		"GUILD_PRIVATE_THREAD": "argomento privato",
 		"GUILD_STAGE_VOICE": "stage",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "canale"
 	},
 	"config_button_enable": "Enable",

@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "vlákno",
 		"GUILD_PRIVATE_THREAD": "soukromé vlákno",
 		"GUILD_STAGE_VOICE": "řečnický kanál",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "kanál"
 	},
 	"config_button_enable": "Enable",

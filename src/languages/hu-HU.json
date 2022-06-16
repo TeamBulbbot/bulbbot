@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "szál",
 		"GUILD_PRIVATE_THREAD": "privát szál",
 		"GUILD_STAGE_VOICE": "alap csatorna",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "csatorna"
 	},
 	"config_button_enable": "Engedélyezés",
