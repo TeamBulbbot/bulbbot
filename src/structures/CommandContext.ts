@@ -50,6 +50,7 @@ import {
 	User,
 	Webhook,
 	WebhookEditMessageOptions,
+	MessageOptions,
 	MessageType,
 } from "discord.js";
 import CommandContextException from "./exceptions/CommandContextException";
@@ -995,8 +996,9 @@ class InteractionCommandContext implements BaseCommandContext {
 			this._editReply = source.editReply.bind(source);
 			this._fetchReply = source.fetchReply.bind(source);
 			this._followUp = source.followUp.bind(source);
-			/*if (this.channel) {
+			if (this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
+					// @ts-expect-error
 					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : { ...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true });
 					// @ts-expect-error
 					const msg = r instanceof Message ? clone(r) : new Message(this.client, r);
@@ -1012,7 +1014,7 @@ class InteractionCommandContext implements BaseCommandContext {
 					};
 					return msg;
 				};
-			}*/
+			}
 
 			if (source.isMessageComponent()) {
 				this._deferUpdate = source.deferUpdate.bind(source);
