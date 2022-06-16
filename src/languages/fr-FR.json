@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "fil",
 		"GUILD_PRIVATE_THREAD": "fil privé",
 		"GUILD_STAGE_VOICE": "salon de conférence",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "salon"
 	},
 	"config_button_enable": "Activer",

@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "थ्रेड",
 		"GUILD_PRIVATE_THREAD": "निजी थ्रेड",
 		"GUILD_STAGE_VOICE": "स्टेज चैनल",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "चैनल"
 	},
 	"config_button_enable": "Enable",
