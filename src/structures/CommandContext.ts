@@ -1,4 +1,4 @@
-import { APIInteractionGuildMember, APIUser, APIMessage, APIMessageComponent, APIActionRowComponent, MessageType as APIMessageType } from "discord-api-types";
+import { APIInteractionGuildMember, APIUser, APIMessage, MessageType as APIMessageType } from "discord-api-types/v9";
 import {
 	ApplicationCommand,
 	ApplicationCommandType,
@@ -24,7 +24,6 @@ import {
 	InteractionWebhook,
 	Message,
 	MessageActionRow,
-	MessageActionRowComponent,
 	MessageActivity,
 	MessageAttachment,
 	MessageComponentInteraction,
@@ -51,7 +50,6 @@ import {
 	User,
 	Webhook,
 	WebhookEditMessageOptions,
-	MessageOptions,
 	MessageType,
 } from "discord.js";
 import CommandContextException from "./exceptions/CommandContextException";
@@ -132,7 +130,7 @@ abstract class BaseCommandContext {
 	public targetType!: Exclude<ApplicationCommandType, "CHAT_INPUT"> | null;
 
 	// MessageComponentInteraction
-	public readonly component!: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;
+	//public readonly component!: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;
 	public componentType!: MessageComponentType | null;
 	public message!: Message | APIMessage;
 	public customId!: string | null;
@@ -643,7 +641,7 @@ class InteractionCommandContext implements BaseCommandContext {
 	public targetType: Exclude<ApplicationCommandType, "CHAT_INPUT"> | null;
 
 	// MessageComponentInteraction
-	public readonly component: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;
+	//public readonly component: MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent> | null;
 	public componentType: MessageComponentType | null;
 	public message: Message;
 	public customId: string | null;
@@ -935,7 +933,7 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.command = null;
 				this.commandId = null;
 				this.commandName = null;
-				this.component = source.component;
+				//this.component = source.component;
 				this.componentType = source.componentType;
 				this.customId = source.customId;
 				this.values = source instanceof SelectMenuInteraction ? source.values : [];
@@ -952,7 +950,7 @@ class InteractionCommandContext implements BaseCommandContext {
 				this.webhook = source.webhook;
 
 				this.customId = null;
-				this.component = null;
+				//this.component = null;
 				this.componentType = null;
 				this.values = [];
 
@@ -980,7 +978,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			this.deferred = false;
 			this.replied = false;
 			this.webhook = null;
-			this.component = null;
+			//this.component = null;
 			this.componentType = null;
 			this.customId = null;
 			this.values = [];
@@ -997,7 +995,7 @@ class InteractionCommandContext implements BaseCommandContext {
 			this._editReply = source.editReply.bind(source);
 			this._fetchReply = source.fetchReply.bind(source);
 			this._followUp = source.followUp.bind(source);
-			if (this.channel) {
+			/*if (this.channel) {
 				this.channel.send = async (options: string | MessagePayload | MessageOptions | InteractionReplyOptions): Promise<Message> => {
 					const r = await this.followUp(typeof options === "string" || options instanceof MessagePayload ? options : { ...options, ephemeral: this.ephemeral ?? undefined, fetchReply: true });
 					// @ts-expect-error
@@ -1014,7 +1012,7 @@ class InteractionCommandContext implements BaseCommandContext {
 					};
 					return msg;
 				};
-			}
+			}*/
 
 			if (source.isMessageComponent()) {
 				this._deferUpdate = source.deferUpdate.bind(source);

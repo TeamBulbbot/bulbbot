@@ -164,6 +164,7 @@ export default {
 		GUILD_PUBLIC_THREAD: "thread",
 		GUILD_PRIVATE_THREAD: "private thread",
 		GUILD_STAGE_VOICE: "stage channel",
+		GUILD_DIRECTORY: "guild directory",
 		UNKNOWN: "channel",
 	},
 
