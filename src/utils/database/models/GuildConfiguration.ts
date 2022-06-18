@@ -33,7 +33,7 @@ export default function (sequelize: Sequelize): void {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},
-		manuelNicknameInf: {
+		manualNicknameInf: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false,
 		},

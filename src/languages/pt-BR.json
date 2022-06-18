@@ -130,6 +130,7 @@
 		"GUILD_PUBLIC_THREAD": "thread publica",
 		"GUILD_PRIVATE_THREAD": "thread privada",
 		"GUILD_STAGE_VOICE": "canal de palco",
+		"GUILD_DIRECTORY": "guild directory",
 		"UNKNOWN": "canal"
 	},
 	"config_button_enable": "Ativar",
@@ -139,6 +140,7 @@
 	"config_main_options": {
 		"language": "Idioma",
 		"actions_on_info": "Ações em informação",
+		"manual_nickname_inf": "Manual nickname infractions",
 		"prefix": "Prefixo",
 		"roles_on_leave": "Cargos na saída",
 		"automod": "Automod",
@@ -150,6 +152,7 @@
 	"config_main_options_descriptions": {
 		"language": "Altere o idioma do bot",
 		"actions_on_info": "Configure as ações de informações",
+		"manual_nickname_inf": "Changing a users nickname results in a infraction",
 		"prefix": "Configure o prefixo do bot",
 		"roles_on_leave": "Configure os cargos em caso de saída",
 		"automod": "Configure o automod",
@@ -161,6 +164,7 @@
 	"config_main_placeholder": "Selecione uma categoria para modificar",
 	"config_actions_on_info_header": "{{emote_wrench}} **Ações na Configuração de Informação**\n{{emote_edit}}*Essa configuração controla se os botões de ação serão exibidos quando você procurar sobre um usuário.*",
 	"config_roles_on_leave_header": "{{emote_wrench}} **Configuração de cargos na saída**\n{{emote_edit}}*Esta configuração controla se o bot irá registrar os cargos do usuário quando ele sair do servidor.*",
+	"config_manual_nickname_infractions": "{{emote_wrench}} **Manual nickname infractions Configuration**\n{{emote_edit}}*This settings controls wheter or not the bot will track infractions on users when a mod gives them an nickname*",
 	"config_language_header": "{{emote_wrench}} **Configuração de idioma**\n{{emote_edit}}*Esta configuração controla o idioma que o bot usará ao responder aos comandos.*",
 	"config_language_placeholder": "Selecione um idioma",
 	"config_language_success": "{{emote_success}} O idioma do servidor foi alterado com sucesso para `{{language}}`",
@@ -203,6 +207,9 @@
 	"config_automod_add_remove_add_success": "{{emote_success}} Item selecionado do automod foi adicionado com sucesso no banco de dados",
 	"config_automod_add_remove_add_prompt": "{{emote_wrench}} Por favor, insira o novo item do automod",
 	"config_automod_add_remove_add_already_exists": "{{emote_fail}} O item do automod `{{item}}` já existe no banco de dados",
+	"config_automod_add_remove_add_invalid_channel": "{{emote_fail}} Invalid automod item `{{item}}` for immune channels",
+	"config_automod_add_remove_add_invalid_user": "{{emote_fail}} Invalid automod item `{{item}}` for immune users",
+	"config_automod_add_remove_add_invalid_role": "{{emote_fail}} Invalid automod item `{{item}}` for immune roles",
 	"config_automod_add_remove_button_add": "Adicionar itens",
 	"config_automod_add_remove_button_remove": "Remover itens",
 	"config_automod_limit_header": "{{emote_wrench}} **Configuração dos limites do automod**\n{{emote_edit}}*Esta configuração controla os limites e tempos para as verificações do automod.*",

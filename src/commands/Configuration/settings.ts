@@ -37,7 +37,7 @@ export default class extends Command {
 			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
 			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Nickname change infraction:  ${guildConfig.manuelNicknameInf ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Nickname change infraction:  ${guildConfig.manualNicknameInf ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
 			`Quick reasons: ${guildConfig.quickReasons.length ? guildConfig.quickReasons.map((r) => `\`${r}\``).join(" ") : Emotes.other.SWITCHOFF}`,
 		];
 

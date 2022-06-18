@@ -164,6 +164,7 @@ export default {
 		GUILD_PUBLIC_THREAD: "thread",
 		GUILD_PRIVATE_THREAD: "private thread",
 		GUILD_STAGE_VOICE: "stage channel",
+		GUILD_DIRECTORY: "guild directory",
 		UNKNOWN: "channel",
 	},
 
@@ -175,7 +176,7 @@ export default {
 	config_main_options: {
 		language: "Language",
 		actions_on_info: "Actions on Info",
-		manuel_nickname_inf: "Manuel nickname infractions",
+		manual_nickname_inf: "Manual nickname infractions",
 		prefix: "Prefix",
 		roles_on_leave: "Roles on Leave",
 		automod: "Automod",
@@ -187,7 +188,7 @@ export default {
 	config_main_options_descriptions: {
 		language: "Change the language of the bot",
 		actions_on_info: "Configure the actions on info setting",
-		manuel_nickname_inf: "Changing a users nickname results in a infraction",
+		manual_nickname_inf: "Changing a users nickname results in a infraction",
 		prefix: "Configure the prefix of the bot",
 		roles_on_leave: "Configure the roles on leave setting",
 		automod: "Configure the Automod settings",
@@ -200,8 +201,8 @@ export default {
 
 	config_actions_on_info_header: "{{emote_wrench}} **Actions on Info Configuration**\n{{emote_edit}}*This setting controls whether or not action buttons will be displayed when you info a user.*",
 	config_roles_on_leave_header: "{{emote_wrench}} **Roles on Leave Configuration**\n{{emote_edit}}*This setting controls whether or not the bot will log user's roles when they leave the server.*",
-	config_manuel_nickname_infractions:
-		"{{emote_wrench}} **Manuel nickname infractions Configuration**\n{{emote_edit}}*This settings controls wheter or not the bot will track infractions on users when a mod gives them an nickname*",
+	config_manual_nickname_infractions:
+		"{{emote_wrench}} **Manual nickname infractions Configuration**\n{{emote_edit}}*This settings controls wheter or not the bot will track infractions on users when a mod gives them an nickname*",
 
 	config_language_header: "{{emote_wrench}} **Language Configuration**\n{{emote_edit}}*This setting controls the language that the bot will use when responding to commands.*",
 	config_language_placeholder: "Select a language",
@@ -252,6 +253,9 @@ export default {
 	config_automod_add_remove_add_success: "{{emote_success}} Successfully added the selected Automod Item to the database",
 	config_automod_add_remove_add_prompt: "{{emote_wrench}} Please enter the new Automod Item",
 	config_automod_add_remove_add_already_exists: "{{emote_fail}} The Automod Item `{{item}}` already exists in the database",
+	config_automod_add_remove_add_invalid_channel: "{{emote_fail}} Invalid automod item `{{item}}` for immune channels",
+	config_automod_add_remove_add_invalid_user: "{{emote_fail}} Invalid automod item `{{item}}` for immune users",
+	config_automod_add_remove_add_invalid_role: "{{emote_fail}} Invalid automod item `{{item}}` for immune roles",
 	config_automod_add_remove_button_add: "Add Items",
 	config_automod_add_remove_button_remove: "Remove Items",
 

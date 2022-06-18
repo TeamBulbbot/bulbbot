@@ -29,6 +29,8 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 				{ label: "Czech (Čeština)", value: "cs-cz" },
 				{ label: "Italian (Italiano)", value: "it-it" },
 				{ label: "Hindi (हिंदी)", value: "hi-in" },
+				{ label: "Hungarian (Magyar)", value: "hu-hu" },
+				{ label: "Spanish (Español)", value: "es-es" },
 			]),
 	);
 

@@ -11,7 +11,6 @@ import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
 import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 import { isBaseGuildTextChannel } from "./typechecks";
-import { GuildFeature } from "discord-api-types";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -120,14 +119,6 @@ export default class {
 			return 60; // 60 * 1 hour * 1 day
 		}
 
-		if (duration === "MAX") {
-			if (!channel?.guild.features) return 1440; // 60 * 24 hours * 1 day
-			const features = channel.guild.features.filter((feature) => feature.endsWith("DAY_THREAD_ARCHIVE")) as Include<GuildFeature, `${string}DAY_THREAD_ARCHIVE`>[];
-			if (features.find((feature) => feature.startsWith("THREE"))) return 4320; // 60 * 24 hours * 3 days
-			if (features.find((feature) => feature.startsWith("SEVEN"))) return 10080; // 60 * 24 hours * 7 days
-			return 1440; // 60 * 24 hours * 1 day
-		}
-
 		// Duration is already a number
 		return duration;
 	}
@@ -204,6 +195,7 @@ export default class {
 		return user;
 	}
 
+	/** Consider deprecating */
 	public prettify(action: string): string {
 		return (
 			{
@@ -363,7 +355,6 @@ export default class {
 	};
 
 	// Supported languages
-	// dont ask me how this works found it on stackoverflow
 	public readonly languages = new Proxy(
 		{
 			"en-us|english": "en-US",
@@ -374,8 +365,30 @@ export default class {
 			"cs-cz|czech|čeština": "cs-CZ",
 			"it-it|italian|italiano": "it-IT",
 			"hi-in|hindi|हिंदी": "hi-IN",
-		}, // @ts-expect-error
-		{ get: (t, p) => Object.keys(t).reduce((r, v) => (r !== undefined ? r : new RegExp(v).test(p) ? t[v] : undefined), undefined) },
+			"hu-hu|hungarian|Magyar": "hu-HU",
+			"es-es|spanish|Español": "es-ES",
+		},
+		{
+			// This handler is used when performing property accesses for the |languages|
+			// Proxy instance, e.g. code like `languages.value` or `languages[value]`.
+			// |target| is the first argument to the constructor (the map of languages codes above),
+			// and |key| is the property key that is being called. The |key| does not have
+			// to exist on the |target|, in which case JavaScript would normally return |undefined|
+			get: (target, key) => {
+				// Constrain type. You could legally pass a |symbol| to
+				// this "get" function, but not to .includes
+				if (typeof key !== "string") return undefined;
+				// Get all keys of |target| as an array, call Array.find with a predicate
+				// that looks for the first property key that includes the key, after splitting
+				// on '|' to separate the distinct values and avoid false positive. Array.find
+				// will short-circuit as soon as it finds a match, or will return |undefined|
+				// if there is none
+				const fullKey = Object.keys(target).find((property) => property.split("|").includes(key));
+				// If we found a match, return the language code. Otherwise, undefined will be returned
+				// by the `&&` operator short-circuiting
+				return fullKey && target[fullKey];
+			},
+		},
 	);
 
 	public formatAction(action: string): string | undefined {
