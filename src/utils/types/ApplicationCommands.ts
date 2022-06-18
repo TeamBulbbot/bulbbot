@@ -93,4 +93,5 @@ export interface ApplicationCommand {
 	name_localizations?: Localization;
 	description_localizations?: Localization;
 	default_permissions: string | null;
+	dm_permission: boolean;
 }

@@ -8,17 +8,17 @@ export default class ApplicationCommand {
 	public readonly type: ApplicationCommandType;
 	public readonly name: string;
 	public readonly description: string;
-	public readonly dm_permissions: boolean;
+	public readonly dm_permission: boolean;
 	public readonly default_member_permissions: string | null;
 	public readonly command_permissions: PermissionString[];
 	public readonly options: ApplicationCommandOptions[];
 
-	constructor(client: BulbBotClient, { type, name, description, dm_permissions, command_permissions, options }: any) {
+	constructor(client: BulbBotClient, { type, name, description, dm_permission, command_permissions, options }: any) {
 		this.client = client;
 		this.type = type;
 		this.name = name;
 		this.description = description;
-		this.dm_permissions = dm_permissions || false;
+		this.dm_permission = dm_permission || false;
 		this.command_permissions = command_permissions || [];
 		this.default_member_permissions = this._computePermissions();
 		this.options = this.appendTranslation(options) || [];

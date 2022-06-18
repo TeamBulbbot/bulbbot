@@ -36,6 +36,7 @@ export async function registerSlashCommands(client: BulbBotClient) {
 				name_localizations: translateSlashCommands(`sc_${command.name}_name`),
 				description_localizations: translateSlashCommands(`sc_${command.name}_desc`),
 				default_permissions: command.default_member_permissions,
+				dm_permission: command.dm_permission,
 				options: command.options,
 			});
 		}
