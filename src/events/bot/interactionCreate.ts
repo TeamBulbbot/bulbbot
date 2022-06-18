@@ -63,6 +63,15 @@ export default class extends Event {
 			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
+			// Slash commands
+			const validated = this.client.commands.get(interaction.commandName)?.validateClientPermissions(interaction);
+
+			if (typeof validated === "string") {
+				return interaction.reply({
+					content: await this.client.bulbutils.translate("global_missing_permissions_bot", interaction.guild?.id, { missing: validated }),
+					ephemeral: true,
+				});
+			}
 			await this.client.commands.get(interaction.commandName)?.run(interaction);
 		}
 	}

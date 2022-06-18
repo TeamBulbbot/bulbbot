@@ -11,15 +11,17 @@ export default class ApplicationCommand {
 	public readonly dm_permission: boolean;
 	public readonly default_member_permissions: string | null;
 	public readonly command_permissions: PermissionString[];
+	public readonly client_permissions: PermissionString[];
 	public readonly options: ApplicationCommandOptions[];
 
-	constructor(client: BulbBotClient, { type, name, description, dm_permission, command_permissions, options }: any) {
+	constructor(client: BulbBotClient, { type, name, description, dm_permission, client_permissions, command_permissions, options }: any) {
 		this.client = client;
 		this.type = type;
 		this.name = name;
 		this.description = description;
 		this.dm_permission = dm_permission || false;
 		this.command_permissions = command_permissions || [];
+		this.client_permissions = client_permissions || [];
 		this.default_member_permissions = this._computePermissions();
 		this.options = this.appendTranslation(options) || [];
 	}
@@ -34,6 +36,16 @@ export default class ApplicationCommand {
 
 			if (optionCommand.options) this.applyTranslation(optionCommand.options, `${name}_${optionCommand.name}`);
 		}
+	}
+
+	public validateClientPermissions(interactions: CommandInteraction): boolean | string {
+		const missing: string[] = [];
+
+		for (const permission of this.client_permissions) {
+			if (!interactions.guild?.me?.permissions.has(permission)) missing.push(permission);
+		}
+
+		return missing.length ? missing.join(", ") : true;
 	}
 
 	private appendTranslation(options: ApplicationCommandOptions[]): ApplicationCommandOptions[] {

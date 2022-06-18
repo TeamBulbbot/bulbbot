@@ -4,7 +4,7 @@
 	"global_missing_permissions": "{{emote_lock}} Missing permission(s)",
 	"global_command_disabled": "{{emote_lock}} This command has been disabled by the server administrators",
 	"global_not_invoked_by_user": "{{emote_lock}} You did not invoke this command",
-	"global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n{{missing}}",
+	"global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n**Missing permissions:** `{{missing}}`",
 	"global_cannot_convert": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	"global_cannot_convert_special": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.",
 	"global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
