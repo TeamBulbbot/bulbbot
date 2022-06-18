@@ -10,6 +10,7 @@ export default class extends ApplicationCommand {
 			name,
 			type: ApplicationCommandType.CHAT_INPUT,
 			description: "Return a link to the GitHub repository",
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 

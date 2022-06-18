@@ -12,6 +12,7 @@ export default class extends ApplicationCommand {
 			name,
 			description: "Returns some useful information about the bot",
 			type: ApplicationCommandType.CHAT_INPUT,
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 

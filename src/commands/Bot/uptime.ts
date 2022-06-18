@@ -11,6 +11,7 @@ export default class extends ApplicationCommand {
 			name,
 			description: "Shows the bot's uptime.",
 			type: ApplicationCommandType.CHAT_INPUT,
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 

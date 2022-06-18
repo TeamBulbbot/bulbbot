@@ -10,6 +10,7 @@ export default class extends ApplicationCommand {
 			name,
 			type: ApplicationCommandType.CHAT_INPUT,
 			description: "Returns the API and WebSocket latency.",
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 
