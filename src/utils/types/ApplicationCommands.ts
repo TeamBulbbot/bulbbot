@@ -92,6 +92,6 @@ export interface ApplicationCommand {
 	type: ApplicationCommandType;
 	name_localizations?: Localization;
 	description_localizations?: Localization;
-	default_permissions: string | null;
+	default_member_permissions: string | null;
 	dm_permission: boolean;
 }

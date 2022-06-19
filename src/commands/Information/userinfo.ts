@@ -1,6 +1,15 @@
 import Command from "../../structures/Command";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
-import { ButtonInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed, User } from "discord.js";
+import {
+	ButtonInteraction,
+	CommandInteraction,
+	GuildMember,
+	Message,
+	MessageActionRow,
+	MessageButton,
+	MessageEmbed, Snowflake,
+	User,
+} from "discord.js";
 import axios from "axios";
 import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -9,13 +18,76 @@ import { discordApi, embedColor, supportInvite } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import type { UserObject } from "../../utils/BulbBotUtils";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 type ButtonActionType = "warn" | "kick" | "ban";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
+			description: "Returns some useful info about a user",
+			type: ApplicationCommandType.CHAT_INPUT,
+			options: [
+				{ name: "user", type: ApplicationCommandOptionTypes.USER, description: "The user you want to view more info about", required: false }
+			],
+			command_permissions: ["MUTE_MEMBERS"],
+			client_permissions: ["EMBED_LINKS"],
+		});
+	}
+
+	public async run(interaction: CommandInteraction) {
+		let user = (interaction.options.getMember("user") ? interaction.options.getMember("user") : (interaction.options.getUser("user") ? interaction.options.getUser("user") : interaction.member));
+
+		const row = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn"),
+			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick"),
+			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban"),
+		]);
+
+		// const rowDisabled = new MessageActionRow().addComponents([
+		// 	new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn").setDisabled(true),
+		// 	new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick").setDisabled(true),
+		// 	new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
+		// ]);
+
+		let components: MessageActionRow[];
+		const actionsOnInfo: boolean = (await databaseManager.getConfig(interaction.guild?.id as Snowflake)).actionsOnInfo;
+
+		if (!actionsOnInfo) components = [];
+		else if (!(user instanceof GuildMember)) components = [];
+		else if (user.user.id === interaction.user.id) components = [];
+		else if (user instanceof User && user.id === interaction.user.id) components = [];
+		else components = [row];
+
+		let description = "";
+		if (user instanceof GuildMember) {
+			if (user.user.flags !== null) description += this.client.bulbutils.badges(user.user.flags.bitfield) + "\n";
+			description += await this.client.bulbutils.translate("userinfo_embed_id", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_username", interaction.guild?.id, { user: user.user });
+			if (user.nickname)
+				description += await this.client.bulbutils.translate("userinfo_embed_nickname", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_profile", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_avatar", interaction.guild?.id, { avatar: user.user.displayAvatarURL({ dynamic: true }) });
+			description += await this.client.bulbutils.translate("userinfo_embed_bot", interaction.guild?.id, { user: user.user });
+			description += await this.client.bulbutils.translate("userinfo_embed_created", interaction.guild?.id, { user_age: Math.floor(user.user.createdTimestamp / 1000) });
+
+			if (user.premiumSinceTimestamp !== undefined && user.premiumSinceTimestamp && user.premiumSinceTimestamp > 0)
+				description += await this.client.bulbutils.translate("userinfo_embed_premium", interaction.guild?.id, {
+					user_premium: Math.floor(user.premiumSinceTimestamp / 1000),
+				});
+		}
+
+		return interaction.reply({ content: description, components });
+	}
+}
+
+export class lol extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
@@ -91,7 +163,7 @@ export default class extends Command {
 		if (userObject.nickname)
 			description += await this.client.bulbutils.translate("userinfo_embed_nickname", context.guild.id, { user: userObject as UserObject & Required<Pick<UserObject, "nickname">> });
 		description += await this.client.bulbutils.translate("userinfo_embed_profile", context.guild.id, { user: userObject });
-		description += await this.client.bulbutils.translate("userinfo_embed_avatar", context.guild.id, { user: userObject });
+		// description += await this.client.bulbutils.translate("userinfo_embed_avatar", context.guild.id, { user: userObject });
 		description += await this.client.bulbutils.translate("userinfo_embed_bot", context.guild.id, { user: userObject });
 		description += await this.client.bulbutils.translate("userinfo_embed_created", context.guild.id, { user_age: Math.floor(userObject.createdTimestamp / 1000) });
 

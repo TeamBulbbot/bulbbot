@@ -58,7 +58,7 @@ export default class ApplicationCommand {
 		let permsBigInt = BigInt(0);
 
 		for (const permission of this.command_permissions) {
-			permsBigInt = permsBigInt | BigInt(Permissions[permission]);
+			permsBigInt = permsBigInt | BigInt(Permissions.FLAGS[permission]);
 		}
 
 		return permsBigInt !== 0n ? permsBigInt.toString() : null;

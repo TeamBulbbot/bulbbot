@@ -281,7 +281,7 @@
 	"userinfo_embed_username": "**Username:** {{user.username}}\n",
 	"userinfo_embed_nickname": "**Nickname:** {{user.nickname}}\n",
 	"userinfo_embed_profile": "**Profile:** <@{{user.id}}> [`Profile`](https://discord.com/users/{{user.id}})\n",
-	"userinfo_embed_avatar": "**Avatar URL:** [Link]({{user.avatarUrl}})\n",
+	"userinfo_embed_avatar": "**Avatar URL:** [Link]({{avatar}})\n",
 	"userinfo_embed_bot": "**Bot:** {{user.bot}}\n",
 	"userinfo_embed_created": "**Account Creation:** <t:{{user_age}}:F> (<t:{{user_age}}:R>)\n",
 	"userinfo_embed_joined": "**Joined Server:** <t:{{user_joined}}:F> (<t:{{user_joined}}:R>)\n",
