@@ -1,3 +1,5 @@
+import type { APIGuildMember } from "discord-api-types/v9";
+import { User, GuildMember, UserFlags } from "discord.js";
 import * as Emotes from "../emotes.json";
 
 // Miscellaneous helper functions & idioms
@@ -15,6 +17,7 @@ export function tryIgnore<T extends (...args: any[]) => any>(cb: T, ...args: Par
 	return undefined;
 }
 
+/** This is not a deep clone, to be clear */
 export function clone<T extends object | null>(obj: T): T {
 	return Object.assign(Object.create(obj), obj);
 }
@@ -52,3 +55,54 @@ export function emote(strings: TemplateStringsArray, ...actions: string[]): stri
 	const resolveEmotes = actions.map((action) => emoteResolver[action] || action);
 	return interpolateArrays([...strings], resolveEmotes).join(" ");
 }
+
+type GuildMemberMaybeApi = GuildMember | APIGuildMember;
+
+/** Dark Magic */
+export function resolveGuildMemberUnsafe(memberInput: GuildMemberMaybeApi): GuildMember {
+	if (memberInput instanceof GuildMember) {
+		return memberInput;
+	}
+
+	const { joined_at, avatar, communication_disabled_until, nick, pending, premium_since, user } = memberInput;
+
+	const { avatar: userAvatar, discriminator, id, username, accent_color, banner, bot, flags, system } = user || {};
+
+	const fakeUser: User = Object.create(User.prototype);
+	Object.assign(fakeUser, {
+		avatar: userAvatar,
+		discriminator,
+		accentColor: accent_color,
+		banner,
+		bot,
+		flags: new UserFlags(flags),
+		id,
+		username,
+		system,
+	});
+
+	const joinedTimestamp = parseInt(joined_at, 10);
+	const premiumSinceTimestamp = premium_since != null ? parseInt(premium_since, 10) : premium_since;
+
+	const fakeMember = Object.create(GuildMember.prototype);
+	Object.assign(fakeMember, {
+		avatar,
+		communicationDisabledUntil: typeof communication_disabled_until === "string" ? new Date(communication_disabled_until) : communication_disabled_until,
+		user: fakeUser,
+		joinedTimestamp,
+		joinedAt: new Date(joinedTimestamp),
+		nickname: nick,
+		pending,
+		premiumSinceTimestamp,
+		premiumSince: premiumSinceTimestamp != null ? new Date(premiumSinceTimestamp) : premiumSinceTimestamp,
+	});
+
+	return fakeMember;
+}
+
+/** Calls a private constructor in D.JS */
+// prettier-ignore
+export const resolveGuildMemberMoreSafe = (memberInput: GuildMemberMaybeApi): GuildMember => (memberInput instanceof GuildMember)
+	? memberInput
+	// @ts-expect-error This is a private constructor don't worry about it
+	: new GuildMember(memberInput);
