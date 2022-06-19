@@ -5,9 +5,9 @@ import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 
 export default class extends ApplicationCommand {
-	constructor(client: BulbBotClient, name: string) {
+	constructor(client: BulbBotClient) {
 		super(client, {
-			name,
+			name: "privacy_policy",
 			description: "Returns the privacy policy for the bot",
 			type: ApplicationCommandType.CHAT_INPUT,
 			client_permissions: ["EMBED_LINKS"],

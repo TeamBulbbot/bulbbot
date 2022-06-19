@@ -14,9 +14,9 @@ import { APIGuildMember } from "discord-api-types/v10";
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 export default class extends ApplicationCommand {
-	constructor(client: BulbBotClient, name: string) {
+	constructor(client: BulbBotClient) {
 		super(client, {
-			name,
+			name: "user_info",
 			description: "Returns some useful info about a user",
 			type: ApplicationCommandType.CHAT_INPUT,
 			options: [{ name: "user", type: ApplicationCommandOptionTypes.USER, description: "The user you want to view more info about", required: false }],
@@ -96,7 +96,7 @@ export default class extends ApplicationCommand {
 		}
 
 		if (user instanceof GuildMember ? user.user.bot : user.bot) {
-			let data: any;
+			let data: any | boolean;
 			try {
 				data = await axios.get(`${discordApi}/applications/${target}/rpc`, {});
 				data = data.data;
