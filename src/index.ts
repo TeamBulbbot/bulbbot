@@ -10,7 +10,7 @@ import { startPrometheus } from "./utils/Prometheus";
 import fs from "fs";
 import i18next from "i18next";
 
-env.config({ path: `${__dirname}/../src/.env` });
+env.config({ path: `${__dirname}/../.env` });
 
 const config = {
 	token: process.env.TOKEN,

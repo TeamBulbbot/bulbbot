@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import * as env from "dotenv";
 import applyExtra from "./applyExtra";
-env.config({ path: `${__dirname}/../../../src/.env` });
+env.config({ path: `${__dirname}/../../../.env` });
 
 if (typeof process.env.DB_NAME !== "string" || typeof process.env.DB_USER !== "string" || typeof process.env.DB_PASSWORD !== "string") {
 	throw new Error("process.env is missing required DB environment variables (is your .env configured correctly?)");

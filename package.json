@@ -26,6 +26,7 @@
 	"homepage": "https://github.com/TeamBulbbot//Bulbbot#readme",
 	"dependencies": {
 		"@messageformat/runtime": "^3.0.0",
+		"@prisma/client": "3.15.2",
 		"@sentry/node": "^6.17.4",
 		"@sentry/tracing": "^6.17.4",
 		"axios": "^0.25.0",
@@ -45,6 +46,7 @@
 		"parse-duration": "^1.0.2",
 		"pg": "^8.7.1",
 		"pg-hstore": "^2.3.4",
+		"prisma": "^3.15.2",
 		"prom-client": "^14.0.1",
 		"safe-timers": "^1.1.0",
 		"sequelize": "^6.15.0",
