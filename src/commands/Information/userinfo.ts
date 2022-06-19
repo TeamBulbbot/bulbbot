@@ -1,60 +1,51 @@
-import Command from "../../structures/Command";
-import CommandContext, { getCommandContext } from "../../structures/CommandContext";
-import {
-	ButtonInteraction,
-	CommandInteraction,
-	GuildMember,
-	Message,
-	MessageActionRow,
-	MessageButton,
-	MessageEmbed, Snowflake,
-	User,
-} from "discord.js";
+import { ColorResolvable, CommandInteraction, GuildMember, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
 import axios from "axios";
-import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
-import { discordApi, embedColor, supportInvite } from "../../Config";
+import { discordApi, embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import type { UserObject } from "../../utils/BulbBotUtils";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
+import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
+import { APIGuildMember } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
-
-type ButtonActionType = "warn" | "kick" | "ban";
-
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Returns some useful info about a user",
 			type: ApplicationCommandType.CHAT_INPUT,
-			options: [
-				{ name: "user", type: ApplicationCommandOptionTypes.USER, description: "The user you want to view more info about", required: false }
-			],
+			options: [{ name: "user", type: ApplicationCommandOptionTypes.USER, description: "The user you want to view more info about", required: false }],
 			command_permissions: ["MUTE_MEMBERS"],
 			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 
 	public async run(interaction: CommandInteraction) {
-		let user = (interaction.options.getMember("user") ? interaction.options.getMember("user") : (interaction.options.getUser("user") ? interaction.options.getUser("user") : interaction.member));
+		let user: User | GuildMember;
+		let color: ColorResolvable;
 
-		const row = new MessageActionRow().addComponents([
-			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn"),
-			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick"),
-			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban"),
-		]);
+		if (interaction.options.getMember("user") !== null) user = resolveGuildMemberMoreSafe(interaction.options.getMember("user") as GuildMember | APIGuildMember);
+		else if (interaction.options.getUser("user") !== null) user = interaction.options.getUser("user") as User;
+		else user = resolveGuildMemberMoreSafe(interaction.member as GuildMember | APIGuildMember);
 
-		// const rowDisabled = new MessageActionRow().addComponents([
-		// 	new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn").setDisabled(true),
-		// 	new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick").setDisabled(true),
-		// 	new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
+		const target: string = user instanceof GuildMember ? user.user.id : user.id;
+
+		// const row = new MessageActionRow().addComponents([
+		// 	new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn"),
+		// 	new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick"),
+		// 	new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban"),
 		// ]);
+
+		const rowDisabled = new MessageActionRow().addComponents([
+			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn").setDisabled(true),
+			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick").setDisabled(true),
+			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
+		]);
 
 		let components: MessageActionRow[];
 		const actionsOnInfo: boolean = (await databaseManager.getConfig(interaction.guild?.id as Snowflake)).actionsOnInfo;
@@ -63,15 +54,15 @@ export default class extends ApplicationCommand {
 		else if (!(user instanceof GuildMember)) components = [];
 		else if (user.user.id === interaction.user.id) components = [];
 		else if (user instanceof User && user.id === interaction.user.id) components = [];
-		else components = [row];
+		else if (user.user.id === interaction.applicationId) components = [];
+		else components = [rowDisabled];
 
 		let description = "";
 		if (user instanceof GuildMember) {
 			if (user.user.flags !== null) description += this.client.bulbutils.badges(user.user.flags.bitfield) + "\n";
 			description += await this.client.bulbutils.translate("userinfo_embed_id", interaction.guild?.id, { user });
 			description += await this.client.bulbutils.translate("userinfo_embed_username", interaction.guild?.id, { user: user.user });
-			if (user.nickname)
-				description += await this.client.bulbutils.translate("userinfo_embed_nickname", interaction.guild?.id, { user });
+			if (user.nickname) description += await this.client.bulbutils.translate("userinfo_embed_nickname", interaction.guild?.id, { user });
 			description += await this.client.bulbutils.translate("userinfo_embed_profile", interaction.guild?.id, { user });
 			description += await this.client.bulbutils.translate("userinfo_embed_avatar", interaction.guild?.id, { avatar: user.user.displayAvatarURL({ dynamic: true }) });
 			description += await this.client.bulbutils.translate("userinfo_embed_bot", interaction.guild?.id, { user: user.user });
@@ -81,106 +72,30 @@ export default class extends ApplicationCommand {
 				description += await this.client.bulbutils.translate("userinfo_embed_premium", interaction.guild?.id, {
 					user_premium: Math.floor(user.premiumSinceTimestamp / 1000),
 				});
+
+			if (user.joinedTimestamp !== undefined && user.joinedTimestamp)
+				description += await this.client.bulbutils.translate("userinfo_embed_joined", interaction.guild?.id, { user_joined: Math.floor(user.joinedTimestamp / 1000) });
+
+			if (user.roles !== undefined && user.roles)
+				description += await this.client.bulbutils.translate("userinfo_embed_roles", interaction.guild?.id, {
+					user_roles: user.roles.cache.map((r: any) => `${r}`).join(" "),
+				});
+
+			if (user.roles === undefined || user.roles.highest.name === "@everyone") color = embedColor;
+			else color = user.roles.highest.hexColor;
+		} else {
+			if (user.flags !== null) description += this.client.bulbutils.badges(user.flags.bitfield) + "\n";
+			description += await this.client.bulbutils.translate("userinfo_embed_id", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_username", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_profile", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_avatar", interaction.guild?.id, { avatar: user.displayAvatarURL({ dynamic: true }) });
+			description += await this.client.bulbutils.translate("userinfo_embed_bot", interaction.guild?.id, { user });
+			description += await this.client.bulbutils.translate("userinfo_embed_created", interaction.guild?.id, { user_age: Math.floor(user.createdTimestamp / 1000) });
+
+			color = embedColor;
 		}
 
-		return interaction.reply({ content: description, components });
-	}
-}
-
-export class lol extends Command {
-	constructor(client: BulbBotClient, name: string) {
-		super(client, {
-			name,
-			description: "Returns some useful info about a user",
-			category: "Information",
-			aliases: ["whois", "info", "user"],
-			usage: "[user]",
-			examples: ["userinfo", "userinfo 123456789012345678", "userinfo @Wumpus#0000"],
-			clearance: 50,
-			maxArgs: 1,
-			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
-			argList: ["user:User"],
-		});
-	}
-
-	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!context.guild) return;
-		let target: string;
-		if (args[0] === undefined) target = context.author.id;
-		else target = args[0].replace(NonDigits, "");
-
-		let user: Optional<User | GuildMember> = await this.client.bulbfetch.getGuildMember(context.guild.members, target);
-		const isGuildMember = true;
-
-		if (!user) user = await this.client.bulbfetch.getUser(target);
-		if (!user)
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
-					arg_expected: "user:User",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-
-		const userObject = this.client.bulbutils.userObject(isGuildMember, user);
-		if (!userObject)
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
-					arg_expected: "user:User",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-
-		const row = new MessageActionRow().addComponents([
-			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn"),
-			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick"),
-			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban"),
-		]);
-
-		const rowDisabled = new MessageActionRow().addComponents([
-			new MessageButton().setLabel("Warn").setStyle("SECONDARY").setEmoji(Emotes.actions.WARN).setCustomId("warn").setDisabled(true),
-			new MessageButton().setLabel("Kick").setStyle("SECONDARY").setEmoji(Emotes.actions.KICK).setCustomId("kick").setDisabled(true),
-			new MessageButton().setLabel("Ban").setStyle("DANGER").setEmoji(Emotes.actions.BAN).setCustomId("ban").setDisabled(true),
-		]);
-
-		let components: MessageActionRow[];
-		const actionsOnInfo: boolean = (await databaseManager.getConfig(context.guild.id)).actionsOnInfo;
-
-		if (!actionsOnInfo) components = [];
-		else if (!isGuildMember) components = [];
-		else if (!args[0]) components = [];
-		else if (userObject?.id === context.author.id) components = [];
-		else components = [row];
-
-		let description = "";
-
-		if (userObject.flags !== null) description += this.client.bulbutils.badges(userObject.flags.bitfield) + "\n";
-		description += await this.client.bulbutils.translate("userinfo_embed_id", context.guild.id, { user: userObject });
-		description += await this.client.bulbutils.translate("userinfo_embed_username", context.guild.id, { user: userObject });
-		if (userObject.nickname)
-			description += await this.client.bulbutils.translate("userinfo_embed_nickname", context.guild.id, { user: userObject as UserObject & Required<Pick<UserObject, "nickname">> });
-		description += await this.client.bulbutils.translate("userinfo_embed_profile", context.guild.id, { user: userObject });
-		// description += await this.client.bulbutils.translate("userinfo_embed_avatar", context.guild.id, { user: userObject });
-		description += await this.client.bulbutils.translate("userinfo_embed_bot", context.guild.id, { user: userObject });
-		description += await this.client.bulbutils.translate("userinfo_embed_created", context.guild.id, { user_age: Math.floor(userObject.createdTimestamp / 1000) });
-
-		if (userObject.premiumSinceTimestamp !== undefined && userObject.premiumSinceTimestamp && userObject.premiumSinceTimestamp > 0)
-			description += await this.client.bulbutils.translate("userinfo_embed_premium", context.guild.id, {
-				user_premium: Math.floor(userObject.premiumSinceTimestamp / 1000),
-			});
-
-		if (userObject.joinedTimestamp !== undefined && userObject.joinedTimestamp)
-			description += await this.client.bulbutils.translate("userinfo_embed_joined", context.guild.id, { user_joined: Math.floor(userObject.joinedTimestamp / 1000) });
-
-		if (userObject.roles !== undefined && userObject.roles)
-			description += await this.client.bulbutils.translate("userinfo_embed_roles", context.guild.id, {
-				user_roles: userObject.roles.cache.map((r: any) => `${r}`).join(" "),
-			});
-
-		if (userObject.bot) {
+		if (user instanceof GuildMember ? user.user.bot : user.bot) {
 			let data: any;
 			try {
 				data = await axios.get(`${discordApi}/applications/${target}/rpc`, {});
@@ -190,23 +105,23 @@ export class lol extends Command {
 			}
 
 			if (data) {
-				description += await this.client.bulbutils.translate("userinfo_embed_bot_info", context.guild.id, {});
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_info", interaction.guild?.id, {});
 				if (data.summary !== "") description += `\n> ${data.summary.split("\n").join(" ")}`;
-				if (data.tags) description += await this.client.bulbutils.translate("userinfo_embed_bot_tags", context.guild.id, { tags: data.tags.map((t: any) => `\`${t}\``).join(" ") });
+				if (data.tags) description += await this.client.bulbutils.translate("userinfo_embed_bot_tags", interaction.guild?.id, { tags: data.tags.map((t: any) => `\`${t}\``).join(" ") });
 
-				description += await this.client.bulbutils.translate("userinfo_embed_bot_public", context.guild.id, { emoji: data.bot_public ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF });
-				description += await this.client.bulbutils.translate("userinfo_embed_bot_requires_code", context.guild.id, {
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_public", interaction.guild?.id, { emoji: data.bot_public ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF });
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_requires_code", interaction.guild?.id, {
 					emoji: data.bot_require_code_grant ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
 				const botflags = this.client.bulbutils.applicationFlags(data.flags);
 
-				description += await this.client.bulbutils.translate("userinfo_embed_bot_presence_intent", context.guild.id, {
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_presence_intent", interaction.guild?.id, {
 					emoji: botflags.includes("GATEWAY_PRESENCE") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
-				description += await this.client.bulbutils.translate("userinfo_embed_server_memebers_intent", context.guild.id, {
+				description += await this.client.bulbutils.translate("userinfo_embed_server_memebers_intent", interaction.guild?.id, {
 					emoji: botflags.includes("GATEWAY_GUILD_MEMBERS") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
-				description += await this.client.bulbutils.translate("userinfo_embed_bot_message_content_intent", context.guild.id, {
+				description += await this.client.bulbutils.translate("userinfo_embed_bot_message_content_intent", interaction.guild?.id, {
 					emoji: botflags.includes("GATEWAY_MESSAGE_CONTENT") ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF,
 				});
 
@@ -222,7 +137,7 @@ export class lol extends Command {
 			}
 		}
 
-		const infs = await infractionsManager.getOffenderInfractions(context.guild.id, userObject.id);
+		const infs = await infractionsManager.getOffenderInfractions(interaction.guild?.id as Snowflake, user instanceof GuildMember ? user.user.id : user.id);
 		if (infs) {
 			let inf_emote;
 
@@ -230,83 +145,27 @@ export class lol extends Command {
 			else if (infs.length === 2) inf_emote = Emotes.other.INF1;
 			else inf_emote = Emotes.other.INF2;
 
-			description += await this.client.bulbutils.translate("userinfo_embed_infractions", context.guild.id, { inf_emote, user_infractions: infs.length });
+			description += await this.client.bulbutils.translate("userinfo_embed_infractions", interaction.guild?.id, { inf_emote, user_infractions: infs.length });
 		}
-
-		let color;
-		if (userObject.roles === undefined || userObject.roles.highest.name === "@everyone") color = embedColor;
-		else color = userObject.roles.highest.hexColor;
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(color)
-			.setThumbnail(userObject.avatarUrl || "")
+			.setThumbnail(user instanceof GuildMember ? (user.user.avatarURL({ dynamic: true }) as string) : (user.avatarURL({ dynamic: true }) as string) || "")
 			.setAuthor({
-				name: `${userObject.username}#${userObject.discriminator}`,
-				iconURL: userObject.avatarUrl || "",
+				name: `${user instanceof GuildMember ? user.user.username : user.username}#${user instanceof GuildMember ? user.user.discriminator : user.discriminator}`,
+				iconURL: user instanceof GuildMember ? (user.user.avatarURL() as string) : (user.avatarURL() as string) || "",
 			})
 			.setDescription(description)
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		const msg = await context.channel.send({ embeds: [embed], components });
+		await interaction.reply({ embeds: [embed], components });
 
-		const filter = (i: any) => !i.bot;
-		const collector = msg.createMessageComponentCollector({ filter, time: 30000 });
-
-		collector.on("collect", async (interaction: ButtonInteraction): Promise<void> => {
-			if (interaction.user.id !== context.author.id)
-				return void (await interaction.reply({
-					content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guildId, {}),
-					ephemeral: true,
-				}));
-
-			const command = Command.resolve(this.client, interaction.customId);
-			if (!command)
-				return void (await interaction.reply({
-					content: await this.client.bulbutils.translate("global_error.unknown", context.guildId, { discord_invite: supportInvite }),
-					ephemeral: true,
-				}));
-
-			const reason = await command.validate(await getCommandContext(interaction), [userObject?.id || "", ""]);
-			if (reason !== undefined) {
-				if (reason) await interaction.reply({ content: reason, ephemeral: true });
-				return;
-			}
-
-			msg.edit({ components: [rowDisabled] });
-			await interaction.reply({
-				content: await this.client.bulbutils.translate("userinfo_interaction_confirm", context.guild?.id, {
-					action: await this.client.bulbutils.translate(`mod_action_types.${interaction.customId as ButtonActionType}`, context.guild?.id, {}),
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					target: userObject!,
-				}),
-			});
-
-			const filter = (m) => m.content && m.author.id === context.author.id;
-			const collector = interaction.channel?.createMessageCollector({ filter, time: 15000, max: 1 });
-
-			collector?.on("collect", async (m) => {
-				const cArgs: string[] = [userObject?.id || "", ...m.content.split(/ +/g)];
-				await command.run(context, cArgs);
-				await m.delete();
-			});
-
-			collector?.on("end", async () => {
-				await interaction.deleteReply();
-			});
-		});
-
-		collector.on("end", async () => {
-			if (!actionsOnInfo) return;
-			else if (!isGuildMember) return;
-			else if (!args[0]) return;
-			else if (userObject?.id === context.author.id) return;
-			msg.edit({ components: [rowDisabled] });
-		});
+		// TODO: Implement button click logic once the corresponding commands have been migrated
 	}
 }
