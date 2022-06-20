@@ -6,9 +6,9 @@ import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 
 export default class extends ApplicationCommand {
-	constructor(client: BulbBotClient) {
+	constructor(client: BulbBotClient, name: string) {
 		super(client, {
-			name: "server_info",
+			name,
 			description: "Returns some useful information about the current server",
 			type: ApplicationCommandType.CHAT_INPUT,
 			command_permissions: ["MANAGE_GUILD"],
