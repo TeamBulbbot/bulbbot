@@ -6,7 +6,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 
-const { doesbanpoolExist, createBanpool, joinBanpool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
+const { doesBanpoolExist, createBanpool, joinBanpool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
 
 export default class extends SubCommand {
@@ -26,7 +26,7 @@ export default class extends SubCommand {
 		const name: string = args[0];
 
 		if (!(context.guild?.id && (await hasBanpoolLog(context.guild.id)))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (await doesbanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild.id, {}));
+		if (await doesBanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild.id, {}));
 
 		await createBanpool(context.guild.id, name);
 		!(await joinBanpool(

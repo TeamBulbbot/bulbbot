@@ -30,7 +30,7 @@ model Automod {
   ignoreChannels       String[]   @db.VarChar(255)
   ignoreRoles          String[]   @db.VarChar(255)
   ignoreUsers          String[]   @db.VarChar(255)
-  guilds               BulbGuild?
+  bulbGuilds               BulbGuild?
 
   @@map("automods")
 }
@@ -41,7 +41,7 @@ model BanpoolSubscriber {
   createdAt DateTime @db.Timestamptz(6) @default(now())
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
   banpoolId Int?
-  banpool   Banpool? @relation(fields: [banpoolId], references: [id])
+  banpool   Banpool? @relation(fields: [banpoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([guildId])
   @@index([banpoolId])
@@ -53,11 +53,12 @@ model Banpool {
   name               String              @db.VarChar(255)
   createdAt          DateTime            @db.Timestamptz(6) @default(now())
   updatedAt          DateTime            @updatedAt @db.Timestamptz(6)
-  guildId            Int?
-  guild              BulbGuild?          @relation(fields: [guildId], references: [id])
+  bulbGuildId        Int @map("guildId")
+  bulbGuild              BulbGuild          @relation(fields: [bulbGuildId], references: [id])
   banpoolSubscribers BanpoolSubscriber[]
 
-  @@index([guildId])
+  @@unique([name])
+  @@index([bulbGuildId])
   @@map("banpools")
 }
 
@@ -81,10 +82,10 @@ model Experiment {
   name      String     @db.VarChar(255)
   createdAt DateTime   @db.Timestamptz(6) @default(now())
   updatedAt DateTime   @updatedAt @db.Timestamptz(6)
-  guildId   Int?
-  guild     BulbGuild? @relation(fields: [guildId], references: [id])
+  bulbGuildId   Int @map("guildId")
+  bulbGuild     BulbGuild @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@index([guildId])
+  @@index([bulbGuildId])
   @@index([name])
   @@map("experiments")
 }
@@ -103,7 +104,7 @@ model GuildConfiguration {
   createdAt         DateTime   @db.Timestamptz(6) @default(now())
   updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
   manualNicknameInf Boolean?   @default(false)
-  guilds            BulbGuild?
+  bulbGuilds            BulbGuild?
 
   @@map("guildConfigurations")
 }
@@ -123,7 +124,7 @@ model GuildLogging {
   other     String?    @db.VarChar(255)
   createdAt DateTime   @db.Timestamptz(6) @default(now())
   updatedAt DateTime   @updatedAt @db.Timestamptz(6)
-  guilds    BulbGuild?
+  bulbGuilds    BulbGuild?
 
   @@map("guildLoggings")
 }
@@ -134,10 +135,10 @@ model GuildModerationRole {
   clearanceLevel Int
   createdAt      DateTime   @db.Timestamptz(6) @default(now())
   updatedAt      DateTime   @updatedAt @db.Timestamptz(6)
-  guildId        Int?
-  guild          BulbGuild? @relation(fields: [guildId], references: [id])
+  bulbGuildId        Int? @map("guildId")
+  bulbGuild          BulbGuild? @relation(fields: [bulbGuildId], references: [id])
 
-  @@index([guildId])
+  @@index([bulbGuildId])
   @@map("guildModerationRoles")
 }
 
@@ -148,10 +149,10 @@ model GuildOverrideCommand {
   clearanceLevel Int
   createdAt      DateTime   @db.Timestamptz(6) @default(now())
   updatedAt      DateTime   @updatedAt @db.Timestamptz(6)
-  guildId        Int?
-  guild          BulbGuild? @relation(fields: [guildId], references: [id])
+  bulbGuildId        Int? @map("guildId")
+  bulbGuild          BulbGuild? @relation(fields: [bulbGuildId], references: [id])
 
-  @@index([guildId])
+  @@index([bulbGuildId])
   @@map("guildOverrideCommands")
 }
 
@@ -189,12 +190,12 @@ model Infraction {
   moderatorId String     @db.VarChar(255)
   createdAt   DateTime   @db.Timestamptz(6) @default(now())
   updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
-  guildId     Int?
-  guild       BulbGuild? @relation(fields: [guildId], references: [id])
+  bulbGuildId     Int? @map("guildId")
+  bulbGuild       BulbGuild? @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([targetId])
   @@index([moderatorId])
-  @@index([guildId])
+  @@index([bulbGuildId])
   @@map("infractions")
 }
 
@@ -209,10 +210,10 @@ model MessageLog {
   attachments String[]   @db.VarChar(800)
   createdAt   DateTime   @db.Timestamptz(6)
   updatedAt   DateTime   @db.Timestamptz(6)
-  guildId     Int?
-  guild       BulbGuild? @relation(fields: [guildId], references: [id])
+  bulbGuildId     Int? @map("guildId")
+  bulbGuild       BulbGuild? @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@index([guildId])
+  @@index([bulbGuildId])
   @@index([authorId])
   @@index([channelId])
   @@index([messageId])
@@ -239,16 +240,16 @@ model Tempban {
   id         Int        @id @default(autoincrement())
   targetTag  String     @db.VarChar(255)
   targetId   String     @db.VarChar(255)
-  gId        String     @db.VarChar(255)
+  guildId        String     @db.VarChar(255) @map("gId")
   reason     String     @db.VarChar(255)
   expireTime BigInt
   createdAt  DateTime   @db.Timestamptz(6) @default(now())
   updatedAt  DateTime   @updatedAt @db.Timestamptz(6)
-  guildId    Int?
-  guild      BulbGuild? @relation(fields: [guildId], references: [id])
+  bulbGuildId    Int? @map("guildId")
+  bulbGuild      BulbGuild? @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([targetId])
-  @@index([gId])
   @@index([guildId])
+  @@index([bulbGuildId])
   @@map("tempbans")
 }

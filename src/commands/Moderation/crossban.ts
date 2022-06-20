@@ -11,7 +11,7 @@ import { tryIgnore } from "../../utils/helpers";
 
 const { createInfraction }: InfractionsManager = new InfractionsManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
-const { getPools, getGuildsFromPools, hasBanpoolLog, getPoolData }: BanpoolManager = new BanpoolManager();
+const { getPools, getGuildIdsFromPools: getGuildsFromPools, hasBanpoolLog, getPoolData }: BanpoolManager = new BanpoolManager();
 
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
@@ -48,14 +48,14 @@ export default class extends Command {
 				}),
 			);
 
-		const pools: { id: number; name: string; createdAt: Date; updatedAt: Date; guildId: number }[] = await getPools(context.guild.id);
+		const pools = await getPools(context.guild.id);
 		const options: Promise<MessageSelectOptionData>[] = pools.map(async (pool) => {
-			const data = await getPoolData(pool.name);
+			const data = (await getPoolData(pool.name)) || { banpoolSubscribers: [] };
 
 			return {
 				label: pool.name,
 				value: `${pool.id}:${pool.name}`,
-				description: await this.client.bulbutils.translate("crossban_select_subscribed", context.guild?.id, { amount: data.length }),
+				description: await this.client.bulbutils.translate("crossban_select_subscribed", context.guild?.id, { amount: data.banpoolSubscribers.length }),
 			};
 		});
 
@@ -74,7 +74,7 @@ export default class extends Command {
 
 			const poolGuilds: any[] = await getGuildsFromPools(
 				interaction.values.map((value) => {
-					return value.split(":")[0];
+					return parseInt(value.split(":")[0], 10);
 				}),
 			);
 			let totalBans = 0;

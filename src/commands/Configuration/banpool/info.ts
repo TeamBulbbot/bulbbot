@@ -5,6 +5,7 @@ import { Message, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
 import { embedColor } from "../../../Config";
+import { BanpoolSubscriber } from "@prisma/client";
 
 const { haveAccessToPool, getPoolData }: BanpoolManager = new BanpoolManager();
 export default class extends SubCommand {
@@ -24,11 +25,11 @@ export default class extends SubCommand {
 		const name: string = args[0];
 		if (!(context.guild?.id && (await haveAccessToPool(context.guild.id, name))))
 			return context.channel.send(await this.client.bulbutils.translate("banpool_missing_access_not_found", context.guild?.id, {}));
-		const data = await getPoolData(name);
+		const { banpoolSubscribers } = (await getPoolData(name)) || { banpoolSubscribers: [] as BanpoolSubscriber[] };
 		const desc: string[] = [];
 
-		for (let i = 0; i < data.length; i++) {
-			const guild = data[i];
+		for (let i = 0; i < banpoolSubscribers.length; i++) {
+			const guild = banpoolSubscribers[i];
 			desc.push(
 				await this.client.bulbutils.translate("banpool_info_desc", context.guild.id, {
 					guildId: guild.guildId,
@@ -41,7 +42,7 @@ export default class extends SubCommand {
 			.setAuthor({
 				name: await this.client.bulbutils.translate("banpool_info_top", context.guild.id, {
 					name,
-					amountOfServers: data.length,
+					amountOfServers: banpoolSubscribers.length,
 				}),
 			})
 			.setColor(embedColor)

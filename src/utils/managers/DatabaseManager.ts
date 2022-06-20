@@ -32,25 +32,21 @@ export default class DatabaseManager {
 			return existingGuild;
 		}
 
-		const config = await prisma.guildConfiguration.create({
-			data: {
-				prefix: Config.prefix,
-			},
-		});
-		const logging = await prisma.guildLogging.create({
-			data: {},
-		});
-		const automod = await prisma.automod.create({
-			data: {},
-		});
-
 		return await prisma.bulbGuild.create({
 			data: {
 				name: guild.name,
 				guildId: guild.id,
-				guildConfigurationId: config["id"],
-				guildLoggingId: logging["id"],
-				automodId: automod["id"],
+				guildConfiguration: {
+					create: {
+						prefix: Config.prefix,
+					},
+				},
+				guildLogging: {
+					create: {},
+				},
+				automod: {
+					create: {},
+				},
 			},
 		});
 	}
@@ -78,32 +74,32 @@ export default class DatabaseManager {
 			}),
 			prisma.infraction.deleteMany({
 				where: {
-					guildId: bulbGuild.id,
+					bulbGuildId: bulbGuild.id,
 				},
 			}),
 			prisma.messageLog.deleteMany({
 				where: {
-					guildId: bulbGuild.id,
+					bulbGuildId: bulbGuild.id,
 				},
 			}),
 			prisma.banpool.deleteMany({
 				where: {
-					guildId: bulbGuild.id,
+					bulbGuildId: bulbGuild.id,
 				},
 			}),
 			prisma.guildModerationRole.deleteMany({
 				where: {
-					guildId: bulbGuild.id,
+					bulbGuildId: bulbGuild.id,
 				},
 			}),
 			prisma.guildOverrideCommand.deleteMany({
 				where: {
-					guildId: bulbGuild.id,
+					bulbGuildId: bulbGuild.id,
 				},
 			}),
 			prisma.tempban.deleteMany({
 				where: {
-					guildId: bulbGuild.id,
+					bulbGuildId: bulbGuild.id,
 				},
 			}),
 			prisma.bulbGuild.delete({
@@ -402,11 +398,14 @@ export default class DatabaseManager {
 		if (!message.guild) {
 			throw new Error("message does not have a guild, cannot add to logs");
 		}
-		const db = await this.getGuild(message.guild);
 		await prisma.messageLog.create({
 			data: {
 				messageId: message.id,
-				guildId: db.id,
+				bulbGuild: {
+					connect: {
+						guildId: message.guild.id,
+					},
+				},
 				channelId: message.channel.id,
 				authorId: message.author.id,
 				authorTag: message.author.tag,
@@ -422,22 +421,24 @@ export default class DatabaseManager {
 	}
 
 	async getUserArchive(authorId: Snowflake, guild: NamedGuild, amount: number | undefined) {
-		const db = await this.getGuild(guild);
 		return await prisma.messageLog.findMany({
 			where: {
 				authorId,
-				guildId: db.id,
+				bulbGuild: {
+					guildId: guild.id,
+				},
 			},
 			take: amount,
 		});
 	}
 
 	async getChannelArchive(channelId: Snowflake, guild: NamedGuild, amount: number | undefined) {
-		const db = await this.getGuild(guild);
 		return await prisma.messageLog.findMany({
 			where: {
 				channelId,
-				guildId: db.id,
+				bulbGuild: {
+					guildId: guild.id,
+				},
 			},
 			take: amount,
 		});
@@ -450,7 +451,7 @@ export default class DatabaseManager {
 		const db = await this.getGuild(guild);
 		return await prisma.messageLog.findMany({
 			where: {
-				guildId: db.id,
+				bulbGuildId: db.id,
 				createdAt: {
 					lte: daysAgo,
 				},
@@ -479,7 +480,7 @@ export default class DatabaseManager {
 		const db = await this.getGuild(guild);
 		const result = await prisma.messageLog.deleteMany({
 			where: {
-				guildId: db.id,
+				bulbGuildId: db.id,
 				createdAt: {
 					lte: daysAgo,
 				},

@@ -1,119 +1,117 @@
 import { Snowflake } from "discord.js";
 import { sequelize } from "../database/connection";
 import { QueryTypes } from "sequelize";
-import moment from "moment";
+import prisma from "../../prisma";
+import { BanpoolInvite } from "../types/BanpoolInvite";
 
 export default class {
-	async createBanpool(guildId: Snowflake, poolName: string): Promise<void> {
-		await sequelize.query('INSERT INTO "banpools" (name, "createdAt", "updatedAt", "guildId") VALUES ($PoolName, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildId))', {
-			bind: {
-				PoolName: poolName,
-				CreatedAt: moment().format(),
-				UpdatedAt: moment().format(),
-				GuildId: guildId,
+	async createBanpool(guildId: Snowflake, poolName: string) {
+		return await prisma.banpool.create({
+			data: {
+				name: poolName,
+				bulbGuild: {
+					connect: {
+						guildId,
+					},
+				},
 			},
-			type: QueryTypes.INSERT,
 		});
 	}
 
 	async hasBanpoolLog(guildId: Snowflake): Promise<boolean> {
-		const response: Record<string, any> = await sequelize.query('SELECT banpool FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildId },
-			type: QueryTypes.SELECT,
-		});
+		const { banpool } =
+			(await prisma.guildLogging.findFirst({
+				where: {
+					bulbGuilds: {
+						guildId,
+					},
+				},
+			})) || {};
 
-		return !!response[0].banpool;
+		return !!banpool;
 	}
 
-	async doesbanpoolExist(name: string): Promise<boolean> {
-		const doesExist: any = await sequelize.query('SELECT id FROM "banpools" WHERE name = $PoolName LIMIT 1', {
-			bind: {
-				PoolName: name,
+	async doesBanpoolExist(name: string): Promise<boolean> {
+		const banpool = await prisma.banpool.findFirst({
+			select: {
+				id: true,
 			},
-			type: QueryTypes.SELECT,
+			where: {
+				name,
+			},
 		});
 
-		return !!doesExist[0];
+		return !!banpool;
 	}
 
 	async haveAccessToPool(guildId: Snowflake, poolName: string): Promise<boolean> {
-		const access: any = await sequelize.query('SELECT id FROM "banpools" WHERE name = $PoolName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildId) LIMIT 1', {
-			bind: {
-				PoolName: poolName,
-				GuildId: guildId,
+		const access = await prisma.banpool.findFirst({
+			where: {
+				name: poolName,
+				bulbGuild: {
+					guildId,
+				},
 			},
-			type: QueryTypes.SELECT,
 		});
 
-		return !!access[0];
+		return !!access;
 	}
 
-	async joinBanpool(invite: any, guildId: Snowflake): Promise<boolean> {
-		await sequelize
-			.query('INSERT INTO "banpoolSubscribers" ("guildId", "createdAt", "updatedAt", "banpoolId") VALUES ($GuildId, $CreatedAt, $UpdatedAt, (SELECT id FROM banpools WHERE "name" = $Name))', {
-				bind: {
-					GuildId: guildId,
-					CreatedAt: moment().format(),
-					UpdatedAt: moment().format(),
-					Name: invite.banpool.name,
+	async joinBanpool(invite: { banpool: Pick<Pick<BanpoolInvite, "banpool">["banpool"], "name"> }, guildId: Snowflake) {
+		return await prisma.banpoolSubscriber.create({
+			data: {
+				guildId,
+				banpool: {
+					connect: {
+						name: invite.banpool.name,
+					},
 				},
-				type: QueryTypes.INSERT,
-			})
-			.catch((err: Error) => console.error(err));
-
-		return true;
-	}
-
-	async getPools(guildId: Snowflake): Promise<any> {
-		const poolIds: any = await sequelize.query('SELECT "banpoolId" FROM "banpoolSubscribers" WHERE "guildId" = $GuildId', {
-			bind: {
-				GuildId: guildId,
 			},
-			type: QueryTypes.SELECT,
 		});
-
-		const pools: any[] = [];
-		for (let i = 0; i < poolIds.length; i++) {
-			const pool = await sequelize.query('SELECT * FROM "banpools" WHERE id = $PoolId', {
-				bind: {
-					PoolId: poolIds[i].banpoolId,
-				},
-				type: QueryTypes.SELECT,
-			});
-
-			if (!pools.includes(pool[0])) pools.push(pool[0]);
-		}
-
-		return pools;
 	}
 
-	async getGuildsFromPools(pools: any[]): Promise<any> {
-		const g: any[] = [];
-
-		for (let i = 0; i < pools.length; i++) {
-			const guilds: any = await sequelize.query('SELECT "guildId" FROM "banpoolSubscribers" WHERE "banpoolId" = $PoolId', {
-				bind: {
-					PoolId: pools[i],
+	async getPools(guildId: Snowflake) {
+		return await prisma.banpool.findMany({
+			where: {
+				bulbGuild: {
+					guildId,
 				},
-				type: QueryTypes.SELECT,
-			});
+			},
+		});
+	}
 
-			for (let ii = 0; ii < guilds.length; ii++) g.push(guilds[ii].guildId);
-		}
-
-		// remove dupes and send back
-		return [...new Set(g)];
+	async getGuildIdsFromPools(pools: number[]) {
+		return [
+			// Dedupe strings
+			...new Set(
+				// Unpack
+				Array.from(
+					// Query database
+					await prisma.banpoolSubscriber.findMany({
+						select: {
+							guildId: true,
+						},
+						where: {
+							banpoolId: {
+								in: pools,
+							},
+						},
+					}),
+					({ guildId }) => guildId,
+				),
+			),
+		];
 	}
 
 	async getPoolData(poolname: string) {
-		const pool: any = await sequelize.query('SELECT * FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE "name" = $PoolName)', {
-			bind: {
-				PoolName: poolname,
+		return await prisma.banpool.findUnique({
+			where: {
+				name: poolname,
 			},
-			type: QueryTypes.SELECT,
+			include: {
+				banpoolSubscribers: true,
+			},
 		});
-
-		return pool;
 	}
 
 	async isGuildInPool(guildId: Snowflake, poolname: string) {

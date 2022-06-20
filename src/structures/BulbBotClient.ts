@@ -7,6 +7,7 @@ import * as Config from "../Config";
 import { logger } from "../utils/Logger";
 import BulbBotFetch from "../utils/BulbBotFetch";
 import ApplicationCommand from "./ApplicationCommand";
+import { BanpoolInvite } from "../utils/types/BanpoolInvite";
 
 export default class extends Client {
 	public prefix: string = Config.prefix;
@@ -19,7 +20,7 @@ export default class extends Client {
 	public readonly bulbfetch: BulbBotFetch;
 	public userClearance = 0;
 	public blacklist: Collection<string, Record<string, any>>;
-	public banpoolInvites: Collection<string, Record<string, any>>;
+	public banpoolInvites: Collection<string, BanpoolInvite>;
 	public log: any;
 	public about: any;
 
