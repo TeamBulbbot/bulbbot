@@ -19,6 +19,7 @@ export default class extends ApplicationCommand {
 				},
 			],
 			command_permissions: ["MANAGE_ROLES"],
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
