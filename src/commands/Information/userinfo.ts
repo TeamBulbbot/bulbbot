@@ -1,4 +1,4 @@
-import { ColorResolvable, CommandInteraction, GuildMember, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
+import { ColorResolvable, CommandInteraction, GuildMember, MessageActionRow, MessageButton, MessageEmbed, User } from "discord.js";
 import axios from "axios";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
@@ -140,7 +140,7 @@ export default class extends ApplicationCommand {
 			}
 		}
 
-		const infs = await infractionsManager.getOffenderInfractions(interaction.guild?.id as Snowflake, user instanceof GuildMember ? user.user.id : user.id);
+		const infs = await infractionsManager.getOffenderInfractions({ guildId: interaction.guild.id, targetId: user instanceof GuildMember ? user.user.id : user.id });
 		if (infs) {
 			let inf_emote;
 

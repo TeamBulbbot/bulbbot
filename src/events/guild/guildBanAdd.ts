@@ -29,8 +29,7 @@ export default class extends Event {
 		if (ban.user.id !== logTarget?.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", ban.guild.id, {});
 
-		await infractionsManager.createInfraction(ban.guild.id, "Manual Ban", true, reason, ban.user, executor);
-		const infID: number = await infractionsManager.getLatestInfraction(ban.guild.id, executor.id, ban.user.id, "Manual Ban");
+		const { id: infID } = await infractionsManager.createInfraction(ban.guild.id, "Manual Ban", true, reason, ban.user, executor);
 		await loggingManager.sendModAction(this.client, ban.guild, "manually banned", ban.user, executor, reason, infID);
 	}
 }

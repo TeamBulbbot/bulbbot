@@ -108,3 +108,14 @@ export const resolveGuildMemberMoreSafe = (memberInput: GuildMemberMaybeApi): Gu
 	: new GuildMember(memberInput);
 
 export const isNullish = (value: any): value is null | undefined => value == null;
+
+export const clamp = (val: number) => +(val > 0) && val;
+
+type PaginateOptions = {
+	take?: number;
+	skip?: number;
+};
+export const paginate = ({ page = 1, pageSize = 25 }: Paginatetable): PaginateOptions => ({
+	take: page * pageSize || undefined,
+	skip: clamp(page - 1) * pageSize || undefined,
+});

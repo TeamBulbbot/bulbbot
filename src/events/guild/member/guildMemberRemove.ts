@@ -59,8 +59,7 @@ export default class extends Event {
 		if (!executor?.id || executor.id === this.client.user?.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});
 
-		await infractionsManager.createInfraction(member.guild.id, "Manual Kick", true, reason, member.user, executor);
-		const infID: number = await infractionsManager.getLatestInfraction(member.guild.id, executor.id, target.id, "Manual Kick");
+		const { id: infID } = await infractionsManager.createInfraction(member.guild.id, "Manual Kick", true, reason, member.user, executor);
 		await loggingManager.sendModAction(this.client, member.guild, "manually kicked", member.user, executor, reason, infID);
 	}
 }

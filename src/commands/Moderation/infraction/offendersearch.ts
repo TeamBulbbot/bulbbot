@@ -5,7 +5,6 @@ import CommandContext from "../../../structures/CommandContext";
 import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -40,7 +39,7 @@ export default class extends SubCommand {
 			);
 
 		const options: any[] = [];
-		const infs: Infraction[] = (await infractionsManager.getOffenderInfractions(context.guild.id, user.id)) || [];
+		const infs = (await infractionsManager.getOffenderInfractions({ guildId: context.guild.id, targetId: user.id })) || [];
 
 		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild.id, { target: user }));
 

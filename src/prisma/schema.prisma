@@ -198,6 +198,7 @@ model Infraction {
   @@index([targetId])
   @@index([moderatorId])
   @@index([bulbGuildId])
+  @@index([id, bulbGuildId])
   @@map("infractions")
 }
 

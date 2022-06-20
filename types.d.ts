@@ -20,3 +20,8 @@ interface Identifiable {
 }
 
 type DeepPartial<T> = T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } : T;
+
+interface Paginatetable {
+	page?: number;
+	pageSize?: number;
+}

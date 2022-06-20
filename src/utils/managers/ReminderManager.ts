@@ -1,10 +1,6 @@
 import { Snowflake } from "discord.js";
 import prisma from "../../prisma";
-
-interface Paginate {
-	limit?: number;
-	offset?: number;
-}
+import { paginate } from "../helpers";
 
 export default class {
 	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake) {
@@ -50,13 +46,12 @@ export default class {
 			},
 		});
 	}
-	public async listUserReminders({ userId, limit, offset }: { userId: string } & Paginate) {
+	public async listUserReminders({ userId, ...args }: { userId: string } & Paginatetable) {
 		return prisma.reminder.findMany({
 			where: {
 				userId,
 			},
-			take: limit,
-			skip: offset,
+			...paginate(args),
 		});
 	}
 

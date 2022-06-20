@@ -30,7 +30,7 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 	description += await client.bulbutils.translate("infraction_info_target", interaction.guild.id, { target });
 	description += await client.bulbutils.translate("infraction_info_moderator", interaction.guild.id, { moderator });
 	description += await client.bulbutils.translate("infraction_info_created", interaction.guild.id, {
-		created: moment(Date.parse(inf.createdAt)).format("MMM Do YYYY, h:mm:ss a"),
+		created: moment(inf.createdAt).format("MMM Do YYYY, h:mm:ss a"),
 	});
 
 	if (inf.active !== "false" && inf.active !== "true") {
