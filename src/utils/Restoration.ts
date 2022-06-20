@@ -21,7 +21,10 @@ export default class {
 			if ((reminder.expireTime - Math.floor(Date.now() / 1000)) * 1000 < 0) client.log.client(`[CLIENT - REMINDERS] [#${reminder.id}] Old reminder, sending it out now to ${reminder.userId}`);
 
 			setTimeout(async () => {
-				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
+				if (!(await getReminder(reminder.id))) {
+					deleteReminder(reminder.id);
+					return;
+				}
 
 				if (reminder.channelId !== "") {
 					// @ts-expect-error

@@ -78,7 +78,10 @@ export default class extends SubCommand {
 			await msg.edit({ components: [row2] });
 
 			setTimeout(async () => {
-				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
+				if (!(await getReminder(reminder.id))) {
+					deleteReminder(reminder.id);
+					return;
+				}
 
 				if (reminder.channelId !== "") {
 					// @ts-expect-error

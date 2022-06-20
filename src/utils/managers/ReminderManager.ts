@@ -1,87 +1,67 @@
-import { sequelize } from "../database/connection";
 import { Snowflake } from "discord.js";
-import { QueryTypes } from "sequelize";
-import moment from "moment";
+import prisma from "../../prisma";
+
+interface Paginate {
+	limit?: number;
+	offset?: number;
+}
 
 export default class {
-	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake): Promise<any> {
-		const response: any = await sequelize.query(
-			'INSERT INTO reminds (reason, "expireTime", "userId", "channelId", "messageId", "createdAt", "updatedAt" ) VALUES ($Reason, $ExpireTime, $UserId, $ChannelId, $MessageId, $CreatedAt, $UpdatedAt) RETURNING *;',
-			{
-				bind: {
-					Reason: reason,
-					ExpireTime: expireTime,
-					UserId: userId,
-					ChannelId: channelId,
-					MessageId: messageId,
-					CreatedAt: moment().format(),
-					UpdatedAt: moment().format(),
-				},
-				type: QueryTypes.INSERT,
+	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake) {
+		return await prisma.reminder.create({
+			data: {
+				reason,
+				expireTime,
+				userId,
+				channelId,
+				messageId,
 			},
-		);
-
-		return response[0][0];
+		});
 	}
 
 	public async getReminder(id: number): Promise<any> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "id" = $Id', {
-			bind: { Id: id },
-			type: QueryTypes.SELECT,
+		// TODO: This really could be inlined
+		return await prisma.reminder.findUnique({
+			where: {
+				id,
+			},
 		});
-
-		return response[0];
 	}
 
-	public async deleteUserReminder(id: number, userId: Snowflake): Promise<boolean> {
-		let response: Record<string, any>;
+	public async deleteUserReminder(id: number, userId: Snowflake) {
+		const reminder = await prisma.reminder.findUnique({
+			where: {
+				id,
+			},
+		});
 
-		try {
-			response = await sequelize.query('SELECT * FROM reminds WHERE "id" = $Id AND "userId" = $UserId', {
-				bind: { Id: id, UserId: userId },
-				type: QueryTypes.SELECT,
-			});
-		} catch (_) {
-			response = [];
+		// Ensure the reminder belongs to the correct user
+		if (reminder?.userId !== userId) {
+			return false;
 		}
 
-		if (response.length === 0) return false;
-
-		await sequelize.query('DELETE FROM reminds WHERE "id" = $Id AND "userId" = $UserId', {
-			bind: {
-				Id: id,
-				UserId: userId,
-			},
-			type: QueryTypes.DELETE,
-		});
-
-		return true;
+		return this.deleteReminder(id);
 	}
 
-	public async deleteReminder(id: number): Promise<void> {
-		await sequelize.query('DELETE FROM reminds WHERE "id" = $Id', {
-			bind: {
-				Id: id,
+	public async deleteReminder(id: number) {
+		return await prisma.reminder.delete({
+			where: {
+				id,
 			},
-			type: QueryTypes.DELETE,
 		});
 	}
-	public async listUserReminders(userId: Snowflake): Promise<any> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM reminds WHERE "userId" = $UserId LIMIT 10', {
-			bind: {
-				UserId: userId,
+	public async listUserReminders({ userId, limit, offset }: { userId: string } & Paginate) {
+		return prisma.reminder.findMany({
+			where: {
+				userId,
 			},
-			type: QueryTypes.SELECT,
+			take: limit,
+			skip: offset,
 		});
-
-		return response;
 	}
 
-	public async getAllReminders(): Promise<any> {
-		const reminders: Record<string, any> = await sequelize.query("SELECT * FROM reminds", {
-			type: QueryTypes.SELECT,
-		});
-
-		return reminders;
+	public async getAllReminders() {
+		// TODO: This should be inlined
+		return await prisma.reminder.findMany();
 	}
 }

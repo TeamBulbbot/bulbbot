@@ -22,8 +22,9 @@ export default class extends SubCommand {
 	}
 
 	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+		// TODO: Avoid the Number constructor unless we have a specific reason. It can cause unexpected behavior for the unfamiliar
 		const reminderId = Number(args[0].replace(NonDigits, ""));
-		const allowedToDelete: boolean = await deleteUserReminder(reminderId, context.author.id);
+		const allowedToDelete = await deleteUserReminder(reminderId, context.author.id);
 
 		if (!allowedToDelete)
 			return context.channel.send(
