@@ -1,6 +1,5 @@
 import Event from "../../structures/Event";
 import { Interaction } from "discord.js";
-import ClearanceManager from "../../utils/managers/ClearanceManager";
 import warn from "../../interactions/context/warn";
 import infSearch from "../../interactions/context/infSearch";
 import mute from "../../interactions/context/mute";
@@ -10,7 +9,6 @@ import { getCommandContext } from "../../structures/CommandContext";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 
-const clearanceManager: ClearanceManager = new ClearanceManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
@@ -39,9 +37,6 @@ export default class extends Event {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			if ((await clearanceManager.getUserClearance(context)) < 50)
-				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));
-
 			const channel = this.client.guilds.cache.get(context.guild.id)?.channels.cache.get(context.channelId);
 			const message = channel?.isText() && (await channel.messages.fetch(interaction.targetId));
 

@@ -25,7 +25,6 @@ export default class SubCommand extends Command {
 			maxArgs: options.maxArgs,
 			subCommands: options.subCommands,
 			category: options.category || parent.category,
-			clearance: options.clearance || parent.clearance,
 			userPerms: options.userPerms || parent.userPerms,
 			clientPerms: options.clientPerms || parent.clientPerms,
 			devOnly: options.devOnly || parent.devOnly,

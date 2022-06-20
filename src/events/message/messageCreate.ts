@@ -2,7 +2,6 @@ import Event from "../../structures/Event";
 import { Message, Permissions } from "discord.js";
 import Command from "../../structures/Command";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
-import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../Config";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import AutoMod from "../../utils/AutoMod";
@@ -12,7 +11,6 @@ import ExperimentManager from "../..//utils/managers/ExperimentManager";
 import { commandUsage } from "../../utils/Prometheus";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
-const clearanceManager: ClearanceManager = new ClearanceManager();
 const loggingManager: LoggingManager = new LoggingManager();
 const { getAllGuildExperiments }: ExperimentManager = new ExperimentManager();
 
@@ -50,11 +48,8 @@ export default class extends Event {
 		const premiumGuild = guildCfg.premiumGuild;
 		this.client.prefix = prefix;
 		context.prefix = prefix;
-		const clearance: number = await clearanceManager.getUserClearance(context);
 
-		if (clearance < 25) {
-			await AutoMod(this.client, context);
-		}
+		await AutoMod(this.client, context);
 
 		if (!context.content.startsWith(this.client.prefix) && !context.content.match(mentionRegex)) return;
 		if (context.content.match(mentionRegex) && context.content.replace(mentionRegex, "").trim().length === 0)
@@ -70,7 +65,6 @@ export default class extends Event {
 			context: context,
 			baseCommand: command,
 			args: args.slice(command.qualifiedName.split(" ").length),
-			clearance,
 			premiumGuild,
 			isDev: Config.developers.includes(context.author.id),
 			isSubDev: Config.developers.includes(context.author.id) || Config.subDevelopers.includes(context.author.id),

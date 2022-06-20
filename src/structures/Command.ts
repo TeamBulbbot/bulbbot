@@ -2,15 +2,11 @@ import BulbBotClient from "./BulbBotClient";
 import { BitField, PermissionString, Permissions } from "discord.js";
 import CommandException from "./exceptions/CommandException";
 import SubCommand from "./SubCommand";
-import ClearanceManager from "../utils/managers/ClearanceManager";
 import CommandOptions from "../utils/types/CommandOptions";
 import ResolveCommandOptions from "../utils/types/ResolveCommandOptions";
 import CommandContext from "./CommandContext";
 import { developers, subDevelopers } from "../Config";
-import { GuildCommandOverride } from "../utils/types/DatabaseStructures";
 import { isGuildChannel } from "../utils/typechecks";
-
-const clearanceManager: ClearanceManager = new ClearanceManager();
 
 export default class Command {
 	public readonly client: BulbBotClient;
@@ -23,7 +19,6 @@ export default class Command {
 	public readonly examples: string[];
 	public readonly userPerms: Readonly<BitField<PermissionString, bigint>>;
 	public readonly clientPerms: Readonly<BitField<PermissionString, bigint>>;
-	public readonly clearance: number;
 	public readonly subDevOnly: boolean;
 	public readonly devOnly: boolean;
 	public readonly premium: boolean;
@@ -55,7 +50,6 @@ export default class Command {
 		this.depth = ~~options.depth!;
 		this.userPerms = new Permissions(options.userPerms).freeze();
 		this.clientPerms = new Permissions(options.clientPerms).freeze();
-		this.clearance = options.clearance || 0;
 		this.subDevOnly = options.subDevOnly || false;
 		this.devOnly = options.devOnly || false;
 		this.premium = options.premium || false;
@@ -92,32 +86,12 @@ export default class Command {
 	}
 
 	public async validate(context: CommandContext, args: string[], options?: ResolveCommandOptions): Promise<string | undefined> {
-		let clearance = this.clearance;
-
 		if (options === undefined) {
 			options = await ResolveCommandOptions.create(this, context, args);
 		}
 		if (this.premium && !options.premiumGuild) return await this.client.bulbutils.translate("global_premium_only", context.guild?.id, {});
 
-		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild?.id, this.qualifiedName);
-		if (commandOverride !== undefined) {
-			if (!commandOverride.enabled) {
-				if (context.isMessageContext()) return "";
-				else if (context.isInteractionContext()) return this.client.bulbutils.translate("global_command_disabled", context.guild?.id, {});
-			}
-			clearance = commandOverride.clearanceLevel;
-		}
-
 		if (!isGuildChannel(context.channel)) return;
-
-		this.client.userClearance = options.clearance;
-		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
-
-		let missing: boolean = clearance > options.clearance;
-		if (missing && ~~userPermCheck) {
-			missing = !(context.member?.permissions.has(userPermCheck) && context.member.permissionsIn(context.channel).has(userPermCheck)); // (!x || !y) === !(x && y) by DeMorgan's Law
-		}
-		if (missing) return await this.client.bulbutils.translate("global_missing_permissions", context.guild?.id, {});
 
 		const clientPermCheck: BitField<PermissionString, bigint> = this.clientPerms ? this.client.defaultPerms.add(this.clientPerms) : this.client.defaultPerms;
 		if (clientPermCheck) {
@@ -155,27 +129,13 @@ export default class Command {
 	}
 
 	public async validateUserPerms(context: CommandContext): Promise<boolean> {
-		let clearance = this.clearance;
 		const isDev = developers.includes(context.author.id);
 		const isSubDev = subDevelopers.includes(context.author.id);
 
 		if (this.devOnly && !isDev) return false;
 		if (this.subDevOnly && !(isDev || isSubDev)) return false;
 
-		const commandOverride: GuildCommandOverride | undefined = await clearanceManager.getCommandOverride(context.guild?.id, this.qualifiedName);
-		if (commandOverride !== undefined) {
-			if (!commandOverride.enabled) return false;
-			clearance = commandOverride["clearanceLevel"];
-		}
-
-		const userClearance = await clearanceManager.getUserClearance(context);
-		const userPermCheck: BitField<PermissionString, bigint> = this.userPerms;
-
-		let missing: boolean = clearance > userClearance;
-		if (missing && ~~userPermCheck) {
-			missing = !(context.member?.permissions.has(userPermCheck) && isGuildChannel(context.channel) && context.member.permissionsIn(context.channel).has(userPermCheck)); // !x || !y === !(x && y)
-		}
-		return !missing;
+		return true;
 	}
 
 	public resolveSubcommand(commandPath: string[]): Command {

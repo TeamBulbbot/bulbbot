@@ -2,13 +2,11 @@ import Event from "../../structures/Event";
 import { Message, Util } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
-import ClearanceManager from "../../utils/managers/ClearanceManager";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import AutoMod from "../../utils/AutoMod";
 import prisma from "../../prisma";
 
 const loggingManager: LoggingManager = new LoggingManager();
-const clearanceManager: ClearanceManager = new ClearanceManager();
 export default class extends Event {
 	constructor(...args: any[]) {
 		// @ts-expect-error
@@ -39,9 +37,8 @@ export default class extends Event {
 			if (oldMessage.content === newMessage.content) return;
 
 			const context: CommandContext = await getCommandContext(newMessage);
-			const clearance = await clearanceManager.getUserClearance(context);
 
-			if (clearance < 25) await AutoMod(this.client, context);
+			await AutoMod(this.client, context);
 
 			oldMessageContent = oldMessage.content;
 		}
