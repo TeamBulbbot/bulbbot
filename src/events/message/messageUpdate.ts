@@ -5,7 +5,7 @@ import * as fs from "fs";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import AutoMod from "../../utils/AutoMod";
-import { prisma } from "../../prisma";
+import prisma from "../../prisma";
 
 const loggingManager: LoggingManager = new LoggingManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();

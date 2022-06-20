@@ -3,7 +3,7 @@ import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, G
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
 import { User } from "@sentry/node";
-import { prisma } from "../../prisma";
+import prisma from "../../prisma";
 import { isNullish } from "../../utils/helpers";
 
 const loggingManager: LoggingManager = new LoggingManager();

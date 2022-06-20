@@ -4,7 +4,7 @@ import moment from "moment";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
 import PunishmentType from "../types/PunishmentType";
-import { prisma } from "../../prisma";
+import prisma from "../../prisma";
 import { BulbGuild } from "@prisma/client";
 
 interface Identified {

@@ -10,7 +10,7 @@ import TranslateString from "./types/TranslateString";
 import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 import { isBaseGuildTextChannel } from "./typechecks";
-import { prisma } from "../prisma";
+import prisma from "../prisma";
 
 export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
 	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };

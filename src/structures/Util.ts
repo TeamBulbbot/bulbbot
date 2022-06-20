@@ -7,7 +7,7 @@ import Event from "./Event";
 import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
 import ApplicationCommand from "./ApplicationCommand";
-import { prisma } from "../prisma";
+import prisma from "../prisma";
 
 const globAsync = promisify(glob);
 
