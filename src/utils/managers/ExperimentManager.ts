@@ -1,39 +1,52 @@
 import { Snowflake } from "discord.js";
-import { sequelize } from "../database/connection";
-import { QueryTypes } from "sequelize";
-import moment from "moment";
+import prisma from "../../prisma";
+import { isNullish } from "../helpers";
 
 export default class {
-	async addExperimentToGuild(guildId: Snowflake, name: string): Promise<void> {
-		const response: any = await sequelize.query(
-			'INSERT INTO experiments ("name", "createdAt", "updatedAt", "guildId") VALUES ($name, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId)) RETURNING *;',
-			{
-				bind: {
-					guildId,
-					name,
-					CreatedAt: moment().format(),
-					UpdatedAt: moment().format(),
+	async addExperimentToGuild(guildId: Snowflake, name: string) {
+		return await prisma.experiment.create({
+			data: {
+				name,
+				bulbGuild: {
+					connect: {
+						guildId,
+					},
 				},
-				type: QueryTypes.INSERT,
 			},
-		);
-
-		return response[0][0];
-	}
-
-	public async removeExperimentFromGuild(guildId: Snowflake, name: string): Promise<void> {
-		await sequelize.query('DELETE FROM experiments WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $guildId) AND name = $name', {
-			bind: { guildId, name },
-			type: QueryTypes.DELETE,
 		});
 	}
 
-	public async getAllGuildExperiments(guildId: Snowflake): Promise<any> {
-		const response: any = await sequelize.query('SELECT name FROM experiments WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $guildId)', {
-			bind: { guildId },
-			type: QueryTypes.SELECT,
+	public async removeExperimentFromGuild(guildId: Snowflake, name: string) {
+		const bulbGuild = await prisma.bulbGuild.findUnique({
+			where: {
+				guildId,
+			},
+		});
+		if (isNullish(bulbGuild)) {
+			throw new Error("could not find a bulbGuild for the guild ID");
+		}
+		return await prisma.experiment.delete({
+			where: {
+				bulbGuildId_name: {
+					bulbGuildId: bulbGuild.id,
+					name,
+				},
+			},
+		});
+	}
+
+	public async getAllGuildExperiments(guildId: Snowflake) {
+		const result = await prisma.experiment.findMany({
+			select: {
+				name: true,
+			},
+			where: {
+				bulbGuild: {
+					guildId,
+				},
+			},
 		});
 
-		return response.map((e: { name: any }) => e.name);
+		return result.map(({ name }) => name);
 	}
 }
