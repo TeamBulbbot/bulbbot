@@ -4,49 +4,55 @@ import { QueryTypes } from "sequelize";
 import moment from "moment";
 import CommandContext from "src/structures/CommandContext";
 import { GuildCommandOverride, GuildRoleOverride } from "../types/DatabaseStructures";
+import prisma from "../../prisma";
 
 export default class {
-	async getClearanceList(guildID: Maybe<Snowflake>): Promise<Record<string, any> | undefined> {
-		if (!guildID) return undefined;
-		const data: Record<string, any> = await sequelize.query('SELECT * FROM "guildOverrideCommands" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		return [data, response];
-	}
-
-	async editCommandOverride(guildID: Maybe<Snowflake>, name: string, clearance: number): Promise<void> {
-		if (!guildID) return;
-		await sequelize.query('UPDATE "guildOverrideCommands" SET "clearanceLevel" = $Clearance WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, CommandName: name, Clearance: clearance },
-			type: QueryTypes.UPDATE,
+	async getClearanceList(guildId: Maybe<Snowflake>) {
+		if (!guildId) return undefined;
+		return await prisma.bulbGuild.findUnique({
+			select: {
+				guildOverrideCommands: true,
+				guildModerationRoles: true,
+			},
+			where: {
+				guildId,
+			},
 		});
 	}
 
-	async setEnabled(guildID: Maybe<Snowflake>, name: string, enabled = true): Promise<void> {
-		if (!guildID) return;
+	async editCommandOverride(guildId: Maybe<Snowflake>, name: string, clearance: number): Promise<void> {
+		if (!guildId) return;
+		await prisma.guildOverrideCommand.updateMany({
+			data: {
+				clearanceLevel: clearance,
+			},
+			where: {
+				commandName: name,
+				bulbGuild: {
+					guildId,
+				},
+			},
+		});
+	}
+
+	async setEnabled(guildId: Maybe<Snowflake>, name: string, enabled = true): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query('UPDATE "guildOverrideCommands" SET "enabled" = $Enabled WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, CommandName: name, Enabled: enabled },
+			bind: { GuildID: guildId, CommandName: name, Enabled: enabled },
 			type: QueryTypes.UPDATE,
 		});
 	}
 
-	async enableCommand(guildID: Maybe<Snowflake>, name: string, enabled: boolean): Promise<void> {
-		if (!guildID) return;
+	async enableCommand(guildId: Maybe<Snowflake>, name: string, enabled: boolean): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query('UPDATE "guildOverrideCommands" SET enabled = $Enabled WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, CommandName: name, Enabled: enabled },
+			bind: { GuildID: guildId, CommandName: name, Enabled: enabled },
 			type: QueryTypes.UPDATE,
 		});
 	}
 
-	async createCommandOverride(guildID: Maybe<Snowflake>, name: string, enabled = true, clearance: number): Promise<void> {
-		if (!guildID) return;
+	async createCommandOverride(guildId: Maybe<Snowflake>, name: string, enabled = true, clearance: number): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query(
 			'INSERT INTO "guildOverrideCommands" (enabled, "commandName", "clearanceLevel", "createdAt", "updatedAt", "guildId") VALUES ($Enabled, $CommandName, $Clearance, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID))',
 			{
@@ -56,19 +62,19 @@ export default class {
 					Clearance: clearance,
 					CreatedAt: moment().format(),
 					UpdatedAt: moment().format(),
-					GuildID: guildID,
+					GuildID: guildId,
 				},
 				type: QueryTypes.INSERT,
 			},
 		);
 	}
 
-	async getCommandOverride(guildID: Maybe<Snowflake> | undefined, name: string): Promise<GuildCommandOverride | undefined> {
-		if (!guildID) return undefined;
+	async getCommandOverride(guildId: Maybe<Snowflake> | undefined, name: string): Promise<GuildCommandOverride | undefined> {
+		if (!guildId) return undefined;
 		const response: GuildCommandOverride[] = await sequelize.query(
 			'SELECT * FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)',
 			{
-				bind: { CommandName: name, GuildID: guildID },
+				bind: { CommandName: name, GuildID: guildId },
 				type: QueryTypes.SELECT,
 			},
 		);
@@ -76,47 +82,47 @@ export default class {
 		return response[0];
 	}
 
-	async deleteCommandOverride(guildID: Maybe<Snowflake>, name: string): Promise<void> {
-		if (!guildID) return;
+	async deleteCommandOverride(guildId: Maybe<Snowflake>, name: string): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query('DELETE FROM "guildOverrideCommands" WHERE "commandName" = $CommandName AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, CommandName: name },
+			bind: { GuildID: guildId, CommandName: name },
 			type: QueryTypes.DELETE,
 		});
 	}
 
-	async createRoleOverride(guildID: Maybe<Snowflake>, roleID: Snowflake, clearance: number): Promise<void> {
-		if (!guildID) return;
+	async createRoleOverride(guildId: Maybe<Snowflake>, roleID: Snowflake, clearance: number): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query(
 			'INSERT INTO "guildModerationRoles" ("roleId", "clearanceLevel", "createdAt", "updatedAt", "guildId") VALUES ($RoleID, $Clearance, $CreatedAt, $UpdatedAt, (SELECT id FROM guilds WHERE "guildId" = $GuildID))',
 			{
-				bind: { RoleID: roleID, Clearance: clearance, CreatedAt: moment().format(), UpdatedAt: moment().format(), GuildID: guildID },
+				bind: { RoleID: roleID, Clearance: clearance, CreatedAt: moment().format(), UpdatedAt: moment().format(), GuildID: guildId },
 				type: QueryTypes.INSERT,
 			},
 		);
 	}
 
-	async getRoleOverride(guildID: Maybe<Snowflake>, roleID: Snowflake): Promise<GuildRoleOverride | undefined> {
-		if (!guildID) return undefined;
+	async getRoleOverride(guildId: Maybe<Snowflake>, roleID: Snowflake): Promise<GuildRoleOverride | undefined> {
+		if (!guildId) return undefined;
 		const response: GuildRoleOverride[] = await sequelize.query('SELECT * FROM "guildModerationRoles" WHERE "roleId" = $RoleID AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { RoleID: roleID, GuildID: guildID },
+			bind: { RoleID: roleID, GuildID: guildId },
 			type: QueryTypes.SELECT,
 		});
 
 		return response[0];
 	}
 
-	async editRoleOverride(guildID: Maybe<Snowflake>, roleID: Snowflake, clearance: number): Promise<void> {
-		if (!guildID) return;
+	async editRoleOverride(guildId: Maybe<Snowflake>, roleID: Snowflake, clearance: number): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query('UPDATE "guildModerationRoles" SET "clearanceLevel" = $Clearance WHERE "roleId" = $RoleID AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { Clearance: clearance, RoleID: roleID, GuildID: guildID },
+			bind: { Clearance: clearance, RoleID: roleID, GuildID: guildId },
 			type: QueryTypes.UPDATE,
 		});
 	}
 
-	async deleteRoleOverride(guildID: Maybe<Snowflake>, roleID: Snowflake): Promise<void> {
-		if (!guildID) return;
+	async deleteRoleOverride(guildId: Maybe<Snowflake>, roleID: Snowflake): Promise<void> {
+		if (!guildId) return;
 		await sequelize.query('DELETE FROM "guildModerationRoles" WHERE "roleId" = $RoleID AND "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, RoleID: roleID },
+			bind: { GuildID: guildId, RoleID: roleID },
 			type: QueryTypes.DELETE,
 		});
 	}
