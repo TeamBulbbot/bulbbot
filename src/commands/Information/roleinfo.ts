@@ -1,39 +1,23 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { NonDigits } from "../../utils/Regex";
-import { MessageEmbed, Role } from "discord.js";
+import { CommandInteraction, MessageEmbed, Role } from "discord.js";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionTypes } from "../../utils/types/ApplicationCommands";
+import { APIRole } from "discord-api-types/v10";
+import { resolveGuildRoleMoreSafe } from "../../utils/helpers";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Returns some useful info about a role",
-			category: "Information",
-			usage: "<role>",
-			examples: ["roleinfo 868832624502771723", "roleinfo @Bulbbot"],
-			clearance: 50,
-			maxArgs: 1,
-			minArgs: 1,
-			argList: ["role:Role"],
-			clientPerms: ["EMBED_LINKS"],
+			options: [{ name: "role", type: ApplicationCommandOptionTypes.ROLE, description: "The role you want more info about", required: true }],
+			command_permissions: ["MANAGE_ROLES"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
-		const roleId: string = args[0].replace(NonDigits, "");
-		const role: Role | undefined = context.guild?.roles.cache.get(roleId);
-		if (!role) {
-			context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.role", context.guild?.id, {}),
-					arg_expected: "role:Role",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-			return;
-		}
+	public async run(interaction: CommandInteraction) {
+		const role = resolveGuildRoleMoreSafe(interaction.options.getRole("role") as Role | APIRole);
+
 		const tags: string[] = [`(by `];
 		if (role.managed) {
 			role.tags?.botId ? tags.push(`<@${role.tags.botId}> \`${role.tags.botId}\``) : null;
@@ -61,13 +45,13 @@ export default class extends Command {
 			.setColor(role.color)
 			.setDescription(desc.join("\n"))
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		context.channel.send({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 }

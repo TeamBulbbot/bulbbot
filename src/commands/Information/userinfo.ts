@@ -14,9 +14,9 @@ import { APIGuildMember } from "discord-api-types/v10";
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 export default class extends ApplicationCommand {
-	constructor(client: BulbBotClient) {
+	constructor(client: BulbBotClient, name: string) {
 		super(client, {
-			name: "user_info",
+			name,
 			description: "Returns some useful info about a user",
 			type: ApplicationCommandType.CHAT_INPUT,
 			options: [{ name: "user", type: ApplicationCommandOptionTypes.USER, description: "The user you want to view more info about", required: false }],
