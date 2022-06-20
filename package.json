@@ -13,9 +13,15 @@
 		"nobuild": "node build/index.js",
 		"dev": "nodemon -w src -w tsconfig.json -w package.json -w types.d.ts -e ts,js,json,env --exec \\\"yarn\\\" -i src/languages/en-US.json -- start",
 		"pm2-start": "pm2 start build/index.js --watch --output ./logs/log.log --error ./logs/error.log --time --name bulbbot",
-		"sync:db": "node build/utils/database/sync.js",
 		"delete:build": "rimraf build/*",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"generate": "prisma generate",
+		"db:migrate": "prisma migrate dev",
+		"db:migrate:prod": "prisma migrate",
+		"db:nuke": "prisma migrate reset",
+		"db:introspect": "prisma db pull",
+		"db:push": "prisma db push",
+		"db:format": "prisma format"
 	},
 	"repository": "git+https://github.com/TeamBulbbot//Bulbbot.git",
 	"author": "Team Bulbbot",
@@ -72,5 +78,8 @@
 		"prettier": "^2.6.1",
 		"sequelize-cli": "^6.4.1",
 		"typescript": "^4.5.5"
+	},
+	"prisma": {
+		"schema": "src/prisma/schema.prisma"
 	}
 }

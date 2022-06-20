@@ -1,12 +1,15 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isNullish } from "../../../utils/helpers";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function timezone(interaction: MessageComponentInteraction, client: BulbBotClient) {
-	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		return;
+	}
+	const config = await databaseManager.getConfig(interaction.guild);
 	const pages: { label: string; value: string }[][] = [];
 	let currPage = 0;
 
@@ -94,7 +97,10 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 				return;
 			}
 
-			await databaseManager.setTimezone(i.guild?.id as Snowflake, i.values[0]);
+			if (isNullish(i.guild)) {
+				return;
+			}
+			await databaseManager.updateConfig({ guild: i.guild, table: "guildConfiguration", field: "timezone", value: i.values[0] });
 			await interaction.followUp({
 				content: await client.bulbutils.translate("config_timezone_success", interaction.guild?.id, {
 					timezone: `${i.values[0]} (${client.bulbutils.timezones[i.values[0]]})`,

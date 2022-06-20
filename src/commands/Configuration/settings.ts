@@ -5,7 +5,7 @@ import { MessageEmbed } from "discord.js";
 import Emotes from "../../emotes.json";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { GuildConfiguration, LoggingConfiguration } from "../../utils/types/DatabaseStructures";
+import { isNullish } from "../../utils/helpers";
 
 const databaseManager = new DatabaseManager();
 
@@ -26,35 +26,41 @@ export default class extends Command {
 			console.error("Guild/GuildID is not defined (in commands/Configuration/settings)");
 			return;
 		}
-		const guildConfig: GuildConfiguration = await databaseManager.getConfig(context.guild.id);
-		const loggingConfig: LoggingConfiguration = await databaseManager.getLoggingConfig(context.guild.id);
+		if (isNullish(context.guild)) {
+			return;
+		}
+		const { guildConfiguration, guildLogging } = (await databaseManager.getFullGuildConfig(context.guild)) || {};
+
+		if (!guildConfiguration || !guildLogging) {
+			return;
+		}
 
 		const configs: string[] = [
 			`**Configuration**`,
-			`Prefix: \`${guildConfig.prefix}\` or [slash commands](https://docs.bulbbot.rocks/slash-commands/)`,
-			`Bot Language: \`${guildConfig.language}\``,
-			`Premium Server: ${guildConfig.premiumGuild ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Auto Role:  ${guildConfig.autorole !== null ? `<@&${guildConfig.autorole}>` : Emotes.other.SWITCHOFF}`,
-			`Actions on Info:  ${guildConfig.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Roles on Leave:  ${guildConfig.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Nickname change infraction:  ${guildConfig.manualNicknameInf ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
-			`Quick reasons: ${guildConfig.quickReasons.length ? guildConfig.quickReasons.map((r) => `\`${r}\``).join(" ") : Emotes.other.SWITCHOFF}`,
+			`Prefix: \`${guildConfiguration.prefix}\` or [slash commands](https://docs.bulbbot.rocks/slash-commands/)`,
+			`Bot Language: \`${guildConfiguration.language}\``,
+			`Premium Server: ${guildConfiguration.premiumGuild ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Auto Role:  ${guildConfiguration.autorole !== null ? `<@&${guildConfiguration.autorole}>` : Emotes.other.SWITCHOFF}`,
+			`Actions on Info:  ${guildConfiguration.actionsOnInfo ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Roles on Leave:  ${guildConfiguration.rolesOnLeave ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Nickname change infraction:  ${guildConfiguration.manualNicknameInf ? Emotes.other.SWITCHON : Emotes.other.SWITCHOFF}`,
+			`Quick reasons: ${guildConfiguration.quickReasons.length ? guildConfiguration.quickReasons.map((r) => `\`${r}\``).join(" ") : Emotes.other.SWITCHOFF}`,
 		];
 
 		const loggingModule: string[] = [
 			`**Logging**`,
-			`Logging Timezone: \`${guildConfig.timezone}\``,
-			`Mod Logs: ${loggingConfig.modAction !== null ? `<#${loggingConfig.modAction}>` : Emotes.other.SWITCHOFF}`,
-			`Banpool Logs: ${loggingConfig.banpool !== null ? `<#${loggingConfig.banpool}>` : Emotes.other.SWITCHOFF}`,
-			`Automod: ${loggingConfig.automod !== null ? `<#${loggingConfig.automod}>` : Emotes.other.SWITCHOFF}`,
-			`Message Logs: ${loggingConfig.message !== null ? `<#${loggingConfig.message}>` : Emotes.other.SWITCHOFF}`,
-			`Role Logs: ${loggingConfig.role !== null ? `<#${loggingConfig.role}>` : Emotes.other.SWITCHOFF}`,
-			`Member Logs: ${loggingConfig.member !== null ? `<#${loggingConfig.member}>` : Emotes.other.SWITCHOFF}`,
-			`Channel Logs: ${loggingConfig.channel !== null ? `<#${loggingConfig.channel}>` : Emotes.other.SWITCHOFF}`,
-			`Thread Logs: ${loggingConfig.thread !== null ? `<#${loggingConfig.thread}>` : Emotes.other.SWITCHOFF}`,
-			`Invite Logs: ${loggingConfig.invite !== null ? `<#${loggingConfig.invite}>` : Emotes.other.SWITCHOFF}`,
-			`Join Leave Logs: ${loggingConfig.joinLeave !== null ? `<#${loggingConfig.joinLeave}>` : Emotes.other.SWITCHOFF}`,
-			`Other: ${loggingConfig.other !== null ? `<#${loggingConfig.other}>` : Emotes.other.SWITCHOFF}`,
+			`Logging Timezone: \`${guildConfiguration.timezone}\``,
+			`Mod Logs: ${guildLogging.modAction !== null ? `<#${guildLogging.modAction}>` : Emotes.other.SWITCHOFF}`,
+			`Banpool Logs: ${guildLogging.banpool !== null ? `<#${guildLogging.banpool}>` : Emotes.other.SWITCHOFF}`,
+			`Automod: ${guildLogging.automod !== null ? `<#${guildLogging.automod}>` : Emotes.other.SWITCHOFF}`,
+			`Message Logs: ${guildLogging.message !== null ? `<#${guildLogging.message}>` : Emotes.other.SWITCHOFF}`,
+			`Role Logs: ${guildLogging.role !== null ? `<#${guildLogging.role}>` : Emotes.other.SWITCHOFF}`,
+			`Member Logs: ${guildLogging.member !== null ? `<#${guildLogging.member}>` : Emotes.other.SWITCHOFF}`,
+			`Channel Logs: ${guildLogging.channel !== null ? `<#${guildLogging.channel}>` : Emotes.other.SWITCHOFF}`,
+			`Thread Logs: ${guildLogging.thread !== null ? `<#${guildLogging.thread}>` : Emotes.other.SWITCHOFF}`,
+			`Invite Logs: ${guildLogging.invite !== null ? `<#${guildLogging.invite}>` : Emotes.other.SWITCHOFF}`,
+			`Join Leave Logs: ${guildLogging.joinLeave !== null ? `<#${guildLogging.joinLeave}>` : Emotes.other.SWITCHOFF}`,
+			`Other: ${guildLogging.other !== null ? `<#${guildLogging.other}>` : Emotes.other.SWITCHOFF}`,
 		];
 
 		const memberObj = this.client.bulbutils.userObject(true, context.member);

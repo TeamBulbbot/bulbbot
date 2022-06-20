@@ -30,7 +30,7 @@ export default class extends SubCommand {
 			return;
 		}
 
-		const data: any = JSON.stringify(await databaseManager.getFullGuildConfig(guild.id), null, 2);
+		const data: any = JSON.stringify(await databaseManager.getFullGuildConfig(guild), null, 2);
 
 		writeFile(`${__dirname}/../../../../../files/DB-INFO-${context.guild?.id}.json`, data, (err: any) => {
 			if (err) console.error(err);

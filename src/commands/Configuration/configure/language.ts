@@ -1,12 +1,15 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isNullish } from "../../../utils/helpers";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function language(interaction: MessageComponentInteraction, client: BulbBotClient) {
-	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		return;
+	}
+	const config = await databaseManager.getConfig(interaction.guild);
 
 	const placeholderRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
@@ -50,8 +53,11 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (isNullish(i.guild)) {
+			return;
+		}
 		if (i.isSelectMenu()) {
-			await databaseManager.setLanguage(i.guild?.id as Snowflake, i.values[0]);
+			await databaseManager.updateConfig({ guild: i.guild, table: "guildConfiguration", field: "language", value: i.values[0] });
 			await interaction.followUp({
 				content: await client.bulbutils.translate("config_language_success", interaction.guild?.id, {
 					language: i.values[0],

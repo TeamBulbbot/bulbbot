@@ -8,11 +8,9 @@ import i18next from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
-import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 import { isBaseGuildTextChannel } from "./typechecks";
-
-const databaseManager: DatabaseManager = new DatabaseManager();
+import { prisma } from "../prisma";
 
 export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
 	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };
@@ -31,8 +29,15 @@ export default class {
 		// Default parameter initialization does not occur if you pass null, but half of the the DJS API return null instead of undefined.
 		// Doing this makes this function easier to call
 		const guild = guildID ?? "742094927403679816";
-		const language = (await databaseManager.getConfig(guild))["language"];
-		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guild))["language"]);
+		const { language = "en-US" } =
+			(await prisma.bulbGuild
+				.findUnique({
+					where: {
+						guildId: guild,
+					},
+				})
+				.guildConfiguration()) || {};
+		if (language !== i18next.language) await i18next.changeLanguage(language);
 
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}

@@ -2,11 +2,11 @@ import Event from "../../structures/Event";
 import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannel, MessageEmbed } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
-import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { User } from "@sentry/node";
+import { prisma } from "../../prisma";
+import { isNullish } from "../../utils/helpers";
 
 const loggingManager: LoggingManager = new LoggingManager();
-const { getMessageFromDB }: DatabaseManager = new DatabaseManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -28,15 +28,25 @@ export default class extends Event {
 		let embeds: string | MessageEmbed[] | null;
 
 		if (message.partial) {
-			const dbData = await getMessageFromDB(message.id);
-			if (dbData === undefined) return;
-			author = (await this.client.bulbfetch.getUser(dbData.authorId)) as User;
-			channel = (await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId)) as TextBasedChannel;
-			guild = this.client.guilds.cache.get(dbData.guildId) as Guild;
+			const dbData = await prisma.messageLog.findUnique({
+				where: {
+					messageId: message.id,
+				},
+			});
+			if (isNullish(dbData)) return;
+			// @ts-expect-error
+			author = await this.client.bulbfetch.getUser(dbData.authorId);
+			// @ts-expect-error
+			channel = await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId);
+			// @ts-expect-error
+			guild = this.client.guilds.cache.get(channel.guild?.id);
+			// @ts-expect-error
 			content = dbData.content;
+			// @ts-expect-error
 			sticker = dbData.sticker ? `**S:** ID: \`${dbData.sticker.id}\` | **Name:** ${dbData.sticker.name} | **Format:** ${dbData.sticker.format}\n` : "";
 			attachment = dbData.attachments.length > 0 ? `**A**: ${dbData.attachments.join("\n")}` : "";
-			embeds = dbData.embeds;
+			// @ts-expect-error
+			embeds = dbData.embed;
 		} else {
 			if (message.author.id === this.client.user?.id) return;
 			author = message.author;

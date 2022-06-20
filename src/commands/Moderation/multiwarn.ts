@@ -71,7 +71,7 @@ export default class extends Command {
 
 			const infID = await infractionsManager.warn(
 				this.client,
-				context.guild.id,
+				context.guild,
 				target.user,
 				context.member,
 				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {

@@ -31,10 +31,9 @@ export default class extends Event {
 		}
 
 		const context = await getCommandContext(interaction);
-		if (this.client.blacklist.get(context.author.id) !== undefined) return;
 		if (!context.guild) return;
 		if (this.client.blacklist.get(context.guild.id)) return;
-		if (context.guildId !== null) context.prefix = (await databaseManager.getConfig(context.guildId)).prefix;
+		context.prefix = (await databaseManager.getConfig(context.guild)).prefix;
 
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);

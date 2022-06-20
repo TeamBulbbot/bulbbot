@@ -1,12 +1,23 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isNullish } from "../../../utils/helpers";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function actionsOnInfo(interaction: MessageComponentInteraction, client: BulbBotClient) {
-	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		if (!interaction.replied) {
+			interaction.reply({
+				data: {
+					content: "Error",
+				},
+				ephemeral: true,
+			});
+		}
+		return;
+	}
+	const config = await databaseManager.getConfig(interaction.guild);
 
 	const selectRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
@@ -49,12 +60,12 @@ async function actionsOnInfo(interaction: MessageComponentInteraction, client: B
 				case "back":
 					await require("./main").default(i, client);
 					break;
-				case "enable":
-					await databaseManager.setActionsOnInfo(i.guild?.id as Snowflake, true);
-					await actionsOnInfo(i, client);
-					break;
 				case "disable":
-					await databaseManager.setActionsOnInfo(i.guild?.id as Snowflake, false);
+				case "enable":
+					if (isNullish(i.guild)) {
+						return;
+					}
+					await databaseManager.updateConfig({ guild: i.guild, table: "guildConfiguration", field: "actionsOnInfo", value: i.customId === "enable" });
 					await actionsOnInfo(i, client);
 					break;
 				default:

@@ -18,10 +18,10 @@ export async function set(client: BulbBotClient, context: CommandContext, guild:
 	if (!cache[guild][category][user]) cache[guild][category][user] = { count: value, time: Date.now() };
 	else cache[guild][category][user]["count"] = cache[guild][category][user]["count"] + value;
 
-	const dbGuild = await databaseManager.getAutoModConfig(guild);
+	const dbGuild = await databaseManager.getAutoModConfig(context.guild);
 
-	const messageLimit = dbGuild.limitMessages;
-	const mentionsLimit = dbGuild.limitMentions;
+	const messageLimit = dbGuild.limitMessages || 0;
+	const mentionsLimit = dbGuild.limitMentions || 0;
 
 	if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
 		if (!(context.channel instanceof DMChannel) && "name" in context.channel) {

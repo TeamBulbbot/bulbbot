@@ -8,7 +8,7 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
-import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
+import { isNullish, resolveGuildMemberMoreSafe } from "../../utils/helpers";
 import { APIGuildMember } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -48,7 +48,10 @@ export default class extends ApplicationCommand {
 		]);
 
 		let components: MessageActionRow[];
-		const actionsOnInfo: boolean = (await databaseManager.getConfig(interaction.guild?.id as Snowflake)).actionsOnInfo;
+		if (isNullish(interaction.guild)) {
+			return;
+		}
+		const { actionsOnInfo } = await databaseManager.getConfig(interaction.guild);
 
 		if (!actionsOnInfo) components = [];
 		else if (!(user instanceof GuildMember)) components = [];

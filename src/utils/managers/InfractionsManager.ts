@@ -139,20 +139,20 @@ export default class {
 		return response[0]["id"];
 	}
 
-	public async warn(client: BulbBotClient, guildID: Snowflake, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
-		await this.createInfraction(guildID, "Warn", true, reason, target, moderator.user);
-		const infID: number = await this.getLatestInfraction(guildID, moderator.id, target.id, "Warn");
-		await loggingManager.sendModAction(client, guildID, await client.bulbutils.translate("mod_action_types.warn", guildID, {}), target, moderator.user, reason, infID);
+	public async warn(client: BulbBotClient, guild: Guild, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
+		await this.createInfraction(guild.id, "Warn", true, reason, target, moderator.user);
+		const infID: number = await this.getLatestInfraction(guild.id, moderator.id, target.id, "Warn");
+		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.warn", guild.id, {}), target, moderator.user, reason, infID);
 
 		return infID;
 	}
 
-	public async kick(client: BulbBotClient, guildID: Snowflake, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
+	public async kick(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
 		if (!target.kickable) return null;
-		await this.createInfraction(guildID, "Kick", true, reason, target.user, moderator.user);
+		await this.createInfraction(guild.id, "Kick", true, reason, target.user, moderator.user);
 		await target.kick(reasonLog);
-		const infID: number = await this.getLatestInfraction(guildID, moderator.id, target.id, "Kick");
-		await loggingManager.sendModAction(client, guildID, await client.bulbutils.translate("mod_action_types.kick", guildID, {}), target.user, moderator.user, reason, infID);
+		const infID: number = await this.getLatestInfraction(guild.id, moderator.id, target.id, "Kick");
+		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.kick", guild.id, {}), target.user, moderator.user, reason, infID);
 
 		return infID;
 	}
@@ -162,14 +162,14 @@ export default class {
 			await this.createInfraction(guild.id, "Force-ban", true, reason, target, moderator.user);
 			await guild.members.ban(target, { reason: reasonLog });
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Force-ban");
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.force_ban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.force_ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else if (type == BanType.CLEAN) {
 			await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
 			await guild.members.ban(target.id, { reason: reasonLog, days: 7 });
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Ban");
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else if (type == BanType.SOFT) {
@@ -177,21 +177,21 @@ export default class {
 			await guild.members.ban(target.id, { reason: reasonLog, days: 7 });
 			await guild.members.unban(target.id);
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Soft-ban");
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else if (type == BanType.POOL) {
 			await this.createInfraction(guild.id, "Pool-ban", true, reason, target, moderator.user);
 			await guild.members.ban(target, { reason: reasonLog });
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Pool-ban");
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.pool_ban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.pool_ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else {
 			await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
 			await guild.members.cache.get(target.id)?.ban({ reason: reasonLog });
 			const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Ban");
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		}
@@ -220,7 +220,7 @@ export default class {
 		await target.timeout(null, reason);
 		await this.createInfraction(guild.id, "Unmute", true, reason, target.user, moderator);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.id, target.user.id, "Unmute");
-		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.unmute", guild.id, {}), target.user, moderator, reason, infID);
+		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.unmute", guild.id, {}), target.user, moderator, reason, infID);
 
 		return infID;
 	}
@@ -231,9 +231,9 @@ export default class {
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Unban");
 
 		if (type === BanType.MANUAL) {
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.unban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.unban", guild.id, {}), target, moderator.user, reason, infID);
 		} else if (type === BanType.TEMP) {
-			await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.auto_unban", guild.id, {}), target, moderator.user, reason, infID);
+			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.auto_unban", guild.id, {}), target, moderator.user, reason, infID);
 		}
 
 		return infID;
@@ -243,7 +243,7 @@ export default class {
 		await target.voice.setDeaf(true, reason);
 		await this.createInfraction(guild.id, "Deafen", true, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Deafen");
-		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.deafen", guild.id, {}), target.user, moderator.user, reason, infID);
+		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.deafen", guild.id, {}), target.user, moderator.user, reason, infID);
 
 		return infID;
 	}
@@ -252,7 +252,7 @@ export default class {
 		await target.voice.setDeaf(false, reason);
 		await this.createInfraction(guild.id, "Undeafen", true, reason, target.user, moderator.user);
 		const infID: number = await this.getLatestInfraction(guild.id, moderator.user.id, target.id, "Undeafen");
-		await loggingManager.sendModAction(client, guild.id, await client.bulbutils.translate("mod_action_types.undeafen", guild.id, {}), target.user, moderator.user, reason, infID);
+		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.undeafen", guild.id, {}), target.user, moderator.user, reason, infID);
 
 		return infID;
 	}

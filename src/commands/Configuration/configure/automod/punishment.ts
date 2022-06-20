@@ -1,15 +1,18 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import PunishmentType from "../../../../utils/types/PunishmentType";
 import AutoModPart from "../../../../utils/types/AutoModPart";
-import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import * as Emotes from "../../../../emotes.json";
+import { isNullish } from "../../../../utils/helpers";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function punishment(interaction: MessageComponentInteraction, client: BulbBotClient, selectedCategory?: string) {
-	const config: AutoModConfiguration = await databaseManager.getAutoModConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		return;
+	}
+	const config = await databaseManager.getAutoModConfig(interaction.guild);
 
 	const selectRow = new MessageActionRow().setComponents(
 		new MessageSelectMenu()
@@ -85,9 +88,9 @@ async function punishment(interaction: MessageComponentInteraction, client: Bulb
 			if (i.customId === "category") {
 				collector.stop();
 				return punishment(i, client, i.values[0]);
-			} else if (i.customId === "punishment") {
+			} else if (i.customId === "punishment" && !isNullish(interaction.guild)) {
 				collector.stop();
-				selectedCategory && (await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, categories[selectedCategory], punishmentTypes[i.values[0]]));
+				selectedCategory && (await databaseManager.automodSetPunishment(interaction.guild, categories[selectedCategory], punishmentTypes[i.values[0]]));
 				return punishment(i, client, selectedCategory);
 			}
 		}

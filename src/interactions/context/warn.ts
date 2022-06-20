@@ -9,7 +9,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
 	const target = message.member;
 	if (!target || !interaction.guild) return;
-	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
+	const reasons: string[] = (await databaseManager.getConfig(target.guild)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild.id, {}));
 
 	const options: MessageSelectOptionData[] = [];
@@ -35,7 +35,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 
 		const infID = await infractionsManager.warn(
 			client,
-			interaction.guild.id,
+			interaction.guild,
 			target.user,
 			interaction.member as GuildMember,
 			await client.bulbutils.translate("global_mod_action_log", message.guild?.id, {

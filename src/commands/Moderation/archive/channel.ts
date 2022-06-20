@@ -30,20 +30,18 @@ export default class extends SubCommand {
 
 		let archive: string = await this.client.bulbutils.translate("archive_header_format", context.guild?.id, {});
 		let temp: string;
-		const archiveChannelData = context.guild?.id ? await getChannelArchive(channel, context.guild.id, AMOUNT) : [];
+		const archiveChannelData = context.guild?.id ? await getChannelArchive(channel, context.guild, AMOUNT) : [];
 		if (archiveChannelData.length === 0) return startMessage.edit(await this.client.bulbutils.translate("archive_no_data_found", context.guild?.id, {}));
 
-		archiveChannelData.forEach(
-			(message: { updatedAt: string; channelId: any; messageId: any; authorTag: any; authorId: any; content: any; sticker: any; embed: any; embeds: any; attachments: any[] }) => {
-				temp = `[${moment(Date.parse(message.updatedAt)).format("MMMM Do YYYY, h:mm:ss a")}] ${message.channelId}-${message.messageId} | ${message.authorTag} (${message.authorId}): `;
-				if (message.content) temp += `C: ${message.content}\n`;
-				else if (message.sticker) temp += `S: ${message.sticker}\n`;
-				if (message.embed) temp += `E: ${JSON.stringify(message.embeds)}\n`;
-				if (message.attachments.length > 0) temp += `A: ${message.attachments.join("\n")}\n`;
+		archiveChannelData.forEach((message) => {
+			temp = `[${moment(message.updatedAt).format("MMMM Do YYYY, h:mm:ss a")}] ${message.channelId}-${message.messageId} | ${message.authorTag} (${message.authorId}): `;
+			if (message.content) temp += `C: ${message.content}\n`;
+			else if (message.sticker) temp += `S: ${message.sticker}\n`;
+			if (message.embed) temp += `E: ${JSON.stringify(message.embed)}\n`;
+			if (message.attachments.length > 0) temp += `A: ${message.attachments.join("\n")}\n`;
 
-				archive += `${temp}`;
-			},
-		);
+			archive += `${temp}`;
+		});
 
 		writeFileSync(`${__dirname}/../../../../files/archive-data-${context.guild?.id}-${channel}.txt`, archive);
 		startMessage.edit({

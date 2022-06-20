@@ -37,7 +37,7 @@ export default class extends Command {
 
 		if (!context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, { discord_invite: supportInvite }));
 
-		const amountOfMessages = (await getServerArchive(context.guild.id, days.toString())).length;
+		const amountOfMessages = (await getServerArchive(context.guild, days)).length;
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
 			new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
@@ -61,7 +61,7 @@ export default class extends Command {
 
 			if (interaction.customId === "confirm") {
 				collector.stop("clicked");
-				if (context.guild?.id) await purgeMessagesInGuild(context.guild.id, days.toString());
+				if (context.guild?.id) await purgeMessagesInGuild(context.guild, days);
 
 				return await interaction.update({
 					content: await this.client.bulbutils.translate("messageclear_success_delete", context.guild?.id, { messages: amountOfMessages }),

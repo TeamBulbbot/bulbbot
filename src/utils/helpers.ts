@@ -106,3 +106,5 @@ export const resolveGuildMemberMoreSafe = (memberInput: GuildMemberMaybeApi): Gu
 	? memberInput
 	// @ts-expect-error This is a private constructor don't worry about it
 	: new GuildMember(memberInput);
+
+export const isNullish = (value: any): value is null | undefined => value == null;

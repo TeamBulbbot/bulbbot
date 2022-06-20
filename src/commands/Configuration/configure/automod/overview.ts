@@ -1,6 +1,5 @@
 import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
-import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import * as Emotes from "../../../../emotes.json";
 import { embedColor } from "../../../../Config";
@@ -9,7 +8,7 @@ const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function overview(interaction: MessageComponentInteraction, client: BulbBotClient) {
 	if (!interaction.guild?.id) return;
-	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(interaction.guild.id);
+	const dbGuild = await databaseManager.getAutoModConfig(interaction.guild);
 
 	const roles: string[] = [];
 	const channels: string[] = [];
@@ -53,7 +52,7 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 		await client.bulbutils.translate("automod_settings_mentions", interaction.guild.id, {
 			enabled: dbGuild.punishmentMentions ? `\`${dbGuild.punishmentMentions}\`` : Emotes.other.SWITCHOFF,
 			limit: dbGuild.limitMentions,
-			timeout: dbGuild.timeoutMentions / 1000,
+			timeout: dbGuild.timeoutMentions ? dbGuild.timeoutMentions / 1000 : 0,
 		}),
 	);
 
@@ -61,7 +60,7 @@ async function overview(interaction: MessageComponentInteraction, client: BulbBo
 		await client.bulbutils.translate("automod_settings_messages", interaction.guild.id, {
 			enabled: dbGuild.punishmentMessages ? `\`${dbGuild.punishmentMessages}\`` : Emotes.other.SWITCHOFF,
 			limit: dbGuild.limitMessages,
-			timeout: dbGuild.timeoutMessages / 1000,
+			timeout: dbGuild.timeoutMessages ? dbGuild.timeoutMessages / 1000 : 0,
 		}),
 	);
 

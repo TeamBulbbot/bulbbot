@@ -29,7 +29,7 @@ export default class extends SubCommand {
 			return;
 		}
 
-		await databaseManager.createGuild(guild);
+		await databaseManager.getGuild(guild);
 		context.channel.send(`Added **${guild.name}** to the database`);
 	}
 }

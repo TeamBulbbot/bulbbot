@@ -18,7 +18,7 @@ export default class extends Event {
 
 	public async run(oldMember: GuildMember, newMember: GuildMember) {
 		let autoRoleName: string | null;
-		if (oldMember.pending && !newMember.pending && (autoRoleName = (await databaseManager.getConfig(newMember.guild.id))["autorole"]) !== null) await newMember.roles.add(autoRoleName);
+		if (oldMember.pending && !newMember.pending && (autoRoleName = (await databaseManager.getConfig(newMember.guild))["autorole"]) !== null) await newMember.roles.add(autoRoleName);
 
 		let change: "newrole" | "removedrole" | "nickname";
 		let part: "member" | "role" | "modAction";
@@ -48,7 +48,7 @@ export default class extends Event {
 					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Unmute");
 					await loggingManager.sendModAction(
 						this.client,
-						newMember.guild.id,
+						newMember.guild,
 						await this.client.bulbutils.translate("mod_action_types.unmute", newMember.guild.id, {}),
 						newMember.user,
 						executor,
@@ -114,7 +114,7 @@ export default class extends Event {
 					auditLog = audit.entries.first();
 				}
 
-				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild.id)).manualNicknameInf) {
+				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild)).manualNicknameInf) {
 					executor = auditLog.executor;
 					if (!executor?.id || executor.id === this.client.user?.id) return;
 

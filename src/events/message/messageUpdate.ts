@@ -5,11 +5,10 @@ import * as fs from "fs";
 import ClearanceManager from "../../utils/managers/ClearanceManager";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import AutoMod from "../../utils/AutoMod";
-import DatabaseManager from "../../utils/managers/DatabaseManager";
+import { prisma } from "../../prisma";
 
 const loggingManager: LoggingManager = new LoggingManager();
 const clearanceManager: ClearanceManager = new ClearanceManager();
-const { getMessageFromDB, updateMessageContent }: DatabaseManager = new DatabaseManager();
 export default class extends Event {
 	constructor(...args: any[]) {
 		// @ts-expect-error
@@ -28,8 +27,12 @@ export default class extends Event {
 		let oldMessageContent: string;
 
 		if (oldMessage.partial || newMessage.partial) {
-			const dbData = await getMessageFromDB(oldMessage.id);
-			if (dbData === undefined) return;
+			const dbData = await prisma.messageLog.findUnique({
+				where: {
+					messageId: oldMessage.id,
+				},
+			});
+			if (!dbData?.content) return;
 			oldMessageContent = dbData.content;
 		} else {
 			if (newMessage.author?.id === this.client.user?.id) return;
@@ -68,6 +71,13 @@ export default class extends Event {
 			);
 		} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
 
-		await updateMessageContent(oldMessage.id, newMessage.content);
+		await prisma.messageLog.update({
+			data: {
+				content: newMessage.content,
+			},
+			where: {
+				messageId: oldMessage.id,
+			},
+		});
 	}
 }

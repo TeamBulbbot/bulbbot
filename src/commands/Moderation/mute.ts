@@ -67,7 +67,7 @@ export default class extends Command {
 			Date.now() + parse(args[1]),
 		);
 
-		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(context.guild.id)];
+		const timezone = this.client.bulbutils.timezones[(await databaseManager.getConfig(context.guild)).timezone];
 		await context.channel.send(
 			await this.client.bulbutils.translate("action_success_temp", context.guild.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild.id, {}),

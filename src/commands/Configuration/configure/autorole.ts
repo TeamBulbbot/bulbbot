@@ -1,14 +1,17 @@
-import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Role, Snowflake } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Role } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isNullish } from "../../../utils/helpers";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 import { NonDigits } from "../../../utils/Regex";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function autorole(interaction: MessageComponentInteraction, client: BulbBotClient) {
-	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
-	const role: Role | null = config.autorole !== null ? ((await client.bulbfetch.getRole(interaction.guild?.roles, config.autorole)) as Role) : null;
+	if (isNullish(interaction.guild)) {
+		return;
+	}
+	const config = await databaseManager.getConfig(interaction.guild);
+	const role = config.autorole !== null ? ((await client.bulbfetch.getRole(interaction.guild?.roles, config.autorole)) as Role) : null;
 
 	const placeholderRow = new MessageActionRow().addComponents(
 		new MessageSelectMenu()
@@ -53,12 +56,15 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
 		if (i.isButton()) {
+			if (isNullish(interaction.guild)) {
+				return;
+			}
 			switch (i.customId) {
 				case "back":
 					await require("./main").default(i, client);
 					break;
 				case "disable":
-					await databaseManager.setAutoRole(interaction.guild?.id as Snowflake, null);
+					await databaseManager.updateConfig({ guild: interaction.guild, table: "guildConfiguration", field: "autorole", value: null });
 					await interaction.followUp({
 						content: await client.bulbutils.translate("config_autorole_disable", interaction.guild?.id, {}),
 						ephemeral: true,
@@ -86,7 +92,7 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 						const role = await client.bulbfetch.getRole(interaction.guild?.roles, roleId);
 						await m.delete();
 
-						if (!role) {
+						if (!role || isNullish(interaction.guild)) {
 							await interaction.followUp({
 								content: await client.bulbutils.translate("global_cannot_convert_special", interaction.guild?.id, {
 									arg_provided: m.content,
@@ -98,7 +104,7 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 							return;
 						}
 
-						await databaseManager.setAutoRole(interaction.guild?.id as Snowflake, role.id);
+						await databaseManager.updateConfig({ guild: interaction.guild, table: "guildConfiguration", field: "autorole", value: role.id });
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_autorole_success", interaction.guild?.id, { role }),
 							ephemeral: true,

@@ -2,7 +2,7 @@ import Command from "../../structures/Command";
 import CommandContext from "../../structures/CommandContext";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { Blacklist } from "../../utils/types/DatabaseStructures";
+import { isNullish } from "../../utils/helpers";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -54,8 +54,8 @@ export default class extends Command {
 				break;
 
 			case "info":
-				const info: Blacklist = await databaseManager.infoBlacklist(args[2]);
-				if (info !== undefined) await context.channel.send(`\`\`\`json\n${JSON.stringify(info, null, 2)}\n\`\`\``);
+				const info = await databaseManager.infoBlacklist(args[2]);
+				if (!isNullish(info)) await context.channel.send(`\`\`\`json\n${JSON.stringify(info, null, 2)}\n\`\`\``);
 				else await context.channel.send("User or guild is not blacklisted");
 
 				break;

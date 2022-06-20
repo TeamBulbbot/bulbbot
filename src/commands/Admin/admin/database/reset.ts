@@ -29,9 +29,9 @@ export default class extends SubCommand {
 			return;
 		}
 
-		await databaseManager.deleteGuild(guild.id);
-		await databaseManager.createGuild(guild);
+		await databaseManager.deleteGuild(guild);
+		await databaseManager.getGuild(guild);
 
-		context.channel.send(`Reseted **${guild.name}**`);
+		context.channel.send(`Reset **${guild.name}**`);
 	}
 }

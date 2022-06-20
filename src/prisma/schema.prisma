@@ -1,200 +1,254 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider             = "postgresql"
+  url                  = env("DB_URL")
+  referentialIntegrity = "prisma"
 }
 
-model automods {
-  id                   Int      @id @default(autoincrement())
-  enabled              Boolean? @default(false)
-  websiteWhitelist     String[] @db.VarChar(255)
-  punishmentWebsite    String?  @db.VarChar(255)
-  inviteWhitelist      String[] @db.VarChar(255)
-  punishmentInvites    String?  @db.VarChar(255)
-  wordBlacklist        String[] @db.VarChar(255)
-  wordBlacklistToken   String[] @db.VarChar(255)
-  punishmentWords      String?  @db.VarChar(255)
-  limitMentions        Int?     @default(0)
-  punishmentMentions   String?  @db.VarChar(255)
-  timeoutMentions      Int?     @default(15000)
-  limitMessages        Int?     @default(0)
-  punishmentMessages   String?  @db.VarChar(255)
-  timeoutMessages      Int?     @default(10000)
-  avatarHashes         String[] @db.VarChar(255)
-  punishmentAvatarBans String?  @db.VarChar(255)
-  ignoreChannels       String[] @db.VarChar(255)
-  ignoreRoles          String[] @db.VarChar(255)
-  ignoreUsers          String[] @db.VarChar(255)
-  guilds               guilds[]
+model Automod {
+  id                   Int        @id @default(autoincrement())
+  enabled              Boolean?   @default(false)
+  websiteWhitelist     String[]   @db.VarChar(255)
+  punishmentWebsite    String?    @db.VarChar(255)
+  inviteWhitelist      String[]   @db.VarChar(255)
+  punishmentInvites    String?    @db.VarChar(255)
+  wordBlacklist        String[]   @db.VarChar(255)
+  wordBlacklistToken   String[]   @db.VarChar(255)
+  punishmentWords      String?    @db.VarChar(255)
+  limitMentions        Int?       @default(0)
+  punishmentMentions   String?    @db.VarChar(255)
+  timeoutMentions      Int?       @default(15000)
+  limitMessages        Int?       @default(0)
+  punishmentMessages   String?    @db.VarChar(255)
+  timeoutMessages      Int?       @default(10000)
+  avatarHashes         String[]   @db.VarChar(255)
+  punishmentAvatarBans String?    @db.VarChar(255)
+  ignoreChannels       String[]   @db.VarChar(255)
+  ignoreRoles          String[]   @db.VarChar(255)
+  ignoreUsers          String[]   @db.VarChar(255)
+  guilds               BulbGuild?
+
+  @@map("automods")
 }
 
-model banpoolSubscribers {
-  id        Int       @id @default(autoincrement())
-  guildId   String    @db.VarChar(255)
-  createdAt DateTime  @db.Timestamptz(6)
-  updatedAt DateTime  @db.Timestamptz(6)
+model BanpoolSubscriber {
+  id        Int      @id @default(autoincrement())
+  guildId   String   @db.VarChar(255)
+  createdAt DateTime @db.Timestamptz(6) @default(now())
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
   banpoolId Int?
-  banpools  banpools? @relation(fields: [banpoolId], references: [id])
+  banpool   Banpool? @relation(fields: [banpoolId], references: [id])
+
+  @@index([guildId])
+  @@index([banpoolId])
+  @@map("banpoolSubscribers")
 }
 
-model banpools {
-  id                 Int                  @id @default(autoincrement())
-  name               String               @db.VarChar(255)
-  createdAt          DateTime             @db.Timestamptz(6)
-  updatedAt          DateTime             @db.Timestamptz(6)
+model Banpool {
+  id                 Int                 @id @default(autoincrement())
+  name               String              @db.VarChar(255)
+  createdAt          DateTime            @db.Timestamptz(6) @default(now())
+  updatedAt          DateTime            @updatedAt @db.Timestamptz(6)
   guildId            Int?
-  guilds             guilds?              @relation(fields: [guildId], references: [id])
-  banpoolSubscribers banpoolSubscribers[]
+  guild              BulbGuild?          @relation(fields: [guildId], references: [id])
+  banpoolSubscribers BanpoolSubscriber[]
+
+  @@index([guildId])
+  @@map("banpools")
 }
 
-model blacklists {
+model BlacklistEntry {
   id          Int      @id @default(autoincrement())
   isGuild     Boolean  @default(false)
   name        String   @db.VarChar(255)
   snowflakeId String   @db.VarChar(255)
   reason      String   @db.VarChar(255)
   developerId String   @db.VarChar(255)
-  createdAt   DateTime @db.Timestamptz(6)
-  updatedAt   DateTime @db.Timestamptz(6)
+  createdAt   DateTime @db.Timestamptz(6) @default(now())
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@index([snowflakeId])
+  @@index([developerId])
+  @@map("blacklists")
 }
 
-model experiments {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
+model Experiment {
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  createdAt DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt DateTime   @updatedAt @db.Timestamptz(6)
   guildId   Int?
-  guilds    guilds?  @relation(fields: [guildId], references: [id])
+  guild     BulbGuild? @relation(fields: [guildId], references: [id])
+
+  @@index([guildId])
+  @@index([name])
+  @@map("experiments")
 }
 
-model guildConfigurations {
-  id            Int      @id @default(autoincrement())
-  prefix        String   @default("!") @db.VarChar(255)
-  language      String   @default("en-US") @db.VarChar(255)
-  timezone      String   @default("UTC") @db.VarChar(255)
-  premiumGuild  Boolean  @default(false)
-  autorole      String?  @db.VarChar(255)
-  actionsOnInfo Boolean? @default(false)
-  rolesOnLeave  Boolean? @default(false)
-  quickReasons  String[] @db.VarChar(255)
-  createdAt     DateTime @db.Timestamptz(6)
-  updatedAt     DateTime @db.Timestamptz(6)
-  guilds        guilds[]
+model GuildConfiguration {
+  id                Int        @id @default(autoincrement())
+  prefix            String     @default("!") @db.VarChar(255)
+  language          String     @default("en-US") @db.VarChar(255)
+  timezone          String     @default("UTC") @db.VarChar(255)
+  premiumGuild      Boolean    @default(false)
+  autorole          String?    @db.VarChar(255)
+  muteRole          String?    @db.VarChar(255)
+  actionsOnInfo     Boolean?   @default(false)
+  rolesOnLeave      Boolean?   @default(false)
+  quickReasons      String[]   @db.VarChar(255)
+  createdAt         DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
+  manualNicknameInf Boolean?   @default(false)
+  guilds            BulbGuild?
+
+  @@map("guildConfigurations")
 }
 
-model guildLoggings {
-  id        Int      @id @default(autoincrement())
-  modAction String?  @db.VarChar(255)
-  banpool   String?  @db.VarChar(255)
-  automod   String?  @db.VarChar(255)
-  message   String?  @db.VarChar(255)
-  role      String?  @db.VarChar(255)
-  member    String?  @db.VarChar(255)
-  channel   String?  @db.VarChar(255)
-  thread    String?  @db.VarChar(255)
-  invite    String?  @db.VarChar(255)
-  joinLeave String?  @db.VarChar(255)
-  other     String?  @db.VarChar(255)
-  createdAt DateTime @db.Timestamptz(6)
-  updatedAt DateTime @db.Timestamptz(6)
-  guilds    guilds[]
+model GuildLogging {
+  id        Int        @id @default(autoincrement())
+  modAction String?    @db.VarChar(255)
+  banpool   String?    @db.VarChar(255)
+  automod   String?    @db.VarChar(255)
+  message   String?    @db.VarChar(255)
+  role      String?    @db.VarChar(255)
+  member    String?    @db.VarChar(255)
+  channel   String?    @db.VarChar(255)
+  thread    String?    @db.VarChar(255)
+  invite    String?    @db.VarChar(255)
+  joinLeave String?    @db.VarChar(255)
+  other     String?    @db.VarChar(255)
+  createdAt DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt DateTime   @updatedAt @db.Timestamptz(6)
+  guilds    BulbGuild?
+
+  @@map("guildLoggings")
 }
 
-model guildModerationRoles {
-  id             Int      @id @default(autoincrement())
-  roleId         String   @db.VarChar(255)
+model GuildModerationRole {
+  id             Int        @id @default(autoincrement())
+  roleId         String     @db.VarChar(255)
   clearanceLevel Int
-  createdAt      DateTime @db.Timestamptz(6)
-  updatedAt      DateTime @db.Timestamptz(6)
+  createdAt      DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt      DateTime   @updatedAt @db.Timestamptz(6)
   guildId        Int?
-  guilds         guilds?  @relation(fields: [guildId], references: [id])
+  guild          BulbGuild? @relation(fields: [guildId], references: [id])
+
+  @@index([guildId])
+  @@map("guildModerationRoles")
 }
 
-model guildOverrideCommands {
-  id             Int      @id @default(autoincrement())
+model GuildOverrideCommand {
+  id             Int        @id @default(autoincrement())
   enabled        Boolean
-  commandName    String   @db.VarChar(255)
+  commandName    String     @db.VarChar(255)
   clearanceLevel Int
-  createdAt      DateTime @db.Timestamptz(6)
-  updatedAt      DateTime @db.Timestamptz(6)
+  createdAt      DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt      DateTime   @updatedAt @db.Timestamptz(6)
   guildId        Int?
-  guilds         guilds?  @relation(fields: [guildId], references: [id])
+  guild          BulbGuild? @relation(fields: [guildId], references: [id])
+
+  @@index([guildId])
+  @@map("guildOverrideCommands")
 }
 
-model guilds {
-  id                    Int                     @id @default(autoincrement())
-  guildId               String                  @db.VarChar(255)
-  name                  String                  @db.VarChar(255)
-  createdAt             DateTime                @db.Timestamptz(6)
-  updatedAt             DateTime                @db.Timestamptz(6)
-  guildConfigurationId  Int?
-  guildLoggingId        Int?
-  automodId             Int?
-  automods              automods?               @relation(fields: [automodId], references: [id])
-  guildConfigurations   guildConfigurations?    @relation(fields: [guildConfigurationId], references: [id])
-  guildLoggings         guildLoggings?          @relation(fields: [guildLoggingId], references: [id])
-  banpools              banpools[]
-  experiments           experiments[]
-  guildModerationRoles  guildModerationRoles[]
-  guildOverrideCommands guildOverrideCommands[]
-  infractions           infractions[]
-  messageLogs           messageLogs[]
-  tempbans              tempbans[]
+model BulbGuild {
+  id                    Int                    @id @default(autoincrement())
+  guildId               String                 @unique @db.VarChar(255)
+  name                  String                 @db.VarChar(255)
+  createdAt             DateTime               @db.Timestamptz(6) @default(now())
+  updatedAt             DateTime               @updatedAt @db.Timestamptz(6)
+  guildConfigurationId  Int                    @unique
+  guildLoggingId        Int                    @unique
+  automodId             Int                    @unique
+  automod               Automod                @relation(fields: [automodId], references: [id], onDelete: SetNull)
+  guildConfiguration    GuildConfiguration     @relation(fields: [guildConfigurationId], references: [id], onDelete: SetNull)
+  guildLogging          GuildLogging           @relation(fields: [guildLoggingId], references: [id], onDelete: SetNull)
+  banpools              Banpool[]
+  experiments           Experiment[]
+  guildModerationRoles  GuildModerationRole[]
+  guildOverrideCommands GuildOverrideCommand[]
+  infractions           Infraction[]
+  messageLogs           MessageLog[]
+  tempbans              Tempban[]
+
+  @@map("guilds")
 }
 
-model infractions {
-  id          Int      @id @default(autoincrement())
-  action      String   @db.VarChar(255)
-  active      String   @db.VarChar(255)
-  reason      String   @db.VarChar(10000)
-  target      String   @db.VarChar(255)
-  targetId    String   @db.VarChar(255)
-  moderator   String   @db.VarChar(255)
-  moderatorId String   @db.VarChar(255)
-  createdAt   DateTime @db.Timestamptz(6)
-  updatedAt   DateTime @db.Timestamptz(6)
+model Infraction {
+  id          Int        @id @default(autoincrement())
+  action      String     @db.VarChar(255)
+  active      String     @db.VarChar(255)
+  reason      String     @db.VarChar(10000)
+  target      String     @db.VarChar(255)
+  targetId    String     @db.VarChar(255)
+  moderator   String     @db.VarChar(255)
+  moderatorId String     @db.VarChar(255)
+  createdAt   DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
   guildId     Int?
-  guilds      guilds?  @relation(fields: [guildId], references: [id])
+  guild       BulbGuild? @relation(fields: [guildId], references: [id])
+
+  @@index([targetId])
+  @@index([moderatorId])
+  @@index([guildId])
+  @@map("infractions")
 }
 
-model messageLogs {
-  messageId   String   @id @db.VarChar(18)
-  channelId   String   @db.VarChar(18)
-  authorId    String   @db.VarChar(18)
-  authorTag   String   @db.VarChar(50)
-  content     String?  @db.VarChar(4000)
-  embed       Json?    @db.Json
-  sticker     Json?    @db.Json
-  attachments String[] @db.VarChar(800)
-  createdAt   DateTime @db.Timestamptz(6)
-  updatedAt   DateTime @db.Timestamptz(6)
+model MessageLog {
+  messageId   String     @id @db.VarChar(18)
+  channelId   String     @db.VarChar(18)
+  authorId    String     @db.VarChar(18)
+  authorTag   String     @db.VarChar(50)
+  content     String?    @db.VarChar(4000)
+  embed       Json?      @db.Json
+  sticker     Json?      @db.Json
+  attachments String[]   @db.VarChar(800)
+  createdAt   DateTime   @db.Timestamptz(6)
+  updatedAt   DateTime   @db.Timestamptz(6)
   guildId     Int?
-  guilds      guilds?  @relation(fields: [guildId], references: [id])
+  guild       BulbGuild? @relation(fields: [guildId], references: [id])
+
+  @@index([guildId])
+  @@index([authorId])
+  @@index([channelId])
+  @@index([messageId])
+  @@map("messageLogs")
 }
 
-model reminds {
+model Reminder {
   id         Int      @id @default(autoincrement())
   reason     String   @db.VarChar(1500)
   expireTime BigInt
   userId     String   @db.VarChar(255)
   channelId  String?  @db.VarChar(255)
   messageId  String?  @db.VarChar(255)
-  createdAt  DateTime @db.Timestamptz(6)
-  updatedAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime @db.Timestamptz(6) @default(now())
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([channelId])
+  @@index([messageId])
+  @@map("reminds")
 }
 
-model tempbans {
-  id         Int      @id @default(autoincrement())
-  targetTag  String   @db.VarChar(255)
-  targetId   String   @db.VarChar(255)
-  gId        String   @db.VarChar(255)
-  reason     String   @db.VarChar(255)
+model Tempban {
+  id         Int        @id @default(autoincrement())
+  targetTag  String     @db.VarChar(255)
+  targetId   String     @db.VarChar(255)
+  gId        String     @db.VarChar(255)
+  reason     String     @db.VarChar(255)
   expireTime BigInt
-  createdAt  DateTime @db.Timestamptz(6)
-  updatedAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime   @db.Timestamptz(6) @default(now())
+  updatedAt  DateTime   @updatedAt @db.Timestamptz(6)
   guildId    Int?
-  guilds     guilds?  @relation(fields: [guildId], references: [id])
+  guild      BulbGuild? @relation(fields: [guildId], references: [id])
+
+  @@index([targetId])
+  @@index([gId])
+  @@index([guildId])
+  @@map("tempbans")
 }

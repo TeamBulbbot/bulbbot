@@ -37,12 +37,12 @@ export default class extends Event {
 		await databaseManager.addToMessageToDB(message);
 
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
-		let guildCfg = await databaseManager.getConfig(context.guild.id);
+		let guildCfg = await databaseManager.getConfig(context.guild);
 
 		if ((guildCfg === undefined || guildCfg.prefix === undefined) && (context.content.startsWith(Config.prefix) || mentionRegex.test(context.content))) {
-			await databaseManager.deleteGuild(context.guild.id);
-			await databaseManager.createGuild(context.guild);
-			if (!(guildCfg = await databaseManager.getConfig(context.guild.id)))
+			await databaseManager.deleteGuild(context.guild);
+			await databaseManager.getGuild(context.guild);
+			if (!(guildCfg = await databaseManager.getConfig(context.guild)))
 				return this.safeReply(context, "Please remove and re-add the bot to the server https://bulbbot.rocks/invite, there has been an error with the configuration of the guild");
 		}
 

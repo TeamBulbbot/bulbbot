@@ -1,14 +1,26 @@
-import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, MessageSelectOptionData, Snowflake } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, MessageSelectOptionData } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
-import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import AutoModPart from "../../../../utils/types/AutoModPart";
 import { NonDigits } from "../../../../utils/Regex";
+import { isNullish } from "../../../../utils/helpers";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function add(interaction: MessageComponentInteraction, client: BulbBotClient, category?: string, items?: string[]): Promise<void> {
-	const config: AutoModConfiguration = await databaseManager.getAutoModConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		if (!interaction.replied) {
+			interaction.reply({
+				data: {
+					content: "Error",
+				},
+				ephemeral: true,
+			});
+		}
+		return;
+	}
+
+	const config = await databaseManager.getAutoModConfig(interaction.guild);
 	let pages: MessageSelectOptionData[][] | undefined;
 	const currPage = 0;
 
@@ -95,8 +107,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 					break;
 				case "remove":
 					collector.stop();
-
-					if (selectedCategory) await databaseManager.automodRemove(interaction.guild?.id as Snowflake, categories[selectedCategory], selectedItems as string[]);
+					if (selectedCategory && !isNullish(interaction.guild)) await databaseManager.automodRemove(interaction.guild, categories[selectedCategory], selectedItems as string[]);
 					await interaction.followUp({
 						content: await client.bulbutils.translate("config_automod_add_remove_remove_success", interaction.guild?.id, {}),
 						ephemeral: true,
@@ -173,8 +184,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							} else appendContent = users;
 						}
 
-						if (!interaction.guild?.id) return;
-						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id, categories[selectedCategory], [appendContent]);
+						if (selectedCategory && !isNullish(interaction.guild)) await databaseManager.automodAppend(interaction.guild, categories[selectedCategory], [appendContent]);
 
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_automod_add_remove_add_success", interaction.guild?.id, {}),

@@ -31,6 +31,6 @@ export default class extends Event {
 
 		await infractionsManager.createInfraction(ban.guild.id, "Manual Ban", true, reason, ban.user, executor);
 		const infID: number = await infractionsManager.getLatestInfraction(ban.guild.id, executor.id, ban.user.id, "Manual Ban");
-		await loggingManager.sendModAction(this.client, ban.guild.id, "manually banned", ban.user, executor, reason, infID);
+		await loggingManager.sendModAction(this.client, ban.guild, "manually banned", ban.user, executor, reason, infID);
 	}
 }
