@@ -1,6 +1,7 @@
 import type { APIGuildMember } from "discord-api-types/v9";
-import { User, GuildMember, UserFlags } from "discord.js";
+import { User, GuildMember, UserFlags, Role } from "discord.js";
 import * as Emotes from "../emotes.json";
+import { APIRole } from "discord-api-types/v10";
 
 // Miscellaneous helper functions & idioms
 // So they don't need to be referenced from bulbutils
@@ -57,6 +58,7 @@ export function emote(strings: TemplateStringsArray, ...actions: string[]): stri
 }
 
 type GuildMemberMaybeApi = GuildMember | APIGuildMember;
+type GuildRoleMaybeApi = Role | APIRole;
 
 /** Dark Magic */
 export function resolveGuildMemberUnsafe(memberInput: GuildMemberMaybeApi): GuildMember {
@@ -106,3 +108,9 @@ export const resolveGuildMemberMoreSafe = (memberInput: GuildMemberMaybeApi): Gu
 	? memberInput
 	// @ts-expect-error This is a private constructor don't worry about it
 	: new GuildMember(memberInput);
+
+export const resolveGuildRoleMoreSafe = (roleInput: GuildRoleMaybeApi): Role =>
+	roleInput instanceof Role
+		? roleInput
+		: // @ts-expect-error
+		  new Role(roleInput);
