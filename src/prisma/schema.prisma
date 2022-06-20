@@ -45,6 +45,7 @@ model BanpoolSubscriber {
 
   @@index([guildId])
   @@index([banpoolId])
+  @@unique([guildId, banpoolId])
   @@map("banpoolSubscribers")
 }
 

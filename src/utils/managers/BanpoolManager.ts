@@ -1,8 +1,7 @@
 import { Snowflake } from "discord.js";
-import { sequelize } from "../database/connection";
-import { QueryTypes } from "sequelize";
 import prisma from "../../prisma";
 import { BanpoolInvite } from "../types/BanpoolInvite";
+import { isNullish } from "../helpers";
 
 export default class {
 	async createBanpool(guildId: Snowflake, poolName: string) {
@@ -70,6 +69,14 @@ export default class {
 		});
 	}
 
+	async getPool(name: string) {
+		return await prisma.banpool.findUnique({
+			where: {
+				name,
+			},
+		});
+	}
+
 	async getPools(guildId: Snowflake) {
 		return await prisma.banpool.findMany({
 			where: {
@@ -115,46 +122,59 @@ export default class {
 	}
 
 	async isGuildInPool(guildId: Snowflake, poolname: string) {
-		const guildsArray: string[] = [];
-		const guilds: any = await sequelize.query('SELECT "guildId" FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE "name" = $PoolName)', {
-			bind: {
-				PoolName: poolname,
+		const subscriber = await prisma.banpoolSubscriber.findFirst({
+			where: {
+				guildId,
+				banpool: {
+					name: poolname,
+				},
 			},
-			type: QueryTypes.SELECT,
 		});
 
-		for (let ii = 0; ii < guilds.length; ii++) guildsArray.push(guilds[ii].guildId);
-
-		return guildsArray.includes(guildId);
+		return !!subscriber;
 	}
 
 	async leavePool(guildId: Snowflake, poolname: string) {
-		await sequelize.query('DELETE FROM "banpoolSubscribers" WHERE "guildId" = $GuildID AND "banpoolId" = (SELECT id FROM banpools WHERE name = $PoolName)', {
-			bind: { GuildID: guildId, PoolName: poolname },
-			type: QueryTypes.DELETE,
-		});
-	}
-
-	async getCreatorGuild(poolname: string) {
-		const guid: any = await sequelize.query('SELECT "guildId" from guilds WHERE id = (SELECT "guildId" from banpools WHERE name = $PoolName)', {
-			bind: {
-				PoolName: poolname,
+		const pool = await this.getPool(poolname);
+		if (isNullish(pool)) {
+			return;
+		}
+		const { id: banpoolId } = pool;
+		return await prisma.banpoolSubscriber.delete({
+			where: {
+				guildId_banpoolId: {
+					guildId,
+					banpoolId,
+				},
 			},
-			type: QueryTypes.SELECT,
 		});
-
-		return guid[0].guildId;
 	}
 
-	async deletePool(poolname: string) {
-		await sequelize.query('DELETE FROM "banpoolSubscribers" WHERE "banpoolId" = (SELECT id FROM banpools WHERE name = $PoolName)', {
-			bind: { PoolName: poolname },
-			type: QueryTypes.DELETE,
-		});
+	async getCreatorGuild(name: string) {
+		const bulbGuild = await prisma.banpool
+			.findUnique({
+				where: {
+					name,
+				},
+			})
+			.bulbGuild({
+				select: {
+					guildId: true,
+				},
+			});
 
-		await sequelize.query("DELETE FROM banpools WHERE name = $PoolName", {
-			bind: { PoolName: poolname },
-			type: QueryTypes.DELETE,
+		if (isNullish(bulbGuild)) {
+			throw new Error("could not resolve banpool creator guild");
+		}
+
+		return bulbGuild.guildId;
+	}
+
+	async deletePool(name: string) {
+		return await prisma.banpool.delete({
+			where: {
+				name,
+			},
 		});
 	}
 }
