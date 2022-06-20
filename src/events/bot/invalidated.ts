@@ -1,7 +1,7 @@
 import Event from "../../structures/Event";
 import { pm2Name } from "../../Config";
 import { exec } from "shelljs";
-import { sequelize } from "../../utils/database/connection";
+// import { sequelize } from "../../utils/database/connection";
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -16,7 +16,7 @@ export default class extends Event {
 		this.client.log.warn("Stopping the PM2 process, destroying the client and closing the database");
 
 		this.client.destroy();
-		sequelize.close();
+		// sequelize.close();
 
 		this.client.log.info("Closed everything <3");
 
