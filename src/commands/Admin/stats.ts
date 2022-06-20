@@ -5,8 +5,8 @@ import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
 import axios from "axios";
-import { sequelize } from "../../utils/database/connection";
-import { QueryTypes } from "sequelize";
+import prisma from "../../prisma";
+
 export default class extends Command {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
@@ -25,20 +25,14 @@ export default class extends Command {
 		const shardData: string[] = this.client.ws.shards.map((shard) => `${selectEmoji(shard.ping)} Shard ID: ${shard.id} \`${shard.ping} ms\`\n`);
 		const { data } = await axios.get<any>("https://discord.com/api/v9/gateway/bot", { headers: { authorization: `Bot ${process.env.TOKEN}` } });
 
-		const amtMessages: any = await sequelize.query('SELECT COUNT(*) FROM "messageLogs"', {
-			type: QueryTypes.SELECT,
-		});
-		const amtOfInfractions: any = await sequelize.query('SELECT COUNT(*) FROM "infractions"', {
-			type: QueryTypes.SELECT,
-		});
-		const sizeOfDB: any = await sequelize.query("SELECT pg_size_pretty(pg_database_size('bulbbot'))", {
-			type: QueryTypes.SELECT,
-		});
+		const amtMessages = await prisma.messageLog.count();
+		const amtOfInfractions = await prisma.infraction.count();
+		const { pg_size_pretty: sizeOfDb } = await prisma.$queryRaw<{ pg_size_pretty: any }>`SELECT pg_size_pretty(pg_database_size('bulbbot'))`;
 
 		const postgresData = {
-			amtMessages: amtMessages[0].count,
-			amtInfractions: amtOfInfractions[0].count,
-			databaseSize: sizeOfDB[0].pg_size_pretty,
+			amtMessages: amtMessages,
+			amtInfractions: amtOfInfractions,
+			databaseSize: sizeOfDb,
 		};
 
 		const desc: string[] = [
