@@ -15,7 +15,7 @@ export default class extends ApplicationCommand {
 	}
 
 	public async run(interaction: CommandInteraction): Promise<void> {
-		await interaction.reply({ embeds: [new MessageEmbed().setDescription("Ping!")] });
+		await interaction.reply({ embeds: [new MessageEmbed().setDescription("Pong!").setColor(Config.embedColor)] });
 
 		const pong = await interaction.fetchReply();
 		const latency = (pong instanceof Message ? pong.createdTimestamp : parseInt(pong.timestamp)) - interaction.createdTimestamp;
