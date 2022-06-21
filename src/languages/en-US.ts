@@ -62,6 +62,8 @@ export default {
 	global_error: {
 		unknown: "{{emote_fail}} An unknown error has occurred, please try again later or if the issue persists contact the developers at {{discord_invite}}",
 		automod_items_length_undefined: "{{emote_fail}} An error occurred while attempting to parse the selected Automod items. No Automod items have been provided or Automod items length is undefined.",
+		inviteinfo_guild_or_member_null:
+			"{{emote_fail}} An error occurred while attempting to parse the selected Invite. The Invite Guild, Interaction Guild or Interaction Member could not be resolved to non-null values.",
 	},
 	global_words: {
 		none: "none",
