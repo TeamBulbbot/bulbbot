@@ -4,7 +4,7 @@ import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
 import { APIGuildMember } from "discord-api-types/v9";
-import { embedColor } from "../..//Config";
+import { embedColor } from "../../Config";
 import { ChannelMessage } from "../../utils/Regex";
 
 export default class extends ApplicationCommand {
@@ -20,7 +20,8 @@ export default class extends ApplicationCommand {
 					required: true,
 				},
 			],
-			clientPerms: ["EMBED_LINKS"],
+			client_permissions: ["EMBED_LINKS"],
+			command_permissions: ["MANAGE_MESSAGES"],
 		});
 	}
 
@@ -42,7 +43,7 @@ export default class extends ApplicationCommand {
 		const channel = interaction.guild?.channels.cache.get(channelId);
 		const member = resolveGuildMemberMoreSafe(interaction.member as GuildMember | APIGuildMember);
 		if (!channel || !interaction.member || (channel.type !== "GUILD_TEXT" && channel.type !== "GUILD_NEWS" && !channel.permissionsFor(member).has("VIEW_CHANNEL", true))) {
-			interaction.reply({
+			await interaction.reply({
 				ephemeral: true,
 				content: await this.client.bulbutils.translate("messageinfo_channel_not_found", interaction.guild?.id, {}),
 			});
@@ -54,7 +55,7 @@ export default class extends ApplicationCommand {
 			// @ts-expect-error It's a try-catch it's fine
 			message = await channel.messages.fetch(messageId);
 		} catch (error) {
-			interaction.reply({
+			await interaction.reply({
 				ephemeral: true,
 				content: await this.client.bulbutils.translate("messageinfo_message_not_found", interaction.guild?.id, {}),
 			});
@@ -86,6 +87,6 @@ export default class extends ApplicationCommand {
 			})
 			.setTimestamp();
 
-		interaction.reply({ embeds: [embed], components: [row] });
+		await interaction.reply({ embeds: [embed], components: [row] });
 	}
 }
