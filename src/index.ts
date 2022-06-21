@@ -1,7 +1,6 @@
 import * as Config from "./Config";
 import BulbBotClient from "./structures/BulbBotClient";
 import * as env from "dotenv";
-// import { sequelize } from "./utils/database/connection";
 import { init, Integrations } from "@sentry/node"; // @ts-expect-error
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as Tracing from "@sentry/tracing";
@@ -34,12 +33,6 @@ i18next.init({
 	resources,
 });
 
-// sequelize
-// 	.authenticate()
-// 	.then(() => client.log.database("[DATABASE] Connecting..."))
-// 	.catch((err: Error) => client.log.error(`[DATABASE] Connection error: ${err.name} | ${err.message} | ${err.stack}`))
-// 	.finally(() => client.log.database("[DATABASE] Database connected successfully"));
-
 startAllCrons(client);
 if (process.env.ENABLE_LOGGING === "true") startPrometheus(client);
 
@@ -60,11 +53,8 @@ client.login().catch((err: Error) => {
 });
 
 process.on("exit", () => {
-	client.log.info("Process was killed, terminating the client and database connection");
-
+	client.log.info("Process was killed, terminating the client");
 	client.destroy();
-	// sequelize.close();
-
 	client.log.info("Closed everything <3");
 });
 
