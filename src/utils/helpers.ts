@@ -116,7 +116,14 @@ export const resolveGuildRoleMoreSafe = (roleInput: GuildRoleMaybeApi): Role =>
     // @ts-expect-error
 		: new Role(roleInput);
 
-export const isNullish = (value: any): value is null | undefined => value == null;
+/** Returns true if |v| is null or undefined ("nullish"), false otherwise */
+// Intentionally uses abstract equality operator (==), not strict equality.
+// null with `==` only returns true when comparing with either null or undefined,
+// thus suiting our purposes
+export const isNullish = (v: any): v is null | undefined => v == null;
+
+/** Will only execute `cb` if `val` is not nullish. Returns undefined if val is nullish */
+export const nullsafe = <T, F extends (val: T) => R, R = ReturnType<F>>(val: T, cb: F) => (!isNullish(val) ? cb(val) : undefined);
 
 export const clamp = (val: number) => +(val > 0) && val;
 
