@@ -1,31 +1,33 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
+import { CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
+import { APIGuildMember } from "discord-api-types/v9";
+import { embedColor } from "../..//Config";
 import { ChannelMessage } from "../../utils/Regex";
-import { Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { embedColor } from "../../Config";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Returns some useful info about a message",
-			category: "Information",
-			usage: "<channel-message>",
-			examples: ["messageinfo 742095521962786858-877632488023945246", "messageinfo https://discord.com/channels/742094927403679816/742095521962786858/877632488023945246"],
-			clearance: 50,
-			maxArgs: 1,
-			minArgs: 0,
-			argList: ["channel-message:Snowflake"],
+			description: "Returns some useful information about a message",
+			options: [
+				{
+					name: "message_link",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "A message link to the message you want information about",
+					required: true,
+				},
+			],
 			clientPerms: ["EMBED_LINKS"],
-			overrides: ["message_info"],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void> {
+	public async run(interaction: CommandInteraction): Promise<void> {
+		let input: string | string[] = interaction.options.getString("message_link", true);
 		let channelId: string;
 		let messageId: string;
-		let input: string | string[] = args[0];
 
 		if (ChannelMessage.test(input)) {
 			input = input.split("-");
@@ -37,31 +39,25 @@ export default class extends Command {
 			messageId = input[input.length - 1];
 		}
 
-		const channel = context.guild?.channels.cache.get(channelId);
-		if (!channel || !context.member || (channel.type !== "GUILD_TEXT" && channel.type !== "GUILD_NEWS" && !channel.permissionsFor(context.member).has("VIEW_CHANNEL", true))) {
-			context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),
-					arg_expected: "message:Message",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
+		const channel = interaction.guild?.channels.cache.get(channelId);
+		const member = resolveGuildMemberMoreSafe(interaction.member as GuildMember | APIGuildMember);
+		if (!channel || !interaction.member || (channel.type !== "GUILD_TEXT" && channel.type !== "GUILD_NEWS" && !channel.permissionsFor(member).has("VIEW_CHANNEL", true))) {
+			interaction.reply({
+				ephemeral: true,
+				content: await this.client.bulbutils.translate("messageinfo_channel_not_found", interaction.guild?.id, {}),
+			});
 			return;
 		}
+
 		let message: Message;
 		try {
 			// @ts-expect-error It's a try-catch it's fine
 			message = await channel.messages.fetch(messageId);
 		} catch (error) {
-			context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),
-					arg_expected: "message:Message",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
+			interaction.reply({
+				ephemeral: true,
+				content: await this.client.bulbutils.translate("messageinfo_message_not_found", interaction.guild?.id, {}),
+			});
 			return;
 		}
 
@@ -76,20 +72,20 @@ export default class extends Command {
 		];
 
 		const row: MessageActionRow = new MessageActionRow().addComponents([
-			new MessageButton().setStyle("LINK").setLabel("Jump to message").setURL(`https://discord.com/channels/${context.guild?.id}/${channel.id}/${message.id}`),
+			new MessageButton().setStyle("LINK").setLabel("Jump to message").setURL(`https://discord.com/channels/${interaction.guild?.id}/${channel.id}/${message.id}`),
 		]);
 
 		const embed = new MessageEmbed()
 			.setColor(embedColor)
 			.setDescription(desc.join("\n"))
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		context.channel.send({ embeds: [embed], components: [row] });
+		interaction.reply({ embeds: [embed], components: [row] });
 	}
 }

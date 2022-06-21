@@ -601,6 +601,9 @@ export default {
 
 	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>",
 
+	messageinfo_channel_not_found: "{{emote_warn}} Unable to find the channel in the messagelink you provided.",
+	messageinfo_message_not_found: "{{emote_warn}} Unable to find the message in the messagelink you provided.",
+
 	sc_about_name: "about",
 	sc_about_desc: "Returns more information about the bot",
 
