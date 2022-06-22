@@ -1,100 +1,73 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { GuildMember, MessageEmbed, User } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
-import { embedColor } from "../../Config";
+import { User, CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
+import { APIGuildMember } from "discord-api-types/v9";
+import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
+import { embedColor } from "../../Config";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Gets a users avatar picture",
-			category: "Miscellaneous",
-			usage: "[user]",
-			examples: ["avatar", "avatar 123456789012345678", "avatar @Wumpus#0000"],
-			argList: ["user:User"],
-			maxArgs: 1,
-			clientPerms: ["EMBED_LINKS"],
+			type: ApplicationCommandType.CHAT_INPUT,
+			options: [
+				{
+					name: "user",
+					type: ApplicationCommandOptionTypes.USER,
+					description: "The user you want to view the avatar of",
+					required: false,
+				},
+			],
+			command_permissions: ["MUTE_MEMBERS"],
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]) {
-		let id: string;
-		if (args[0] === undefined) id = context.author.id;
-		else id = args[0].replace(NonDigits, "");
-		let user: GuildMember | User | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, id);
-		const isGuildMember = !!user;
+	public async run(interaction: CommandInteraction) {
+		let user: User | GuildMember;
 
-		if (!user) {
-			user = await this.client.bulbfetch.getUser(id);
+		if (interaction.options.getMember("user") !== null) user = resolveGuildMemberMoreSafe(interaction.options.getMember("user") as GuildMember | APIGuildMember);
+		else if (interaction.options.getUser("user") !== null) user = interaction.options.getUser("user") as User;
+		else user = resolveGuildMemberMoreSafe(interaction.member as GuildMember | APIGuildMember);
 
-			if (!user)
-				return context.channel.send(
-					await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-						type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
-						arg_provided: args[0],
-						arg_expected: "user:User",
-						usage: this.usage,
-					}),
-				);
-		}
+		const images: string[] = [];
 
-		const desc = "";
-		let avatar: string | null = "";
-
-		if (isGuildMember) {
-			if (user.avatar) avatar = user.avatarURL({ dynamic: true, size: 4096 });
+		if (user instanceof GuildMember) {
 			// @ts-expect-error
-			else if (user.user.avatar === null) avatar = `https://cdn.discordapp.com/embed/avatars/${Number(user.user.discriminator) % 5}.png`;
+			if (user.avatar) images.push(user.avatarURL({ dynamic: true, size: 4096 }));
 			// @ts-expect-error
-			else avatar = user.user.avatarURL({ dynamic: true, size: 4096 });
+			if (user.user.avatar) images.push(user.user.avatarURL({ dynamic: true, size: 4096 }));
+			else images.push(`https://cdn.discordapp.com/embed/avatars/${Number(user.user.discriminator) % 5}.png`);
 		} else {
-			if (user.avatar) avatar = user.avatarURL({ dynamic: true, size: 4096 });
 			// @ts-expect-error
-			else avatar = `https://cdn.discordapp.com/embed/avatars/${Number(user.user.discriminator) % 5}.png`;
+			if (user.avatar) images.push(user.avatarURL({ dynamic: true, size: 4096 }));
+			else images.push(`https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.png`);
 		}
 
-		if (isGuildMember && user.avatar) {
-			// @ts-expect-error
-			const normal = new MessageEmbed().setURL("https://bulbbot.rocks/").setImage(user.user.avatarURL({ dynamic: true }));
-			const guild = new MessageEmbed()
-				.setColor(embedColor)
-				.setAuthor({
-					// @ts-expect-error
-					name: `${user.user.tag} (${user.user.id})`,
-				})
-				.setDescription(desc)
-				.setURL("https://bulbbot.rocks/") // @ts-expect-error
-				.setImage(user.avatarURL({ dynamic: true, size: 4096 }))
-				.setFooter({
-					text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-						user: context.author,
-					}),
-					iconURL: this.client.bulbutils.userObject(false, context.author)?.avatarUrl ?? undefined,
-				})
-				.setTimestamp();
+		const embeds = await Promise.all(
+			images.map(async (image) => {
+				return new MessageEmbed()
+					.setColor(embedColor)
+					.setAuthor({
+						name: user instanceof GuildMember ? `${user.user.tag} (${user.user.id})` : `${user.tag} (${user.id})`,
+					})
+					.setURL("https://bulbbot.rocks/")
+					.setFooter({
+						text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+							user: interaction.user,
+						}),
+						iconURL: this.client.bulbutils.userObject(false, interaction.user)?.avatarUrl ?? undefined,
+					})
+					.setTimestamp()
+					.setImage(image);
+			}),
+		);
 
-			return context.channel.send({ embeds: [guild, normal] });
-		}
-
-		const embed = new MessageEmbed()
-			.setColor(embedColor)
-			.setAuthor({
-				// @ts-expect-error
-				name: isGuildMember ? `${user.user.tag} (${user.user.id})` : `${user.tag} (${user.id})`,
-				iconURL: avatar ?? undefined,
-			})
-			.setDescription(desc) // @ts-expect-error
-			.setImage(avatar)
-			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
-				}),
-				iconURL: (await this.client.bulbutils.userObject(false, context.author)?.avatarUrl) ?? undefined,
-			})
-			.setTimestamp();
-
-		return context.channel.send({ embeds: [embed] });
+		interaction.reply({
+			embeds,
+		});
 	}
 }
