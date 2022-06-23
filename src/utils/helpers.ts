@@ -143,3 +143,14 @@ export const resolveGuildChannelMoreSafe = (channelInput: GuildChannelMaybeApi):
 		? channelInput
 		: // @ts-expect-error
 		  new Channel(channelInput);
+
+export const unpackSettled = <T>(settled: PromiseSettledResult<T>[]): T[] => {
+	const resolved: T[] = [];
+	for (const result of settled) {
+		if (result.status === "fulfilled") {
+			resolved.push(result.value);
+		}
+		// This will drop any rejections silently. Only use it if that is fine
+	}
+	return resolved;
+};
