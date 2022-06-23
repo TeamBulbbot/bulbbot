@@ -1,5 +1,5 @@
-import type { APIGuildMember } from "discord-api-types/v9";
-import { User, GuildMember, UserFlags, Role } from "discord.js";
+import type { APIChannel, APIGuildMember } from "discord-api-types/v9";
+import { User, GuildMember, UserFlags, Role, GuildChannel } from "discord.js";
 import * as Emotes from "../emotes.json";
 import { APIRole } from "discord-api-types/v10";
 
@@ -59,6 +59,7 @@ export function emote(strings: TemplateStringsArray, ...actions: string[]): stri
 
 type GuildMemberMaybeApi = GuildMember | APIGuildMember;
 type GuildRoleMaybeApi = Role | APIRole;
+type GuildChannelMaybeApi = GuildChannel | APIChannel;
 
 /** Dark Magic */
 export function resolveGuildMemberUnsafe(memberInput: GuildMemberMaybeApi): GuildMember {
@@ -135,3 +136,10 @@ export const paginate = ({ page = 1, pageSize = 25 }: Paginatetable): PaginateOp
 	take: page * pageSize || undefined,
 	skip: clamp(page - 1) * pageSize || undefined,
 });
+
+// TODO: I have reservations about this one
+export const resolveGuildChannelMoreSafe = (channelInput: GuildChannelMaybeApi): GuildChannel =>
+	channelInput instanceof GuildChannel
+		? channelInput
+		: // @ts-expect-error
+		  new Channel(channelInput);

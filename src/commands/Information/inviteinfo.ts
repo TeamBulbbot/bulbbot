@@ -1,61 +1,73 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { Invite, MessageEmbed, Widget } from "discord.js";
+import { CommandInteraction, Invite, MessageEmbed, Widget } from "discord.js";
 import { embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Returns some useful info about a server from the invite link",
-			category: "Information",
-			aliases: ["inv"],
-			usage: "<invitecode>",
-			examples: ["inviteinfo cacUmbQ", "inviteinfo https://discord.gg/cacUmbQ"],
-			argList: ["invitecode:String"],
-			minArgs: 1,
-			maxArgs: -1,
-			clientPerms: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
+			type: ApplicationCommandType.CHAT_INPUT,
+			description: "Returns information about the characters provided",
+			options: [
+				{
+					name: "invite",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "The invite you want to resolve",
+					required: true,
+				},
+			],
+			command_permissions: ["MANAGE_GUILD"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
-		const code: string = args[0];
+	public async run(interaction: CommandInteraction) {
+		const code: string = interaction.options.getString("invite") as string;
 		let invite: Invite;
 
 		try {
 			invite = await this.client.fetchInvite(code);
 		} catch (error) {
-			await context.channel.send(await this.client.bulbutils.translate("inviteinfo_error", context.guild?.id, {}));
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("inviteinfo_error", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 			return;
 		}
 
-		if (invite.channel.type === "GROUP_DM") {
-			context.channel.send(await this.client.bulbutils.translate("inviteinfo_groupdm", context.guild?.id, {}));
-			return;
-		}
+		if (invite.channel.type === "GROUP_DM")
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("inviteinfo_groupdm", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		const guild = invite.guild;
-		if (guild === null || context.guild === null || context.member === null) return;
+		if (guild === null || interaction.guild?.id === null || interaction.member === null)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_error.inviteinfo_guild_or_member_null", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		let desc = "";
 		let inviteInfo = "";
 
 		desc += `${this.client.bulbutils.guildFeatures(guild.features)}\n\n`;
-		desc += await this.client.bulbutils.translate("inviteinfo_verification_level", context.guild.id, { guild });
+		desc += await this.client.bulbutils.translate("inviteinfo_verification_level", interaction.guild?.id, { guild });
 
-		inviteInfo += await this.client.bulbutils.translate("inviteinfo_code", context.guild.id, { invite });
+		inviteInfo += await this.client.bulbutils.translate("inviteinfo_code", interaction.guild?.id, { invite });
 		inviteInfo += `${Emotes.status.ONLINE}: \`${invite.presenceCount}\`\n`;
 		inviteInfo += `${Emotes.status.OFFLINE}: \`${invite.memberCount}\`\n\n`;
 
 		if (invite.inviter) {
 			let inviter = "";
 
-			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_id", context.guild.id, { invite });
-			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_tag", context.guild.id, { invite });
-			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_avatar", context.guild.id, { user_avatar: invite.inviter.avatarURL({ dynamic: true, size: 4096 }) });
+			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_id", interaction.guild?.id, { invite });
+			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_tag", interaction.guild?.id, { invite });
+			inviter += await this.client.bulbutils.translate("inviteinfo_inviter_avatar", interaction.guild?.id, {
+				user_avatar: invite.inviter.avatarURL({ dynamic: true, size: 4096 }),
+			});
 
 			desc += "\n**Inviter**\n" + inviter;
 		}
@@ -63,9 +75,9 @@ export default class extends Command {
 		if (invite.channel) {
 			let inviteChannel = "";
 
-			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_id", context.guild.id, { invite });
-			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_name", context.guild.id, { invite });
-			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_nsfw", context.guild.id, { invite });
+			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_id", interaction.guild?.id, { invite });
+			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_name", interaction.guild?.id, { invite });
+			inviteChannel += await this.client.bulbutils.translate("inviteinfo_channel_nsfw", interaction.guild?.id, { invite });
 
 			desc += "\n**Invite Channel**\n" + inviteChannel;
 		}
@@ -83,12 +95,13 @@ export default class extends Command {
 			.setThumbnail(guild.iconURL({ dynamic: true, size: 4096 }) || "")
 			.setImage(guild.splash !== null ? `https://cdn.discordapp.com/splashes/${guild.id}/${guild.splash}.png?size=4096` : "")
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: this.client.bulbutils.userObject(true, context.member)?.avatarUrl ?? undefined,
+				iconURL: interaction.user.avatarURL({ dynamic: true }) as string,
 			})
 			.setTimestamp();
+
 		embeds.push(embed);
 
 		let widget: Widget | null;
@@ -103,10 +116,10 @@ export default class extends Command {
 				.setColor(embedColor)
 				.setTitle("Widget Data")
 				.setFooter({
-					text: await this.client.bulbutils.translate("global_executed_by", context.guild.id, {
-						user: context.author,
+					text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+						user: interaction.user,
 					}),
-					iconURL: this.client.bulbutils.userObject(true, context.member)?.avatarUrl ?? undefined,
+					iconURL: interaction.user.avatarURL({ dynamic: true }) as string,
 				})
 				.setTimestamp()
 				.setDescription(`**Member (${widget.members.size})**\n${widget.members.map((m) => `\`${m.username}\``).join(" ")}`);
@@ -114,6 +127,6 @@ export default class extends Command {
 			embeds.push(widgetEmbed);
 		}
 
-		await context.channel.send({ embeds });
+		return interaction.reply({ embeds });
 	}
 }

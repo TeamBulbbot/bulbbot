@@ -19,7 +19,14 @@ export default class extends ApplicationCommand {
 			name,
 			description: "Returns some useful info about a user",
 			type: ApplicationCommandType.CHAT_INPUT,
-			options: [{ name: "user", type: ApplicationCommandOptionTypes.USER, description: "The user you want to view more info about", required: false }],
+			options: [
+				{
+					name: "user",
+					type: ApplicationCommandOptionTypes.USER,
+					description: "The user you want to view more info about",
+					required: false,
+				},
+			],
 			command_permissions: ["MUTE_MEMBERS"],
 			client_permissions: ["EMBED_LINKS"],
 		});

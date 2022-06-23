@@ -62,6 +62,8 @@ export default {
 	global_error: {
 		unknown: "{{emote_fail}} An unknown error has occurred, please try again later or if the issue persists contact the developers at {{discord_invite}}",
 		automod_items_length_undefined: "{{emote_fail}} An error occurred while attempting to parse the selected Automod items. No Automod items have been provided or Automod items length is undefined.",
+		inviteinfo_guild_or_member_null:
+			"{{emote_fail}} An error occurred while attempting to parse the selected Invite. The Invite Guild, Interaction Guild or Interaction Member could not be resolved to non-null values.",
 	},
 	global_words: {
 		none: "none",
@@ -601,6 +603,9 @@ export default {
 
 	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>",
 
+	messageinfo_channel_not_found: "{{emote_warn}} Unable to find the channel in the messagelink you provided.",
+	messageinfo_message_not_found: "{{emote_warn}} Unable to find the message in the messagelink you provided.",
+
 	sc_about_name: "about",
 	sc_about_desc: "Returns more information about the bot",
 
@@ -632,16 +637,16 @@ export default {
 
 	sc_charinfo_name: "charinfo",
 	sc_charinfo_desc: "Returns information about the characters provided",
-	sc_charinfo_string_name: "string",
-	sc_charinfo_string_desc: "The characters you want to info",
+	sc_charinfo_characters_name: "string",
+	sc_charinfo_characters_desc: "The characters you want to info",
 
 	sc_inviteinfo_name: "inviteinfo",
 	sc_inviteinfo_desc: "Returns some useful info about a server from the invite link",
 	sc_inviteinfo_invite_name: "invite",
 	sc_inviteinfo_invite_desc: "The invite link of the server you want to info",
 
-	sc_server_name: "server",
-	sc_server_desc: "Returns some useful information about the current server",
+	sc_serverinfo_name: "server",
+	sc_serverinfo_desc: "Returns some useful information about the current server",
 
 	sc_userinfo_name: "userinfo",
 	sc_userinfo_desc: "Returns some useful info about a user",
@@ -941,8 +946,8 @@ export default {
 
 	sc_messageinfo_name: "messageinfo",
 	sc_messageinfo_desc: "Returns information about the message provided",
-	sc_messageinfo_message_name: "message",
-	sc_messageinfo_message_desc: "The message you want to get info about",
+	sc_messageinfo_message_link_name: "message",
+	sc_messageinfo_message_link_desc: "The message you want to get info about",
 
 	sc_roleinfo_name: "roleinfo",
 	sc_roleinfo_desc: "Returns information about the role provided",

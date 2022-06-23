@@ -8,7 +8,7 @@ A powerful Discord moderation bot with rich features allowing server Moderators 
 
 Click [here](https://bulbbot.rocks//invite) to invite Bulbbot to your server.
 
-The default prefix of the bot is `!` (or you can use [slash commands](https://docs.bulbbot.rocks/slash-commands) `/`), but the prefix can easily be changed with `!configure prefix <prefix>` command.
+The bot only uses [slash commands](https://docs.bulbbot.rocks/slash-commands) `/` which is the future of Discord bot commands.
 
 ## Main features include
 
@@ -37,5 +37,6 @@ issues and questions over at our [support server](https://bulbbot.rocks/discord)
 
 ## Setup development environment
 
-**We offer 0 support on selfhosting the bot.** For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.rocks/setup-dev) that will help you
-setting it up.
+**We offer 0 support on selfhosting the bot.**
+
+For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.rocks/setup-dev) that will help you setting it up.

@@ -11,7 +11,14 @@ export default class extends ApplicationCommand {
 			name,
 			type: ApplicationCommandType.CHAT_INPUT,
 			description: "Returns information about the characters provided",
-			options: [{ name: "characters", type: ApplicationCommandOptionTypes.STRING, description: "The characters you want to info", required: true }],
+			options: [
+				{
+					name: "characters",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "The characters you want to info",
+					required: true,
+				},
+			],
 		});
 	}
 

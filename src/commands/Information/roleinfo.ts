@@ -10,8 +10,16 @@ export default class extends ApplicationCommand {
 		super(client, {
 			name,
 			description: "Returns some useful info about a role",
-			options: [{ name: "role", type: ApplicationCommandOptionTypes.ROLE, description: "The role you want more info about", required: true }],
+			options: [
+				{
+					name: "role",
+					type: ApplicationCommandOptionTypes.ROLE,
+					description: "The role you want more info about",
+					required: true,
+				},
+			],
 			command_permissions: ["MANAGE_ROLES"],
+			clientPerms: ["EMBED_LINKS"],
 		});
 	}
 
