@@ -9,7 +9,7 @@ export default async function (client: BulbBotClient, interaction: ContextMenuIn
 
 	if (!interaction.guild) return;
 	const options: any[] = [];
-	const infs = await infractionManager.getAllUserInfractions(interaction.guild.id, user.id, 0);
+	const infs = await infractionManager.getAllUserInfractions({ guildId: interaction.guild.id, targetId: user.id, pageSize: 0 });
 
 	if (!infs?.length) return interaction.reply({ content: await client.bulbutils.translate("infraction_search_not_found", interaction.guild.id, { target: user }), ephemeral: true });
 

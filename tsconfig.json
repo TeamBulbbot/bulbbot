@@ -23,11 +23,13 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "allowJs": true,
+    "paths": {
+      "@db/prisma": ["./src/prisma.ts"]
+    },
     "baseUrl": "."
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/**/*.ts",
-    "./src/.env.example", "./src/**/*.json", "./src/**/*.yml",
+  "include": ["./src/**/**/*.ts", "./src/**/*.json", "./src/**/*.yml",
     "types.d.ts"
   ]
 }

@@ -6,8 +6,8 @@ import { set } from "../structures/AutoModCache";
 import AutoModManager from "./managers/AutoModManager";
 import LoggingManager from "./managers/LoggingManager";
 import CommandContext from "../structures/CommandContext";
-import { AutoModConfiguration } from "./types/DatabaseStructures";
 import { isGuildChannel } from "./typechecks";
+import { Automod } from "@prisma/client";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const automodManager: AutoModManager = new AutoModManager();
@@ -15,7 +15,7 @@ const loggingManager: LoggingManager = new LoggingManager();
 
 export default async function (client: BulbBotClient, context: CommandContext): Promise<void> {
 	if (!context.guild?.available || !isGuildChannel(context.channel)) return;
-	const dbGuild: AutoModConfiguration = await databaseManager.getAutoModConfig(context.guild.id);
+	const dbGuild = await databaseManager.getAutoModConfig(context.guild);
 
 	if (!dbGuild.enabled) return;
 	if (context.member?.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return;
@@ -102,15 +102,15 @@ export default async function (client: BulbBotClient, context: CommandContext): 
 
 	const mentionCount: number = hasMentions(context, dbGuild);
 	if (mentionCount) {
-		if (dbGuild.punishmentMentions) await set(client, context, context.guild.id, "mentions", context.author.id, mentionCount, dbGuild.timeoutMentions);
+		if (dbGuild.punishmentMentions) await set(client, context, context.guild.id, "mentions", context.author.id, mentionCount, dbGuild.timeoutMentions ?? undefined);
 		if (dbGuild.limitMentions) shouldDelete ||= mentionCount >= dbGuild.limitMentions;
 	}
 
-	await set(client, context, context.guild.id, "messages", context.author.id, 1, dbGuild.timeoutMessages);
+	await set(client, context, context.guild.id, "messages", context.author.id, 1, dbGuild.timeoutMessages ?? undefined);
 	if (shouldDelete) await context.delete();
 }
 
-function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): string {
+function hasSwearWords(context: CommandContext, guild: Pick<Automod, "punishmentWords" | "wordBlacklist" | "wordBlacklistToken">): string {
 	if (!guild.punishmentWords) return "";
 	const wordBlacklist: string[] = guild.wordBlacklist;
 
@@ -129,7 +129,7 @@ function hasSwearWords(context: CommandContext, guild: AutoModConfiguration): st
 	return "";
 }
 
-function hasWebsite(context: CommandContext, guild: AutoModConfiguration): boolean {
+function hasWebsite(context: CommandContext, guild: Pick<Automod, "punishmentWebsite" | "websiteWhitelist">): boolean {
 	if (!guild.punishmentWebsite) return false;
 	const blocked_websites: string[] = guild.websiteWhitelist;
 	AutoMod_WEBSITE.lastIndex = 0;
@@ -143,7 +143,7 @@ function hasWebsite(context: CommandContext, guild: AutoModConfiguration): boole
 	return false;
 }
 
-function hasInvite(context: CommandContext, guild: AutoModConfiguration): boolean {
+function hasInvite(context: CommandContext, guild: Pick<Automod, "punishmentInvites" | "inviteWhitelist">): boolean {
 	if (!guild.punishmentInvites) return false;
 	const allowed_invites: string[] = guild.inviteWhitelist;
 	AutoMod_INVITE.lastIndex = 0;
@@ -157,7 +157,7 @@ function hasInvite(context: CommandContext, guild: AutoModConfiguration): boolea
 	return false;
 }
 
-function hasMentions(context: CommandContext, guild: AutoModConfiguration): number {
+function hasMentions(context: CommandContext, guild: Pick<Automod, "punishmentMentions" | "limitMentions">): number {
 	if (!(guild.punishmentMentions || guild.limitMentions)) return 0;
 	return context.content.match(UserMention)?.length ?? 0;
 }

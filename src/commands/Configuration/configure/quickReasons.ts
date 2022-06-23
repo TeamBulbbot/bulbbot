@@ -1,12 +1,15 @@
-import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import { isNullish } from "../../../utils/helpers";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { GuildConfiguration } from "../../../utils/types/DatabaseStructures";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function quickReasons(interaction: MessageComponentInteraction, client: BulbBotClient) {
-	const config: GuildConfiguration = await databaseManager.getConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		return;
+	}
+	const config = await databaseManager.getConfig(interaction.guild);
 	let reasons: { label: string; value: string; default?: boolean }[] = [];
 	let selected: string[] = [];
 
@@ -78,8 +81,11 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 					break;
 				case "remove":
 					collector.stop();
+					if (isNullish(interaction.guild)) {
+						return;
+					}
 					for (const reason of selected) {
-						await databaseManager.removeQuickReason(interaction.guild?.id as Snowflake, reason);
+						await databaseManager.removeQuickReason(interaction.guild, reason);
 					}
 
 					await interaction.followUp({
@@ -129,8 +135,12 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 							return;
 						}
 
+						if (isNullish(interaction.guild)) {
+							return;
+						}
+
 						await m.delete();
-						await databaseManager.appendQuickReasons(interaction.guild?.id as Snowflake, m.content);
+						await databaseManager.appendQuickReasons(interaction.guild, m.content);
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_quick_reason_success", interaction.guild?.id, {
 								reason: m.content,

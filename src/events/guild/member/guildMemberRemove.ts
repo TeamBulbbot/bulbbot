@@ -19,7 +19,7 @@ export default class extends Event {
 	public async run(member: GuildMember): Promise<void> {
 		if (!member.joinedTimestamp) return;
 
-		if (member.roles.cache.size > 1 && (await databaseManager.getConfig(member.guild.id)).rolesOnLeave) {
+		if (member.roles.cache.size > 1 && (await databaseManager.getConfig(member.guild)).rolesOnLeave) {
 			await loggingManager.sendEventLog(
 				this.client,
 				member.guild,
@@ -59,8 +59,7 @@ export default class extends Event {
 		if (!executor?.id || executor.id === this.client.user?.id) return;
 		if (reason === null) reason = await this.client.bulbutils.translate("global_no_reason", member.guild.id, {});
 
-		await infractionsManager.createInfraction(member.guild.id, "Manual Kick", true, reason, member.user, executor);
-		const infID: number = await infractionsManager.getLatestInfraction(member.guild.id, executor.id, target.id, "Manual Kick");
-		await loggingManager.sendModAction(this.client, member.guild.id, "manually kicked", member.user, executor, reason, infID);
+		const { id: infID } = await infractionsManager.createInfraction(member.guild.id, "Manual Kick", true, reason, member.user, executor);
+		await loggingManager.sendModAction(this.client, member.guild, "manually kicked", member.user, executor, reason, infID);
 	}
 }

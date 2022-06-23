@@ -6,11 +6,8 @@ import glob from "glob";
 import Event from "./Event";
 import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
-import DatabaseManager from "../utils/managers/DatabaseManager";
-import { Blacklist } from "../utils/types/DatabaseStructures";
 import ApplicationCommand from "./ApplicationCommand";
-
-const databaseManager: DatabaseManager = new DatabaseManager();
+import prisma from "../prisma";
 
 const globAsync = promisify(glob);
 
@@ -74,7 +71,7 @@ export default class {
 
 	async loadBlacklist(): Promise<void> {
 		this.client.log.client("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
-		const blacklistedUsers: Blacklist[] = await databaseManager.getAllBlacklisted();
+		const blacklistedUsers = await prisma.blacklistEntry.findMany();
 		for (let i = 0; i < blacklistedUsers.length; i++) {
 			const blacklist = blacklistedUsers[i];
 			this.client.blacklist.set(blacklist.snowflakeId, {

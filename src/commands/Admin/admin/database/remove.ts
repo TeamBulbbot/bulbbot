@@ -30,7 +30,7 @@ export default class extends SubCommand {
 			return;
 		}
 
-		await databaseManager.deleteGuild(guild.id);
+		await databaseManager.deleteGuild(guild);
 		context.channel.send(`Removed **${guild.name}** from the database`);
 	}
 }

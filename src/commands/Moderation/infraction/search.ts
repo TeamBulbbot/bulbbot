@@ -5,7 +5,6 @@ import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "d
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { Infraction } from "../../../utils/types/DatabaseStructures";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
@@ -41,7 +40,7 @@ export default class extends SubCommand {
 			);
 
 		const options: any[] = [];
-		const infs: Infraction[] = (await infractionManager.getAllUserInfractions(context.guild.id, user.id, page)) || [];
+		const infs = (await infractionManager.getAllUserInfractions({ guildId: context.guild.id, targetId: user.id, page })) || [];
 
 		if (!infs.length) return await context.channel.send(await this.client.bulbutils.translate("infraction_search_not_found", context.guild.id, { target: user }));
 

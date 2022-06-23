@@ -4,7 +4,6 @@ import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import imageHash from "imghash";
 import axios from "axios";
-import { AutoModConfiguration } from "../../../utils/types/DatabaseStructures";
 import AutoModManager from "../../../utils/managers/AutoModManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
@@ -28,7 +27,7 @@ export default class extends Event {
 			}),
 		);
 
-		const automod: AutoModConfiguration = await databaseManager.getAutoModConfig(member.guild.id);
+		const automod = await databaseManager.getAutoModConfig(member.guild);
 		if (automod.enabled && automod.avatarHashes.length > 0 && automod.punishmentAvatarBans) {
 			const buffer = await axios.get(member.displayAvatarURL(), {
 				responseType: "arraybuffer",
@@ -59,7 +58,7 @@ export default class extends Event {
 		}
 
 		if (member.pending) return;
-		const config: Record<string, any> = await databaseManager.getConfig(member.guild.id);
+		const config: Record<string, any> = await databaseManager.getConfig(member.guild);
 		if (!config["autorole"]) return;
 
 		await member.roles.add(config["autorole"]);

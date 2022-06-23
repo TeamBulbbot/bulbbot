@@ -3,6 +3,7 @@ build
 
 # Files
 *.json
+!package.json
 
 node_modules
 .env

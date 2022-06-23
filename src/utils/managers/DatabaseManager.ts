@@ -1,293 +1,210 @@
-import { sequelize } from "../database/connection";
 import * as Config from "../../Config";
-import { Guild, Message, MessageAttachment, Snowflake } from "discord.js";
-import { QueryTypes } from "sequelize";
+import { Message, MessageAttachment, Snowflake } from "discord.js";
 import moment from "moment";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
 import { AutoModListOperation, AutoModListOperationResult } from "../types/AutoModListOperation";
 import PunishmentType from "../types/PunishmentType";
-import { AutoModConfiguration, Blacklist, GuildConfiguration, LoggingConfiguration } from "../types/DatabaseStructures";
+import prisma from "../../prisma";
+import { BulbGuild } from "@prisma/client";
 
-export default class {
-	async createGuild(guild: Guild): Promise<void> {
+interface Identified {
+	id: Snowflake;
+}
+
+interface Named {
+	name: string;
+}
+
+type NamedGuild = Identified & Named;
+
+const jsonify = <T = unknown>(val: any): T => JSON.parse(JSON.stringify(val));
+
+export default class DatabaseManager {
+	async getGuild(guild: NamedGuild) {
 		// if guild is already in db ignore
-		if (
-			(
-				await sequelize.query('SELECT id FROM "guilds" WHERE "guildId" = $GuildID', {
-					bind: { GuildID: guild.id },
-					type: QueryTypes.SELECT,
-				})
-			).length > 0
-		)
-			return;
-		const config = await sequelize.models.guildConfiguration.create({ prefix: Config.prefix });
-		const logging = await sequelize.models.guildLogging.create({});
-		const automod = await sequelize.models.automod.create({});
+		const existingGuild = await prisma.bulbGuild.findUnique({
+			where: {
+				guildId: guild.id,
+			},
+		});
 
-		await sequelize.models.guild.create({
-			name: guild.name,
-			guildId: guild.id,
-			guildConfigurationId: config["id"],
-			guildLoggingId: logging["id"],
-			automodId: automod["id"],
+		if (existingGuild) {
+			return existingGuild;
+		}
+
+		return await prisma.bulbGuild.create({
+			data: {
+				name: guild.name,
+				guildId: guild.id,
+				guildConfiguration: {
+					create: {
+						prefix: Config.prefix,
+					},
+				},
+				guildLogging: {
+					create: {},
+				},
+				automod: {
+					create: {},
+				},
+			},
 		});
 	}
 
-	async deleteGuild(guildID: Snowflake): Promise<void> {
-		await sequelize.query('DELETE FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
+	async deleteGuild(guild: NamedGuild) {
+		// TODO: Change these to SQL cascading deletes
+
+		const bulbGuild = await this.getGuild(guild);
+
+		return await prisma.$transaction([
+			prisma.guildConfiguration.delete({
+				where: {
+					id: bulbGuild.guildConfigurationId,
+				},
+			}),
+			prisma.automod.delete({
+				where: {
+					id: bulbGuild.automodId,
+				},
+			}),
+			prisma.guildLogging.delete({
+				where: {
+					id: bulbGuild.guildLoggingId,
+				},
+			}),
+			prisma.infraction.deleteMany({
+				where: {
+					bulbGuildId: bulbGuild.id,
+				},
+			}),
+			prisma.messageLog.deleteMany({
+				where: {
+					bulbGuildId: bulbGuild.id,
+				},
+			}),
+			prisma.banpool.deleteMany({
+				where: {
+					bulbGuildId: bulbGuild.id,
+				},
+			}),
+			prisma.guildModerationRole.deleteMany({
+				where: {
+					bulbGuildId: bulbGuild.id,
+				},
+			}),
+			prisma.guildOverrideCommand.deleteMany({
+				where: {
+					bulbGuildId: bulbGuild.id,
+				},
+			}),
+			prisma.tempban.deleteMany({
+				where: {
+					bulbGuildId: bulbGuild.id,
+				},
+			}),
+			prisma.bulbGuild.delete({
+				where: {
+					id: bulbGuild.id,
+				},
+			}),
+		]);
+	}
+
+	async getConfig(guild: NamedGuild) {
+		const entry = await this.getGuild(guild);
+
+		const config = await prisma.guildConfiguration.findUnique({
+			where: {
+				id: entry.guildConfigurationId,
+			},
 		});
 
-		await sequelize.query('DELETE FROM automods WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
+		if (!config) {
+			throw new Error(`config ID is missing from new bulbGuild, ${entry.id}`);
+		}
+		return config;
+	}
+
+	async getAutoModConfig(guild: NamedGuild) {
+		const entry = await this.getGuild(guild);
+
+		const config = await prisma.automod.findUnique({
+			where: {
+				id: entry.automodId,
+			},
 		});
 
-		await sequelize.query('DELETE FROM infractions WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
+		if (!config) {
+			throw new Error(`automod ID is missing from new bulbGuild, ${entry.id}`);
+		}
+		return config;
+	}
 
-		await sequelize.query('DELETE FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
+	async getCombinedLoggingConfig(guild: Identified) {
+		const result = await prisma.bulbGuild.findUnique({
+			where: {
+				guildId: guild.id,
+			},
+			select: {
+				guildId: true,
+				guildLogging: true,
+				guildConfiguration: {
+					select: {
+						timezone: true,
+					},
+				},
+			},
 		});
+		if (!result?.guildLogging || !result.guildConfiguration) {
+			throw new Error("could not find guild for logging config");
+		}
+		const { timezone, guildId, ...guildLogging } = {
+			guildId: result.guildId,
+			...result.guildLogging,
+			...result.guildConfiguration,
+		};
+		return { timezone, guildId, guildLogging };
+	}
 
-		await sequelize.query('DELETE FROM "messageLogs" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
-
-		await sequelize.query('DELETE FROM "banpools" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
-
-		await sequelize.query('DELETE FROM "guildModerationRoles" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
-
-		await sequelize.query('DELETE FROM "guildOverrideCommands" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
-
-		await sequelize.query('DELETE FROM "tempbans" WHERE "guildId" = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
-		});
-
-		await sequelize.query('DELETE FROM guilds WHERE "guildId" = $GuildID', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.DELETE,
+	async getFullGuildConfig(guild: Identified) {
+		return await prisma.bulbGuild.findUnique({
+			where: { guildId: guild.id },
+			include: {
+				guildConfiguration: true,
+				guildLogging: true,
+				guildOverrideCommands: true,
+				guildModerationRoles: true,
+				automod: true,
+				infractions: true,
+				tempbans: true,
+				banpools: true,
+			},
 		});
 	}
 
-	async getConfig(guildID: Snowflake): Promise<GuildConfiguration> {
-		const response: Record<string, any> = await sequelize.query('SELECT * FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
+	// TODO: Fix the schema so we don't have to get the bulbGuild every time we do anything
+	public async updateConfig<
+		T extends "bulbGuild" | "guildLogging" | "guildConfiguration" | "automod",
+		K extends keyof Parameters<typeof prisma[T]["update"]>[0]["data"],
+		V extends Parameters<typeof prisma[T]["update"]>[0]["data"][K],
+	>({ guild, table, field, value }: { guild: NamedGuild; table: T; field: K; value: V }) {
+		const db = await this.getGuild(guild);
+		// @ts-expect-error TS is a bit scared of this, it's fine I think
+		const result = await prisma[table].update({
+			data: {
+				[field]: value,
+			},
+			where: {
+				id: db[`${table}Id` as keyof BulbGuild],
+			},
 		});
-
-		return response[0];
-	}
-
-	async getAutoModConfig(guildID: Snowflake): Promise<AutoModConfiguration> {
-		const response: AutoModConfiguration[] = await sequelize.query('SELECT * FROM automods WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0];
-	}
-
-	async getFullGuildConfig(guildID: Snowflake) {
-		return await sequelize.models.guild.findOne({
-			where: { guildId: guildID },
-			include: [
-				{ model: sequelize.models.guildConfiguration },
-				{ model: sequelize.models.guildLogging },
-				{ model: sequelize.models.guildOverrideCommands },
-				{ model: sequelize.models.guildModerationRoles },
-				{ model: sequelize.models.automod },
-				{ model: sequelize.models.infraction },
-				{ model: sequelize.models.tempban },
-				{ model: sequelize.models.banpools },
-			],
-		});
-	}
-
-	async setPrefix(guildId: Snowflake, prefix: string): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET prefix = $Prefix WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { Prefix: prefix, GuildID: guildId },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setActionsOnInfo(guildID: Snowflake, enabled: boolean): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "actionsOnInfo" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, Enabled: enabled },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setRolesOnLeave(guildID: Snowflake, enabled: boolean): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "rolesOnLeave" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, Enabled: enabled },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setManualNicknameInf(guildID: Snowflake, enabled: boolean): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "manualNicknameInf" = $Enabled WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, Enabled: enabled },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setPremium(guildID: Snowflake, premium: boolean): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "premiumGuild" = $Premium WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { Premium: premium, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setMuteRole(guildID: Snowflake, muteRoleID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "muteRole" = $MuteRole WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { MuteRole: muteRoleID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setAutoRole(guildID: Snowflake, autoRoleID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "autorole" = $AutoRole WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { AutoRole: autoRoleID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setLanguage(guildID: Snowflake, language: string): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET language = $Lang WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { Lang: language, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async getTimezone(guildID: Snowflake): Promise<string> {
-		const response: Record<string, any> = await sequelize.query('SELECT timezone FROM "guildConfigurations" WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0]["timezone"];
-	}
-
-	async setTimezone(guildID: Snowflake, timezone: string): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET timezone = $TZ WHERE id = (SELECT "guildConfigurationId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { TZ: timezone, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setModAction(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET "modAction" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setBanpool(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET "banpool" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setAutoMod(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET automod = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setMessage(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET message = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setRole(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET role = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setMember(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET member = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setChannel(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET channel = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setThread(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET thread = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setInvite(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET invite = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setJoinLeave(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET "joinLeave" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async setOther(guildID: Snowflake, channelID: Snowflake | null): Promise<void> {
-		await sequelize.query('UPDATE "guildLoggings" SET "other" = $ChannelID WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { ChannelID: channelID, GuildID: guildID },
-			type: QueryTypes.UPDATE,
-		});
-	}
-
-	async getLoggingConfig(guildID: Snowflake): Promise<LoggingConfiguration> {
-		const response: LoggingConfiguration[] = await sequelize.query('SELECT * FROM "guildLoggings" WHERE id = (SELECT "guildLoggingId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID },
-			type: QueryTypes.SELECT,
-		});
-
-		return response[0];
-	}
-
-	async enableAutomod(guildID: Snowflake, enabled: boolean): Promise<void> {
-		await sequelize.query('UPDATE automods SET enabled = $Enabled WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: { GuildID: guildID, Enabled: enabled },
-			type: QueryTypes.UPDATE,
-		});
+		return result;
 	}
 
 	// Append/Remove Abstractions
-	private async automodListOperation(guildID: Snowflake, part: AutoModListPart, operation: AutoModListOperation): Promise<AutoModListOperationResult> {
-		const db: AutoModConfiguration = await this.getAutoModConfig(guildID);
-		const dbkey: string = (function (part) {
+	private async automodListOperation(guild: NamedGuild, part: AutoModListPart, operation: AutoModListOperation): Promise<AutoModListOperationResult> {
+		const db = await this.getAutoModConfig(guild);
+		const dbkey = (function (part) {
 			switch (part) {
 				case AutoModPart.word:
 					return "wordBlacklist";
@@ -308,15 +225,19 @@ export default class {
 			}
 		})(part);
 		const result: AutoModListOperationResult = await operation(db[dbkey]);
-		await sequelize.query(`UPDATE automods SET "${dbkey}" = $ListContent WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
-			bind: { GuildID: guildID, ListContent: result.list },
-			type: QueryTypes.UPDATE,
+		await prisma.automod.update({
+			data: {
+				[dbkey]: result.list,
+			},
+			where: {
+				id: db.id,
+			},
 		});
 		return result;
 	}
 
-	public async automodAppend(guildID: Snowflake, part: AutoModListPart, items: (string | undefined)[]): Promise<AutoModListOperationResult> {
-		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
+	public async automodAppend(guild: NamedGuild, part: AutoModListPart, items: (string | undefined)[]): Promise<AutoModListOperationResult> {
+		return await this.automodListOperation(guild, part, (dblist: string[]): AutoModListOperationResult => {
 			const dbSet: Set<string> = new Set(dblist);
 			const itemSet: Set<string | undefined> = new Set(items);
 			const duplicateSet: Set<string> = new Set();
@@ -330,8 +251,8 @@ export default class {
 		});
 	}
 
-	public async automodRemove(guildID: Snowflake, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
-		return await this.automodListOperation(guildID, part, (dblist: string[]): AutoModListOperationResult => {
+	public async automodRemove(guild: NamedGuild, part: AutoModListPart, items: string[]): Promise<AutoModListOperationResult> {
+		return await this.automodListOperation(guild, part, (dblist: string[]): AutoModListOperationResult => {
 			const notPresent: string[] = [];
 			const removed: string[] = [];
 			for (const item of items) {
@@ -351,8 +272,8 @@ export default class {
 		});
 	}
 
-	public async automodSetTimeout(guildID: Snowflake, part: AutoModAntiSpamPart, timeout: number): Promise<void> {
-		const dbkey: string = (function (part) {
+	public async automodSetTimeout(guild: NamedGuild, part: AutoModAntiSpamPart, timeout: number) {
+		const dbkey = (function (part) {
 			switch (part) {
 				case AutoModPart.message:
 					return "timeoutMessages";
@@ -361,14 +282,19 @@ export default class {
 			}
 		})(part);
 
-		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Timeout WHERE id = (SELECT id FROM guilds WHERE "guildId" = $GuildID)`, {
-			bind: { Timeout: timeout, Part: dbkey, GuildID: guildID },
-			type: QueryTypes.UPDATE,
+		const db = await this.getAutoModConfig(guild);
+		return await prisma.automod.update({
+			data: {
+				[dbkey]: timeout,
+			},
+			where: {
+				id: db.id,
+			},
 		});
 	}
 
-	public async automodSetLimit(guildID: Snowflake, part: AutoModAntiSpamPart, limit: number): Promise<void> {
-		const dbkey: string = (function (part) {
+	public async automodSetLimit(guild: NamedGuild, part: AutoModAntiSpamPart, limit: number) {
+		const dbkey = (function (part) {
 			switch (part) {
 				case AutoModPart.message:
 					return "limitMessages";
@@ -376,218 +302,192 @@ export default class {
 					return "limitMentions";
 			}
 		})(part);
-		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Limit WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
-			bind: { GuildID: guildID, Limit: limit },
-			type: QueryTypes.UPDATE,
+		const db = await this.getAutoModConfig(guild);
+		return await prisma.automod.update({
+			data: {
+				[dbkey]: limit,
+			},
+			where: {
+				id: db.id,
+			},
 		});
 	}
 
-	public async automodSetPunishment(guildID: Snowflake, part: AutoModPart, punishment: PunishmentType | null): Promise<void> {
-		const dbkey: string = (function (part) {
-			switch (part) {
-				case AutoModPart.message:
-					return "punishmentMessages";
-				case AutoModPart.mention:
-					return "punishmentMentions";
-				case AutoModPart.website:
-					return "punishmentWebsite";
-				case AutoModPart.invite:
-					return "punishmentInvites";
-				case AutoModPart.word:
-					return "punishmentWords";
-				case AutoModPart.token:
-					return "punishmentWords";
-				case AutoModPart.avatars:
-					return "punishmentAvatarBans";
-				default:
-					return "";
-			}
-		})(part);
+	public async automodSetPunishment(guild: NamedGuild, part: AutoModPart, punishment: PunishmentType | null) {
+		const dbPunishmentKeys = {
+			[AutoModPart.message]: "punishmentMessages",
+			[AutoModPart.mention]: "punishmentMentions",
+			[AutoModPart.website]: "punishmentWebsite",
+			[AutoModPart.invite]: "punishmentInvites",
+			[AutoModPart.word]: "punishmentWords",
+			[AutoModPart.token]: "punishmentWords",
+			[AutoModPart.avatars]: "punishmentAvatarBans",
+		} as const;
+
+		const dbkey = dbPunishmentKeys[part as keyof typeof dbPunishmentKeys];
+
 		if (!dbkey) return;
-		const punishmentkey: string | null = punishment === null ? null : Object.getOwnPropertyNames(PunishmentType).find((n) => PunishmentType[n] === punishment) ?? null;
-		await sequelize.query(`UPDATE automods SET "${dbkey}" = $Punishment WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)`, {
-			bind: { GuildID: guildID, Punishment: punishmentkey },
-			type: QueryTypes.UPDATE,
-		});
-	}
+		const punishmentkey: keyof typeof PunishmentType | null = punishment !== null ? (PunishmentType[punishment] as keyof typeof PunishmentType) ?? null : null;
 
-	async getAllBlacklisted(): Promise<Blacklist[]> {
-		return await sequelize.query("SELECT * FROM blacklists", { type: QueryTypes.SELECT });
-	}
-
-	async infoBlacklist(snowflakeId: Snowflake): Promise<Blacklist> {
-		const response: Blacklist[] = await sequelize.query('SELECT * FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
-			bind: { snowflakeId },
-			type: QueryTypes.SELECT,
-		});
-		return response[0];
-	}
-
-	async addBlacklist(isGuild: boolean, name: string, snowflakeId: Snowflake, reason: string, developerId: Snowflake): Promise<void> {
-		await sequelize.query(
-			'INSERT INTO blacklists ("isGuild", name, "snowflakeId", reason, "developerId", "createdAt", "updatedAt") VALUES ($isGuild, $name, $snowflakeId, $reason, $developerId, $createdAt, $updatedAt)',
-			{
-				bind: {
-					isGuild,
-					name,
-					snowflakeId,
-					reason,
-					developerId,
-					createdAt: moment().format(),
-					updatedAt: moment().format(),
-				},
-				type: QueryTypes.INSERT,
+		const db = await this.getAutoModConfig(guild);
+		return await prisma.automod.update({
+			data: {
+				[dbkey]: punishmentkey,
 			},
-		);
-	}
-
-	async removeBlacklist(snowflakeId: Snowflake): Promise<void> {
-		await sequelize.query('DELETE FROM "blacklists" WHERE ("snowflakeId" = $snowflakeId)', {
-			bind: { snowflakeId },
-			type: QueryTypes.DELETE,
+			where: {
+				id: db.id,
+			},
 		});
 	}
 
-	async appendQuickReasons(guildId: Snowflake, reason: string): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "quickReasons" = array_append("quickReasons", $reason) WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: {
-				GuildID: guildId,
+	async infoBlacklist(snowflakeId: Snowflake) {
+		// TODO: Figure out if snowflakeId is unique
+		return await prisma.blacklistEntry.findFirst({
+			where: {
+				snowflakeId,
+			},
+		});
+	}
+
+	async addBlacklist(isGuild: boolean, name: string, snowflakeId: Snowflake, reason: string, developerId: Snowflake) {
+		return await prisma.blacklistEntry.create({
+			data: {
+				isGuild,
+				name,
+				snowflakeId,
 				reason,
+				developerId,
 			},
-			type: QueryTypes.UPDATE,
 		});
 	}
 
-	async removeQuickReason(guildId: Snowflake, reason: string): Promise<void> {
-		await sequelize.query('UPDATE "guildConfigurations" SET "quickReasons" = array_remove("quickReasons", $reason) WHERE id = (SELECT "automodId" FROM guilds WHERE "guildId" = $GuildID)', {
-			bind: {
-				GuildID: guildId,
-				reason,
+	async removeBlacklist(snowflakeId: Snowflake) {
+		// TODO: Figure out if snowflakeId is unique
+		return await prisma.blacklistEntry.deleteMany({
+			where: {
+				snowflakeId,
 			},
-			type: QueryTypes.UPDATE,
+		});
+	}
+
+	async appendQuickReasons(guild: NamedGuild, reason: string) {
+		const db = await this.getConfig(guild);
+		return await prisma.guildConfiguration.update({
+			data: {
+				quickReasons: [...db.quickReasons, reason],
+			},
+			where: {
+				id: db.id,
+			},
+		});
+	}
+
+	async removeQuickReason(guild: NamedGuild, reason: string) {
+		const db = await this.getConfig(guild);
+		return await prisma.guildConfiguration.update({
+			data: {
+				quickReasons: db.quickReasons.filter((quickReason) => quickReason !== reason),
+			},
+			where: {
+				id: db.id,
+			},
 		});
 	}
 
 	async addToMessageToDB(message: Message) {
-		await sequelize.query(
-			'INSERT INTO "messageLogs" ("messageId", "channelId", "authorId", "authorTag", "content", "embed", "sticker", "attachments", "createdAt", "updatedAt", "guildId") VALUES ($messageId, $channelId, $authorId, $authorTag, $content, $embed, $sticker, $attachments, $createdAt, $updatedAt, (SELECT id FROM guilds WHERE "guildId" = $guildId))',
-			{
-				bind: {
-					messageId: message.id,
-					guildId: message.guild?.id,
-					channelId: message.channel.id,
-					authorId: message.author.id,
-					authorTag: message.author.tag,
-					content: message.content,
-					embed: message.embeds.length > 0 ? message.embeds[0].toJSON() : null,
-					sticker: message.stickers.first() ? message.stickers.first()?.toJSON() : null, // @ts-expect-error
-					attachments: message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`),
-					createdAt: moment(message.createdAt).format(),
-					updatedAt: moment(message.createdAt).format(),
+		if (!message.guild) {
+			throw new Error("message does not have a guild, cannot add to logs");
+		}
+		await prisma.messageLog.create({
+			data: {
+				messageId: message.id,
+				bulbGuild: {
+					connect: {
+						guildId: message.guild.id,
+					},
 				},
-				type: QueryTypes.INSERT,
+				channelId: message.channel.id,
+				authorId: message.author.id,
+				authorTag: message.author.tag,
+				content: message.content,
+				embed: message.embeds.length > 0 ? jsonify(message.embeds[0].toJSON()) : undefined,
+				sticker: message.stickers.first() ? jsonify(message.stickers.first()?.toJSON()) : undefined,
+				// @ts-expect-error It thinks it could be a DM channel and therefore accessing nsfw boolean is bad but it's fine here
+				attachments: message.attachments.map((attach: MessageAttachment) => `**${attach.name}**\n${message.channel.nsfw ? `|| ${attach.proxyURL} ||` : attach.proxyURL}`),
+				createdAt: moment(message.createdAt).format(),
+				updatedAt: moment(message.createdAt).format(),
 			},
-		);
-	}
-
-	async getMessageFromDB(messageId: Snowflake) {
-		const response: Record<string, any> = await sequelize.query(
-			`
-		SELECT * FROM "messageLogs"
-		JOIN guilds ON "messageLogs"."guildId" = guilds.id
-		WHERE ("messageId" = $messageId)
-		`,
-			{
-				bind: { messageId },
-				type: QueryTypes.SELECT,
-			},
-		);
-		return response[0];
-	}
-
-	async deleteMessageFromDB(messageId: Snowflake) {
-		await sequelize.query('DELETE FROM "messageLogs" WHERE ("messageId" = $messageId)', {
-			bind: { messageId },
-			type: QueryTypes.DELETE,
 		});
 	}
 
-	async updateMessageContent(messageId: Snowflake, content: string) {
-		await sequelize.query('UPDATE "messageLogs" SET "content" = $content WHERE "messageId" = $messageId', {
-			bind: { messageId, content },
-			type: QueryTypes.UPDATE,
+	async getUserArchive(authorId: Snowflake, guild: NamedGuild, amount: number | undefined) {
+		return await prisma.messageLog.findMany({
+			where: {
+				authorId,
+				bulbGuild: {
+					guildId: guild.id,
+				},
+			},
+			take: amount,
 		});
 	}
 
-	async getUserArchive(userId: Snowflake, serverId: Snowflake, amount: number) {
-		const response: Record<string, any> = await sequelize.query(
-			`
-			SELECT * FROM "messageLogs"
-			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $serverId)
-			AND "authorId" = $userId
-			LIMIT $amount
-		`,
-			{
-				bind: { serverId, userId, amount },
-				type: QueryTypes.SELECT,
+	async getChannelArchive(channelId: Snowflake, guild: NamedGuild, amount: number | undefined) {
+		return await prisma.messageLog.findMany({
+			where: {
+				channelId,
+				bulbGuild: {
+					guildId: guild.id,
+				},
 			},
-		);
-		return response;
+			take: amount,
+		});
 	}
 
-	async getChannelArchive(channelId: Snowflake, serverId: Snowflake, amount: number) {
-		const response: Record<string, any> = await sequelize.query(
-			`
-			SELECT * FROM "messageLogs"
-			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $serverId)
-			AND "channelId" = $channelId
-			LIMIT $amount
-		`,
-			{
-				bind: { serverId, channelId, amount },
-				type: QueryTypes.SELECT,
+	async getServerArchive(guild: NamedGuild, days: number) {
+		const now = Date.now();
+		const daysInMs = days * 24 * 60 * 60 * 1000;
+		const daysAgo = new Date(now - daysInMs);
+		const db = await this.getGuild(guild);
+		return await prisma.messageLog.findMany({
+			where: {
+				bulbGuildId: db.id,
+				createdAt: {
+					lte: daysAgo,
+				},
 			},
-		);
-		return response;
-	}
-
-	async getServerArchive(guildId: Snowflake, days: string) {
-		const response: Record<string, any> = await sequelize.query(
-			`
-			SELECT * FROM "messageLogs"
-			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
-			AND "createdAt" < (now() - '${days} days'::interval);
-		`,
-			{
-				bind: { guildId },
-				type: QueryTypes.SELECT,
-			},
-		);
-		return response;
+		});
 	}
 
 	async purgeAllMessagesOlderThan30Days() {
-		const deleted: Record<string, any> = await sequelize.query(
-			`
-			DELETE FROM "messageLogs"
-			WHERE "createdAt" < (now() - '30 days'::interval);
-			`,
-		);
-
-		return deleted[1].rowCount;
+		const now = Date.now();
+		const thirtyDays = 30 * 24 * 60 * 60 * 1000;
+		const thirtyDaysAgo = new Date(now - thirtyDays);
+		const result = await prisma.messageLog.deleteMany({
+			where: {
+				createdAt: {
+					lte: thirtyDaysAgo,
+				},
+			},
+		});
+		return result.count;
 	}
 
-	async purgeMessagesInGuild(guildId: Snowflake, days: string) {
-		await sequelize.query(
-			`
-			DELETE FROM "messageLogs"
-			WHERE "guildId" = (SELECT id FROM "guilds" WHERE "guildId" = $guildId)
-			AND "createdAt" < (now() - '${days} days'::interval);
-			`,
-			{
-				bind: { guildId },
-				type: QueryTypes.DELETE,
+	async purgeMessagesInGuild(guild: NamedGuild, days: number) {
+		const now = Date.now();
+		const daysInMs = days * 24 * 60 * 60 * 1000;
+		const daysAgo = new Date(now - daysInMs);
+		const db = await this.getGuild(guild);
+		const result = await prisma.messageLog.deleteMany({
+			where: {
+				bulbGuildId: db.id,
+				createdAt: {
+					lte: daysAgo,
+				},
 			},
-		);
+		});
+		return result.count;
 	}
 }
+
+export const databaseManager = new DatabaseManager();

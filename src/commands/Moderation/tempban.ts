@@ -77,7 +77,7 @@ export default class extends Command {
 		await createTempBan(target, reason, Date.now() + parse(args[1]), context.guild.id);
 		const tempban: any = await getLatestTempBan(target, context.guild.id);
 
-		const timezone = this.client.bulbutils.timezones[await databaseManager.getTimezone(context.guild.id)];
+		const timezone = this.client.bulbutils.timezones[(await databaseManager.getConfig(context.guild)).timezone];
 		await context.channel.send(
 			await this.client.bulbutils.translate("action_success_temp", context.guild.id, {
 				action: await this.client.bulbutils.translate("mod_action_types.temp_ban", context.guild.id, {}),

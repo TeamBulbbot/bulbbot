@@ -56,7 +56,7 @@ export default class extends SubCommand {
 		description += await this.client.bulbutils.translate("infraction_info_target", context.guild.id, { target });
 		description += await this.client.bulbutils.translate("infraction_info_moderator", context.guild.id, { moderator });
 		description += await this.client.bulbutils.translate("infraction_info_created", context.guild.id, {
-			created: moment(Date.parse(inf.createdAt)).format("MMM Do YYYY, h:mm:ss a"),
+			created: moment(inf.createdAt).format("MMM Do YYYY, h:mm:ss a"),
 		});
 
 		if (inf.active !== "false" && inf.active !== "true") {

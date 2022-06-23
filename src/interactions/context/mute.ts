@@ -8,12 +8,12 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default async function (client: BulbBotClient, interaction: ContextMenuInteraction, message: Message): Promise<void> {
-	if (!message.member || !message.guild || !interaction.member) return;
+	if (!message.member || !message.guild || !interaction.member || !interaction.guild) return;
 	const target = message.member;
-	const timezone = client.bulbutils.timezones[await databaseManager.getTimezone(message.guild.id)];
+	const timezone = client.bulbutils.timezones[(await databaseManager.getConfig(interaction.guild)).timezone];
 	const reason = await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
 
-	const reasons: string[] = (await databaseManager.getConfig(target.guild.id)).quickReasons;
+	const reasons: string[] = (await databaseManager.getConfig(target.guild)).quickReasons;
 	reasons.push(await client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
 	const options: MessageSelectOptionData[] = [];

@@ -1,5 +1,6 @@
-import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
+import { isNullish } from "../../../../utils/helpers";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import AutoModPart from "../../../../utils/types/AutoModPart";
 
@@ -99,8 +100,10 @@ async function limit(interaction: MessageComponentInteraction, client: BulbBotCl
 						return limit(i, client, category);
 					}
 
-					if (category !== undefined) await databaseManager.automodSetLimit(interaction.guild?.id as Snowflake, parts[category], parseInt(items));
-					if (category !== undefined) await databaseManager.automodSetTimeout(interaction.guild?.id as Snowflake, parts[category], parseInt(seconds) * 1000);
+					if (category !== undefined && !isNullish(interaction.guild)) {
+						await databaseManager.automodSetLimit(interaction.guild, parts[category], parseInt(items));
+						await databaseManager.automodSetTimeout(interaction.guild, parts[category], parseInt(seconds) * 1000);
+					}
 					await interaction.followUp({ content: `Updated to ${items}/${seconds}`, ephemeral: true });
 
 					return limit(i, client, category);

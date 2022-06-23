@@ -30,7 +30,7 @@ export default class extends SubCommand {
 		}
 
 		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) enabled premium on ${guild.name} (${guild.id})`);
-		await databaseManager.setPremium(guild.id, true);
+		await databaseManager.updateConfig({ guild, table: "guildConfiguration", field: "premiumGuild", value: true });
 		await context.channel.send(`Enabled premium for **${guild.name}** \`(${guild.id})\``);
 	}
 }

@@ -1,0 +1,35 @@
+-- AlterTable
+ALTER TABLE "banpoolSubscribers" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "banpools" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "blacklists" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "experiments" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "guildConfigurations" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "guildLoggings" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "guildModerationRoles" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "guildOverrideCommands" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "guilds" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "infractions" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "reminds" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "tempbans" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;

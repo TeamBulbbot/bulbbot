@@ -2,14 +2,11 @@ import Event from "../../structures/Event";
 import { Message, Util } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
-import ClearanceManager from "../../utils/managers/ClearanceManager";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import AutoMod from "../../utils/AutoMod";
-import DatabaseManager from "../../utils/managers/DatabaseManager";
+import prisma from "../../prisma";
 
 const loggingManager: LoggingManager = new LoggingManager();
-const clearanceManager: ClearanceManager = new ClearanceManager();
-const { getMessageFromDB, updateMessageContent }: DatabaseManager = new DatabaseManager();
 export default class extends Event {
 	constructor(...args: any[]) {
 		// @ts-expect-error
@@ -28,17 +25,20 @@ export default class extends Event {
 		let oldMessageContent: string;
 
 		if (oldMessage.partial || newMessage.partial) {
-			const dbData = await getMessageFromDB(oldMessage.id);
-			if (dbData === undefined) return;
+			const dbData = await prisma.messageLog.findUnique({
+				where: {
+					messageId: oldMessage.id,
+				},
+			});
+			if (!dbData?.content) return;
 			oldMessageContent = dbData.content;
 		} else {
 			if (newMessage.author?.id === this.client.user?.id) return;
 			if (oldMessage.content === newMessage.content) return;
 
 			const context: CommandContext = await getCommandContext(newMessage);
-			const clearance = await clearanceManager.getUserClearance(context);
 
-			if (clearance < 25) await AutoMod(this.client, context);
+			await AutoMod(this.client, context);
 
 			oldMessageContent = oldMessage.content;
 		}
@@ -68,6 +68,13 @@ export default class extends Event {
 			);
 		} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
 
-		await updateMessageContent(oldMessage.id, newMessage.content);
+		await prisma.messageLog.update({
+			data: {
+				content: newMessage.content,
+			},
+			where: {
+				messageId: oldMessage.id,
+			},
+		});
 	}
 }

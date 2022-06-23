@@ -1,11 +1,9 @@
 import Command from "../../structures/Command";
 import DatabaseManager from "../managers/DatabaseManager";
-import ClearanceManager from "../../utils/managers/ClearanceManager";
 import * as Config from "../../Config";
 import CommandContext from "src/structures/CommandContext";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
-const clearanceManager: ClearanceManager = new ClearanceManager();
 
 interface ResolveCommandOptionsOptions {
 	clearance?: number;
@@ -18,15 +16,13 @@ export default class ResolveCommandOptions {
 	public context: CommandContext;
 	public baseCommand: Command;
 	public args: string[];
-	public clearance: number;
 	public premiumGuild: boolean;
 	public isDev: boolean;
 	public isSubDev: boolean;
 
 	static async create(command: Command, context: CommandContext, args: string[], options: ResolveCommandOptionsOptions = {}): Promise<ResolveCommandOptions> {
 		const instance = new ResolveCommandOptions(command, context, args, options);
-		instance.clearance = await clearanceManager.getUserClearance(context);
-		instance.premiumGuild = !!context.guild?.id && (await databaseManager.getConfig(context.guild.id)).premiumGuild;
+		instance.premiumGuild = !!context.guild?.id && (await databaseManager.getConfig(context.guild)).premiumGuild;
 		return instance;
 	}
 
@@ -34,9 +30,6 @@ export default class ResolveCommandOptions {
 		this.baseCommand = command;
 		this.context = context;
 		this.args = args;
-
-		if (options.clearance !== undefined) this.clearance = options.clearance;
-		else this.clearance = 0;
 
 		if (options.premiumGuild !== undefined) this.premiumGuild = options.premiumGuild;
 		else this.premiumGuild = false;

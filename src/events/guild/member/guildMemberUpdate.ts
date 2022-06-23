@@ -3,6 +3,8 @@ import { DiscordAPIError, GuildAuditLogs, GuildAuditLogsEntry, GuildMember, Perm
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
+import { Infraction } from "@prisma/client";
+import { isNullish } from "../../../utils/helpers";
 
 const loggingManager: LoggingManager = new LoggingManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -18,7 +20,7 @@ export default class extends Event {
 
 	public async run(oldMember: GuildMember, newMember: GuildMember) {
 		let autoRoleName: string | null;
-		if (oldMember.pending && !newMember.pending && (autoRoleName = (await databaseManager.getConfig(newMember.guild.id))["autorole"]) !== null) await newMember.roles.add(autoRoleName);
+		if (oldMember.pending && !newMember.pending && (autoRoleName = (await databaseManager.getConfig(newMember.guild))["autorole"]) !== null) await newMember.roles.add(autoRoleName);
 
 		let change: "newrole" | "removedrole" | "nickname";
 		let part: "member" | "role" | "modAction";
@@ -37,7 +39,7 @@ export default class extends Event {
 			// If newMember is not muted check if the executor is bot. If not, log as manual unmute, else log as auto mute
 			if (newMember.communicationDisabledUntilTimestamp === null && executor) {
 				if (executor.id !== this.client.user?.id) {
-					await infractionsManager.createInfraction(
+					const { id: infID } = await infractionsManager.createInfraction(
 						newMember.guild.id,
 						"Unmute",
 						false,
@@ -45,10 +47,9 @@ export default class extends Event {
 						newMember.user,
 						executor,
 					);
-					const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Unmute");
 					await loggingManager.sendModAction(
 						this.client,
-						newMember.guild.id,
+						newMember.guild,
 						await this.client.bulbutils.translate("mod_action_types.unmute", newMember.guild.id, {}),
 						newMember.user,
 						executor,
@@ -59,7 +60,7 @@ export default class extends Event {
 			} else {
 				if (!executor?.id || executor.id === this.client.user?.id || newMember.communicationDisabledUntilTimestamp === null) return;
 
-				await infractionsManager.createInfraction(
+				const { id: infID } = await infractionsManager.createInfraction(
 					newMember.guild.id,
 					"Mute",
 					newMember.communicationDisabledUntilTimestamp,
@@ -67,7 +68,6 @@ export default class extends Event {
 					newMember.user,
 					executor,
 				);
-				const infID: number = await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Mute");
 				await loggingManager.sendModActionTemp(
 					this.client,
 					newMember.guild,
@@ -114,14 +114,13 @@ export default class extends Event {
 					auditLog = audit.entries.first();
 				}
 
-				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild.id)).manualNicknameInf) {
+				if (auditLog?.changes && auditLog.changes[0].key === "nick" && (await databaseManager.getConfig(newMember.guild)).manualNicknameInf) {
 					executor = auditLog.executor;
 					if (!executor?.id || executor.id === this.client.user?.id) return;
-
+					let infraction: Maybe<Infraction> = undefined;
 					const reason = auditLog.reason ?? (await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}));
-					if (!executor.bot && executor.id !== newMember.user.id) await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor);
-					const infID: number =
-						!executor.bot && executor.id !== newMember.user.id ? await infractionsManager.getLatestInfraction(newMember.guild.id, executor.id, newMember.user.id, "Manual Nickname") : -1;
+					if (!executor.bot && executor.id !== newMember.user.id) infraction = await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor);
+					const infID = !isNullish(infraction) ? infraction.id : -1;
 					const translateKey =
 						executor === null || executor.id === newMember.id
 							? newMember.nickname

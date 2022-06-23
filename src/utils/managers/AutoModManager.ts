@@ -8,7 +8,7 @@ import CommandContext from "../../structures/CommandContext";
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
 export default class {
-	async resolveAction(client: BulbBotClient, context: CommandContext, action: string, reason: string): Promise<string> {
+	async resolveAction(client: BulbBotClient, context: CommandContext, action: Nullable<string>, reason: string): Promise<string> {
 		let target: any = {
 			user: {
 				tag: context.author.tag,
@@ -34,7 +34,7 @@ export default class {
 			case "WARN":
 				await infractionsManager.warn(
 					client,
-					context.guild.id,
+					context.guild,
 					target.user,
 					context.guild.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
@@ -50,7 +50,7 @@ export default class {
 				target = await client.bulbfetch.getGuildMember(context.guild.members, context.author.id);
 				await infractionsManager.kick(
 					client,
-					context.guild.id,
+					context.guild,
 					target,
 					context.guild.me,
 					await client.bulbutils.translate("global_mod_action_log", context.guild.id, {
@@ -102,7 +102,7 @@ export default class {
 			case "WARN":
 				await infractionsManager.warn(
 					client,
-					member.guild.id,
+					member.guild,
 					member.user,
 					member.guild.me,
 					await client.bulbutils.translate("global_mod_action_log", member.guild.id, {
@@ -117,7 +117,7 @@ export default class {
 			case "KICK":
 				await infractionsManager.kick(
 					client,
-					member.guild.id,
+					member.guild,
 					member,
 					member.guild.me,
 					await client.bulbutils.translate("global_mod_action_log", member.guild.id, {

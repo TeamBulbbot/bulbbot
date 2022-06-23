@@ -110,14 +110,47 @@ export const resolveGuildMemberMoreSafe = (memberInput: GuildMemberMaybeApi): Gu
 	// @ts-expect-error This is a private constructor don't worry about it
 	: new GuildMember(memberInput);
 
+// prettier-ignore
 export const resolveGuildRoleMoreSafe = (roleInput: GuildRoleMaybeApi): Role =>
 	roleInput instanceof Role
 		? roleInput
-		: // @ts-expect-error
-		  new Role(roleInput);
+    // @ts-expect-error
+		: new Role(roleInput);
 
+/** Returns true if |v| is null or undefined ("nullish"), false otherwise */
+// Intentionally uses abstract equality operator (==), not strict equality.
+// null with `==` only returns true when comparing with either null or undefined,
+// thus suiting our purposes
+export const isNullish = (v: any): v is null | undefined => v == null;
+
+/** Will only execute `cb` if `val` is not nullish. Returns undefined if val is nullish */
+export const nullsafe = <T, F extends (val: T) => R, R = ReturnType<F>>(val: T, cb: F) => (!isNullish(val) ? cb(val) : undefined);
+
+export const clamp = (val: number) => +(val > 0) && val;
+
+type PaginateOptions = {
+	take?: number;
+	skip?: number;
+};
+export const paginate = ({ page = 1, pageSize = 25 }: Paginatetable): PaginateOptions => ({
+	take: page * pageSize || undefined,
+	skip: clamp(page - 1) * pageSize || undefined,
+});
+
+// TODO: I have reservations about this one
 export const resolveGuildChannelMoreSafe = (channelInput: GuildChannelMaybeApi): GuildChannel =>
 	channelInput instanceof GuildChannel
 		? channelInput
 		: // @ts-expect-error
 		  new Channel(channelInput);
+
+export const unpackSettled = <T>(settled: PromiseSettledResult<T>[]): T[] => {
+	const resolved: T[] = [];
+	for (const result of settled) {
+		if (result.status === "fulfilled") {
+			resolved.push(result.value);
+		}
+		// This will drop any rejections silently. Only use it if that is fine
+	}
+	return resolved;
+};

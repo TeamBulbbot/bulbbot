@@ -1,4 +1,4 @@
-import { ColorResolvable, CommandInteraction, GuildMember, MessageActionRow, MessageButton, MessageEmbed, Snowflake, User } from "discord.js";
+import { ColorResolvable, CommandInteraction, GuildMember, MessageActionRow, MessageButton, MessageEmbed, User } from "discord.js";
 import axios from "axios";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import * as Emotes from "../../emotes.json";
@@ -8,7 +8,7 @@ import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
-import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
+import { isNullish, resolveGuildMemberMoreSafe } from "../../utils/helpers";
 import { APIGuildMember } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -55,7 +55,10 @@ export default class extends ApplicationCommand {
 		]);
 
 		let components: MessageActionRow[];
-		const actionsOnInfo: boolean = (await databaseManager.getConfig(interaction.guild?.id as Snowflake)).actionsOnInfo;
+		if (isNullish(interaction.guild)) {
+			return;
+		}
+		const { actionsOnInfo } = await databaseManager.getConfig(interaction.guild);
 
 		if (!actionsOnInfo) components = [];
 		else if (!(user instanceof GuildMember)) components = [];
@@ -144,7 +147,7 @@ export default class extends ApplicationCommand {
 			}
 		}
 
-		const infs = await infractionsManager.getOffenderInfractions(interaction.guild?.id as Snowflake, user instanceof GuildMember ? user.user.id : user.id);
+		const infs = await infractionsManager.getOffenderInfractions({ guildId: interaction.guild.id, targetId: user instanceof GuildMember ? user.user.id : user.id });
 		if (infs) {
 			let inf_emote;
 

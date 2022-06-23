@@ -18,3 +18,10 @@ type Include<T, U> = T extends U ? T : never;
 interface Identifiable {
 	id: string;
 }
+
+type DeepPartial<T> = T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } : T;
+
+interface Paginatetable {
+	page?: number;
+	pageSize?: number;
+}

@@ -69,9 +69,9 @@ export default class extends SubCommand {
 
 		collector.on("collect", async (interaction: ButtonInteraction) => {
 			if (interaction.user.id !== context.author.id) {
-				return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
+				return void interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
 			}
-			if (!context.guild) return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }), ephemeral: true });
+			if (!context.guild) return void interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }), ephemeral: true });
 			if (interaction.customId === "confirm") {
 				await interaction.update({
 					content: await this.client.bulbutils.translate("infraction_delete_success", context.guild.id, {
@@ -80,10 +80,10 @@ export default class extends SubCommand {
 					components: [],
 				});
 				collector.stop("clicked");
-				return await infractionsManager.deleteInfraction(context.guild.id, infID);
+				return void (await infractionsManager.deleteInfraction(context.guild.id, infID));
 			} else {
 				collector.stop("clicked");
-				return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
+				return void interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
 			}
 		});
 

@@ -1,25 +1,26 @@
 import { schedule } from "node-cron";
 import BulbBotClient from "../structures/BulbBotClient";
 import DatabaseManager from "./managers/DatabaseManager";
-import { readdirSync, unlinkSync } from "fs";
+import { readdir, unlink } from "fs/promises";
 import { join } from "path";
+import { unpackSettled } from "./helpers";
 
 const { purgeAllMessagesOlderThan30Days }: DatabaseManager = new DatabaseManager();
 
 export function startAllCrons(client: BulbBotClient) {
-	client.log.info("[CRONS] Starting up the crons");
+	client.log.info("[CRONS] Starting cron jobs");
 	schedule("0 0 * * *", async () => {
 		client.log.info("[CRONS] Starting to clear up messages");
 		const count = await purgeAllMessagesOlderThan30Days();
-		let fileCount = 0;
 		const path = `${__dirname}/../../files`;
-		const files: string[] = readdirSync(path);
-		for (const file of files) {
-			if (file.endsWith(".gitignore")) continue;
-			fileCount++;
-			unlinkSync(join(path, file));
-		}
+		const files: string[] = await readdir(path);
+		const operations = files.map(async (file) => {
+			if (file.endsWith(".gitignore")) return;
+			await unlink(join(path, file));
+			return true;
+		});
+		const resolvedOperations = unpackSettled(await Promise.allSettled(operations)).filter(Boolean) as true[];
 
-		client.log.info(`[CRONS] Cleared ${count} messages and deleted ${fileCount} files`);
+		client.log.info(`[CRONS] Cleared ${count} messages and deleted ${resolvedOperations.length} files`);
 	});
 }
