@@ -5,13 +5,13 @@
 
 */
 -- AlterTable
-ALTER TABLE "infractions" ADD COLUMN "active_tmp" VarChar(255);
-UPDATE "infractions" SET "active_tmp" = "active";
+ALTER TABLE "infractions" ADD COLUMN "timeout" VarChar(255);
+UPDATE "infractions" SET "timeout" = "active";
 ALTER TABLE "infractions" DROP COLUMN "active",
 ADD COLUMN     "active" BOOLEAN NOT NULL;
-UPDATE "infractions" SET "active" = true WHERE "active_tmp" = 'true';
-UPDATE "infractions" SET "active" = false WHERE "active_tmp" = 'false';
-ALTER TABLE "infractions" DROP COLUMN "active_tmp";
+UPDATE "infractions" SET "active" = true WHERE "timeout" <> 'false';
+UPDATE "infractions" SET "active" = false WHERE "timeout" = 'false';
+UPDATE "infractions" SET "timeout" = NULL WHERE "timeout" = 'false' OR "timeout" = 'true';
 
 -- CreateIndex
 CREATE INDEX "infractions_id_guildId_idx" ON "infractions"("id", "guildId");

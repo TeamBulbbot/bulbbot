@@ -164,6 +164,7 @@ model Infraction {
   id          Int       @id @default(autoincrement())
   action      String    @db.VarChar(255)
   active      Boolean
+  timeout     String?   @db.VarChar(255)
   reason      String    @db.VarChar(10000)
   target      String    @db.VarChar(255)
   targetId    String    @db.VarChar(255)
