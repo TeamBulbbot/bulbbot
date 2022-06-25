@@ -1,82 +1,101 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { GuildMember, Message, Snowflake } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
-import DatabaseManager from "../../utils/managers/DatabaseManager";
+import { CommandInteraction, Guild, GuildMember, Snowflake } from "discord.js";
 import parse from "parse-duration";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import moment from "moment";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 
-const databaseManager: DatabaseManager = new DatabaseManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
+			type: ApplicationCommandType.CHAT_INPUT,
 			description: "Mutes the selected user",
-			category: "Moderation",
-			aliases: ["tempmute"],
-			usage: "<member> <duration> [reason]",
-			examples: ["mute 123456789012345678 5m", "mute 123456789012345678 1h rude user", "mute @Wumpus#0000 24h rude user"],
-			argList: ["member:Member", "duration:Time", "reason:String"],
-			minArgs: 2,
-			maxArgs: -1,
-			clearance: 50,
-			userPerms: ["MODERATE_MEMBERS"],
-			clientPerms: ["MODERATE_MEMBERS"],
+			options: [
+				{
+					name: "member",
+					type: ApplicationCommandOptionTypes.USER,
+					description: "The member you want to mute",
+					required: true,
+				},
+				{
+					name: "duration",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "How long the member should be muted for",
+					required: true,
+				},
+				{
+					name: "reason",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "The reason behind the mute",
+					required: false,
+				},
+			],
+			command_permissions: ["MUTE_MEMBERS"],
+			client_permissions: ["MUTE_MEMBERS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		const duration: number = parse(args[1]);
-		let reason: string = args.slice(2).join(" ");
+	public async run(interaction: CommandInteraction) {
+		let member = interaction.options.getMember("member");
+		const duration = parse(interaction.options.getString("duration") as string);
+		let reason = interaction.options.getString("reason", false);
 
-		if (!target)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-		if (!context.guild || !context.member || (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user))) return;
-
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if ((duration && duration <= parse("0s")) || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > parse("28d")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_28d", context.guild?.id, {}));
-		if (target.communicationDisabledUntilTimestamp !== null && Date.now() < target.communicationDisabledUntilTimestamp)
-			return context.channel.send(await this.client.bulbutils.translate("mute_already_muted", context.guild?.id, { target: target.user }));
+		if (!member)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
+		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
+		if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
+		if ((duration && duration <= parse("0s")) || duration === null)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (duration > parse("28d"))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("duration_invalid_28d", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (member.communicationDisabledUntilTimestamp !== null && Date.now() < member.communicationDisabledUntilTimestamp)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("mute_already_muted", interaction.guild?.id, { target: member.user }),
+				ephemeral: true,
+			});
 
 		const infID = await infractionsManager.mute(
 			this.client,
-			context.guild,
-			target,
-			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild.id, {}),
-				moderator: context.author,
-				target: target?.user,
+			interaction.guild as Guild,
+			member,
+			interaction.member as GuildMember,
+			await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.mute", interaction.guild?.id, {}),
+				moderator: interaction.user,
+				target: member.user,
 				reason,
 			}),
 			reason,
-			Date.now() + parse(args[1]),
+			Date.now() + duration,
 		);
 
-		const timezone = this.client.bulbutils.timezones[(await databaseManager.getConfig(context.guild)).timezone];
-		await context.channel.send(
-			await this.client.bulbutils.translate("action_success_temp", context.guild.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.mute", context.guild.id, {}),
-				target: target?.user,
+		if (infID === null)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_error.db_inf_id_null", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+
+		return interaction.reply(
+			await this.client.bulbutils.translate("action_success_temp", interaction.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.mute", interaction.guild?.id, {}),
+				target: member.user,
 				reason,
 				infraction_id: infID,
-				until: moment(Date.now() + parse(args[1]))
-					.tz(timezone)
-					.format("MMM Do YYYY, h:mm:ssa z"),
+				until: moment(Date.now() + duration).unix(),
 			}),
 		);
 	}

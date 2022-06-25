@@ -37,6 +37,7 @@ export default class extends ApplicationCommand {
 
 		if (!member)
 			return interaction.reply({
+				// TODO: Rename global_not_found_new to global_not_found once all commands are migrated
 				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
@@ -60,7 +61,7 @@ export default class extends ApplicationCommand {
 
 		if (infID === null)
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_error.kick_inf_id_null", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_error.db_inf_id_null", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 

@@ -60,4 +60,7 @@ process.on("exit", () => {
 	client.log.info("Closed everything <3");
 });
 
-process.on("unhandledRejection", (err: Error) => client.log.error(`[PROGRAM] Unhandled Rejection: ${err.name} | ${err.message} | ${err.stack}`));
+process.on("unhandledRejection", (err: Error) => {
+	client.log.error(`[PROGRAM] Unhandled Rejection: ${err.name} | ${err.message} | ${err.stack}`);
+	client.log.error(err);
+});
