@@ -9,27 +9,34 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
+enum AutomodPunishmentType {
+  LOG
+  WARN
+  KICK
+  BAN
+}
+
 model Automod {
-  id                   Int        @id @default(autoincrement())
-  enabled              Boolean    @default(false)
-  websiteWhitelist     String[]   @db.VarChar(255)
-  punishmentWebsite    String?    @db.VarChar(255)
-  inviteWhitelist      String[]   @db.VarChar(255)
-  punishmentInvites    String?    @db.VarChar(255)
-  wordBlacklist        String[]   @db.VarChar(255)
-  wordBlacklistToken   String[]   @db.VarChar(255)
-  punishmentWords      String?    @db.VarChar(255)
-  limitMentions        Int?       @default(0)
-  punishmentMentions   String?    @db.VarChar(255)
-  timeoutMentions      Int?       @default(15000)
-  limitMessages        Int?       @default(0)
-  punishmentMessages   String?    @db.VarChar(255)
-  timeoutMessages      Int?       @default(10000)
-  avatarHashes         String[]   @db.VarChar(255)
-  punishmentAvatarBans String?    @db.VarChar(255)
-  ignoreChannels       String[]   @db.VarChar(255)
-  ignoreRoles          String[]   @db.VarChar(255)
-  ignoreUsers          String[]   @db.VarChar(255)
+  id                   Int                    @id @default(autoincrement())
+  enabled              Boolean                @default(false)
+  websiteWhitelist     String[]               @db.VarChar(255)
+  punishmentWebsite    AutomodPunishmentType?
+  inviteWhitelist      String[]               @db.VarChar(255)
+  punishmentInvites    AutomodPunishmentType?
+  wordBlacklist        String[]               @db.VarChar(255)
+  wordBlacklistToken   String[]               @db.VarChar(255)
+  punishmentWords      AutomodPunishmentType?
+  limitMentions        Int?                   @default(0)
+  punishmentMentions   AutomodPunishmentType?
+  timeoutMentions      Int?                   @default(15000)
+  limitMessages        Int?                   @default(0)
+  punishmentMessages   AutomodPunishmentType?
+  timeoutMessages      Int?                   @default(10000)
+  avatarHashes         String[]               @db.VarChar(255)
+  punishmentAvatarBans AutomodPunishmentType?
+  ignoreChannels       String[]               @db.VarChar(255)
+  ignoreRoles          String[]               @db.VarChar(255)
+  ignoreUsers          String[]               @db.VarChar(255)
   bulbGuilds           BulbGuild?
 
   @@map("automods")
