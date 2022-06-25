@@ -369,6 +369,7 @@
 	"already_banned": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
 	"not_banned": "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
 	"ban_force_confirm": "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently in the server. Do you want me to force-ban them anyway?",
+	"ban_message_dismiss": "{{emote_success}} You can now dismiss this message",
 	"messageclear_few_than_0days": "{{emote_fail}} You can't clear messages that are younger than 0 days",
 	"messageclear_more_than_30days": "{{emote_fail}} You can't clear messages that are older than 30 days. (We already do that automatically)",
 	"messageclear_found_no_message": "{{emote_fail}} Unable to find any messages within that time period",

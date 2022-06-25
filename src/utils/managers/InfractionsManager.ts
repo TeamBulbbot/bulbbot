@@ -220,7 +220,7 @@ export default class InfractionsManager {
 		return infID;
 	}
 
-	public async ban(client: BulbBotClient, guild: Guild, type: BanType, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
+	public async ban(client: BulbBotClient, guild: Guild, type: BanType, target: User, moderator: GuildMember, reasonLog: string, reason: string, days?: number) {
 		if (type == BanType.FORCE) {
 			const { id: infID } = await this.createInfraction(guild.id, "Force-ban", true, reason, target, moderator.user);
 			await guild.members.ban(target, { reason: reasonLog });
@@ -229,13 +229,13 @@ export default class InfractionsManager {
 			return infID;
 		} else if (type == BanType.CLEAN) {
 			const { id: infID } = await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
-			await guild.members.ban(target.id, { reason: reasonLog, days: 7 });
+			await guild.members.ban(target.id, { reason: reasonLog, days });
 			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else if (type == BanType.SOFT) {
 			const { id: infID } = await this.createInfraction(guild.id, "Soft-ban", true, reason, target, moderator.user);
-			await guild.members.ban(target.id, { reason: reasonLog, days: 7 });
+			await guild.members.ban(target.id, { reason: reasonLog, days });
 			await guild.members.unban(target.id);
 			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
 

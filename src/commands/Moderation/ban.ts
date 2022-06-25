@@ -1,159 +1,173 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { ButtonInteraction, Collection, Message, MessageActionRow, MessageButton, Snowflake, User } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import { ButtonInteraction, Collection, CommandInteraction, Guild, GuildMember, MessageActionRow, MessageButton, User } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { supportInvite } from "../../Config";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
+import { APIGuildMember } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Bans or forcebans a user from the server",
-			category: "Moderation",
-			aliases: ["terminate", "yeet"],
-			usage: "<user> [reason]",
-			examples: ["ban 123456789012345678", "ban 123456789012345678 rude user", "ban @Wumpus#0000 rude user"],
-			argList: ["user:User", "reason:String"],
-			minArgs: 1,
-			maxArgs: -1,
-			clearance: 50,
-			userPerms: ["BAN_MEMBERS"],
-			clientPerms: ["BAN_MEMBERS"],
+			description: "Bans the selected user from the server",
+			type: ApplicationCommandType.CHAT_INPUT,
+			options: [
+				{
+					name: "user",
+					type: ApplicationCommandOptionTypes.USER,
+					description: "The user that should be banned",
+					required: true,
+				},
+				{
+					name: "clean",
+					type: ApplicationCommandOptionTypes.INTEGER,
+					description: "The type of the ban command being performed",
+					required: false,
+					choices: [
+						{ name: "Previous Day", value: 1 },
+						{ name: "Previous 2 Days", value: 2 },
+						{ name: "Previous 3 Days", value: 3 },
+						{ name: "Previous 4 Days", value: 4 },
+						{ name: "Previous 5 Days", value: 5 },
+						{ name: "Previous 6 Days", value: 6 },
+						{ name: "Previous 7 Days", value: 7 },
+					],
+				},
+				{
+					name: "reason",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "The reason behind the ban",
+					required: false,
+				},
+			],
+			command_permissions: ["BAN_MEMBERS"],
+			client_permissions: ["BAN_MEMBERS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		//Variable declarations
-		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let target: any = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		let reason: string = args.slice(1).join(" ");
-		const notInGuild = !target;
-		let infID = 0;
+	public async run(interaction: CommandInteraction) {
+		let user: GuildMember | User;
+		let reason = interaction.options.getString("reason", false);
+		let infID: number;
+		let clean: number = interaction.options.getInteger("clean") ? (interaction.options.getInteger("clean") as number) : 0;
 
-		if (!notInGuild) {
-			if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
-		}
+		if (interaction.options.getMember("user") !== null) user = resolveGuildMemberMoreSafe(interaction.options.getMember("user") as GuildMember | APIGuildMember);
+		else user = interaction.options.getUser("user") as User;
 
-		//Fetches the ban list
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
+		if (user instanceof User) clean = 0;
+		if (user instanceof GuildMember)
+			if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, user), user.user)) return;
+
 		// @ts-expect-error
-		const banList: Collection<string, { user: User; reason: string }> | undefined = await context.guild?.bans.fetch();
-		const bannedUser = banList?.find((user) => user.user.id === targetID);
+		const banList: Collection<string, { user: User; reason: string }> | undefined = await interaction.guild?.bans.fetch();
+		const bannedUser = banList?.find((u) => u.user.id === (user instanceof GuildMember ? user.user.id : user.id));
 
-		//If the user is already banned return with a context
-		if (bannedUser) {
-			await context.channel.send(
-				await this.client.bulbutils.translate("already_banned", context.guild?.id, {
+		if (bannedUser)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("already_banned", interaction.guild?.id, {
 					target: bannedUser.user,
-					reason: bannedUser.reason ? bannedUser.reason.split("Reason: ").pop() : await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {}),
+					reason: bannedUser.reason ? bannedUser.reason.split("Reason: ").pop() : await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}),
 				}),
-			);
-			return;
-		}
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if (!target) target = await this.client.bulbfetch.getUser(targetID);
-		if (!target)
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
-					arg_expected: "user:User",
-					arg_provided: args[0],
-					usage: this.usage,
+				ephemeral: true,
+			});
+
+		if (user instanceof GuildMember) {
+			infID = await infractionsManager.ban(
+				this.client,
+				interaction.guild as Guild,
+				clean > 0 ? BanType.CLEAN : BanType.NORMAL,
+				user.user,
+				interaction.member as GuildMember,
+				await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", interaction.guild?.id, {}),
+					moderator: interaction.user,
+					target: user.user,
+					reason,
 				}),
+				reason,
+				clean,
 			);
 
-		//If the user is not in the guild force ban
-		if (notInGuild) {
+			return interaction.reply(
+				await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", interaction.guild?.id, {}),
+					target: user.user,
+					reason,
+					infraction_id: infID,
+				}),
+			);
+		} else {
 			const row = new MessageActionRow().addComponents([
 				new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
 				new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 			]);
 
-			const confirmMsg = await context.channel.send({
-				content: await this.client.bulbutils.translate("ban_force_confirm", context.guild?.id, { target }),
+			await interaction.reply({
+				content: await this.client.bulbutils.translate("ban_force_confirm", interaction.guild?.id, { target: user }),
 				components: [row],
+				ephemeral: true,
 			});
 
-			const collector = confirmMsg.createMessageComponentCollector({ time: 30000 });
+			const collector = interaction.channel?.createMessageComponentCollector({ time: 10000, max: 1 });
 
-			collector.on("collect", async (interaction: ButtonInteraction) => {
-				if (interaction.user.id !== context.author.id) {
-					return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
-				}
-
-				if (!context.guild?.id || !context.member)
-					return interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, { discord_invite: supportInvite }), ephemeral: true });
-
-				if (interaction.customId === "confirm") {
+			collector?.on("collect", async (i: ButtonInteraction) => {
+				if (i.customId === "confirm") {
 					collector.stop("clicked");
 
 					infID = await infractionsManager.ban(
 						this.client,
-						context.guild,
+						interaction.guild as Guild,
 						BanType.FORCE,
-						target,
-						context.member,
-						await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.force_ban", context.guild.id, {}),
-							moderator: context.author,
-							target,
+						user as User,
+						interaction.member as GuildMember,
+						await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.force_ban", interaction.guild?.id, {}),
+							moderator: interaction.user,
+							target: user as User,
 							reason,
 						}),
-						reason,
+						reason as string,
+						0,
 					);
 
-					return await interaction.update({
-						content: await this.client.bulbutils.translate("action_success", context.guild.id, {
-							action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
-							target,
+					await i.reply({
+						content: await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
+							action: await this.client.bulbutils.translate("mod_action_types.ban", interaction.guild?.id, {}),
+							target: user as User,
 							reason,
 							infraction_id: infID,
 						}),
 						components: [],
 					});
+					await interaction.editReply({
+						content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+						components: [],
+					});
+					return;
 				} else {
 					collector.stop("clicked");
-					return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
+					await interaction.editReply({
+						content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}),
+						components: [],
+					});
+					return;
 				}
 			});
 
-			collector.on("end", async (interaction: ButtonInteraction, reason: string) => {
+			collector?.on("end", async (i: ButtonInteraction, reason: string) => {
 				if (reason !== "time") return;
 
-				await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+				await interaction.editReply({
+					content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}),
+					components: [],
+				});
 				return;
 			});
-		} else {
-			if (!context.guild?.id || !context.member) return;
-			//Else execute a normal ban
-			target = target.user;
-			infID = await infractionsManager.ban(
-				this.client,
-				context.guild,
-				BanType.NORMAL,
-				target,
-				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
-					moderator: context.author,
-					target,
-					reason,
-				}),
-				reason,
-			);
-
-			await context.channel.send(
-				await this.client.bulbutils.translate("action_success", context.guild.id, {
-					action: await this.client.bulbutils.translate("mod_action_types.ban", context.guild.id, {}),
-					target,
-					reason,
-					infraction_id: infID,
-				}),
-			);
 		}
 	}
 }
