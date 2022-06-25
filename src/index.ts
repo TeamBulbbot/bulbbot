@@ -36,7 +36,8 @@ i18next.init({
 startAllCrons(client);
 if (process.env.ENABLE_LOGGING === "true") startPrometheus(client);
 
-if (process.env.ENABLE_SENTRY === "true")
+if (process.env.ENABLE_SENTRY === "true") {
+	if (!process.env.SENTRY_DSN) throw "process.env.SENTRY_DSN is missing";
 	init({
 		dsn: process.env.SENTRY_DSN,
 		tracesSampleRate: 1.0,
@@ -47,6 +48,7 @@ if (process.env.ENABLE_SENTRY === "true")
 		maxBreadcrumbs: 100,
 		integrations: [new Integrations.Http({ tracing: true })],
 	});
+}
 
 client.login().catch((err: Error) => {
 	client.log.error(`[CLIENT] Login error: ${err.name} | ${err.message} | ${err.stack}`);

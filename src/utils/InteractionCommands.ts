@@ -1,5 +1,5 @@
 import BulbBotClient from "../structures/BulbBotClient";
-import { discordApi, developerGuild } from "../Config";
+import { discordApi } from "../Config";
 import axios from "axios";
 import { LocalCode, Localization, ApplicationCommand } from "./types/ApplicationCommands";
 import i18next from "i18next";
@@ -44,9 +44,10 @@ export async function registerSlashCommands(client: BulbBotClient) {
 		return cmds;
 	};
 
+	if (!process.env.DEVELOPER_GUILD) throw "missing process.env.DEVELOPER_GUILD, add that to the .env file";
 	const options: { method: "PUT" | "GET" | "POST" | "PATCH"; url: string; headers: any; data: ApplicationCommand[] } = {
 		method: "PUT",
-		url: `${discordApi}/applications/${client.user?.id}/${isDev ? `guilds/${developerGuild}/` : ""}commands`,
+		url: `${discordApi}/applications/${client.user?.id}/${isDev ? `guilds/${process.env.DEVELOPER_GUILD}/` : ""}commands`,
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bot ${process.env.TOKEN}`,
