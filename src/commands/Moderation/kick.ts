@@ -3,6 +3,7 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -20,6 +21,21 @@ export default class extends ApplicationCommand {
 					required: true,
 				},
 				{
+					name: "clean",
+					type: ApplicationCommandOptionTypes.INTEGER,
+					description: "The amount of messages that should be deleted",
+					required: false,
+					choices: [
+						{ name: "Previous Day", value: 1 },
+						{ name: "Previous 2 Days", value: 2 },
+						{ name: "Previous 3 Days", value: 3 },
+						{ name: "Previous 4 Days", value: 4 },
+						{ name: "Previous 5 Days", value: 5 },
+						{ name: "Previous 6 Days", value: 6 },
+						{ name: "Previous 7 Days", value: 7 },
+					],
+				},
+				{
 					name: "reason",
 					type: ApplicationCommandOptionTypes.STRING,
 					description: "The reason behind the kick",
@@ -34,6 +50,8 @@ export default class extends ApplicationCommand {
 	public async run(interaction: CommandInteraction) {
 		let member = interaction.options.getMember("member");
 		let reason = interaction.options.getString("reason", false);
+		const days = interaction.options.getInteger("clean", false) ? (interaction.options.getInteger("clean", false) as number) : 0;
+		let infID: number | null;
 
 		if (!member)
 			return interaction.reply({
@@ -45,19 +63,37 @@ export default class extends ApplicationCommand {
 		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
 		if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
 
-		const infID = await infractionsManager.kick(
-			this.client,
-			interaction.guild as Guild,
-			member,
-			interaction.member as GuildMember,
-			await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.kick", interaction.guild?.id, {}),
-				moderator: interaction.user,
-				target: member.user,
+		if (days > 0) {
+			infID = await infractionsManager.ban(
+				this.client,
+				interaction.guild as Guild,
+				BanType.SOFT,
+				member.user,
+				interaction.member as GuildMember,
+				await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.ban", interaction.guild?.id, {}),
+					moderator: interaction.user,
+					target: member.user,
+					reason,
+				}),
 				reason,
-			}),
-			reason,
-		);
+				days,
+			);
+		} else {
+			infID = await infractionsManager.kick(
+				this.client,
+				interaction.guild as Guild,
+				member,
+				interaction.member as GuildMember,
+				await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+					action: await this.client.bulbutils.translate("mod_action_types.kick", interaction.guild?.id, {}),
+					moderator: interaction.user,
+					target: member.user,
+					reason,
+				}),
+				reason,
+			);
+		}
 
 		if (infID === null)
 			return interaction.reply({

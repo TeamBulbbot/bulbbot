@@ -25,7 +25,7 @@ export default class extends ApplicationCommand {
 				{
 					name: "clean",
 					type: ApplicationCommandOptionTypes.INTEGER,
-					description: "The type of the ban command being performed",
+					description: "The amount of messages that should be deleted",
 					required: false,
 					choices: [
 						{ name: "Previous Day", value: 1 },
