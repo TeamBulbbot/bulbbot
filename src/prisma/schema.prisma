@@ -184,7 +184,7 @@ model BulbGuild {
 model Infraction {
   id          Int        @id @default(autoincrement())
   action      String     @db.VarChar(255)
-  active      String     @db.VarChar(255)
+  active      Boolean
   reason      String     @db.VarChar(10000)
   target      String     @db.VarChar(255)
   targetId    String     @db.VarChar(255)
