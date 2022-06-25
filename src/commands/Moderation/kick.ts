@@ -13,8 +13,18 @@ export default class extends ApplicationCommand {
 			type: ApplicationCommandType.CHAT_INPUT,
 			description: "Kicks the selected user from the server",
 			options: [
-				{ name: "member", type: ApplicationCommandOptionTypes.USER, description: "The member you want to kick", required: true },
-				{ name: "reason", type: ApplicationCommandOptionTypes.STRING, description: "The reason behind the kick", required: false },
+				{
+					name: "member",
+					type: ApplicationCommandOptionTypes.USER,
+					description: "The member you want to kick",
+					required: true,
+				},
+				{
+					name: "reason",
+					type: ApplicationCommandOptionTypes.STRING,
+					description: "The reason behind the kick",
+					required: false,
+				},
 			],
 			command_permissions: ["KICK_MEMBERS"],
 			client_permissions: ["KICK_MEMBERS"],
