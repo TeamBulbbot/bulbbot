@@ -1,4 +1,4 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import { CommandInteraction, ContextMenuInteraction, GuildChannel, GuildMember, Interaction, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import CommandContext from "../structures/CommandContext";
@@ -156,6 +156,7 @@ export default class {
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} day(s) ago)\`\``;
 	}
 
+	// Consider deprecating and removing. Should become unused once all commands are migrated
 	public userObject(isGuildMember: boolean, userObject: Maybe<User | GuildMember>) {
 		if (!userObject) return;
 		let user: UserObject;
@@ -220,6 +221,11 @@ export default class {
 		);
 	}
 
+	/**
+	 * @deprecated
+	 *
+	 * Will be removed once all commands are migrated to Slash commands
+	 */
 	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
 		if (
 			context.author.id === context.guild?.ownerId &&
@@ -246,6 +252,11 @@ export default class {
 		return UserHandle.SUCCESS;
 	}
 
+	/**
+	 * @deprecated
+	 *
+	 * Will be removed once all commands are migrated to Slash commands
+	 */
 	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
 		if (handle === UserHandle.SUCCESS) return false;
 
@@ -260,8 +271,7 @@ export default class {
 		return true;
 	}
 
-	/** @deprecated */
-	async checkUserFromInteraction(interaction: ContextMenuInteraction, user: GuildMember): Promise<UserHandle> {
+	async checkUserFromInteraction(interaction: Interaction, user: GuildMember): Promise<UserHandle> {
 		const author = await interaction.guild?.members.fetch(interaction.user.id);
 
 		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
@@ -289,8 +299,7 @@ export default class {
 		return UserHandle.SUCCESS;
 	}
 
-	/** @deprecated */
-	async resolveUserHandleFromInteraction(interaction: ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
+	async resolveUserHandleFromInteraction(interaction: CommandInteraction | ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
 				await interaction.reply({ content: await this.translate("global_cannot_action_self", interaction.guild?.id, {}), ephemeral: true });

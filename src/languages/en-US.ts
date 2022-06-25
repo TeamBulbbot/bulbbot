@@ -12,6 +12,9 @@ export default {
 	global_cannot_convert: "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	global_cannot_convert_special: "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.",
 	global_not_found: "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
+	global_not_found_new: {
+		member: "{{emote_fail}} Could not find the specified **Member**!\n{{emote_wrench}} *Ensure the member is still in the server or that you're providing a valid Member*",
+	},
 	global_not_found_types: {
 		user: "user",
 		member: "member",
@@ -64,6 +67,7 @@ export default {
 		automod_items_length_undefined: "{{emote_fail}} An error occurred while attempting to parse the selected Automod items. No Automod items have been provided or Automod items length is undefined.",
 		inviteinfo_guild_or_member_null:
 			"{{emote_fail}} An error occurred while attempting to parse the selected Invite. The Invite Guild, Interaction Guild or Interaction Member could not be resolved to non-null values.",
+		kick_inf_id_null: "{{emote_fail}} An error occurred while trying to kick the user. The returned Infraction ID was null or the Member could not be kicked.",
 	},
 	global_words: {
 		none: "none",
