@@ -139,54 +139,23 @@ model GuildLogging {
   @@map("guildLoggings")
 }
 
-// @deprecated
-model GuildModerationRole {
-  id             Int        @id @default(autoincrement())
-  roleId         String     @db.VarChar(255)
-  clearanceLevel Int
-  createdAt      DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime   @updatedAt @db.Timestamptz(6)
-  bulbGuildId    Int?       @map("guildId")
-  bulbGuild      BulbGuild? @relation(fields: [bulbGuildId], references: [id])
-
-  @@index([bulbGuildId])
-  @@map("guildModerationRoles")
-}
-
-// @deprecated
-model GuildOverrideCommand {
-  id             Int        @id @default(autoincrement())
-  enabled        Boolean
-  commandName    String     @db.VarChar(255)
-  clearanceLevel Int
-  createdAt      DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime   @updatedAt @db.Timestamptz(6)
-  bulbGuildId    Int?       @map("guildId")
-  bulbGuild      BulbGuild? @relation(fields: [bulbGuildId], references: [id])
-
-  @@index([bulbGuildId])
-  @@map("guildOverrideCommands")
-}
-
 model BulbGuild {
-  id                    Int                    @id @default(autoincrement())
-  guildId               String                 @unique @db.VarChar(255)
-  name                  String                 @db.VarChar(255)
-  createdAt             DateTime               @default(now()) @db.Timestamptz(6)
-  updatedAt             DateTime               @updatedAt @db.Timestamptz(6)
-  guildConfigurationId  Int                    @unique
-  guildLoggingId        Int                    @unique
-  automodId             Int                    @unique
-  automod               Automod                @relation(fields: [automodId], references: [id], onDelete: SetNull)
-  guildConfiguration    GuildConfiguration     @relation(fields: [guildConfigurationId], references: [id], onDelete: SetNull)
-  guildLogging          GuildLogging           @relation(fields: [guildLoggingId], references: [id], onDelete: SetNull)
-  banpools              Banpool[]
-  experiments           Experiment[]
-  guildModerationRoles  GuildModerationRole[]
-  guildOverrideCommands GuildOverrideCommand[]
-  infractions           Infraction[]
-  messageLogs           MessageLog[]
-  tempbans              Tempban[]
+  id                   Int                @id @default(autoincrement())
+  guildId              String             @unique @db.VarChar(255)
+  name                 String             @db.VarChar(255)
+  createdAt            DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime           @updatedAt @db.Timestamptz(6)
+  guildConfigurationId Int                @unique
+  guildLoggingId       Int                @unique
+  automodId            Int                @unique
+  automod              Automod            @relation(fields: [automodId], references: [id], onDelete: SetNull)
+  guildConfiguration   GuildConfiguration @relation(fields: [guildConfigurationId], references: [id], onDelete: SetNull)
+  guildLogging         GuildLogging       @relation(fields: [guildLoggingId], references: [id], onDelete: SetNull)
+  banpools             Banpool[]
+  experiments          Experiment[]
+  infractions          Infraction[]
+  messageLogs          MessageLog[]
+  tempbans             Tempban[]
 
   @@map("guilds")
 }
