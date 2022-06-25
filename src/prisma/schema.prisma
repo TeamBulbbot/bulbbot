@@ -47,8 +47,8 @@ model BanpoolSubscriber {
   guildId   String   @db.VarChar(255)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
-  banpoolId Int?
-  banpool   Banpool? @relation(fields: [banpoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  banpoolId Int
+  banpool   Banpool  @relation(fields: [banpoolId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([guildId, banpoolId])
   @@index([guildId])
@@ -101,6 +101,7 @@ model Experiment {
 
 model GuildConfiguration {
   id                Int        @id @default(autoincrement())
+  // @deprecated
   prefix            String     @default("!") @db.VarChar(255)
   language          String     @default("en-US") @db.VarChar(255)
   timezone          String     @default("UTC") @db.VarChar(255)
@@ -138,6 +139,7 @@ model GuildLogging {
   @@map("guildLoggings")
 }
 
+// @deprecated
 model GuildModerationRole {
   id             Int        @id @default(autoincrement())
   roleId         String     @db.VarChar(255)
@@ -151,6 +153,7 @@ model GuildModerationRole {
   @@map("guildModerationRoles")
 }
 
+// @deprecated
 model GuildOverrideCommand {
   id             Int        @id @default(autoincrement())
   enabled        Boolean
@@ -189,18 +192,18 @@ model BulbGuild {
 }
 
 model Infraction {
-  id          Int        @id @default(autoincrement())
-  action      String     @db.VarChar(255)
+  id          Int       @id @default(autoincrement())
+  action      String    @db.VarChar(255)
   active      Boolean
-  reason      String     @db.VarChar(10000)
-  target      String     @db.VarChar(255)
-  targetId    String     @db.VarChar(255)
-  moderator   String     @db.VarChar(255)
-  moderatorId String     @db.VarChar(255)
-  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
-  bulbGuildId Int?       @map("guildId")
-  bulbGuild   BulbGuild? @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  reason      String    @db.VarChar(10000)
+  target      String    @db.VarChar(255)
+  targetId    String    @db.VarChar(255)
+  moderator   String    @db.VarChar(255)
+  moderatorId String    @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+  bulbGuildId Int       @map("guildId")
+  bulbGuild   BulbGuild @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([targetId])
   @@index([moderatorId])
@@ -210,18 +213,18 @@ model Infraction {
 }
 
 model MessageLog {
-  messageId   String     @id @db.VarChar(18)
-  channelId   String     @db.VarChar(18)
-  authorId    String     @db.VarChar(18)
-  authorTag   String     @db.VarChar(50)
-  content     String?    @db.VarChar(4000)
-  embed       Json?      @db.Json
-  sticker     Json?      @db.Json
-  attachments String[]   @db.VarChar(800)
-  createdAt   DateTime   @db.Timestamptz(6)
-  updatedAt   DateTime   @db.Timestamptz(6)
-  bulbGuildId Int?       @map("guildId")
-  bulbGuild   BulbGuild? @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  messageId   String    @id @db.VarChar(18)
+  channelId   String    @db.VarChar(18)
+  authorId    String    @db.VarChar(18)
+  authorTag   String    @db.VarChar(50)
+  content     String?   @db.VarChar(4000)
+  embed       Json?     @db.Json
+  sticker     Json?     @db.Json
+  attachments String[]  @db.VarChar(800)
+  createdAt   DateTime  @db.Timestamptz(6)
+  updatedAt   DateTime  @db.Timestamptz(6)
+  bulbGuildId Int       @map("guildId")
+  bulbGuild   BulbGuild @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([bulbGuildId])
   @@index([authorId])
@@ -247,16 +250,16 @@ model Reminder {
 }
 
 model Tempban {
-  id          Int        @id @default(autoincrement())
-  targetTag   String     @db.VarChar(255)
-  targetId    String     @db.VarChar(255)
-  guildId     String     @map("gId") @db.VarChar(255)
-  reason      String     @db.VarChar(255)
+  id          Int       @id @default(autoincrement())
+  targetTag   String    @db.VarChar(255)
+  targetId    String    @db.VarChar(255)
+  guildId     String    @map("gId") @db.VarChar(255)
+  reason      String    @db.VarChar(255)
   expireTime  BigInt
-  createdAt   DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime   @updatedAt @db.Timestamptz(6)
-  bulbGuildId Int?       @map("guildId")
-  bulbGuild   BulbGuild? @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+  bulbGuildId Int       @map("guildId")
+  bulbGuild   BulbGuild @relation(fields: [bulbGuildId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([targetId])
   @@index([guildId])
