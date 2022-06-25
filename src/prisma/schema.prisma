@@ -11,7 +11,7 @@ datasource db {
 
 model Automod {
   id                   Int        @id @default(autoincrement())
-  enabled              Boolean?   @default(false)
+  enabled              Boolean    @default(false)
   websiteWhitelist     String[]   @db.VarChar(255)
   punishmentWebsite    String?    @db.VarChar(255)
   inviteWhitelist      String[]   @db.VarChar(255)
@@ -100,12 +100,12 @@ model GuildConfiguration {
   premiumGuild      Boolean    @default(false)
   autorole          String?    @db.VarChar(255)
   muteRole          String?    @db.VarChar(255)
-  actionsOnInfo     Boolean?   @default(false)
-  rolesOnLeave      Boolean?   @default(false)
+  actionsOnInfo     Boolean    @default(false)
+  rolesOnLeave      Boolean    @default(false)
   quickReasons      String[]   @db.VarChar(255)
   createdAt         DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
-  manualNicknameInf Boolean?   @default(false)
+  manualNicknameInf Boolean    @default(false)
   bulbGuilds        BulbGuild?
 
   @@map("guildConfigurations")
