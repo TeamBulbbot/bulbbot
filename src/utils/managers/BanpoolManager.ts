@@ -21,7 +21,7 @@ export default class {
 		const { banpool } =
 			(await prisma.guildLogging.findFirst({
 				where: {
-					bulbGuilds: {
+					bulbGuild: {
 						guildId,
 					},
 				},

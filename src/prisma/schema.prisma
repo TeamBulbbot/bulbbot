@@ -37,7 +37,7 @@ model Automod {
   ignoreChannels       String[]               @db.VarChar(255)
   ignoreRoles          String[]               @db.VarChar(255)
   ignoreUsers          String[]               @db.VarChar(255)
-  bulbGuilds           BulbGuild?
+  bulbGuild            BulbGuild?
 
   @@map("automods")
 }
@@ -114,27 +114,27 @@ model GuildConfiguration {
   createdAt         DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
   manualNicknameInf Boolean    @default(false)
-  bulbGuilds        BulbGuild?
+  bulbGuild         BulbGuild?
 
   @@map("guildConfigurations")
 }
 
 model GuildLogging {
-  id         Int        @id @default(autoincrement())
-  modAction  String?    @db.VarChar(255)
-  banpool    String?    @db.VarChar(255)
-  automod    String?    @db.VarChar(255)
-  message    String?    @db.VarChar(255)
-  role       String?    @db.VarChar(255)
-  member     String?    @db.VarChar(255)
-  channel    String?    @db.VarChar(255)
-  thread     String?    @db.VarChar(255)
-  invite     String?    @db.VarChar(255)
-  joinLeave  String?    @db.VarChar(255)
-  other      String?    @db.VarChar(255)
-  createdAt  DateTime   @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime   @updatedAt @db.Timestamptz(6)
-  bulbGuilds BulbGuild?
+  id        Int        @id @default(autoincrement())
+  modAction String?    @db.VarChar(255)
+  banpool   String?    @db.VarChar(255)
+  automod   String?    @db.VarChar(255)
+  message   String?    @db.VarChar(255)
+  role      String?    @db.VarChar(255)
+  member    String?    @db.VarChar(255)
+  channel   String?    @db.VarChar(255)
+  thread    String?    @db.VarChar(255)
+  invite    String?    @db.VarChar(255)
+  joinLeave String?    @db.VarChar(255)
+  other     String?    @db.VarChar(255)
+  createdAt DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime   @updatedAt @db.Timestamptz(6)
+  bulbGuild BulbGuild?
 
   @@map("guildLoggings")
 }
@@ -148,9 +148,9 @@ model BulbGuild {
   guildConfigurationId Int                @unique
   guildLoggingId       Int                @unique
   automodId            Int                @unique
-  automod              Automod            @relation(fields: [automodId], references: [id], onDelete: SetNull)
-  guildConfiguration   GuildConfiguration @relation(fields: [guildConfigurationId], references: [id], onDelete: SetNull)
-  guildLogging         GuildLogging       @relation(fields: [guildLoggingId], references: [id], onDelete: SetNull)
+  automod              Automod            @relation(fields: [automodId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  guildConfiguration   GuildConfiguration @relation(fields: [guildConfigurationId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  guildLogging         GuildLogging       @relation(fields: [guildLoggingId], references: [id], onDelete: NoAction, onUpdate: Cascade)
   banpools             Banpool[]
   experiments          Experiment[]
   infractions          Infraction[]

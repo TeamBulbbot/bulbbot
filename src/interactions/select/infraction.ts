@@ -21,7 +21,7 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 			ephemeral: true,
 		});
 
-	const user = await client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
+	const user = client.bulbutils.userObject(false, await client.users.fetch(inf.targetId));
 	const target = { tag: inf.target, id: inf.targetId };
 	const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
@@ -33,17 +33,14 @@ export default async function (client: BulbBotClient, interaction: SelectMenuInt
 		created: moment(inf.createdAt).format("MMM Do YYYY, h:mm:ss a"),
 	});
 
-	if (inf.active !== "false" && inf.active !== "true") {
+	if (inf.timeout) {
 		description += await client.bulbutils.translate("infraction_info_expires", interaction.guild.id, {
-			expires: `${Emotes.status.ONLINE} ${moment(parseInt(inf.active)).format("MMM Do YYYY, h:mm:ss a")}`,
-		});
-	} else {
-		description += await client.bulbutils.translate("infraction_info_active", interaction.guild.id, {
-			active: client.bulbutils.prettify(inf.active),
+			expires: `${Emotes.status.ONLINE} ${moment(parseInt(inf.timeout)).format("MMM Do YYYY, h:mm:ss a")}`,
 		});
 	}
 
 	description += await client.bulbutils.translate("infraction_info_reason", interaction.guild.id, { reason: inf.reason });
+	description += await client.bulbutils.translate("infraction_info_active", interaction.guild.id, { active: client.bulbutils.prettify(`${inf.active}`) });
 
 	const image = inf.reason.match(ReasonImage);
 

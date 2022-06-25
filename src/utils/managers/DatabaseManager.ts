@@ -87,16 +87,6 @@ export default class DatabaseManager {
 					bulbGuildId: bulbGuild.id,
 				},
 			}),
-			prisma.guildModerationRole.deleteMany({
-				where: {
-					bulbGuildId: bulbGuild.id,
-				},
-			}),
-			prisma.guildOverrideCommand.deleteMany({
-				where: {
-					bulbGuildId: bulbGuild.id,
-				},
-			}),
 			prisma.tempban.deleteMany({
 				where: {
 					bulbGuildId: bulbGuild.id,
@@ -172,8 +162,6 @@ export default class DatabaseManager {
 			include: {
 				guildConfiguration: true,
 				guildLogging: true,
-				guildOverrideCommands: true,
-				guildModerationRoles: true,
 				automod: true,
 				infractions: true,
 				tempbans: true,
@@ -398,6 +386,7 @@ export default class DatabaseManager {
 		if (!message.guild) {
 			throw new Error("message does not have a guild, cannot add to logs");
 		}
+
 		await prisma.messageLog.create({
 			data: {
 				messageId: message.id,

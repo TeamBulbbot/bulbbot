@@ -32,10 +32,11 @@ export default class extends Event {
 		// checks if the guild is in the blacklist
 		if (this.client.blacklist.get(context.guild.id)) return;
 
-		await databaseManager.addToMessageToDB(message);
-
 		const mentionRegex = RegExp(`^<@!?${this.client.user.id}>`);
+		// Calling this will guarantee that the guild exists in the DB.
+		// If it doesn't already exists, we will just create it now
 		let guildCfg = await databaseManager.getConfig(context.guild);
+		await databaseManager.addToMessageToDB(message);
 
 		if ((guildCfg === undefined || guildCfg.prefix === undefined) && (context.content.startsWith(Config.prefix) || mentionRegex.test(context.content))) {
 			await databaseManager.deleteGuild(context.guild);
