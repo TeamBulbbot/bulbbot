@@ -44,7 +44,7 @@ export async function registerSlashCommands(client: BulbBotClient) {
 		return cmds;
 	};
 
-	if (!process.env.DEVELOPER_GUILD) throw "missing process.env.DEVELOPER_GUILD, add that to the .env file";
+	if (!process.env.DEVELOPER_GUILD) throw new Error("missing process.env.DEVELOPER_GUILD, add that to the .env file");
 	const options: { method: "PUT" | "GET" | "POST" | "PATCH"; url: string; headers: any; data: ApplicationCommand[] } = {
 		method: "PUT",
 		url: `${discordApi}/applications/${client.user?.id}/${isDev ? `guilds/${process.env.DEVELOPER_GUILD}/` : ""}commands`,

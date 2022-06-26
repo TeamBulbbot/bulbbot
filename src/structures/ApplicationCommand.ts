@@ -32,7 +32,7 @@ export default class ApplicationCommand {
 			optionCommand.description_localizations = translateSlashCommands(`${name}_${optionCommand.name}_desc`);
 
 			if (`${name}_${optionCommand.name}_name`.length > 32 || `${name}_${optionCommand.name}_desc`.length > 32)
-				throw Error(`Too long of a name for slash commands: ${optionCommand.name} is too long for the slashcommand to register (over 32 characters)`);
+				throw new Error(`Too long of a name for slash commands: ${optionCommand.name} is too long for the slashcommand to register (over 32 characters)`);
 
 			if (optionCommand.options) this.applyTranslation(optionCommand.options, `${name}_${optionCommand.name}`);
 		}
