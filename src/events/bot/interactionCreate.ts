@@ -58,15 +58,24 @@ export default class extends Event {
 			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
 			// Slash commands
-			const validated = this.client.commands.get(interaction.commandName)?.validateClientPermissions(interaction);
+			const command = context.commandName && this.client.commands.get(context.commandName);
 
-			if (typeof validated === "string") {
+			if (!command) {
+				// Shouldn't be possible because we shouldn't register commands that we aren't prepared
+				// to handle, but we need to narrow the type properly regardless. It is technically plausible
+				return;
+			}
+
+			const missing = command.validateClientPermissions(interaction);
+
+			if (missing) {
 				return interaction.reply({
-					content: await this.client.bulbutils.translate("global_missing_permissions_bot", interaction.guild?.id, { missing: validated }),
+					content: await this.client.bulbutils.translate("global_missing_permissions_bot", interaction.guild?.id, { missing }),
 					ephemeral: true,
 				});
 			}
-			await this.client.commands.get(interaction.commandName)?.run(interaction);
+			// Should we add a .catch to handle uncaught errors thrown in command run methods?
+			await command.run(interaction);
 		}
 	}
 }
