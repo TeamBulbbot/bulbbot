@@ -1,7 +1,7 @@
 import BulbBotClient from "./BulbBotClient";
 import { CommandInteraction, Permissions, PermissionString } from "discord.js";
-import { ApplicationCommandOptions, ApplicationCommandType } from "../utils/types/ApplicationCommands";
 import { translateSlashCommands } from "../utils/InteractionCommands";
+import { APIApplicationCommandOption, ApplicationCommandType } from "discord-api-types/v10";
 
 interface ApplicationCommandConstructOptions {
 	name: string;
@@ -10,7 +10,7 @@ interface ApplicationCommandConstructOptions {
 	dm_permission?: boolean;
 	client_permissions?: PermissionString[];
 	command_permissions?: PermissionString[];
-	options?: ApplicationCommandOptions[];
+	options?: APIApplicationCommandOption[];
 }
 
 export default class ApplicationCommand {
@@ -22,7 +22,7 @@ export default class ApplicationCommand {
 	public readonly default_member_permissions: string | null;
 	public readonly command_permissions: PermissionString[];
 	public readonly client_permissions: PermissionString[];
-	public readonly options: ApplicationCommandOptions[];
+	public readonly options: APIApplicationCommandOption[];
 
 	constructor(client: BulbBotClient, { type, name, description, dm_permission = false, client_permissions = [], command_permissions = [], options }: ApplicationCommandConstructOptions) {
 		this.client = client;
@@ -36,15 +36,13 @@ export default class ApplicationCommand {
 		this.options = this.appendTranslation(options);
 	}
 
-	private applyTranslation(options: ApplicationCommandOptions[], name: string) {
+	private applyTranslation(options: APIApplicationCommandOption[], name: string) {
 		for (const optionCommand of options) {
 			optionCommand.name_localizations = translateSlashCommands(`${name}_${optionCommand.name}_name`);
 			optionCommand.description_localizations = translateSlashCommands(`${name}_${optionCommand.name}_desc`);
 
 			if (`${name}_${optionCommand.name}_name`.length > 32 || `${name}_${optionCommand.name}_desc`.length > 32)
 				throw new Error(`Too long of a name for slash commands: ${optionCommand.name} is too long for the slashcommand to register (over 32 characters)`);
-
-			if (optionCommand.options) this.applyTranslation(optionCommand.options, `${name}_${optionCommand.name}`);
 		}
 	}
 
@@ -53,7 +51,7 @@ export default class ApplicationCommand {
 		return missing.join(", ");
 	}
 
-	private appendTranslation(options: Maybe<ApplicationCommandOptions[]>): ApplicationCommandOptions[] {
+	private appendTranslation(options: Maybe<APIApplicationCommandOption[]>): APIApplicationCommandOption[] {
 		if (!options) return [];
 		this.applyTranslation(options ?? [], `sc_${this.name}`);
 		return options;

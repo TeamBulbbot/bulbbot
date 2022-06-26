@@ -2,13 +2,13 @@ import { CommandInteraction, MessageEmbed } from "discord.js";
 import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandType } from "discord-api-types/v9";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			description: "Return a link to the GitHub repository",
 			client_permissions: ["EMBED_LINKS"],
 		});

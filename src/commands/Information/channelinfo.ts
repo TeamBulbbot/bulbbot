@@ -1,28 +1,27 @@
 import BulbBotClient from "../../structures/BulbBotClient";
 import { CommandInteraction, GuildChannel, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { resolveGuildChannelMoreSafe } from "../../utils/helpers";
-import { APIChannel } from "discord-api-types/v9";
+import { APIChannel, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { embedColor } from "../..//Config";
-import { isTextChannel } from "../..//utils/typechecks";
+import { isTextChannel } from "../../utils/typechecks";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
+			type: ApplicationCommandType.ChatInput,
 			description: "Returns some useful info about a channel",
-
 			options: [
 				{
 					name: "channel",
-					type: ApplicationCommandOptionTypes.CHANNEL,
+					type: ApplicationCommandOptionType.Channel,
 					description: "The channel you want more info about",
 					required: true,
 				},
 			],
 			command_permissions: ["MANAGE_CHANNELS"],
-			clientPerms: ["EMBED_LINKS"],
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 

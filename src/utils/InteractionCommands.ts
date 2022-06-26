@@ -1,33 +1,27 @@
 import BulbBotClient from "../structures/BulbBotClient";
 import { discordApi } from "../Config";
 import axios from "axios";
-import { LocalCode, Localization, ApplicationCommand } from "./types/ApplicationCommands";
+import { LocalCode, Localization } from "./types/Localization";
 import i18next from "i18next";
+import { APIApplicationCommand } from "discord-api-types/v10";
 
 export function translateSlashCommands(key: string) {
 	const TRANSLATED_LANGS: LocalCode[] = ["es-ES", "hu", "fr", "cs", "sv-SE", "hi"];
-	const obj: Localization = {
-		"es-ES": "",
-		fr: "",
-		hu: "",
-		"sv-SE": "",
-		cs: "",
-		hi: "",
-	};
-
-	for (let i = 0; i < TRANSLATED_LANGS.length; i++) {
-		obj[TRANSLATED_LANGS[i]] = i18next.t(key, {
-			lng: TRANSLATED_LANGS[i],
-		});
-	}
-	return obj;
+	return Object.fromEntries(
+		TRANSLATED_LANGS.map((lng) => [
+			lng,
+			i18next.t(key, {
+				lng,
+			}) as string,
+		]),
+	) as Localization;
 }
 
 export async function registerSlashCommands(client: BulbBotClient) {
 	const isDev: boolean = process.env.ENVIRONMENT === "dev";
 
 	const data = () => {
-		const cmds: ApplicationCommand[] = [];
+		const cmds: Omit<APIApplicationCommand, "id" | "application_id" | "version">[] = [];
 		for (const command of client.commands.values()) {
 			cmds.push({
 				name: command.name,
@@ -45,7 +39,7 @@ export async function registerSlashCommands(client: BulbBotClient) {
 	};
 
 	if (!process.env.DEVELOPER_GUILD) throw new Error("missing process.env.DEVELOPER_GUILD, add that to the .env file");
-	const options: { method: "PUT" | "GET" | "POST" | "PATCH"; url: string; headers: any; data: ApplicationCommand[] } = {
+	const options = {
 		method: "PUT",
 		url: `${discordApi}/applications/${client.user?.id}/${isDev ? `guilds/${process.env.DEVELOPER_GUILD}/` : ""}commands`,
 		headers: {
@@ -53,7 +47,7 @@ export async function registerSlashCommands(client: BulbBotClient) {
 			Authorization: `Bot ${process.env.TOKEN}`,
 		},
 		data: data(),
-	};
+	} as const;
 
 	try {
 		const response = await axios.request(options);

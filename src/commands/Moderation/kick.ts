@@ -2,7 +2,7 @@ import { CommandInteraction, Guild, GuildMember, Snowflake } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
@@ -11,18 +11,18 @@ export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			description: "Kicks the selected user from the server",
 			options: [
 				{
 					name: "member",
-					type: ApplicationCommandOptionTypes.USER,
+					type: ApplicationCommandOptionType.User,
 					description: "The member you want to kick",
 					required: true,
 				},
 				{
 					name: "clean",
-					type: ApplicationCommandOptionTypes.INTEGER,
+					type: ApplicationCommandOptionType.Integer,
 					description: "The amount of messages that should be deleted",
 					required: false,
 					choices: [
@@ -37,7 +37,7 @@ export default class extends ApplicationCommand {
 				},
 				{
 					name: "reason",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "The reason behind the kick",
 					required: false,
 				},

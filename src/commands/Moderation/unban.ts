@@ -3,7 +3,7 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { BanType } from "../../utils/types/BanType";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -12,10 +12,10 @@ export default class extends ApplicationCommand {
 		super(client, {
 			name,
 			description: "Unbans a user from the server.",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			options: [
-				{ name: "user", description: "The user to unban.", type: ApplicationCommandOptionTypes.USER, required: true },
-				{ name: "reason", description: "The reason for the unban.", type: ApplicationCommandOptionTypes.STRING, required: false },
+				{ name: "user", description: "The user to unban.", type: ApplicationCommandOptionType.User, required: true },
+				{ name: "reason", description: "The reason for the unban.", type: ApplicationCommandOptionType.String, required: false },
 			],
 			client_permissions: ["BAN_MEMBERS"],
 			command_permissions: ["BAN_MEMBERS"],

@@ -1,25 +1,25 @@
 import BulbBotClient from "../../structures/BulbBotClient";
 import { CommandInteraction, MessageEmbed, Role } from "discord.js";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandOptionTypes } from "../../utils/types/ApplicationCommands";
-import { APIRole } from "discord-api-types/v10";
+import { APIRole, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { resolveGuildRoleMoreSafe } from "../../utils/helpers";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
+			type: ApplicationCommandType.ChatInput,
 			description: "Returns some useful info about a role",
 			options: [
 				{
 					name: "role",
-					type: ApplicationCommandOptionTypes.ROLE,
+					type: ApplicationCommandOptionType.Role,
 					description: "The role you want more info about",
 					required: true,
 				},
 			],
 			command_permissions: ["MANAGE_ROLES"],
-			clientPerms: ["EMBED_LINKS"],
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 
