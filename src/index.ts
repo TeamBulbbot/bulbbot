@@ -37,7 +37,7 @@ startAllCrons(client);
 if (process.env.ENABLE_LOGGING === "true") startPrometheus(client);
 
 if (process.env.ENABLE_SENTRY === "true") {
-	if (!process.env.SENTRY_DSN) throw "process.env.SENTRY_DSN is missing";
+	if (!process.env.SENTRY_DSN) throw new Error("process.env.SENTRY_DSN is missing");
 	init({
 		dsn: process.env.SENTRY_DSN,
 		tracesSampleRate: 1.0,

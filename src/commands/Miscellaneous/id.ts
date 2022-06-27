@@ -1,8 +1,7 @@
 import { CommandInteraction } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
-import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { AnyId } from "../../utils/Regex";
 
 export default class extends ApplicationCommand {
@@ -10,11 +9,11 @@ export default class extends ApplicationCommand {
 		super(client, {
 			name,
 			description: "Parse out the Discord id from any text",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			options: [
 				{
 					name: "text",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "The text you want to parse the ids from",
 					required: true,
 				},

@@ -3,14 +3,14 @@ import { embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import * as Emotes from "../../emotes.json";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandType } from "discord-api-types/v9";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Returns some useful information about the current server",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			command_permissions: ["MANAGE_GUILD"],
 			client_permissions: ["EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
 		});

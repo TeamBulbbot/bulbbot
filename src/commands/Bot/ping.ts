@@ -1,14 +1,14 @@
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
 import { CommandInteraction, Message, MessageEmbed } from "discord.js";
 import * as Config from "../../Config";
+import { ApplicationCommandType } from "discord-api-types/v9";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			description: "Returns the API and WebSocket latency.",
 			client_permissions: ["EMBED_LINKS"],
 		});

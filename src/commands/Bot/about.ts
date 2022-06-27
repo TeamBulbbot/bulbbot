@@ -4,14 +4,14 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import * as Emotes from "../../emotes.json";
 import { NonDigits } from "../../utils/Regex";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandType } from "discord-api-types/v9";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Returns some useful information about the bot",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			client_permissions: ["EMBED_LINKS"],
 		});
 	}

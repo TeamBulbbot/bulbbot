@@ -6,10 +6,8 @@ import { discordApi, embedColor } from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
-import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
 import { isNullish, resolveGuildMemberMoreSafe } from "../../utils/helpers";
-import { APIGuildMember } from "discord-api-types/v10";
+import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
@@ -18,11 +16,11 @@ export default class extends ApplicationCommand {
 		super(client, {
 			name,
 			description: "Returns some useful info about a user",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			options: [
 				{
 					name: "user",
-					type: ApplicationCommandOptionTypes.USER,
+					type: ApplicationCommandOptionType.User,
 					description: "The user you want to view more info about",
 					required: false,
 				},

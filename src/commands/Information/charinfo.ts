@@ -3,18 +3,18 @@ import CommandContext from "../../structures/CommandContext";
 import { CommandInteraction, Message } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			description: "Returns information about the characters provided",
 			options: [
 				{
 					name: "characters",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "The characters you want to info",
 					required: true,
 				},

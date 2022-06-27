@@ -4,7 +4,7 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import moment from "moment";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -12,24 +12,24 @@ export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			description: "Mutes the selected user",
 			options: [
 				{
 					name: "member",
-					type: ApplicationCommandOptionTypes.USER,
+					type: ApplicationCommandOptionType.User,
 					description: "The member you want to mute",
 					required: true,
 				},
 				{
 					name: "duration",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "How long the member should be muted for",
 					required: true,
 				},
 				{
 					name: "reason",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "The reason behind the mute",
 					required: false,
 				},

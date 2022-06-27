@@ -1,9 +1,7 @@
 import { User, CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandType } from "../../utils/types/ApplicationCommands";
-import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
-import { APIGuildMember } from "discord-api-types/v9";
+import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
 import { embedColor } from "../../Config";
 
@@ -12,11 +10,11 @@ export default class extends ApplicationCommand {
 		super(client, {
 			name,
 			description: "Gets a users avatar picture",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			options: [
 				{
 					name: "user",
-					type: ApplicationCommandOptionTypes.USER,
+					type: ApplicationCommandOptionType.User,
 					description: "The user you want to view the avatar of",
 					required: false,
 				},

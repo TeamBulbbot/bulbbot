@@ -1,9 +1,8 @@
 import BulbBotClient from "../../structures/BulbBotClient";
 import { CommandInteraction, GuildMember, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { ApplicationCommandOptionTypes } from "discord.js/typings/enums";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
-import { APIGuildMember } from "discord-api-types/v9";
+import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { embedColor } from "../../Config";
 import { ChannelMessage } from "../../utils/Regex";
 
@@ -11,11 +10,12 @@ export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
+			type: ApplicationCommandType.ChatInput,
 			description: "Returns some useful information about a message",
 			options: [
 				{
 					name: "message_link",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "A message link to the message you want information about",
 					required: true,
 				},
