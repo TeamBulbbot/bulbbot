@@ -59,17 +59,14 @@ export default class extends SubCommand {
 			created: moment(inf.createdAt).format("MMM Do YYYY, h:mm:ss a"),
 		});
 
-		if (inf.active !== "false" && inf.active !== "true") {
+		if (inf.timeout) {
 			description += await this.client.bulbutils.translate("infraction_info_expires", context.guild.id, {
-				expires: `${Emotes.status.ONLINE} ${moment(parseInt(inf.active)).format("MMM Do YYYY, h:mm:ss a")}`,
-			});
-		} else {
-			description += await this.client.bulbutils.translate("infraction_info_active", context.guild.id, {
-				active: this.client.bulbutils.prettify(inf.active),
+				expires: `${Emotes.status.ONLINE} ${moment(parseInt(inf.timeout)).format("MMM Do YYYY, h:mm:ss a")}`,
 			});
 		}
-
 		description += await this.client.bulbutils.translate("infraction_info_reason", context.guild.id, { reason: inf.reason });
+
+		description += await this.client.bulbutils.translate("infraction_info_active", context.guild.id, { active: this.client.bulbutils.prettify(`${inf.active}`) });
 
 		const image = inf.reason.match(ReasonImage);
 

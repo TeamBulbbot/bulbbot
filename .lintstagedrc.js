@@ -3,4 +3,5 @@ module.exports = {
 	'*.{js,ts,md}': 'prettier --write',
 	'*.ts': () => 'yarn typecheck',
 	'*.{js,ts}': 'yarn eslint',
+	'*.prisma': () => 'yarn prisma format',
 }

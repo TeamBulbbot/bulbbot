@@ -63,10 +63,11 @@ export default class extends Event {
 				const { id: infID } = await infractionsManager.createInfraction(
 					newMember.guild.id,
 					"Mute",
-					newMember.communicationDisabledUntilTimestamp,
+					true,
 					auditLog?.reason ? auditLog.reason : await this.client.bulbutils.translate("global_no_reason", newMember.guild.id, {}),
 					newMember.user,
 					executor,
+					newMember.communicationDisabledUntilTimestamp,
 				);
 				await loggingManager.sendModActionTemp(
 					this.client,

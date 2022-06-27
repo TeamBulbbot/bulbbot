@@ -18,7 +18,7 @@
 		"prepare": "yarn husky install && yarn generate",
 		"generate": "prisma generate",
 		"db:migrate": "prisma migrate dev",
-		"db:migrate:prod": "prisma migrate",
+		"db:deploy": "prisma migrate deploy",
 		"db:nuke": "prisma migrate reset",
 		"db:introspect": "prisma db pull",
 		"db:push": "prisma db push",

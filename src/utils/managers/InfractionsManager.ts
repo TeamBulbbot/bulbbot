@@ -12,11 +12,12 @@ const loggingManager: LoggingManager = new LoggingManager();
 type GetInfractionsParams = { guildId: Snowflake; targetId: Snowflake };
 
 export default class InfractionsManager {
-	async createInfraction(guildId: Snowflake, action: string, active: boolean | number, reason: string, target: User, moderator: User) {
+	async createInfraction(guildId: Snowflake, action: string, active: boolean, reason: string, target: User, moderator: User, timeout?: number) {
 		return await prisma.infraction.create({
 			data: {
 				action,
-				active: `${active}`,
+				active,
+				timeout: timeout ? `${timeout}` : null,
 				reason,
 				target: target.tag,
 				targetId: target.id,
@@ -118,11 +119,10 @@ export default class InfractionsManager {
 			return false;
 		}
 
-		// FIXME: What is this? Is this a boolean? If so, isn't there a DB data type for that? Might be something like tinyint
-		return JSON.parse(result.active);
+		return result.active;
 	}
 
-	public async setActive(guildId: Snowflake, infractionId: Maybe<number>, active: boolean | number) {
+	public async setActive(guildId: Snowflake, infractionId: Maybe<number>, active: boolean) {
 		if (typeof infractionId !== "number") return;
 
 		// We check to ensure this infraction belongs to this guild
@@ -133,7 +133,26 @@ export default class InfractionsManager {
 
 		return await prisma.infraction.update({
 			data: {
-				active: `${active}`,
+				active,
+			},
+			where: {
+				id: infractionId,
+			},
+		});
+	}
+
+	public async setTimeout(guildId: Snowflake, infractionId: Maybe<number>, timeout: number | null) {
+		if (typeof infractionId !== "number") return;
+
+		// We check to ensure this infraction belongs to this guild
+		const infraction = await this.getInfraction(guildId, infractionId);
+		if (isNullish(infraction)) {
+			return;
+		}
+
+		return await prisma.infraction.update({
+			data: {
+				timeout: timeout ? `${timeout}` : null,
 			},
 			where: {
 				id: infractionId,
@@ -175,9 +194,7 @@ export default class InfractionsManager {
 			where: {
 				targetId,
 				action: "Mute",
-				active: {
-					not: "false",
-				},
+				active: true,
 				bulbGuild: {
 					guildId,
 				},
@@ -258,7 +275,7 @@ export default class InfractionsManager {
 	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput) {
 		if (!target.bannable || (typeof until !== "number" && typeof until !== "boolean")) return null;
 		await target.ban({ reason: reasonLog });
-		const { id: infID } = await this.createInfraction(guild.id, "Tempban", until, reason, target.user, moderator.user);
+		const { id: infID } = await this.createInfraction(guild.id, "Tempban", true, reason, target.user, moderator.user, until);
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.temp_ban", guild.id, {}), target.user, moderator.user, reason, infID, until);
 
 		return infID;
