@@ -4,6 +4,8 @@ import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import AutoModPart from "../../../../utils/types/AutoModPart";
 import { NonDigits } from "../../../../utils/Regex";
+import imageHash from "imghash";
+import axios from "axios";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -146,7 +148,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 						}
 
 						// whitelist channels only allow channels
-						if (selectedCategory === "ignoreChannels") {
+						else if (selectedCategory === "ignoreChannels") {
 							const channels = appendContent.replace(NonDigits, "");
 							if (!i.guild?.channels.cache.get(channels)) {
 								await interaction.followUp({
@@ -160,7 +162,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 						}
 
 						// whitelist users only allow users ids
-						if (selectedCategory === "ignoreUsers") {
+						else if (selectedCategory === "ignoreUsers") {
 							const users = appendContent.replace(NonDigits, "");
 							if (!i.guild?.members.cache.get(users)) {
 								await interaction.followUp({
@@ -171,6 +173,18 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 								});
 								return add(i, client, selectedCategory);
 							} else appendContent = users;
+						}
+
+						// handle the avatar bans
+						else if (selectedCategory === "avatarHashes") {
+							const user = await client.bulbfetch.getUser(appendContent.replace(NonDigits, ""));
+							if (!user) appendContent = "";
+							else {
+								const buffer = await axios.get(user?.displayAvatarURL(), {
+									responseType: "arraybuffer",
+								});
+								appendContent = await imageHash.hash(buffer.data, 8);
+							}
 						}
 
 						if (!interaction.guild?.id) return;
