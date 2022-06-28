@@ -178,9 +178,17 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 						// handle the avatar bans
 						else if (selectedCategory === "avatarHashes") {
 							const user = await client.bulbfetch.getUser(appendContent.replace(NonDigits, ""));
-							if (!user) appendContent = "";
-							else {
-								const buffer = await axios.get(user?.displayAvatarURL(), {
+							if (!user) {
+								await interaction.followUp({
+									content: await client.bulbutils.translate("config_automod_add_remove_add_fail", interaction.guild?.id, {
+										item: appendContent,
+									}),
+									ephemeral: true,
+								});
+
+								return add(i, client, selectedCategory);
+							} else {
+								const buffer = await axios.get(user.displayAvatarURL(), {
 									responseType: "arraybuffer",
 								});
 								appendContent = await imageHash.hash(buffer.data, 8);
