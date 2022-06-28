@@ -8,6 +8,7 @@ interface ApplicationCommandConstructOptions {
 	type: ApplicationCommandType;
 	description: string;
 	dm_permission?: boolean;
+	premium?: boolean;
 	client_permissions?: PermissionString[];
 	command_permissions?: PermissionString[];
 	options?: APIApplicationCommandOption[];
@@ -20,17 +21,22 @@ export default class ApplicationCommand {
 	public readonly description: string;
 	public readonly dm_permission: boolean;
 	public readonly default_member_permissions: string | null;
+	public readonly premium: boolean;
 	public readonly command_permissions: PermissionString[];
 	public readonly client_permissions: PermissionString[];
 	public readonly options: APIApplicationCommandOption[];
 
-	constructor(client: BulbBotClient, { type, name, description, dm_permission = false, client_permissions = [], command_permissions = [], options }: ApplicationCommandConstructOptions) {
+	constructor(
+		client: BulbBotClient,
+		{ type, name, description, dm_permission = false, premium = false, client_permissions = [], command_permissions = [], options }: ApplicationCommandConstructOptions,
+	) {
 		this.client = client;
 		this.type = type;
 		this.name = name;
 		this.description = description;
 		this.dm_permission = dm_permission;
 		this.command_permissions = command_permissions;
+		this.premium = premium;
 		this.client_permissions = client_permissions;
 		this.default_member_permissions = this.computePermissions();
 		this.options = this.appendTranslation(options);

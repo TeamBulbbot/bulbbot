@@ -1,61 +1,55 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { Guild, GuildBan, GuildMember, Message, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, Permissions, SelectMenuInteraction, Snowflake, User } from "discord.js";
+import { CommandInteraction, Guild, GuildBan, GuildMember, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, Permissions, SelectMenuInteraction, Snowflake, User } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import BanpoolManager from "../../utils/managers/BanpoolManager";
-import { NonDigits } from "../../utils/Regex";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as Emotes from "../../emotes.json";
 import { tryIgnore } from "../../utils/helpers";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
-const { createInfraction }: InfractionsManager = new InfractionsManager();
-const { sendEventLog }: LoggingManager = new LoggingManager();
-const { getPools, getGuildIdsFromPools: getGuildsFromPools, hasBanpoolLog, getPoolData }: BanpoolManager = new BanpoolManager();
+const infractionsManager: InfractionsManager = new InfractionsManager();
+const banpoolManager: BanpoolManager = new BanpoolManager();
+const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Crossban a user across multiple servers",
-			category: "Moderation",
-			aliases: ["poolban"],
-			usage: "<user> <reason>",
-			examples: ["crossban 123456789012345678 rude user", "crossban 123456789012345678 rude user", "crossban @Wumpus#0000 rude user"],
-			argList: ["user:User", "reason:String"],
-			minArgs: 2,
-			maxArgs: -1,
-			clearance: 75,
-			clientPerms: ["BAN_MEMBERS"],
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "user",
+					type: ApplicationCommandOptionType.User,
+					description: "The user that should be cross-banned",
+					required: true,
+				},
+				{
+					name: "reason",
+					type: ApplicationCommandOptionType.String,
+					description: "The reason behind the cross-ban",
+					required: true,
+				},
+			],
 			premium: true,
+			command_permissions: ["BAN_MEMBERS", "ADMINISTRATOR"],
+			client_permissions: ["BAN_MEMBERS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		let reason: string = args.slice(1).join(" ");
-		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
+	public async run(interaction: CommandInteraction) {
+		const user = interaction.options.getUser("user") as User;
+		let reason = interaction.options.getString("reason") as string;
 
-		if (!context.guild?.id || !(await hasBanpoolLog(context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-
-		if (!target)
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild.id, {}),
-					arg_expected: "user:User",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-
-		const pools = await getPools(context.guild.id);
+		const pools = await banpoolManager.getPools(interaction.guild?.id as Snowflake);
 		const options: Promise<MessageSelectOptionData>[] = pools.map(async (pool) => {
-			const data = (await getPoolData(pool.name)) || { banpoolSubscribers: [] };
+			const data = (await banpoolManager.getPoolData(pool.name)) || { banpoolSubscribers: [] };
 
 			return {
 				label: pool.name,
 				value: `${pool.id}:${pool.name}`,
-				description: await this.client.bulbutils.translate("crossban_select_subscribed", context.guild?.id, { amount: data.banpoolSubscribers.length }),
+				description: await this.client.bulbutils.translate("crossban_select_subscribed", interaction.guild?.id, { amount: data.banpoolSubscribers.length }),
 			};
 		});
 
@@ -66,20 +60,22 @@ export default class extends Command {
 				.addOptions(await Promise.all(options))
 				.setMinValues(1),
 		);
-		const banpoolSelect: Message = await context.channel.send({ components: [row], content: await this.client.bulbutils.translate("crossban_select_pools", context.guild.id, {}) });
-		const compCollector = banpoolSelect.createMessageComponentCollector({ componentType: "SELECT_MENU", time: 60_000 });
 
-		compCollector.on("collect", async (interaction: SelectMenuInteraction) => {
-			if (interaction.user.id !== context.author.id) return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("crossban_select_pools", interaction.guild?.id, {}),
+			components: [row],
+			ephemeral: true,
+		});
+		const collector = interaction.channel?.createMessageComponentCollector({ time: 60_000 });
 
-			const poolGuilds: any[] = await getGuildsFromPools(
-				interaction.values.map((value) => {
+		collector?.on("collect", async (i: SelectMenuInteraction) => {
+			const poolGuilds = await banpoolManager.getGuildIdsFromPools(
+				i.values.map((value) => {
 					return parseInt(value.split(":")[0], 10);
 				}),
 			);
-			let totalBans = 0;
 
-			if (!target) return;
+			let totalBans = 0;
 
 			for (let i = 0; i < poolGuilds.length; i++) {
 				const guildId = poolGuilds[i];
@@ -89,31 +85,29 @@ export default class extends Command {
 				if (!guild.me?.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) continue;
 
 				const banList = await guild.bans.fetch();
-				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === target.id);
+				const bannedUser = banList.find((ban: GuildBan) => ban.user.id === user.id);
 
-				if (bannedUser) continue;
-				else {
-					if (!context.guild) continue;
-					const guildTarget: GuildMember | undefined = await tryIgnore(() => this.client.bulbfetch.getGuildMember(guild.members, target.id));
+				if (!bannedUser) {
+					const guildTarget: GuildMember | undefined = await tryIgnore(() => this.client.bulbfetch.getGuildMember(guild.members, user.id));
 
 					if (!guildTarget) {
 						totalBans++;
-						banUser(this.client, target, context.author, guild, context.guild, reason);
+						await this.crossban(this.client, user, interaction.user, guild, interaction.guild as Guild, reason);
 					} else {
 						if (guildTarget.bannable) {
 							totalBans++;
-							banUser(this.client, target, context.author, guild, context.guild, reason);
-						} else continue;
+							await this.crossban(this.client, user, interaction.user, guild, interaction.guild as Guild, reason);
+						}
 					}
 				}
 			}
 
-			banpoolSelect.edit({
-				content: await this.client.bulbutils.translate("crossban_success", context.guild?.id, {
-					target,
+			await interaction.followUp({
+				content: await this.client.bulbutils.translate("crossban_success", interaction.guild?.id, {
+					target: user,
 					totalBans,
 					totalPossible: poolGuilds.length,
-					usedPools: interaction.values
+					usedPools: i.values
 						.map((value) => {
 							return `\`${value.split(":")[1]}\``;
 						})
@@ -121,31 +115,36 @@ export default class extends Command {
 				}),
 				components: [],
 			});
+
+			await interaction.editReply({
+				content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+				components: [],
+			});
 		});
 	}
-}
 
-async function banUser(client: BulbBotClient, target: User, moderator: User, guild: Guild, startedGuild: Guild, reason: string) {
-	const infraction: any = await createInfraction(guild.id, "poolban", true, reason, target, moderator);
-	await sendEventLog(
-		client,
-		guild,
-		"banpool",
-		await client.bulbutils.translate("crossban_reason", guild.id, {
-			emoji: Emotes.actions.BAN,
-			target,
-			startedGuild,
-			moderator,
-			reason,
-			infraction_id: infraction.id,
-		}),
-	);
+	private async crossban(client: BulbBotClient, target: User, moderator: User, guild: Guild, originalGuild: Guild, reason: string) {
+		const infraction = await infractionsManager.createInfraction(guild.id, "poolban", true, reason, target, moderator);
+		await loggingManager.sendEventLog(
+			client,
+			guild,
+			"banpool",
+			await client.bulbutils.translate("crossban_reason", guild.id, {
+				emoji: Emotes.actions.BAN,
+				target,
+				originalGuild,
+				moderator,
+				reason,
+				infraction_id: infraction.id,
+			}),
+		);
 
-	guild.members.ban(target, {
-		reason: await client.bulbutils.translate("crossban_reason_audit", guild.id, {
-			startedGuild,
-			moderator,
-			reason,
-		}),
-	});
+		await guild.members.ban(target, {
+			reason: await client.bulbutils.translate("crossban_reason_audit", guild.id, {
+				originalGuild,
+				moderator,
+				reason,
+			}),
+		});
+	}
 }

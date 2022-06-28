@@ -3,7 +3,7 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { MuteType } from "../../utils/types/MuteType";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
-import { ApplicationCommandOptionTypes, ApplicationCommandType } from "../../utils/types/ApplicationCommands";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
@@ -12,17 +12,17 @@ export default class extends ApplicationCommand {
 		super(client, {
 			name,
 			description: "Unmutes the specified user.",
-			type: ApplicationCommandType.CHAT_INPUT,
+			type: ApplicationCommandType.ChatInput,
 			options: [
 				{
 					name: "member",
-					type: ApplicationCommandOptionTypes.USER,
+					type: ApplicationCommandOptionType.User,
 					description: "The user to unmute.",
 					required: true,
 				},
 				{
 					name: "reason",
-					type: ApplicationCommandOptionTypes.STRING,
+					type: ApplicationCommandOptionType.String,
 					description: "The reason for unmuting the user.",
 					required: false,
 				},
