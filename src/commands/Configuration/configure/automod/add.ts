@@ -119,6 +119,8 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 					const msgCollector = interaction.channel?.createMessageCollector({ filter: msgFilter, time: 60000, max: 1 });
 
 					msgCollector?.on("collect", async (m: Message) => {
+						if (!interaction.guild?.id) return;
+
 						await m.delete();
 						let appendContent = m.content;
 						if (selectedCategory && config[selectedCategory].includes(appendContent)) {
@@ -195,7 +197,6 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 							}
 						}
 
-						if (!interaction.guild?.id) return;
 						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id, categories[selectedCategory], [appendContent]);
 
 						await interaction.followUp({
