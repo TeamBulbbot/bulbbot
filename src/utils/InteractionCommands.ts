@@ -3,7 +3,7 @@ import { discordApi } from "../Config";
 import axios from "axios";
 import { LocalCode, Localization } from "./types/Localization";
 import i18next from "i18next";
-import { APIApplicationCommand } from "discord-api-types/v10";
+import { APIApplicationCommand, ApplicationCommandType } from "discord-api-types/v10";
 
 export function translateSlashCommands(key: string) {
 	const TRANSLATED_LANGS: LocalCode[] = ["es-ES", "hu", "fr", "cs", "sv-SE", "hi"];
@@ -23,9 +23,12 @@ export async function registerSlashCommands(client: BulbBotClient) {
 	const data = () => {
 		const cmds: Omit<APIApplicationCommand, "id" | "application_id" | "version">[] = [];
 		for (const command of client.commands.values()) {
+			if (command.subCommands !== []) command.options = [...command.options, ...command.subCommands.map((subCommand) => subCommand.options[0])];
+			console.log(command.options);
+
 			cmds.push({
 				name: command.name,
-				type: command.type,
+				type: command.type as ApplicationCommandType,
 				description: command.description,
 				name_localizations: translateSlashCommands(`sc_${command.name}_name`),
 				description_localizations: translateSlashCommands(`sc_${command.name}_desc`),

@@ -1,14 +1,44 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
+import { CommandInteraction, Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
-export default class extends SubCommand {
+export default class extends ApplicationCommand {
+	constructor(client: BulbBotClient, name: string) {
+		super(client, {
+			name,
+			description: "Search for infractions of a user.",
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [
+				{
+					name: "user",
+					description: "The user to search for.",
+					type: ApplicationCommandOptionType.User,
+					required: true,
+				},
+				{
+					name: "page",
+					description: "The page of infractions to show.",
+					type: ApplicationCommandOptionType.Number,
+					required: false,
+				}
+			]
+		});
+	}
+
+	public async run(interaction: CommandInteraction) {
+		return interaction.reply("Yes hi hello");
+	}
+}
+
+export class lol extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "search",
