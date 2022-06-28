@@ -130,7 +130,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 								}),
 								ephemeral: true,
 							});
-							return add(i, client, selectedCategory);
+							return;
 						}
 
 						// parsing of objects being done
@@ -145,7 +145,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									}),
 									ephemeral: true,
 								});
-								return add(i, client, selectedCategory);
+								return;
 							} else appendContent = roles;
 						}
 
@@ -159,7 +159,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									}),
 									ephemeral: true,
 								});
-								return add(i, client, selectedCategory);
+								return;
 							} else appendContent = channels;
 						}
 
@@ -173,7 +173,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									}),
 									ephemeral: true,
 								});
-								return add(i, client, selectedCategory);
+								return;
 							} else appendContent = users;
 						}
 
@@ -188,7 +188,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									ephemeral: true,
 								});
 
-								return add(i, client, selectedCategory);
+								return;
 							} else {
 								const buffer = await axios.get(user.displayAvatarURL(), {
 									responseType: "arraybuffer",
