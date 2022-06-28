@@ -4,6 +4,8 @@ import DatabaseManager from "../../../../utils/managers/DatabaseManager";
 import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import AutoModPart from "../../../../utils/types/AutoModPart";
 import { NonDigits } from "../../../../utils/Regex";
+import imageHash from "imghash";
+import axios from "axios";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -117,6 +119,8 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 					const msgCollector = interaction.channel?.createMessageCollector({ filter: msgFilter, time: 60000, max: 1 });
 
 					msgCollector?.on("collect", async (m: Message) => {
+						if (!interaction.guild?.id) return;
+
 						await m.delete();
 						let appendContent = m.content;
 						if (selectedCategory && config[selectedCategory].includes(appendContent)) {
@@ -126,7 +130,7 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 								}),
 								ephemeral: true,
 							});
-							return add(i, client, selectedCategory);
+							return;
 						}
 
 						// parsing of objects being done
@@ -141,12 +145,12 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									}),
 									ephemeral: true,
 								});
-								return add(i, client, selectedCategory);
+								return;
 							} else appendContent = roles;
 						}
 
 						// whitelist channels only allow channels
-						if (selectedCategory === "ignoreChannels") {
+						else if (selectedCategory === "ignoreChannels") {
 							const channels = appendContent.replace(NonDigits, "");
 							if (!i.guild?.channels.cache.get(channels)) {
 								await interaction.followUp({
@@ -155,12 +159,12 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									}),
 									ephemeral: true,
 								});
-								return add(i, client, selectedCategory);
+								return;
 							} else appendContent = channels;
 						}
 
 						// whitelist users only allow users ids
-						if (selectedCategory === "ignoreUsers") {
+						else if (selectedCategory === "ignoreUsers") {
 							const users = appendContent.replace(NonDigits, "");
 							if (!i.guild?.members.cache.get(users)) {
 								await interaction.followUp({
@@ -169,11 +173,30 @@ async function add(interaction: MessageComponentInteraction, client: BulbBotClie
 									}),
 									ephemeral: true,
 								});
-								return add(i, client, selectedCategory);
+								return;
 							} else appendContent = users;
 						}
 
-						if (!interaction.guild?.id) return;
+						// handle the avatar bans
+						else if (selectedCategory === "avatarHashes") {
+							const user = await client.bulbfetch.getUser(appendContent.replace(NonDigits, ""));
+							if (!user) {
+								await interaction.followUp({
+									content: await client.bulbutils.translate("config_automod_add_remove_add_fail", interaction.guild?.id, {
+										item: appendContent,
+									}),
+									ephemeral: true,
+								});
+
+								return;
+							} else {
+								const buffer = await axios.get(user.displayAvatarURL(), {
+									responseType: "arraybuffer",
+								});
+								appendContent = await imageHash.hash(buffer.data, 8);
+							}
+						}
+
 						if (selectedCategory) await databaseManager.automodAppend(interaction.guild?.id, categories[selectedCategory], [appendContent]);
 
 						await interaction.followUp({
