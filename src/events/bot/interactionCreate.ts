@@ -66,6 +66,13 @@ export default class extends Event {
 				return;
 			}
 
+			if (interaction.options.getSubcommand(false)) {
+				const subCommand = command.subCommands.find((subCommand) => subCommand.name === interaction.options.getSubcommand(false));
+				if (subCommand) {
+					return subCommand.run(interaction);
+				}
+			}
+
 			const missing = command.validateClientPermissions(interaction);
 			const { premiumGuild } = await databaseManager.getConfig(interaction.guild as Guild);
 
