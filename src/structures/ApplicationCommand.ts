@@ -2,6 +2,7 @@ import BulbBotClient from "./BulbBotClient";
 import { CommandInteraction, Permissions, PermissionString } from "discord.js";
 import { translateSlashCommands } from "../utils/InteractionCommands";
 import { APIApplicationCommandOption, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
+import ApplicationSubCommand from "./ApplicationSubCommand";
 
 interface ApplicationCommandConstructOptions {
 	name: string;
@@ -9,11 +10,13 @@ interface ApplicationCommandConstructOptions {
 	description: string;
 	dm_permission?: boolean;
 	premium?: boolean;
-	subCommands?: ApplicationCommand[];
+	subCommands?: ApplicationSubCommandClass[];
 	client_permissions?: PermissionString[];
 	command_permissions?: PermissionString[];
 	options?: APIApplicationCommandOption[];
 }
+
+export type ApplicationSubCommandClass = typeof ApplicationSubCommand;
 
 export default class ApplicationCommand {
 	public readonly client: BulbBotClient;
@@ -23,7 +26,7 @@ export default class ApplicationCommand {
 	public readonly dm_permission: boolean;
 	public readonly default_member_permissions: string | null;
 	public readonly premium: boolean;
-	public readonly subCommands: ApplicationCommand[];
+	public readonly subCommands: ApplicationSubCommand[];
 	public readonly command_permissions: PermissionString[];
 	public readonly client_permissions: PermissionString[];
 	public options: APIApplicationCommandOption[];
@@ -39,7 +42,7 @@ export default class ApplicationCommand {
 		this.dm_permission = dm_permission;
 		this.command_permissions = command_permissions;
 		this.premium = premium;
-		this.subCommands = subCommands !== [] ? subCommands?.map((sc) => new sc()) : subCommands;
+		this.subCommands = subCommands?.map((sc) => new sc(this.client, this));
 		this.client_permissions = client_permissions;
 		this.default_member_permissions = this.computePermissions();
 		this.options = this.appendTranslation(options);

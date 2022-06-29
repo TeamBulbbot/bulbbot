@@ -3,7 +3,7 @@ import { discordApi } from "../Config";
 import axios from "axios";
 import { LocalCode, Localization } from "./types/Localization";
 import i18next from "i18next";
-import { APIApplicationCommand, ApplicationCommandType } from "discord-api-types/v10";
+import { APIApplicationCommand, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
 export function translateSlashCommands(key: string) {
 	const TRANSLATED_LANGS: LocalCode[] = ["es-ES", "hu", "fr", "cs", "sv-SE", "hi"];
@@ -23,8 +23,18 @@ export async function registerSlashCommands(client: BulbBotClient) {
 	const data = () => {
 		const cmds: Omit<APIApplicationCommand, "id" | "application_id" | "version">[] = [];
 		for (const command of client.commands.values()) {
-			if (command.subCommands !== []) command.options = [...command.options, ...command.subCommands.map((subCommand) => subCommand.options[0])];
-			console.log(command.options);
+			if (command.subCommands.length) {
+				for (const subCommand of command.subCommands) {
+					command.options.push({
+						name: subCommand.name,
+						description: subCommand.description,
+						type: ApplicationCommandOptionType.Subcommand,
+						// FIXME: There has got to be a better solution than just @ts-expect-error
+						// @ts-expect-error
+						options: subCommand.options,
+					});
+				}
+			}
 
 			cmds.push({
 				name: command.name,

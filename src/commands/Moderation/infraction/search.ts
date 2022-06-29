@@ -5,36 +5,37 @@ import { CommandInteraction, Message, MessageActionRow, MessageSelectMenu, Snowf
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import ApplicationCommand from "../../../structures/ApplicationCommand";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationCommand {
-	constructor(client: BulbBotClient, name: string) {
-		super(client, {
-			name,
-			description: "Search for infractions of a user.",
-			type: ApplicationCommandOptionType.Subcommand,
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
+		super(client, parent, {
+			name: "search",
+			description: "Search for infractions by user",
 			options: [
 				{
 					name: "user",
-					description: "The user to search for.",
 					type: ApplicationCommandOptionType.User,
+					description: "The user to search for",
 					required: true,
 				},
 				{
 					name: "page",
-					description: "The page of infractions to show.",
 					type: ApplicationCommandOptionType.Number,
+					description: "The page of results to show",
 					required: false,
-				}
-			]
+					min_value: 1,
+				},
+			],
 		});
 	}
 
-	public async run(interaction: CommandInteraction) {
-		return interaction.reply("Yes hi hello");
+	public async run(interaction: CommandInteraction): Promise<void> {
+		return interaction.reply("This command is not yet implemented.");
 	}
 }
 
