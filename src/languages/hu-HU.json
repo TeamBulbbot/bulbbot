@@ -205,6 +205,7 @@
 	"config_automod_add_remove_header": "{{emote_wrench}} **AutoModerátor konfiguráció**\n{{emote_edit}}*Ez a beállítás lehetővé teszi, hogy elemeket adjon hozzá és távolítson el az automod adatbázisból.*",
 	"config_automod_add_remove_remove_success": "{{emote_success}} Sikeresen eltávolította a kiválasztott AutoModerátor elem(ek) et az adatbázisból",
 	"config_automod_add_remove_add_success": "{{emote_success}} Sikeresen hozzáadta a kiválasztott AutoModerátor elemet az adatbázishoz",
+	"config_automod_add_remove_add_fail": "{{emote_fail}} Invalid automod item `{{item}}`",
 	"config_automod_add_remove_add_prompt": "{{emote_wrench}} Kérjük adja meg az új AutoModerátor elemet",
 	"config_automod_add_remove_add_already_exists": "{{emote_fail}} Az AutoModerátor Item `{{item}}` már létezik az adatbázisban",
 	"config_automod_add_remove_add_invalid_channel": "{{emote_fail}} Invalid automod item `{{item}}` for immune channels",
