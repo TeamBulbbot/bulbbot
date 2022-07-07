@@ -3,6 +3,7 @@ import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "discord-api-types/v10";
 import search from "./infraction/search";
 import info from "./infraction/info";
+import claim from "./infraction/claim";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -11,7 +12,7 @@ export default class extends ApplicationCommand {
 			description: "Manage infractions.",
 			type: ApplicationCommandType.ChatInput,
 			options: [],
-			subCommands: [search, info],
+			subCommands: [search, info, claim],
 			command_permissions: ["MODERATE_MEMBERS"],
 		});
 	}
