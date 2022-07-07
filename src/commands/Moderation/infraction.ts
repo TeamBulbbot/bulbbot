@@ -5,6 +5,7 @@ import search from "./infraction/search";
 import info from "./infraction/info";
 import claim from "./infraction/claim";
 import remove from "./infraction/remove";
+import update from "./infraction/update";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -13,7 +14,7 @@ export default class extends ApplicationCommand {
 			description: "Manage infractions.",
 			type: ApplicationCommandType.ChatInput,
 			options: [],
-			subCommands: [search, info, claim, remove],
+			subCommands: [search, info, claim, remove, update],
 			command_permissions: ["MODERATE_MEMBERS"],
 		});
 	}

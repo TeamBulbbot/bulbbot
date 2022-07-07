@@ -1,50 +1,73 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message } from "discord.js";
+import { CommandInteraction, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import { NonDigits } from "../../../utils/Regex";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "update",
-			clearance: 50,
-			minArgs: 2,
-			maxArgs: -1,
-			argList: ["infraction:Number", "reason:String"],
-			usage: "<infraction> <reason>",
-			description: "Updates the reason of an infraction.",
+			description: "Update the reason of an infraction.",
+			options: [
+				{
+					name: "id",
+					type: ApplicationCommandOptionType.Integer,
+					description: "The ID of the infraction",
+					required: true,
+					min_value: 1,
+					max_value: 2147483647,
+				},
+				{
+					name: "reason",
+					type: ApplicationCommandOptionType.String,
+					description: "The new reason for the infraction",
+					required: true,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!context.guild) return;
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const infractionId: number = interaction.options.getInteger("id") as number;
+		const reason: string = interaction.options.getString("reason") as string;
 
-		const infID = Number(args[0].replace(NonDigits, ""));
-
-		if (!infID || infID >= 2147483647 || infID <= 0)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
-					arg_expected: "id:Number",
-					arg_provided: args[0],
-					usage: this.usage,
+		const inf = await infractionsManager.getInfraction(interaction.guild?.id as Snowflake, infractionId);
+		if (!inf) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_not_found", interaction.guild?.id, {
+					infraction_id: infractionId,
 				}),
-			);
-
-		if (!(await infractionsManager.getInfraction(context.guild.id, Number(args[0].replace(NonDigits, ""))))) {
-			return context.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", context.guild.id, {
-					infraction_id: args[0],
-				}),
-			);
+				ephemeral: true,
+			});
 		}
 
-		const reason = args.slice(1).join(" ");
-		await infractionsManager.updateReason(context.guild.id, Number(args[0]), reason);
-		return context.channel.send(await this.client.bulbutils.translate("infraction_update_success", context.guild.id, { infraction_id: args[0] }));
+		if (inf.moderatorId !== interaction.user.id) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_claim_not_owned", interaction.guild?.id, {
+					infraction_id: infractionId,
+				}),
+				ephemeral: true,
+			});
+		}
+
+		if (!(await infractionsManager.getInfraction(interaction.guild?.id as Snowflake, infractionId))) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_not_found", interaction.guild?.id, {
+					infraction_id: infractionId,
+				}),
+				ephemeral: true,
+			});
+		}
+
+		await infractionsManager.updateReason(interaction.guild?.id as Snowflake, infractionId, reason);
+		return interaction.reply({
+			content: await this.client.bulbutils.translate("infraction_update_success", interaction.guild?.id, {
+				infraction_id: infractionId,
+			}),
+		});
 	}
 }
