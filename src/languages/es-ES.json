@@ -205,6 +205,7 @@
 	"config_automod_add_remove_header": "{{emote_wrench}} **Configuración del Automod**\n{{emote_edit}}*Este ajuste le permite agregar y eliminar elementos de la base de datos del Automod.*",
 	"config_automod_add_remove_remove_success": "{{emote_success}} Eliminado con éxito el(los) el(los) item(s) del Automod seleccionados de la base de datos",
 	"config_automod_add_remove_add_success": "{{emote_success}} Añadido correctamente el item seleccionado del Automod a la base de datos",
+	"config_automod_add_remove_add_fail": "{{emote_fail}} Invalid automod item `{{item}}`",
 	"config_automod_add_remove_add_prompt": "{{emote_wrench}} Por favor, ingrese un nuevo Item al Automod",
 	"config_automod_add_remove_add_already_exists": "{{emote_fail}} El item del Automod `{{item}}` ya existe en la base de datos",
 	"config_automod_add_remove_add_invalid_channel": "{{emote_fail}} Invalid automod item `{{item}}` for immune channels",
