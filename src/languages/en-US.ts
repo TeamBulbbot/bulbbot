@@ -520,7 +520,7 @@ export default {
 	prune_successful: "{{emote_success}} Successfully pruned **{{prune}}** members",
 	prune_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` pruned **{{prune}}** members for **{{reason}}** with these settings, days **{{days}}**, roles **{{roles}}**",
 
-	verification_level_select: "Please select your verification level then press save",
+	verifcation_level_community_none: "{{emote_success}} Verification level cannot be set to `none` for community servers",
 	verification_level_success: "{{emote_success}} Server verification level changed to `{{level}}`",
 
 	nickname_success: "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
