@@ -5,14 +5,14 @@ import { CommandInteraction } from "discord.js";
 
 interface ApplicationSubCommandConstructOptions {
 	name: string;
-	description?: string;
+	description: string;
 	options?: APIApplicationCommandBasicOption[];
 }
 
 export default class extends ApplicationCommand {
 	public readonly parent: ApplicationCommand;
 
-	constructor(client: BulbBotClient, parent: ApplicationCommand, options: ApplicationSubCommandConstructOptions = { name: "missing name" }) {
+	constructor(client: BulbBotClient, parent: ApplicationCommand, options: ApplicationSubCommandConstructOptions = { name: "missing name", description: "no description" }) {
 		super(client, {
 			name: options.name,
 			type: ApplicationCommandOptionType.Subcommand,
