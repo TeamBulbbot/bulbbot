@@ -1,5 +1,5 @@
 import * as path from "path";
-import { exec, cd } from "shelljs";
+import { cd, exec } from "shelljs";
 import BulbBotClient from "./BulbBotClient";
 import { promisify } from "util";
 import glob from "glob";

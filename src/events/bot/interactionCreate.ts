@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Interaction } from "discord.js";
+import { Guild, Interaction } from "discord.js";
 import warn from "../../interactions/context/warn";
 import infSearch from "../../interactions/context/infSearch";
 import mute from "../../interactions/context/mute";
@@ -66,14 +66,28 @@ export default class extends Event {
 				return;
 			}
 
-			const missing = command.validateClientPermissions(interaction);
+			if (interaction.options.getSubcommand(false)) {
+				const subCommand = command.subCommands.find((subCommand) => subCommand.name === interaction.options.getSubcommand(false));
+				if (subCommand) {
+					return subCommand.run(interaction);
+				}
+			}
 
-			if (missing) {
+			const missing = command.validateClientPermissions(interaction);
+			const { premiumGuild } = await databaseManager.getConfig(interaction.guild as Guild);
+
+			if (!premiumGuild && command.premium)
+				return interaction.reply({
+					content: await this.client.bulbutils.translate("global_premium_only", interaction.guild?.id, {}),
+					ephemeral: true,
+				});
+
+			if (missing)
 				return interaction.reply({
 					content: await this.client.bulbutils.translate("global_missing_permissions_bot", interaction.guild?.id, { missing }),
 					ephemeral: true,
 				});
-			}
+
 			// Should we add a .catch to handle uncaught errors thrown in command run methods?
 			await command.run(interaction);
 		}

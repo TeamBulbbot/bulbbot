@@ -6,12 +6,23 @@ export default {
 	global_executed_by: "Executed by {{user.tag}}",
 	global_execution_cancel: "{{emote_fail}} Command execution cancelled",
 	global_missing_permissions: "{{emote_lock}} Missing permission(s)",
+
+	//  TODO: Remove, should become obsolete due to new command permissions system
+	// **
 	global_command_disabled: "{{emote_lock}} This command has been disabled by the server administrators",
 	global_not_invoked_by_user: "{{emote_lock}} You did not invoke this command",
+	// **
+
 	global_missing_permissions_bot: "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n**Missing permissions:** `{{missing}}`",
+
+	// TODO: Remove, this gets handled by Discord API now
+	// **
 	global_cannot_convert: "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	global_cannot_convert_special: "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.",
+	// **
+
 	global_not_found: "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
+	// TODO: Rename once all commands are migrated to new command permissions system
 	global_not_found_new: {
 		member: "{{emote_fail}} Could not find the specified **Member**!\n{{emote_wrench}} *Ensure the member is still in the server or that you're providing a valid Member*",
 	},
@@ -60,11 +71,13 @@ export default {
 
 	global_logging_command: "`[{{timestamp}}]` {{emote_wrench}} **{{user.tag}}** `({{user.id}})` has executed `{{command}}` in <#{{channel}}>.",
 	global_no_reason: "No reason given",
+	// TODO: Remove, not needed anymore because of interaction deferring
 	global_loading: "{{emote_loading}} Loading...",
 	global_not_in_voice: "{{emote_fail}} User **{{target.tag}}** `({{target.id}})` is currently not connected to any Voice Channels!",
 	global_error: {
 		unknown: "{{emote_fail}} An unknown error has occurred, please try again later or if the issue persists contact the developers at {{discord_invite}}",
 		automod_items_length_undefined: "{{emote_fail}} An error occurred while attempting to parse the selected Automod items. No Automod items have been provided or Automod items length is undefined.",
+		// TODO: Rename to global
 		inviteinfo_guild_or_member_null:
 			"{{emote_fail}} An error occurred while attempting to parse the selected Invite. The Invite Guild, Interaction Guild or Interaction Member could not be resolved to non-null values.",
 		db_inf_id_null: "{{emote_fail}} An error occurred while trying to kick the user. The returned Infraction ID was null or the Member could not be kicked.",
@@ -89,11 +102,16 @@ export default {
 
 	global_premium_only: "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
 
+	// TODO: Remove, disabled by default
 	event_interaction_dm_command: "{{emote_warn}} Slash commands cannot be used in DMs.",
 
+	// TODO: Remove, not possible anymore
+	// **
 	event_message_args_unexpected: "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	event_message_args_missing: "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	event_message_args_missing_list: "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
+	// **
+
 	event_message_edit:
 		"{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
 	event_message_edit_special: "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
@@ -296,6 +314,8 @@ export default {
 
 	config_automod_overview_header: "{{emote_wrench}} **Automod Overview**",
 
+	// TODO: Remove all of these
+	// **
 	override_clearance_more_than_100: "{{emote_warn}} Clearance level cannot be higher than **100**",
 	override_clearance_0_confirmation:
 		"{{emote_warn}} You're about to set a restricted command to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",
@@ -314,6 +334,7 @@ export default {
 	override_edit_success: "{{emote_success}} Successfully updated the override with a new clearance level of `{{clearance}}`",
 
 	override_remove_success: "{{emote_success}} Successfully removed the selected override.",
+	// **
 
 	automod_less_than_zero: "{{emote_warn}} {{limit}} cannot be less than `0`",
 
@@ -428,8 +449,8 @@ export default {
 	crossban_select_pools: "Select the banpools where you want the user to get banned from.",
 	crossban_select_subscribed: "{{amount}} server(s) subscribed",
 	crossban_reason:
-		"{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{startedGuild.name}}** `({{startedGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-	crossban_reason_audit: "Crossban from: {{startedGuild.name}} ({{startedGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
+		"{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{originalGuild.name}}** `({{originalGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+	crossban_reason_audit: "Crossban from: {{originalGuild.name}} ({{originalGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 
 	banpool_missing_access_not_found: "{{emote_warn}} That pool does not exists our you are missing access to view it",
 	banpool_missing_logging:
@@ -477,6 +498,8 @@ export default {
 	already_banned: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
 	not_banned: "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
 	ban_force_confirm: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently in the server. Do you want me to force-ban them anyway?",
+
+	// TODO: make this global
 	ban_message_dismiss: "{{emote_success}} You can now dismiss this message",
 
 	messageclear_few_than_0days: "{{emote_fail}} You can't clear messages that are younger than 0 days",
@@ -569,6 +592,8 @@ export default {
 	lockdown_locked: "{{emote_locked}} Successfully locked down channel <#{{channel}}>",
 	lockdown_unlocked: "{{emote_unlocked}} Successfully unlocked channel <#{{channel}}>",
 
+	// TODO: Remove these, make sure no compile errors happen
+	// **
 	mute_muterole_not_found: "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
 	mute_not_muted: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
 	mute_rejoin: "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
@@ -577,6 +602,7 @@ export default {
 	unmute_confirm:
 		"{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the mute from them without creating an infraction*",
 	unmute_special: "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been unmuted for **{{reason}}** ",
+	// **
 
 	infraction_not_found: "{{emote_fail}} Infraction **#{{infraction_id}}** could not be found!",
 	infraction_delete_confirm:
@@ -606,6 +632,7 @@ export default {
 
 	commands_help: "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
 
+	// TODO: Remove once all commands are migrated
 	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>",
 
 	messageinfo_channel_not_found: "{{emote_warn}} Unable to find the channel in the messagelink you provided.",

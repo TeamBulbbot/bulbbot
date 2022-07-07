@@ -1,14 +1,45 @@
 import Command from "../../../structures/Command";
 import SubCommand from "../../../structures/SubCommand";
 import CommandContext from "../../../structures/CommandContext";
-import { Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
+import { CommandInteraction, Message, MessageActionRow, MessageSelectMenu, Snowflake, User } from "discord.js";
 import { NonDigits } from "../../../utils/Regex";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
-export default class extends SubCommand {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
+		super(client, parent, {
+			name: "search",
+			description: "Search for infractions by user",
+			options: [
+				{
+					name: "user",
+					type: ApplicationCommandOptionType.User,
+					description: "The user to search for",
+					required: true,
+				},
+				{
+					name: "page",
+					type: ApplicationCommandOptionType.Number,
+					description: "The page of results to show",
+					required: false,
+					min_value: 1,
+				},
+			],
+		});
+	}
+
+	public async run(interaction: CommandInteraction): Promise<void> {
+		return interaction.reply("This command is not yet implemented.");
+	}
+}
+
+export class lol extends SubCommand {
 	constructor(client: BulbBotClient, parent: Command) {
 		super(client, parent, {
 			name: "search",
