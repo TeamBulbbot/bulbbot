@@ -1,52 +1,45 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { ButtonInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
+import { ButtonInteraction, CommandInteraction, MessageActionRow, MessageButton, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { NonDigits } from "../../../utils/Regex";
-import { supportInvite } from "../../../Config";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "delete",
-			aliases: ["del", "remove"],
-			clearance: 50,
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["infraction:Number"],
-			usage: "<infraction>",
-			description: "Delete an infraction.",
+			description: "Delete an infraction",
+			options: [
+				{
+					name: "id",
+					type: ApplicationCommandOptionType.Integer,
+					description: "The ID of the infraction",
+					required: true,
+					min_value: 1,
+					max_value: 2147483647,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!context.guild) return;
-		const infID = Number(args[0].replace(NonDigits, ""));
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const infractionId: number = interaction.options.getInteger("id") as number;
+		const inf = await infractionsManager.getInfraction(interaction.guild?.id as Snowflake, infractionId);
 
-		if (!infID || infID >= 2147483647 || infID <= 0)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
-					arg_expected: "id:Number",
-					arg_provided: args[0],
-					usage: this.usage,
+		if (!inf) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_not_found", interaction.guild?.id, {
+					infraction_id: infractionId,
 				}),
-			);
-
-		if (isNaN(infID) || (await infractionsManager.getInfraction(context.guild.id, infID)) === undefined) {
-			return context.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", context.guild.id, {
-					infraction_id: args[0],
-				}),
-			);
+				ephemeral: true,
+			});
 		}
 
-		const inf = await infractionsManager.getInfraction(context.guild.id, infID);
-		// TODO: send a not_found message
-		if (!inf) return;
+		// Possibly implement permission checking here. Awaiting input from the team
+
 		const target = { tag: inf.target, id: inf.targetId };
 		const moderator = { tag: inf.moderator, id: inf.moderatorId };
 
@@ -55,44 +48,48 @@ export default class extends SubCommand {
 			new MessageButton().setLabel("Cancel").setStyle("DANGER").setCustomId("cancel"),
 		]);
 
-		const confirmMsg = await context.channel.send({
-			content: await this.client.bulbutils.translate("infraction_delete_confirm", context.guild.id, {
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("infraction_delete_confirm", interaction.guild?.id, {
 				infraction_id: inf.id,
 				moderator,
 				target,
 				reason: inf["reason"],
 			}),
 			components: [row],
+			ephemeral: true,
 		});
 
-		const collector = confirmMsg.createMessageComponentCollector({ time: 30000 });
+		const collector = interaction.channel?.createMessageComponentCollector({ time: 30000 });
 
-		collector.on("collect", async (interaction: ButtonInteraction) => {
-			if (interaction.user.id !== context.author.id) {
-				return void interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
-			}
-			if (!context.guild) return void interaction.reply({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }), ephemeral: true });
-			if (interaction.customId === "confirm") {
-				await interaction.update({
-					content: await this.client.bulbutils.translate("infraction_delete_success", context.guild.id, {
-						infraction_id: infID,
+		collector?.on("collect", async (i: ButtonInteraction) => {
+			if (i.customId === "confirm") {
+				await i.reply({
+					content: await this.client.bulbutils.translate("infraction_delete_success", interaction.guild?.id, {
+						infraction_id: infractionId,
 					}),
 					components: [],
 				});
+
+				await interaction.editReply({
+					content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+					components: [],
+				});
+
 				collector.stop("clicked");
-				return void (await infractionsManager.deleteInfraction(context.guild.id, infID));
+				return void (await infractionsManager.deleteInfraction(interaction.guild?.id as Snowflake, infractionId));
 			} else {
 				collector.stop("clicked");
-				return void interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
+				return void (await interaction.editReply({
+					content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}),
+					components: [],
+				}));
 			}
 		});
 
-		collector.on("end", async (_: ButtonInteraction, reason: string) => {
+		collector?.on("end", async (_: ButtonInteraction, reason: string) => {
 			if (reason !== "time") return;
-			if (!context.guild) return void (await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_error.unknown", undefined, { discord_invite: supportInvite }) }));
 
-			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild.id, {}), components: [] });
-			return;
+			return void (await interaction.editReply({ content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}), components: [] }));
 		});
 	}
 }
