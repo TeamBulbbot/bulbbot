@@ -35,7 +35,21 @@ export default class extends ApplicationSubCommand {
 		const page: number = interaction.options.getNumber("page") || 1;
 
 		const options: any[] = [];
-		const infs = (await infractionManager.getAllUserInfractions({ guildId: interaction.guild?.id as Snowflake, targetId: user.id, page })) || [];
+		const infs =
+			(await infractionManager.getAllUserInfractions({
+				guildId: interaction.guild?.id as Snowflake,
+				targetId: user.id,
+				page,
+			})) || [];
+
+		if (!infs.length) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_search_not_found", interaction.guild?.id, {
+					target: user,
+				}),
+				ephemeral: true,
+			});
+		}
 
 		for (let i = 0; i < 25; i++) {
 			// Included this as it's part of our original code. Not sure if it's needed though.
