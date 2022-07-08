@@ -609,6 +609,7 @@ export default {
 	infraction_delete_confirm:
 		"{{emote_warn}} Are you sure you want to delete infraction **#{{infraction_id}}**? This action __**cannot**__ be undone.\n**Offender:** {{target.tag}} `({{target.id}})`\n**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n**Reason:** {{reason}}",
 	infraction_delete_success: "{{emote_success}} Infraction **#{{infraction_id}}** has been successfully deleted!",
+	infraction_delete_not_owned: "{{emote_fail}} You cannot delete an infraction that you did not create!\n{{emote_wrench}} **Tip:** Members with the `MANAGE_GUILD` permission bypass this check",
 	infraction_info_inf_id: "**Infraction ID:** {{infraction_id}}\n",
 	infraction_info_target: "**Target:** {{target.tag}} `({{target.id}})`\n",
 	infraction_info_moderator: "**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n",

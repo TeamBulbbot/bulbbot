@@ -38,7 +38,11 @@ export default class extends ApplicationSubCommand {
 			});
 		}
 
-		// Possibly implement permission checking here. Awaiting input from the team
+		if (inf.moderatorId !== interaction.user.id && !interaction.guild?.members.cache.get(interaction.user.id)?.permissions.has("MANAGE_GUILD"))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_delete_not_owned", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		const target = { tag: inf.target, id: inf.targetId };
 		const moderator = { tag: inf.moderator, id: inf.moderatorId };
