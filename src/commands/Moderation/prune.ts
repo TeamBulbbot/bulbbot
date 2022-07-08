@@ -1,88 +1,103 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { ButtonInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
-import { NonDigits, RoleMentionAndID } from "../../utils/Regex";
+import { ButtonInteraction, CommandInteraction, Guild, MessageActionRow, MessageButton } from "discord.js";
+import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
 import LoggingManager from "../../utils/managers/LoggingManager";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
 const { sendModActionPreformatted }: LoggingManager = new LoggingManager();
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Prune users from the server",
-			category: "Moderation",
-			usage: "<days> [roles]... [reason]",
-			argList: ["days:Number", "roles:Role", "reason:String"],
-			examples: ["prune 5", "prune 1 @members @sleepers", "prune 2 @members kicking after being afk for 2 days"],
-			minArgs: 1,
-			maxArgs: -1,
-			clearance: 50,
-			clientPerms: ["KICK_MEMBERS"],
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "days",
+					description: "The number of days to prune",
+					type: ApplicationCommandOptionType.Integer,
+					required: true,
+					min_value: 1,
+					max_value: 30,
+				},
+				{
+					name: "roles",
+					description: "The roles included in the prune",
+					type: ApplicationCommandOptionType.String,
+					required: false,
+				},
+				{
+					name: "reason",
+					description: "The reason for the prune",
+					type: ApplicationCommandOptionType.String,
+					required: false,
+				},
+			],
+			command_permissions: ["MANAGE_GUILD", "KICK_MEMBERS"],
+			client_permissions: ["KICK_MEMBERS"],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const days = parseInt(args[0]);
-		if (isNaN(days) || days <= 0 || days > 30) return context.channel.send(await this.client.bulbutils.translate("prune_invalid_time", context.guild?.id, {}));
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const days = interaction.options.getInteger("days") as number;
 		const roles =
-			args
-				.slice(1)
-				.join(" ")
-				.match(RoleMentionAndID)
+			interaction.options
+				.getString("roles")
+				?.match(NonDigits)
 				?.map((r) => r.replace(NonDigits, "")) ?? [];
+		const reason = interaction.options.getString("reason") || (await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
-		let reason: string = args
-			.slice(roles.length + 1)
-			.join(" ")
-			.replace(RoleMentionAndID, "");
-
-		if (reason === "") reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-
-		const prunesize = await context.guild?.members.prune({
+		const prunesize = await interaction.guild?.members.prune({
 			days,
 			roles,
 			dry: true,
 		});
 
-		if (prunesize === 0) return context.channel.send(await this.client.bulbutils.translate("prune_no_users", context.guild?.id, {}));
+		if (prunesize === 0)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("prune_no_users", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
 			new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 		]);
 
-		const confirmMsg = await context.channel.send({
-			content: await this.client.bulbutils.translate("prune_confirm_prune", context.guild?.id, { prunesize }),
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("prune_confirm_prune", interaction.guild?.id, { prunesize }),
 			components: [row],
+			ephemeral: true,
 		});
 
-		const collector = confirmMsg.createMessageComponentCollector({ time: 30000 });
+		const collector = interaction.channel?.createMessageComponentCollector({ time: 30000 });
 
-		collector.on("collect", async (interaction: ButtonInteraction) => {
-			if (interaction.user.id !== context.author.id) {
-				return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
-			}
-
-			if (interaction.customId === "confirm") {
-				const prune = await context.guild?.members.prune({
+		collector?.on("collect", async (i: ButtonInteraction) => {
+			if (i.customId === "confirm") {
+				const prune = await interaction.guild?.members.prune({
 					days,
 					roles,
 					count: true,
 					reason,
-					dry: false,
 				});
 
-				confirmMsg.edit({
+				await i.reply({
 					components: [],
-					content: await this.client.bulbutils.translate("prune_successful", context.guild?.id, { prune }),
+					content: await this.client.bulbutils.translate("prune_successful", interaction.guild?.id, { prune }),
 				});
+
+				await interaction.editReply({
+					content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+					components: [],
+				});
+
 				await sendModActionPreformatted(
 					this.client,
-					context.guild,
-					await this.client.bulbutils.translate("prune_log", context.guild?.id, {
-						user: context.author,
+					interaction.guild as Guild,
+					await this.client.bulbutils.translate("prune_log", interaction.guild?.id, {
+						user: interaction.user,
 						prune,
 						reason,
 						days,
@@ -90,18 +105,20 @@ export default class extends Command {
 					}),
 				);
 
-				collector.stop("clicked");
+				return collector.stop("clicked");
 			} else {
 				collector.stop("clicked");
-				return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+				return void (await interaction.editReply({
+					content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}),
+					components: [],
+				}));
 			}
 		});
 
-		collector.on("end", async (_: ButtonInteraction, reason: string) => {
+		collector?.on("end", async (_: ButtonInteraction, reason: string) => {
 			if (reason !== "time") return;
 
-			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
-			return;
+			return void (await interaction.editReply({ content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}), components: [] }));
 		});
 	}
 }
