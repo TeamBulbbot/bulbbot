@@ -13,7 +13,7 @@ export default class extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "bots",
-			description: "Purge messages from a user.",
+			description: "Purges bot messages from the current channel.",
 			options: [
 				{
 					name: "amount",
