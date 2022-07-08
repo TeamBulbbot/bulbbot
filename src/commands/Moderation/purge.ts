@@ -7,6 +7,7 @@ import bots from "./purge/bots";
 import contains from "./purge/contains";
 import embeds from "./purge/embeds";
 import emojis from "./purge/emojis";
+import images from "./purge/images";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -15,7 +16,7 @@ export default class extends ApplicationCommand {
 			description: "Purge messages from a channel.",
 			type: ApplicationCommandType.ChatInput,
 			options: [],
-			subCommands: [all, user, bots, contains, embeds, emojis],
+			subCommands: [all, user, bots, contains, embeds, emojis, images],
 			command_permissions: ["MANAGE_MESSAGES"],
 			client_permissions: ["MANAGE_MESSAGES"],
 		});
