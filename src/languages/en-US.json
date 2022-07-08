@@ -9,7 +9,8 @@
 	"global_cannot_convert_special": "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.",
 	"global_not_found": "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	"global_not_found_new": {
-		"member": "{{emote_fail}} Could not find the specified **Member**!\n{{emote_wrench}} *Ensure the member is still in the server or that you're providing a valid Member*"
+		"member": "{{emote_fail}} Could not find the specified **Member**!\n{{emote_wrench}} *Ensure the member is still in the server or that you're providing a valid Member*",
+		"message": "{{emote_fail}} Could not find the specified **Message**!\n{{emote_wrench}} *Ensure the message is still in the channel or that you're providing a valid Message*"
 	},
 	"global_not_found_types": {
 		"user": "user",

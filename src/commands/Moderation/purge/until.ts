@@ -1,81 +1,99 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Collection, Message } from "discord.js";
+import { Collection, CommandInteraction, GuildTextBasedChannel, Message } from "discord.js";
 import moment from "moment";
 import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { isGuildChannel } from "../../../utils/typechecks";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { NonDigits } from "../../../utils/Regex";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "until",
-			clearance: 50,
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["message:Snowflake"],
-			usage: "<message>",
-			description: "Purges messages until a message",
+			description: "Purge messages from a channel until a certain message.",
+			options: [
+				{
+					name: "message",
+					description: "The ID of the message to purge until.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
+	public async run(interaction: CommandInteraction): Promise<void> {
 		let amount = 0;
 		let deletedAmount = 0;
 		let msg: Message;
 		let deletedMessage = false;
 		let temp: number;
-		if (!isGuildChannel(context.channel)) return;
-
-		let delMsgs = `Message purge in #${context.channel.name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
-		const twoWeeksAgo = moment().subtract(14, "days").unix();
+		const messageId = interaction.options.getString("message") as string;
 
 		try {
-			msg = await context.channel.messages.fetch(args[0]);
-		} catch (error) {
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.message", context.guild?.id, {}),
-					arg_expected: "message:Message",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
+			msg = (await interaction.channel?.messages.fetch(messageId.replace(NonDigits, ""))) as Message;
+		} catch (_) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_not_found_new.message", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 		}
+
+		let delMsgs = await this.client.bulbutils.translate("purge_message_log", interaction.guild?.id, {
+			user: interaction.user,
+			channel: interaction.channel as GuildTextBasedChannel,
+			timestamp: moment().format("MMMM Do YYYY, h:mm:ss a"),
+		});
+		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
 		while (amount < 500) {
 			temp = 0;
-			let msgs: Collection<string, Message> = await context.channel.messages.fetch({
+			let msgs: Collection<string, Message> = await (interaction.channel as GuildTextBasedChannel).messages.fetch({
 				limit: 100,
 			});
 
-			const found = msgs.find((m) => {
+			const found = msgs.find((m: Message) => {
 				temp++;
 				return m.id === msg.id;
 			});
 			if (found) {
 				deletedMessage = true;
-				msgs = await context.channel.messages.fetch({
+				msgs = await (interaction.channel as GuildTextBasedChannel).messages.fetch({
 					limit: temp,
 				});
 				deletedAmount += temp;
 				amount = 500;
 			} else deletedAmount += 100;
-			msgs.map((m) => {
+			msgs.map((m: Message) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
 				delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 			});
-			await context.channel.bulkDelete(msgs);
+			await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(msgs);
 			amount += 100;
 		}
-		if (!deletedMessage) return context.channel.send(await this.client.bulbutils.translate("purge_message_failed_to_delete", context.guild?.id, {}));
-		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
-		await loggingManager.sendModActionFile(this.client, context.guild, "purge", deletedAmount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
 
-		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: deletedAmount }));
+		if (!deletedMessage)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("purge_message_failed_to_delete", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+
+		writeFileSync(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+
+		await loggingManager.sendModActionFile(
+			this.client,
+			interaction.guild,
+			"purge",
+			deletedAmount,
+			`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`,
+			interaction.channel as GuildTextBasedChannel,
+			interaction.user,
+		);
+
+		return interaction.reply(await this.client.bulbutils.translate("purge_success", interaction.guild?.id, { count: deletedAmount }));
 	}
 }

@@ -25,6 +25,7 @@ export default {
 	// TODO: Rename once all commands are migrated to new command permissions system
 	global_not_found_new: {
 		member: "{{emote_fail}} Could not find the specified **Member**!\n{{emote_wrench}} *Ensure the member is still in the server or that you're providing a valid Member*",
+		message: "{{emote_fail}} Could not find the specified **Message**!\n{{emote_wrench}} *Ensure the message is still in the channel or that you're providing a valid Message*",
 	},
 	global_not_found_types: {
 		user: "user",
