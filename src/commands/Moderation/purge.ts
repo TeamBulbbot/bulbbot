@@ -4,6 +4,7 @@ import { ApplicationCommandType } from "discord-api-types/v10";
 import all from "./purge/all";
 import user from "./purge/user";
 import bots from "./purge/bots";
+import contains from "./purge/contains";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -12,7 +13,7 @@ export default class extends ApplicationCommand {
 			description: "Purge messages from a channel.",
 			type: ApplicationCommandType.ChatInput,
 			options: [],
-			subCommands: [all, user, bots],
+			subCommands: [all, user, bots, contains],
 			command_permissions: ["MANAGE_MESSAGES"],
 			client_permissions: ["MANAGE_MESSAGES"],
 		});
