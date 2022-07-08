@@ -513,6 +513,7 @@ export default {
 	purge_too_few: "{{emote_fail}} You cannot purge less than 2 messages",
 	purge_success: "{{emote_success}} Successfully purged **{{count}}** messages",
 	purge_message_failed_to_delete: "{{emote_fail}} Was unable to find the message you wanted to delete. No messages were deleted past this point.",
+	purge_message_log: "Message purge in {{channel.name}} ({{channel.id}}) by {{user.tag}} ({{user.id}}) at {{timestamp}}\n",
 
 	prune_invalid_time: "{{emote_fail}} The duration can only be a value between 1 and 30 (days)",
 	prune_no_users: "{{emote_fail}} There are no users that can be pruned with those settings",
