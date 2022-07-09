@@ -1,37 +1,44 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message } from "discord.js";
+import { CommandInteraction, Guild, GuildChannel } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 import { writeFileSync } from "fs";
 import moment from "moment";
-import { NonDigits } from "../../../utils/Regex";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ChannelType } from "discord-api-types/v10";
 
 const { getChannelArchive }: DatabaseManager = new DatabaseManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "channel",
-			clearance: 50,
-			minArgs: 1,
-			maxArgs: 2,
-			argList: ["channel:ChannelText", "amount:Number"],
-			usage: "<channel> [amount]",
+			description: "Receive the archive of a channel",
+			options: [
+				{
+					name: "channel",
+					description: "The channel to get the archive of",
+					type: ApplicationCommandOptionType.Channel,
+					channel_types: [ChannelType.GuildText],
+					required: true,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const AMOUNT: number = args[1] ? parseInt(args[1]) : 100;
-		if (isNaN(AMOUNT) || AMOUNT > 5000) return context.channel.send(await this.client.bulbutils.translate("archive_too_much", context.guild?.id, {}));
-		const channel = args[0].replace(NonDigits, "");
-		const startMessage = await context.channel.send(await this.client.bulbutils.translate("archive_started_search", context.guild?.id, {}));
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const channel = interaction.options.getChannel("channel") as Exclude<GuildChannel, null>;
+		const amount = interaction.options.getInteger("amount") || 100;
 
-		let archive: string = await this.client.bulbutils.translate("archive_header_format", context.guild?.id, {});
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("archive_started_search", interaction.guild?.id, {}),
+			ephemeral: true,
+		});
+
+		let archive: string = await this.client.bulbutils.translate("archive_header_format", interaction.guild?.id, {});
 		let temp: string;
-		const archiveChannelData = context.guild?.id ? await getChannelArchive(channel, context.guild, AMOUNT) : [];
-		if (archiveChannelData.length === 0) return startMessage.edit(await this.client.bulbutils.translate("archive_no_data_found", context.guild?.id, {}));
+		const archiveChannelData = await getChannelArchive(channel.id, interaction.guild as Guild, amount);
+		if (archiveChannelData.length === 0) return void (await interaction.editReply(await this.client.bulbutils.translate("archive_no_data_found", interaction.guild?.id, {})));
 
 		archiveChannelData.forEach((message) => {
 			temp = `[${moment(message.updatedAt).format("MMMM Do YYYY, h:mm:ss a")}] ${message.channelId}-${message.messageId} | ${message.authorTag} (${message.authorId}): `;
@@ -43,19 +50,20 @@ export default class extends SubCommand {
 			archive += `${temp}`;
 		});
 
-		writeFileSync(`${__dirname}/../../../../files/archive-data-${context.guild?.id}-${channel}.txt`, archive);
-		startMessage.edit({
-			content: await this.client.bulbutils.translate("archive_success", context.guild?.id, {
-				place: channel,
+		writeFileSync(`${__dirname}/../../../../files/archive-data-${interaction.guild?.id}-${channel.id}.txt`, archive);
+		await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+		return void (await interaction.followUp({
+			content: await this.client.bulbutils.translate("archive_success", interaction.guild?.id, {
+				place: channel.id,
 				amountOfMessages: archiveChannelData.length,
-				searchAmount: AMOUNT,
+				searchAmount: amount,
 			}),
 			files: [
 				{
-					attachment: `${__dirname}/../../../../files/archive-data-${context.guild?.id}-${channel}.txt`,
+					attachment: `${__dirname}/../../../../files/archive-data-${interaction.guild?.id}-${channel.id}.txt`,
 					name: "archive.txt",
 				},
 			],
-		});
+		}));
 	}
 }
