@@ -6,7 +6,7 @@ import { CommandInteraction } from "discord.js";
 interface ApplicationSubCommandConstructOptions {
 	name: string;
 	description: string;
-	options?: APIApplicationCommandBasicOption[];
+	options?: (APIApplicationCommandBasicOption & Pick<any, any>)[];
 }
 
 export default class extends ApplicationCommand {

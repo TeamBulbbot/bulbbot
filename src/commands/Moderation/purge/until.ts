@@ -21,6 +21,8 @@ export default class extends ApplicationSubCommand {
 					description: "The ID of the message to purge until.",
 					type: ApplicationCommandOptionType.String,
 					required: true,
+					min_length: 17,
+					max_length: 19,
 				},
 			],
 		});

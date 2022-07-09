@@ -1,41 +1,70 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Collection, Message, Snowflake } from "discord.js";
+import { Collection, CommandInteraction, GuildTextBasedChannel, Message, Snowflake } from "discord.js";
 import moment from "moment";
 import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { isGuildChannel } from "../../../utils/typechecks";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { NonDigits } from "../../../utils/Regex";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "between",
-			clearance: 50,
-			minArgs: 2,
-			maxArgs: 2,
-			argList: ["message1:Snowflake", "message2:Snowflake"],
-			usage: "<context1> <context2>",
-			description: "Purges messages between two messages.",
+			description: "Purge messages from a channel between two messages.",
+			options: [
+				{
+					name: "message1",
+					description: "The ID of the first message where to begin the purge.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+					min_length: 17,
+					max_length: 19,
+				},
+				{
+					name: "message2",
+					description: "The ID of the last message where to end the purge.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+					min_length: 17,
+					max_length: 19,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!isGuildChannel(context.channel)) return;
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const message1 = (interaction.options.getString("message1") as string).replace(NonDigits, "");
+		const message2 = (interaction.options.getString("message2") as string).replace(NonDigits, "");
 
-		const msgs: Collection<string, Message> = await context.channel.messages.fetch({ limit: 100 });
-		const allMessages: Message[] = msgs.map((m) => m).reverse();
+		const msgs: Collection<string, Message> = await (interaction.channel as GuildTextBasedChannel)?.messages.fetch({ limit: 100 });
+		const allMessages: Message[] = msgs.map((m: Message) => m).reverse();
 		const messages: Snowflake[] = [];
-		let delMsgs = `Message purge in #${context.channel.name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format("MMMM Do YYYY, h:mm:ss a")} \n`;
+
+		let delMsgs = await this.client.bulbutils.translate("purge_message_log", interaction.guild?.id, {
+			user: interaction.user,
+			channel: interaction.channel as GuildTextBasedChannel,
+			timestamp: moment().format("MMMM Do YYYY, h:mm:ss a"),
+		});
+
+		try {
+			(await interaction.channel?.messages.fetch(message1)) as Message;
+			(await interaction.channel?.messages.fetch(message2)) as Message;
+		} catch (_) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_not_found_new.message", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		}
 
 		let counting = false;
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
 		for (const msg of allMessages) {
-			if (msg.id === args[0]) {
+			if (msg.id === message1) {
 				counting = true;
 			}
 
@@ -45,15 +74,23 @@ export default class extends SubCommand {
 				delMsgs += `${moment(msg.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${msg.author.tag} (${msg.author.id}) | ${msg.id} | ${msg.content} |\n`;
 			}
 
-			if (msg.id === args[1]) counting = false;
+			if (msg.id === message2) counting = false;
 		}
 
-		await context.channel.bulkDelete(messages);
+		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messages);
 
-		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
+		writeFileSync(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
-		await loggingManager.sendModActionFile(this.client, context.guild, "purge", messages.length, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(
+			this.client,
+			interaction.guild,
+			"purge",
+			messages.length,
+			`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`,
+			interaction.channel as GuildTextBasedChannel,
+			interaction.user,
+		);
 
-		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: messages.length }));
+		return interaction.reply(await this.client.bulbutils.translate("purge_success", interaction.guild?.id, { count: messages.length }));
 	}
 }
