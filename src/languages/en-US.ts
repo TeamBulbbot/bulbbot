@@ -455,8 +455,7 @@ export default {
 	crossban_reason_audit: "Crossban from: {{originalGuild.name}} ({{originalGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 
 	banpool_missing_access_not_found: "{{emote_warn}} That pool does not exists our you are missing access to view it",
-	banpool_missing_logging:
-		"{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `configure logging banpool_logs <channel>` command to setup a logging channel.",
+	banpool_missing_logging: "{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `/configure` command to setup a logging channel.",
 
 	banpool_create_name_exists: "{{emote_warn}} That banpool name already exists, please choose another one",
 	banpool_create_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` created a new banpool with the name **{{name}}**",
