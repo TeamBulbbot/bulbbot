@@ -2,6 +2,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "discord-api-types/v10";
 import create from "./banpool/create";
+import invite from "./banpool/invite";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -10,7 +11,7 @@ export default class extends ApplicationCommand {
 			description: "Manage banpools",
 			type: ApplicationCommandType.ChatInput,
 			options: [],
-			subCommands: [create],
+			subCommands: [create, invite],
 			command_permissions: ["ADMINISTRATOR"],
 			client_permissions: ["BAN_MEMBERS"],
 		});

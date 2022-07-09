@@ -454,7 +454,7 @@ export default {
 		"{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{originalGuild.name}}** `({{originalGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
 	crossban_reason_audit: "Crossban from: {{originalGuild.name}} ({{originalGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 
-	banpool_missing_access_not_found: "{{emote_warn}} That pool does not exists our you are missing access to view it",
+	banpool_missing_access_not_found: "{{emote_fail}} You do not have access to the banpool **{{pool}}** or the banpool does not exist",
 	banpool_missing_logging: "{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `/configure` command to setup a logging channel.",
 
 	banpool_create_name_exists: "{{emote_warn}} That banpool name already exists, please choose another one",
@@ -473,7 +473,7 @@ export default {
 	banpool_invite_message: "Press the green button to generate your banpool invite code",
 	banpool_invite_success_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` created a banpool invite for **{{name}}** that expires <t:{{expireTime}}:R>",
 	banpool_invite_reply:
-		"Here is your banpool code `{{code}}` for the **{{name}}** banpool. Keep it safe until the other server uses it to join. It will expire <t:{{expireTime}}:R> and only has **one** use. The other server can use the `banpool join {{code}}` command to join the pool",
+		"{{emote_success}} Here is your banpool code `{{code}}` for the **{{name}}** banpool.\n{{emote_wrench}} Keep the code safe until the other server uses it to join. The code will expire <t:{{expireTime}}:R> and only has **one** use. The other server can use the `/banpool join {{code}}` command to join the pool",
 
 	banpool_join_unable_to_find: "{{emote_warn}} Unable to find an invite with that code",
 	banpool_join_own_guild: "{{emote_warn}} You can't join your own banpool",
