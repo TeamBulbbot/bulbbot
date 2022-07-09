@@ -37,7 +37,10 @@ export default class extends ApplicationSubCommand {
 		const user = interaction.options.getUser("user") as User;
 		const amount = interaction.options.getInteger("amount") || 100;
 
-		await interaction.reply(await this.client.bulbutils.translate("archive_started_search", interaction.guild?.id, {}));
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("archive_started_search", interaction.guild?.id, {}),
+			ephemeral: true,
+		});
 
 		let archive: string = await this.client.bulbutils.translate("archive_header_format", interaction.guild?.id, {});
 
@@ -55,7 +58,8 @@ export default class extends ApplicationSubCommand {
 		});
 
 		writeFileSync(`${__dirname}/../../../../files/archive-data-${interaction.guild?.id}-${user.id}.txt`, archive);
-		return void (await interaction.editReply({
+		await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+		return void (await interaction.followUp({
 			content: await this.client.bulbutils.translate("archive_success", interaction.guild?.id, {
 				place: user.tag,
 				amountOfMessages: archiveUserData.length,
