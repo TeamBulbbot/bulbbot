@@ -1,5 +1,5 @@
 import BulbBotClient from "./BulbBotClient";
-import { CommandInteraction, Permissions, PermissionString } from "discord.js";
+import { CommandInteraction, ContextMenuInteraction, Permissions, PermissionString } from "discord.js";
 import { translateSlashCommands } from "../utils/InteractionCommands";
 import { APIApplicationCommandOption, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 import ApplicationSubCommand from "./ApplicationSubCommand";
@@ -13,7 +13,7 @@ interface ApplicationCommandConstructOptions {
 	subCommands?: ApplicationSubCommandClass[];
 	client_permissions?: PermissionString[];
 	command_permissions?: PermissionString[];
-	options?: (APIApplicationCommandOption & Pick<any, any>)[];
+	options?: (APIApplicationCommandOption & Pick<any, any>)[] | null;
 	devOnly?: boolean;
 	ownerOnly?: boolean;
 }
@@ -92,7 +92,7 @@ export default class ApplicationCommand {
 		return permsBigInt !== 0n ? permsBigInt.toString() : null;
 	}
 
-	public async run(_interaction: CommandInteraction): Promise<void> {
+	public async run(_interaction: CommandInteraction | ContextMenuInteraction): Promise<void> {
 		throw new Error("Method not implemented.");
 	}
 }

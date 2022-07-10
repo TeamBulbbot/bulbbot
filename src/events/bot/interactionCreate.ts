@@ -1,10 +1,6 @@
 import Event from "../../structures/Event";
 import { Guild, Interaction } from "discord.js";
-import warn from "../../interactions/context/warn";
-import infSearch from "../../interactions/context/infSearch";
-import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
-import clean from "../../interactions/context/clean";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { developers } from "../../Config";
@@ -32,26 +28,14 @@ export default class extends Event {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
+			const contextMenuCommands = {
+				Warn: this.client.commands.get("Warn"),
+			};
+
 			if (!interaction.guildId) return;
-			const channel = this.client.guilds.cache.get(interaction.guildId)?.channels.cache.get(interaction.channelId);
-			const message = channel?.isText() && (await channel.messages.fetch(interaction.targetId));
+			const command = contextMenuCommands[interaction.commandName];
 
-			if (
-				!message ||
-				!interaction.guild ||
-				(await this.client.bulbutils.resolveUserHandleFromInteraction(
-					interaction,
-					await this.client.bulbutils.checkUserFromInteraction(interaction, await interaction.guild.members.fetch(message.author.id)),
-					message.author,
-				))
-			)
-				return;
-
-			//Context commands
-			if (interaction.commandName === "List all Infractions") await infSearch(this.client, interaction, message);
-			else if (interaction.commandName === "Warn") await warn(this.client, interaction, message);
-			else if (interaction.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
-			else if (interaction.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+			await command.run(interaction);
 		} else if (interaction.isCommand()) {
 			// Slash commands
 			const command = this.client.commands.get(interaction.commandName);
