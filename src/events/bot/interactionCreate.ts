@@ -28,14 +28,11 @@ export default class extends Event {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			const contextMenuCommands = {
-				Warn: this.client.commands.get("Warn"),
-			};
-
 			if (!interaction.guildId) return;
-			const command = contextMenuCommands[interaction.commandName];
 
-			await command.run(interaction);
+			const command = this.client.commands.get(interaction.commandName);
+
+			await command?.run(interaction);
 		} else if (interaction.isCommand()) {
 			// Slash commands
 			const command = this.client.commands.get(interaction.commandName);
