@@ -13,7 +13,7 @@ interface ApplicationCommandConstructOptions {
 	subCommands?: ApplicationSubCommandClass[];
 	client_permissions?: PermissionString[];
 	command_permissions?: PermissionString[];
-	options?: APIApplicationCommandOption[];
+	options?: (APIApplicationCommandOption & Pick<any, any>)[];
 	devOnly?: boolean;
 	ownerOnly?: boolean;
 }
