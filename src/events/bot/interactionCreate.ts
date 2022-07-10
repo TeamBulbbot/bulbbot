@@ -5,7 +5,6 @@ import infSearch from "../../interactions/context/infSearch";
 import mute from "../../interactions/context/mute";
 import infraction from "../../interactions/select/infraction";
 import clean from "../../interactions/context/clean";
-import { getCommandContext } from "../../structures/CommandContext";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { developers } from "../../Config";
@@ -29,16 +28,12 @@ export default class extends Event {
 			return;
 		}
 
-		const context = await getCommandContext(interaction);
-		if (!context.guild) return;
-		if (this.client.blacklist.get(context.guild.id)) return;
-		context.prefix = (await databaseManager.getConfig(context.guild)).prefix;
-
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			const channel = this.client.guilds.cache.get(context.guild.id)?.channels.cache.get(context.channelId);
+			if (!interaction.guildId) return;
+			const channel = this.client.guilds.cache.get(interaction.guildId)?.channels.cache.get(interaction.channelId);
 			const message = channel?.isText() && (await channel.messages.fetch(interaction.targetId));
 
 			if (
@@ -53,13 +48,13 @@ export default class extends Event {
 				return;
 
 			//Context commands
-			if (context.commandName === "List all Infractions") await infSearch(this.client, interaction, message);
-			else if (context.commandName === "Warn") await warn(this.client, interaction, message);
-			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
-			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+			if (interaction.commandName === "List all Infractions") await infSearch(this.client, interaction, message);
+			else if (interaction.commandName === "Warn") await warn(this.client, interaction, message);
+			else if (interaction.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
+			else if (interaction.commandName === "Clean All Messages") await clean(this.client, interaction, message);
 		} else if (interaction.isCommand()) {
 			// Slash commands
-			const command = context.commandName && this.client.commands.get(context.commandName);
+			const command = this.client.commands.get(interaction.commandName);
 
 			if (!command) {
 				// Shouldn't be possible because we shouldn't register commands that we aren't prepared
@@ -69,9 +64,7 @@ export default class extends Event {
 
 			if (interaction.options.getSubcommand(false)) {
 				const subCommand = command.subCommands.find((subCommand) => subCommand.name === interaction.options.getSubcommand(false));
-				if (subCommand) {
-					return subCommand.run(interaction);
-				}
+				if (subCommand) return subCommand.run(interaction);
 			}
 
 			const missing = command.validateClientPermissions(interaction);
