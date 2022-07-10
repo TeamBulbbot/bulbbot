@@ -82,6 +82,7 @@ export default {
 		inviteinfo_guild_or_member_null:
 			"{{emote_fail}} An error occurred while attempting to parse the selected Invite. The Invite Guild, Interaction Guild or Interaction Member could not be resolved to non-null values.",
 		db_inf_id_null: "{{emote_fail}} An error occurred while trying to kick the user. The returned Infraction ID was null or the Member could not be kicked.",
+		settings_db_null: "{{emote_fail}} An error occurred while trying to retrieve the settings. The returned settings object was null or undefined.",
 	},
 	global_words: {
 		none: "none",
