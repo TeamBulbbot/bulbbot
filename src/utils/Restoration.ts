@@ -18,11 +18,12 @@ export default class {
 		const reminders: any = await getAllReminders();
 		for (let i = 0; i < reminders.length; i++) {
 			const reminder = reminders[i];
-			if ((reminder.expireTime - Math.floor(Date.now() / 1000)) * 1000 < 0) client.log.client(`[CLIENT - REMINDERS] [#${reminder.id}] Old reminder, sending it out now to ${reminder.userId}`);
+			if ((parseInt(reminder.expireTime) - Math.floor(Date.now() / 1000)) * 1000 < 0)
+				client.log.client(`[CLIENT - REMINDERS] [#${reminder.id}] Old reminder, sending it out now to ${reminder.userId}`);
 
 			setTimeout(async () => {
 				if (!(await getReminder(reminder.id))) {
-					deleteReminder(reminder.id);
+					await deleteReminder(reminder.id);
 					return;
 				}
 
@@ -65,8 +66,8 @@ export default class {
 					});
 				}
 
-				deleteReminder(reminder.id);
-			}, (reminder.expireTime - Math.floor(Date.now() / 1000)) * 1000);
+				await deleteReminder(reminder.id);
+			}, (parseInt(reminder.expireTime) - Math.floor(Date.now() / 1000)) * 1000);
 		}
 
 		client.log.client(`[CLIENT - REMINDERS] Successfully handled ${reminders.length} reminder(s)`);

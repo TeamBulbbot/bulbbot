@@ -1,37 +1,44 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message } from "discord.js";
+import { CommandInteraction } from "discord.js";
 import ReminderManager from "../../../utils/managers/ReminderManager";
-import { NonDigits } from "../../../utils/Regex";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
-const { deleteUserReminder }: ReminderManager = new ReminderManager();
+const reminderManager: ReminderManager = new ReminderManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
-			name: "remove",
-			aliases: ["yeet", "delete"],
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["id:Number"],
-			usage: "<id>",
-			description: "Removes a reminder by its ID.",
+			name: "delete",
+			description: "Delete a reminder.",
+			options: [
+				{
+					name: "id",
+					description: "The ID of the reminder to delete.",
+					type: ApplicationCommandOptionType.Integer,
+					required: true,
+					min_value: 1,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		// TODO: Avoid the Number constructor unless we have a specific reason. It can cause unexpected behavior for the unfamiliar
-		const reminderId = Number(args[0].replace(NonDigits, ""));
-		const allowedToDelete = await deleteUserReminder(reminderId, context.author.id);
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const reminderId: number = interaction.options.getInteger("id") as number;
+		const allowedToDelete = await reminderManager.deleteUserReminder(reminderId, interaction.user.id);
 
 		if (!allowedToDelete)
-			return context.channel.send(
-				await this.client.bulbutils.translate("remind_remove_unable_to_find", context.guild?.id, {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("remind_remove_unable_to_find", interaction.guild?.id, {
 					reminderId,
 				}),
-			);
-		else context.channel.send(await this.client.bulbutils.translate("remind_remove_removed", context.guild?.id, { reminderId }));
+				ephemeral: true,
+			});
+		else
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("remind_remove_removed", interaction.guild?.id, { reminderId }),
+				ephemeral: true,
+			});
 	}
 }

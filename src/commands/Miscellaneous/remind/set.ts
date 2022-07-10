@@ -85,14 +85,14 @@ export default class extends ApplicationSubCommand {
 
 		collector?.on("collect", async (i: ButtonInteraction) => {
 			if (i.customId === "dm") {
-				reminder = await reminderManager.createReminder(message, duration, interaction.user.id, "", "");
+				reminder = await reminderManager.createReminder(message, unixDuration, interaction.user.id, "", "");
 				await i.reply({
 					content: await this.client.bulbutils.translate("remind_set_select_dm", interaction.guild?.id, { duration: unixDuration }),
 					ephemeral: true,
 				});
 			} else {
 				await i.reply(await this.client.bulbutils.translate("remind_set_select_channel", interaction.guild?.id, { duration: unixDuration }));
-				reminder = await reminderManager.createReminder(message, duration, interaction.user.id, interaction.channel?.id as Snowflake, (await i.fetchReply())?.id as Snowflake);
+				reminder = await reminderManager.createReminder(message, unixDuration, interaction.user.id, interaction.channel?.id as Snowflake, (await i.fetchReply())?.id as Snowflake);
 			}
 
 			await interaction.editReply({ components: [row2] });
