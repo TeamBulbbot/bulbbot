@@ -1,35 +1,56 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Guild, Message } from "discord.js";
+import { CommandInteraction, Guild, Snowflake } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
 import LoggingManager from "../../../utils/managers/LoggingManager";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const { sendEventLog }: LoggingManager = new LoggingManager();
 const { joinBanpool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "join",
-			minArgs: 1,
-			maxArgs: -1,
-			argList: ["code:String"],
-			usage: "<code>",
-			clearance: 100,
-			description: "Join a banpool.",
+			description: "Join a banpool using a generated invite code",
+			options: [
+				{
+					name: "code",
+					description: "The invite code to join the banpool.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+					min_length: 10,
+					max_length: 10,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const code: string = args[0];
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const code: string = interaction.options.getString("code") as string;
 		const invite = this.client.banpoolInvites.get(code) as { guild: any; banpool: any; inviter: any } & Record<string, any>;
 
-		if (!(context.guild?.id && (await hasBanpoolLog(context.guild.id)))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (!invite) return context.channel.send(await this.client.bulbutils.translate("banpool_join_unable_to_find", context.guild.id, {}));
-		if (invite.guild.id === context.guild.id) return context.channel.send(await this.client.bulbutils.translate("banpool_join_own_guild", context.guild.id, {}));
-		if (!(await joinBanpool(invite, context.guild.id))) return context.channel.send(await this.client.bulbutils.translate("banpool_join_error", context.guild.id, {}));
+		if (!(await hasBanpoolLog(interaction.guild?.id as Snowflake)))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("banpool_missing_logging", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (!invite)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("banpool_join_unable_to_find", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (invite.guild.id === interaction.guild?.id)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("banpool_join_own_guild", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (!(await joinBanpool(invite, interaction.guild?.id as Snowflake)))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("banpool_join_error", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		const poolguild: Guild = await this.client.guilds.fetch(invite.guild.id);
 
@@ -37,24 +58,24 @@ export default class extends SubCommand {
 			this.client,
 			poolguild,
 			"banpool",
-			await this.client.bulbutils.translate("banpool_join_log_og", context.guild.id, {
-				user: context.user,
+			await this.client.bulbutils.translate("banpool_join_log_og", interaction.guild?.id, {
+				user: interaction.user,
 				invite,
-				guild: context.guild,
+				guild: interaction.guild as Guild,
 			}),
 		);
 		await sendEventLog(
 			this.client,
-			context.guild,
+			interaction.guild,
 			"banpool",
-			await this.client.bulbutils.translate("banpool_join_log", context.guild.id, {
-				user: context.user,
+			await this.client.bulbutils.translate("banpool_join_log", interaction.guild?.id, {
+				user: interaction.user,
 				invite,
 			}),
 		);
 
-		context.channel.send(await this.client.bulbutils.translate("banpool_join_success", context.guild.id, {}));
-
 		this.client.banpoolInvites.delete(invite.banpool.code);
+
+		return interaction.reply(await this.client.bulbutils.translate("banpool_join_success", interaction.guild?.id, {}));
 	}
 }
