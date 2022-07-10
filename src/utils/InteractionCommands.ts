@@ -21,7 +21,9 @@ export async function registerSlashCommands(client: BulbBotClient) {
 	const isDev: boolean = process.env.ENVIRONMENT === "dev";
 
 	const data = () => {
-		const cmds: Omit<APIApplicationCommand, "id" | "application_id" | "version">[] = [];
+		const publicCmds: Omit<APIApplicationCommand, "id" | "application_id" | "version">[] = [];
+		const developerCmds: Omit<APIApplicationCommand, "id" | "application_id" | "version">[] = [];
+
 		for (const command of client.commands.values()) {
 			if (command.subCommands.length) {
 				for (const subCommand of command.subCommands) {
@@ -36,7 +38,7 @@ export async function registerSlashCommands(client: BulbBotClient) {
 				}
 			}
 
-			cmds.push({
+			const cmd = {
 				name: command.name,
 				type: command.type as ApplicationCommandType,
 				description: command.description,
@@ -45,27 +47,35 @@ export async function registerSlashCommands(client: BulbBotClient) {
 				default_member_permissions: command.default_member_permissions,
 				dm_permission: command.dm_permission,
 				options: command.options,
-			});
+			};
+
+			command.devOnly ? developerCmds.push(cmd) : publicCmds.push(cmd);
 		}
 
-		return cmds;
+		return { publicCmds, developerCmds };
 	};
 
+	const { publicCmds, developerCmds } = data();
 	if (!process.env.DEVELOPER_GUILD) throw new Error("missing process.env.DEVELOPER_GUILD, add that to the .env file");
-	const options = {
-		method: "PUT",
-		url: `${discordApi}/applications/${client.user?.id}/${isDev ? `guilds/${process.env.DEVELOPER_GUILD}/` : ""}commands`,
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bot ${process.env.TOKEN}`,
-		},
-		data: data(),
-	} as const;
 
-	try {
-		const response = await axios.request(options);
-		client.log.info(`[APPLICATION COMMANDS] Registered all of the slash commands, amount: ${response.data.length}`);
-	} catch (err: any) {
-		client.log.error(`[APPLICATION COMMANDS] Failed to register slash commands: ${err.response.statusText} (${err})`);
-	}
+	const response = await axios.put(
+		`${discordApi}/applications/${client.user?.id}/${isDev ? `guilds/${process.env.DEVELOPER_GUILD}/` : ""}commands`,
+		isDev ? [...publicCmds, ...developerCmds] : publicCmds,
+		{
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bot ${process.env.TOKEN}`,
+			},
+		},
+	);
+
+	if (!isDev)
+		await axios.put(`${discordApi}/applications/${client.user?.id}/guilds/${process.env.DEVELOPER_GUILD}/commands`, developerCmds, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bot ${process.env.TOKEN}`,
+			},
+		});
+
+	client.log.info(`[APPLICATION COMMANDS] Registered all of the slash commands, amount: ${response.data.length}`);
 }
