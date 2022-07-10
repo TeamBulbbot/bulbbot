@@ -67,6 +67,7 @@
 	"global_cannot_action_role_equal": "{{emote_warn}} You cannot perform this action on **{{target.tag}}** `({{target.id}})` as you do not have a higher role than them!",
 	"global_cannot_action_role_equal_bot": "{{emote_warn}} I cannot perform this action on **{{target.tag}}** `({{target.id}})` as I don't have a higher role than them!",
 	"global_cannot_action_bot_self": "{{emote_warn}} You cannot perform this action on the bot!",
+	"global_command_owner_only": "{{emote_warn}} This command is only available to the server owner!",
 	"global_premium_only": "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
 	"event_interaction_dm_command": "{{emote_warn}} Slash commands cannot be used in DMs.",
 	"event_message_args_unexpected": "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",

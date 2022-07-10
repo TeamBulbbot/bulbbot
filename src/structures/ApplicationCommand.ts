@@ -15,6 +15,7 @@ interface ApplicationCommandConstructOptions {
 	command_permissions?: PermissionString[];
 	options?: APIApplicationCommandOption[];
 	devOnly?: boolean;
+	ownerOnly?: boolean;
 }
 
 export type ApplicationSubCommandClass = typeof ApplicationSubCommand;
@@ -32,6 +33,7 @@ export default class ApplicationCommand {
 	public readonly client_permissions: PermissionString[];
 	public options: APIApplicationCommandOption[];
 	public readonly devOnly: boolean;
+	public readonly ownerOnly: boolean;
 
 	constructor(
 		client: BulbBotClient,
@@ -46,6 +48,7 @@ export default class ApplicationCommand {
 			command_permissions = [],
 			options,
 			devOnly = false,
+			ownerOnly = false,
 		}: ApplicationCommandConstructOptions,
 	) {
 		this.client = client;
@@ -60,6 +63,7 @@ export default class ApplicationCommand {
 		this.default_member_permissions = this.computePermissions();
 		this.options = this.appendTranslation(options);
 		this.devOnly = devOnly;
+		this.ownerOnly = ownerOnly;
 	}
 
 	private applyTranslation(options: APIApplicationCommandOption[], name: string) {

@@ -101,6 +101,8 @@ export default {
 	global_cannot_action_role_equal_bot: "{{emote_warn}} I cannot perform this action on **{{target.tag}}** `({{target.id}})` as I don't have a higher role than them!",
 	global_cannot_action_bot_self: "{{emote_warn}} You cannot perform this action on the bot!",
 
+	global_command_owner_only: "{{emote_warn}} This command is only available to the server owner!",
+
 	global_premium_only: "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
 
 	// TODO: Remove, disabled by default

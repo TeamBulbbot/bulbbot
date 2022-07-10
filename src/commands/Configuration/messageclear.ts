@@ -1,85 +1,86 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { MessageActionRow, MessageButton, ButtonInteraction } from "discord.js";
-import { supportInvite } from "../../Config";
+import { ButtonInteraction, CommandInteraction, Guild, MessageActionRow, MessageButton } from "discord.js";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
 const { purgeMessagesInGuild, getServerArchive } = new DatabaseManager();
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "clears X amount of messages from the database in the server",
-			category: "Configuration",
-			clearance: 100,
-			usage: "<days>",
-			examples: ["messageclear 5", "messageclear 10"],
-			argList: ["days:Number"],
-			minArgs: 1,
-			maxArgs: -1,
+			description: "Clears the selected amount of messages from our message database",
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "days",
+					type: ApplicationCommandOptionType.Integer,
+					description: "The amount of days to clear messages from",
+					required: true,
+					min_value: 1,
+					max_value: 30,
+				},
+			],
+			ownerOnly: true,
+			command_permissions: ["ADMINISTRATOR"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]) {
-		const days = parseInt(args[0]);
-		if (isNaN(Number(days)))
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[0],
-					arg_expected: "days:number",
-					usage: "messageclear <days>",
-				}),
-			);
-		if (days < 0) return context.channel.send(await this.client.bulbutils.translate("messageclear_few_than_0days", context.guild?.id, {}));
-		if (days > 30) return context.channel.send(await this.client.bulbutils.translate("messageclear_more_than_30days", context.guild?.id, {}));
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const days: number = interaction.options.getInteger("days") as number;
 
-		if (!context.guild?.id) return context.channel.send(await this.client.bulbutils.translate("global_error.unknown", context.guild?.id, { discord_invite: supportInvite }));
+		if (interaction.user.id !== interaction.guild?.ownerId)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_command_owner_only", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
-		const amountOfMessages = (await getServerArchive(context.guild, days)).length;
+		const amountOfMessages = (await getServerArchive(interaction.guild as Guild, days)).length;
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
 			new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
 		]);
 
-		if (amountOfMessages === 0) return context.channel.send(await this.client.bulbutils.translate("messageclear_found_no_message", context.guild.id, {}));
+		if (amountOfMessages === 0)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("messageclear_found_no_message", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
-		const confirmMsg = await context.channel.send({
-			content: await this.client.bulbutils.translate("messageclear_about_to_clear", context.guild.id, {
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("messageclear_about_to_clear", interaction.guild?.id, {
 				messages: amountOfMessages,
 			}),
 			components: [row],
+			ephemeral: true,
 		});
 
-		const collector = confirmMsg.createMessageComponentCollector({ time: 30000 });
+		const collector = interaction.channel?.createMessageComponentCollector({ time: 30000 });
 
-		collector.on("collect", async (interaction: ButtonInteraction) => {
-			if (interaction.user.id !== context.author.id) {
-				return interaction.reply({ content: await this.client.bulbutils.translate("global_not_invoked_by_user", context.guild?.id, {}), ephemeral: true });
-			}
-
-			if (interaction.customId === "confirm") {
+		collector?.on("collect", async (i: ButtonInteraction) => {
+			if (i.customId === "confirm") {
 				collector.stop("clicked");
-				if (context.guild?.id) await purgeMessagesInGuild(context.guild, days);
+				await purgeMessagesInGuild(interaction.guild as Guild, days);
 
-				return await interaction.update({
-					content: await this.client.bulbutils.translate("messageclear_success_delete", context.guild?.id, { messages: amountOfMessages }),
-					components: [],
-				});
+				await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+				return void (await interaction.followUp({
+					content: await this.client.bulbutils.translate("messageclear_success_delete", interaction.guild?.id, { messages: amountOfMessages }),
+				}));
 			} else {
 				collector.stop("clicked");
-				return interaction.update({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+				return void (await interaction.editReply({
+					content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}),
+					components: [],
+				}));
 			}
 		});
 
-		collector.on("end", async (_: ButtonInteraction, reason: string) => {
+		collector?.on("end", async (_: ButtonInteraction, reason: string) => {
 			if (reason !== "time") return;
 
-			await confirmMsg.edit({ content: await this.client.bulbutils.translate("global_execution_cancel", context.guild?.id, {}), components: [] });
+			await interaction.editReply({ content: await this.client.bulbutils.translate("global_execution_cancel", interaction.guild?.id, {}), components: [] });
 			return;
 		});
-
-		return;
 	}
 }

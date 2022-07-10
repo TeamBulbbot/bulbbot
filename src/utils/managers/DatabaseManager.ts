@@ -438,6 +438,7 @@ export default class DatabaseManager {
 		const daysInMs = days * 24 * 60 * 60 * 1000;
 		const daysAgo = new Date(now - daysInMs);
 		const db = await this.getGuild(guild);
+
 		return await prisma.messageLog.findMany({
 			where: {
 				bulbGuildId: db.id,
