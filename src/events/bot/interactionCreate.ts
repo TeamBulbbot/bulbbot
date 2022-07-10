@@ -8,6 +8,7 @@ import clean from "../../interactions/context/clean";
 import { getCommandContext } from "../../structures/CommandContext";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
+import { developers } from "../../Config";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -75,6 +76,12 @@ export default class extends Event {
 
 			const missing = command.validateClientPermissions(interaction);
 			const { premiumGuild } = await databaseManager.getConfig(interaction.guild as Guild);
+
+			if (command.devOnly && !developers.includes(interaction.user.id))
+				return interaction.reply({
+					content: "This maze was not meant for you",
+					ephemeral: true,
+				});
 
 			if (!premiumGuild && command.premium)
 				return interaction.reply({
