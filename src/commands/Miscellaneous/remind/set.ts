@@ -1,5 +1,5 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageButton, MessageMentionOptions, Snowflake, TextChannel, User } from "discord.js";
+import { ButtonInteraction, CommandInteraction, Interaction, Message, MessageActionRow, MessageButton, MessageMentionOptions, Snowflake, TextChannel, User } from "discord.js";
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
@@ -79,7 +79,8 @@ export default class extends ApplicationSubCommand {
 			ephemeral: true,
 		});
 
-		const collector = interaction.channel?.createMessageComponentCollector({ time: 15000 });
+		const filter = (i: Interaction) => interaction.user.id === i.user.id;
+		const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1, time: 15000, componentType: "BUTTON" });
 		let reminder: any;
 
 		collector?.on("collect", async (i: ButtonInteraction) => {
