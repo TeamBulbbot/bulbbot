@@ -34,8 +34,8 @@ export default class extends ApplicationCommand {
 					required: false,
 				},
 			],
-			command_permissions: ["MUTE_MEMBERS"],
-			client_permissions: ["MUTE_MEMBERS"],
+			command_permissions: ["MODERATE_MEMBERS"],
+			client_permissions: ["MODERATE_MEMBERS"],
 		});
 	}
 
