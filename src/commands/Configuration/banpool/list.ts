@@ -1,30 +1,32 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message, MessageEmbed } from "discord.js";
+import { CommandInteraction, MessageEmbed, Snowflake } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
 import { embedColor } from "../../../Config";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import moment from "moment";
 
 const { getPools }: BanpoolManager = new BanpoolManager();
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "list",
-			clearance: 100,
+			description: "List all banpools",
+			options: [],
 		});
 	}
 
-	public async run(context: CommandContext, _args: string[]): Promise<void | Message> {
-		const data = context.guild?.id ? await getPools(context.guild.id) : [];
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const data = await getPools(interaction.guild?.id as Snowflake);
 		const desc: string[] = [];
 
 		for (let i = 0; i < data.length; i++) {
 			const pool = data[i];
 			desc.push(
-				await this.client.bulbutils.translate("banpool_list_desc", context.guild?.id, {
+				await this.client.bulbutils.translate("banpool_list_desc", interaction.guild?.id, {
 					name: pool.name,
-					createdAt: new Date(pool.createdAt).getTime() / 1000,
+					createdAt: moment(pool.createdAt).unix(),
 				}),
 			);
 		}
@@ -33,13 +35,15 @@ export default class extends SubCommand {
 			.setColor(embedColor)
 			.setDescription(desc.join("\n\n"))
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		await context.channel.send({ embeds: [embed] });
+		return interaction.reply({
+			embeds: [embed],
+		});
 	}
 }
