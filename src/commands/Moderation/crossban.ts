@@ -1,4 +1,17 @@
-import { CommandInteraction, Guild, GuildBan, GuildMember, MessageActionRow, MessageSelectMenu, MessageSelectOptionData, Permissions, SelectMenuInteraction, Snowflake, User } from "discord.js";
+import {
+	CommandInteraction,
+	Guild,
+	GuildBan,
+	GuildMember,
+	Interaction,
+	MessageActionRow,
+	MessageSelectMenu,
+	MessageSelectOptionData,
+	Permissions,
+	SelectMenuInteraction,
+	Snowflake,
+	User,
+} from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import BanpoolManager from "../../utils/managers/BanpoolManager";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
@@ -66,7 +79,9 @@ export default class extends ApplicationCommand {
 			components: [row],
 			ephemeral: true,
 		});
-		const collector = interaction.channel?.createMessageComponentCollector({ time: 60_000 });
+
+		const filter = (i: Interaction) => interaction.user.id === i.user.id;
+		const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60_000, max: 1, componentType: "SELECT_MENU" });
 
 		collector?.on("collect", async (i: SelectMenuInteraction) => {
 			const poolGuilds = await banpoolManager.getGuildIdsFromPools(

@@ -1,4 +1,4 @@
-import { ButtonInteraction, Collection, CommandInteraction, Guild, GuildMember, MessageActionRow, MessageButton, User } from "discord.js";
+import { ButtonInteraction, Collection, CommandInteraction, Guild, GuildMember, Interaction, MessageActionRow, MessageButton, User } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import { BanType } from "../../utils/types/BanType";
 import BulbBotClient from "../../structures/BulbBotClient";
@@ -112,7 +112,8 @@ export default class extends ApplicationCommand {
 				ephemeral: true,
 			});
 
-			const collector = interaction.channel?.createMessageComponentCollector({ time: 10000, max: 1 });
+			const filter = (i: Interaction) => interaction.user.id === i.user.id;
+			const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 10000, max: 1, componentType: "BUTTON" });
 
 			collector?.on("collect", async (i: ButtonInteraction) => {
 				if (i.customId === "confirm") {
