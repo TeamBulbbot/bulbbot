@@ -4,7 +4,7 @@ import { ButtonInteraction, CommandInteraction, Guild, MessageActionRow, Message
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
-const { purgeMessagesInGuild, getServerArchive } = new DatabaseManager();
+const databaseManager: DatabaseManager = new DatabaseManager();
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -36,7 +36,7 @@ export default class extends ApplicationCommand {
 				ephemeral: true,
 			});
 
-		const amountOfMessages = (await getServerArchive(interaction.guild as Guild, days)).length;
+		const amountOfMessages = (await databaseManager.getServerArchive(interaction.guild as Guild, days)).length;
 		const row = new MessageActionRow().addComponents([
 			new MessageButton().setStyle("SUCCESS").setLabel("Confirm").setCustomId("confirm"),
 			new MessageButton().setStyle("DANGER").setLabel("Cancel").setCustomId("cancel"),
@@ -61,7 +61,7 @@ export default class extends ApplicationCommand {
 		collector?.on("collect", async (i: ButtonInteraction) => {
 			if (i.customId === "confirm") {
 				collector.stop("clicked");
-				await purgeMessagesInGuild(interaction.guild as Guild, days);
+				await databaseManager.purgeMessagesInGuild(interaction.guild as Guild, days);
 
 				await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
 				return void (await interaction.followUp({
