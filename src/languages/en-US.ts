@@ -463,7 +463,7 @@ export default {
 
 	banpool_delete_message: "{{emote_warn}} Are you sure you want to delete this banpool? This action __**cannot**__ be undone.",
 	banpool_delete_success_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` deleted a banpool with the name **{{name}}**",
-	banpool_delete_success: "{{emote_success}} Successfully deleted the banpool",
+	banpool_delete_success: "{{emote_success}} Successfully deleted a banpool with the name of **{{name}}**",
 
 	banpool_info_top: "Banpool data from {{name}} | Servers subscribed: {{amountOfServers}}",
 	banpool_info_desc: "**Server ID:** `{{guildId}}`\n**Joined:** <t:{{createdAt}}> (<t:{{createdAt}}:R>)",
