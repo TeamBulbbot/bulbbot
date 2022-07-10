@@ -364,6 +364,7 @@
 	"banpool_leave_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` left the banpool with the name **{{name}}**",
 	"banpool_leave_success": "{{emote_success}} Successfully left the selected banpool",
 	"banpool_remove_not_found": "{{emote_warn}} Unable to find a banpool with that name",
+	"banpool_remove_self": "{{emote_warn}} You can't remove yourself from your own banpool",
 	"banpool_remove_message": "{{emote_warn}} Are you sure you want to remove that server from the banpool?",
 	"banpool_remove_log_kicked": "{{emote_warn}} Your server has been removed from the banpool with the name **{{name}}**",
 	"banpool_remove_log": "{{emote_warn}} **{{user.tag}}** `({{user.id}})` removed the server **{{guild.name}}** `({{guild.id}})` from the banpool **{{name}}**",

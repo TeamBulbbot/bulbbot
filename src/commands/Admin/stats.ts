@@ -1,13 +1,11 @@
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, MessageEmbed } from "discord.js";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "discord-api-types/v9";
-import { MessageEmbed } from "discord.js";
-import { embedColor } from "../../Config";
+import { discordApi, embedColor } from "../../Config";
 import * as Emotes from "../../emotes.json";
 import BulbBotClient from "../../structures/BulbBotClient";
 import axios from "axios";
 import prisma from "../../prisma";
-import { discordApi } from "../../Config";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {

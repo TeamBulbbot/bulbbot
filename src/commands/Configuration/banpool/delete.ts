@@ -20,6 +20,7 @@ export default class extends ApplicationSubCommand {
 					description: "The name of the banpool",
 					type: ApplicationCommandOptionType.String,
 					required: true,
+					max_length: 255,
 				},
 			],
 		});

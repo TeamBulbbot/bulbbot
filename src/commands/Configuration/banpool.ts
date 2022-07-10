@@ -5,6 +5,7 @@ import _delete from "./banpool/delete";
 import create from "./banpool/create";
 import invite from "./banpool/invite";
 import list from "./banpool/list";
+import remove from "./banpool/remove";
 
 export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -13,7 +14,7 @@ export default class extends ApplicationCommand {
 			description: "Manage banpools",
 			type: ApplicationCommandType.ChatInput,
 			options: [],
-			subCommands: [create, invite, list, _delete],
+			subCommands: [create, invite, list, _delete, remove],
 			command_permissions: ["ADMINISTRATOR"],
 			client_permissions: ["BAN_MEMBERS"],
 		});
