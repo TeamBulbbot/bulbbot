@@ -1,55 +1,67 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message } from "discord.js";
+import { CommandInteraction, Snowflake } from "discord.js";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import BanpoolManager from "../../../utils/managers/BanpoolManager";
 import LoggingManager from "../../../utils/managers/LoggingManager";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 
 const { doesBanpoolExist, createBanpool, joinBanpool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "create",
-			minArgs: 1,
-			maxArgs: -1,
-			argList: ["pool-name:String"],
-			usage: "<pool-name>",
-			clearance: 100,
-			description: "Create a new banpool.",
+			description: "Create a banpool",
+			options: [
+				{
+					name: "name",
+					type: ApplicationCommandOptionType.String,
+					description: "The name of the banpool",
+					required: true,
+					max_length: 255,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const name: string = args[0];
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const name = interaction.options.getString("name") as string;
 
-		if (!(context.guild?.id && (await hasBanpoolLog(context.guild.id)))) return context.channel.send(await this.client.bulbutils.translate("banpool_missing_logging", context.guild?.id, {}));
-		if (await doesBanpoolExist(name)) return context.channel.send(await this.client.bulbutils.translate("banpool_create_name_exists", context.guild.id, {}));
+		if (!(await hasBanpoolLog(interaction.guild?.id as Snowflake)))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("banpool_missing_logging", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (await doesBanpoolExist(name))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("banpool_create_name_exists", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
-		await createBanpool(context.guild.id, name);
-		!(await joinBanpool(
+		await createBanpool(interaction.guild?.id as Snowflake, name);
+		await joinBanpool(
 			{
 				banpool: {
 					name,
 				},
 			},
-			context.guild.id,
-		));
+			interaction.guild?.id as Snowflake,
+		);
 
 		await sendEventLog(
 			this.client,
-			context.guild,
+			interaction.guild,
 			"banpool",
-			await this.client.bulbutils.translate("banpool_create_log", context.guild.id, {
-				user: context.user,
+			await this.client.bulbutils.translate("banpool_create_log", interaction.guild?.id, {
+				user: interaction.user,
 				name,
 			}),
 		);
 
-		context.channel.send(
-			await this.client.bulbutils.translate("banpool_create_success", context.guild.id, {
+		return interaction.reply(
+			await this.client.bulbutils.translate("banpool_create_success", interaction.guild?.id, {
 				name,
 			}),
 		);

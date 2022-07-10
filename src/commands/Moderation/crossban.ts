@@ -33,7 +33,7 @@ export default class extends ApplicationCommand {
 				},
 			],
 			premium: true,
-			command_permissions: ["BAN_MEMBERS", "ADMINISTRATOR"],
+			command_permissions: ["BAN_MEMBERS", "MANAGE_GUILD"],
 			client_permissions: ["BAN_MEMBERS"],
 		});
 	}
