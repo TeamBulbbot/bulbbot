@@ -8,7 +8,6 @@ import AutoMod from "../../utils/AutoMod";
 import ResolveCommandOptions from "../../utils/types/ResolveCommandOptions";
 import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import ExperimentManager from "../..//utils/managers/ExperimentManager";
-import { commandUsage } from "../../utils/Prometheus";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 const loggingManager: LoggingManager = new LoggingManager();
@@ -81,7 +80,6 @@ export default class extends Event {
 		command.devOnly || command.subDevOnly ? null : await loggingManager.sendCommandLog(this.client, context.guild, context.author, context.channel.id, used);
 
 		const serverOverrides: string[] = await getAllGuildExperiments(context.guild.id);
-		commandUsage(context, command, false);
 
 		try {
 			if (command.overrides.length > 0) {

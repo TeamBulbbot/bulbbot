@@ -1,5 +1,5 @@
 import prom from "prom-client";
-import Command from "../structures/Command";
+import Command from "../structures/ApplicationCommand";
 import express, { Request } from "express";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
@@ -12,20 +12,10 @@ const websocket = new prom.Counter({
 	help: "Analytics regarding the websocket",
 	labelNames: ["event"],
 });
-const userMessages = new prom.Counter({
-	name: "bulbbot_user_messages",
-	help: "Analytics regarding user messages",
-	labelNames: ["authorId"],
-});
-const guildMessages = new prom.Counter({
-	name: "bulbbot_guild_messages",
-	help: "Analytics regarding guild messages",
-	labelNames: ["guildId"],
-});
 const userCommandUsage = new prom.Counter({
 	name: "bulbbot_command_usage",
-	help: "Analytics regarding user commands",
-	labelNames: ["commandName", "isSlashCommand"],
+	help: "Analytics regarding  commands",
+	labelNames: ["commandName"],
 });
 const api = new prom.Counter({
 	name: "bulbbot_api_requests",
@@ -33,8 +23,8 @@ const api = new prom.Counter({
 	labelNames: ["route", "method", "status"],
 });
 
-export function commandUsage(_: any, command: Command, isSlash: boolean) {
-	userCommandUsage.inc({ commandName: command.getFullCommandName(), isSlashCommand: isSlash.toString() });
+export function commandUsage(command: Command) {
+	userCommandUsage.inc({ commandName: command.name });
 }
 
 export async function startPrometheus(client: any): Promise<void> {
@@ -49,7 +39,7 @@ export async function startPrometheus(client: any): Promise<void> {
 
 	prom.collectDefaultMetrics({ register });
 
-	const metric = [latency, cachedUsers, websocket, userMessages, guildMessages, guildCount, guildMemberCount, userCommandUsage, api];
+	const metric = [latency, cachedUsers, websocket, guildCount, guildMemberCount, userCommandUsage, api];
 	metric.forEach((metric) => {
 		register.registerMetric(metric);
 	});
@@ -72,8 +62,6 @@ export async function startPrometheus(client: any): Promise<void> {
 	client.on("raw", (packet: any) => {
 		if (packet.t === null) return;
 		websocket.inc({ event: packet.t });
-
-		if (packet.t === "MESSAGE_CREATE") guildMessages.inc({ guildId: packet.d.guild_id });
 	});
 
 	app.listen(PORT, () => {
