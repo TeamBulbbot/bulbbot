@@ -1,7 +1,6 @@
-import { CommandInteraction, ContextMenuInteraction, GuildChannel, GuildMember, Interaction, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import { CommandInteraction, ContextMenuInteraction, GuildChannel, GuildMember, Interaction, Message, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
-import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
 import i18next from "i18next";
@@ -14,9 +13,6 @@ import prisma from "../prisma";
 
 export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
 	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };
-type LowercaseUserHandle = Lowercase<
-	Exclude<keyof typeof UserHandle, "SUCCESS" | "CANNOT_ACTION_ROLE_EQUAL" | "CANNOT_ACTION_ROLE_HIGHER" | "CANNOT_ACTION_USER_ROLE_EQUAL_BOT" | "CANNOT_ACTION_USER_ROLE_HIGHER_BOT">
->;
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -221,57 +217,7 @@ export default class {
 		);
 	}
 
-	/**
-	 * @deprecated
-	 *
-	 * Will be removed once all commands are migrated to Slash commands
-	 */
-	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
-		if (
-			context.author.id === context.guild?.ownerId &&
-			context.guild.me &&
-			context.guild.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < context.guild.me.roles.highest.rawPosition
-		)
-			return UserHandle.SUCCESS;
-
-		if (user.id === context.author.id) return UserHandle.CANNOT_ACTION_SELF;
-
-		if (context.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
-
-		if (context.member?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
-
-		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
-
-		if (context.member?.roles && user.roles.highest.rawPosition >= context.member.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
-
-		if (context.guild?.me && context.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
-
-		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
-
-		return UserHandle.SUCCESS;
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * Will be removed once all commands are migrated to Slash commands
-	 */
-	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
-		if (handle === UserHandle.SUCCESS) return false;
-
-		// here are two exclusive cases, that use the same message as the other ones
-		if (handle === UserHandle.CANNOT_ACTION_ROLE_EQUAL || handle === UserHandle.CANNOT_ACTION_ROLE_HIGHER)
-			await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
-		if (handle === UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT || handle === UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT)
-			await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
-
-		const userHandle = UserHandle[handle].toLocaleLowerCase() as LowercaseUserHandle;
-		await context.channel.send(await this.translate(`global_${userHandle}`, context.guild?.id, { target: user }));
-		return true;
-	}
-
-	async checkUserFromInteraction(interaction: Interaction, user: GuildMember): Promise<UserHandle> {
+	async checkUser(interaction: Interaction, user: GuildMember): Promise<UserHandle> {
 		const author = await interaction.guild?.members.fetch(interaction.user.id);
 
 		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
@@ -299,7 +245,7 @@ export default class {
 		return UserHandle.SUCCESS;
 	}
 
-	async resolveUserHandleFromInteraction(interaction: CommandInteraction | ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
+	async resolveUserHandle(interaction: CommandInteraction | ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
 				await interaction.reply({ content: await this.translate("global_cannot_action_self", interaction.guild?.id, {}), ephemeral: true });
@@ -422,7 +368,7 @@ export default class {
 		}[action];
 	}
 
-	public async logError(err: Error, context?: CommandContext, eventName?: string, runArgs?: any): Promise<void> {
+	public async logError(err: Error, message?: Message, eventName?: string, runArgs?: any): Promise<void> {
 		if (process.env.ENVIRONMENT === "dev") throw err;
 		const embed = new MessageEmbed()
 			.setColor("RED")
@@ -432,10 +378,10 @@ export default class {
 			.addField("String", `${err.name}: ${err.message}`, true)
 			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
 
-		if (context) {
-			embed.addField("Guild ID", `${context.guild?.id}`, true);
-			embed.addField("User", context.author.id, true);
-			embed.addField("Message Content", context.content, true);
+		if (message) {
+			embed.addField("Guild ID", `${message.guild?.id}`, true);
+			embed.addField("User", message.author.id, true);
+			embed.addField("Message Content", message.content, true);
 		} else if (runArgs) {
 			const argsDesc: string[] = [];
 			for (const [k, v] of Object.entries<any>(runArgs)) {

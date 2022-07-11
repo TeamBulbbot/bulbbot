@@ -1,12 +1,14 @@
 import Event from "../../structures/Event";
-import { Guild, GuildMember, Interaction } from "discord.js";
+import { Guild, GuildMember, Interaction, Snowflake } from "discord.js";
 import infraction from "../../interactions/select/infraction";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { developers } from "../../Config";
 import { commandUsage } from "../../utils/Prometheus";
+import LoggingManager from "../../utils/managers/LoggingManager";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
+const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -32,7 +34,7 @@ export default class extends Event {
 			if (!interaction.guildId) return;
 
 			const member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.targetId)) as GuildMember;
-			if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
+			if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 
 			const command = this.client.commands.get(interaction.commandName);
 
@@ -49,6 +51,9 @@ export default class extends Event {
 
 			if (interaction.options.getSubcommand(false)) {
 				const subCommand = command.subCommands.find((subCommand) => subCommand.name === interaction.options.getSubcommand(false));
+
+				await loggingManager.sendCommandLog(this.client, interaction.guild, interaction.user, interaction.channel?.id as Snowflake, `/${command.name} ${interaction.options.getSubcommand(false)}`);
+
 				if (subCommand) return subCommand.run(interaction);
 			}
 
@@ -74,6 +79,9 @@ export default class extends Event {
 				});
 
 			commandUsage(command);
+
+			await loggingManager.sendCommandLog(this.client, interaction.guild, interaction.user, interaction.channel?.id as Snowflake, `/${command.name}`);
+
 			// Should we add a .catch to handle uncaught errors thrown in command run methods?
 			await command.run(interaction);
 		}

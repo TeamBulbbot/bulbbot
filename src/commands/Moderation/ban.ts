@@ -59,8 +59,7 @@ export default class extends ApplicationCommand {
 
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
 		if (user instanceof User) clean = 0;
-		if (user instanceof GuildMember)
-			if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, user), user.user)) return;
+		if (user instanceof GuildMember) if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, user), user.user)) return;
 
 		// @ts-expect-error
 		const banList: Collection<string, { user: User; reason: string }> | undefined = await interaction.guild?.bans.fetch();

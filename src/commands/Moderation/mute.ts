@@ -51,7 +51,7 @@ export default class extends ApplicationCommand {
 			});
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
 		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
-		if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
+		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 		if ((duration && duration <= parse("0s")) || duration === null)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),

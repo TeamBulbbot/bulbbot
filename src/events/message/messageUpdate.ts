@@ -2,7 +2,6 @@ import Event from "../../structures/Event";
 import { Message, Util } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
-import CommandContext, { getCommandContext } from "../../structures/CommandContext";
 import AutoMod from "../../utils/AutoMod";
 import prisma from "../../prisma";
 
@@ -36,9 +35,7 @@ export default class extends Event {
 			if (newMessage.author?.id === this.client.user?.id) return;
 			if (oldMessage.content === newMessage.content) return;
 
-			const context: CommandContext = await getCommandContext(newMessage);
-
-			await AutoMod(this.client, context);
+			await AutoMod(this.client, newMessage);
 
 			oldMessageContent = oldMessage.content;
 		}

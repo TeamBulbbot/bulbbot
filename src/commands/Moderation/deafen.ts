@@ -40,7 +40,7 @@ export default class extends ApplicationCommand {
 				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
-		if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
+		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 		if (!member.voice.channel)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("global_not_in_voice", interaction.guild?.id, { target: member.user }),

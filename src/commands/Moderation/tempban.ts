@@ -56,7 +56,7 @@ export default class extends ApplicationCommand {
 				ephemeral: true,
 			});
 
-		if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
+		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 
 		if (duration <= parse("0s"))
 			return interaction.reply({
