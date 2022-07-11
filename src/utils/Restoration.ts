@@ -6,7 +6,6 @@ import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { BanType } from "./types/BanType";
 import { setTimeout } from "safe-timers";
-import { tryIgnore } from "./helpers";
 
 const { getAllReminders, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
 const { getAllTemBans, deleteTempBan }: TempbanManager = new TempbanManager();
@@ -15,10 +14,10 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 export default class {
 	async loadReminders(client: BulbBotClient): Promise<void> {
 		client.log.client("[CLIENT - REMINDERS] Starting to restore reminders...");
-		const reminders: any = await getAllReminders();
+		const reminders = await getAllReminders();
 		for (let i = 0; i < reminders.length; i++) {
 			const reminder = reminders[i];
-			if ((parseInt(reminder.expireTime) - Math.floor(Date.now() / 1000)) * 1000 < 0)
+			if ((parseInt(reminder.expireTime.toString()) - Math.floor(Date.now() / 1000)) * 1000 < 0)
 				client.log.client(`[CLIENT - REMINDERS] [#${reminder.id}] Old reminder, sending it out now to ${reminder.userId}`);
 
 			setTimeout(async () => {
@@ -32,7 +31,7 @@ export default class {
 					let channel: TextChannel;
 
 					try {
-						channel = await client.channels.fetch(reminder.channelId);
+						channel = await client.channels.fetch(reminder.channelId as string);
 					} catch (_) {
 						client.log.client(`[CLIENT - REMINDERS] [#${reminder.id}] Bot was was unable to find the channel: ${reminder.channelId}`);
 						return;
@@ -49,25 +48,25 @@ export default class {
 					try {
 						message = await channel.messages.fetch(reminder.messageId);
 						message.reply({
-							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt.toString())).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
 							options,
 						});
 					} catch (_) {
 						channel.send({
-							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt.toString())).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
 							options,
 						});
 					}
 				} else {
 					const user: User = await client.users.fetch(reminder.userId);
 
-					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch((_) => {
+					user.send(`⏰ Your reminder from **${moment(Date.parse(reminder.createdAt.toString())).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``).catch((_) => {
 						client.log.info(`[REMIND - DM] Unable to dm ${user.tag} (${user.id}) with the reminder of ${reminder.reason}`);
 					});
 				}
 
 				await deleteReminder(reminder.id);
-			}, (parseInt(reminder.expireTime) - Math.floor(Date.now() / 1000)) * 1000);
+			}, Math.max((parseInt(reminder.expireTime.toString()) - Math.floor(Date.now() / 1000)) * 1000, 0));
 		}
 
 		client.log.client(`[CLIENT - REMINDERS] Successfully handled ${reminders.length} reminder(s)`);
@@ -75,12 +74,12 @@ export default class {
 
 	async loadTempBans(client: BulbBotClient): Promise<void> {
 		client.log.client("[CLIENT - TEMP BANS] Starting to restore temp bans...");
-		const tempbans: any = await getAllTemBans();
+		const tempbans = await getAllTemBans();
 		for (let i = 0; i < tempbans.length; i++) {
-			const tempban: any = tempbans[i];
+			const tempban = tempbans[i];
 			let guild: Guild;
 			try {
-				guild = await client.guilds.fetch(tempban.gId);
+				guild = await client.guilds.fetch(tempban.guildId);
 			} catch (_) {
 				client.log.client(`[CLIENT - TEMP BANS] [#${tempban.id}] Bot was kicked from the guild, can't unban the user: ${tempban.targetId}`);
 				await deleteTempBan(tempban.id);
@@ -96,11 +95,10 @@ export default class {
 				continue;
 			}
 
-			setTimeout(async function () {
+			setTimeout(async () => {
 				if (!guild.me || !client.user) return;
 
-				await tryIgnore(
-					infractionsManager.unban,
+				await infractionsManager.unban(
 					client,
 					guild,
 					BanType.TEMP,
@@ -116,7 +114,7 @@ export default class {
 				);
 
 				await deleteTempBan(tempban.id);
-			}, tempban.expireTime - Date.now());
+			}, Math.max((parseInt(tempban.expireTime.toString()) - Math.floor(Date.now() / 1000)) * 1000, 0));
 		}
 
 		client.log.client(`[CLIENT - TEMP BANS] Successfully handled ${tempbans.length} temp bans(s)`);

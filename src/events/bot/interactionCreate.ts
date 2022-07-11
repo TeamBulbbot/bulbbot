@@ -1,5 +1,5 @@
 import Event from "../../structures/Event";
-import { Guild, Interaction } from "discord.js";
+import { Guild, GuildMember, Interaction } from "discord.js";
 import infraction from "../../interactions/select/infraction";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
@@ -29,6 +29,9 @@ export default class extends Event {
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
 			if (!interaction.guildId) return;
+
+			const member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.targetId)) as GuildMember;
+			if (await this.client.bulbutils.resolveUserHandleFromInteraction(interaction, await this.client.bulbutils.checkUserFromInteraction(interaction, member), member.user)) return;
 
 			const command = this.client.commands.get(interaction.commandName);
 
