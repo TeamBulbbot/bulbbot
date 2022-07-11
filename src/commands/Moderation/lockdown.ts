@@ -1,57 +1,44 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { Channel, GuildChannel, Message, ThreadChannel } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import { BaseGuildVoiceChannel, CommandInteraction, Role, TextChannel } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from "discord-api-types/v10";
 
-export default class extends Command {
+export default class extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Locks/unlocks a selected channel",
-			category: "Moderation",
-			usage: "<channel> <true|false>",
-			examples: ["lockdown 742095521962786858 true", "lockdown #general false"],
-			argList: ["channel:ChannelText", "lock:Boolean"],
-			minArgs: 2,
-			maxArgs: 2,
-			clearance: 50,
-			userPerms: ["MANAGE_CHANNELS"],
-			clientPerms: ["MANAGE_CHANNELS"],
+			description: "Locks/unlocks the selected channel",
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "channel",
+					description: "The channel to lock/unlock",
+					type: ApplicationCommandOptionType.Channel,
+					required: true,
+					channel_types: [ChannelType.GuildText],
+				},
+				{
+					name: "lock",
+					description: "Whether to lock or unlock the channel",
+					type: ApplicationCommandOptionType.Boolean,
+					required: true,
+				},
+			],
+			command_permissions: ["MANAGE_CHANNELS"],
+			client_permissions: ["MANAGE_CHANNELS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void | Message | Channel> {
-		const channel: GuildChannel | ThreadChannel | null | undefined = await this.client.bulbfetch.getChannel(context.guild?.channels, args[0].replace(NonDigits, ""));
-		if (!channel || channel.type !== "GUILD_TEXT") {
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id),
-					arg_provided: args[0],
-					arg_expected: "channel:ChannelText",
-					usage: this.usage,
-				}),
-			);
-		}
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const channel = interaction.options.getChannel("channel") as TextChannel | BaseGuildVoiceChannel;
+		const lock = interaction.options.getBoolean("lock") as boolean;
 
-		if (args[1] !== "true" && args[1] !== "false") {
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[1],
-					arg_expected: "lock:Boolean",
-					usage: this.usage,
-				}),
-			);
-		}
-
-		if (!context.guild) return;
-
-		if (args[1] === "true") {
-			await context.channel.send(await this.client.bulbutils.translate("lockdown_locked", context.guild.id, { channel }));
-			return channel.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: false });
+		if (lock) {
+			await channel.permissionOverwrites.edit(interaction.guild?.roles.everyone as Role, { SEND_MESSAGES: false });
+			return interaction.reply(await this.client.bulbutils.translate("lockdown_locked", interaction.guild?.id, { channel }));
 		} else {
-			await channel.permissionOverwrites.edit(context.guild.roles.everyone, { SEND_MESSAGES: null });
-			return await context.channel.send(await this.client.bulbutils.translate("lockdown_unlocked", context.guild.id, { channel }));
+			await channel.permissionOverwrites.edit(interaction.guild?.roles.everyone as Role, { SEND_MESSAGES: null });
+			return interaction.reply(await this.client.bulbutils.translate("lockdown_unlocked", interaction.guild?.id, { channel }));
 		}
 	}
 }
