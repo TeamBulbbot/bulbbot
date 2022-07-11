@@ -4,6 +4,7 @@ import infraction from "../../interactions/select/infraction";
 import reminders from "../../interactions/select/reminders";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
 import { developers } from "../../Config";
+import { commandUsage } from "../../utils/Prometheus";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
@@ -72,6 +73,7 @@ export default class extends Event {
 					ephemeral: true,
 				});
 
+			commandUsage(command);
 			// Should we add a .catch to handle uncaught errors thrown in command run methods?
 			await command.run(interaction);
 		}
