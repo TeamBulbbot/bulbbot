@@ -61,7 +61,8 @@ export default class ApplicationCommand {
 		this.subCommands = subCommands?.map((sc) => new sc(this.client, this));
 		this.client_permissions = client_permissions;
 		this.default_member_permissions = this.computePermissions();
-		this.options = this.appendTranslation(options);
+		// @ts-expect-error
+		this.options = !devOnly && type === ApplicationCommandType.ChatInput ? this.appendTranslation(options) : options;
 		this.devOnly = devOnly;
 		this.ownerOnly = ownerOnly;
 	}
@@ -76,15 +77,18 @@ export default class ApplicationCommand {
 		}
 	}
 
+	private appendTranslation(options: Maybe<APIApplicationCommandOption[]>): APIApplicationCommandOption[] {
+		if (!options) return [];
+
+		if (this.subCommands) for (const subCmd of this.subCommands) this.applyTranslation(options ?? [], `sc_${subCmd.parent.name}`);
+		else this.applyTranslation(options ?? [], `sc_${this.name}`);
+
+		return options;
+	}
+
 	public validateClientPermissions(interaction: CommandInteraction): string {
 		const missing = this.client_permissions.filter((permission) => !interaction.guild?.me?.permissions.has(permission));
 		return missing.join(", ");
-	}
-
-	private appendTranslation(options: Maybe<APIApplicationCommandOption[]>): APIApplicationCommandOption[] {
-		if (!options) return [];
-		this.applyTranslation(options ?? [], `sc_${this.name}`);
-		return options;
 	}
 
 	private computePermissions(): string | null {
