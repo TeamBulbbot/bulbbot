@@ -7,7 +7,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import axios from "axios";
 import prisma from "../../prisma";
 
-export default class extends ApplicationCommand {
+export default class Stats extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

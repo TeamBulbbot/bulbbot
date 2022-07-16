@@ -9,7 +9,7 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const { getUserArchive }: DatabaseManager = new DatabaseManager();
 
-export default class extends ApplicationSubCommand {
+export default class ArchiveUser extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "user",

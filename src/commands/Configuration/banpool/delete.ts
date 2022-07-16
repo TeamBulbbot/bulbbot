@@ -9,7 +9,7 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 const { haveAccessToPool, deletePool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationSubCommand {
+export default class BanpoolDelete extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "delete",

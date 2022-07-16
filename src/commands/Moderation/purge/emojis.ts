@@ -10,7 +10,7 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationSubCommand {
+export default class PurgeEmojis extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "emojis",

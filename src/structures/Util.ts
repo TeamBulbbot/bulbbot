@@ -36,7 +36,7 @@ export default class {
 				if (!this.isClass(File.default)) throw new CommandException(`Command ${name} is not an instance of Command`);
 
 				const command = new File.default(this.client, name);
-				if (!(command instanceof ApplicationCommand)) continue; //throw new CommandException(`Command ${name} doesn't belong in commands!`);
+				if (!(command instanceof ApplicationCommand)) throw new CommandException(`Command ${name} doesn't belong in commands!`);
 
 				this.client.commands.set(command.name, command);
 			}

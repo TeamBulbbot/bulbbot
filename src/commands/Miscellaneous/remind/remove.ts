@@ -7,7 +7,7 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const reminderManager: ReminderManager = new ReminderManager();
 
-export default class extends ApplicationSubCommand {
+export default class ReminderRemove extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "delete",

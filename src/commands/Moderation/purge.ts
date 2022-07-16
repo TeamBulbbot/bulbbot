@@ -11,7 +11,7 @@ import images from "./purge/images";
 import until from "./purge/until";
 import between from "./purge/between";
 
-export default class extends ApplicationCommand {
+export default class Purge extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

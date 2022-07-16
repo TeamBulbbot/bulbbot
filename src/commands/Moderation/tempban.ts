@@ -12,7 +12,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-ap
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const tempbanManager: TempbanManager = new TempbanManager();
 
-export default class extends ApplicationCommand {
+export default class Tempban extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

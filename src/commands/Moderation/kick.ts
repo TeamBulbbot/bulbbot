@@ -7,7 +7,7 @@ import { BanType } from "../../utils/types/BanType";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationCommand {
+export default class Kick extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

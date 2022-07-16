@@ -5,7 +5,7 @@ import moment from "moment";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
-export default class extends ApplicationCommand {
+export default class SnowflakeCommand extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

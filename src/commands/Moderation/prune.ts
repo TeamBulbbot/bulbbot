@@ -7,7 +7,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-ap
 
 const { sendModActionPreformatted }: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationCommand {
+export default class Prune extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

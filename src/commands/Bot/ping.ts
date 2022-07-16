@@ -4,7 +4,7 @@ import { CommandInteraction, Message, MessageEmbed } from "discord.js";
 import * as Config from "../../Config";
 import { ApplicationCommandType } from "discord-api-types/v9";
 
-export default class extends ApplicationCommand {
+export default class Ping extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

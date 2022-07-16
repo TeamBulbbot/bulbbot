@@ -10,7 +10,7 @@ import { NonDigits } from "../../../utils/Regex";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationSubCommand {
+export default class PurgeBetween extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "between",

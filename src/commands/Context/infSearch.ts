@@ -6,7 +6,7 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationCommand {
+export default class ContextInfSearch extends ApplicationCommand {
 	constructor(client: BulbBotClient) {
 		super(client, {
 			name: "List all Infractions",

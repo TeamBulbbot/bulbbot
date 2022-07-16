@@ -6,7 +6,7 @@ import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } 
 import { embedColor } from "../../Config";
 import { ChannelMessage } from "../../utils/Regex";
 
-export default class extends ApplicationCommand {
+export default class MessageInfo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

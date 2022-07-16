@@ -9,7 +9,7 @@ import InfractionsManager from "../../utils/managers/InfractionsManager";
 const databaseManager: DatabaseManager = new DatabaseManager();
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationCommand {
+export default class ContextMute extends ApplicationCommand {
 	constructor(client: BulbBotClient) {
 		super(client, {
 			name: "Quick Mute (1h)",

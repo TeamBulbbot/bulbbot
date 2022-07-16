@@ -10,7 +10,7 @@ import moment from "moment";
 
 const { haveAccessToPool, getPoolData }: BanpoolManager = new BanpoolManager();
 
-export default class extends ApplicationSubCommand {
+export default class BanpoolInfo extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "info",

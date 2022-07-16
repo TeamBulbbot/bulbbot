@@ -9,7 +9,7 @@ import update from "./infraction/update";
 import modsearch from "./infraction/modsearch";
 import offendersearch from "./infraction/offendersearch";
 
-export default class extends ApplicationCommand {
+export default class Infraction extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name: name,

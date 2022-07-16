@@ -5,7 +5,7 @@ import set from "./remind/set";
 import list from "./remind/list";
 import remove from "./remind/remove";
 
-export default class extends ApplicationCommand {
+export default class Reminder extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

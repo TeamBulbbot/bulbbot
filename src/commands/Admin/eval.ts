@@ -5,15 +5,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
-function genString(l: number) {
-	let res = "";
-	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (let i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
-
-	return Buffer.from(res).toString("base64").substring(0, l);
-}
-
-export default class extends ApplicationCommand {
+export default class Eval extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
@@ -55,7 +47,9 @@ export default class extends ApplicationCommand {
 			description += `\n**Type:** ${typeof evaled}`;
 			if (typeof evaled !== "string") evaled = inspect(evaled);
 
-			evaled = this.client.token ? evaled.replace(new RegExp(this.client.token, "g"), `${Buffer.from(this.client.user?.id || "").toString("base64")}.${genString(7)}.${genString(27)}`) : evaled;
+			evaled = this.client.token
+				? evaled.replace(new RegExp(this.client.token, "g"), `${Buffer.from(this.client.user?.id || "").toString("base64")}.${this.genString(7)}.${this.genString(27)}`)
+				: evaled;
 
 			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {
@@ -92,5 +86,13 @@ export default class extends ApplicationCommand {
 				  ]
 				: [],
 		});
+	}
+
+	private genString(l: number): string {
+		let res = "";
+		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (let i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+
+		return Buffer.from(res).toString("base64").substring(0, l);
 	}
 }

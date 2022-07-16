@@ -8,7 +8,7 @@ import LoggingManager from "../../utils/managers/LoggingManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationCommand {
+export default class ContextClean extends ApplicationCommand {
 	constructor(client: BulbBotClient) {
 		super(client, {
 			name: "Clean all Messages",

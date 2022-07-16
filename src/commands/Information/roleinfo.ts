@@ -4,7 +4,7 @@ import ApplicationCommand from "../../structures/ApplicationCommand";
 import { APIRole, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { resolveGuildRoleMoreSafe } from "../../utils/helpers";
 
-export default class extends ApplicationCommand {
+export default class RoleInfo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

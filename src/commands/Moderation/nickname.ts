@@ -6,7 +6,7 @@ import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } 
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationCommand {
+export default class Nickname extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

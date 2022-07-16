@@ -9,7 +9,7 @@ import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 const { doesBanpoolExist, createBanpool, joinBanpool, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 const { sendEventLog }: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationSubCommand {
+export default class BanpoolCreate extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "create",

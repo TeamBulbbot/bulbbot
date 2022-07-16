@@ -55,7 +55,7 @@ const PERM_STRINGS = [
 const log10 = (num: number) => (num ? Math.log10(num) : 0);
 const loglen = ~~log10(PERM_STRINGS.length);
 
-export default class extends ApplicationCommand {
+export default class Permissions extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

@@ -25,7 +25,7 @@ const infractionsManager: InfractionsManager = new InfractionsManager();
 const banpoolManager: BanpoolManager = new BanpoolManager();
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationCommand {
+export default class Crossban extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

@@ -5,7 +5,7 @@ import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } 
 import { resolveGuildMemberMoreSafe } from "../../utils/helpers";
 import { embedColor } from "../../Config";
 
-export default class extends ApplicationCommand {
+export default class Avatar extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

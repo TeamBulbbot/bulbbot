@@ -8,7 +8,7 @@ import { ApplicationCommandType } from "discord-api-types/v10";
 
 const databaseManager = new DatabaseManager();
 
-export default class extends ApplicationCommand {
+export default class Settings extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

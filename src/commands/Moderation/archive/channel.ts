@@ -9,7 +9,7 @@ import { ApplicationCommandOptionType, ChannelType } from "discord-api-types/v10
 
 const { getChannelArchive }: DatabaseManager = new DatabaseManager();
 
-export default class extends ApplicationSubCommand {
+export default class ArchiveChannel extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "channel",

@@ -8,7 +8,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-ap
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationCommand {
+export default class Mute extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

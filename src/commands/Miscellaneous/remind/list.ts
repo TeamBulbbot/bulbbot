@@ -7,7 +7,7 @@ import ApplicationCommand from "../../../structures/ApplicationCommand";
 
 const { listUserReminders }: ReminderManager = new ReminderManager();
 
-export default class extends ApplicationSubCommand {
+export default class ReminderList extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "list",

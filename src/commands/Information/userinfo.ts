@@ -11,7 +11,8 @@ import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } 
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
-export default class extends ApplicationCommand {
+
+export default class UserInfo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

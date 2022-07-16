@@ -9,7 +9,7 @@ import { APIGuildMember, ApplicationCommandOptionType } from "discord-api-types/
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends ApplicationSubCommand {
+export default class PurgeUser extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "user",

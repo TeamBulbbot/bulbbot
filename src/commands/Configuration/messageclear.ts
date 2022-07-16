@@ -6,7 +6,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-ap
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
-export default class extends ApplicationCommand {
+export default class MessageClear extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

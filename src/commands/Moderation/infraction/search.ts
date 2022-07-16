@@ -7,7 +7,7 @@ import ApplicationCommand from "../../../structures/ApplicationCommand";
 
 const infractionManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationSubCommand {
+export default class InfractionSearch extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "search",

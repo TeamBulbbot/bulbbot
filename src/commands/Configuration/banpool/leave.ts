@@ -9,7 +9,7 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 const { sendEventLog }: LoggingManager = new LoggingManager();
 const { isGuildInPool, haveAccessToPool, leavePool, getCreatorGuild, hasBanpoolLog }: BanpoolManager = new BanpoolManager();
 
-export default class extends ApplicationSubCommand {
+export default class BanpoolLeave extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "leave",

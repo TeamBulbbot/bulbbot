@@ -4,7 +4,7 @@ import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "discord-api-types/v10";
 import BulbBotClient from "../../structures/BulbBotClient";
 
-export default class extends ApplicationCommand {
+export default class Configure extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

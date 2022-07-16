@@ -10,7 +10,7 @@ import info from "./banpool/info";
 import leave from "./banpool/leave";
 import join from "./banpool/join";
 
-export default class extends ApplicationCommand {
+export default class Banpool extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

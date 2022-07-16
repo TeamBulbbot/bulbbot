@@ -7,7 +7,7 @@ import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends ApplicationSubCommand {
+export default class InfractionOffenderSearch extends ApplicationSubCommand {
 	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "offendersearch",

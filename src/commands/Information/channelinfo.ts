@@ -3,10 +3,10 @@ import { CommandInteraction, GuildChannel, MessageActionRow, MessageButton, Mess
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { resolveGuildChannelMoreSafe } from "../../utils/helpers";
 import { APIChannel, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
-import { embedColor } from "../..//Config";
+import { embedColor } from "../../Config";
 import { isTextChannel } from "../../utils/typechecks";
 
-export default class extends ApplicationCommand {
+export default class ChannelInfo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,

@@ -4,7 +4,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import user from "./archive/user";
 import channel from "./archive/channel";
 
-export default class extends ApplicationCommand {
+export default class Archive extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
