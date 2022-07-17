@@ -8,18 +8,17 @@ A powerful Discord moderation bot with rich features allowing server Moderators 
 
 Click [here](https://bulbbot.rocks//invite) to invite Bulbbot to your server.
 
-The bot only uses [slash commands](https://docs.bulbbot.rocks/slash-commands) `/` which is the future of Discord bot commands.
+The bot only uses [slash commands](https://docs.bulbbot.rocks/basics/slash-commands) `/` which is the future of Discord bot commands.
 
 ## Main features include
 
-- Extensive [automoderation (automod)](https://docs.bulbbot.rocks/automod)
+- Extensive [automoderation (automod)](https://docs.bulbbot.rocks/configuration/automod)
   - Message/word filter
   - Mention spam
   - Website filter
   - Invite filtering
-- [Logging](https://docs.bulbbot.rocks/logs) (have logs of what is going on in your server)
-- [Infraction history](https://docs.bulbbot.rocks/infractions) (have logs on all of the moderation actions)
-- Fully customizable restrictions on commands with [clearance](https://docs.bulbbot.rocks/clearance)
+- [Logging](https://docs.bulbbot.rocks/configuration/logs) (have logs of what is going on in your server)
+- [Infraction history](https://docs.bulbbot.rocks/moderating/infractions) (have logs on all of the moderation actions)
 - 100% translation in 8 languages
 - A lot of utility commands
 - And a lot more
@@ -39,4 +38,4 @@ issues and questions over at our [support server](https://bulbbot.rocks/discord)
 
 **We offer 0 support on selfhosting the bot.**
 
-For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.rocks/setup-dev) that will help you setting it up.
+For a full and detailed list on how to setup a development environment see [this article](https://docs.bulbbot.rocks/guides/setup-dev) that will help you setting it up.

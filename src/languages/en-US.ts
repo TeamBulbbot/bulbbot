@@ -545,7 +545,7 @@ export default {
 	license_license:
 		"📜 This bot is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license, for more info see the full license **[here](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
 
-	privacy_policy: "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
+	privacy_policy: "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/legal/privacy-policy)**",
 
 	github_source_code: "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TeamBulbbot//Bulbbot)**",
 
@@ -640,10 +640,10 @@ export default {
 	infraction_interaction_placeholder: "No Infractions Selected",
 	infraction_interaction_description: "Click to view more info",
 
-	commands_help: "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
+	commands_help: "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/basics/command-list)**",
 
 	// TODO: Remove once all commands are migrated
-	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>",
+	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/basics/command-list>",
 
 	messageinfo_channel_not_found: "{{emote_warn}} Unable to find the channel in the messagelink you provided.",
 	messageinfo_message_not_found: "{{emote_warn}} Unable to find the message in the messagelink you provided.",

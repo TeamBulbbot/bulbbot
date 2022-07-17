@@ -20,6 +20,7 @@ export default class Banpool extends ApplicationCommand {
 			subCommands: [create, invite, list, _delete, remove, info, leave, join],
 			command_permissions: ["ADMINISTRATOR"],
 			client_permissions: ["BAN_MEMBERS"],
+			premium: true,
 		});
 	}
 }

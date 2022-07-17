@@ -26,7 +26,7 @@ export default class BanpoolCreate extends ApplicationSubCommand {
 		});
 	}
 
-	public async run(interaction: CommandInteraction): Promise<void> {
+	public async run(interaction: CommandInteraction) {
 		const name = interaction.options.getString("name") as string;
 
 		if (!(await hasBanpoolLog(interaction.guild?.id as Snowflake)))
@@ -60,7 +60,7 @@ export default class BanpoolCreate extends ApplicationSubCommand {
 			}),
 		);
 
-		return interaction.reply(
+		interaction.reply(
 			await this.client.bulbutils.translate("banpool_create_success", interaction.guild?.id, {
 				name,
 			}),
