@@ -183,9 +183,9 @@ model Infraction {
 }
 
 model MessageLog {
-  messageId   String    @id @db.VarChar(18)
-  channelId   String    @db.VarChar(18)
-  authorId    String    @db.VarChar(18)
+  messageId   String    @id @db.VarChar(19)
+  channelId   String    @db.VarChar(19)
+  authorId    String    @db.VarChar(19)
   authorTag   String    @db.VarChar(50)
   content     String?   @db.VarChar(4000)
   embed       Json?     @db.Json
