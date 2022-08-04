@@ -53,6 +53,7 @@ export default class {
 		const EMBEDDED: number = 1 << 17;
 		const GATEWAY_MESSAGE_CONTENT: number = 1 << 18;
 		const GATEWAY_MESSAGE_CONTENT_LIMITED: number = 1 << 19;
+		const SUPPORTS_SLASH_COMMANDS: number = 1 << 23;
 
 		if ((flag & GATEWAY_PRESENCE) == GATEWAY_PRESENCE) flags.push("GATEWAY_PRESENCE");
 		if ((flag & GATEWAY_PRESENCE_LIMITED) == GATEWAY_PRESENCE_LIMITED) flags.push("GATEWAY_PRESENCE_LIMITED");
@@ -62,11 +63,12 @@ export default class {
 		if ((flag & EMBEDDED) == EMBEDDED) flags.push("EMBEDDED");
 		if ((flag & GATEWAY_MESSAGE_CONTENT) == GATEWAY_MESSAGE_CONTENT) flags.push("GATEWAY_MESSAGE_CONTENT");
 		if ((flag & GATEWAY_MESSAGE_CONTENT_LIMITED) == GATEWAY_MESSAGE_CONTENT_LIMITED) flags.push("GATEWAY_MESSAGE_CONTENT_LIMITED");
+		if ((flag & SUPPORTS_SLASH_COMMANDS) == SUPPORTS_SLASH_COMMANDS) flags.push("SUPPORTS_SLASH_COMMANDS");
 
 		return flags;
 	}
 
-	public badges(bitfield: number) {
+	public userFlags(bitfield: number) {
 		const badges: string[] = [];
 
 		const staff: number = 1 << 0;
@@ -83,8 +85,10 @@ export default class {
 		const certified_mod: number = 1 << 18;
 		const spammer: number = 1 << 20;
 
+		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
+		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
 		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
@@ -92,12 +96,10 @@ export default class {
 		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.flags.HOUSE_BALANCE);
 		if ((bitfield & early_support) === early_support) badges.push(Emotes.flags.EARLY_SUPPORTER);
 		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
-		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
-		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 
-		return badges.map((i) => `${i}`).join(" ");
+		return badges;
 	}
 
 	public guildFeatures(guildFeatures: string[]) {

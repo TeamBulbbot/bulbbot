@@ -19,9 +19,9 @@ export default class InfractionsManager {
 				active,
 				timeout: timeout ? `${timeout}` : null,
 				reason,
-				target: target.tag,
+				target: `${target.username}#${target.discriminator}`,
 				targetId: target.id,
-				moderator: moderator.tag,
+				moderator: `${moderator.username}#${moderator.discriminator}`,
 				moderatorId: moderator.id,
 				bulbGuild: {
 					connect: {
