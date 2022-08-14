@@ -123,3 +123,27 @@ CREATE INDEX "tempbans_gId_idx" ON "tempbans"("gId");
 
 -- CreateIndex
 CREATE INDEX "tempbans_guildId_idx" ON "tempbans"("guildId");
+
+-- Drop Old Contraints
+ALTER TABLE "automods" ALTER COLUMN "websiteWhitelist" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "inviteWhitelist" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "wordBlacklist" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "wordBlacklistToken" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "ignoreChannels" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "ignoreRoles" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "ignoreUsers" DROP DEFAULT;
+ALTER TABLE "automods" ALTER COLUMN "avatarHashes" DROP DEFAULT;
+ALTER TABLE "guildConfigurations" ALTER COLUMN "quickReasons" DROP DEFAULT;
+ALTER TABLE "banpoolSubscribers" DROP CONSTRAINT "banpoolSubscribers_banpoolId_fkey";
+ALTER TABLE "banpools" DROP CONSTRAINT "banpools_guildId_fkey";
+ALTER TABLE "experiments" DROP CONSTRAINT "experiments_guildId_fkey";
+ALTER TABLE "guildModerationRoles" DROP CONSTRAINT "guildModerationRoles_guildId_fkey";
+ALTER TABLE "guildOverrideCommands" DROP CONSTRAINT "guildOverrideCommands_guildId_fkey";
+ALTER TABLE "guilds" DROP CONSTRAINT "guilds_automodId_fkey";
+ALTER TABLE "guilds" DROP CONSTRAINT "guilds_guildConfigurationId_fkey";
+ALTER TABLE "guilds" DROP CONSTRAINT "guilds_guildLoggingId_fkey";
+ALTER TABLE "infractions" DROP CONSTRAINT "infractions_guildId_fkey";
+ALTER TABLE "messageLogs" DROP CONSTRAINT "messageLogs_guildId_fkey";
+ALTER TABLE "starboardPosts" DROP CONSTRAINT "starboardPosts_starboardId_fkey";
+ALTER TABLE "tempbans" DROP CONSTRAINT "tempbans_guildId_fkey";
+ALTER TABLE "tempmutes" DROP CONSTRAINT "tempmutes_guildId_fkey";

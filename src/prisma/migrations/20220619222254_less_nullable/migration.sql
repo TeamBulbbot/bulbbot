@@ -6,6 +6,8 @@
   - Made the column `automodId` on table `guilds` required. This step will fail if there are existing NULL values in that column.
 
 */
+-- Has null ID for all three configs
+DELETE FROM "guilds" WHERE id = 909;
 -- AlterTable
 ALTER TABLE "guilds" ALTER COLUMN "guildConfigurationId" SET NOT NULL,
 ALTER COLUMN "guildLoggingId" SET NOT NULL,

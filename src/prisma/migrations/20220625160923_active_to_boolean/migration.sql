@@ -7,8 +7,8 @@
 -- AlterTable
 ALTER TABLE "infractions" ADD COLUMN "timeout" VarChar(255);
 UPDATE "infractions" SET "timeout" = "active";
-ALTER TABLE "infractions" DROP COLUMN "active",
-ADD COLUMN     "active" BOOLEAN NOT NULL;
+ALTER TABLE "infractions" DROP COLUMN "active";
+ALTER TABLE "infractions"  ADD COLUMN "active" BOOLEAN NOT NULL DEFAULT false;
 UPDATE "infractions" SET "active" = true WHERE "timeout" <> 'false';
 UPDATE "infractions" SET "active" = false WHERE "timeout" = 'false';
 UPDATE "infractions" SET "timeout" = NULL WHERE "timeout" = 'false' OR "timeout" = 'true';
