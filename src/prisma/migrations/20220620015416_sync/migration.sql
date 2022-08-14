@@ -11,7 +11,8 @@ ALTER TABLE "blacklists" ALTER COLUMN "createdAt" DROP DEFAULT;
 ALTER TABLE "experiments" ALTER COLUMN "createdAt" DROP DEFAULT;
 
 -- AlterTable
-ALTER TABLE "guildConfigurations" ALTER COLUMN "createdAt" DROP DEFAULT;
+ALTER TABLE "guildConfigurations" ADD COLUMN     "manualNicknameInf" BOOLEAN DEFAULT false,
+ALTER COLUMN "createdAt" DROP DEFAULT;
 
 -- AlterTable
 ALTER TABLE "guildLoggings" ALTER COLUMN "createdAt" DROP DEFAULT;
