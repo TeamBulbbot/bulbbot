@@ -1,82 +1,78 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { GuildMember, Message, Snowflake } from "discord.js";
-import { QuoteMarked, UserMentionAndID } from "../../utils/Regex";
+import { CommandInteraction, Guild, GuildMember, Snowflake } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { APIGuildMember, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends Command {
+export default class Nickname extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Nicknames a user from the current server",
-			category: "Moderation",
-			aliases: ["nick"],
-			usage: "<member> [nickname] [reason]",
-			argList: ["member:Member", "nickname:String", "reason:String"],
-			examples: ["nickname @Wumpus#0000 Nellys best friend"],
-			minArgs: 1,
-			maxArgs: -1,
-			clearance: 50,
-			clientPerms: ["MANAGE_NICKNAMES"],
+			description: "Change the nickname of a user.",
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "member",
+					description: "The member to change the nickname of.",
+					type: ApplicationCommandOptionType.User,
+					required: true,
+				},
+				{
+					name: "nickname",
+					description: "The new nickname of the user.",
+					type: ApplicationCommandOptionType.String,
+					required: false,
+					max_length: 32,
+				},
+				{
+					name: "reason",
+					description: "The reason for changing the nickname.",
+					type: ApplicationCommandOptionType.String,
+					required: false,
+				},
+			],
+			command_permissions: ["MANAGE_NICKNAMES"],
+			client_permissions: ["MANAGE_NICKNAMES"],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const argString: string = args.slice(1).join(" ");
-		UserMentionAndID.lastIndex = 0;
-		const match = UserMentionAndID.exec(args[0]);
-		if (!match)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-		const targetID: Snowflake = match[1] ?? match[2];
-		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		const nickmatch = QuoteMarked.exec(argString);
-		const nickname: string = (nickmatch ? nickmatch[1] : args[1]).trim() ?? "";
-		const reason: string =
-			args
-				// Interaction commands will pass multi-word nicknames as a single argument (unless it is quoted, in which case it'll split the argument)
-				.slice(1 + (nickmatch ? nickname.split(" ").length : 1))
-				.join(" ")
-				.trim() || (await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {}));
-		if (!target)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
+	public async run(interaction: CommandInteraction): Promise<void> {
+		let user = interaction.options.getMember("member") as GuildMember | APIGuildMember;
+		const nickname = interaction.options.getString("nickname", false) || "";
+		const reason = interaction.options.getString("reason", false) || (await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
-		if (nickname.length > 32) return context.channel.send(await this.client.bulbutils.translate("nickname_too_long", context.guild?.id, { length: nickname.length.toString() }));
-		if (!nickname && !target.nickname) return context.channel.send(await this.client.bulbutils.translate("nickname_no_nickname", context.guild?.id, { target: target.user }));
-		if (nickname === target.nickname)
-			return context.channel.send(await this.client.bulbutils.translate("nickname_same_nickname", context.guild?.id, { target: target.user, nickname: target.nickname }));
+		if (user && !(user instanceof GuildMember)) user = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
+		if (!user)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (!nickname && !user.nickname)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("nickname_no_nickname", interaction.guild?.id, { target: user.user }),
+				ephemeral: true,
+			});
+		if (nickname === user.nickname)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("nickname_same_nickname", interaction.guild?.id, { target: user.user, nickname: user.nickname }),
+				ephemeral: true,
+			});
 
-		if (!context.guild || !context.member) return;
-
-		const nickOld: string = target.nickname || target.user.username;
+		const nickOld: string = user.nickname || user.user.username;
 		let infID: number;
+
 		try {
 			infID = await infractionsManager.nickname(
 				this.client,
-				context.guild,
-				target,
-				context.member,
-				await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
+				interaction.guild as Guild,
+				user,
+				interaction.member as GuildMember,
+				await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
 					action: nickname ? "Nickname changed" : "Nickname removed",
-					moderator: context.author,
-					target: target.user,
+					moderator: interaction.user,
+					target: user.user,
 					reason,
 				}),
 				reason,
@@ -85,12 +81,15 @@ export default class extends Command {
 			);
 		} catch (e: any) {
 			console.error(e.stack);
-			return context.channel.send(await this.client.bulbutils.translate("nickname_fail", context.guild.id, { target: target.user }));
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("nickname_fail", interaction.guild?.id, { target: user.user }),
+				ephemeral: true,
+			});
 		}
 
-		return context.channel.send(
-			await this.client.bulbutils.translate(nickname ? "nickname_success" : "nickname_remove_success", context.guild.id, {
-				target: target.user,
+		return interaction.reply(
+			await this.client.bulbutils.translate(nickname ? "nickname_success" : "nickname_remove_success", interaction.guild?.id, {
+				target: user.user,
 				nick_old: nickOld,
 				nick_new: nickname,
 				reason,

@@ -1,7 +1,6 @@
 import { DMChannel, GuildAuditLogs, GuildChannel, Permissions } from "discord.js";
 import Event from "../../../structures/Event";
 import LoggingManager from "../../../utils/managers/LoggingManager";
-import { LoggingConfiguration } from "../../../utils/types/DatabaseStructures";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
 const loggingManager: LoggingManager = new LoggingManager();
@@ -16,41 +15,15 @@ export default class extends Event {
 	async run(channel: DMChannel | GuildChannel) {
 		if (!(channel instanceof GuildChannel)) return;
 
-		const config: LoggingConfiguration = await databaseManager.getLoggingConfig(channel.guild.id);
-		switch (channel.id) {
-			case config.modAction:
-				await databaseManager.setModAction(channel.guild.id, null);
-				break;
-			case config.banpool:
-				await databaseManager.setBanpool(channel.guild.id, null);
-				break;
-			case config.automod:
-				await databaseManager.setAutoMod(channel.guild.id, null);
-				break;
-			case config.message:
-				await databaseManager.setMessage(channel.guild.id, null);
-				break;
-			case config.role:
-				await databaseManager.setRole(channel.guild.id, null);
-				break;
-			case config.member:
-				await databaseManager.setMember(channel.guild.id, null);
-				break;
-			case config.channel:
-				await databaseManager.setChannel(channel.guild.id, null);
-				break;
-			case config.thread:
-				await databaseManager.setThread(channel.guild.id, null);
-				break;
-			case config.invite:
-				await databaseManager.setInvite(channel.guild.id, null);
-				break;
-			case config.joinLeave:
-				await databaseManager.setJoinLeave(channel.guild.id, null);
-				break;
-			case config.other:
-				await databaseManager.setOther(channel.guild.id, null);
-				break;
+		const { guildLogging: config } = await databaseManager.getCombinedLoggingConfig(channel.guild);
+		const field = Object.keys(config).find((key) => config[key] === channel.id) as keyof typeof config;
+		if (field) {
+			databaseManager.updateConfig({
+				guild: channel.guild,
+				table: "guildLogging",
+				field,
+				value: null,
+			});
 		}
 
 		let log = "";

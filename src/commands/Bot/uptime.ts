@@ -1,21 +1,21 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { MessageEmbed } from "discord.js";
+import { CommandInteraction, MessageEmbed } from "discord.js";
 import moment, { Duration } from "moment";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandType } from "discord-api-types/v9";
 
-export default class extends Command {
+export default class Uptime extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Shows the bot's uptime.",
-			category: "Bot",
-			clientPerms: ["EMBED_LINKS"],
+			type: ApplicationCommandType.ChatInput,
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 
-	async run(context: CommandContext): Promise<void> {
+	public async run(interaction: CommandInteraction): Promise<void> {
 		const time: Duration = moment.duration(this.client.uptime, "milliseconds");
 		const days: number = Math.floor(time.asDays());
 		const hours: number = Math.floor(time.asHours() - days * 24);
@@ -30,15 +30,15 @@ export default class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(Config.embedColor)
-			.setDescription(await this.client.bulbutils.translate("uptime_uptime", context.guild?.id, { uptime }))
+			.setDescription(await this.client.bulbutils.translate("uptime_uptime", interaction.guild?.id, { uptime }))
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		await context.channel.send({ embeds: [embed] });
+		await interaction.reply({ embeds: [embed] });
 	}
 }

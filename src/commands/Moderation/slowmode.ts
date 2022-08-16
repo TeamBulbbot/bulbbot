@@ -1,75 +1,68 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { Message, Snowflake } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import { CommandInteraction, GuildTextBasedChannel } from "discord.js";
 import parse from "parse-duration";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { isTextChannel } from "../../utils/typechecks";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType } from "discord-api-types/v10";
 
-export default class extends Command {
+export default class Slowmode extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Sets a slowmode to the selected channel",
-			category: "Moderation",
-			usage: "<duration> [channel]",
-			examples: ["slowmode 60m", "slowmode 742095521962786858 30m", "slowmode #general 0s"],
-			argList: ["duration:Time", "channel:ChannelText"],
-			minArgs: 1,
-			maxArgs: 2,
-			clearance: 50,
-			userPerms: ["MANAGE_CHANNELS"],
-			clientPerms: ["MANAGE_CHANNELS"],
+			description: "Set the slowmode for a channel.",
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "channel",
+					description: "The channel to set the slowmode for.",
+					type: ApplicationCommandOptionType.Channel,
+					required: true,
+					channel_types: [ChannelType.GuildText],
+				},
+				{
+					name: "duration",
+					description: "The duration of the slowmode.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+			],
+			command_permissions: ["MANAGE_CHANNELS"],
+			client_permissions: ["MANAGE_CHANNELS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let duration: number;
-		let targetChannel: Snowflake;
-		if (!args[1]) targetChannel = context.channel.id;
-		else targetChannel = args[1].replace(NonDigits, "");
-		const channel = await this.client.bulbfetch.getChannel(context.guild?.channels, targetChannel);
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const channel: GuildTextBasedChannel = interaction.options.getChannel("channel") as GuildTextBasedChannel;
+		const duration: number = parse(interaction.options.getString("duration") as string, "second");
 
-		if (!channel || channel.type !== "GUILD_TEXT" || !isTextChannel(channel)) {
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
-					arg_expected: "channel:ChannelText",
-					arg_provided: args[1],
-					usage: this.usage,
-				}),
-			);
-		}
-		if (args.length === 1) duration = parse(args[0]);
-		else duration = parse(args[0]);
-
-		if (duration < parse("0s") || duration === null) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > parse("6h")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_6h", context.guild?.id, {}));
+		if (duration < 0)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (duration > parse("6h", "second"))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("duration_invalid_6h", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		try {
-			await channel.setRateLimitPerUser(duration / 1000);
+			await channel.setRateLimitPerUser(duration);
 		} catch (error) {
-			return await context.channel.send(
-				await this.client.bulbutils.translate("slowmode_missing_perms", context.guild?.id, {
+			return await interaction.reply({
+				content: await this.client.bulbutils.translate("slowmode_missing_perms", interaction.guild?.id, {
 					channel,
 				}),
-			);
+				ephemeral: true,
+			});
 		}
 
-		if (duration === parse("0s")) await context.channel.send(await this.client.bulbutils.translate("slowmode_success_remove", context.guild?.id, { channel }));
-		else if (args.length === 1)
-			await context.channel.send(
-				await this.client.bulbutils.translate("slowmode_success", context.guild?.id, {
-					channel,
-					slowmode: args[0],
-				}),
-			);
-		else
-			await context.channel.send(
-				await this.client.bulbutils.translate("slowmode_success", context.guild?.id, {
-					channel,
-					slowmode: args[0],
-				}),
-			);
+		if (duration === parse("0s", "second")) return interaction.reply(await this.client.bulbutils.translate("slowmode_success_remove", interaction.guild?.id, { channel }));
+
+		return interaction.reply(
+			await this.client.bulbutils.translate("slowmode_success", interaction.guild?.id, {
+				channel,
+				slowmode: interaction.options.getString("duration") as string,
+			}),
+		);
 	}
 }

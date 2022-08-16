@@ -1,21 +1,14 @@
 import Event from "../../structures/Event";
-import { Interaction } from "discord.js";
-import ClearanceManager from "../../utils/managers/ClearanceManager";
-import warn from "../../interactions/context/warn";
-import infSearch from "../../interactions/context/infSearch";
-import mute from "../../interactions/context/mute";
+import { Guild, GuildMember, Interaction, Snowflake } from "discord.js";
 import infraction from "../../interactions/select/infraction";
-import clean from "../../interactions/context/clean";
-import { getCommandContext } from "../../structures/CommandContext";
-import Command from "../../structures/Command";
 import reminders from "../../interactions/select/reminders";
-import LoggingManager from "../../utils/managers/LoggingManager";
 import DatabaseManager from "../../utils/managers/DatabaseManager";
+import { developers } from "../../Config";
 import { commandUsage } from "../../utils/Prometheus";
+import LoggingManager from "../../utils/managers/LoggingManager";
 
-const clearanceManager: ClearanceManager = new ClearanceManager();
-const loggingManager: LoggingManager = new LoggingManager();
 const databaseManager: DatabaseManager = new DatabaseManager();
+const loggingManager: LoggingManager = new LoggingManager();
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -34,78 +27,63 @@ export default class extends Event {
 			return;
 		}
 
-		const context = await getCommandContext(interaction);
-		if (this.client.blacklist.get(context.author.id) !== undefined) return;
-		if (!context.guild) return;
-		if (this.client.blacklist.get(context.guild.id)) return;
-		if (context.guildId !== null) context.prefix = (await databaseManager.getConfig(context.guildId)).prefix;
-
 		if (interaction.isSelectMenu()) {
 			if (interaction.customId === "infraction") await infraction(this.client, interaction);
 			else if (interaction.customId === "reminders") await reminders(this.client, interaction);
 		} else if (interaction.isContextMenu()) {
-			if ((await clearanceManager.getUserClearance(context)) < 50)
-				return void (await context.reply({ content: await this.client.bulbutils.translate("global_missing_permissions", interaction.guild?.id, {}), ephemeral: true }));
+			if (!interaction.guildId) return;
 
-			const channel = this.client.guilds.cache.get(context.guild.id)?.channels.cache.get(context.channelId);
-			const message = channel?.isText() && (await channel.messages.fetch(interaction.targetId));
+			const member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.targetId)) as GuildMember;
+			if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 
-			if (
-				!message ||
-				!interaction.guild ||
-				(await this.client.bulbutils.resolveUserHandleFromInteraction(
-					interaction,
-					await this.client.bulbutils.checkUserFromInteraction(interaction, await interaction.guild.members.fetch(message.author.id)),
-					message.author,
-				))
-			)
-				return;
+			const command = this.client.commands.get(interaction.commandName);
 
-			//Context commands
-			if (context.commandName === "List all Infractions") await infSearch(this.client, interaction, message);
-			else if (context.commandName === "Warn") await warn(this.client, interaction, message);
-			else if (context.commandName === "Quick Mute (1h)") await mute(this.client, interaction, message);
-			else if (context.commandName === "Clean All Messages") await clean(this.client, interaction, message);
+			await command?.run(interaction);
 		} else if (interaction.isCommand()) {
-			const subCommandGroup: string = context.options.getSubcommandGroup(false) || "";
-			const subCommand: string = context.options.getSubcommand(false) || "";
-			const args: string[] = [];
-			let cmd: string = context.commandName || "";
+			// Slash commands
+			const command = this.client.commands.get(interaction.commandName);
 
-			if (subCommandGroup && subCommand) cmd += ` ${subCommandGroup} ${subCommand}`;
-			else if (!subCommandGroup && subCommand) cmd += ` ${subCommand}`;
-
-			for (const option of context.options["_hoistedOptions"]) {
-				if (option.type === "STRING") args.push(...`${option.value}`.split(" "));
-				else args.push(`${option.value}`);
-			}
-
-			const command = Command.resolve(this.client, cmd);
-			if (!command) return;
-			const invalidReason = await command.validate(context, args);
-			if (invalidReason !== undefined) {
-				// CommandContext#reply is safe here - deferReply has not yet been called
-				if (invalidReason) await context.reply({ content: invalidReason, ephemeral: true });
+			if (!command) {
+				// Shouldn't be possible because we shouldn't register commands that we aren't prepared
+				// to handle, but we need to narrow the type properly regardless. It is technically plausible
 				return;
 			}
 
-			let used = `/${command.qualifiedName}`;
-			if (command.name === "nickname") {
-				// This fix is temporary, until we remove the text-commands
-				// TODO(@wakfi): Move this into the nickname handler directly, once we officially drop text-based commands
-				args.splice(0, args.length);
-				const member = context.options.getUser("member", true);
-				const nickname = context.options.getString("nickname") ?? "";
-				const reason = context.options.getString("reason") ?? "";
-				// Pass in the arguments without splitting, to behave nicely with the text parsing done in the nickname command
-				args.push(`${member}`, ...(nickname.startsWith('"') && nickname.endsWith('"') ? `${nickname}`.split(" ") : [`${nickname}`]), ...`${reason}`.split(" "));
-			}
-			args.forEach((arg) => (used += ` ${arg}`));
-			await loggingManager.sendCommandLog(this.client, interaction.guild, context.author, context.channel.id, used);
+			if (interaction.options.getSubcommand(false)) {
+				const subCommand = command.subCommands.find((subCommand) => subCommand.name === interaction.options.getSubcommand(false));
 
-			await context.deferReply();
-			await command.run(context, args);
-			commandUsage(context, command, true);
+				await loggingManager.sendCommandLog(this.client, interaction.guild, interaction.user, interaction.channel?.id as Snowflake, `/${command.name} ${interaction.options.getSubcommand(false)}`);
+
+				if (subCommand) return subCommand.run(interaction);
+			}
+
+			const missing = command.validateClientPermissions(interaction);
+			const { premiumGuild } = await databaseManager.getConfig(interaction.guild as Guild);
+
+			if (command.devOnly && !developers.includes(interaction.user.id))
+				return interaction.reply({
+					content: "This maze was not meant for you",
+					ephemeral: true,
+				});
+
+			if (!premiumGuild && command.premium)
+				return interaction.reply({
+					content: await this.client.bulbutils.translate("global_premium_only", interaction.guild?.id, {}),
+					ephemeral: true,
+				});
+
+			if (missing)
+				return interaction.reply({
+					content: await this.client.bulbutils.translate("global_missing_permissions_bot", interaction.guild?.id, { missing }),
+					ephemeral: true,
+				});
+
+			commandUsage(command);
+
+			await loggingManager.sendCommandLog(this.client, interaction.guild, interaction.user, interaction.channel?.id as Snowflake, `/${command.name}`);
+
+			// Should we add a .catch to handle uncaught errors thrown in command run methods?
+			await command.run(interaction);
 		}
 	}
 }

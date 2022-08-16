@@ -1,4 +1,7 @@
+import type { APIChannel, APIGuildMember } from "discord-api-types/v9";
+import { User, GuildMember, UserFlags, Role, GuildChannel } from "discord.js";
 import * as Emotes from "../emotes.json";
+import { APIRole } from "discord-api-types/v10";
 
 // Miscellaneous helper functions & idioms
 // So they don't need to be referenced from bulbutils
@@ -15,6 +18,7 @@ export function tryIgnore<T extends (...args: any[]) => any>(cb: T, ...args: Par
 	return undefined;
 }
 
+/** This is not a deep clone, to be clear */
 export function clone<T extends object | null>(obj: T): T {
 	return Object.assign(Object.create(obj), obj);
 }
@@ -52,3 +56,101 @@ export function emote(strings: TemplateStringsArray, ...actions: string[]): stri
 	const resolveEmotes = actions.map((action) => emoteResolver[action] || action);
 	return interpolateArrays([...strings], resolveEmotes).join(" ");
 }
+
+type GuildMemberMaybeApi = GuildMember | APIGuildMember;
+type GuildRoleMaybeApi = Role | APIRole;
+type GuildChannelMaybeApi = GuildChannel | APIChannel;
+
+/** Dark Magic */
+export function resolveGuildMemberUnsafe(memberInput: GuildMemberMaybeApi): GuildMember {
+	if (memberInput instanceof GuildMember) {
+		return memberInput;
+	}
+
+	const { joined_at, avatar, communication_disabled_until, nick, pending, premium_since, user } = memberInput;
+
+	const { avatar: userAvatar, discriminator, id, username, accent_color, banner, bot, flags, system } = user || {};
+
+	const fakeUser: User = Object.create(User.prototype);
+	Object.assign(fakeUser, {
+		avatar: userAvatar,
+		discriminator,
+		accentColor: accent_color,
+		banner,
+		bot,
+		flags: new UserFlags(flags),
+		id,
+		username,
+		system,
+	});
+
+	const joinedTimestamp = parseInt(joined_at, 10);
+	const premiumSinceTimestamp = premium_since != null ? parseInt(premium_since, 10) : premium_since;
+
+	const fakeMember = Object.create(GuildMember.prototype);
+	Object.assign(fakeMember, {
+		avatar,
+		communicationDisabledUntil: typeof communication_disabled_until === "string" ? new Date(communication_disabled_until) : communication_disabled_until,
+		user: fakeUser,
+		joinedTimestamp,
+		joinedAt: new Date(joinedTimestamp),
+		nickname: nick,
+		pending,
+		premiumSinceTimestamp,
+		premiumSince: premiumSinceTimestamp != null ? new Date(premiumSinceTimestamp) : premiumSinceTimestamp,
+	});
+
+	return fakeMember;
+}
+
+/** Calls a private constructor in D.JS */
+// prettier-ignore
+export const resolveGuildMemberMoreSafe = (memberInput: GuildMemberMaybeApi): GuildMember => (memberInput instanceof GuildMember)
+	? memberInput
+	// @ts-expect-error This is a private constructor don't worry about it
+	: new GuildMember(memberInput);
+
+// prettier-ignore
+export const resolveGuildRoleMoreSafe = (roleInput: GuildRoleMaybeApi): Role =>
+	roleInput instanceof Role
+		? roleInput
+    // @ts-expect-error
+		: new Role(roleInput);
+
+/** Returns true if |v| is null or undefined ("nullish"), false otherwise */
+// Intentionally uses abstract equality operator (==), not strict equality.
+// null with `==` only returns true when comparing with either null or undefined,
+// thus suiting our purposes
+export const isNullish = (v: any): v is null | undefined => v == null;
+
+/** Will only execute `cb` if `val` is not nullish. Returns undefined if val is nullish */
+export const nullsafe = <T, F extends (val: T) => R, R = ReturnType<F>>(val: T, cb: F) => (!isNullish(val) ? cb(val) : undefined);
+
+export const clamp = (val: number) => +(val > 0) && val;
+
+type PaginateOptions = {
+	take?: number;
+	skip?: number;
+};
+export const paginate = ({ page = 1, pageSize = 25 }: Paginatetable): PaginateOptions => ({
+	take: page * pageSize || undefined,
+	skip: clamp(page - 1) * pageSize || undefined,
+});
+
+// TODO: I have reservations about this one
+export const resolveGuildChannelMoreSafe = (channelInput: GuildChannelMaybeApi): GuildChannel =>
+	channelInput instanceof GuildChannel
+		? channelInput
+		: // @ts-expect-error
+		  new Channel(channelInput);
+
+export const unpackSettled = <T>(settled: PromiseSettledResult<T>[]): T[] => {
+	const resolved: T[] = [];
+	for (const result of settled) {
+		if (result.status === "fulfilled") {
+			resolved.push(result.value);
+		}
+		// This will drop any rejections silently. Only use it if that is fine
+	}
+	return resolved;
+};

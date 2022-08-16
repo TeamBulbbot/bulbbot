@@ -1,43 +1,43 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
 import { writeFile } from "fs";
-import BulbBotClient from "../../structures/BulbBotClient";
-import { MessageEmbed } from "discord.js";
 import { inspect } from "util";
+import { CommandInteraction, MessageEmbed } from "discord.js";
+import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
-export default class extends Command {
+export default class Eval extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Evaluates the provided JavaScript code",
-			category: "Admin",
-			aliases: ["ev"],
-			usage: "<code>",
-			examples: ["eval context.channel.send('hi')"],
-			minArgs: 1,
-			maxArgs: -1,
-			argList: ["code:String"],
+			type: ApplicationCommandType.ChatInput,
 			devOnly: true,
+			options: [
+				{
+					required: true,
+					name: "code",
+					description: "The JavaScript code",
+					type: ApplicationCommandOptionType.String,
+				},
+			],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
+	public async run(interaction: CommandInteraction) {
+		const code = interaction.options.getString("code", true);
 		const embed = new MessageEmbed()
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
 		const start: number = Date.now();
-		const code: string = args.join(" ");
 		let evaled: any;
 		let output: any;
 		let isFile = false;
-
-		this.client.log.info(`[DEVELOPER] ${context.author.tag} (${context.author.id}) ran eval with the code: ${code}`);
 
 		let description = `**Input**\n\`\`\`js\n${code}\n\`\`\``;
 
@@ -47,11 +47,13 @@ export default class extends Command {
 			description += `\n**Type:** ${typeof evaled}`;
 			if (typeof evaled !== "string") evaled = inspect(evaled);
 
-			evaled = this.client.token ? evaled.replace(new RegExp(this.client.token, "g"), `${Buffer.from(this.client.user?.id || "").toString("base64")}.${genString(7)}.${genString(27)}`) : evaled;
+			evaled = this.client.token
+				? evaled.replace(new RegExp(this.client.token, "g"), `${Buffer.from(this.client.user?.id || "").toString("base64")}.${this.genString(7)}.${this.genString(27)}`)
+				: evaled;
 
 			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {
-				writeFile(`${__dirname}/../../../files/EVAL-${context.guild?.id}.js`, evaled, (err: any) => {
+				writeFile(`${__dirname}/../../../files/EVAL-${interaction.guild?.id}.js`, evaled, (err: any) => {
 					if (err) this.client.log.error(err);
 				});
 
@@ -72,25 +74,25 @@ export default class extends Command {
 			name: `Run time: ${end - start} ms`,
 		});
 
-		context.channel.send({
+		interaction.reply({
 			embeds: [embed],
 			content: output,
 			files: isFile
 				? [
 						{
-							attachment: `${__dirname}/../../../files/EVAL-${context.guild?.id}.js`,
+							attachment: `${__dirname}/../../../files/EVAL-${interaction.guild?.id}.js`,
 							name: "eval.js",
 						},
 				  ]
 				: [],
 		});
 	}
-}
 
-function genString(l: number) {
-	let res = "";
-	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-	for (let i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+	private genString(l: number): string {
+		let res = "";
+		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (let i = 0; i < l; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
 
-	return Buffer.from(res).toString("base64").substring(0, l);
+		return Buffer.from(res).toString("base64").substring(0, l);
+	}
 }

@@ -1,72 +1,61 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { Message, Snowflake, User } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import { CommandInteraction, Guild, GuildMember, User } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
 import BulbBotClient from "../../structures/BulbBotClient";
 import { BanType } from "../../utils/types/BanType";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends Command {
+export default class Unban extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			description: "Unban a user from the server",
-			category: "Moderation",
-			aliases: ["pardon"],
-			usage: "<user> [reason]",
-			examples: ["unban 123456789012345678", "unban 123456789012345678 nice user", "unban @Wumpus#0000 nice user"],
-			argList: ["user:User", "reason:String"],
-			minArgs: 1,
-			maxArgs: -1,
-			clearance: 50,
-			userPerms: ["BAN_MEMBERS"],
-			clientPerms: ["BAN_MEMBERS"],
+			description: "Unbans a user from the server.",
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{ name: "user", description: "The user to unban.", type: ApplicationCommandOptionType.User, required: true },
+				{ name: "reason", description: "The reason for the unban.", type: ApplicationCommandOptionType.String, required: false },
+			],
+			client_permissions: ["BAN_MEMBERS"],
+			command_permissions: ["BAN_MEMBERS"],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: User | undefined = await this.client.bulbfetch.getUser(targetID);
-		let reason: string = args.slice(1).join(" ");
+	public async run(interaction: CommandInteraction) {
+		const user = interaction.options.getUser("user") as User;
+		let reason = interaction.options.getString("reason", false);
 
-		if (!target || !context.guild || !context.member)
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.user", context.guild?.id, {}),
-					arg_provided: args[0],
-					arg_expected: "user:User",
-					usage: this.usage,
-				}),
-			);
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
 
-		const banList = await context.guild.bans.fetch();
-		const bannedUser = banList.find((user) => user.user.id === targetID);
+		const banList = await interaction.guild?.bans.fetch();
+		const bannedUser = banList?.find((ban) => user.id === ban.user.id);
 
-		if (!bannedUser) return context.channel.send(await this.client.bulbutils.translate("not_banned", context.guild.id, { target }));
-
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild.id, {});
+		if (!bannedUser)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("not_banned", interaction.guild?.id, { target: user }),
+				ephemeral: true,
+			});
 
 		const infID = await infractionsManager.unban(
 			this.client,
-			context.guild,
+			interaction.guild as Guild,
 			BanType.MANUAL,
-			target,
-			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild.id, {}),
-				moderator: context.author,
-				target,
+			user,
+			interaction.member as GuildMember,
+			await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", interaction.guild?.id, {}),
+				moderator: interaction.user,
+				target: user,
 				reason,
 			}),
 			reason,
 		);
 
-		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.unban", context.guild.id, {}),
-				target,
+		return interaction.reply(
+			await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.unban", interaction.guild?.id, {}),
+				target: user,
 				reason,
 				infraction_id: infID,
 			}),

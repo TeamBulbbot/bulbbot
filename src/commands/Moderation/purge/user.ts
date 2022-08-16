@@ -1,47 +1,48 @@
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Collection, GuildChannel, GuildMember, Message, Snowflake } from "discord.js";
-import { NonDigits } from "../../../utils/Regex";
+import { Collection, CommandInteraction, Guild, GuildMember, GuildTextBasedChannel, Message, Snowflake } from "discord.js";
 import moment from "moment";
 import { writeFileSync } from "fs";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { isGuildChannel } from "../../../utils/typechecks";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { APIGuildMember, ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class PurgeUser extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "user",
-			clearance: 50,
-			minArgs: 2,
-			maxArgs: 2,
-			argList: ["member:Member", "amount:Number"],
-			usage: "<member> <amount>",
-			description: "Purges a users messages from the current channel.",
+			description: "Purge messages from a user.",
+			options: [
+				{
+					name: "member",
+					description: "The member to purge messages from.",
+					type: ApplicationCommandOptionType.User,
+					required: true,
+				},
+				{
+					name: "amount",
+					description: "The amount of messages to purge.",
+					type: ApplicationCommandOptionType.Integer,
+					required: true,
+					min_value: 2,
+					max_value: 499,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let amount = Number(args[1]);
-		const user: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, args[0].replace(NonDigits, ""));
+	public async run(interaction: CommandInteraction): Promise<void> {
+		let member = interaction.options.getMember("member") as GuildMember | APIGuildMember;
+		let amount = interaction.options.getInteger("amount") as number;
 
-		if (!user)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[1],
-					usage: this.usage,
-				}),
-			);
-
-		if (amount >= 500) return context.channel.send(await this.client.bulbutils.translate("purge_too_many", context.guild?.id, {}));
-		if (amount < 2 || isNaN(amount)) return context.channel.send(await this.client.bulbutils.translate("purge_too_few", context.guild?.id, {}));
-
-		if (!isGuildChannel(context.channel)) return;
+		if (!member)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
 
 		const deleteMsg: number[] = [];
 		let a = 0;
@@ -54,9 +55,11 @@ export default class extends SubCommand {
 		}
 		if (amount - a !== 0) deleteMsg.push(amount - a);
 
-		let delMsgs = `Message purge in #${(context.channel as GuildChannel).name} (${context.channel.id}) by ${context.author.tag} (${context.author.id}) at ${moment().format(
-			"MMMM Do YYYY, h:mm:ss a",
-		)} \n`;
+		let delMsgs = await this.client.bulbutils.translate("purge_message_log", interaction.guild?.id, {
+			user: interaction.user,
+			channel: interaction.channel as GuildTextBasedChannel,
+			timestamp: moment().format("MMMM Do YYYY, h:mm:ss a"),
+		});
 
 		const messagesToPurge: Snowflake[] = [];
 		amount = 0;
@@ -64,13 +67,15 @@ export default class extends SubCommand {
 		const twoWeeksAgo = moment().subtract(14, "days").unix();
 
 		for (let i = 0; i < deleteMsg.length; i++) {
-			const msgs: Collection<string, Message> = await context.channel.messages.fetch({
+			const msgs: Collection<string, Message> = await (interaction.channel as GuildTextBasedChannel)?.messages.fetch({
 				limit: deleteMsg[i],
 			});
 
 			msgs.map(async (m) => {
 				if (moment(m.createdAt).unix() < twoWeeksAgo) msgs.delete(m.id);
-				if (user.user.id === m.author.id) {
+				// FIXME: Why is this happening? I have handled this in the past and it worked fine.
+				// @ts-expect-error
+				if (member.user.id === m.author.id) {
 					delMsgs += `${moment(m.createdTimestamp).format("MM/DD/YYYY, h:mm:ss a")} | ${m.author.tag} (${m.author.id}) | ${m.id} | ${m.content} |\n`;
 					messagesToPurge.push(m.id);
 					amount++;
@@ -78,12 +83,20 @@ export default class extends SubCommand {
 			});
 		}
 
-		await context.channel.bulkDelete(messagesToPurge);
+		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messagesToPurge);
 
-		writeFileSync(`${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, delMsgs);
+		writeFileSync(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
-		await loggingManager.sendModActionFile(this.client, context.guild, "purge", amount, `${__dirname}/../../../../files/PURGE-${context.guild?.id}.txt`, context.channel, context.author);
+		await loggingManager.sendModActionFile(
+			this.client,
+			interaction.guild as Guild,
+			"purge",
+			amount,
+			`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`,
+			interaction.channel as GuildTextBasedChannel,
+			interaction.user,
+		);
 
-		await context.channel.send(await this.client.bulbutils.translate("purge_success", context.guild?.id, { count: amount }));
+		return interaction.reply(await this.client.bulbutils.translate("purge_success", interaction.guild?.id, { count: amount }));
 	}
 }

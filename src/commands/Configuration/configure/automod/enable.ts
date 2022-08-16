@@ -1,13 +1,16 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu, Snowflake } from "discord.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageSelectMenu } from "discord.js";
 import BulbBotClient from "../../../../structures/BulbBotClient";
 import DatabaseManager from "../../../../utils/managers/DatabaseManager";
-import { AutoModConfiguration } from "../../../../utils/types/DatabaseStructures";
 import AutoModPart from "../../../../utils/types/AutoModPart";
+import { isNullish } from "../../../../utils/helpers";
 
 const databaseManager: DatabaseManager = new DatabaseManager();
 
 async function enable(interaction: MessageComponentInteraction, client: BulbBotClient, category?: string): Promise<void> {
-	const config: AutoModConfiguration = await databaseManager.getAutoModConfig(interaction.guild?.id as Snowflake);
+	if (isNullish(interaction.guild)) {
+		return;
+	}
+	const config = await databaseManager.getAutoModConfig(interaction.guild);
 	const selectedCategory: string | undefined = category;
 
 	const selectRow = new MessageActionRow().addComponents(
@@ -36,7 +39,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 			.setCustomId("enable")
 			.setLabel(enableButton)
 			.setStyle("SUCCESS")
-			.setDisabled(selectedCategory !== undefined || config.enabled),
+			.setDisabled(selectedCategory !== undefined || !!config.enabled),
 		new MessageButton()
 			.setCustomId("disable")
 			.setLabel(disableButton)
@@ -53,6 +56,9 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });
 
 	collector?.on("collect", async (i: MessageComponentInteraction) => {
+		if (isNullish(interaction.guild)) {
+			return;
+		}
 		if (i.isButton()) {
 			switch (i.customId) {
 				case "back":
@@ -62,7 +68,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 				case "disable":
 					collector.stop();
 					if (selectedCategory === undefined) {
-						await databaseManager.enableAutomod(interaction.guild?.id as Snowflake, false);
+						await databaseManager.updateConfig({ guild: interaction.guild, table: "automod", field: "enabled", value: false });
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_enable_disable_disable_generic_success", interaction.guild?.id, {}),
 							ephemeral: true,
@@ -70,7 +76,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 
 						await enable(i, client);
 					} else {
-						await databaseManager.automodSetPunishment(interaction.guild?.id as Snowflake, parts[selectedCategory], null);
+						await databaseManager.automodSetPunishment(interaction.guild, parts[selectedCategory], null);
 						await interaction.followUp({
 							content: await client.bulbutils.translate("config_enable_disable_disable_success", interaction.guild?.id, {}),
 							ephemeral: true,
@@ -82,7 +88,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 					break;
 				case "enable":
 					collector.stop();
-					await databaseManager.enableAutomod(interaction.guild?.id as Snowflake, true);
+					await databaseManager.updateConfig({ guild: interaction.guild, table: "automod", field: "enabled", value: true });
 					await interaction.followUp({
 						content: await client.bulbutils.translate("config_enable_disable_enable_success", interaction.guild?.id, {}),
 						ephemeral: true,

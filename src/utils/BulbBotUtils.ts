@@ -1,24 +1,18 @@
-import { ContextMenuInteraction, GuildChannel, GuildMember, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import { CommandInteraction, ContextMenuInteraction, GuildChannel, GuildMember, Interaction, Message, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
-import CommandContext from "../structures/CommandContext";
 import BulbBotClient from "../structures/BulbBotClient";
 import { UserHandle } from "./types/UserHandle";
 import i18next from "i18next";
 import { translatorEmojis, translatorConfig, error } from "../Config";
 import TranslateString from "./types/TranslateString";
 import { TranslateOptions, DeepAccess } from "./types/TranslateOptions";
-import DatabaseManager from "./managers/DatabaseManager";
 import { GuildFeaturesDescriptions } from "./types/GuildFeaturesDescriptions";
 import { isBaseGuildTextChannel } from "./typechecks";
-
-const databaseManager: DatabaseManager = new DatabaseManager();
+import prisma from "../prisma";
 
 export type UserObject = Pick<User & GuildMember, "tag" | "id" | "flags" | "username" | "discriminator" | "avatar" | "bot" | "createdAt" | "createdTimestamp"> &
 	Partial<Pick<User & GuildMember, "nickname" | "roles" | "premiumSinceTimestamp" | "joinedTimestamp">> & { avatarUrl: ReturnType<(User & GuildMember)["avatarURL"]> };
-type LowercaseUserHandle = Lowercase<
-	Exclude<keyof typeof UserHandle, "SUCCESS" | "CANNOT_ACTION_ROLE_EQUAL" | "CANNOT_ACTION_ROLE_HIGHER" | "CANNOT_ACTION_USER_ROLE_EQUAL_BOT" | "CANNOT_ACTION_USER_ROLE_HIGHER_BOT">
->;
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -31,8 +25,15 @@ export default class {
 		// Default parameter initialization does not occur if you pass null, but half of the the DJS API return null instead of undefined.
 		// Doing this makes this function easier to call
 		const guild = guildID ?? "742094927403679816";
-		const language = (await databaseManager.getConfig(guild))["language"];
-		if (language !== i18next.language) await i18next.changeLanguage((await databaseManager.getConfig(guild))["language"]);
+		const { language = "en-US" } =
+			(await prisma.bulbGuild
+				.findUnique({
+					where: {
+						guildId: guild,
+					},
+				})
+				.guildConfiguration()) || {};
+		if (language !== i18next.language) await i18next.changeLanguage(language);
 
 		return await i18next.t(string, { ...options, ...translatorEmojis, ...translatorConfig });
 	}
@@ -52,6 +53,7 @@ export default class {
 		const EMBEDDED: number = 1 << 17;
 		const GATEWAY_MESSAGE_CONTENT: number = 1 << 18;
 		const GATEWAY_MESSAGE_CONTENT_LIMITED: number = 1 << 19;
+		const SUPPORTS_SLASH_COMMANDS: number = 1 << 23;
 
 		if ((flag & GATEWAY_PRESENCE) == GATEWAY_PRESENCE) flags.push("GATEWAY_PRESENCE");
 		if ((flag & GATEWAY_PRESENCE_LIMITED) == GATEWAY_PRESENCE_LIMITED) flags.push("GATEWAY_PRESENCE_LIMITED");
@@ -61,11 +63,12 @@ export default class {
 		if ((flag & EMBEDDED) == EMBEDDED) flags.push("EMBEDDED");
 		if ((flag & GATEWAY_MESSAGE_CONTENT) == GATEWAY_MESSAGE_CONTENT) flags.push("GATEWAY_MESSAGE_CONTENT");
 		if ((flag & GATEWAY_MESSAGE_CONTENT_LIMITED) == GATEWAY_MESSAGE_CONTENT_LIMITED) flags.push("GATEWAY_MESSAGE_CONTENT_LIMITED");
+		if ((flag & SUPPORTS_SLASH_COMMANDS) == SUPPORTS_SLASH_COMMANDS) flags.push("SUPPORTS_SLASH_COMMANDS");
 
 		return flags;
 	}
 
-	public badges(bitfield: number) {
+	public userFlags(bitfield: number) {
 		const badges: string[] = [];
 
 		const staff: number = 1 << 0;
@@ -82,8 +85,10 @@ export default class {
 		const certified_mod: number = 1 << 18;
 		const spammer: number = 1 << 20;
 
+		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
+		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
 		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
@@ -91,12 +96,10 @@ export default class {
 		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.flags.HOUSE_BALANCE);
 		if ((bitfield & early_support) === early_support) badges.push(Emotes.flags.EARLY_SUPPORTER);
 		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
-		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
-		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
 		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 
-		return badges.map((i) => `${i}`).join(" ");
+		return badges;
 	}
 
 	public guildFeatures(guildFeatures: string[]) {
@@ -151,6 +154,7 @@ export default class {
 		return `${moment.utc(start).format("MMMM, Do YYYY @ hh:mm:ss a")} \`\`(${Math.floor(days).toString().replace("-", "")} day(s) ago)\`\``;
 	}
 
+	// Consider deprecating and removing. Should become unused once all commands are migrated
 	public userObject(isGuildMember: boolean, userObject: Maybe<User | GuildMember>) {
 		if (!userObject) return;
 		let user: UserObject;
@@ -215,48 +219,7 @@ export default class {
 		);
 	}
 
-	public checkUser(context: CommandContext, user: GuildMember): UserHandle {
-		if (
-			context.author.id === context.guild?.ownerId &&
-			context.guild.me &&
-			context.guild.me.roles.highest.id !== user.roles.highest.id &&
-			user.roles.highest.rawPosition < context.guild.me.roles.highest.rawPosition
-		)
-			return UserHandle.SUCCESS;
-
-		if (user.id === context.author.id) return UserHandle.CANNOT_ACTION_SELF;
-
-		if (context.guild?.ownerId === user.id) return UserHandle.CANNOT_ACTION_OWNER;
-
-		if (context.member?.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_ROLE_EQUAL;
-
-		if (user.id === this.client.user?.id) return UserHandle.CANNOT_ACTION_BOT_SELF;
-
-		if (context.member?.roles && user.roles.highest.rawPosition >= context.member.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_ROLE_HIGHER;
-
-		if (context.guild?.me && context.guild.me.roles.highest.id === user.roles.highest.id) return UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT;
-
-		if (context.guild?.me && user.roles.highest.rawPosition >= context.guild.me.roles.highest.rawPosition) return UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT;
-
-		return UserHandle.SUCCESS;
-	}
-
-	public async resolveUserHandle(context: CommandContext, handle: UserHandle, user: User): Promise<boolean> {
-		if (handle === UserHandle.SUCCESS) return false;
-
-		// here are two exclusive cases, that use the same message as the other ones
-		if (handle === UserHandle.CANNOT_ACTION_ROLE_EQUAL || handle === UserHandle.CANNOT_ACTION_ROLE_HIGHER)
-			await context.channel.send(await this.translate("global_cannot_action_role_equal", context.guild?.id, { target: user }));
-		if (handle === UserHandle.CANNOT_ACTION_USER_ROLE_EQUAL_BOT || handle === UserHandle.CANNOT_ACTION_USER_ROLE_HIGHER_BOT)
-			await context.channel.send(await this.translate("global_cannot_action_role_equal_bot", context.guild?.id, { target: user }));
-
-		const userHandle = UserHandle[handle].toLocaleLowerCase() as LowercaseUserHandle;
-		await context.channel.send(await this.translate(`global_${userHandle}`, context.guild?.id, { target: user }));
-		return true;
-	}
-
-	/** @deprecated */
-	async checkUserFromInteraction(interaction: ContextMenuInteraction, user: GuildMember): Promise<UserHandle> {
+	async checkUser(interaction: Interaction, user: GuildMember): Promise<UserHandle> {
 		const author = await interaction.guild?.members.fetch(interaction.user.id);
 
 		if (user.id === interaction.user.id) return UserHandle.CANNOT_ACTION_SELF;
@@ -284,8 +247,7 @@ export default class {
 		return UserHandle.SUCCESS;
 	}
 
-	/** @deprecated */
-	async resolveUserHandleFromInteraction(interaction: ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
+	async resolveUserHandle(interaction: CommandInteraction | ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
 				await interaction.reply({ content: await this.translate("global_cannot_action_self", interaction.guild?.id, {}), ephemeral: true });
@@ -408,7 +370,7 @@ export default class {
 		}[action];
 	}
 
-	public async logError(err: Error, context?: CommandContext, eventName?: string, runArgs?: any): Promise<void> {
+	public async logError(err: Error, message?: Message, eventName?: string, runArgs?: any): Promise<void> {
 		if (process.env.ENVIRONMENT === "dev") throw err;
 		const embed = new MessageEmbed()
 			.setColor("RED")
@@ -418,10 +380,10 @@ export default class {
 			.addField("String", `${err.name}: ${err.message}`, true)
 			.setDescription(`**Stack trace:** \n\`\`\`${err.stack}\`\`\``);
 
-		if (context) {
-			embed.addField("Guild ID", `${context.guild?.id}`, true);
-			embed.addField("User", context.author.id, true);
-			embed.addField("Message Content", context.content, true);
+		if (message) {
+			embed.addField("Guild ID", `${message.guild?.id}`, true);
+			embed.addField("User", message.author.id, true);
+			embed.addField("Message Content", message.content, true);
 		} else if (runArgs) {
 			const argsDesc: string[] = [];
 			for (const [k, v] of Object.entries<any>(runArgs)) {

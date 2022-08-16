@@ -1,84 +1,107 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { ButtonInteraction, Message, MessageActionRow, MessageButton, MessageMentionOptions, TextChannel, User } from "discord.js";
+import { ButtonInteraction, CommandInteraction, Interaction, Message, MessageActionRow, MessageButton, MessageMentionOptions, Snowflake, TextChannel, User } from "discord.js";
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
 import { setTimeout } from "safe-timers";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
-const { createReminder, deleteReminder, getReminder }: ReminderManager = new ReminderManager();
+const reminderManager: ReminderManager = new ReminderManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class ReminderSet extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "set",
-			aliases: ["add"],
-			minArgs: 2,
-			maxArgs: -1,
-			argList: ["duration:Time", "reason:String"],
-			usage: "<duration> <reason>",
-			description: "Sets a reminder for the specified duration.",
+			description: "Sets a reminder for you to do something in the future.",
+			options: [
+				{
+					name: "duration",
+					description: "The amount of time before the reminder occurs.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+				{
+					name: "message",
+					description: "The message to be sent when the reminder occurs.",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		let duration: number = parse(args[0]);
-		const reason: string = args.slice(1).join(" ");
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const duration = parse(interaction.options.getString("duration") as string);
+		const message = interaction.options.getString("message") as string;
 
-		if (duration <= 0) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_0s", context.guild?.id, {}));
-		if (duration > parse("1y")) return context.channel.send(await this.client.bulbutils.translate("duration_invalid_1y", context.guild?.id, {}));
+		if (duration <= 0)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (duration > parse("1y"))
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("duration_invalid_1y", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
 
 		const row = new MessageActionRow().addComponents([
 			new MessageButton()
 				.setCustomId("dm")
-				.setLabel(await this.client.bulbutils.translate("remind_set_dm", context.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", interaction.guild?.id, {}))
 				.setStyle("PRIMARY"),
 			new MessageButton()
 				.setCustomId("channel")
-				.setLabel(await this.client.bulbutils.translate("remind_set_channel", context.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", interaction.guild?.id, {}))
 				.setStyle("SUCCESS"),
 		]);
 
 		const row2 = new MessageActionRow().addComponents([
 			new MessageButton()
 				.setCustomId("dm")
-				.setLabel(await this.client.bulbutils.translate("remind_set_dm", context.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_dm", interaction.guild?.id, {}))
 				.setStyle("PRIMARY")
 				.setDisabled(true),
 			new MessageButton()
 				.setCustomId("channel")
-				.setLabel(await this.client.bulbutils.translate("remind_set_channel", context.guild?.id, {}))
+				.setLabel(await this.client.bulbutils.translate("remind_set_channel", interaction.guild?.id, {}))
 				.setStyle("SUCCESS")
 				.setDisabled(true),
 		]);
 
-		duration = Math.floor(Date.now() / 1000) + duration / 1000;
+		const unixDuration = moment().add(duration, "ms").unix();
 
-		const msg: Message | void = await context.channel.send({
-			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", context.guild?.id, {}),
+		await interaction.reply({
+			content: await this.client.bulbutils.translate("remind_set_how_to_get_reminded", interaction.guild?.id, {}),
 			components: [row],
+			ephemeral: true,
 		});
-		if (!msg) return;
 
-		const filter = (i: any) => i.user.id === context.author.id;
-		const collector = msg.createMessageComponentCollector({ filter, time: 15000 });
+		const filter = (i: Interaction) => interaction.user.id === i.user.id;
+		const collector = interaction.channel?.createMessageComponentCollector({ filter, max: 1, time: 15000, componentType: "BUTTON" });
 		let reminder: any;
 
-		collector.on("collect", async (interaction: ButtonInteraction) => {
-			if (interaction.customId === "dm") {
-				reminder = await createReminder(reason, duration, context.author.id, "", "");
-				await interaction.reply(await this.client.bulbutils.translate("remind_set_select_dm", context.guild?.id, { duration }));
+		collector?.on("collect", async (i: ButtonInteraction) => {
+			if (i.customId === "dm") {
+				reminder = await reminderManager.createReminder(message, unixDuration, interaction.user.id, "", "");
+				await i.reply({
+					content: await this.client.bulbutils.translate("remind_set_select_dm", interaction.guild?.id, { duration: unixDuration }),
+					ephemeral: true,
+				});
 			} else {
-				reminder = await createReminder(reason, duration, context.author.id, context.channel.id, context.id);
-				await interaction.reply(await this.client.bulbutils.translate("remind_set_select_channel", context.guild?.id, { duration }));
+				await i.reply(await this.client.bulbutils.translate("remind_set_select_channel", interaction.guild?.id, { duration: unixDuration }));
+				reminder = await reminderManager.createReminder(message, unixDuration, interaction.user.id, interaction.channel?.id as Snowflake, (await i.fetchReply())?.id as Snowflake);
 			}
 
-			await msg.edit({ components: [row2] });
+			await interaction.editReply({ components: [row2] });
 
 			setTimeout(async () => {
-				if (!(await getReminder(reminder.id))) return deleteReminder(reminder.id);
+				if (!(await reminderManager.getReminder(reminder.id))) {
+					await reminderManager.deleteReminder(reminder.id);
+					return;
+				}
 
 				if (reminder.channelId !== "") {
 					// @ts-expect-error
@@ -110,8 +133,8 @@ export default class extends SubCommand {
 					});
 				}
 
-				await deleteReminder(reminder.id);
-			}, parse(args[0]));
+				await reminderManager.deleteReminder(reminder.id);
+			}, duration);
 		});
 	}
 }

@@ -1,50 +1,40 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
 import BulbBotClient from "../../structures/BulbBotClient";
-import { NonDigits } from "../../utils/Regex";
-import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { CommandInteraction, GuildChannel, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { resolveGuildChannelMoreSafe } from "../../utils/helpers";
+import { APIChannel, ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 import { embedColor } from "../../Config";
 import { isTextChannel } from "../../utils/typechecks";
 
-export default class extends Command {
+export default class ChannelInfo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
+			type: ApplicationCommandType.ChatInput,
 			description: "Returns some useful info about a channel",
-			category: "Information",
-			usage: "[channel]",
-			examples: ["channelinfo", "channelinfo 742095521962786858", "channelinfo #rules"],
-			clearance: 50,
-			maxArgs: 1,
-			clientPerms: ["EMBED_LINKS"],
-			argList: ["channel:Channel"],
+			options: [
+				{
+					name: "channel",
+					type: ApplicationCommandOptionType.Channel,
+					description: "The channel you want more info about",
+					required: true,
+				},
+			],
+			command_permissions: ["MANAGE_CHANNELS"],
+			client_permissions: ["EMBED_LINKS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
-		let channelId: string;
-		if (args[0] === undefined) channelId = context.channel.id;
-		else channelId = args[0].replace(NonDigits, "");
+	async run(interaction: CommandInteraction): Promise<void> {
+		const channel = resolveGuildChannelMoreSafe(interaction.options.getChannel("channel", true) as GuildChannel | APIChannel);
 
-		const channel = context.guild?.channels.cache.get(channelId);
-		if (!(context.member && channel?.permissionsFor(context.member)?.has("VIEW_CHANNEL", true))) {
-			context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.channel", context.guild?.id, {}),
-					arg_expected: "channel:Channel",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-			return;
-		}
 		const desc: string[] = [`**ID:** ${channel.id}`, `**Name:** ${channel.name}`, `**Mention:** <#${channel.id}>`];
 		channel.parentId !== null ? desc.push(`**Parent:** ${channel.parent?.name}`) : "";
 		const buttons: MessageButton[] = [];
 
 		if (isTextChannel(channel)) {
 			channel.lastMessageId !== null
-				? buttons.push(new MessageButton().setStyle("LINK").setLabel("Latest message").setURL(`https://discord.com/channels/${context.guild?.id}/${channel.id}/${channel.lastMessageId}`))
+				? buttons.push(new MessageButton().setStyle("LINK").setLabel("Latest message").setURL(`https://discord.com/channels/${interaction.guild?.id}/${channel.id}/${channel.lastMessageId}`))
 				: null;
 
 			channel.rateLimitPerUser > 0 ? desc.push(`**Slowmode:** ${channel.rateLimitPerUser} seconds`) : null;
@@ -52,7 +42,7 @@ export default class extends Command {
 			desc.push(`**NSFW:** ${channel.nsfw}`);
 			desc.push(
 				`\n**Your permissions:** ${channel
-					.permissionsFor(context.author)
+					.permissionsFor(interaction.user)
 					?.toArray()
 					.map((p) => `\`${p}\``)
 					.join(" ")}`,
@@ -64,7 +54,7 @@ export default class extends Command {
 
 			desc.push(
 				`\n**Your permissions:** ${channel
-					.permissionsFor(context.author)
+					.permissionsFor(interaction.user)
 					?.toArray()
 					.map((p) => `\`${p}\``)
 					.join(" ")}`,
@@ -80,13 +70,13 @@ export default class extends Command {
 			.setColor(embedColor)
 			.setDescription(desc.join("\n"))
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		buttons.length > 0 ? context.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(buttons)] }) : context.channel.send({ embeds: [embed] });
+		buttons.length > 0 ? interaction.reply({ embeds: [embed], components: [new MessageActionRow().addComponents(buttons)] }) : interaction.reply({ embeds: [embed] });
 	}
 }

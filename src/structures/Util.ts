@@ -1,16 +1,13 @@
 import * as path from "path";
-import { exec, cd } from "shelljs";
+import { cd, exec } from "shelljs";
 import BulbBotClient from "./BulbBotClient";
 import { promisify } from "util";
 import glob from "glob";
 import Event from "./Event";
 import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
-import Command from "./Command";
-import DatabaseManager from "../utils/managers/DatabaseManager";
-import { Blacklist } from "../utils/types/DatabaseStructures";
-
-const databaseManager: DatabaseManager = new DatabaseManager();
+import ApplicationCommand from "./ApplicationCommand";
+import prisma from "../prisma";
 
 const globAsync = promisify(glob);
 
@@ -39,14 +36,9 @@ export default class {
 				if (!this.isClass(File.default)) throw new CommandException(`Command ${name} is not an instance of Command`);
 
 				const command = new File.default(this.client, name);
-				if (!(command instanceof Command)) throw new CommandException(`Event ${name} doesn't belong in commands!`);
+				if (!(command instanceof ApplicationCommand)) throw new CommandException(`Command ${name} doesn't belong in commands!`);
 
 				this.client.commands.set(command.name, command);
-				if (command.aliases.length) {
-					for (const alias of command.aliases) {
-						this.client.aliases.set(alias, command.name);
-					}
-				}
 			}
 			this.client.log.client("[CLIENT - COMMANDS] Successfully registered all commands");
 		});
@@ -79,7 +71,7 @@ export default class {
 
 	async loadBlacklist(): Promise<void> {
 		this.client.log.client("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
-		const blacklistedUsers: Blacklist[] = await databaseManager.getAllBlacklisted();
+		const blacklistedUsers = await prisma.blacklistEntry.findMany();
 		for (let i = 0; i < blacklistedUsers.length; i++) {
 			const blacklist = blacklistedUsers[i];
 			this.client.blacklist.set(blacklist.snowflakeId, {

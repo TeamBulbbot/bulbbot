@@ -1,9 +1,8 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { MessageEmbed /* Permissions */ } from "discord.js";
-import { NonDigits } from "../../utils/Regex";
+import { CommandInteraction, MessageEmbed } from "discord.js";
 import * as Config from "../../Config";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
 
 const bint0 = BigInt(0);
 const bint1 = BigInt(1);
@@ -56,34 +55,29 @@ const PERM_STRINGS = [
 const log10 = (num: number) => (num ? Math.log10(num) : 0);
 const loglen = ~~log10(PERM_STRINGS.length);
 
-export default class extends Command {
+export default class Permissions extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
-			aliases: ["perms"],
-			description: "Gets permission names from a permission number",
-			category: "Miscellaneous",
-			usage: "<permissions>",
-			examples: ["permissions 8", "permissions 12037"],
-			argList: ["permissions:Number"],
-			minArgs: 1,
-			maxArgs: 1,
+			description: "Gets permission names from a permission BitField",
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "permissions",
+					description: "The permission BitField to destructure",
+					type: ApplicationCommandOptionType.Integer,
+					required: true,
+				},
+			],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]) {
-		if (NonDigits.test(args[0]))
-			return await context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild?.id, {
-					arg_provided: args[0],
-					arg_expected: await this.client.bulbutils.translate("global_not_found_types.int", context.guild?.id, {}),
-					usage: `\`${this.client.prefix}${this.usage}\``,
-				}),
-			);
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const bitfield = interaction.options.getInteger("permissions") as number;
 
 		// Decimal-to-Binary conversion algorithm
 		// This is closely based on the algorithm taught for doing written conversions
-		let permsInt = BigInt(args[0]);
+		let permsInt = BigInt(bitfield);
 		const permissionStrings: string[] = [];
 		for (let i = 0; permsInt > bint0 && i < PERM_STRINGS.length; permsInt >>= bint1, ++i) {
 			const val = permsInt % bint2;
@@ -91,21 +85,21 @@ export default class extends Command {
 		}
 
 		// There are better ways to accomplish dynamic first-letter-capitalization but am going to leave that for later
-		let noneWord = await this.client.bulbutils.translate("global_words.none", context.guild?.id, {});
+		let noneWord = await this.client.bulbutils.translate("global_words.none", interaction.guild?.id, {});
 		noneWord = noneWord[0].toUpperCase() + noneWord.slice(1);
 
 		const embed = new MessageEmbed()
-			.setTitle(`Permissions of: ${BigInt(args[0])}`)
+			.setTitle(`Permissions of: ${BigInt(bitfield)}`)
 			.setColor(Config.embedColor)
 			.setDescription(permissionStrings.length ? permissionStrings.join("\n") : `*${noneWord}*`)
 			.setFooter({
-				text: await this.client.bulbutils.translate("global_executed_by", context.guild?.id, {
-					user: context.author,
+				text: await this.client.bulbutils.translate("global_executed_by", interaction.guild?.id, {
+					user: interaction.user,
 				}),
-				iconURL: context.author.avatarURL({ dynamic: true }) || "",
+				iconURL: interaction.user.avatarURL({ dynamic: true }) || "",
 			})
 			.setTimestamp();
 
-		return context.channel.send({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 }

@@ -6,12 +6,27 @@ export default {
 	global_executed_by: "Executed by {{user.tag}}",
 	global_execution_cancel: "{{emote_fail}} Command execution cancelled",
 	global_missing_permissions: "{{emote_lock}} Missing permission(s)",
+
+	//  TODO: Remove, should become obsolete due to new command permissions system
+	// **
 	global_command_disabled: "{{emote_lock}} This command has been disabled by the server administrators",
 	global_not_invoked_by_user: "{{emote_lock}} You did not invoke this command",
-	global_missing_permissions_bot: "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n{{missing}}",
+	// **
+
+	global_missing_permissions_bot: "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n**Missing permissions:** `{{missing}}`",
+
+	// TODO: Remove, this gets handled by Discord API now
+	// **
 	global_cannot_convert: "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	global_cannot_convert_special: "{{emote_fail}} Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.",
+	// **
+
 	global_not_found: "{{emote_fail}} Could not find the specified {{type}}. Cannot convert `{{arg_provided}}` to `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
+	// TODO: Rename once all commands are migrated to new command permissions system
+	global_not_found_new: {
+		member: "{{emote_fail}} Could not find the specified **Member**!\n{{emote_wrench}} *Ensure the member is still in the server or that you're providing a valid Member*",
+		message: "{{emote_fail}} Could not find the specified **Message**!\n{{emote_wrench}} *Ensure the message is still in the channel or that you're providing a valid Message*",
+	},
 	global_not_found_types: {
 		user: "user",
 		member: "member",
@@ -57,11 +72,17 @@ export default {
 
 	global_logging_command: "`[{{timestamp}}]` {{emote_wrench}} **{{user.tag}}** `({{user.id}})` has executed `{{command}}` in <#{{channel}}>.",
 	global_no_reason: "No reason given",
+	// TODO: Remove, not needed anymore because of interaction deferring
 	global_loading: "{{emote_loading}} Loading...",
 	global_not_in_voice: "{{emote_fail}} User **{{target.tag}}** `({{target.id}})` is currently not connected to any Voice Channels!",
 	global_error: {
 		unknown: "{{emote_fail}} An unknown error has occurred, please try again later or if the issue persists contact the developers at {{discord_invite}}",
 		automod_items_length_undefined: "{{emote_fail}} An error occurred while attempting to parse the selected Automod items. No Automod items have been provided or Automod items length is undefined.",
+		// TODO: Rename to global
+		inviteinfo_guild_or_member_null:
+			"{{emote_fail}} An error occurred while attempting to parse the selected Invite. The Invite Guild, Interaction Guild or Interaction Member could not be resolved to non-null values.",
+		db_inf_id_null: "{{emote_fail}} An error occurred while trying to kick the user. The returned Infraction ID was null or the Member could not be kicked.",
+		settings_db_null: "{{emote_fail}} An error occurred while trying to retrieve the settings. The returned settings object was null or undefined.",
 	},
 	global_words: {
 		none: "none",
@@ -81,13 +102,20 @@ export default {
 	global_cannot_action_role_equal_bot: "{{emote_warn}} I cannot perform this action on **{{target.tag}}** `({{target.id}})` as I don't have a higher role than them!",
 	global_cannot_action_bot_self: "{{emote_warn}} You cannot perform this action on the bot!",
 
+	global_command_owner_only: "{{emote_warn}} This command is only available to the server owner!",
+
 	global_premium_only: "This is a premium command. Become a Patron and get access to this command and other exclusive features at <https://www.patreon.com/bulbbot>",
 
+	// TODO: Remove, disabled by default
 	event_interaction_dm_command: "{{emote_warn}} Slash commands cannot be used in DMs.",
 
+	// TODO: Remove, not possible anymore
+	// **
 	event_message_args_unexpected: "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}` got `{{arg_provided}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	event_message_args_missing: "{{emote_warn}} Missing argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct usage:** {{usage}}",
 	event_message_args_missing_list: "{{emote_warn}} Unexpected argument `{{argument}}`. Expected `{{arg_expected}}`.\n{{emote_wrench}} **Correct arguments:** {{argument_list}}",
+	// **
+
 	event_message_edit:
 		"{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`\n**B:** {{before}}\n**A:** {{after}}",
 	event_message_edit_special: "{{emote_edit}} Message from **{{user_tag}}** `({{user.id}})` has been updated in <#{{channel.id}}>\n`ID (channel-message): {{channel.id}}-{{message.id}}`",
@@ -291,6 +319,8 @@ export default {
 
 	config_automod_overview_header: "{{emote_wrench}} **Automod Overview**",
 
+	// TODO: Remove all of these
+	// **
 	override_clearance_more_than_100: "{{emote_warn}} Clearance level cannot be higher than **100**",
 	override_clearance_0_confirmation:
 		"{{emote_warn}} You're about to set a restricted command to clearance level `0`.\n\nThis will allow __**anyone**__ to use this command. Are you sure you want to do this?",
@@ -309,6 +339,7 @@ export default {
 	override_edit_success: "{{emote_success}} Successfully updated the override with a new clearance level of `{{clearance}}`",
 
 	override_remove_success: "{{emote_success}} Successfully removed the selected override.",
+	// **
 
 	automod_less_than_zero: "{{emote_warn}} {{limit}} cannot be less than `0`",
 
@@ -362,9 +393,9 @@ export default {
 	userinfo_embed_id: "**ID:** {{user.id}}\n",
 	userinfo_embed_username: "**Username:** {{user.username}}\n",
 	userinfo_embed_nickname: "**Nickname:** {{user.nickname}}\n",
-	userinfo_embed_profile: "**Profile:** <@{{user.id}}> [`Profile`](https://discord.com/users/{{user.id}})\n",
-	userinfo_embed_avatar: "**Avatar URL:** [Link]({{user.avatarUrl}})\n",
-	userinfo_embed_bot: "**Bot:** {{user.bot}}\n",
+	userinfo_embed_profile: "**Profile:** <@{{user.id}}>\n",
+	userinfo_embed_avatar: "**Avatar URL:** [Link]({{avatar}})\n",
+	userinfo_embed_bot: "**Bot:** {{bot}}\n",
 	userinfo_embed_created: "**Account Creation:** <t:{{user_age}}:F> (<t:{{user_age}}:R>)\n",
 	userinfo_embed_joined: "**Joined Server:** <t:{{user_joined}}:F> (<t:{{user_joined}}:R>)\n",
 	userinfo_embed_premium: "**Boosting since:** <t:{{user_premium}}:F> (<t:{{user_premium}}:R>)\n",
@@ -407,7 +438,7 @@ export default {
 	serverinfo_emotes_none: "No emotes",
 
 	action_success: "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} for **{{reason}}** `[#{{infraction_id}}]`",
-	action_success_temp: "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} until **{{until}}** for **{{reason}}** `[#{{infraction_id}}]`",
+	action_success_temp: "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been {{action}} until **<t:{{until}}:F>** for **{{reason}}** `[#{{infraction_id}}]`",
 
 	action_success_multi: "{{emote_success}} {{full_list}} have been {{action}} for **{{reason}}**",
 	action_multi_less_than_2: "{{emote_warn}} Selected less than 2 targets. Executing normal {{action}} instead",
@@ -423,12 +454,11 @@ export default {
 	crossban_select_pools: "Select the banpools where you want the user to get banned from.",
 	crossban_select_subscribed: "{{amount}} server(s) subscribed",
 	crossban_reason:
-		"{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{startedGuild.name}}** `({{startedGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
-	crossban_reason_audit: "Crossban from: {{startedGuild.name}} ({{startedGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
+		"{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{originalGuild.name}}** `({{originalGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
+	crossban_reason_audit: "Crossban from: {{originalGuild.name}} ({{originalGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
 
-	banpool_missing_access_not_found: "{{emote_warn}} That pool does not exists our you are missing access to view it",
-	banpool_missing_logging:
-		"{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `configure logging banpool_logs <channel>` command to setup a logging channel.",
+	banpool_missing_access_not_found: "{{emote_fail}} You do not have access to the banpool **{{pool}}** or the banpool does not exist",
+	banpool_missing_logging: "{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `/configure` command to setup a logging channel.",
 
 	banpool_create_name_exists: "{{emote_warn}} That banpool name already exists, please choose another one",
 	banpool_create_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` created a new banpool with the name **{{name}}**",
@@ -436,7 +466,7 @@ export default {
 
 	banpool_delete_message: "{{emote_warn}} Are you sure you want to delete this banpool? This action __**cannot**__ be undone.",
 	banpool_delete_success_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` deleted a banpool with the name **{{name}}**",
-	banpool_delete_success: "{{emote_success}} Successfully deleted the banpool",
+	banpool_delete_success: "{{emote_success}} Successfully deleted a banpool with the name of **{{name}}**",
 
 	banpool_info_top: "Banpool data from {{name}} | Servers subscribed: {{amountOfServers}}",
 	banpool_info_desc: "**Server ID:** `{{guildId}}`\n**Joined:** <t:{{createdAt}}> (<t:{{createdAt}}:R>)",
@@ -446,7 +476,7 @@ export default {
 	banpool_invite_message: "Press the green button to generate your banpool invite code",
 	banpool_invite_success_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` created a banpool invite for **{{name}}** that expires <t:{{expireTime}}:R>",
 	banpool_invite_reply:
-		"Here is your banpool code `{{code}}` for the **{{name}}** banpool. Keep it safe until the other server uses it to join. It will expire <t:{{expireTime}}:R> and only has **one** use. The other server can use the `banpool join {{code}}` command to join the pool",
+		"{{emote_success}} Here is your banpool code `{{code}}` for the **{{name}}** banpool.\n{{emote_wrench}} Keep the code safe until the other server uses it to join. The code will expire <t:{{expireTime}}:R> and only has **one** use. The other server can use the `/banpool join {{code}}` command to join the pool",
 
 	banpool_join_unable_to_find: "{{emote_warn}} Unable to find an invite with that code",
 	banpool_join_own_guild: "{{emote_warn}} You can't join your own banpool",
@@ -464,6 +494,7 @@ export default {
 	banpool_leave_success: "{{emote_success}} Successfully left the selected banpool",
 
 	banpool_remove_not_found: "{{emote_warn}} Unable to find a banpool with that name",
+	banpool_remove_self: "{{emote_warn}} You can't remove yourself from your own banpool",
 	banpool_remove_message: "{{emote_warn}} Are you sure you want to remove that server from the banpool?",
 	banpool_remove_log_kicked: "{{emote_warn}} Your server has been removed from the banpool with the name **{{name}}**",
 	banpool_remove_log: "{{emote_warn}} **{{user.tag}}** `({{user.id}})` removed the server **{{guild.name}}** `({{guild.id}})` from the banpool **{{name}}**",
@@ -472,6 +503,9 @@ export default {
 	already_banned: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has already been banned for `{{reason}}`",
 	not_banned: "{{emote_fail}} **{{target.tag}}** `({{target.id}})` is not banned from the server!",
 	ban_force_confirm: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently in the server. Do you want me to force-ban them anyway?",
+
+	// TODO: make this global
+	ban_message_dismiss: "{{emote_success}} You can now dismiss this message",
 
 	messageclear_few_than_0days: "{{emote_fail}} You can't clear messages that are younger than 0 days",
 	messageclear_more_than_30days: "{{emote_fail}} You can't clear messages that are older than 30 days. (We already do that automatically)",
@@ -483,6 +517,7 @@ export default {
 	purge_too_few: "{{emote_fail}} You cannot purge less than 2 messages",
 	purge_success: "{{emote_success}} Successfully purged **{{count}}** messages",
 	purge_message_failed_to_delete: "{{emote_fail}} Was unable to find the message you wanted to delete. No messages were deleted past this point.",
+	purge_message_log: "Message purge in {{channel.name}} ({{channel.id}}) by {{user.tag}} ({{user.id}}) at {{timestamp}}\n",
 
 	prune_invalid_time: "{{emote_fail}} The duration can only be a value between 1 and 30 (days)",
 	prune_no_users: "{{emote_fail}} There are no users that can be pruned with those settings",
@@ -490,7 +525,7 @@ export default {
 	prune_successful: "{{emote_success}} Successfully pruned **{{prune}}** members",
 	prune_log: "{{emote_success}} **{{user.tag}}** `({{user.id}})` pruned **{{prune}}** members for **{{reason}}** with these settings, days **{{days}}**, roles **{{roles}}**",
 
-	verification_level_select: "Please select your verification level then press save",
+	verifcation_level_community_none: "{{emote_success}} Verification level cannot be set to `none` for community servers",
 	verification_level_success: "{{emote_success}} Server verification level changed to `{{level}}`",
 
 	nickname_success: "{{emote_success}} Nickname of **{{target.tag}}** `({{target.id}})` has been changed from `{{nick_old}}` to `{{nick_new}}` for **{{reason}}** `[#{{infraction_id}}]`",
@@ -510,7 +545,7 @@ export default {
 	license_license:
 		"📜 This bot is licensed under the Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) license, for more info see the full license **[here](https://github.com/TeamBulbbot//Bulbbot/blob/master/LICENSE)**",
 
-	privacy_policy: "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/privacy-policy/)**",
+	privacy_policy: "📜 View the privacy policy of the bot **[here](https://docs.bulbbot.rocks/legal/privacy-policy)**",
 
 	github_source_code: "{{emote_github}} Bulbbot is a fully open source project. You can find the source code at our GitHub repository **[here](https://github.com/TeamBulbbot//Bulbbot)**",
 
@@ -563,6 +598,8 @@ export default {
 	lockdown_locked: "{{emote_locked}} Successfully locked down channel <#{{channel}}>",
 	lockdown_unlocked: "{{emote_unlocked}} Successfully unlocked channel <#{{channel}}>",
 
+	// TODO: Remove these, make sure no compile errors happen
+	// **
 	mute_muterole_not_found: "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
 	mute_not_muted: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
 	mute_rejoin: "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
@@ -571,22 +608,27 @@ export default {
 	unmute_confirm:
 		"{{emote_warn}} **{{target.tag}}** `({{target.id}})` has not been muted by Bulbbot. Are you sure you want to unmute them?\n*Unmuting a user not muted by Bulbbot will only remove the mute from them without creating an infraction*",
 	unmute_special: "{{emote_success}} **{{target.tag}}** `({{target.id}})` has been unmuted for **{{reason}}** ",
+	// **
 
 	infraction_not_found: "{{emote_fail}} Infraction **#{{infraction_id}}** could not be found!",
 	infraction_delete_confirm:
 		"{{emote_warn}} Are you sure you want to delete infraction **#{{infraction_id}}**? This action __**cannot**__ be undone.\n**Offender:** {{target.tag}} `({{target.id}})`\n**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n**Reason:** {{reason}}",
 	infraction_delete_success: "{{emote_success}} Infraction **#{{infraction_id}}** has been successfully deleted!",
+	infraction_delete_not_owned: "{{emote_fail}} You cannot delete an infraction that you did not create!\n{{emote_wrench}} **Tip:** Members with the `MANAGE_GUILD` permission bypass this check",
 	infraction_info_inf_id: "**Infraction ID:** {{infraction_id}}\n",
 	infraction_info_target: "**Target:** {{target.tag}} `({{target.id}})`\n",
 	infraction_info_moderator: "**Moderator:** {{moderator.tag}} `({{moderator.id}})`\n",
-	infraction_info_created: "**Created:** {{created}}\n",
+	infraction_info_created: "**Created:** {{created}}",
 	infraction_info_active: "**Active:** {{active}}",
 	infraction_info_expires: "**Expires:** {{expires}}",
-	infraction_info_reason: "\n\n**Reason:** {{reason}}",
+	infraction_info_reason: "\n\n**Reason:** {{reason}}\n",
 	infraction_search_not_found: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` has no infractions!",
 	infraction_list_not_found: "{{emote_warn}} This server does not seem to have any infractions!",
 	infraction_claim_success: "{{emote_success}} You have claimed responsibility over infraction **#{{infraction_id}}**",
+	infraction_claim_fail: "{{emote_fail}} You already have responsibility over infraction **#{{infraction_id}}**",
 	infraction_update_success: "{{emote_success}} Infraction **#{{infraction_id}}** has been updated!",
+	infraction_claim_not_owned:
+		"{{emote_fail}} You do not own infraction **#{{infraction_id}}**\n{{emote_wrench}} **Tip:** You can update an infraction after claiming it using the `/infraction claim` command",
 
 	archive_too_much: "{{emote_fail}} You can only request a max of 5000 entries",
 	archive_header_format: "Time, channelId-messageId | AuthorTag (AuthorId): Content/Embeds/Stickers/Attachments\n",
@@ -598,7 +640,399 @@ export default {
 	infraction_interaction_placeholder: "No Infractions Selected",
 	infraction_interaction_description: "Click to view more info",
 
-	commands_help: "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/command-list)**",
+	commands_help: "You can find all the commands Bulbbot offers over **[here](https://docs.bulbbot.rocks/basics/command-list)**",
 
-	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/command-list>",
+	// TODO: Remove once all commands are migrated
+	help_unable_to_find_command: "`{{commandName}}` is not a valid command, for a full list of commands visit our website <https://docs.bulbbot.rocks/basics/command-list>",
+
+	messageinfo_channel_not_found: "{{emote_warn}} Unable to find the channel in the messagelink you provided.",
+	messageinfo_message_not_found: "{{emote_warn}} Unable to find the message in the messagelink you provided.",
+
+	sc_about_name: "about",
+	sc_about_desc: "Returns more information about the bot",
+
+	sc_commands_name: "commands",
+	sc_commands_desc: "Return a list of all available commands for Bulbbot",
+
+	sc_github_name: "github",
+	sc_github_desc: "Returns the GitHub repository link",
+
+	sc_help_name: "help",
+	sc_help_desc: "Gets useful information about the provided command",
+	sc_help_command_name: "command",
+	sc_help_command_desc: "The command you want to get more information for",
+
+	sc_invite_name: "invite",
+	sc_invite_desc: "Returns the invite link for the bot and the support server",
+
+	sc_license_name: "license",
+	sc_license_desc: "Returns the license file for the Github repo for the bot",
+
+	sc_ping_name: "ping",
+	sc_ping_desc: "Returns the API and WebSocket latency",
+
+	sc_privacypolicy_name: "privacypolicy",
+	sc_privacypolicy_desc: "Returns the Privacy Policy for the bot",
+
+	sc_uptime_name: "uptime",
+	sc_uptime_desc: "Returns the current uptime of the bot",
+
+	sc_charinfo_name: "charinfo",
+	sc_charinfo_desc: "Returns information about the characters provided",
+	sc_charinfo_characters_name: "string",
+	sc_charinfo_characters_desc: "The characters you want to info",
+
+	sc_inviteinfo_name: "inviteinfo",
+	sc_inviteinfo_desc: "Returns some useful info about a server from the invite link",
+	sc_inviteinfo_invite_name: "invite",
+	sc_inviteinfo_invite_desc: "The invite link of the server you want to info",
+
+	sc_serverinfo_name: "server",
+	sc_serverinfo_desc: "Returns some useful information about the current server",
+
+	sc_userinfo_name: "userinfo",
+	sc_userinfo_desc: "Returns some useful info about a user",
+	sc_userinfo_user_name: "user",
+	sc_userinfo_user_desc: "The user you want to info",
+
+	sc_configure_name: "configure",
+	sc_configure_desc: "Configure main command",
+
+	sc_settings_name: "settings",
+	sc_settings_desc: "Get the settings for the server",
+
+	sc_avatar_name: "avatar",
+	sc_avatar_desc: "Gets a users avatar picture",
+	sc_avatar_user_name: "user",
+	sc_avatar_user_desc: "The user who's avatar you want to retrieve",
+
+	sc_remind_name: "remind",
+	sc_remind_desc: "Reminder main command",
+	sc_remind_list_name: "list",
+	sc_remind_list_desc: "Returns a list of all your current active reminders",
+	sc_remind_remove_name: "remove",
+	sc_remind_remove_desc: "Removes the selected reminder",
+	sc_remind_remove_reminder_name: "reminder",
+	sc_remind_remove_reminder_desc: "The ID of the reminder you want to remove",
+	sc_remind_set_name: "set",
+	sc_remind_set_desc: "Sets a reminder",
+	sc_remind_set_duration_name: "duration",
+	sc_remind_set_duration_desc: "The duration after which you should receive the reminder",
+	sc_remind_set_reminder_name: "reminder",
+	sc_remind_set_reminder_desc: "The reminder message",
+
+	sc_jumbo_name: "jumbo",
+	sc_jumbo_desc: "Sends a bigger version of the given emote(s)",
+	sc_jumbo_emojis_name: "emojis",
+	sc_jumbo_emojis_desc: "The emoji(s) you want to return in their jumbo version",
+
+	sc_ban_name: "ban",
+	sc_ban_desc: "Bans or forcebans a user from the server",
+	sc_ban_user_name: "user",
+	sc_ban_user_desc: "The user that should be banned",
+	sc_ban_reason_name: "reason",
+	sc_ban_reason_desc: "The reason behind the ban",
+
+	sc_cleanban_name: "cleanban",
+	sc_cleanban_desc: "Bans a user and removes all their contexts from the server",
+	sc_cleanban_member_name: "member",
+	sc_cleanban_member_desc: "The member that should be banned",
+	sc_cleanban_reason_name: "reason",
+	sc_cleanban_reason_desc: "The reason behind the ban",
+
+	sc_deafen_name: "deafen",
+	sc_deafen_desc: "Deafens a member from a Voice Channel they're connected to",
+	sc_deafen_member_name: "member",
+	sc_deafen_member_desc: "The member that should be deafened",
+	sc_deafen_reason_name: "reason",
+	sc_deafen_reason_desc: "The reason behind the deafen",
+
+	sc_infraction_name: "infraction",
+	sc_infraction_desc: "Manages a given users infractions",
+	sc_infraction_claim_name: "claim",
+	sc_infraction_claim_desc: "Claim responsibility over the provided infraction",
+	sc_infraction_claim_infraction_name: "infraction",
+	sc_infraction_claim_infraction_desc: "The infraction ID",
+	sc_infraction_info_name: "info",
+	sc_infraction_info_desc: "Returns more information about the provided information",
+	sc_infraction_info_infraction_name: "infraction",
+	sc_infraction_info_infraction_desc: "The infraction ID",
+	sc_infraction_modsearch_name: "modsearch",
+	sc_infraction_modsearch_desc: "Searches the database for any infractions where the provided user is the moderator",
+	sc_infraction_modsearch_user_name: "user",
+	sc_infraction_modsearch_user_desc: "The user that should be used as a query",
+	sc_infraction_offendersearch_name: "offendersearch",
+	sc_infraction_offendersearch_desc: "Searches the database for infractions where the selected user is marked as the offender",
+	sc_infraction_offendersearch_user_name: "user",
+	sc_infraction_offendersearch_user_desc: "The user that should be used as a query",
+	sc_infraction_remove_name: "remove",
+	sc_infraction_remove_desc: "Removes the selected infraction from the database",
+	sc_infraction_remove_infraction_name: "infraction",
+	sc_infraction_remove_infraction_desc: "The infraction ID",
+	sc_infraction_search_name: "search",
+	sc_infraction_search_desc: "Searches the database for any infractions where the selected user is the moderator or offender",
+	sc_infraction_search_user_name: "user",
+	sc_infraction_search_user_desc: "The user that should be used as the query",
+	sc_infraction_update_name: "update",
+	sc_infraction_update_desc: "Updates the selected infraction with the new provided reason",
+	sc_infraction_update_infraction_name: "infraction",
+	sc_infraction_update_infraction_desc: "The ID of the infraction that should be updated",
+	sc_infraction_update_reason_name: "reason",
+	sc_infraction_update_reason_desc: "The new updated reason behind the infraction",
+
+	sc_kick_name: "kick",
+	sc_kick_desc: "Kicks the selected member from the server",
+	sc_kick_member_name: "member",
+	sc_kick_member_desc: "The member that should be kicked",
+	sc_kick_reason_name: "reason",
+	sc_kick_reason_desc: "The reason behind the kick",
+
+	sc_lockdown_name: "lockdown",
+	sc_lockdown_desc: "Locks/unlocks a selected channel",
+	sc_lockdown_channel_name: "channel",
+	sc_lockdown_channel_desc: "The channel that should be locked/unlocked",
+	sc_lockdown_locked_name: "locked",
+	sc_lockdown_locked_desc: "Whether the channel should be locked or not",
+
+	sc_multiban_name: "multiban",
+	sc_multiban_desc: "Bans or forcebans multiple people from a server",
+	sc_multiban_users_name: "users",
+	sc_multiban_users_desc: "The users that should be banned separated by a space",
+	sc_multiban_reason_name: "reason",
+	sc_multiban_reason_desc: "The reason behind the ban",
+
+	sc_multikick_name: "multikick",
+	sc_multikick_desc: "Kicks multiple people from a server",
+	sc_multikick_users_name: "users",
+	sc_multikick_users_desc: "The users that should be kicked separated by a space",
+	sc_multikick_reason_name: "reason",
+	sc_multikick_reason_desc: "The reason behind the kick",
+
+	sc_multiunban_name: "multiunban",
+	sc_multiunban_desc: "Unbans multiple people from a server",
+	sc_multiunban_users_name: "users",
+	sc_multiunban_users_desc: "The users that should be unbanned separated by a space",
+	sc_multiunban_reason_name: "reason",
+	sc_multiunban_reason_desc: "The reason behind the unban",
+
+	sc_multiwarn_name: "multiwarn",
+	sc_multiwarn_desc: "Warns multiple selected users",
+	sc_multiwarn_users_name: "users",
+	sc_multiwarn_users_desc: "The users that should be warned separated by a space",
+	sc_multiwarn_reason_name: "reason",
+	sc_multiwarn_reason_desc: "The reason behind the warn",
+
+	sc_mute_name: "mute",
+	sc_mute_desc: "Mutes the selected user for the specified amount of time",
+	sc_mute_member_name: "member",
+	sc_mute_member_desc: "The member that should be muted",
+	sc_mute_duration_name: "duration",
+	sc_mute_duration_desc: "The duration for which the should be muted for",
+	sc_mute_reason_name: "reason",
+	sc_mute_reason_desc: "The reason behind the mute",
+
+	sc_nickname_name: "nickname",
+	sc_nickname_desc: "Nicknames a user from the current server",
+	sc_nickname_member_name: "member",
+	sc_nickname_member_desc: "The member that should be nicknamed",
+	sc_nickname_nickname_name: "nickname",
+	sc_nickname_nickname_desc: "The selected user's new nickname",
+	sc_nickname_reason_name: "reason",
+	sc_nickname_reason_desc: "The reason behind the nickname change",
+
+	sc_purge_name: "purge",
+	sc_purge_desc: "Purge main command",
+	sc_purge_all_name: "all",
+	sc_purge_all_desc: "Purges the selected amount of messages in the given channel",
+	sc_purge_all_amount_name: "amount",
+	sc_purge_all_amount_desc: "The amount of messages that should be fetched from the last sent message",
+	sc_purge_between_name: "between",
+	sc_purge_between_desc: "Purges all messages between the two given messages",
+	sc_purge_between_message1_name: "message1",
+	sc_purge_between_message1_desc: "The first message",
+	sc_purge_between_message2_name: "message2",
+	sc_purge_between_message2_desc: "The second message",
+	sc_purge_bots_name: "bots",
+	sc_purge_bots_desc: "Purges the selected amount of messages sent from bot users",
+	sc_purge_bots_amount_name: "amount",
+	sc_purge_bots_amount_desc: "The amount of messages that should be fetched from the last sent message",
+	sc_purge_contains_name: "contains",
+	sc_purge_contains_desc: "Purges the selected amount of messages containing the provided query",
+	sc_purge_contains_query_name: "query",
+	sc_purge_contains_query_desc: "The query that the fetched messages must have",
+	sc_purge_contains_amount_name: "amount",
+	sc_purge_contains_amount_desc: "The amount of messages that should be fetched from the last sent message",
+	sc_purge_embeds_name: "embeds",
+	sc_purge_embeds_desc: "Purges the selected amount of messages if the message contains an embed",
+	sc_purge_embeds_amount_name: "amount",
+	sc_purge_embeds_amount_desc: "The amount of messages that should be fetched from the last sent message",
+	sc_purge_emojis_name: "emojis",
+	sc_purge_emojis_desc: "Purges the selected amount of messages if the message contains an emoji",
+	sc_purge_emojis_amount_name: "amount",
+	sc_purge_emojis_amount_desc: "The amount of messages that should be fetched from the last sent message",
+	sc_purge_images_name: "images",
+	sc_purge_images_desc: "Purges the selected amount of messages if the message contains an image",
+	sc_purge_images_amount_name: "amount",
+	sc_purge_images_amount_desc: "The amount of messages that should be fetched from the last sent message",
+	sc_purge_until_name: "until",
+	sc_purge_until_desc: "Purges messages until a message",
+	sc_purge_until_message_name: "message",
+	sc_purge_until_message_desc: "The message to purge until",
+	sc_purge_user_name: "user",
+	sc_purge_user_desc: "Purges the selected amount of messages from the selected member",
+	sc_purge_user_member_name: "member",
+	sc_purge_user_member_desc: "The user who's messages should be purged",
+	sc_purge_user_amount_name: "amount",
+	sc_purge_user_amount_desc: "The amount of messages that should be fetched from the last sent message",
+
+	sc_slowmode_name: "slowmode",
+	sc_slowmode_desc: "Sets a slowmode to the selected channel",
+	sc_slowmode_duration_name: "duration",
+	sc_slowmode_duration_desc: "The duration the slowmode should be set to",
+	sc_slowmode_channel_name: "channel",
+	sc_slowmode_channel_desc: "The channel where the slowmode should be edited",
+
+	sc_softban_name: "softban",
+	sc_softban_desc: "Bans and immediately unbans the selected member from the server",
+	sc_softban_member_name: "member",
+	sc_softban_member_desc: "The user that should be soft-banned",
+	sc_softban_reason_name: "reason",
+	sc_softban_reason_desc: "The reason behind the soft-ban",
+
+	sc_tempban_name: "tempban",
+	sc_tempban_desc: "Temporarily bans the selected member from the server",
+	sc_tempban_member_name: "member",
+	sc_tempban_member_desc: "The member that should be temp-banned",
+	sc_tempban_duration_name: "duration",
+	sc_tempban_duration_desc: "The duration the selected user should be banned for",
+	sc_tempban_reason_name: "reason",
+	sc_tempban_reason_desc: "The reason behind the tempban",
+
+	sc_unban_name: "unban",
+	sc_unban_desc: "Unban a user from the server",
+	sc_unban_user_name: "user",
+	sc_unban_user_desc: "The user that should be unbanned",
+	sc_unban_reason_name: "reason",
+	sc_unban_reason_desc: "The reason behind the unban",
+
+	sc_undeafen_name: "undeafen",
+	sc_undeafen_desc: "Undeafens a member from a Voice Channel they're connected to",
+	sc_undeafen_member_name: "member",
+	sc_undeafen_member_desc: "The member that should be undeafened",
+	sc_undeafen_reason_name: "reason",
+	sc_undeafen_reason_desc: "The reason behind the undeafen",
+
+	sc_unmute_name: "unmute",
+	sc_unmute_desc: "Unmutes the selected member",
+	sc_unmute_member_name: "member",
+	sc_unmute_member_desc: "The member that should be unmuted",
+	sc_unmute_reason_name: "reason",
+	sc_unmute_reason_desc: "The reason behind the unmute",
+
+	sc_verification_name: "verification",
+	sc_verification_desc: "Changes the server verification level",
+
+	sc_warn_name: "warn",
+	sc_warn_desc: "Warns the selected server member",
+	sc_warn_member_name: "member",
+	sc_warn_member_desc: "The member that should be warned",
+	sc_warn_reason_name: "reason",
+	sc_warn_reason_desc: "The reason behind the warning",
+
+	sc_banpool_name: "banpool",
+	sc_banpool_desc: "Banpool main command",
+	sc_banpool_create_name: "create",
+	sc_banpool_create_desc: "Creates a banpool",
+	sc_banpool_create_name_name: "name",
+	sc_banpool_create_name_desc: "The banpool name",
+	sc_banpool_delete_name: "delete",
+	sc_banpool_delete_desc: "Deletes the selected banpool",
+	sc_banpool_delete_name_name: "name",
+	sc_banpool_delete_name_desc: "The name of the banpool that should be deleted",
+	sc_banpool_info_name: "info",
+	sc_banpool_info_desc: "Returns information about the selected banpool",
+	sc_banpool_info_name_name: "name",
+	sc_banpool_info_name_desc: "The name of the banpool that should be info'd",
+	sc_banpool_invite_name: "invite",
+	sc_banpool_invite_desc: "Creates a one-time invite for the selected banpool",
+	sc_banpool_invite_name_name: "name",
+	sc_banpool_invite_name_desc: "Name of the selected banpool",
+	sc_banpool_join_name: "join",
+	sc_banpool_join_desc: "Joins the selected banpool",
+	sc_banpool_join_code_name: "code",
+	sc_banpool_join_code_desc: "The invite code of that banpool that you want to join",
+	sc_banpool_leave_name: "leave",
+	sc_banpool_leave_desc: "Leaves the selected banpool",
+	sc_banpool_leave_name_name: "name",
+	sc_banpool_leave_name_desc: "Name of the banpool that you want to leave",
+	sc_banpool_list_name: "list",
+	sc_banpool_list_desc: "Gets a list of bannpools the server is connected to",
+	sc_banpool_kick_name: "kick",
+	sc_banpool_kick_desc: "Kicks the selected server from the selected banpool",
+	sc_banpool_kick_guild_id_name: "guild_id",
+	sc_banpool_kick_guild_id_desc: "ID of the selected server",
+	sc_banpool_kick_name_name: "name",
+	sc_banpool_kick_name_desc: "The name of the selected banpool",
+
+	sc_crossban_name: "crossban",
+	sc_crossban_desc: "Cross-bans the selected user from all connected banpools",
+	sc_crossban_member_name: "member",
+	sc_crossban_member_desc: "The user that should be cross-banned from all connected banpools",
+	sc_crossban_reason_name: "reason",
+	sc_crossban_reason_desc: "The reason for the ban",
+
+	sc_channelinfo_name: "channelinfo",
+	sc_channelinfo_desc: "Returns information about the channel",
+	sc_channelinfo_channel_name: "channel",
+	sc_channelinfo_channel_desc: "The channel you want to get information about",
+
+	sc_messageinfo_name: "messageinfo",
+	sc_messageinfo_desc: "Returns information about the message provided",
+	sc_messageinfo_message_link_name: "message",
+	sc_messageinfo_message_link_desc: "The message you want to get info about",
+
+	sc_roleinfo_name: "roleinfo",
+	sc_roleinfo_desc: "Returns information about the role provided",
+	sc_roleinfo_role_name: "role",
+	sc_roleinfo_role_desc: "The role you want to get info about",
+
+	sc_messageclear_name: "messageclear",
+	sc_messageclear_desc: "Clears X amount of messages from the database in the server",
+	sc_messageclear_days_name: "days",
+	sc_messageclear_days_desc: "The amount of days of messages to clear",
+
+	sc_id_name: "id",
+	sc_id_desc: "Parses Discord IDs from the provided text",
+	sc_id_text_name: "text",
+	sc_id_text_desc: "The text you want to parse Discord IDs from",
+
+	sc_permissions_name: "permissions",
+	sc_permissions_desc: "Gets permission names from a permission number",
+	sc_permissions_permissions_name: "permissions",
+	sc_permissions_permissions_desc: "The permission number",
+
+	sc_archive_name: "archive",
+	sc_archive_desc: "Archive commands",
+	sc_archive_channel_name: "channel",
+	sc_archive_channel_desc: "Archive a channel",
+	sc_archive_channel_channel_name: "channel",
+	sc_archive_channel_channel_desc: "The channel to archive",
+	sc_archive_user_name: "user",
+	sc_archive_user_desc: "Archive a user",
+	sc_archive_user_user_name: "user",
+	sc_archive_user_user_desc: "The user to archive",
+
+	sc_prune_name: "prune",
+	sc_prune_desc: "Prune users from the server",
+	sc_prune_days_name: "days",
+	sc_prune_days_desc: "How many days to prune from",
+	sc_prune_roles_name: "roles",
+	sc_prune_roles_desc: "Roles to include in the prune",
+	sc_prune_reason_name: "reason",
+	sc_prune_reason_desc: "Reason for the prune",
+
+	sc_snowflake_name: "snowflake",
+	sc_snowflake_desc: "Gets information about a given snowflake",
+	sc_snowflake_id_name: "id",
+	sc_snowflake_id_desc: "The snowflake you want to check",
 } as const;

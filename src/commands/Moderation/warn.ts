@@ -1,71 +1,72 @@
-import Command from "../../structures/Command";
-import CommandContext from "../../structures/CommandContext";
-import { GuildMember, Snowflake } from "discord.js";
+import { CommandInteraction, Guild, GuildMember, Snowflake } from "discord.js";
 import InfractionsManager from "../../utils/managers/InfractionsManager";
-import { NonDigits } from "../../utils/Regex";
 import BulbBotClient from "../../structures/BulbBotClient";
+import ApplicationCommand from "../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v9";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends Command {
+export default class Warn extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
 		super(client, {
 			name,
 			description: "Warns the selected server member",
-			category: "Moderation",
-			usage: "<member> [reason]",
-			examples: ["warn 123456789012345678", "warn 123456789012345678 rude user", "warn @Wumpus#0000 rude user"],
-			argList: ["member:Member", "reason:String"],
-			minArgs: 1,
-			maxArgs: -1,
-			clearance: 50,
-			userPerms: ["MANAGE_ROLES"],
+			type: ApplicationCommandType.ChatInput,
+			options: [
+				{
+					name: "member",
+					type: ApplicationCommandOptionType.User,
+					description: "The member that should be warned",
+					required: true,
+				},
+				{
+					name: "reason",
+					type: ApplicationCommandOptionType.String,
+					description: "The reason behind the warning",
+					required: false,
+				},
+			],
+			command_permissions: ["MODERATE_MEMBERS"],
 		});
 	}
 
-	async run(context: CommandContext, args: string[]): Promise<void> {
-		//Variable declarations
-		const targetID: Snowflake = args[0].replace(NonDigits, "");
-		const target: GuildMember | undefined = await this.client.bulbfetch.getGuildMember(context.guild?.members, targetID);
-		let reason: string = args.slice(1).join(" ");
+	public async run(interaction: CommandInteraction) {
+		let member = interaction.options.getMember("member");
+		let reason = interaction.options.getString("reason", false);
 
-		//Checks if reason or target are null and if the target is actionable
-		if (!target) {
-			await context.channel.send(
-				await this.client.bulbutils.translate("global_not_found", context.guild?.id, {
-					type: await this.client.bulbutils.translate("global_not_found_types.member", context.guild?.id, {}),
-					arg_expected: "member:Member",
-					arg_provided: args[0],
-					usage: this.usage,
-				}),
-			);
-			return;
-		}
-		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", context.guild?.id, {});
-		if (!context.guild || !context.member) return;
+		if (!member)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
+		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
+		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 
-		if (await this.client.bulbutils.resolveUserHandle(context, this.client.bulbutils.checkUser(context, target), target.user)) return;
-
-		//Executes the action
 		const infID = await infractionsManager.warn(
 			this.client,
-			context.guild.id,
-			target.user,
-			context.member,
-			await this.client.bulbutils.translate("global_mod_action_log", context.guild.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
-				moderator: context.author,
-				target: target.user,
+			interaction.guild as Guild,
+			member.user,
+			interaction.member as GuildMember,
+			await this.client.bulbutils.translate("global_mod_action_log", interaction.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.warn", interaction.guild?.id, {}),
+				moderator: interaction.user,
+				target: member.user,
 				reason,
 			}),
 			reason,
 		);
 
-		//Sends the respond context
-		await context.channel.send(
-			await this.client.bulbutils.translate("action_success", context.guild.id, {
-				action: await this.client.bulbutils.translate("mod_action_types.warn", context.guild.id, {}),
-				target: target.user,
+		if (infID === null)
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("global_error.db_inf_id_null", interaction.guild?.id, {}),
+				ephemeral: true,
+			});
+
+		return interaction.reply(
+			await this.client.bulbutils.translate("action_success", interaction.guild?.id, {
+				action: await this.client.bulbutils.translate("mod_action_types.warn", interaction.guild?.id, {}),
+				target: member.user,
 				reason,
 				infraction_id: infID,
 			}),

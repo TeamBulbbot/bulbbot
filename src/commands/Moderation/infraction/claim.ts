@@ -1,48 +1,52 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
-import Command from "../../../structures/Command";
-import SubCommand from "../../../structures/SubCommand";
-import CommandContext from "../../../structures/CommandContext";
-import { Message } from "discord.js";
+import { CommandInteraction, Snowflake } from "discord.js";
 import InfractionsManager from "../../../utils/managers/InfractionsManager";
-import { NonDigits } from "../../../utils/Regex";
+import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
+import ApplicationCommand from "../../../structures/ApplicationCommand";
+import { ApplicationCommandOptionType } from "discord-api-types/v10";
 
 const infractionsManager: InfractionsManager = new InfractionsManager();
 
-export default class extends SubCommand {
-	constructor(client: BulbBotClient, parent: Command) {
+export default class InfractionClaim extends ApplicationSubCommand {
+	constructor(client: BulbBotClient, parent: ApplicationCommand) {
 		super(client, parent, {
 			name: "claim",
-			clearance: 50,
-			minArgs: 1,
-			maxArgs: 1,
-			argList: ["infraction:Number"],
-			usage: "<infraction>",
-			description: "Claims an infraction.",
+			description: "Claim responsibility over an infraction",
+			options: [
+				{
+					name: "id",
+					type: ApplicationCommandOptionType.Integer,
+					description: "The ID of the infraction",
+					required: true,
+					min_value: 1,
+					max_value: 2147483647,
+				},
+			],
 		});
 	}
 
-	public async run(context: CommandContext, args: string[]): Promise<void | Message> {
-		if (!context.guild || !context.member) return;
-		const infID = Number(args[0].replace(NonDigits, ""));
+	public async run(interaction: CommandInteraction): Promise<void> {
+		const infractionId: number = interaction.options.getInteger("id") as number;
+		const infraction = await infractionsManager.getInfraction(interaction.guild?.id as Snowflake, infractionId);
 
-		if (!infID || infID >= 2147483647 || infID <= 0)
-			return context.channel.send(
-				await this.client.bulbutils.translate("global_cannot_convert", context.guild.id, {
-					arg_expected: "id:Number",
-					arg_provided: args[0],
-					usage: this.usage,
+		if (infraction === null) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_not_found", interaction.guild?.id, {
+					infraction_id: infractionId,
 				}),
-			);
-
-		if ((await infractionsManager.getInfraction(context.guild.id, Number(args[0].replace(NonDigits, "")))) === undefined) {
-			return context.channel.send(
-				await this.client.bulbutils.translate("infraction_not_found", context.guild.id, {
-					infraction_id: args[0],
-				}),
-			);
+				ephemeral: true,
+			});
 		}
 
-		await infractionsManager.updateModerator(context.guild.id, Number(args[0].replace(NonDigits, "")), context.member.user);
-		return await context.channel.send(await this.client.bulbutils.translate("infraction_claim_success", context.guild.id, { infraction_id: args[0] }));
+		if (infraction.moderatorId === interaction.user.id) {
+			return interaction.reply({
+				content: await this.client.bulbutils.translate("infraction_claim_fail", interaction.guild?.id, { infraction_id: infractionId }),
+				ephemeral: true,
+			});
+		}
+
+		await infractionsManager.updateModerator(interaction.guild?.id as Snowflake, infractionId, interaction.user);
+
+		return interaction.reply(await this.client.bulbutils.translate("infraction_claim_success", interaction.guild?.id, { infraction_id: infractionId }));
 	}
 }
