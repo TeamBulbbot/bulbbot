@@ -7,7 +7,7 @@
 
 */
 -- Has null ID for all three configs
-DELETE FROM "guilds" WHERE id = 909;
+DELETE FROM "guilds" WHERE "guildConfigurationId" IS NULL OR "guildLoggingId" IS NULL OR "automodId" IS NULL;
 -- AlterTable
 ALTER TABLE "guilds" ALTER COLUMN "guildConfigurationId" SET NOT NULL,
 ALTER COLUMN "guildLoggingId" SET NOT NULL,
