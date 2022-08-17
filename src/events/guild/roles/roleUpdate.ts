@@ -1,5 +1,5 @@
 import Event from "../../../structures/Event";
-import { GuildAuditLogs, GuildMember, Role } from "discord.js";
+import { User, Role } from "discord.js";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
 
@@ -15,21 +15,21 @@ export default class extends Event {
 	}
 
 	public async run(oldRole: Role, newRole: Role): Promise<void> {
-		const config = await databaseManager.getConfig(newRole.guild.id);
-		if (newRole.rawPosition > newRole.guild.me?.roles.highest.rawPosition) {
-			if (newRole.id === config.muteRole) await databaseManager.setMuteRole(newRole.guild.id, null);
-			else if (newRole.id === config.autorole) await databaseManager.setAutoRole(newRole.guild.id, null);
+		const config = await databaseManager.getConfig(newRole.guild);
+		if (newRole.rawPosition > (newRole.guild.me?.roles.highest.rawPosition ?? Infinity)) {
+			if (newRole.id === config.muteRole) await databaseManager.updateConfig({ table: "guildConfiguration", field: "muteRole", value: null, guild: newRole.guild });
+			if (newRole.id === config.autorole) await databaseManager.updateConfig({ table: "guildConfiguration", field: "autorole", value: null, guild: newRole.guild });
 		}
 
 		const difference = this.client.bulbutils.diff(oldRole, newRole).filter((k) => k !== "rawPosition");
 		if (difference.length === 0) return;
 
-		let executor: GuildMember | null = null;
-		let changes: any[] | null = null;
+		let executor: Nullable<User> = null;
+		let changes: Nullable<any[]> = null;
 		// let createdTimestamp: number | null = null;
 		const log: string[] = [];
 		try {
-			const logs: GuildAuditLogs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
+			const logs = await newRole.guild.fetchAuditLogs({ limit: 1, type: "ROLE_UPDATE" });
 			const first = logs.entries.first();
 			if (!first) return;
 
