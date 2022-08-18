@@ -17,7 +17,7 @@ export default class extends Event {
 		const guildCfg = await databaseManager.getConfig(message.guild as Guild);
 		await databaseManager.addToMessageToDB(message);
 
-		if (guildCfg === undefined || guildCfg.prefix === undefined) {
+		if (guildCfg === undefined) {
 			await databaseManager.deleteGuild(message.guild as Guild);
 			await databaseManager.getGuild(message.guild as Guild);
 			if (!(await databaseManager.getConfig(message.guild as Guild)))

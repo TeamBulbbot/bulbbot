@@ -3,7 +3,6 @@ import LoggingSetup from "./LoggingSetup";
 
 export default interface GuildSetup {
 	language?: string;
-	prefix?: string;
 	timezone?: string;
 	muterole?: string | null;
 	automod?: string;

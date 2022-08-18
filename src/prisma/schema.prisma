@@ -100,9 +100,8 @@ model Experiment {
 }
 
 model GuildConfiguration {
-  id                Int        @id @default(autoincrement())
-  // @deprecated
-  prefix            String     @default("!") @db.VarChar(255)
+  id Int @id @default(autoincrement())
+
   language          String     @default("en-US") @db.VarChar(255)
   timezone          String     @default("UTC") @db.VarChar(255)
   premiumGuild      Boolean    @default(false)

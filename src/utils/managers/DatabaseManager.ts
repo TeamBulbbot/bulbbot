@@ -1,4 +1,3 @@
-import * as Config from "../../Config";
 import { Message, MessageAttachment, Snowflake } from "discord.js";
 import moment from "moment";
 import AutoModPart, { AutoModAntiSpamPart, AutoModListPart } from "../types/AutoModPart";
@@ -37,9 +36,7 @@ export default class DatabaseManager {
 				name: guild.name,
 				guildId: guild.id,
 				guildConfiguration: {
-					create: {
-						prefix: Config.prefix,
-					},
+					create: {},
 				},
 				guildLogging: {
 					create: {},

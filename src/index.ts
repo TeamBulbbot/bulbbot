@@ -13,7 +13,6 @@ env.config({ path: `${__dirname}/../.env` });
 
 const config = {
 	token: process.env.TOKEN,
-	prefix: Config.prefix,
 	defaultPerms: Config.defaultPerms,
 };
 

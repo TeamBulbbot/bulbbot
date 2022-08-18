@@ -41,12 +41,6 @@ export default async function (interaction: MessageComponentInteraction, client:
 					emoji: Emotes.configure.LOGGING,
 				},
 				{
-					label: await client.bulbutils.translate("config_main_options.prefix", interaction.guild?.id, {}),
-					value: "prefix",
-					description: await client.bulbutils.translate("config_main_options_descriptions.prefix", interaction.guild?.id, {}),
-					emoji: Emotes.features.MEMBER_LIST_DISABLED,
-				},
-				{
 					label: await client.bulbutils.translate("config_main_options.quick_reasons", interaction.guild?.id, {}),
 					value: "quickReasons",
 					description: await client.bulbutils.translate("config_main_options_descriptions.quick_reasons", interaction.guild?.id, {}),
