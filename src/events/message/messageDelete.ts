@@ -1,12 +1,15 @@
 import Event from "../../structures/Event";
-import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannel, MessageEmbed } from "discord.js";
+import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannel, MessageEmbed, DMChannel, PartialDMChannel } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
 import * as fs from "fs";
 import { User } from "@sentry/node";
 import prisma from "../../prisma";
 import { isNullish } from "../../utils/helpers";
+import { Prisma } from "@prisma/client";
 
 const loggingManager: LoggingManager = new LoggingManager();
+
+type TextBasedGuildChannel = Exclude<TextBasedChannel, DMChannel | PartialDMChannel>;
 
 export default class extends Event {
 	constructor(...args: any[]) {
@@ -19,13 +22,13 @@ export default class extends Event {
 	public async run(message: Message): Promise<void> {
 		if (!message.guild) return;
 		let msg = "";
-		let channel: TextBasedChannel;
-		let guild: Guild;
-		let author: User;
-		let content: string;
-		let sticker: string;
-		let attachment: string;
-		let embeds: string | MessageEmbed[] | null;
+		let channel: Maybe<TextBasedGuildChannel>;
+		let guild: Maybe<Guild>;
+		let author: Maybe<User>;
+		let content: Maybe<string>;
+		let sticker: Maybe<string>;
+		let attachment: Maybe<string>;
+		let embeds: Maybe<string | MessageEmbed[]>;
 
 		if (message.partial) {
 			const dbData = await prisma.messageLog.findUnique({
@@ -34,23 +37,19 @@ export default class extends Event {
 				},
 			});
 			if (isNullish(dbData)) return;
-			// @ts-expect-error
 			author = await this.client.bulbfetch.getUser(dbData.authorId);
-			// @ts-expect-error
-			channel = await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId);
-			// @ts-expect-error
-			guild = this.client.guilds.cache.get(channel.guild?.id);
-			// @ts-expect-error
+			channel = (await this.client.bulbfetch.getChannel(this.client.channels as GuildChannelManager, dbData.channelId)) as Optional<TextBasedGuildChannel>;
+			guild = await this.client.bulbfetch.bulbfetch(this.client.guilds, channel?.guild?.id);
 			content = dbData.content;
-			// @ts-expect-error
-			sticker = dbData.sticker ? `**S:** ID: \`${dbData.sticker.id}\` | **Name:** ${dbData.sticker.name} | **Format:** ${dbData.sticker.format}\n` : "";
+			const dbSticker: Prisma.JsonObject | undefined = dbData.sticker as any;
+			sticker = dbSticker ? `**S:** ID: \`${dbSticker?.id}\` | **Name:** ${dbSticker?.name} | **Format:** ${dbSticker?.format}\n` : "";
 			attachment = dbData.attachments.length > 0 ? `**A**: ${dbData.attachments.join("\n")}` : "";
 			// @ts-expect-error
 			embeds = dbData.embed;
 		} else {
 			if (message.author.id === this.client.user?.id) return;
 			author = message.author;
-			channel = message.channel as TextBasedChannel;
+			channel = message.channel as TextBasedGuildChannel;
 			guild = message.guild;
 			content = message.content;
 			sticker = message.stickers.first() ? `**S:** ID: \`${message.stickers.first()?.id}\` | **Name:** ${message.stickers.first()?.name} | **Format:** ${message.stickers.first()?.format}\n` : "";
@@ -82,30 +81,32 @@ export default class extends Event {
 		}
 
 		if (!msg)
-			msg = await this.client.bulbutils.translate("event_message_delete", guild.id, {
-				user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-				user: author as typeof author & Required<Pick<typeof author, "id">>,
+			msg = await this.client.bulbutils.translate("event_message_delete", guild?.id, {
+				user_tag: author?.bot ? `${author?.tag} :robot:` : author?.tag,
+				user: author as typeof author & Required<Identifiable>,
 				message,
+				// @ts-expect-error
 				channel,
-				content: content ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
+				content: content && channel ? `**C:** ${Util.cleanContent(content, channel)}\n` : "",
 				reply: message.type === "REPLY" ? `**Reply to:** https://discord.com/channels/${message.reference?.guildId}/${message.reference?.channelId}/${message.reference?.messageId}\n` : "",
 				sticker,
 				attachment,
 			});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`, content);
+			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`, content || "");
 			await loggingManager.sendEventLog(
 				this.client,
 				guild,
 				"message",
-				await this.client.bulbutils.translate("event_message_delete_special", guild.id, {
-					user_tag: author.bot ? `${author.tag} :robot:` : author.tag,
-					user: author as typeof author & Required<Pick<typeof author, "id">>,
+				await this.client.bulbutils.translate("event_message_delete_special", guild?.id, {
+					user_tag: author?.bot ? `${author?.tag} :robot:` : author?.tag,
+					user: author as typeof author & Identifiable,
 					message,
+					// @ts-expect-error
 					channel,
 				}),
-				`${__dirname}/../../../files/MESSAGE_DELETE-${guild.id}.txt`,
+				`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
 	}
