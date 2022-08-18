@@ -17,7 +17,6 @@ export default class extends Event {
 	public async run(oldRole: Role, newRole: Role): Promise<void> {
 		const config = await databaseManager.getConfig(newRole.guild);
 		if (newRole.rawPosition > (newRole.guild.me?.roles.highest.rawPosition ?? Infinity)) {
-			if (newRole.id === config.muteRole) await databaseManager.updateConfig({ table: "guildConfiguration", field: "muteRole", value: null, guild: newRole.guild });
 			if (newRole.id === config.autorole) await databaseManager.updateConfig({ table: "guildConfiguration", field: "autorole", value: null, guild: newRole.guild });
 		}
 

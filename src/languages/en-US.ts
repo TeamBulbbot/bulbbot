@@ -205,7 +205,6 @@ export default {
 		language: "Language",
 		actions_on_info: "Actions on Info",
 		manual_nickname_inf: "Manual nickname infractions",
-		prefix: "Prefix",
 		roles_on_leave: "Roles on Leave",
 		automod: "Automod",
 		autorole: "Autorole",
@@ -217,7 +216,6 @@ export default {
 		language: "Change the language of the bot",
 		actions_on_info: "Configure the actions on info setting",
 		manual_nickname_inf: "Changing a users nickname results in a infraction",
-		prefix: "Configure the prefix of the bot",
 		roles_on_leave: "Configure the roles on leave setting",
 		automod: "Configure the Automod settings",
 		autorole: "Configure the autorole setting",
@@ -260,14 +258,6 @@ export default {
 	config_timezone_header: "{{emote_wrench}} **Timezone Configuration**\n{{emote_edit}}*This setting controls the timezone that the bot will use when sending logs.*",
 	config_timezone_placeholder: "Current Timezone: {{timezone}}",
 	config_timezone_success: "{{emote_success}} Successfully changed the server timezone to `{{timezone}}`",
-
-	config_prefix_header: "{{emote_wrench}} **Prefix Configuration**\n{{emote_edit}}*This setting controls the prefix that the bot will listen to when using commands.*",
-	config_prefix_prompt: "{{emote_wrench}} Please enter a new prefix",
-	config_prefix_reset: "{{emote_success}} The prefix has been reset to `!`",
-	config_prefix_success: "{{emote_success}} Successfully changed the server prefix to `{{prefix}}`",
-	config_prefix_too_long: "{{emote_fail}} The selected prefix is too long. Please make the prefix shorter than 255 characters.",
-	config_prefix_button_change: "Change Prefix",
-	config_prefix_button_reset: "Reset Prefix",
 
 	config_automod_main_header: "{{emote_wrench}} **Automod Configuration**\n{{emote_edit}}*This setting controls the AutoMod settings for the server.*",
 	config_automod_main_add_remove_description: "Add or remove an item from the selected Automod category.",
@@ -600,7 +590,6 @@ export default {
 
 	// TODO: Remove these, make sure no compile errors happen
 	// **
-	mute_muterole_not_found: "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
 	mute_not_muted: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
 	mute_rejoin: "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
 	mute_rejoin_reason: "{{user.tag}} ({{user.id}}) has rejoined the server before their mute expired and has been automatically muted again.",

@@ -9,7 +9,6 @@ export const version = "1.0.0";
 export const lib = "Discord.JS";
 
 // Configs
-export const prefix = "!";
 export const embedColor: ColorResolvable = "#5865F2";
 export const massCommandSleep = 850;
 export const intents: IntentsString[] = ["GUILDS", "GUILD_MEMBERS", "GUILD_BANS", "GUILD_MESSAGES", "GUILD_INVITES", "GUILD_MESSAGE_REACTIONS", "GUILD_VOICE_STATES", "GUILD_SCHEDULED_EVENTS"];

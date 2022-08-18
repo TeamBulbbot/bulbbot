@@ -14,14 +14,6 @@ export default class extends Event {
 
 	async run(role: Role) {
 		const config = await databaseManager.getConfig(role.guild);
-
-		if (role.id === config.muteRole)
-			await databaseManager.updateConfig({
-				guild: role.guild,
-				table: "guildConfiguration",
-				field: "muteRole",
-				value: null,
-			});
 		if (role.id === config.autorole)
 			await databaseManager.updateConfig({
 				guild: role.guild,
