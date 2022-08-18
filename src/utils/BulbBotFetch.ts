@@ -1,42 +1,44 @@
-import { User, GuildMember, Snowflake, GuildMemberManager, GuildChannelManager, GuildChannel, ThreadChannel, RoleManager, Role } from "discord.js";
+import { User, GuildMember, Snowflake, GuildMemberManager, GuildChannelManager, GuildChannel, ThreadChannel, RoleManager, Role, Guild, DataManager, GuildManager } from "discord.js";
 import BulbBotClient from "../structures/BulbBotClient";
 
-export default class {
+export default class BulbFetch {
 	private readonly client: BulbBotClient;
 
 	constructor(client: BulbBotClient) {
 		this.client = client;
 	}
 
-	public async getUser(userId: Snowflake): Promise<User | undefined> {
-		let user: User | undefined = this.client.users.cache.get(userId);
-		if (!userId.length) return undefined;
-		if (!user) user = await this.client.users.fetch(userId).catch((_) => undefined);
-
-		return user;
+	public async getUser(userId: Maybe<Snowflake>): Promise<Optional<User>> {
+		return this.bulbfetch(this.client.users, userId);
 	}
 
-	public async getGuildMember(members: GuildMemberManager | undefined, userId: Snowflake | undefined): Promise<GuildMember | undefined> {
-		if (!userId) return undefined;
-		let member: GuildMember | undefined = members?.cache.get(userId);
-		if (!member) member = await members?.fetch(userId).catch((_) => undefined);
-
-		return member;
+	public async getGuildMember(members: GuildMemberManager | undefined, userId: Maybe<Snowflake>): Promise<Optional<GuildMember>> {
+		return this.bulbfetch(members, userId);
 	}
 
-	public async getChannel(channels: GuildChannelManager | undefined, channelId: Snowflake): Promise<GuildChannel | ThreadChannel | null | undefined> {
-		let channel: GuildChannel | ThreadChannel | undefined | null = channels?.cache.get(channelId);
-		if (!channelId.length) return undefined;
-		if (!channel) channel = await channels?.fetch(channelId).catch((_) => undefined);
-
-		return channel;
+	public async getChannel(channels: GuildChannelManager | undefined, channelId: Maybe<Snowflake>): Promise<Optional<GuildChannel | ThreadChannel>> {
+		return this.bulbfetch(channels, channelId);
 	}
 
-	public async getRole(roles: RoleManager | undefined, roleId: Snowflake): Promise<Role | null | undefined> {
-		let role: Role | undefined | null = roles?.cache.get(roleId);
-		if (!roleId.length) return undefined;
-		if (!role) role = await roles?.fetch(roleId).catch((_) => undefined);
+	public async getRole(roles: RoleManager | undefined, roleId: Maybe<Snowflake>): Promise<Optional<Role>> {
+		return this.bulbfetch(roles, roleId);
+	}
 
-		return role;
+	public async getGuild(guildId: Snowflake, guilds: Maybe<GuildManager> = this.client.guilds): Promise<Optional<Guild>> {
+		return this.bulbfetch(guilds, guildId);
+	}
+
+	// We can just use this from now on instead of adding a new 'getX' method each time we need a thing.
+	// I would prefer it not be an instance method though because there's no reason for it to be
+	public async bulbfetch<K, Holds, R>(manager: Maybe<DataManager<K, Holds, R>>, id: Maybe<K>): Promise<Optional<Holds>> {
+		// Ensure the manager and ID are defined
+		if (!id || !manager) return undefined;
+		// Attempt to get the data from the manager cache
+		const item = manager.cache.get(id);
+		// If the item is in the cache, return it
+		if (item) return item;
+		// Otherwise, fetch the data from the API
+		// @ts-expect-error DataManager does not actually define the fetch method, so it may be undefined with these typings
+		return (manager.fetch?.(id).catch(() => undefined) ?? undefined) as Optional<Holds>;
 	}
 }
