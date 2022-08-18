@@ -106,7 +106,6 @@ model GuildConfiguration {
   timezone          String     @default("UTC") @db.VarChar(255)
   premiumGuild      Boolean    @default(false)
   autorole          String?    @db.VarChar(255)
-  muteRole          String?    @db.VarChar(255)
   actionsOnInfo     Boolean    @default(false)
   rolesOnLeave      Boolean    @default(false)
   quickReasons      String[]   @db.VarChar(255)

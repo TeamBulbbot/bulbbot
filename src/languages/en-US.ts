@@ -590,7 +590,6 @@ export default {
 
 	// TODO: Remove these, make sure no compile errors happen
 	// **
-	mute_muterole_not_found: "{{emote_warn}} This server does not have a mute role configured!\n{{emote_wrench}} **Tip:** You can configure the mute role using the `!configure mute_role` command",
 	mute_not_muted: "{{emote_warn}} **{{target.tag}}** `({{target.id}})` is not currently muted!",
 	mute_rejoin: "{{emote_warn}} **{{user.tag}}** `({{user.id}})` has rejoined the server before their mute expired and has been automatically muted again.",
 	mute_rejoin_reason: "{{user.tag}} ({{user.id}}) has rejoined the server before their mute expired and has been automatically muted again.",
