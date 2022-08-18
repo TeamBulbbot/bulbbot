@@ -6,7 +6,7 @@ import { init, Integrations } from "@sentry/node"; // @ts-expect-error
 import * as Tracing from "@sentry/tracing";
 import { startAllCrons } from "./utils/Crons";
 import { startPrometheus } from "./utils/Prometheus";
-import fs from "fs";
+import { readdirSync } from "fs";
 import i18next from "i18next";
 
 env.config({ path: `${__dirname}/../.env` });
@@ -21,7 +21,8 @@ const client: BulbBotClient = new BulbBotClient(config);
 const languagesPath = require("path").join(__dirname, "languages");
 
 const resources = {};
-fs.readdirSync(languagesPath).map((file) => {
+// This call is top-level so it must be sync. It occurs during startup so this is fine
+readdirSync(languagesPath).map((file) => {
 	const langName = file.split(".")[0];
 	resources[langName] = {
 		translation: require(`./languages/${langName}.json`),

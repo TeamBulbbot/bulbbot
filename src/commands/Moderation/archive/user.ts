@@ -1,7 +1,7 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
 import { CommandInteraction, Guild, User } from "discord.js";
 import DatabaseManager from "../../../utils/managers/DatabaseManager";
-import { writeFileSync } from "fs";
+import { writeFile } from "fs/promises";
 import moment from "moment";
 import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import ApplicationCommand from "../../../structures/ApplicationCommand";
@@ -57,7 +57,7 @@ export default class ArchiveUser extends ApplicationSubCommand {
 			archive += `${temp}`;
 		});
 
-		writeFileSync(`${__dirname}/../../../../files/archive-data-${interaction.guild?.id}-${user.id}.txt`, archive);
+		await writeFile(`${__dirname}/../../../../files/archive-data-${interaction.guild?.id}-${user.id}.txt`, archive);
 		await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
 		return void (await interaction.followUp({
 			content: await this.client.bulbutils.translate("archive_success", interaction.guild?.id, {
