@@ -56,7 +56,7 @@
 		"prisma": "^3.15.2",
 		"prom-client": "^14.0.1",
 		"safe-timers": "^1.1.0",
-		"sharp": "^0.30.0",
+		"sharp": "^0.30.5",
 		"shelljs": "^0.8.5",
 		"unicode": "^14.0.0",
 		"winston": "^3.5.1"
