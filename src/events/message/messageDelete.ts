@@ -1,7 +1,7 @@
 import Event from "../../structures/Event";
 import { Message, Util, Permissions, GuildAuditLogs, MessageAttachment, Guild, GuildChannelManager, TextBasedChannel, MessageEmbed, DMChannel, PartialDMChannel } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
-import * as fs from "fs";
+import { writeFile } from "fs/promises";
 import { User } from "@sentry/node";
 import prisma from "../../prisma";
 import { isNullish } from "../../utils/helpers";
@@ -94,7 +94,9 @@ export default class extends Event {
 			});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`, content || "");
+			if (content) {
+				await writeFile(`${__dirname}/../../../files/MESSAGE_DELETE-${guild?.id}.txt`, content);
+			}
 			await loggingManager.sendEventLog(
 				this.client,
 				guild,

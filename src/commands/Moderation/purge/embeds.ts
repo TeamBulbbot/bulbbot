@@ -1,6 +1,6 @@
 import { Collection, CommandInteraction, Guild, GuildTextBasedChannel, Message, Snowflake } from "discord.js";
 import moment from "moment";
-import { writeFileSync } from "fs";
+import { writeFile } from "fs/promises";
 import LoggingManager from "../../../utils/managers/LoggingManager";
 import BulbBotClient from "../../../structures/BulbBotClient";
 import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
@@ -69,7 +69,7 @@ export default class PurgeEmbeds extends ApplicationSubCommand {
 
 		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messagesToPurge);
 
-		writeFileSync(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+		await writeFile(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
 		await loggingManager.sendModActionFile(
 			this.client,

@@ -1,5 +1,6 @@
 import { CommandInteraction } from "discord.js";
-import { existsSync, unlinkSync } from "fs";
+import { unlink } from "fs/promises";
+import { exists } from "../../utils/helpers";
 import { CustomEmote, GetEverythingAfterColon } from "../../utils/Regex";
 import axios from "axios";
 import sharp from "sharp";
@@ -88,7 +89,7 @@ export default class Jumbo extends ApplicationCommand {
 
 				if (emote === null) {
 					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
-					if (!existsSync(join(PATH, `${emoteName}.png`)))
+					if (!(await exists(join(PATH, `${emoteName}.png`))))
 						await this.downloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, "png", emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
 
 					jumboList.push(`${emoteName}.png`);
@@ -99,7 +100,7 @@ export default class Jumbo extends ApplicationCommand {
 					emoteName = emote[0];
 					if (!emoteName) continue;
 
-					if (!existsSync(join(PATH, `${emoteName}.${extension}`)))
+					if (!(await exists(join(PATH, `${emoteName}.${extension}`))))
 						await this.downloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.${extension}?v=1&quality=lossless`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
 					jumboList.push(`${emoteName}.${extension}`);
 				}
@@ -141,10 +142,10 @@ export default class Jumbo extends ApplicationCommand {
 					],
 					content: null,
 				});
-				unlinkSync(`${PATH}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
+				await unlink(`${PATH}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
 			}
 
-			unlinkSync(`${PATH}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
+			await unlink(`${PATH}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 		} catch (err) {
 			this.client.log.error(`[JUMBO] ${interaction.user.tag} (${interaction.user.id}) had en error: `, err);
 			return void (await interaction.followUp({

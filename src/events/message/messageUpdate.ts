@@ -1,7 +1,7 @@
 import Event from "../../structures/Event";
 import { Message, Util } from "discord.js";
 import LoggingManager from "../../utils/managers/LoggingManager";
-import * as fs from "fs";
+import { writeFile } from "fs/promises";
 import AutoMod from "../../utils/AutoMod";
 import prisma from "../../prisma";
 
@@ -50,7 +50,7 @@ export default class extends Event {
 		});
 
 		if (msg.length >= 1850) {
-			fs.writeFileSync(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
+			await writeFile(`${__dirname}/../../../files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
 			await loggingManager.sendEventLog(
 				this.client,
 				newMessage.guild,
