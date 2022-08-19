@@ -24,8 +24,6 @@ export default class extends Event {
 
 		await loadReminders(this.client);
 		await loadTempBans(this.client);
-		
-		console.log("hello world");
 
 		registerSlashCommands(this.client);
 
