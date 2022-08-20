@@ -5,6 +5,7 @@ import * as Emotes from "../../emotes.json";
 import { NonDigits } from "../../utils/Regex";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandType } from "discord-api-types/v9";
+import * as pjson from "../../../package.json";
 
 export default class About extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -28,10 +29,8 @@ export default class About extends ApplicationCommand {
 			new MessageButton().setLabel("Source Code").setStyle("LINK").setEmoji(Emotes.other.GITHUB.replace(NonDigits, "")).setURL("https://github.com/TeamBulbbot/bulbbot"),
 		]);
 
-		const version = Number(this.client.about.buildId.replace("\n", "")) - 782;
-
 		let desc = `**__Bulbbot Information__**\n`;
-		desc += `**Version:** TS ${(Math.floor(version / 100) + 1 + "" + version).replace(/\B(?=(\d)+(?!\d))/g, ".")} (${this.client.about.build.hash.replace("\n", "")})\n\n`;
+		desc += `**Version:** ${pjson.version} (${this.client.about.build.hash.replace("\n", "")})\n\n`;
 		desc += `**Last Commit:**\n**Hash:** \`${this.client.about.build.hash}\`**Time:** ${realCommitTime}\n\n`;
 		desc += `**Ping:** \`${latency} ms\`\n**API Latency:** \`${apiLatency} ms\`\n\n`;
 		desc +=
