@@ -57,10 +57,15 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			.setStyle("DANGER"),
 	]);
 
-	await interaction.update({
-		content: await client.bulbutils.translate("config_timezone_header", interaction.guild?.id, {}),
-		components: [selectRow, pageRow, buttonRow],
-	});
+	interaction.deferred
+		? await interaction.editReply({
+				content: await client.bulbutils.translate("config_timezone_header", interaction.guild?.id, {}),
+				components: [selectRow, pageRow, buttonRow],
+		  })
+		: await interaction.update({
+				content: await client.bulbutils.translate("config_timezone_header", interaction.guild?.id, {}),
+				components: [selectRow, pageRow, buttonRow],
+		  });
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });

@@ -38,10 +38,15 @@ async function manualNicknameInf(interaction: MessageComponentInteraction, clien
 			.setLabel(config.manualNicknameInf ? disable : enable),
 	]);
 
-	await interaction.update({
-		content: await client.bulbutils.translate("config_manual_nickname_infractions", interaction.guild?.id, {}),
-		components: [selectRow, buttonRow],
-	});
+	interaction.deferred
+		? await interaction.editReply({
+				content: await client.bulbutils.translate("config_manual_nickname_infractions", interaction.guild?.id, {}),
+				components: [selectRow, buttonRow],
+		  })
+		: await interaction.update({
+				content: await client.bulbutils.translate("config_manual_nickname_infractions", interaction.guild?.id, {}),
+				components: [selectRow, buttonRow],
+		  });
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
