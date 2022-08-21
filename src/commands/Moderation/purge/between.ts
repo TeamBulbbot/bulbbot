@@ -55,7 +55,7 @@ export default class PurgeBetween extends ApplicationSubCommand {
 			(await interaction.channel?.messages.fetch(message2)) as Message;
 		} catch (_) {
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.message", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.message", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		}

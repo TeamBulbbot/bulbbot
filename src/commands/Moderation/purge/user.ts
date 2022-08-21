@@ -39,7 +39,7 @@ export default class PurgeUser extends ApplicationSubCommand {
 
 		if (!member)
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;

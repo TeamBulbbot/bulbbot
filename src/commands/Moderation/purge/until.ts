@@ -40,7 +40,7 @@ export default class PurgeUntil extends ApplicationSubCommand {
 			msg = (await interaction.channel?.messages.fetch(messageId.replace(NonDigits, ""))) as Message;
 		} catch (_) {
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.message", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.message", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		}

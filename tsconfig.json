@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "outDir": "build",
+    "rootDir": ".",
     "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": false,
@@ -29,7 +30,5 @@
     "baseUrl": "src"
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/**/*.ts", "./src/**/*.json", "./src/**/*.yml",
-    "types.d.ts"
-  ]
+  "include": ["./src/**/**/*.ts", "./src/**/*.json", "./src/**/*.yml", "types.d.ts", "src/"]
 }

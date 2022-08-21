@@ -1,7 +1,7 @@
 // This file is JS rather than TS so that we don't have to compile it
 const fs = require("fs");
 // This is the current "en-US.json", which may be out of sync with en-US.ts
-const current = require("../build/languages/en-US.json");
+const current = require("../build/src/languages/en-US.json");
 const prettier = require("prettier");
 const path = require("path");
 

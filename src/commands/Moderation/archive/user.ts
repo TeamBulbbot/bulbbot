@@ -58,7 +58,7 @@ export default class ArchiveUser extends ApplicationSubCommand {
 		});
 
 		await writeFile(`${__dirname}/../../../../files/archive-data-${interaction.guild?.id}-${user.id}.txt`, archive);
-		await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+		await interaction.editReply(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
 		return void (await interaction.followUp({
 			content: await this.client.bulbutils.translate("archive_success", interaction.guild?.id, {
 				place: user.tag,

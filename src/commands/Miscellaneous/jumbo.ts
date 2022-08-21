@@ -107,7 +107,7 @@ export default class Jumbo extends ApplicationCommand {
 			}
 
 			if (doesIncludeAnimatedEmoji) {
-				await interaction.followUp(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+				await interaction.followUp(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
 				await interaction.followUp({
 					files: [
 						{
@@ -131,7 +131,7 @@ export default class Jumbo extends ApplicationCommand {
 				}
 
 				await sharp(`${PATH}/${jumboList[0]}`).composite(imgPath).png().toFile(`${PATH}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
-				await interaction.followUp(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+				await interaction.followUp(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
 				await interaction.followUp({
 					files: [
 						{

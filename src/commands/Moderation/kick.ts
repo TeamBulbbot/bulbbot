@@ -55,8 +55,7 @@ export default class Kick extends ApplicationCommand {
 
 		if (!member)
 			return interaction.reply({
-				// TODO: Rename global_not_found_new to global_not_found once all commands are migrated
-				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
