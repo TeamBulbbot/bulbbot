@@ -50,7 +50,7 @@ async function quickReasons(interaction: MessageComponentInteraction, client: Bu
 		new MessageButton().setCustomId("remove").setLabel(remove).setStyle("PRIMARY").setDisabled(true),
 	]);
 
-	interaction.deferred ? await interaction.editReply({ content: header, components: [selectRow, buttonRow] }) : await interaction.update({ content: header, components: [selectRow, buttonRow] });
+	await interaction[interaction.deferred ? "editReply" : "update"]({ content: header, components: [selectRow, buttonRow] });
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });

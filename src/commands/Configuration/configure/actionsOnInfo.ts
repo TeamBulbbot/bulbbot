@@ -46,15 +46,10 @@ async function actionsOnInfo(interaction: MessageComponentInteraction, client: B
 			.setLabel(config.actionsOnInfo ? disable : enable),
 	]);
 
-	interaction.deferred
-		? await interaction.editReply({
-				content: await client.bulbutils.translate("config_actions_on_info_header", interaction.guild?.id, {}),
-				components: [selectRow, buttonRow],
-		  })
-		: await interaction.update({
-				content: await client.bulbutils.translate("config_actions_on_info_header", interaction.guild?.id, {}),
-				components: [selectRow, buttonRow],
-		  });
+	await interaction[interaction.deferred ? "editReply" : "update"]({
+		content: await client.bulbutils.translate("config_actions_on_info_header", interaction.guild?.id, {}),
+		components: [selectRow, buttonRow],
+	});
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });

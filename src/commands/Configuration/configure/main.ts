@@ -67,19 +67,12 @@ export default async function (interaction: MessageComponentInteraction, client:
 			]),
 	);
 
-	interaction.deferred
-		? await interaction.editReply({
-				content: await client.bulbutils.translate("config_main_header", interaction.guild?.id, {
-					guild: interaction.guild,
-				}),
-				components: [row],
-		  })
-		: await interaction.update({
-				content: await client.bulbutils.translate("config_main_header", interaction.guild?.id, {
-					guild: interaction.guild,
-				}),
-				components: [row],
-		  });
+	await interaction[interaction.deferred ? "editReply" : "update"]({
+		content: await client.bulbutils.translate("config_main_header", interaction.guild?.id, {
+			guild: interaction.guild,
+		}),
+		components: [row],
+	});
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });

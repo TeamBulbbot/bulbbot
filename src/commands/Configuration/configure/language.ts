@@ -44,15 +44,10 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 			.setStyle("DANGER"),
 	);
 
-	interaction.deferred
-		? await interaction.editReply({
-				content: await client.bulbutils.translate("config_language_header", interaction.guild?.id, {}),
-				components: [placeholderRow, selectRow, buttonRow],
-		  })
-		: await interaction.update({
-				content: await client.bulbutils.translate("config_language_header", interaction.guild?.id, {}),
-				components: [placeholderRow, selectRow, buttonRow],
-		  });
+	await interaction[interaction.deferred ? "editReply" : "update"]({
+		content: await client.bulbutils.translate("config_language_header", interaction.guild?.id, {}),
+		components: [placeholderRow, selectRow, buttonRow],
+	});
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });
