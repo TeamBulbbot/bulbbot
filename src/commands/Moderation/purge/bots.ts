@@ -6,6 +6,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import ApplicationCommand from "../../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
+import { rootDir } from "../../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -69,14 +70,14 @@ export default class PurgeBots extends ApplicationSubCommand {
 
 		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messagesToPurge);
 
-		await writeFile(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+		await writeFile(`${rootDir}/files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
 		await loggingManager.sendModActionFile(
 			this.client,
 			interaction.guild as Guild,
 			"purge",
 			amount,
-			`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`,
+			`${rootDir}/files/PURGE-${interaction.guild?.id}.txt`,
 			interaction.channel as GuildTextBasedChannel,
 			interaction.user,
 		);
