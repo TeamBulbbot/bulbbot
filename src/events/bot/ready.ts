@@ -26,6 +26,8 @@ export default class extends Event {
 		await loadTempBans(this.client);
 
 		registerSlashCommands(this.client);
+		
+		console.log("test");
 
 		this.client.log.client(`[CLIENT] ${this.client.user?.username || "Bot (client.user is undefined?)"} successfully logged and ready`);
 		this.client.log.client(`[CLIENT] Listening to ${this.client.events.size} event(s)`);
