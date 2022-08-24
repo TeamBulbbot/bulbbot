@@ -9,6 +9,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import { join } from "path";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
+import { rootDir } from "../..";
 
 export default class Jumbo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -34,7 +35,7 @@ export default class Jumbo extends ApplicationCommand {
 
 		const emojis = interaction.options.getString("emoji")?.split(" ") as string[];
 
-		const PATH = `${__dirname}/../../../files`;
+		const PATH = `${rootDir}/files`;
 		const TWEMOJI_VERSION = "13.1.0";
 		let doesIncludeAnimatedEmoji = false;
 

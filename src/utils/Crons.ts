@@ -4,6 +4,7 @@ import DatabaseManager from "./managers/DatabaseManager";
 import { readdir, unlink } from "fs/promises";
 import { join } from "path";
 import { unpackSettled } from "./helpers";
+import { rootDir } from "..";
 
 const { purgeAllMessagesOlderThan30Days }: DatabaseManager = new DatabaseManager();
 
@@ -12,7 +13,7 @@ export function startAllCrons(client: BulbBotClient) {
 	schedule("0 0 * * *", async () => {
 		client.log.info("[CRONS] Starting to clear up messages");
 		const count = await purgeAllMessagesOlderThan30Days();
-		const path = `${__dirname}/../../files`;
+		const path = `${rootDir}/files`;
 		const files: string[] = await readdir(path);
 		const operations = files.map(async (file) => {
 			if (file.endsWith(".gitignore")) return;

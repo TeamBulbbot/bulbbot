@@ -4,6 +4,7 @@ import { CommandInteraction, MessageEmbed } from "discord.js";
 import BulbBotClient from "../../structures/BulbBotClient";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
+import { rootDir } from "../..";
 
 export default class Eval extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -53,7 +54,7 @@ export default class Eval extends ApplicationCommand {
 
 			if (evaled.length < 1950) output = `**Output**\n\`\`\`js\n${evaled}\n\`\`\``;
 			else {
-				writeFile(`${__dirname}/../../../files/EVAL-${interaction.guild?.id}.js`, evaled, (err: any) => {
+				writeFile(`${rootDir}/files/EVAL-${interaction.guild?.id}.js`, evaled, (err: any) => {
 					if (err) this.client.log.error(err);
 				});
 
@@ -80,7 +81,7 @@ export default class Eval extends ApplicationCommand {
 			files: isFile
 				? [
 						{
-							attachment: `${__dirname}/../../../files/EVAL-${interaction.guild?.id}.js`,
+							attachment: `${rootDir}/files/EVAL-${interaction.guild?.id}.js`,
 							name: "eval.js",
 						},
 				  ]
