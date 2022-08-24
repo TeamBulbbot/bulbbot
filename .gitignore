@@ -57,3 +57,4 @@ typings/
 .env
 start.bat
 _
+.DS_Store
