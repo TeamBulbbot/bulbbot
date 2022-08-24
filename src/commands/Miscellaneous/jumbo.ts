@@ -9,7 +9,7 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import { join } from "path";
 import ApplicationCommand from "../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType, ApplicationCommandType } from "discord-api-types/v10";
-import { rootDir } from "../..";
+import { filesDir } from "../..";
 
 export default class Jumbo extends ApplicationCommand {
 	constructor(client: BulbBotClient, name: string) {
@@ -35,7 +35,6 @@ export default class Jumbo extends ApplicationCommand {
 
 		const emojis = interaction.options.getString("emoji")?.split(" ") as string[];
 
-		const PATH = `${rootDir}/files`;
 		const TWEMOJI_VERSION = "13.1.0";
 		let doesIncludeAnimatedEmoji = false;
 
@@ -79,7 +78,7 @@ export default class Jumbo extends ApplicationCommand {
 
 			if (doesIncludeAnimatedEmoji) sharpCanvas.gif();
 			else sharpCanvas.png();
-			await sharpCanvas.toFile(`${PATH}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
+			await sharpCanvas.toFile(`${filesDir}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 			jumboList.push(`${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 
 			for (let i = 0; i < realList.length; i++) {
@@ -90,8 +89,8 @@ export default class Jumbo extends ApplicationCommand {
 
 				if (emote === null) {
 					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
-					if (!(await exists(join(PATH, `${emoteName}.png`))))
-						await this.downloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, "png", emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
+					if (!(await exists(join(filesDir, `${emoteName}.png`))))
+						await this.downloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, "png", emote, emoteName, SIZE, filesDir, TWEMOJI_VERSION);
 
 					jumboList.push(`${emoteName}.png`);
 				} else {
@@ -101,8 +100,8 @@ export default class Jumbo extends ApplicationCommand {
 					emoteName = emote[0];
 					if (!emoteName) continue;
 
-					if (!(await exists(join(PATH, `${emoteName}.${extension}`))))
-						await this.downloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.${extension}?v=1&quality=lossless`, extension, emote, emoteName, SIZE, PATH, TWEMOJI_VERSION);
+					if (!(await exists(join(filesDir, `${emoteName}.${extension}`))))
+						await this.downloadEmoji(`https://cdn.discordapp.com/emojis/${emoteName}.${extension}?v=1&quality=lossless`, extension, emote, emoteName, SIZE, filesDir, TWEMOJI_VERSION);
 					jumboList.push(`${emoteName}.${extension}`);
 				}
 			}
@@ -112,7 +111,7 @@ export default class Jumbo extends ApplicationCommand {
 				await interaction.followUp({
 					files: [
 						{
-							attachment: `${PATH}/${jumboList[1]}`,
+							attachment: `${filesDir}/${jumboList[1]}`,
 							name: "jumbo.gif",
 							description: `Jumbo created by ${interaction.user.tag} (${interaction.user.id})`,
 						},
@@ -122,7 +121,7 @@ export default class Jumbo extends ApplicationCommand {
 			} else {
 				for (let i = 1; i < jumboList.length; i++) {
 					imgPath.push({
-						input: `${PATH}/${jumboList[i]}`,
+						input: `${filesDir}/${jumboList[i]}`,
 						gravity: "southeast",
 						top: 0,
 						left: SIZE * (i - 1),
@@ -131,22 +130,22 @@ export default class Jumbo extends ApplicationCommand {
 					});
 				}
 
-				await sharp(`${PATH}/${jumboList[0]}`).composite(imgPath).png().toFile(`${PATH}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
+				await sharp(`${filesDir}/${jumboList[0]}`).composite(imgPath).png().toFile(`${filesDir}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
 				await interaction.followUp(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
 				await interaction.followUp({
 					files: [
 						{
-							attachment: `${PATH}/final-${interaction.user.id}-${interaction.guild?.id}.png`,
+							attachment: `${filesDir}/final-${interaction.user.id}-${interaction.guild?.id}.png`,
 							name: "jumbo.png",
 							description: `Jumbo created by ${interaction.user.tag} (${interaction.user.id})`,
 						},
 					],
 					content: null,
 				});
-				await unlink(`${PATH}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
+				await unlink(`${filesDir}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
 			}
 
-			await unlink(`${PATH}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
+			await unlink(`${filesDir}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 		} catch (err) {
 			this.client.log.error(`[JUMBO] ${interaction.user.tag} (${interaction.user.id}) had en error: `, err);
 			return void (await interaction.followUp({

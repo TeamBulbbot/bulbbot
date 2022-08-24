@@ -7,7 +7,7 @@ import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import ApplicationCommand from "../../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import { NonDigits } from "../../../utils/Regex";
-import { rootDir } from "../../..";
+import { filesDir } from "../../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -80,14 +80,14 @@ export default class PurgeBetween extends ApplicationSubCommand {
 
 		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messages);
 
-		await writeFile(`${rootDir}/files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+		await writeFile(`${filesDir}/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
 		await loggingManager.sendModActionFile(
 			this.client,
 			interaction.guild,
 			"purge",
 			messages.length,
-			`${rootDir}/files/PURGE-${interaction.guild?.id}.txt`,
+			`${filesDir}/PURGE-${interaction.guild?.id}.txt`,
 			interaction.channel as GuildTextBasedChannel,
 			interaction.user,
 		);

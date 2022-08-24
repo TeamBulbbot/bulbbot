@@ -6,7 +6,7 @@ import moment from "moment";
 import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import ApplicationCommand from "../../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
-import { rootDir } from "../../..";
+import { filesDir } from "../../..";
 
 const { getUserArchive }: DatabaseManager = new DatabaseManager();
 
@@ -58,7 +58,7 @@ export default class ArchiveUser extends ApplicationSubCommand {
 			archive += `${temp}`;
 		});
 
-		await writeFile(`${rootDir}/files/archive-data-${interaction.guild?.id}-${user.id}.txt`, archive);
+		await writeFile(`${filesDir}/archive-data-${interaction.guild?.id}-${user.id}.txt`, archive);
 		await interaction.editReply(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
 		return void (await interaction.followUp({
 			content: await this.client.bulbutils.translate("archive_success", interaction.guild?.id, {
@@ -68,7 +68,7 @@ export default class ArchiveUser extends ApplicationSubCommand {
 			}),
 			files: [
 				{
-					attachment: `${rootDir}/files/archive-data-${interaction.guild?.id}-${user.id}.txt`,
+					attachment: `${filesDir}/archive-data-${interaction.guild?.id}-${user.id}.txt`,
 					name: "archive.txt",
 				},
 			],

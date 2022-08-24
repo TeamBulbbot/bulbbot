@@ -6,7 +6,7 @@ import { User } from "@sentry/node";
 import prisma from "../../prisma";
 import { isNullish } from "../../utils/helpers";
 import { Prisma } from "@prisma/client";
-import { rootDir } from "../..";
+import { filesDir } from "../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -96,7 +96,7 @@ export default class extends Event {
 
 		if (msg.length >= 1850) {
 			if (content) {
-				await writeFile(`${rootDir}/files/MESSAGE_DELETE-${guild?.id}.txt`, content);
+				await writeFile(`${filesDir}/MESSAGE_DELETE-${guild?.id}.txt`, content);
 			}
 			await loggingManager.sendEventLog(
 				this.client,
@@ -109,7 +109,7 @@ export default class extends Event {
 					// @ts-expect-error
 					channel,
 				}),
-				`${rootDir}/files/MESSAGE_DELETE-${guild?.id}.txt`,
+				`${filesDir}/MESSAGE_DELETE-${guild?.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, guild, "message", msg, embeds ? embeds : null);
 	}

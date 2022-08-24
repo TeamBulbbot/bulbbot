@@ -13,6 +13,7 @@ import { resolve } from "path";
 export const srcDir = __dirname;
 export const buildDir = resolve(__dirname, "..");
 export const rootDir = resolve(__dirname, "..", "..");
+export const filesDir = resolve(rootDir, "files");
 
 env.config({ path: `${__dirname}/../.env` });
 

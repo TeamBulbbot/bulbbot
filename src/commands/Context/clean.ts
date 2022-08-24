@@ -5,7 +5,7 @@ import { Collection, ContextMenuInteraction, GuildTextBasedChannel, Message, Sno
 import moment from "moment";
 import { writeFile } from "fs/promises";
 import LoggingManager from "../../utils/managers/LoggingManager";
-import { rootDir } from "../..";
+import { filesDir } from "../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -60,13 +60,13 @@ export default class ContextClean extends ApplicationCommand {
 
 		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messagesToPurge);
 
-		await writeFile(`${rootDir}/files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+		await writeFile(`${filesDir}/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 		await loggingManager.sendModActionFile(
 			this.client,
 			interaction.guild,
 			"Purge",
 			amount,
-			`${rootDir}/files/PURGE-${interaction.guild?.id}.txt`,
+			`${filesDir}/PURGE-${interaction.guild?.id}.txt`,
 			interaction.channel as GuildTextBasedChannel,
 			interaction.user,
 		);

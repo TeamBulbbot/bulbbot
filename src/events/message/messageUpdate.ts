@@ -4,7 +4,7 @@ import LoggingManager from "../../utils/managers/LoggingManager";
 import { writeFile } from "fs/promises";
 import AutoMod from "../../utils/AutoMod";
 import prisma from "../../prisma";
-import { rootDir } from "../..";
+import { filesDir } from "../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 export default class extends Event {
@@ -51,7 +51,7 @@ export default class extends Event {
 		});
 
 		if (msg.length >= 1850) {
-			await writeFile(`${rootDir}/files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
+			await writeFile(`${filesDir}/MESSAGE_UPDATE-${newMessage.guild.id}.txt`, `**B:** ${oldMessageContent}\n**A:** ${newMessage.content}`);
 			await loggingManager.sendEventLog(
 				this.client,
 				newMessage.guild,
@@ -62,7 +62,7 @@ export default class extends Event {
 					message: newMessage,
 					channel: newMessage.channel,
 				}),
-				`${rootDir}/files/MESSAGE_UPDATE-${newMessage.guild.id}.txt`,
+				`${filesDir}/MESSAGE_UPDATE-${newMessage.guild.id}.txt`,
 			);
 		} else await loggingManager.sendEventLog(this.client, newMessage.guild, "message", msg);
 
