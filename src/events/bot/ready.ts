@@ -27,7 +27,6 @@ export default class extends Event {
 
 		registerSlashCommands(this.client);
 		
-
 		this.client.log.client(`[CLIENT] ${this.client.user?.username || "Bot (client.user is undefined?)"} successfully logged and ready`);
 		this.client.log.client(`[CLIENT] Listening to ${this.client.events.size} event(s)`);
 		this.client.log.client(`[CLIENT] Listening to ${this.client.commands.size} command(s)`);
