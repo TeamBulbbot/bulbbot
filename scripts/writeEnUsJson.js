@@ -45,7 +45,7 @@ if (formattedJsonFile !== prettier.format(JSON.stringify(current), prettierOptio
 	// TODO: Is this correct? Could we just wrap them in a function? As long as the
 	//       script doesn't exit until writing completes, it ought to work fine
 	fs.writeFileSync(path.resolve(__dirname, "../build/src/languages/en-US.json"), formattedJsonFile);
-	fs.writeFileSync(path.resolve(__dirname, "../src/src/languages/en-US.json"), formattedJsonFile);
+	fs.writeFileSync(path.resolve(__dirname, "../src/languages/en-US.json"), formattedJsonFile);
 
 	console.log("Updated languages/en-US.json");
 }
