@@ -46,7 +46,7 @@ async function actionsOnInfo(interaction: MessageComponentInteraction, client: B
 			.setLabel(config.actionsOnInfo ? disable : enable),
 	]);
 
-	await interaction.update({
+	await interaction[interaction.deferred ? "editReply" : "update"]({
 		content: await client.bulbutils.translate("config_actions_on_info_header", interaction.guild?.id, {}),
 		components: [selectRow, buttonRow],
 	});

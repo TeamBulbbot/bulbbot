@@ -64,7 +64,7 @@ export default class MessageClear extends ApplicationCommand {
 				collector.stop("clicked");
 				await databaseManager.purgeMessagesInGuild(interaction.guild as Guild, days);
 
-				await interaction.editReply(await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}));
+				await interaction.editReply(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
 				return void (await interaction.followUp({
 					content: await this.client.bulbutils.translate("messageclear_success_delete", interaction.guild?.id, { messages: amountOfMessages }),
 				}));

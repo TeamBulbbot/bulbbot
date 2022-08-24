@@ -37,7 +37,7 @@ export default class Undeafen extends ApplicationCommand {
 
 		if (!member)
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;

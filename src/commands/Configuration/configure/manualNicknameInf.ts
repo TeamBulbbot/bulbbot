@@ -38,7 +38,7 @@ async function manualNicknameInf(interaction: MessageComponentInteraction, clien
 			.setLabel(config.manualNicknameInf ? disable : enable),
 	]);
 
-	await interaction.update({
+	await interaction[interaction.deferred ? "editReply" : "update"]({
 		content: await client.bulbutils.translate("config_manual_nickname_infractions", interaction.guild?.id, {}),
 		components: [selectRow, buttonRow],
 	});

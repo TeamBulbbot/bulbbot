@@ -47,9 +47,7 @@ async function autorole(interaction: MessageComponentInteraction, client: BulbBo
 			.setDisabled(config.autorole === null),
 	]);
 
-	interaction.deferred
-		? await interaction.editReply({ content: header, components: [placeholderRow, buttonRow] })
-		: await interaction.update({ content: header, components: [placeholderRow, buttonRow] });
+	await interaction[interaction.deferred ? "editReply" : "update"]({ content: header, components: [placeholderRow, buttonRow] });
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000, max: 1 });

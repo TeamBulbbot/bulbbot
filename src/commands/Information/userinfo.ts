@@ -175,12 +175,19 @@ export default class UserInfo extends ApplicationCommand {
 			description += await this.client.bulbutils.translate("userinfo_embed_infractions", interaction.guild?.id, { inf_emote, user_infractions: infs.length });
 		}
 
+		let avatar = "";
+		if (user instanceof GuildMember)
+			if (user.user.avatarURL() !== null) avatar = user.user.avatarURL() as string;
+			else avatar = user.user.defaultAvatarURL;
+		else if (user.avatarURL() !== null) avatar = user.avatarURL() as string;
+		else avatar = user.defaultAvatarURL;
+
 		const embed: MessageEmbed = new MessageEmbed()
 			.setColor(color)
-			.setThumbnail(user instanceof GuildMember ? (user.user.avatarURL() as string) : (user.avatarURL() as string) || "")
+			.setThumbnail(avatar)
 			.setAuthor({
 				name: `${user instanceof GuildMember ? user.user.username : user.username}#${user instanceof GuildMember ? user.user.discriminator : user.discriminator}`,
-				iconURL: user instanceof GuildMember ? (user.user.avatarURL() as string) : (user.avatarURL() as string) || "",
+				iconURL: avatar,
 			})
 			.setDescription(`${badges}${description}`)
 			.setFooter({
@@ -204,7 +211,7 @@ export default class UserInfo extends ApplicationCommand {
 			const command = this.client.commands.get(buttonInteraction.customId);
 
 			if (!command) {
-				interaction.editReply({ components: [rowDisabled] });
+				await interaction.editReply({ components: [rowDisabled] });
 				return void (await buttonInteraction.reply({
 					content: await this.client.bulbutils.translate("global_error.unknown", buttonInteraction.guildId, { discord_invite: supportInvite }),
 					ephemeral: true,
@@ -298,7 +305,7 @@ export default class UserInfo extends ApplicationCommand {
 
 		collector.on("end", async () => {
 			if (components.length === 0) return;
-			interaction.editReply({ components: [rowDisabled] });
+			await interaction.editReply({ components: [rowDisabled] });
 		});
 	}
 }

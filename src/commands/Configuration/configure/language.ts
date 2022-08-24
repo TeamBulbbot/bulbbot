@@ -44,7 +44,7 @@ async function language(interaction: MessageComponentInteraction, client: BulbBo
 			.setStyle("DANGER"),
 	);
 
-	await interaction.update({
+	await interaction[interaction.deferred ? "editReply" : "update"]({
 		content: await client.bulbutils.translate("config_language_header", interaction.guild?.id, {}),
 		components: [placeholderRow, selectRow, buttonRow],
 	});

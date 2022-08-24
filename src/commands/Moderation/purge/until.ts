@@ -7,6 +7,7 @@ import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import ApplicationCommand from "../../../structures/ApplicationCommand";
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
 import { NonDigits } from "../../../utils/Regex";
+import { filesDir } from "../../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -40,7 +41,7 @@ export default class PurgeUntil extends ApplicationSubCommand {
 			msg = (await interaction.channel?.messages.fetch(messageId.replace(NonDigits, ""))) as Message;
 		} catch (_) {
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.message", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.message", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		}
@@ -84,14 +85,14 @@ export default class PurgeUntil extends ApplicationSubCommand {
 				ephemeral: true,
 			});
 
-		await writeFile(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+		await writeFile(`${filesDir}/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
 		await loggingManager.sendModActionFile(
 			this.client,
 			interaction.guild,
 			"purge",
 			deletedAmount,
-			`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`,
+			`${filesDir}/PURGE-${interaction.guild?.id}.txt`,
 			interaction.channel as GuildTextBasedChannel,
 			interaction.user,
 		);

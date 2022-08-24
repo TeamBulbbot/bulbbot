@@ -76,7 +76,7 @@ async function logging(interaction: MessageComponentInteraction, client: BulbBot
 
 	const backRow = new MessageActionRow().addComponents(new MessageButton().setCustomId("back").setLabel("Back").setStyle("DANGER"));
 
-	await interaction.update({ content: "Logging Configuration", components: [channelRow, logsRow, pageRow, backRow] });
+	await interaction[interaction.deferred ? "editReply" : "update"]({ content: "Logging Configuration", components: [channelRow, logsRow, pageRow, backRow] });
 
 	const filter = (i: MessageComponentInteraction) => i.user.id === interaction.user.id;
 	const collector = interaction.channel?.createMessageComponentCollector({ filter, time: 60000 });

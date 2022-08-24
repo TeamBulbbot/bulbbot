@@ -6,6 +6,7 @@ import BulbBotClient from "../../../structures/BulbBotClient";
 import ApplicationSubCommand from "../../../structures/ApplicationSubCommand";
 import ApplicationCommand from "../../../structures/ApplicationCommand";
 import { APIGuildMember, ApplicationCommandOptionType } from "discord-api-types/v10";
+import { filesDir } from "../../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -39,7 +40,7 @@ export default class PurgeUser extends ApplicationSubCommand {
 
 		if (!member)
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
@@ -85,14 +86,14 @@ export default class PurgeUser extends ApplicationSubCommand {
 
 		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messagesToPurge);
 
-		await writeFile(`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs);
+		await writeFile(`${filesDir}/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 
 		await loggingManager.sendModActionFile(
 			this.client,
 			interaction.guild as Guild,
 			"purge",
 			amount,
-			`${__dirname}/../../../../files/PURGE-${interaction.guild?.id}.txt`,
+			`${filesDir}/PURGE-${interaction.guild?.id}.txt`,
 			interaction.channel as GuildTextBasedChannel,
 			interaction.user,
 		);

@@ -46,7 +46,7 @@ export default class InviteInfo extends ApplicationCommand {
 		const guild = invite.guild;
 		if (guild === null || interaction.guild?.id === null || interaction.member === null)
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_error.inviteinfo_guild_or_member_null", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_error.global_guild_or_member_null", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 

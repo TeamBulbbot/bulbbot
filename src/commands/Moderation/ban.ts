@@ -144,7 +144,7 @@ export default class Ban extends ApplicationCommand {
 						components: [],
 					});
 					await interaction.editReply({
-						content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+						content: await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}),
 						components: [],
 					});
 					return;

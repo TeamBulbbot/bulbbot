@@ -132,7 +132,7 @@ export default class Crossban extends ApplicationCommand {
 			});
 
 			await interaction.editReply({
-				content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}),
 				components: [],
 			});
 		});

@@ -38,7 +38,7 @@ async function rolesOnLeave(interaction: MessageComponentInteraction, client: Bu
 			.setLabel(config.rolesOnLeave ? disable : enable),
 	]);
 
-	await interaction.update({
+	await interaction[interaction.deferred ? "editReply" : "update"]({
 		content: await client.bulbutils.translate("config_roles_on_leave_header", interaction.guild?.id, {}),
 		components: [selectRow, buttonRow],
 	});

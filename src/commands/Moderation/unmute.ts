@@ -38,7 +38,7 @@ export default class Unmute extends ApplicationCommand {
 
 		if (!member)
 			return interaction.reply({
-				content: await this.client.bulbutils.translate("global_not_found_new.member", interaction.guild?.id, {}),
+				content: await this.client.bulbutils.translate("global_not_found.member", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});

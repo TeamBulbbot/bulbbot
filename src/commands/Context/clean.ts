@@ -3,8 +3,9 @@ import BulbBotClient from "../../structures/BulbBotClient";
 import { ApplicationCommandType } from "discord-api-types/v10";
 import { Collection, ContextMenuInteraction, GuildTextBasedChannel, Message, Snowflake, User } from "discord.js";
 import moment from "moment";
-import fs from "fs";
+import { writeFile } from "fs/promises";
 import LoggingManager from "../../utils/managers/LoggingManager";
+import { filesDir } from "../..";
 
 const loggingManager: LoggingManager = new LoggingManager();
 
@@ -59,16 +60,13 @@ export default class ContextClean extends ApplicationCommand {
 
 		await (interaction.channel as GuildTextBasedChannel)?.bulkDelete(messagesToPurge);
 
-		fs.writeFile(`${__dirname}/../../../files/PURGE-${interaction.guild?.id}.txt`, delMsgs, function (err) {
-			if (err) console.error(err);
-		});
-
+		await writeFile(`${filesDir}/PURGE-${interaction.guild?.id}.txt`, delMsgs);
 		await loggingManager.sendModActionFile(
 			this.client,
 			interaction.guild,
 			"Purge",
 			amount,
-			`${__dirname}/../../../files/PURGE-${interaction.guild?.id}.txt`,
+			`${filesDir}/PURGE-${interaction.guild?.id}.txt`,
 			interaction.channel as GuildTextBasedChannel,
 			interaction.user,
 		);

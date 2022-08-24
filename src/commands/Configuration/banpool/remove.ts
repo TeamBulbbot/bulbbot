@@ -103,7 +103,7 @@ export default class BanpoolRemove extends ApplicationSubCommand {
 				);
 
 				await interaction.editReply({
-					content: await this.client.bulbutils.translate("ban_message_dismiss", interaction.guild?.id, {}),
+					content: await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}),
 					components: [],
 				});
 				return i.reply(await this.client.bulbutils.translate("banpool_remove_success", interaction.guild?.id, {}));

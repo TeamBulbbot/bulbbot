@@ -67,7 +67,7 @@ export default async function (interaction: MessageComponentInteraction, client:
 			]),
 	);
 
-	await interaction.update({
+	await interaction[interaction.deferred ? "editReply" : "update"]({
 		content: await client.bulbutils.translate("config_main_header", interaction.guild?.id, {
 			guild: interaction.guild,
 		}),

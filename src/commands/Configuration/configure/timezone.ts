@@ -57,7 +57,7 @@ async function timezone(interaction: MessageComponentInteraction, client: BulbBo
 			.setStyle("DANGER"),
 	]);
 
-	await interaction.update({
+	await interaction[interaction.deferred ? "editReply" : "update"]({
 		content: await client.bulbutils.translate("config_timezone_header", interaction.guild?.id, {}),
 		components: [selectRow, pageRow, buttonRow],
 	});
