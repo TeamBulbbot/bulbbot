@@ -41,9 +41,11 @@ const formattedJsonFile = prettier.format(JSON.stringify(en_US), prettierOptions
 
 // Avoid writing & reporting when there's no changes
 if (formattedJsonFile !== prettier.format(JSON.stringify(current), prettierOptions)) {
-	fs.writeFileSync(path.resolve(__dirname, "../build/languages/en-US.json"), formattedJsonFile);
-
-	fs.writeFileSync(path.resolve(__dirname, "../src/languages/en-US.json"), formattedJsonFile);
+	// These must be written synchronously, because they are called at the top level
+	// TODO: Is this correct? Could we just wrap them in a function? As long as the
+	//       script doesn't exit until writing completes, it ought to work fine
+	fs.writeFileSync(path.resolve(__dirname, "../build/src/languages/en-US.json"), formattedJsonFile);
+	fs.writeFileSync(path.resolve(__dirname, "../src/src/languages/en-US.json"), formattedJsonFile);
 
 	console.log("Updated languages/en-US.json");
 }
