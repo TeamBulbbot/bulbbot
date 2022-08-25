@@ -71,6 +71,7 @@ export default class Crossban extends ApplicationCommand {
 				content: await this.client.bulbutils.translate("crossban_no_servers", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
+
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
 				.setCustomId("banpool-dropdown")
