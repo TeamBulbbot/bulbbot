@@ -1,6 +1,7 @@
 import prom from "prom-client";
 import Command from "../structures/ApplicationCommand";
 import express, { Request } from "express";
+import { Interaction } from "discord.js";
 
 const latency = new prom.Gauge({ name: "bulbbot_latency", help: "The bulbbot latency to the Discord Websocket" });
 const cachedUsers = new prom.Gauge({ name: "bulbbot_cached_users", help: "The amount of cached users in the memory" });
@@ -14,17 +15,18 @@ const websocket = new prom.Counter({
 });
 const userCommandUsage = new prom.Counter({
 	name: "bulbbot_command_usage",
-	help: "Analytics regarding  commands",
-	labelNames: ["commandName"],
-});
-const api = new prom.Counter({
-	name: "bulbbot_api_requests",
-	help: "Analytics regarding the communication between the Discord API and Bulbbot",
-	labelNames: ["route", "method", "status"],
+	help: "Analytics regarding commands",
+	labelNames: ["commandName", "user", "guild", "userLocale", "guildLocale"],
 });
 
-export function commandUsage(command: Command) {
-	userCommandUsage.inc({ commandName: command.name });
+export function commandUsage(command: Command, interaction: Interaction) {
+	userCommandUsage.inc({
+		commandName: command.name,
+		user: interaction.user.id,
+		guild: interaction.guildId || "N/A",
+		userLocale: interaction.locale,
+		guildLocale: interaction.guildLocale || "N/A",
+	});
 }
 
 export async function startPrometheus(client: any): Promise<void> {
@@ -39,7 +41,7 @@ export async function startPrometheus(client: any): Promise<void> {
 
 	prom.collectDefaultMetrics({ register });
 
-	const metric = [latency, cachedUsers, websocket, guildCount, guildMemberCount, userCommandUsage, api];
+	const metric = [latency, cachedUsers, websocket, guildCount, guildMemberCount, userCommandUsage];
 	metric.forEach((metric) => {
 		register.registerMetric(metric);
 	});
@@ -54,10 +56,6 @@ export async function startPrometheus(client: any): Promise<void> {
 		res.write(await register.metrics());
 		res.end();
 	});
-
-	//client.on("apiResponse", (request: APIRequest, response: Response) => {
-	//	api.inc({ route: request.route, method: request.method, status: response.status });
-	//});
 
 	client.on("raw", (packet: any) => {
 		if (packet.t === null) return;

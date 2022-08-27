@@ -78,7 +78,7 @@ export default class extends Event {
 					ephemeral: true,
 				});
 
-			commandUsage(command);
+			commandUsage(command, interaction);
 
 			await loggingManager.sendCommandLog(this.client, interaction.guild, interaction.user, interaction.channel?.id as Snowflake, `/${command.name}`);
 
