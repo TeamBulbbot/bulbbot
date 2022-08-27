@@ -84,7 +84,7 @@ export default class extends Event {
 					ephemeral: true,
 				});
 
-			commandUsage(command);
+			commandUsage(command, interaction);
 
 			await loggingManager.sendCommandLog(this.client, guild, interaction.user, interaction.channelId, `/${command.name}`);
 
