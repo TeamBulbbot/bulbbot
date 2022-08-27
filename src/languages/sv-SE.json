@@ -315,6 +315,7 @@
 	"crossban_select_subscribed": "{{amount}} server(er) prenumererade",
 	"crossban_reason": "{{emoji}} **{{target.tag}}** `({{target.id}})` has been crossbanned from **{{originalGuild.name}}** `({{originalGuild.id}})` by **{{moderator.tag}}** `({{moderator.id}})` for **{{reason}}** `[#{{infraction_id}}]`",
 	"crossban_reason_audit": "Crossban from: {{originalGuild.name}} ({{originalGuild.id}}) | Moderator: {{moderator.tag}} ({{moderator.id}}) | Reason: {{reason}}",
+	"crossban_no_servers": "This server is currently not subscribed to any banpools, create or join one to crossban the user",
 	"banpool_missing_access_not_found": "{{emote_fail}} You do not have access to the banpool **{{pool}}** or the banpool does not exist",
 	"banpool_missing_logging": "{{emote_fail}} You need to configure a banpool logging channel before running this command. Use the `/configure` command to setup a logging channel.",
 	"banpool_create_name_exists": "{{emote_warn}} Det banpoolnamnet finns redan, välj ett annat",
