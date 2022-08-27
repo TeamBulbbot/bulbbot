@@ -29,9 +29,7 @@ export default class Jumbo extends ApplicationCommand {
 	}
 
 	public async run(interaction: CommandInteraction): Promise<void> {
-		await interaction.deferReply({
-			ephemeral: true,
-		});
+		await interaction.deferReply();
 
 		const emojis = interaction.options.getString("emoji")?.split(" ") as string[];
 
@@ -107,8 +105,7 @@ export default class Jumbo extends ApplicationCommand {
 			}
 
 			if (doesIncludeAnimatedEmoji) {
-				await interaction.followUp(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
-				await interaction.followUp({
+				await interaction.editReply({
 					files: [
 						{
 							attachment: `${filesDir}/${jumboList[1]}`,
@@ -131,8 +128,7 @@ export default class Jumbo extends ApplicationCommand {
 				}
 
 				await sharp(`${filesDir}/${jumboList[0]}`).composite(imgPath).png().toFile(`${filesDir}/final-${interaction.user.id}-${interaction.guild?.id}.png`);
-				await interaction.followUp(await this.client.bulbutils.translate("global_message_dismiss", interaction.guild?.id, {}));
-				await interaction.followUp({
+				await interaction.editReply({
 					files: [
 						{
 							attachment: `${filesDir}/final-${interaction.user.id}-${interaction.guild?.id}.png`,
