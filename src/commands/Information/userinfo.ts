@@ -218,6 +218,9 @@ export default class UserInfo extends ApplicationCommand {
 				}));
 			}
 
+			// @ts-expect-error
+			if (await this.client.bulbutils.resolveUserHandle(buttonInteraction, await this.client.bulbutils.checkUser(buttonInteraction, user as GuildMember), user.user)) return;
+
 			const modal = new Modal().setCustomId("reasonModal").setTitle("Reason");
 			const reasonInput = new TextInputComponent().setCustomId("reason").setLabel(`Reason for the ${buttonInteraction.customId}`).setStyle("SHORT");
 
