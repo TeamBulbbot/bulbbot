@@ -1,6 +1,6 @@
 {
 	"name": "bulbbot",
-	"version": "2.7.1",
+	"version": "2.7.2",
 	"description": "A discord moderation bot written in Discord.JS",
 	"main": "src/index.ts",
 	"scripts": {
