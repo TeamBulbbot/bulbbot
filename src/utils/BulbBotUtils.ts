@@ -1,4 +1,17 @@
-import { CommandInteraction, ContextMenuInteraction, GuildChannel, GuildMember, Interaction, Message, MessageEmbed, Snowflake, ThreadAutoArchiveDuration, ThreadChannel, User } from "discord.js";
+import {
+	CommandInteraction,
+	ContextMenuInteraction,
+	GuildChannel,
+	GuildMember,
+	Interaction,
+	Message,
+	MessageEmbed,
+	Snowflake,
+	ThreadAutoArchiveDuration,
+	ThreadChannel,
+	User,
+	ButtonInteraction,
+} from "discord.js";
 import * as Emotes from "../emotes.json";
 import moment, { Duration, Moment } from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
@@ -247,7 +260,7 @@ export default class {
 		return UserHandle.SUCCESS;
 	}
 
-	async resolveUserHandle(interaction: CommandInteraction | ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
+	async resolveUserHandle(interaction: ButtonInteraction | CommandInteraction | ContextMenuInteraction, handle: UserHandle, user: User): Promise<boolean> {
 		switch (handle) {
 			case UserHandle.CANNOT_ACTION_SELF:
 				await interaction.reply({ content: await this.translate("global_cannot_action_self", interaction.guild?.id, {}), ephemeral: true });
