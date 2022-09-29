@@ -1,8 +1,8 @@
 {
 	"global_executed_by": "Ejecutado por {{user.tag}}",
 	"global_message_dismiss": "{{emote_success}} You can now dismiss this message",
-	"global_execution_cancel": "{{emote_fail}} Ejecución de comando cancelada",
-	"global_missing_permissions": "{{emote_lock}} Sin permisos",
+	"global_execution_cancel": "{{emote_fail}} Command execution cancelled",
+	"global_missing_permissions": "{{emote_lock}} Missing permission(s)",
 	"global_missing_permissions_bot": "The bot is missing crucial permissions to perform this command. Please check the bot's permissions.\n**Missing permissions:** `{{missing}}`",
 	"global_cannot_convert_special": "{{emote_fail}} No se puede convertir `{{arg_provided}}` a `{{arg_expected}}`.",
 	"global_not_found": {
@@ -22,7 +22,7 @@
 		"manual_kick": "manualmente expulsado(a)",
 		"ban": "baneado(a)",
 		"force_ban": "baneado(a) forzadamente",
-		"soft_ban": "baneado(a) suavemente",
+		"soft_ban": "soft-banned",
 		"temp_ban": "baneado(a) temporalmente",
 		"pool_ban": "baneado(a) por enlistamiento",
 		"manual_ban": "baneado(a) manualmente",
