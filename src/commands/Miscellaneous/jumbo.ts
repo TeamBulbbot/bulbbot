@@ -33,7 +33,7 @@ export default class Jumbo extends ApplicationCommand {
 
 		const emojis = interaction.options.getString("emoji")?.split(" ") as string[];
 
-		const TWEMOJI_VERSION = "13.1.0";
+		const TWEMOJI_VERSION = "14.0.2";
 		let doesIncludeAnimatedEmoji = false;
 
 		const SIZE = 250;
