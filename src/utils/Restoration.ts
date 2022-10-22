@@ -1,7 +1,7 @@
 import ReminderManager from "./managers/ReminderManager";
 import InfractionsManager from "./managers/InfractionsManager";
 import TempbanManager from "./managers/TempbanManager";
-import { Guild, Message, User } from "discord.js";
+import { Guild, User } from "discord.js";
 import moment from "moment";
 import BulbBotClient from "../structures/BulbBotClient";
 import { BanType } from "./types/BanType";
@@ -37,26 +37,12 @@ export default class {
 						return;
 					}
 
-					let message: Message;
-					const options: any = {
+					channel.send({
+						content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt.toString())).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
 						allowedMentions: {
-							repliedUser: true,
 							users: [reminder.userId],
 						},
-					};
-
-					try {
-						message = await channel.messages.fetch(reminder.messageId);
-						message.reply({
-							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt.toString())).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
-							options,
-						});
-					} catch (_) {
-						channel.send({
-							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt.toString())).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
-							options,
-						});
-					}
+					});
 				} else {
 					const user: User = await client.users.fetch(reminder.userId);
 

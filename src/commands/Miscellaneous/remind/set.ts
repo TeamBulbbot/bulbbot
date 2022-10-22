@@ -1,5 +1,5 @@
 import BulbBotClient from "../../../structures/BulbBotClient";
-import { ButtonInteraction, CommandInteraction, Interaction, Message, MessageActionRow, MessageButton, MessageMentionOptions, Snowflake, TextChannel, User } from "discord.js";
+import { ButtonInteraction, CommandInteraction, Interaction, MessageActionRow, MessageButton, Snowflake, TextChannel, User } from "discord.js";
 import parse from "parse-duration";
 import ReminderManager from "../../../utils/managers/ReminderManager";
 import moment from "moment";
@@ -91,7 +91,10 @@ export default class ReminderSet extends ApplicationSubCommand {
 					ephemeral: true,
 				});
 			} else {
-				await i.reply(await this.client.bulbutils.translate("remind_set_select_channel", interaction.guild?.id, { duration: unixDuration }));
+				await i.reply({
+					content: await this.client.bulbutils.translate("remind_set_select_channel", interaction.guild?.id, { duration: unixDuration }),
+					ephemeral: true,
+				});
 				reminder = await reminderManager.createReminder(message, unixDuration, interaction.user.id, interaction.channel?.id as Snowflake, (await i.fetchReply())?.id as Snowflake);
 			}
 
@@ -106,24 +109,13 @@ export default class ReminderSet extends ApplicationSubCommand {
 				if (reminder.channelId !== "") {
 					// @ts-expect-error
 					const channel: TextChannel = await this.client.bulbfetch.getChannel(this.client.channels, reminder.channelId);
-					let message: Message;
-					const options: MessageMentionOptions = {
-						repliedUser: true,
-						users: [reminder.userId],
-					};
 
-					try {
-						message = await channel.messages.fetch(reminder.messageId);
-						await message.reply({
-							content: `⏰ Your reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
-							allowedMentions: options,
-						});
-					} catch (_) {
-						await channel.send({
-							content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
-							allowedMentions: options,
-						});
-					}
+					await channel.send({
+						content: `⏰ <@${reminder.userId}> reminder from **${moment(Date.parse(reminder.createdAt)).format("MMM Do YYYY, h:mm:ss a")}**\n\n\`\`\`\n${reminder.reason}\`\`\``,
+						allowedMentions: {
+							users: [reminder.userId],
+						},
+					});
 				} else {
 					const user: User | undefined = await this.client.bulbfetch.getUser(reminder.userId);
 					if (!user) return;
