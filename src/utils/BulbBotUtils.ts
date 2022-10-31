@@ -119,7 +119,7 @@ export default class {
 		const features: string[] = [];
 
 		guildFeatures.forEach((feature) => {
-			const fEmoji = Emotes.features[feature] ? Emotes.features[feature] : Emotes.features.Feature;
+			const fEmoji = Emotes.features[feature] ?? Emotes.features.DEFAULT;
 
 			features.push(`${fEmoji} [\`${feature}\`](https://bulbbot.rocks '${GuildFeaturesDescriptions[feature]}')`);
 		});
