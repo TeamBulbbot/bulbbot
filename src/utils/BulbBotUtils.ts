@@ -97,6 +97,7 @@ export default class {
 		const bot_developer: number = 1 << 17;
 		const certified_mod: number = 1 << 18;
 		const spammer: number = 1 << 20;
+		const active_developer: number = 1 << 22;
 
 		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
@@ -111,6 +112,7 @@ export default class {
 		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
 		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
 		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
+		if ((bitfield & active_developer) === active_developer) badges.push(Emotes.flags.ACTIVE_DEVELOPER);
 
 		return badges;
 	}
