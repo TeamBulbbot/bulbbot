@@ -95,24 +95,24 @@ export default class {
 		const bughunter_gold: number = 1 << 14;
 		const verified_bot: number = 1 << 16;
 		const bot_developer: number = 1 << 17;
-		const certified_mod: number = 1 << 18;
+		const moderator_alumni: number = 1 << 18;
 		const spammer: number = 1 << 20;
 		const active_developer: number = 1 << 22;
 
+		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 		if ((bitfield & verified_bot) === verified_bot) badges.push(Emotes.flags.VERIFIED_BOT);
 		if ((bitfield & staff) === staff) badges.push(Emotes.flags.DISCORD_EMPLOYEE);
 		if ((bitfield & partner) === partner) badges.push(Emotes.flags.PARTNERED_SERVER_OWNER);
-		if ((bitfield & certified_mod) === certified_mod) badges.push(Emotes.flags.CERTIFIED_MODERATOR);
+		if ((bitfield & moderator_alumni) === moderator_alumni) badges.push(Emotes.flags.MODERATOR_PROGRAM_ALUMNI);
 		if ((bitfield & hypesquad_events) === hypesquad_events) badges.push(Emotes.flags.HYPESQUAD_EVENTS);
 		if ((bitfield & bughunter_green) === bughunter_green) badges.push(Emotes.flags.BUGHUNTER_LEVEL_1);
+		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
 		if ((bitfield & hypesquad_bravery) === hypesquad_bravery) badges.push(Emotes.flags.HOUSE_BRAVERY);
 		if ((bitfield & hypesquad_brilliance) === hypesquad_brilliance) badges.push(Emotes.flags.HOUSE_BRILLIANCE);
 		if ((bitfield & hypesquad_balance) === hypesquad_balance) badges.push(Emotes.flags.HOUSE_BALANCE);
-		if ((bitfield & early_support) === early_support) badges.push(Emotes.flags.EARLY_SUPPORTER);
-		if ((bitfield & bughunter_gold) === bughunter_gold) badges.push(Emotes.flags.BUGHUNTER_LEVEL_2);
-		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
-		if ((bitfield & spammer) === spammer) badges.push(Emotes.flags.SPAMMER);
 		if ((bitfield & active_developer) === active_developer) badges.push(Emotes.flags.ACTIVE_DEVELOPER);
+		if ((bitfield & bot_developer) === bot_developer) badges.push(Emotes.flags.EARLY_VERIFIED_DEVELOPER);
+		if ((bitfield & early_support) === early_support) badges.push(Emotes.flags.EARLY_SUPPORTER);
 
 		return badges;
 	}
