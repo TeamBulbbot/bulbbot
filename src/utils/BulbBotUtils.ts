@@ -180,6 +180,7 @@ export default class {
 			user = {
 				tag: userObject.user.tag,
 				id: userObject.user.id,
+				// @ts-expect-error
 				flags: userObject.user.flags,
 				username: userObject.user.username,
 				discriminator: userObject.user.discriminator,
@@ -198,6 +199,7 @@ export default class {
 			user = {
 				tag: userObject.tag,
 				id: userObject.id,
+				// @ts-expect-error
 				flags: userObject.flags,
 				username: userObject.username,
 				discriminator: userObject.discriminator,
@@ -430,6 +432,7 @@ export default class {
 	/** Return a list of property keys where the values differ between the two objects */
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
+		// eslint-disable-next-line
 		for (const key of Object.keys(oldObj)) {
 			if (!this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
 		}
