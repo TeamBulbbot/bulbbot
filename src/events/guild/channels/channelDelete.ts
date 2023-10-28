@@ -36,7 +36,6 @@ export default class extends Event {
 					log = await this.client.bulbutils.translate("event_channel_delete_moderator", channel.guild.id, {
 						channel,
 						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
-						// @ts-expect-error
 						type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 					});
 			}
@@ -45,7 +44,6 @@ export default class extends Event {
 		if (!log)
 			log = await this.client.bulbutils.translate("event_channel_delete", channel.guild.id, {
 				channel,
-				// @ts-expect-error
 				type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 			});
 

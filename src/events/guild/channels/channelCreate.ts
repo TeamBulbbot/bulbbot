@@ -23,7 +23,6 @@ export default class extends Event {
 					msg = await this.client.bulbutils.translate("event_channel_create_moderator", channel.guild.id, {
 						channel,
 						moderator: executor || { id: "Unknown ID", tag: "Unknown User" },
-						// @ts-expect-error
 						type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 					});
 			}
@@ -32,7 +31,6 @@ export default class extends Event {
 		if (!msg)
 			msg = await this.client.bulbutils.translate("event_channel_create", channel.guild.id, {
 				channel,
-				// @ts-expect-error
 				type: await this.client.bulbutils.translate(`channel_types.${channel.type}`, channel.guild.id, {}),
 			});
 

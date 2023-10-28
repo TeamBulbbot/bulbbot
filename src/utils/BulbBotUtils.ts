@@ -180,7 +180,6 @@ export default class {
 			user = {
 				tag: userObject.user.tag,
 				id: userObject.user.id,
-				// @ts-expect-error
 				flags: userObject.user.flags,
 				username: userObject.user.username,
 				discriminator: userObject.user.discriminator,
@@ -199,7 +198,6 @@ export default class {
 			user = {
 				tag: userObject.tag,
 				id: userObject.id,
-				// @ts-expect-error
 				flags: userObject.flags,
 				username: userObject.username,
 				discriminator: userObject.discriminator,
